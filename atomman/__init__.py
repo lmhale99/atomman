@@ -5,6 +5,6 @@ import units
 
 import defect
 #import lammps
-#import models
+import models
 #import plot
 import tools

@@ -26,7 +26,8 @@ setup(name='atomman',
         'numpy', 
         'matplotlib',
         'scipy',
-        'numericalunits'
+        'numericalunits',
+        'xmltodict'
       ],
       include_package_data=True,
       zip_safe=False)
