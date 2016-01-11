@@ -3,7 +3,7 @@ from Box import Box
 from System import System
 import units
 
-#import defect
+import defect
 #import lammps
 #import models
 #import plot

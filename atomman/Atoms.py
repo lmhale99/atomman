@@ -106,7 +106,7 @@ class Atoms:
         term = None
         a_id = None
         value = None
-        
+
         if arg1 is not None:
             if isinstance(arg1, (str, unicode)):
                 term = arg1
