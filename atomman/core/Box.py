@@ -5,8 +5,8 @@ from copy import deepcopy
 import numpy as np
 
 #Internal imports
-from tools import vect_angle
-import units
+from atomman.tools import vect_angle
+import atomman.tools.unitconvert as uc
 
 class Box:
 #Class for representing a triclinic box
@@ -79,7 +79,7 @@ class Box:
             assert allNone((xlo, xhi, ylo, yhi, zlo, zhi)),                 'Invalid parameter set' 
             assert allNone((a, b, c, alpha, beta, gamma, origin)),          'Invalid parameter set'
             
-            self.__vects[:] = units.set_in_units(np.eye(3), unit)
+            self.__vects[:] = uc.set_in_units(np.eye(3), unit)
             self.__origin[:] = np.zeros(3)
             self.__isnorm = True
     
@@ -95,7 +95,7 @@ class Box:
         assert origin.shape == (3L,)
         
         #Convert units and save
-        self.__origin[:] = units.set_in_units(origin, unit)
+        self.__origin[:] = uc.set_in_units(origin, unit)
         
     def set_vectors(self, origin=None, vects=None, avect=None, bvect=None, cvect=None, unit=None):
     #Set the direction vectors of the box. 
@@ -111,8 +111,11 @@ class Box:
         #Check shape of vects
         assert vects.shape == (3L, 3L)
         
+        #Zero out near zero terms
+        vects[np.isclose(vects/vects.max(), 0.0)] = 0.0
+        
         #Convert units and save
-        self.__vects[:] = units.set_in_units(vects, unit)
+        self.__vects[:] = uc.set_in_units(vects, unit)
         
         #Check if box vectors are consistent with LAMMPS normalization
         if (vects[0,1] == 0.0 and vects[0,2] == 0.0 and vects[1,2] == 0 and
@@ -171,7 +174,7 @@ class Box:
         vects[np.isclose(vects/vects.max(), 0.0)] = 0.0
         
         #Save in appropriate units
-        self.__vects[:] = units.set_in_units(vects, unit)
+        self.__vects[:] = uc.set_in_units(vects, unit)
 
         #vects is constructed to be LAMMPS normalized
         self.__isnorm = True
@@ -301,7 +304,7 @@ class Box:
         else:
             return None
             
-        return units.get_in_units(value, unit)
+        return uc.get_in_units(value, unit)
 
 def allNone(check):
     for test in check:

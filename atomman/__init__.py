@@ -1,10 +1,8 @@
-from Atoms import Atoms
-from Box import Box
-from System import System
-import units
+from core import *
+
 
 import defect
-#import lammps
+import lammps
 import models
 #import plot
 import tools

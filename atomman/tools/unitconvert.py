@@ -3,6 +3,8 @@ import numericalunits as nu
 
 #creates a dictionary containing the defined numericalunits values
 def build_values():
+    #Builds the unit dictionary based on current working units
+    
     global unit
     unit = {
         "m": nu.m, "cm": nu.cm, "mm": nu.mm, "um": nu.um, "nm": nu.nm, "pm": nu.pm, "fm": nu.fm, 
@@ -71,6 +73,8 @@ def build_values():
     }
 
 def reset(seed=None, length=None, mass=None, time=None, energy=None, charge=None):
+    #Allows the working units to be reset to random values or specified accoring to dimensions
+    
     if length is None and time is None and mass is None and energy is None and charge is None:
         nu.reset_units(seed)
     
@@ -131,24 +135,73 @@ def reset(seed=None, length=None, mass=None, time=None, energy=None, charge=None
     build_values()    
 
 def set_in_units(value, units):
-    #Wrapper around numerical units for setting values with specific units
-    if units is None:
-        return value
-    try:        
-        units = unit[units]
-        return value * units
-    except:
-        return value * units
+    #Convert value from specified units to working units
+    units = parse(units)
+    return value * units
         
 def get_in_units(value, units):
-    #Wrapper around numerical units for getting values with specific units
+    #Convert value from working units to specified units
+    units = parse(units)
+    return value / units
+    
+def parse(units):
+    #Convert units as None or strings into numbers
+    
+    #Units of None does no scaling
     if units is None:
-        return value
-    try:
-        units = unit[units]
-        return value / units
-    except:
-        return value / units
+        return 1
 
+    #Parse string and return number value
+    elif isinstance(units, (str, unicode)):
+        i = 0
+        terms = []
+        while i < len(units):
+            if units[i] == '(':
+                end = units.rindex(')')
+                terms.append(parse(units[i+1:end]))
+                i = end+1
+            elif units[i].isalpha():
+                term = ''
+                while i < len(units) and units[i] not in ' */^\n\r\t':
+                    term += units[i]
+                    i += 1
+                terms.append(unit[term])
+            elif units[i].isdigit() or units[i] == '-' or units[i] == '.':
+                term = ''
+                while i < len(units) and units[i] not in ' */^\n\r\t':
+                    term += units[i]
+                    i += 1
+                terms.append(float(term))
+            elif units[i] in '*/^':
+                terms.append(units[i])
+                i += 1
+            elif units[i] in ' \n\r\t':
+                i += 1
+            else:
+                raise ValueError('Unknown character: %s' % units[i])
+        
+        while '^' in terms:
+            c = terms.index('^')
+            value = [terms[c-1] ** terms[c+1]]
+            terms = terms[:c-1] + value + terms[c+2:]
+        
+        while len(terms) > 1:
+            if terms[1] == '*':
+                value = [terms[0] * terms[2]]
+                terms = value + terms[3:]
+            elif terms[1] == '/':
+                value = [terms[0] / terms[2]]
+                terms = value + terms[3:]
+            else:
+                print terms
+                raise ValueError('Invalid string format')
+        
+        return terms[0]
+
+    #Else assume units is already a number
+    else:
+        return units
+        
+#Initial build and reset.  Only called first time module is loaded        
 build_values()
 reset(length = 'angstrom', mass = 'amu', energy='eV', charge='e')

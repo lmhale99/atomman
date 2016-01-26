@@ -8,7 +8,7 @@ import numpy as np
 #Internal imports
 from Atoms import Atoms
 from Box import Box
-from tools import nlist, dvect
+from atomman.tools import nlist, dvect
      
 class System:
     #Define atomic system
@@ -149,7 +149,7 @@ class System:
         value = np.asarray(value)
         vects = self.box('vects')
         inverse = np.linalg.inv(vects)
-        origin = self.box('origin')[0]
+        origin = self.box('origin')
         
         return (value - origin).dot(inverse)
           
@@ -158,7 +158,7 @@ class System:
 
         value = np.asarray(value)
         vects = self.box('vects')
-        origin = self.box('origin')[0]
+        origin = self.box('origin')
         
         return value.dot(vects) + origin
     
@@ -187,7 +187,6 @@ class System:
         
         for i in xrange(3):
             if self.pbc(i):
-                print spos[:, i], np.floor(spos[:, i])
                 spos[:, i] -= np.floor(spos[:, i])
             else:
                 min = spos[:, i].min()

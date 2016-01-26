@@ -6,7 +6,7 @@ from copy import deepcopy
 import numpy as np
 
 #Internal imports
-import units
+import atomman.tools.unitconvert as uc
 
 class Atoms:
     #Class for handling atomic properties
@@ -25,11 +25,11 @@ class Atoms:
         
             self.view['atype'] =  self.data[:, 0:1]
             self.view['atype'][:] = np.zeros((natoms, 1))
-            self.dtype['atype'] = int
+            self.dtype['atype'] = np.dtype('int32')
         
             self.view['pos'] =  self.data[:, 1:4]
             self.view['pos'][:] = np.zeros((natoms, 3))
-            self.dtype['pos'] = float
+            self.dtype['pos'] = np.dtype('float64')
         
             self.__start = 4
         
@@ -43,7 +43,6 @@ class Atoms:
                     unit = None
                 else:
                     unit = prop_unit[key]
-
                 self.prop(key, value, dtype=dtype, unit=unit)
                 
         elif data is not None and view is not None and prop_dtype is not None:
@@ -110,7 +109,7 @@ class Atoms:
         if arg1 is not None:
             if isinstance(arg1, (str, unicode)):
                 term = arg1
-            elif isinstance(arg1, (int, long)) and arg1 >= 0 and arg1 < self.natoms():
+            elif isinttype(arg1) and arg1 >= 0 and arg1 < self.natoms():
                 a_id = arg1
             else:
                 raise TypeError('Invalid argument')
@@ -118,7 +117,7 @@ class Atoms:
         if arg2 is not None:
             if isinstance(arg2, (str, unicode)) and term is None:
                 term = arg2
-            elif isinstance(arg2, (int, long)) and arg2 >= 0 and arg2 < self.natoms() and a_id is None:
+            elif isinttype(arg2) and arg2 >= 0 and arg2 < self.natoms() and a_id is None:
                 a_id = arg2
             else:
                 value = arg2
@@ -156,7 +155,7 @@ class Atoms:
                         value = value[0]
                 elif len(value[0]) == 1:
                     value = value.T[0]
-                return units.get_in_units(value, unit)
+                return uc.get_in_units(value, unit)
 
             else:
                 value = np.asarray(value)
@@ -174,7 +173,7 @@ class Atoms:
                 assert np.allclose(value, np.asarray(value, dtype=self.dtype[term])), "value not compatible with term's dtype"
                 assert dtype is None or dtype==self.dtype[term],                       "stored dtype already assigned to %s" % self.dtype[term]
                 
-                self.view[term][:] = units.set_in_units(value, unit)
+                self.view[term][:] = uc.set_in_units(value, unit)
             
         #Get or set a specific atom's property   
         else:
@@ -185,7 +184,7 @@ class Atoms:
                     value = np.array(self.view[term][a_id], dtype=dtype) 
                     if len(value) == 1:
                         value = value[0]
-                    return units.get_in_units(value, unit)
+                    return uc.get_in_units(value, unit)
                 except:
                     return None
             else:
@@ -201,7 +200,7 @@ class Atoms:
                 assert np.allclose(value, np.asarray(value, dtype=self.dtype[term])), "value not compatible with term's dtype"
                 assert dtype is None or dtype==self.dtype[term],                       "stored dtype already assigned to %s" % self.dtype[term]
 
-                self.view[term][a_id] = units.set_in_units(value, unit)
+                self.view[term][a_id] = uc.set_in_units(value, unit)
                 
     def __add_prop(self, term, size, shape, dtype):
         try:
@@ -226,14 +225,29 @@ class Atoms:
                 start = start + self.view[k][0].size
             assert start == self.__start, 'Error reassigning properties'
             
-        #create view and save dtype and units
+        #create view and save dtype
         self.view[term] = self.data[:,  self.__start : end]
         self.view[term].shape = (self.natoms(), ) + shape
         self.dtype[term] = dtype
         self.__start = end
                 
                 
-                
+def isinttype(value):
+    if isinstance(value, (int, long)): 
+        return True
+    elif isinstance(value, np.ndarray) and len(value) == 0:
+        if value.dtype == int or value.dtype == long: 
+            return True
+        else:
+            try:
+                if issubclass(value.dtype.type, np.int):
+                    return True
+                else:
+                    return False
+            except:
+                return False
+    else:
+        return False                 
                 
                 
                 
