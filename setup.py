@@ -7,7 +7,7 @@ def readme():
 
 setup(name='atomman',
       version='0.2',
-      description='Atomic Manipulation Toolkit',
+      description='Atomistic Manipulation Toolkit',
       long_description=readme(),
       classifiers=[
         'Development Status :: 3 - Alpha',
@@ -17,7 +17,7 @@ setup(name='atomman',
         'Topic :: Scientific/Engineering :: Physics'
       ],
       keywords='atom atomic atomistic molecular dynamics', 
-      url='git@github.com:lmhale99/iprPy.git',
+      url='git@github.com:lmhale99/atomman.git',
       author='Lucas Hale',
       author_email='lucas.hale@nist.gov',
       license='NIST',
