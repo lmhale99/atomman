@@ -1,7 +1,7 @@
 AtomMan
 -------
 
-Atomic Manipulation Toolkit 
+Atomistic Manipulation Toolkit 
 
 This package is designed to allow easy manipulation of large-scale atomistic systems and the rapid development and use of property calculation metrics. 
 
