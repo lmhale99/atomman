@@ -2,7 +2,7 @@
 import numericalunits as nu
 
 #creates a dictionary containing the defined numericalunits values
-def build_values():
+def build_unit():
     #Builds the unit dictionary based on current working units
     
     global unit
@@ -72,7 +72,7 @@ def build_values():
         "MEarth": nu.MEarth
     }
 
-def reset(seed=None, length=None, mass=None, time=None, energy=None, charge=None):
+def reset_units(seed=None, length=None, mass=None, time=None, energy=None, charge=None):
     #Allows the working units to be reset to random values or specified accoring to dimensions
     
     if length is None and time is None and mass is None and energy is None and charge is None:
@@ -132,7 +132,7 @@ def reset(seed=None, length=None, mass=None, time=None, energy=None, charge=None
         nu.K = K
         
         nu.set_derived_units_and_constants()
-    build_values()    
+    build_unit()    
 
 def set_in_units(value, units):
     #Convert value from specified units to working units
@@ -143,6 +143,14 @@ def get_in_units(value, units):
     #Convert value from working units to specified units
     units = parse(units)
     return value / units
+    
+def value_unit(term):
+    """Used for data model elements with value, unit"""
+    try:
+        unit = term['unit']
+    except:
+        unit = None
+    return set_in_units(term['value'], unit)
     
 def parse(units):
     #Convert units as None or strings into numbers
@@ -203,5 +211,5 @@ def parse(units):
         return units
         
 #Initial build and reset.  Only called first time module is loaded        
-build_values()
-reset(length = 'angstrom', mass = 'amu', energy='eV', charge='e')
+build_unit()
+reset_units()

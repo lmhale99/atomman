@@ -1,7 +1,7 @@
 import numpy as np
 
 def vect_angle(vect1, vect2):
-    #Returns the angle between two vectors
+    """Returns the angle between two vectors in degrees."""
     vect1 = np.asarray(vect1)
     vect2 = np.asarray(vect2)
     u_vect1 = vect1 / np.linalg.norm(vect1)

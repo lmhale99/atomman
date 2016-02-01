@@ -1,7 +1,6 @@
 import atomman as am
 import numpy as np
 
-#Generates the LAMMPS script lines associated with having LAMMPS create a system
 def sys_gen(units = 'metal',
             atom_style = 'atomic',
             pbc = (True, True, True),
@@ -13,7 +12,22 @@ def sys_gen(units = 'metal',
             axes = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]),
             shift = np.array([0.1, 0.1, 0.1]),
             size = np.array([[-3,3], [-3,3], [-3,3]], dtype=np.int)):
-
+    """
+    Generates the LAMMPS input command lines associated with having LAMMPS create a system.
+    
+    Keyword Arguments:
+    units -- LAMMPS units option to use. Default is 'metal'.
+    atom_style -- LAMMPS atom_style option to use. Default is 'atomic'.
+    pbc -- list or tuple of three booleans indicating which directions are periodic. Default is (True, True, True).
+    ucell -- a small system (i.e. crystallographic unit cell) from which the returned system is generated from. Default is an fcc unit cell with cell lengths = 1.
+    axes -- crystallographic axes to rotate the ucell by.  For a cubic ucell, the dimensions of the rotated system will increase to ensure that all directions can be periodic.  Default is [[1,0,0],[0,1,0],[0,0,1]].
+    shift -- box-scaled vector to shift all atoms by. Default is [0.1, 0.1, 0.1]. (The LAMMPS algorithm for generating systems sometimes has issues at boundaries.)
+    size -- system multipliers to expand the system by.  Default is [[-3,3], [-3,3], [-3,3]], i.e. 6x6x6 supercell of ucell where Cartesian (0,0,0) is in the center of the returned System's Box.
+    """
+    size = np.asarray(size)
+    shift = np.asarray(shift)
+    axes = np.asarray(axes)
+    
     boundary = ''
     for i in xrange(3):
         if pbc[i]:
@@ -21,18 +35,18 @@ def sys_gen(units = 'metal',
         else:
             boundary += 'm '
     
-    ntypes = ucell.natypes()
+    ntypes = ucell.natypes
     pos_basis = ''
     type_basis = ''
-    for i in xrange(ucell.natoms()):
-        pos = ucell.atoms(i, 'pos', scale = True)
+    for i in xrange(ucell.natoms):
+        pos = ucell.atoms_prop(a_id=i, key='pos', scale = True)
         pos_basis += '        basis %f %f %f' %(pos[0], pos[1], pos[2])
-        if i < ucell.natoms() - 1:
+        if i < ucell.natoms - 1:
             pos_basis += ' &\n'
-        if ucell.atoms(i, 'atype') > 1:
-            type_basis += ' &\n             basis %i %i'%(i+1,  ucell.atoms(i, 'atype'))
+        if ucell.atoms_prop(a_id=i, key='atype') > 1:
+            type_basis += ' &\n             basis %i %i'%(i+1,  ucell.atoms_prop(a_id=i, key='atype'))
     
-    vects = ucell.box('vects')
+    vects = ucell.box.vects
     
     #Test if box is cubic
     if vects[1][0] == 0.0 and vects[2][0] == 0.0 and vects[2][1] == 0.0:
@@ -41,9 +55,9 @@ def sys_gen(units = 'metal',
     else:
         assert np.allclose(axes[0], [1,0,0]) and np.allclose(axes[1], [0,1,0]) and np.allclose(axes[2], [0,0,1]), 'Rotation of non-orthogonal box not suppported'
         ortho = False
-        size_xy = vects[1][0] * (size[0,1] - size[0,0]) / ucell.box('a')
-        size_xz = vects[2][0] * (size[0,1] - size[0,0]) / ucell.box('a')
-        size_yz = vects[2][1] * (size[1,1] - size[1,0]) / ucell.box('b')
+        size_xy = vects[1][0] * (size[0,1] - size[0,0]) / ucell.box.a
+        size_xz = vects[2][0] * (size[0,1] - size[0,0]) / ucell.box.a
+        size_yz = vects[2][1] * (size[1,1] - size[1,0]) / ucell.box.b
         region_box = 'region box prism %i %i %i %i %i %i %f %f %f' % (size[0,0], size[0,1], size[1,0], 
                                                                       size[1,1], size[2,0], size[2,1], 
                                                                       size_xy,   size_xz,   size_yz)

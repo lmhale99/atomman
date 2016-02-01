@@ -1,11 +1,19 @@
-from atomman import Atoms, Box, System
+import atomman as am
+import atomman.unitconvert as uc
 from atomman.models import DataModelDict
 import numpy as np
-from collections import OrderedDict
 from copy import deepcopy
 
-def load(fname=None, prop_info=None):
-    #Reads a LAMMPS-style atom dump file and returns an atomman.System.
+def load(fname, prop_info=None):
+    """
+    Read a LAMMPS-style dump file and return a System.
+    
+    Argument:
+    fname -- name (and location) of file to read data from.
+    
+    Keyword Argument:
+    prop_info -- DataModelDict for relating the per-atom properties to/from the dump file and the System. Will create a default json instance <fname>.json if prop_info is not given and <fname>.json doesn't already exist.
+    """
     
     #read in prop_info if supplied
     if prop_info is not None:
@@ -18,14 +26,15 @@ def load(fname=None, prop_info=None):
                 prop_info = DataModelDict(fj)
         except:
             prop_info = None
-    assert prop_info is None or prop_info.ismodel('LAMMPS-dump-atoms_prop-relate'), 'Data Model not a LAMMPS-dump-atoms_prop-relate'
-    
+   
     #read box_unit if specified in prop_info
-    try:
-        box_unit = prop_info['LAMMPS-dump-atoms_prop-relate']['box_prop']['unit']
-    except:
+    if prop_info is None:
         box_unit = None
-    
+    elif prop_info.ismodel('LAMMPS-dump-atoms_prop-relate'):
+        box_unit = prop_info['LAMMPS-dump-atoms_prop-relate']['box_prop'].get('unit', None)
+    else:
+        raise ValueError('Data Model not a LAMMPS-dump-atoms_prop-relate')
+
     with open(fname, 'r') as f:
         pbc = None
         box = None
@@ -80,10 +89,8 @@ def load(fname=None, prop_info=None):
                                     #if atoms prop and relation prop match
                                     if relation['prop'] == prop:
                                         #get unit and scale info
-                                        try:
-                                            unit = relation['unit']
-                                        except:
-                                            unit = None
+                                        unit = relation.get('unit', None)
+
                                         if unit == 'scaled':
                                             unit = None
                                             scale = True
@@ -111,7 +118,7 @@ def load(fname=None, prop_info=None):
                                 value = np.asarray(value, dtype=dtype)
                             
                             #save prop values to system
-                            system.atoms(prop, value, unit=unit, scale=scale)
+                            system.atoms_prop(key=prop, value=uc.set_in_units(value, unit), scale=scale)
                 
                 #read number of atoms if time to do so
                 elif readnatoms:                
@@ -124,33 +131,33 @@ def load(fname=None, prop_info=None):
                 
                 #read x boundary condition values if time to do so
                 elif bcount == 0:
-                    xlo = float(terms[0])
-                    xhi = float(terms[1])
+                    xlo = uc.set_in_units(float(terms[0]), box_unit)
+                    xhi = uc.set_in_units(float(terms[1]), box_unit)
                     if len(terms) == 3:
-                        xy = float(terms[2])
+                        xy = uc.set_in_units(float(terms[2]), box_unit)
                     bcount += 1
                     
                 #read y boundary condition values if time to do so
                 elif bcount == 1:
-                    ylo = float(terms[0])
-                    yhi = float(terms[1])
+                    ylo = uc.set_in_units(float(terms[0]), box_unit)
+                    yhi = uc.set_in_units(float(terms[1]), box_unit)
                     if len(terms) == 3:
-                        xz = float(terms[2])
+                        xz = uc.set_in_units(float(terms[2]), box_unit)
                     bcount += 1
                     
                 #read z boundary condition values if time to do so
                 elif bcount == 2:
-                    zlo = float(terms[0])
-                    zhi = float(terms[1])
+                    zlo = uc.set_in_units(float(terms[0]), box_unit)
+                    zhi = uc.set_in_units(float(terms[1]), box_unit)
                     if len(terms) == 3:
-                        yz = float(terms[2])
+                        yz = uc.set_in_units(float(terms[2]), box_unit)
                         xlo = xlo - min((0.0, xy, xz, xy + xz))
                         xhi = xhi - max((0.0, xy, xz, xy + xz))
                         ylo = ylo - min((0.0, yz))
                         yhi = yhi - max((0.0, yz))
-                        box = Box(xlo=xlo, xhi=xhi, ylo=ylo, yhi=yhi, zlo=zlo, zhi=zhi, xy=xy, xz=xz, yz=yz, unit=box_unit)
+                        box = am.Box(xlo=xlo, xhi=xhi, ylo=ylo, yhi=yhi, zlo=zlo, zhi=zhi, xy=xy, xz=xz, yz=yz)
                     else:
-                        box = Box(xlo=xlo, xhi=xhi, ylo=ylo, yhi=yhi, zlo=zlo, zhi=zhi, unit=box_unit) 
+                        box = am.Box(xlo=xlo, xhi=xhi, ylo=ylo, yhi=yhi, zlo=zlo, zhi=zhi) 
                     bcount += 1
                 
                 #if not time to read value, check the ITEM: header information
@@ -194,13 +201,23 @@ def load(fname=None, prop_info=None):
                                     prop_info.json(fp=fj, indent=4)
                             
                             #create system and flag that it is time to read data
-                            system = System(atoms=Atoms(natoms=natoms), box=box, pbc=pbc)
+                            system = am.System(atoms=am.Atoms(natoms=natoms), box=box, pbc=pbc)
                             system.prop['timestep'] = timestep
                             readatoms = True 
     return system      
 
 def dump(fname, system, prop_info=None, xf='%.13e'):
-    #Writes a LAMMPS style dump file from system using all assigned per-atom properties    
+    """
+    Write a LAMMPS-style dump file from a System.
+    
+    Arguments:
+    fname -- name (and location) of file to save data to.
+    system -- System to write to the dump file.
+    
+    Keyword Arguments:
+    prop_info -- DataModelDict for relating the per-atom properties to/from the dump file and the System. Will create a default json instance <fname>.json if prop_info is not given and <fname>.json doesn't already exist.
+    xf -- c-style format for printing the floating point numbers. Default is '%.13e'.
+    """  
 
     #create or read prop_info Data Model
     if prop_info is None:
@@ -216,11 +233,8 @@ def dump(fname, system, prop_info=None, xf='%.13e'):
     assert prop_info.ismodel('LAMMPS-dump-atoms_prop-relate'), 'Data Model not a LAMMPS-dump-atoms_prop-relate'  
     
     #read box_unit if specified in prop_info
-    try:
-        box_unit = prop_info['LAMMPS-dump-atoms_prop-relate']['box_prop']['unit']
-    except:
-        box_unit = None    
-    
+    box_unit = prop_info['LAMMPS-dump-atoms_prop-relate']['box_prop'].get('unit', None)
+        
     #open fname
     with open(fname, 'w') as f:
 
@@ -233,21 +247,21 @@ def dump(fname, system, prop_info=None, xf='%.13e'):
         
         #write number of atoms
         f.write('ITEM: NUMBER OF ATOMS\n')
-        f.write('%i\n' % ( system.natoms() ))
+        f.write('%i\n' % ( system.natoms ))
         
         #write system boundary info for an orthogonal box
-        if system.box('xy') == 0.0 and system.box('xz') == 0.0 and system.box('yz') == 0.0:
+        if system.box.xy == 0.0 and system.box.xz == 0.0 and system.box.yz == 0.0:
             f.write('ITEM: BOX BOUNDS')
             for i in xrange(3):
-                if system.pbc(i):
+                if system.pbc[i]:
                     f.write(' pp')
                 else:
                     f.write(' fm')
             f.write('\n')
             
-            f.write('%f %f\n' % ( system.box('xlo', box_unit), system.box('xhi', box_unit) )) 
-            f.write('%f %f\n' % ( system.box('ylo', box_unit), system.box('yhi', box_unit) ))
-            f.write('%f %f\n' % ( system.box('zlo', box_unit), system.box('zhi', box_unit) ))
+            f.write('%f %f\n' % ( uc.get_in_units(system.box.xlo, box_unit), uc.get_in_units(system.box.xhi, box_unit) )) 
+            f.write('%f %f\n' % ( uc.get_in_units(system.box.ylo, box_unit), uc.get_in_units(system.box.yhi, box_unit) ))
+            f.write('%f %f\n' % ( uc.get_in_units(system.box.zlo, box_unit), uc.get_in_units(system.box.zhi, box_unit) ))
         
         #write system boundary info for a triclinic box
         else:
@@ -259,16 +273,16 @@ def dump(fname, system, prop_info=None, xf='%.13e'):
                     f.write(' fm')
             f.write('\n')
 
-            xlo_bound = system.box('xlo', box_unit) + min(( 0.0, system.box('xy', box_unit), system.box('xz', box_unit), system.box('xy', box_unit) + system.box('xz', box_unit) ))
-            xhi_bound = system.box('xhi', box_unit) + max(( 0.0, system.box('xy', box_unit), system.box('xz', box_unit), system.box('xy', box_unit) + system.box('xz', box_unit) ))
-            ylo_bound = system.box('ylo', box_unit) + min(( 0.0, system.box('yz', box_unit) ))
-            yhi_bound = system.box('yhi', box_unit) + max(( 0.0, system.box('yz', box_unit) ))
-            zlo_bound = system.box('zlo', box_unit)
-            zhi_bound = system.box('zhi', box_unit)
+            xlo_bound = uc.get_in_units(system.box.xlo, box_unit) + uc.get_in_units(min(( 0.0, system.box.xy, system.box.xz, system.box.xy + system.box.xz)), box_unit)
+            xhi_bound = uc.get_in_units(system.box.xhi, box_unit) + uc.get_in_units(max(( 0.0, system.box.xy, system.box.xz, system.box.xy + system.box.xz)), box_unit)
+            ylo_bound = uc.get_in_units(system.box.ylo, box_unit) + uc.get_in_units(min(( 0.0, system.box.yz )), box_unit) 
+            yhi_bound = uc.get_in_units(system.box.yhi, box_unit) + uc.get_in_units(max(( 0.0, system.box.yz )), box_unit)
+            zlo_bound = uc.get_in_units(system.box.zlo, box_unit)
+            zhi_bound = uc.get_in_units(system.box.zhi, box_unit)
             
-            f.write('%f %f %f\n' % ( xlo_bound, xhi_bound, system.box('xy', box_unit) )) 
-            f.write('%f %f %f\n' % ( ylo_bound, yhi_bound, system.box('xz', box_unit) ))
-            f.write('%f %f %f\n' % ( zlo_bound, zhi_bound, system.box('yz', box_unit) ))
+            f.write('%f %f %f\n' % ( xlo_bound, xhi_bound, uc.get_in_units(system.box.xy, box_unit) )) 
+            f.write('%f %f %f\n' % ( ylo_bound, yhi_bound, uc.get_in_units(system.box.xz, box_unit) ))
+            f.write('%f %f %f\n' % ( zlo_bound, zhi_bound, uc.get_in_units(system.box.yz, box_unit) ))
 
         #write atomic header info
         f.write('ITEM: ATOMS id')
@@ -277,7 +291,7 @@ def dump(fname, system, prop_info=None, xf='%.13e'):
         f.write('\n')
         
         #write atomic info for all atoms
-        for i in xrange(system.natoms()):
+        for i in xrange(system.natoms):
             f.write('%i' % (i+1))
             
             #write each attribute value
@@ -290,10 +304,7 @@ def dump(fname, system, prop_info=None, xf='%.13e'):
                 prop = relation['prop']
                 
                 #set unit and scale info
-                try:
-                    unit = relation['unit']
-                except:
-                    unit = None
+                unit = relation.get('unit', None)
                 if unit == 'scaled':
                     unit = None
                     scale = True
@@ -301,8 +312,8 @@ def dump(fname, system, prop_info=None, xf='%.13e'):
                     scale = False
                 
                 #retrieve value and dtype
-                value = system.atoms(i, prop, scale=scale, unit=unit)
-                dtype = system.atoms_dtype[prop]
+                value = uc.get_in_units(system.atoms_prop(a_id=i, key=prop, scale=scale), unit)
+                dtype = system.atoms.dtype[prop]
                 
                 #pull out index value
                 if 'index' in relation:
@@ -322,6 +333,7 @@ def dump(fname, system, prop_info=None, xf='%.13e'):
             f.write('\n')
 
 def __prop_info_default_load(name_list):
+    """Construct default conversion model for atom_dump.load()"""
     name_list = list(name_list)
     prop_info = DataModelDict()
     prop_info['LAMMPS-dump-atoms_prop-relate'] = DataModelDict()
@@ -402,6 +414,8 @@ def __prop_info_default_load(name_list):
     return prop_info        
             
 def __prop_info_default_dump(system):
+    """Construct default conversion model for atom_dump.load()"""
+
     #iterates over value to create unique parameter name
     def __itername(string, value):
         for i in xrange(len(value)):
@@ -444,7 +458,7 @@ def __prop_info_default_dump(system):
     
     for prop in system.atoms_prop():
         if prop != 'atype' and prop != 'pos':
-            p = system.atoms(0, prop)
+            p = system.atoms_prop(a_id=0, key=prop)
             
             #for scalars, no shape is defined and no index is needed to relate to
             if len(p.shape) == 0:
@@ -468,10 +482,4 @@ def __prop_info_default_dump(system):
                 for name, index in zip(names, indexes):
                     attrs[name] = DataModelDict([('relation', DataModelDict([('prop', prop), 
                                                                              ('index', index)]) )])
-    return prop_info
-            
-def allNone(check):
-    for test in check:
-        if test is not None:
-            return False    
-    return True            
+    return prop_info        

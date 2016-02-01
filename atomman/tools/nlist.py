@@ -1,19 +1,21 @@
 import numpy as np
 from copy import deepcopy
 from dvect import dvect
-import time
 
 def nlist(system, cutoff, cmult=1):
-    start = time.time()
-    natoms = system.natoms()
-    vects, unit = system.box('vects')
-    origin = system.box('origin')[0]
+    """
+    Calculates a neighbor list for all atoms in a System taking periodic boundaries into account.
+    
+    Keyword Arguments:
+    system -- System to calculate the neighbor list for.
+    cutoff -- radial cutoff distance for neighbors.
+    cmult -- parameter associated with the binning routine.  Default value is most likely the fastest."""
+    
+    natoms = system.natoms
+    vects = system.box.vects
+    origin = system.box.origin
     pos = system.atoms.view['pos']
     pbc = system.pbc
-    assert unit == system.atoms.unit['pos'],  'units do not match'
-    if isinstance(cutoff, tuple) and len(cutoff) == 2:
-        assert unit == cutoff[1],              'units do not match'
-        cutoff = cutoff[0]
         
     #Determine orthogonal superbox that fully encompases the system
     corners = origin + np.array([[0,0,0], vects[0], vects[1], vects[2],
@@ -77,6 +79,7 @@ def nlist(system, cutoff, cmult=1):
     
     neighbors = np.zeros((natoms, 41), dtype=np.int)
     
+    #assign atoms and ghost atoms to xyz bins
     xyz_bins = np.zeros((len(xbins), len(ybins), len(zbins), 41), dtype=np.int)
     for i in xrange(len(atom_index)):
         x,y,z = xyz_index[i]
@@ -90,23 +93,22 @@ def nlist(system, cutoff, cmult=1):
             xyz_bins = newbins
             xyz_bins[x,y,z, xyz_bins[x,y,z,0]] = atom_index[i]
     
-    end = time.time()
-    print 'setup time:', end-start
-
-    start = time.time()
-
+    #iterate over all bins with real atoms
     for bin in real_bins:
         x,y,z = bin
         
+        #short = all atoms in current bin
         short = xyz_bins[x,y,z, 1:xyz_bins[x,y,z,0]+1]
         long = deepcopy(short)
         
+        #add all atoms in half of the nearby bins to long
         for dx, dy, dz in box_iter(cmult):
             try:
                 long = np.hstack((long, xyz_bins[x+dx,y+dy,z+dz, 1:xyz_bins[x+dx,y+dy,z+dz,0]+1]))
             except:
                 long = xyz_bins[x+dx,y+dy,z+dz, 1:xyz_bins[x+dx,y+dy,z+dz,0]+1]
         
+        #compare all atoms in short to medium (which is long starting with u+1).
         for u in xrange(len(short)):
             u_pos = pos[short[u]]
             u_index = short[u]
@@ -118,17 +120,16 @@ def nlist(system, cutoff, cmult=1):
                 d = np.linalg.norm([dvect(u_pos, v_pos, system.box(), system.pbc)], axis=1)
             vlist = medium[np.where(d < cutoff)]
             for v_index in vlist:
-                neighbors = append_neighbor(neighbors, u_index, v_index)
+                neighbors = __append_neighbor(neighbors, u_index, v_index)
     
+    #sort each atom's neighbors
     for i in xrange(len(neighbors)):
         neighbors[i][1 : neighbors[i][0]+1] = np.sort(neighbors[i][1 : neighbors[i][0]+1])
     
-    end = time.time()
-    print 'neighbor assignment time:', end-start
-    
     return neighbors
     
-def append_neighbor(n, a, b):
+def __append_neighbor(n, a, b):
+    """Adds atom ids a and b to each other's list of neighbors."""
     if b not in n[a, 1:n[a, 0]+1] and a != b:
         n[a, 0] += 1
         n[b, 0] += 1
@@ -145,12 +146,15 @@ def append_neighbor(n, a, b):
     return n
   
 def unique_rows(a):  
+    """Takes two-dimensional array a and returns only the unique rows."""
     return np.unique(a.view(np.dtype((np.void, a.dtype.itemsize*a.shape[1])))).view(a.dtype).reshape(-1, a.shape[1])  
   
   
 def box_iter(num):
-    #Iterates over unique x,y,z combinations where each x,y,z can equal +-num.
-    #Excludes 0,0,0 and equal but opposite combinations (i.e. x,y,z used, -x,-y,-z excluded)
+    """
+    Iterates over unique x,y,z combinations where each x,y,z can equal +-num.
+    Excludes 0,0,0 and equal but opposite combinations (e.g. x,y,z used, -x,-y,-z excluded).
+    """
     z = -num
     end = False
     while z <= 0:
@@ -170,42 +174,40 @@ def box_iter(num):
             break
         z+=1     
         
-def write_nlist(fname, n_list):
-    #Write a neighbor list to a file
-    
-    with open(fname, 'w') as f:
-        f.write('#Generated neighbor list\n')
-        f.write('#index n_index_1 n_index_2 ...\n')
-        for i in xrange(len(n_list)):
-            f.write(str(i))
-            for j in xrange(1, n_list[i, 0]+1):
-                f.write(' ' + str(n_list[i, j]))
-            f.write('\n')
+def write_nlist(fp, n_list):
+    """Write a neighbor list to a file-like object."""
 
-def read_nlist(fname):
-    #Read in a neighbor list from a file
+    fp.write('#Generated neighbor list\n')
+    fp.write('#index n_index_1 n_index_2 ...\n')
+    for i in xrange(len(n_list)):
+        fp.write(str(i))
+        for j in xrange(1, n_list[i, 0]+1):
+            fp.write(' ' + str(n_list[i, j]))
+        fp.write('\n')
+
+def read_nlist(fp):
+    """Read in a neighbor list from a file-like object."""
     
-    with open(fname, 'r') as f:
-        natoms = 0
-        max_n = 1
-        
-        #First pass determines number of atoms and max number of neighbors
-        for line in f:
-            terms = line.split()
-            n_n = len(terms)
-            if terms[0][0] != '#' and n_n > 0:
-                natoms += 1
-                if n_n > max_n: max_n = n_n
-                
-        n_list = np.zeros((natoms, max_n), dtype=np.int)
+    natoms = 0
+    max_n = 1
     
-        #Second pass gets values
-        for line in f:
-            terms = line.split()
-            if len(terms) > 0 and terms[0][0] != '#':
-                i = int(terms[0])
-                n_list[i, 0] = len(terms) - 1
-                for j in xrange(1, len(terms)):
-                    n_list[i, j] = terms[j]
+    #First pass determines number of atoms and max number of neighbors
+    for line in fp:
+        terms = line.split()
+        n_n = len(terms)
+        if terms[0][0] != '#' and n_n > 0:
+            natoms += 1
+            if n_n > max_n: max_n = n_n
+            
+    n_list = np.zeros((natoms, max_n), dtype=np.int)
+
+    #Second pass gets values
+    for line in fp:
+        terms = line.split()
+        if len(terms) > 0 and terms[0][0] != '#':
+            i = int(terms[0])
+            n_list[i, 0] = len(terms) - 1
+            for j in xrange(1, len(terms)):
+                n_list[i, j] = terms[j]
     
     return n_list

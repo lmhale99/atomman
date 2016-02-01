@@ -6,143 +6,258 @@ import numpy as np
 
 #Internal imports
 from atomman.tools import vect_angle
-import atomman.tools.unitconvert as uc
 
-class Box:
-#Class for representing a triclinic box
+class Box(object):
+    """
+    Class for representing a triclinic box. All property attributes can be retrieved individually, but must be set using one of the given set* methods.
+    
+    Property Attributes:
+    vects -- 3x3 array of box vectors. Can be set directly.
+    avect, bvect, cvect -- individual box vectors.
+    a, b, c, alpha, beta, gamma -- crystal cell parameter representation of a box.
+    lx, ly, lz -- LAMMPS-style box lengths.
+    xy, xz, yz -- LAMMPS-style box tilt factors.
+    xlo, xhi, ylo, yhi, zlo, zhi -- LAMMPS-style box hi/los.
+    origin -- box origin from which the vects are added to define the box. Can be set directly.
+    
+    Methods:
+    set() -- calls one of the other set_* methods if keyword arguments form a full parameter set.
+    set_vectors() -- set box with avect, bvect, cvect, (and origin).
+    set_abc() -- set box with a, b, c, (alpha, beta, gamma, and origin).
+    set_lengths() -- set box with lx, ly, lz, (xy, xz, yz, and origin).
+    set_hi_los() -- set box with xlo, xhi, ylo, yhi, zlo, zhi, (xy, xz, and yz).
+    normalize() -- normalizes a generic box to be compatible with the LAMMPS representations.
+    """
 
-    def __init__(self, origin=None, vects=None,
-                 avect=None, bvect=None, cvect=None,
-                 a=None, b=None, c=None, alpha=None, beta=None, gamma=None,
-                 lx=None, ly=None, lz=None, xy=None, xz=None, yz=None,
-                 xlo=None, xhi=None, ylo=None, yhi=None, zlo=None, zhi=None, unit=None):
+    def __init__(self, **kwargs):
+        """
+        Initilizes a box.
         
-        self.__vects = np.eye(3)
-        self.__origin = np.zeros(3)
+        If no arguments given, box is set to square unit box with origin = [0,0,0].
+        Otherwise, must give one of the following sets:
+        - vects, (and origin).
+        - avect, bvect, cvect, (and origin).
+        - a, b, c, (alpha, beta, gamma, and origin).
+        - lx, ly, lz, (xy, xz, yz, and origin).
+        - xlo, xhi, ylo, yhi, zlo, zhi, (xy, xz, and yz).
+        """
+        self.__vects = np.eye(3, dtype='float64')
+        self.__origin = np.zeros(3, dtype='float64')
         self.__isnorm = True
-       
-        self.set(origin=origin, vects=vects,
-                 avect=avect, bvect=bvect, cvect=cvect,
-                 a=a, b=b, c=c, alpha=alpha, beta=beta, gamma=gamma,
-                 lx=lx, ly=ly, lz=lz, xy=xy, xz=xz, yz=yz,
-                 xlo=xlo, xhi=xhi, ylo=ylo, yhi=yhi, zlo=zlo, zhi=zhi, unit=unit)
+        
+        if len(kwargs) > 0:
+            self.set(**kwargs)
+    
+    @property
+    def vects(self):
+        """3x3 array of box vectors."""
+        return deepcopy(self.__vects)
+        
+    @vects.setter
+    def vects(self, value):
+        
+        self.__vects[:] = value
+        #Zero out near zero terms
+        self.__vects[np.isclose(self.__vects/self.__vects.max(), 0.0, atol=1e-9)] = 0.0
+        
+        #Check if box vectors are consistent with LAMMPS normalization
+        if (self.__vects[0,1] == 0.0 and self.__vects[0,2] == 0.0 and self.__vects[1,2] == 0.0 and
+            self.__vects[0,0] > 0.0 and self.__vects[1,1] > 0.0 and self.__vects[2,2] > 0.0 and
+            abs(self.__vects[1,0]) < self.__vects[0,0]/2. and 
+            abs(self.__vects[2,0]) < self.__vects[0,0]/2. and 
+            abs(self.__vects[2,1]) < self.__vects[1,1]/2.):
+            self.__isnorm = True
+        else:
+            self.__isnorm = False
+        
+    @property
+    def origin(self):
+        """box origin vector position"""
+        return deepcopy(self.__origin)
+        
+    @origin.setter
+    def origin(self, value):
+        self.__origin[:] = value
+        
+    @property
+    def avect(self):
+        """box a vector"""
+        return self.vects[0]
+        
+    @property
+    def bvect(self):
+        """box b vector"""
+        return self.vects[1]
+    
+    @property
+    def cvect(self):
+        """box c vector"""
+        return self.vects[2]
+    
+    @property
+    def a(self):
+        """cell length a, i.e. magnitude of box a vector"""
+        return (self.__vects[0,0]**2 + self.__vects[0,1]**2 + self.__vects[0,2]**2)**0.5
+
+    @property
+    def b(self):
+        """cell length b, i.e. magnitude of box b vector"""
+        return (self.__vects[1,0]**2 + self.__vects[1,1]**2 + self.__vects[1,2]**2)**0.5       
+    
+    @property
+    def c(self):
+        """cell length c, i.e. magnitude of box c vector"""
+        return (self.__vects[2,0]**2 + self.__vects[2,1]**2 + self.__vects[2,2]**2)**0.5 
+    
+    @property    
+    def alpha(self):
+        """cell angle alpha in degrees"""
+        return vect_angle(self.__vects[1], self.__vects[2])
+        
+    @property    
+    def beta(self):
+        """cell angle beta in degrees"""
+        return vect_angle(self.__vects[0], self.__vects[2])
+
+    @property    
+    def gamma(self):
+        """cell angle gamma in degrees"""
+        return vect_angle(self.__vects[0], self.__vects[1])      
+
+    @property    
+    def lx(self):
+        """LAMMPS-style box length lx"""
+        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        return self.__vects[0,0]
+    
+    @property    
+    def ly(self):
+        """LAMMPS-style box length ly"""
+        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        return self.__vects[1,1]
+
+    @property    
+    def lz(self):
+        """LAMMPS-style box length lz"""
+        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        return self.__vects[2,2]
+        
+    @property    
+    def xy(self):
+        """LAMMPS-style box tilt factor xy"""
+        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        return self.__vects[1,0]
+        
+    @property    
+    def xz(self):
+        """LAMMPS-style box tilt factor xz"""
+        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        return self.__vects[2,0]
+
+    @property    
+    def yz(self):
+        """LAMMPS-style box tilt factor yz"""
+        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        return self.__vects[2,1]        
+         
+    @property    
+    def xlo(self):
+        """LAMMPS-style box xlo"""
+        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        return self.__origin[0]
+        
+    @property    
+    def ylo(self):
+        """LAMMPS-style box ylo"""
+        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        return self.__origin[1]
+
+    @property    
+    def zlo(self):
+        """LAMMPS-style box zlo"""
+        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        return self.__origin[2]   
+        
+    @property    
+    def xhi(self):
+        """LAMMPS-style box xhi"""
+        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        return self.__origin[0] + self.__vects[0,0]
+        
+    @property    
+    def yhi(self):
+        """LAMMPS-style box yhi"""
+        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        return self.__origin[1] + self.__vects[1,1]
+
+    @property    
+    def zhi(self):
+        """LAMMPS-style box zhi"""
+        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        return self.__origin[2] + self.__vects[2,2]         
     
     def __str__(self):
+        """Returns a string representation of the box"""
         return '\n'.join(['avect =  [%6.3f, %6.3f, %6.3f]' % (self.__vects[0,0], self.__vects[0,1], self.__vects[0,2]),
                           'bvect =  [%6.3f, %6.3f, %6.3f]' % (self.__vects[1,0], self.__vects[1,1], self.__vects[1,2]),
                           'cvect =  [%6.3f, %6.3f, %6.3f]' % (self.__vects[2,0], self.__vects[2,1], self.__vects[2,2]),
                           'origin = [%6.3f, %6.3f, %6.3f]' % (self.__origin[0],  self.__origin[1],  self.__origin[2])])
     
     
-    def set(self, origin=None, vects=None,
-                 avect=None, bvect=None, cvect=None,
-                 a=None, b=None, c=None, alpha=None, beta=None, gamma=None,
-                 lx=None, ly=None, lz=None, xy=None, xz=None, yz=None,
-                 xlo=None, xhi=None, ylo=None, yhi=None, zlo=None, zhi=None, unit=None):            
+    def set(self, **kwargs):            
+        """
+        Set the box values.
+        
+        If no arguments given, box is set to square unit box with origin = [0,0,0].
+        Otherwise, must give one of the following sets:
+        - vects, (and origin).
+        - avect, bvect, cvect, (and origin).
+        - a, b, c, (alpha, beta, gamma, and origin).
+        - lx, ly, lz, (xy, xz, yz, and origin).
+        - xlo, xhi, ylo, yhi, zlo, zhi, (xy, xz, and yz).
+        """
+                    
+        #Set default values if no kwargs given
+        if len(kwargs) == 0:
+            self.vects = np.eye(3)
+            self.origin = np.zeros(3)
+        
+        #Set directly if vects given
+        elif 'vects' in kwargs:
+            vects = kwargs.pop('vects')
+            origin = kwargs.pop('origin', [0.0, 0.0, 0.0])
+            assert len(kwargs) == 0, 'Invalid arguments'
+            self.vects = vects
+            self.origin = origin
         
         #Call set_vectors if vect inputs given
-        if vects is not None or allnotNone((avect, bvect, cvect)):
-            assert allNone((lx, ly, lz, xy, xz, yz)),                       'Invalid parameter set' 
-            assert allNone((xlo, xhi, ylo, yhi, zlo, zhi)),                 'Invalid parameter set' 
-            assert allNone((a, b, c, alpha, beta, gamma)),                  'Invalid parameter set'
-            
-            self.set_vectors(origin=origin, vects=vects, avect=avect, bvect=bvect, cvect=cvect, unit=unit)
+        elif 'avect' in kwargs:            
+            self.set_vectors(**kwargs)
         
         #Call set_lengths if length inputs given
-        elif allnotNone((lx, ly, lz)):
-            assert allNone((vects, avect, bvect, cvect)),                   'Invalid parameter set'
-            assert allNone((xlo, xhi, ylo, yhi, zlo, zhi)),                 'Invalid parameter set' 
-            assert allNone((a, b, c, alpha, beta, gamma)),                  'Invalid parameter set'
-           
-            self.set_lengths(origin=origin, lx=lx, ly=ly, lz=lz, xy=xy, xz=xz, yz=yz, unit=unit)
+        elif 'lx' in kwargs:           
+            self.set_lengths(**kwargs)
     
         #Call set_hi_los if hi/lo inputs given
-        elif allnotNone((xlo, xhi, ylo, yhi, zlo, zhi)):
-            assert allNone((vects, avect, bvect, cvect)),                   'Invalid parameter set'
-            assert allNone((lx, ly, lz)),                                   'Invalid parameter set' 
-            assert allNone((a, b, c, alpha, beta, gamma, origin)),          'Invalid parameter set'
-            
-            self.set_hi_los(xlo=xlo, xhi=xhi, ylo=ylo, yhi=yhi, zlo=zlo, zhi=zhi, xy=xy, xz=xz, yz=yz, unit=unit)
+        elif 'xlo' in kwargs:            
+            self.set_hi_los(**kwargs)
         
         #Call set_abc if vector magnitudes are given
-        elif allnotNone((a, b, c)):
-            assert allNone((vects, avect, bvect, cvect)),                   'Invalid parameter set'
-            assert allNone((lx, ly, lz, xy, xz, yz)),                       'Invalid parameter set'         
-            assert allNone((xlo, xhi, ylo, yhi, zlo, zhi)),                 'Invalid parameter set' 
-            
-            self.set_abc(origin=origin, a=a, b=b, c=c, alpha=alpha, beta=beta, gamma=gamma, unit=unit)
-            
-        #Set to cubed unit box if no parameters given    
+        elif 'a' in kwargs:            
+            self.set_abc(**kwargs)
+        
         else:
-            assert allNone((vects, avect, bvect, cvect)),                   'Invalid parameter set'
-            assert allNone((lx, ly, lz, xy, xz, yz)),                       'Invalid parameter set'         
-            assert allNone((xlo, xhi, ylo, yhi, zlo, zhi)),                 'Invalid parameter set' 
-            assert allNone((a, b, c, alpha, beta, gamma, origin)),          'Invalid parameter set'
-            
-            self.__vects[:] = uc.set_in_units(np.eye(3), unit)
-            self.__origin[:] = np.zeros(3)
-            self.__isnorm = True
-    
-    def set_origin(self, origin=None, unit=None):
-    #Sets the box origin    
+            raise TypeError('Invalid arguments')
         
-        #Default origin is (0,0,0)
-        if origin is None:
-            origin = np.zeros(3)
+    def set_vectors(self, avect, bvect, cvect, origin=[0.0, 0.0, 0.0]):
+        """Set the box using vectors (avect, bvect, cvect) and origin."""
         
-        #Check shape of origin
-        origin = np.asarray(origin)
-        assert origin.shape == (3L,)
+        self.vects = [avect, bvect, cvect]
+        self.origin = origin
         
-        #Convert units and save
-        self.__origin[:] = uc.set_in_units(origin, unit)
-        
-    def set_vectors(self, origin=None, vects=None, avect=None, bvect=None, cvect=None, unit=None):
-    #Set the direction vectors of the box. 
-        
-        #Test if vects or (avect, bvect, cvect) are given and build vects
-        if vects is not None:
-            assert allNone((avect, bvect, cvect)),                'cannot specify vects with avect, bvect, or cvect'
-            vects = np.asarray(vects)
-        else:
-            assert allnotNone((avect, bvect, cvect)),             'all avect, bvect, cvect needed'
-            vects = np.array([avect, bvect, cvect])
-        
-        #Check shape of vects
-        assert vects.shape == (3L, 3L)
-        
-        #Zero out near zero terms
-        vects[np.isclose(vects/vects.max(), 0.0)] = 0.0
-        
-        #Convert units and save
-        self.__vects[:] = uc.set_in_units(vects, unit)
-        
-        #Check if box vectors are consistent with LAMMPS normalization
-        if (vects[0,1] == 0.0 and vects[0,2] == 0.0 and vects[1,2] == 0 and
-            vects[0,0] > 0.0 and vects[1,1] > 0.0 and vects[2,2] > 0.0 and
-            abs(vects[1,0]) < vects[0,0]/2. and 
-            abs(vects[2,0]) < vects[0,0]/2. and 
-            abs(vects[2,1]) < vects[1,1]/2.):
-            self.__isnorm = True
-        else:
-            self.__isnorm = False
-        
-        #Call set_origin
-        self.set_origin(origin, unit)
-        
-    def set_abc(self, origin=None, a=None, b=None, c=None, alpha=None, beta=None, gamma=None, unit=None):
-    #Set the direction vectors using vector magnitudes (a, b, c) and angles (alpha, beta, gamma). 
-    
-        #Unit box constructed if no a,b,c are given
-        if allNone((a, b, c)):
-            a = b = c = 1.0
-        assert allnotNone((a, b, c)),   'All or none a,b,c must be given' 
-
-        #Default angles are 90.0 degrees
-        if alpha is None: alpha = 90.0
-        if beta is None:  beta =  90.0
-        if gamma is None: gamma = 90.0
-        
+    def set_abc(self, a, b, c, alpha=90.0, beta=90.0, gamma=90.0, origin=[0.0, 0.0, 0.0]):
+        """Set the box using crystal-style cell parameters (a, b, c, alpha, beta, gamma) and origin."""
+         
         #Convert to lx, ly, lz, xy, xz, yz
         lx = a
         xy = b * np.cos(gamma * np.pi / 180)
@@ -152,67 +267,46 @@ class Box:
         lz = (c**2 - xz**2 - yz**2)**0.5
 
         #Call set_lengths
-        self.set_lengths(origin=origin, lx=lx, ly=ly, lz=lz, xy=xy, xz=xz, yz=yz, unit=unit)
+        self.set_lengths(lx=lx, ly=ly, lz=lz, xy=xy, xz=xz, yz=yz, origin=origin)
         
-    def set_lengths(self, origin=None, lx=None, ly=None, lz=None, xy=None, xz=None, yz=None, unit=None):
-    #Set the direction vectors using lengths (lx, ly, lz) and tilts (xy, xz, yz).
+    def set_lengths(self, lx, ly, lz, xy=0.0, xz=0.0, yz=0.0, origin=[0.0, 0.0, 0.0]):
+        """Set the box using LAMMPS-style lengths (lx, ly, lz), tilt factors (xy, xz, yz) and origin."""
         
-        #Check that all lengths are given and positive
-        assert allnotNone((lx, ly, lz)),                                'All lengths lx, ly, and lz must be given' 
         assert lx > 0 and ly > 0 and lz > 0,                            'All lengths must be positive'
-        
-        #Default tilts are 0.0
-        if xy is None: xy = 0.0
-        if xz is None: xz = 0.0
-        if yz is None: yz = 0.0
         assert abs(xy) < lx/2. and abs(xz) < lx/2. and abs(yz) < ly/2., 'Invalid angles/tilts'
         
         #Construct vects array
-        vects = np.array([[lx, 0.0, 0.0],
-                          [xy, ly,  0.0],
-                          [xz, yz,  lz]], dtype=float)
-        vects[np.isclose(vects/vects.max(), 0.0)] = 0.0
-        
-        #Save in appropriate units
-        self.__vects[:] = uc.set_in_units(vects, unit)
-
-        #vects is constructed to be LAMMPS normalized
-        self.__isnorm = True
-        
-        #Call set_origin
-        self.set_origin(origin, unit)
+        self.vects = [[lx, 0.0, 0.0],
+                      [xy, ly,  0.0],
+                      [xz, yz,  lz]]
+        self.origin = origin
     
-    def set_hi_los(self, xlo=None, xhi=None, ylo=None, yhi=None, zlo=None, zhi=None, xy=None, xz=None, yz=None, unit=None):
-    #Set the direction vectors using hi/los (xlo, xhi, ylo, yhi, zlo, zhi) and tilts (xy, xz, yz).    
-        
-        #Check that all hi/los are given
-        assert allnotNone((xlo, xhi, ylo, yhi, zlo, zhi)),        'All hi/los must be given'
-        
-        #Convert to lengths
+    def set_hi_los(self, xlo, xhi, ylo, yhi, zlo, zhi, xy=0.0, xz=0.0, yz=0.0):
+        """Set the box using LAMMPS-style hi/los (xlo, xhi, ylo, yhi, zlo, zhi) and tilt factors (xy, xz, yz)."""   
+
+        #Convert to hi/los to lengths and origin
         lx = xhi - xlo
         ly = yhi - ylo
         lz = zhi - zlo
-        
-        #Build origin
-        origin = np.array([xlo, ylo, zlo], dtype=float)
+        origin = [xlo, ylo, zlo]
         
         #Call set_lengths
-        self.set_lengths(origin=origin, lx=lx, ly=ly, lz=lz, xy=xy, xz=xz, yz=yz, unit=unit)
+        self.set_lengths(lx=lx, ly=ly, lz=lz, xy=xy, xz=xz, yz=yz, origin=origin)
     
     def normalize(self):
-    #Rotates the box so that avect_y = avect_z = bvect_z = 0.
-        
-        #test right handedness
-        test = np.dot(np.cross(self.__vects[0], self.__vects[1]), self.__vects[2])
-        assert test > 0, 'Supplied vectors are not right handed'
+        """Rotates the box so that avect_y = avect_z = bvect_z = 0.0."""
         
         #Extract vectors and vector magnitudes
-        avect = self.__vects[0]
-        bvect = self.__vects[1]
-        cvect = self.__vects[2]
+        avect = self.avect
+        bvect = self.bvect
+        cvect = self.cvect
         a = (avect[0]**2 + avect[1]**2 + avect[2]**2)**0.5 
         b = (bvect[0]**2 + bvect[1]**2 + bvect[2]**2)**0.5 
         c = (cvect[0]**2 + cvect[1]**2 + cvect[2]**2)**0.5 
+        
+        #test right handedness
+        test = np.dot(np.cross(avect, bvect), cvect)
+        assert test > 0, 'Supplied vectors are not right handed'
         
         #Convert to normalized lx, ly, lz, xy, xz, yz
         lx = a
@@ -223,98 +317,4 @@ class Box:
         lz = (c**2 - xz**2 - yz**2)**0.5
     
         #Call set_lengths
-        self.set_lengths(lx=lx, ly=ly, lz=lz, xy=xy, xz=xz, yz=yz, origin=self.__origin)
-            
-    def get(self, term, unit=None):
-    #Returns vectors, magnitudes, angles, lengths, hi/los and tilts
-        
-        #vects, avect, bvect, cvect
-        if term == 'vects':
-            value = deepcopy(self.__vects)
-        elif term == 'avect':
-            value = deepcopy(self.__vects[0])
-        elif term == 'bvect':
-            value = deepcopy(self.__vects[1])
-        elif term == 'cvect':
-            value = deepcopy(self.__vects[2])
-            
-        #a, b, c, alpha, beta, gamma    
-        elif term == 'a':
-            value = (self.__vects[0,0]**2 + self.__vects[0,1]**2 + self.__vects[0,2]**2)**0.5
-        elif term == 'b':
-            value = (self.__vects[1,0]**2 + self.__vects[1,1]**2 + self.__vects[1,2]**2)**0.5
-        elif term == 'c':
-            value = (self.__vects[2,0]**2 + self.__vects[2,1]**2 + self.__vects[2,2]**2)**0.5
-        elif term == 'alpha':
-            value = vect_angle(self.__vects[1], self.__vects[2])
-        elif term == 'beta':
-            value = vect_angle(self.__vects[0], self.__vects[2])
-        elif term == 'gamma':
-            value = vect_angle(self.__vects[0], self.__vects[1])
-            
-        #lx, ly, lz    
-        elif term == 'lx':
-            assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
-            value = self.__vects[0,0]
-        elif term == 'ly':
-            assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
-            value = self.__vects[1,1]
-        elif term == 'lz':
-            assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
-            value = self.__vects[2,2]
-            
-        #xy, xz, yz    
-        elif term == 'xy':
-            assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
-            value = self.__vects[1,0]
-        elif term == 'xz':
-            assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
-            value = self.__vects[2,0]
-        elif term == 'yz':
-            assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
-            value = self.__vects[2,1]
-            
-        #xlo, ylo, zlo    
-        elif term == 'xlo':
-            assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
-            value = self.__origin[0]
-        elif term == 'ylo':
-            assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
-            value = self.__origin[1]    
-        elif term == 'zlo':
-            assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
-            value = self.__origin[2]
-            
-        #xhi, yhi, zhi
-        elif term == 'xhi':
-            assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
-            value = self.__origin[0] + self.__vects[0,0]
-        elif term == 'yhi':
-            assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
-            value = self.__origin[1] + self.__vects[1,1]
-        elif term == 'zhi':
-            assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
-            value = self.__origin[2] + self.__vects[2,2]  
-        
-        #origin
-        elif term == 'origin':
-            value = deepcopy(self.__origin)
-        
-        #unknown
-        else:
-            return None
-            
-        return uc.get_in_units(value, unit)
-
-def allNone(check):
-    for test in check:
-        if test is not None:
-            return False    
-    return True
-
-def allnotNone(check):
-    for test in check:
-        if test is None:
-            return False
-    return True
-    
+        self.set_lengths(lx=lx, ly=ly, lz=lz, xy=xy, xz=xz, yz=yz, origin=self.origin)     

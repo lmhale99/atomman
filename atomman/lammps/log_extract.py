@@ -6,7 +6,7 @@ import numpy as np
 from atomman.models import DataModelDict
 
 def log_extract(log_info):
-#Parse a LAMMPS screen output/log file into a DataModelDict
+    """Parses a LAMMPS screen output/log file and returns a data model containing the information."""
     
     #Create DataModelDict root
     log_dict = DataModelDict()
@@ -34,17 +34,17 @@ def log_extract(log_info):
                 #save values in list if they are numbers
                 if terms[0].isdigit():
                     if thermolist is None:
-                        thermolist = np.array([terms], dtype=float)
+                        thermolist = np.array([terms], dtype='float64')
                     else:
-                        thermolist = np.append(thermolist, np.array([terms], dtype=float), axis=0)                    
+                        thermolist = np.append(thermolist, np.array([terms], dtype='float64'), axis=0)                    
                 
                 #if not values, transform to dictionary
                 else:
                     thermo = DataModelDict()
                     for i in xrange(len(headers)):
                         thermoval = thermolist[:,i]
-                        if np.allclose(thermoval, np.asarray(thermoval, dtype=int)):
-                            thermoval = np.asarray(thermoval, dtype=int)
+                        #if np.allclose(thermoval, np.asarray(thermoval, dtype='int32')):
+                        #    thermoval = np.asarray(thermoval, dtype='int32')
                         thermo[headers[i]] = list(thermoval)
                         
                     #add dictionary to simulation list

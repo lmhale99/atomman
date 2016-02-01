@@ -2,7 +2,24 @@ import numpy as np
 import atomman as am
 
 def point(system, ptd_type=None, atype=None, pos=None, ptd_id=None, db_vect=None, scale=False):
-    #Returns a new system containing a point defect. 
+    """
+    Returns a new System where a point defect has been inserted.
+    
+    Keyword Arguments:
+    system -- base System that the defect is added to.    
+    ptd_type -- key indicating which type of defect to add:
+                'v' -- vacancy.
+                'i' -- positional interstitial.
+                's' -- substitutional.
+                'db' -- dumbbell interstitial.
+    atype -- atom type for defect atom ('i', 's', 'db' styles).
+    pos -- position for adding the defect atom (all styles).
+    ptd_id -- atom id where defect is added.  Alternative to using pos ('v', 's', 'db' styles).
+    db_vect -- vector associated with the dumbbell interstitial ('db' style).
+    scale -- indicates if pos and db_vect are absolute (False) or box-relative (True). Default is False.
+    
+    Adds atom property old_id if it doesn't already exist that tracks the original atom ids
+    """ 
     
     #Check that ptd_type is a valid option
     assert ptd_type in ('v', 'i', 's', 'db'),    'Invalid ptd_type. Options are: v, i, s, or db'
@@ -29,9 +46,19 @@ def point(system, ptd_type=None, atype=None, pos=None, ptd_id=None, db_vect=None
         return dumbbell(system, atype=atype, pos=pos, ptd_id=ptd_id, db_vect=db_vect, scale=scale)
     
 def vacancy(system, pos=None, ptd_id=None, scale=False):
-    #Adds a vacancy to the system by specifying a position or atom id
+    """
+    Returns a new System where a vacancy point defect has been inserted.
     
-    pos_list = system.atoms_view['pos']
+    Keyword Arguments:
+    system -- base System that the defect is added to.
+    pos -- position of the atom to be removed.
+    ptd_id -- id of the atom to be removed.  Alternative to using pos.
+    scale -- if pos is given, indicates if pos is absolute (False) or box-relative (True). Default is False.
+    
+    Adds atom property old_id if it doesn't already exist that tracks the original atom ids.
+    """ 
+    
+    pos_list = system.atoms.view['pos']
     
     #if pos is supplied, use isclose and where to identify the id of the atom at pos
     if pos is not None:
@@ -49,22 +76,32 @@ def vacancy(system, pos=None, ptd_id=None, scale=False):
         raise TypeError('Invalid ptd_id')
     
     #create new system and copy values over
-    d_system = am.System(box=system.box(), pbc=system.pbc(), atoms=am.Atoms(natoms=system.natoms()-1))
+    d_system = am.System(box=system.box, pbc=system.pbc, atoms=am.Atoms(natoms=system.natoms-1))
     for prop in system.atoms_prop():
-        view = system.atoms_view[prop]
-        view = np.vstack(( view[:ptd_id], view[ptd_id+1:] ))
-        d_system.atoms(prop, view, dtype=system.atoms_dtype[prop])
+        view = system.atoms.view[prop]
+        value = np.asarray(np.vstack(( view[:ptd_id], view[ptd_id+1:] )), dtype=system.atoms.dtype[prop])
+        d_system.atoms_prop(key=prop, value=value)
     
     #add property old_id with each atom's original id
-    if d_system.atoms(0, 'old_id') is None:
-        d_system.atoms('old_id', np.hstack(( np.arange(0, ptd_id), np.arange(ptd_id+1, system.natoms()) )), dtype=int)
+    if d_system.atoms_prop(key='old_id') is None:
+        d_system.atoms_prop(key='old_id', value=np.hstack(( np.arange(0, ptd_id), np.arange(ptd_id+1, system.natoms) )), dtype='int32')
     
     return d_system
           
 def interstitial(system, atype=None, pos=None, scale=False):
-    #Adds an interstitial atom to the system with specified atom type and position
+    """
+    Returns a new System where a positional interstitial point defect has been inserted.
+    
+    Keyword Arguments:
+    system -- base System that the defect is added to.
+    atype -- atom type for the interstitial atom.
+    pos -- position for adding the interstitial atom.
+    scale -- if pos is given, indicates if pos is absolute (False) or box-relative (True). Default is False.
+    
+    Adds atom property old_id if it doesn't already exist that tracks the original atom ids.
+    """  
   
-    pos_list = system.atoms_view['pos']
+    pos_list = system.atoms.view['pos']
     
     if scale:
         pos = system.unscale(pos)
@@ -76,27 +113,38 @@ def interstitial(system, atype=None, pos=None, scale=False):
     assert isinstance(atype, (int, long)) and atype > 0,                            'atype must be a positive integer'   
     
     #create new system and copy values over
-    d_system = am.System(box=system.box(), pbc=system.pbc(), atoms=am.Atoms(natoms=system.natoms()+1))
+    d_system = am.System(box=system.box, pbc=system.pbc, atoms=am.Atoms(natoms=system.natoms+1))
     for prop in system.atoms_prop():
-        view = system.atoms_view[prop]
-        view = np.vstack(( view, np.zeros_like(view[0]) ))
-        d_system.atoms_prop(prop, view, dtype=system.atoms_dtype[prop])
-    d_system.atoms(d_system.natoms()-1, 'atype', atype)
-    d_system.atoms(d_system.natoms()-1, 'pos', pos)
+        view = system.atoms.view[prop]
+        value = np.asarray(np.vstack(( view, np.zeros_like(view[0]) )), dtype=system.atoms.dtype[prop])
+        d_system.atoms_prop(key=prop, value=value)
+    d_system.atoms_prop(a_id=d_system.natoms-1, key='atype', value=atype)
+    d_system.atoms_prop(a_id=d_system.natoms-1, key='pos',   value=pos)
     
     #add property old_id with each atom's original id
-    if d_system.atoms(0, 'old_id') is None:
-        d_system.atoms('old_id', np.arange(d_system.natoms()), dtype=int)
+    if d_system.atoms_prop(key='old_id') is None:
+        d_system.atoms_prop(key='old_id', value=np.arange(d_system.natoms), dtype='int32')
     else:
-        old_id = max(system.atoms_view['old_id'])[0] + 1
-        d_system.atoms(d_system.natoms()-1, 'old_id', old_id)
+        old_id = max(system.atoms_prop(key='old_id')) + 1
+        d_system.atoms_prop(a_id=d_system.natoms-1, key='old_id', value=old_id)
     
     return d_system
     
 def substitutional(system, atype=None, pos=None, ptd_id=None, scale=False):
-    #Adds a substitutional atom to the system by changing the atom type of an atom indicated by ptd_id or pos
+    """
+    Returns a new System where a substitutional point defect has been inserted.
     
-    pos_list = system.atoms_view['pos']
+    Keyword Arguments:
+    system -- base System that the defect is added to.
+    atype -- atom type to change the indicated atom to.
+    pos -- position of the atom to be changed.
+    ptd_id -- id of the atom to be changed.  Alternative to using pos.
+    scale -- if pos is given, indicates if pos is absolute (False) or box-relative (True). Default is False.
+    
+    Adds atom property old_id if it doesn't already exist that tracks the original atom ids.
+    """ 
+    
+    pos_list = system.atoms.view['pos']
     
     #if pos is supplied, use isclose and where to identify the id of the atom at pos
     if pos is not None:
@@ -114,26 +162,38 @@ def substitutional(system, atype=None, pos=None, ptd_id=None, scale=False):
         raise TypeError('Invalid ptd_id')
     
     assert isinstance(atype, (int, long)) and atype > 0,                            'atype must be a positive integer'   
-    assert system.atoms(ptd_id, 'atype') != atype,                                  'identified atom is already of the specified atype'
+    assert system.atoms_prop(a_id=ptd_id, key='atype') != atype,                    'identified atom is already of the specified atype'
     
     #create new system and copy values over
-    d_system = am.System(box=system.box(), pbc=system.pbc(), atoms=am.Atoms(natoms=system.natoms()))
+    d_system = am.System(box=system.box, pbc=system.pbc, atoms=am.Atoms(natoms=system.natoms))
     for prop in system.atoms_prop():
-        view = system.atoms_view[prop]
-        view = np.vstack(( view[:ptd_id], view[ptd_id+1:], view[ptd_id] ))
-        d_system.atoms(prop, view, dtype=system.atoms_dtype[prop])
-    d_system.atoms(d_system.natoms()-1, 'atype', atype)
+        view = system.atoms.view[prop]
+        value = np.asarray(np.vstack(( view[:ptd_id], view[ptd_id+1:], view[ptd_id] )), dtype=system.atoms.dtype[prop])
+        d_system.atoms_prop(key=prop, value=value)
+    d_system.atoms_prop(a_id=d_system.natoms-1, key='atype', value=atype)
     
     #add property old_id with each atom's original id
-    if d_system.atoms(0, 'old_id') is None:
-        d_system.atoms('old_id', np.hstack(( np.arange(0, ptd_id), np.arange(ptd_id+1, system.natoms()), ptd_id )), dtype=int)
+    if d_system.atoms_prop(key='old_id') is None:
+        d_system.atoms_prop(key='old_id', value=np.hstack(( np.arange(0, ptd_id), np.arange(ptd_id+1, system.natoms), ptd_id )), dtype='int32')
         
     return d_system
         
 def dumbbell(system, atype=None, pos=None, ptd_id=None, db_vect=None, scale=False):
-    #Adds a dumbbell interstitial to the system with specified atom type, position, and dumbbell vector
+    """
+    Returns a new System where a dumbbell interstitial point defect has been inserted.
     
-    pos_list = system.atoms_view['pos']
+    Keyword Arguments:
+    system -- base System that the defect is added to.    
+    atype -- atom type for the atom in the dumbbell pair being added to the system.
+    pos -- position of the system atom where the dumbbell pair is added.
+    ptd_id -- id of the system atom where the dumbbell pair is added.  Alternative to using pos.
+    db_vect -- vector associated with the dumbbell interstitial.
+    scale -- indicates if pos and db_vect are absolute (False) or box-relative (True). Default is False.
+    
+    Adds atom property old_id if it doesn't already exist that tracks the original atom ids.
+    """ 
+    
+    pos_list = system.atoms.view['pos']
     
     #if pos is supplied, use isclose and where to identify the id of the atom at pos
     if pos is not None:
@@ -152,22 +212,26 @@ def dumbbell(system, atype=None, pos=None, ptd_id=None, db_vect=None, scale=Fals
     
     assert isinstance(atype, (int, long)) and atype > 0,                            'atype must be a positive integer'   
     
+    #unscale db_vect if scale is True
+    if scale:
+        db_vect = system.unscale(db_vect)
+    
     #create new system and copy values over
-    d_system = am.System(box=system.box(), pbc=system.pbc(), atoms=am.Atoms(natoms=system.natoms()+1))
+    d_system = am.System(box=system.box, pbc=system.pbc, atoms=am.Atoms(natoms=system.natoms+1))
     for prop in system.atoms_prop():
-        view = system.atoms_view[prop]
-        view = np.vstack(( view[:ptd_id], view[ptd_id+1:], view[ptd_id], np.zeros_like(view[0]) ))
-        d_system.atoms(prop, view, dtype=system.atoms_dtype[prop])
+        view = system.atoms.view[prop]
+        value = np.asarray(np.vstack(( view[:ptd_id], view[ptd_id+1:], view[ptd_id], np.zeros_like(view[0]) )), dtype=system.atoms.dtype[prop])
+        d_system.atoms_prop(key=prop, value=value)
         
-    d_system.atoms(d_system.natoms()-1, 'atype', atype)
-    d_system.atoms(d_system.natoms()-2, 'pos', pos-db_vect)
-    d_system.atoms(d_system.natoms()-1, 'pos', pos+db_vect)
+    d_system.atoms_prop(a_id=d_system.natoms-1, key='atype', value=atype)
+    d_system.atoms_prop(a_id=d_system.natoms-2, key='pos',   value=pos-db_vect)
+    d_system.atoms_prop(a_id=d_system.natoms-1, key='pos',   value=pos+db_vect)
     
     #add property old_id with each atom's original id
-    if d_system.atoms(0, 'old_id') is None:
-        d_system.atoms('old_id', np.hstack(( np.arange(0, ptd_id), np.arange(ptd_id+1, system.natoms()), ptd_id, system.natoms())), dtype=int)
+    if d_system.atoms_prop(a_id=0, key='old_id') is None:
+        d_system.atoms_prop(key='old_id', value=np.hstack(( np.arange(0, ptd_id), np.arange(ptd_id+1, system.natoms), ptd_id, system.natoms)), dtype='int32')
     else:
-        old_id = max(system.atoms_view['old_id'])[0] + 1
-        d_system.atoms(d_system.natoms()-1, 'old_id', old_id)
+        old_id = max(system.atoms_prop(key='old_id')) + 1
+        d_system.atoms_prop(a_id=d_system.natoms-1, key='old_id', value=old_id)
     
     return d_system

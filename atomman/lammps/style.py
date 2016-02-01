@@ -1,8 +1,13 @@
 from collections import OrderedDict
 import numpy as np
-
-#Specifies the per-atom values associated with the different LAMMPS atom_style options    
+    
 def atom(atom_style='atomic'):
+    """
+    Returns the atom information associated with a given LAMMPS atom_style.
+    
+    Returns a dictionary where the keys are atom property names and values are tuples consisting of:
+    (size, physical-quantity, data-type). 
+    """
     int = np.dtype('int32')
     float = np.dtype('float64')
     
@@ -154,6 +159,13 @@ def atom(atom_style='atomic'):
     return params
 
 def velocity(atom_style='atomic'):
+    """
+    Returns the velocity information associated with a given LAMMPS atom_style.
+    
+    Returns a dictionary where the keys are velocity property names and values are tuples consisting of:
+    (size, physical-quantity, data-type). 
+    """
+    
     params = OrderedDict()
     
     if atom_style in ('angle', 'atomic', 'body', 'bond', 'charge', 'dipole', 'full', 'line', 'meso',
@@ -190,6 +202,13 @@ def velocity(atom_style='atomic'):
     return params
     
 def unit(units='metal'):
+    """
+    Returns the units information associated with a LAMMPS units option.
+    
+    Returns a dictionary where:
+    keys are physical quantity types
+    values are associated units for the LAMMPS units option specified.
+    """
     params = OrderedDict()
     
     if units == 'lj':

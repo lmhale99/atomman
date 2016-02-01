@@ -3,21 +3,29 @@ import mendeleev
 import os
 
 class Potential():
-#class for representing a LAMMPS potential instance    
+    """class for building LAMMPS input lines from a LAMMPS-potential data model.""" 
     
-    def __init__(self, datamodel = None, pot_dir = None):
-        #initialize a Potential object
+    def __init__(self, datamodel, pot_dir=None):
+        """
+        initializes an instance associated with a LAMMPS-potential data model.
         
-        if datamodel is not None:
-            self.load(datamodel, pot_dir)
-        else:
-            self.__dm = DataModelDict()
-            self.__pot_dir = ''
+        Arguments:
+        datamodel -- a string or file-like obect of a json/xml data model containing a LAMMPS-potential branch.
+        pot_dir -- (optional) the directory location of any artifacts associated with the potential.
+        """
+        
+        self.load(datamodel, pot_dir)
             
     def load(self, datamodel, pot_dir=None):
-        #loads data model info associated with a LAMMPS potential instance
+        """
+        loads LAMMPS-potential data model info.
+        
+        Arguments:
+        datamodel -- a string or file-like obect of a json/xml data model containing a LAMMPS-potential branch.
+        pot_dir -- (optional) the directory location of any artifacts associated with the potential.
+        """
 
-        dm = DataModelDict(datamodel).find('interatomicPotentialImplementationLAMMPS')
+        dm = DataModelDict(datamodel).find('LAMMPS-potential')
         assert len(dm) == 1, 'Exactly one LAMMPS potential implementation must be in data model'
         self.__dm = dm[0]
         
@@ -53,33 +61,52 @@ class Potential():
             assert isinstance(atom['mass'], float), 'Mass needs to be a number!'
         
         if pot_dir is not None:
-            self.__pot_dir = pot_dir
+            self.pot_dir = pot_dir
         else:
-            self.__pot_dir = ''
+            self.pot_dir = ''
             
     def __str__(self):
-        #string prints the potential's human readable name
-        return self.__dm['potentialID']['descriptionIdentifier']
-        
+        """The string of the Potential returns its human-readable id"""
+        return self.__dm['potential']['id']
+    
+    @property
+    def id(self):
+        """The human-readable id for the Potential."""
+        return self.__dm['potential']['id']
+    
+    @property    
+    def key(self):
+        """The unique hash-key for the Potential."""
+        return self.__dm['potential']['key']
+    
+    @property
     def units(self):
-        #returns the potential's units style
+        """The LAMMPS units for the Potential."""
         return self.__dm['units']
-        
+    
+    @property
     def atom_style(self):
-        #returns the potential's atom_style
+        """The LAMMPS atom_style for the Potential."""
         return self.__dm['atom_style']
-        
+    
+    @property
     def symbols(self):
+        """List of all element-model symbols for the Potential."""
         symbols = []
         atoms = self.__dm['atom']
         for atom in atoms:
-            symbols.append(str(atom['symbol']))
-            
+            symbols.append(str(atom['symbol']))    
         return symbols
     
     def elements(self, symbols=None):
+        """
+        Returns the element names associated with a list of element-model symbols.
+        
+        Arguments:
+        symbols -- (optional) list of element-model symbols being used.  If None (default), will use all of the Potential's elements.
+        """
         if symbols is None:
-            symbols = self.symbols()
+            symbols = self.symbols
         
         if not isinstance(symbols, (list, tuple)):
             symbols = [symbols]
@@ -92,14 +119,17 @@ class Potential():
                     break
         assert len(symbols) == len(elements), 'Not all elements found!'
         
-        if len(elements) == 0:
-            return elements[0]
-        else:
-            return elements
+        return elements
             
     def masses(self, symbols=None):
+        """
+        Returns the element masses associated with a list of element-model symbols.
+        
+        Arguments:
+        symbols -- (optional) list of element-model symbols being used.  If None (default), will use all of the Potential's elements.
+        """
         if symbols is None:
-            symbols = self.symbols()
+            symbols = self.symbols
         
         if not isinstance(symbols, (list, tuple)):
             symbols = [symbols]
@@ -112,16 +142,18 @@ class Potential():
                     break
         assert len(symbols) == len(masses), 'Not all masses found!'
         
-        if len(masses) == 0:
-            return masses[0]
-        else:
-            return masses
+        return masses
            
-        #Returns mass, pair_style and pair_coeff LAMMPS command lines associated with a given list of element symbols
     def pair_info(self, symbols = None):
+        """
+        Returns all LAMMPS input command lines associated with the Potential and a list of element-model symbols.
+        
+        Arguments:
+        symbols -- (optional) list of element-model symbols being used.  If None (default), will use all of the Potential's elements.
+        """
         #if no symbols supplied use all for potential
         if symbols is None:
-            symbols = self.symbols()
+            symbols = self.symbols
         if not isinstance(symbols, (list, tuple)):
             symbols = [symbols]
         
@@ -146,14 +178,14 @@ class Potential():
             coeff_terms = [coeff_terms]
         for coeff_line in coeff_terms:
             try:
-                test = coeff_line['interaction']['element']
+                test = coeff_line['interaction']['symbol']
             except:
-                coeff_line['interaction'] = DataModelDict([('element', ['*', '*'])])
+                coeff_line['interaction'] = DataModelDict([('symbol', ['*', '*'])])
             
             
             #Always include coeff lines that act on all atoms in the system
-            if coeff_line['interaction']['element'] == ['*', '*']:
-                coeff_symbols = self.symbols()
+            if coeff_line['interaction']['symbol'] == ['*', '*']:
+                coeff_symbols = self.symbols
                 coeff += 'pair_coeff * *' + self.__pair_terms(coeff_line['term'], symbols, coeff_symbols) + '\n'
                 continue
             
@@ -166,12 +198,12 @@ class Potential():
                                                     
             #Treat as a many-body potential
             if many:
-                coeff_symbols = coeff_line['interaction']['element']
+                coeff_symbols = coeff_line['interaction']['symbol']
                 coeff += 'pair_coeff * *' + self.__pair_terms(coeff_line['term'], symbols, coeff_symbols) + '\n'
                 
             #Treat as pair potential
             else:
-                coeff_symbols = coeff_line['interaction']['element']
+                coeff_symbols = coeff_line['interaction']['symbol']
                 assert len(coeff_symbols) == 2,     'Pair potential interactions need two listed elements'
                 
                 #Classic eam style is a special case
@@ -198,22 +230,22 @@ class Potential():
         except:
             command_terms = []
         for command_line in command_terms:
-            command += self.__pair_terms(command_line['term']) + '\n'
-            
+            command += self.__pair_terms(command_line['term'], symbols, self.symbols).strip() + '\n'
+
         return mass + style + coeff + command
     
-    #Utility function used by self.pair_info() for composing lines from terms
     def __pair_terms(self, terms, system_symbols = [], coeff_symbols = []):
+        """utility function used by self.pair_info() for composing lines from terms"""
         line = ''
         if not isinstance(terms, list): 
             terms = [terms]
         for term in terms:
             for ttype, tval in term.iteritems():
-                if ttype == 'option': 
+                if ttype == 'option' or ttype == 'parameter': 
                     line += ' ' + str(tval)
                     
                 elif ttype == 'file':
-                    line += ' ' + str( os.path.join(self.__pot_dir, tval) )
+                    line += ' ' + str( os.path.join(self.pot_dir, tval) )
                     
                 elif ttype == 'symbolsList' and tval == 'True':
                     for coeff_symbol in coeff_symbols:

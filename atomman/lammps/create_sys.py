@@ -1,9 +1,17 @@
 import os
 import numpy as np
 from atomman.lammps import atom_dump, run
-
-#Uses LAMMPS to create a iprpy.System from the supplied system parameters    
+   
 def create_sys(lammps_exe, system_info):
+    """
+    Uses LAMMPS to generate a System based on the supplied system_info.
+    
+    Arguments:
+    lammps_exe -- name (and location) of the LAMMPS executable to use.
+    system_info -- LAMMPS input script command lines associated with creating a new system.
+    
+    system_info can be generated using atomman.lammps.sys_gen.
+    """
 
     newline = '\n'
     script = newline.join([system_info,
