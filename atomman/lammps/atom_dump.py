@@ -1,6 +1,6 @@
 import atomman as am
 import atomman.unitconvert as uc
-from atomman.models import DataModelDict
+from DataModelDict import DataModelDict
 import numpy as np
 from copy import deepcopy
 
@@ -26,14 +26,12 @@ def load(fname, prop_info=None):
                 prop_info = DataModelDict(fj)
         except:
             prop_info = None
+            box_unit = None
    
     #read box_unit if specified in prop_info
-    if prop_info is None:
-        box_unit = None
-    elif prop_info.ismodel('LAMMPS-dump-atoms_prop-relate'):
+    if prop_info is not None:
+        prop_info = prop_info.find('LAMMPS-dump-atoms_prop-relate')
         box_unit = prop_info['LAMMPS-dump-atoms_prop-relate']['box_prop'].get('unit', None)
-    else:
-        raise ValueError('Data Model not a LAMMPS-dump-atoms_prop-relate')
 
     with open(fname, 'r') as f:
         pbc = None
@@ -65,14 +63,8 @@ def load(fname, prop_info=None):
                         #cycle over the defined atoms_prop in prop_info
                         for prop, p_keys in prop_info['LAMMPS-dump-atoms_prop-relate']['atoms_prop'].iteritems():
                             #set default keys
-                            try:
-                                dtype = p_keys['dtype']
-                            except:
-                                dtype = None
-                            try:
-                                shape = p_keys['shape']
-                            except:
-                                shape = None
+                            dtype = p_keys.get('dtype', None)
+                            shape = p_keys.get('shape', None)
                             shape = (natoms,) + np.empty(shape).shape
                             
                             value = np.empty(shape)
@@ -81,10 +73,7 @@ def load(fname, prop_info=None):
                             for attr, a_keys in prop_info['LAMMPS-dump-atoms_prop-relate']['LAMMPS-attribute'].iteritems():
                                 
                                 #cycle over list of relations for each LAMMPS-attribute
-                                relations = a_keys['relation']
-                                if not isinstance(relations, list):
-                                    relations = [relations]
-                                for relation in relations:
+                                for relation in a_keys.iterlist('relation'):
                                     
                                     #if atoms prop and relation prop match
                                     if relation['prop'] == prop:
@@ -230,9 +219,9 @@ def dump(fname, system, prop_info=None, xf='%.13e'):
                 prop_info.json(fp=fj, indent=4)
     else:
         prop_info = DataModelDict(prop_info)
-    assert prop_info.ismodel('LAMMPS-dump-atoms_prop-relate'), 'Data Model not a LAMMPS-dump-atoms_prop-relate'  
     
     #read box_unit if specified in prop_info
+    prop_info = prop_info.find('LAMMPS-dump-atoms_prop-relate')
     box_unit = prop_info['LAMMPS-dump-atoms_prop-relate']['box_prop'].get('unit', None)
         
     #open fname
@@ -298,9 +287,7 @@ def dump(fname, system, prop_info=None, xf='%.13e'):
             for attr, a_keys in prop_info['LAMMPS-dump-atoms_prop-relate']['LAMMPS-attribute'].iteritems():
                 
                 #get first prop relation for attr
-                relation = a_keys['relation']
-                if isinstance(relation, list):
-                    relation = relation[0]
+                relation = a_keys.list('relation')[0]
                 prop = relation['prop']
                 
                 #set unit and scale info
