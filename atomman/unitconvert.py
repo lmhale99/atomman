@@ -1,14 +1,14 @@
 #External library imports
 import numericalunits as nu
+import numpy as np
 
-#creates a dictionary containing the defined numericalunits values
 def build_unit():
-    #Builds the unit dictionary based on current working units
+    """Builds the unit dictionary based on current working units"""
     
     global unit
     unit = {
         "m": nu.m, "cm": nu.cm, "mm": nu.mm, "um": nu.um, "nm": nu.nm, "pm": nu.pm, "fm": nu.fm, 
-        "km": nu.km, "angstrom": nu.angstrom, "lightyear": nu.lightyear, "astro_unit": nu.astro_unit,
+        "km": nu.km, "angstrom": nu.angstrom, "Angstrom": nu.angstrom, "lightyear": nu.lightyear, "astro_unit": nu.astro_unit,
         "pc": nu.pc, "kpc": nu.kpc, "Mpc": nu.Mpc, "Gpc": nu.Gpc, 
         "inch": nu.inch, "foot": nu.foot, "mile": nu.mile, "thou": nu.thou,
         
@@ -73,7 +73,7 @@ def build_unit():
     }
 
 def reset_units(seed=None, length=None, mass=None, time=None, energy=None, charge=None):
-    #Allows the working units to be reset to random values or specified accoring to dimensions
+    """Allows the working units to be reset to random values or specified accoring to dimensions."""
     
     if length is None and time is None and mass is None and energy is None and charge is None:
         nu.reset_units(seed)
@@ -135,14 +135,14 @@ def reset_units(seed=None, length=None, mass=None, time=None, energy=None, charg
     build_unit()    
 
 def set_in_units(value, units):
-    #Convert value from specified units to working units
+    """Convert value from specified units to working units"""
     units = parse(units)
-    return value * units
+    return np.asarray(value) * units
         
 def get_in_units(value, units):
-    #Convert value from working units to specified units
+    """Convert value from working units to specified units"""
     units = parse(units)
-    return value / units
+    return np.asarray(value) / units
     
 def value_unit(term):
     """Used for data model elements with value, unit"""
@@ -153,7 +153,7 @@ def value_unit(term):
     return set_in_units(term['value'], unit)
     
 def parse(units):
-    #Convert units as None or strings into numbers
+    """Convert units as strings (or None) into numbers."""
     
     #Units of None does no scaling
     if units is None:
