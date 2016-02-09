@@ -38,6 +38,12 @@ class System(object):
         assert isinstance(prop, dict), 'invalid prop dictionary'
         self.__prop = prop
 
+    def __str__(self):
+        return '\n'.join([str(self.box),
+                          'natoms = ' + str(self.natoms),
+                          'natypes = ' + str(self.natypes),
+                          str(self.atoms)])
+        
     @property    
     def atoms(self): 
         """The Atoms instance within the System."""
@@ -106,12 +112,12 @@ class System(object):
         """
         
         scale = kwargs.pop('scale', False)
-        if not 'scale':
-            self.__box.set(**kwargs)
-        else:
+        if scale:
             spos = self.scale(self.atoms.view['pos'])
             self.__box.set(**kwargs)
             self.atoms.view['pos'][:] = self.unscale(spos)
+        else:
+            self.__box.set(**kwargs)
     
     def box_normalize(self):
         """Extends box.normalize()."""
@@ -174,12 +180,13 @@ class System(object):
         
         #call atomman.tools.dvect using self system's box and pbc
         return dvect(pos_0, pos_1, self.box, self.pbc)
-        
+
     def wrap(self):
         """Wrap atoms around periodic boundaries and extend non-periodic boundaries such that all atoms are within the box."""
         
         mins = np.array([0.0, 0.0, 0.0])
         maxs = np.array([1.0, 1.0, 1.0])
+
         spos = self.scale(self.atoms.view['pos'])
         
         for i in xrange(3):
@@ -188,17 +195,18 @@ class System(object):
             else:
                 min = spos[:, i].min()
                 max = spos[:, i].max()
-                if min < 0.0: mins[i] = min - 0.001
-                if max > 1.0: maxs[i] = max + 0.001             
+                if min < mins[i]: mins[i] = min - 0.001
+                if max > maxs[i]: maxs[i] = max + 0.001             
                         
-        self.atoms.view['pos'][:] = self.unscale(spos)        
+        self.atoms.view['pos'][:] = self.unscale(spos)          
         
         origin = self.box.origin + mins.dot(self.box.vects) 
         avect = self.box.avect * (maxs[0] - mins[0])
         bvect = self.box.bvect * (maxs[1] - mins[1])
         cvect = self.box.cvect * (maxs[2] - mins[2])
+        
         self.box_set(avect=avect, bvect=bvect, cvect=cvect, origin=origin)          
-    
+        
     def nlist(self, cutoff, cmult=1):
         """Build neighbor list for all atoms based on a cutoff.
         
