@@ -53,7 +53,7 @@ def supersize(system, a_size, b_size, c_size):
     #Copy over all property values using numpy broadcasting
     for prop in system.atoms_prop():
         o_values = system.atoms_prop(key=prop)
-        n_values = np.empty((mults[0] * mults[1] * mults[2],) + o_values.shape)
+        n_values = np.empty((mults[0] * mults[1] * mults[2],) + o_values.shape, dtype = o_values.dtype)
         n_values[:] = system.atoms_prop(key=prop)
         n_shape = n_values.shape
         n_shape = (n_shape[0]*n_shape[1],) + n_shape[2:]
