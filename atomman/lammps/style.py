@@ -344,7 +344,17 @@ def unit(units='metal'):
     
     return params
 
-
+def timestep(units='metal'):
+    if   units == 'lj': return 0.005
+    elif units == 'real': return 1.0
+    elif units == 'metal': return 0.001
+    elif units == 'si': return 1.0e-8
+    elif units == 'cgs': return 1.0e-8
+    elif units == 'electron': return 0.001
+    elif units == 'micro': return 2.0
+    elif units == 'nano': return 0.00045
+    else:
+        raise ValueError('units ' + units + ' not supported')
 
 
 

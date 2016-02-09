@@ -27,7 +27,7 @@ class Potential(object):
 
         self.__dm = DataModelDict(model).find('LAMMPS-potential')        
         
-        for atom in self.__dm['LAMMPS-potential'].iterlist('atom'):
+        for atom in self.__dm.iterlist('atom'):
             #Check if element is listed
             try:
                 test = atom['element']
@@ -73,28 +73,28 @@ class Potential(object):
     @property
     def id(self):
         """Human-readable identifier."""
-        return self.__dm['LAMMPS-potential']['potential']['id']
+        return self.__dm['potential']['id']
     
     @property    
     def uuid(self):
         """uuid hash-key."""
-        return self.__dm['LAMMPS-potential']['potential']['key']
+        return self.__dm['potential']['key']
     
     @property
     def units(self):
         """LAMMPS units option."""
-        return self.__dm['LAMMPS-potential']['units']
+        return self.__dm['units']
     
     @property
     def atom_style(self):
         """LAMMPS atom_style option."""
-        return self.__dm['LAMMPS-potential']['atom_style']
+        return self.__dm['atom_style']
     
     @property
     def symbols(self):
         """List of all atom-model symbols."""
         symbols = []
-        for atom in self.__dm['LAMMPS-potential'].iterlist('atom'):
+        for atom in self.__dm.iterlist('atom'):
             symbols.append(str(atom['symbol']))    
         return symbols
     
@@ -113,7 +113,7 @@ class Potential(object):
         
         elements = []
         for symbol in symbols:
-            for atom in self.__dm['LAMMPS-potential'].iterlist('atom'):
+            for atom in self.__dm.iterlist('atom'):
                 if symbol == atom['symbol']:
                     elements.append(str(atom['element']))
                     break
@@ -136,7 +136,7 @@ class Potential(object):
         
         masses = []
         for symbol in symbols:
-            for atom in self.__dm['LAMMPS-potential'].iterlist('atom'):
+            for atom in self.__dm.iterlist('atom'):
                 if symbol == atom['symbol']:
                     masses.append(atom['mass'])
                     break
@@ -165,13 +165,13 @@ class Potential(object):
         mass +='\n'
         
         #Generate pair_style line
-        style = 'pair_style ' + self.__dm['LAMMPS-potential']['pair_style']['type'] 
-        terms = self.__dm['LAMMPS-potential']['pair_style'].get('term', None)
-        style += self.__pair_terms(self.__dm['LAMMPS-potential']['pair_style'].iterlist('term')) + '\n'
+        style = 'pair_style ' + self.__dm['pair_style']['type'] 
+        terms = self.__dm['pair_style'].get('term', None)
+        style += self.__pair_terms(self.__dm['pair_style'].iterlist('term')) + '\n'
        
         #Generate pair_coeff lines
         coeff = ''
-        for coeff_line in self.__dm['LAMMPS-potential'].iterlist('pair_coeff'):
+        for coeff_line in self.__dm.iterlist('pair_coeff'):
             if 'interaction' in coeff_line:
                 interaction = coeff_line['interaction'].get('symbol', ['*', '*'])            
             else:
@@ -201,7 +201,7 @@ class Potential(object):
                 assert len(coeff_symbols) == 2,     'Pair potential interactions need two listed elements'
                 
                 #Classic eam style is a special case
-                if self.__dm['LAMMPS-potential']['pair_style']['type'] == 'eam':
+                if self.__dm['pair_style']['type'] == 'eam':
                     assert coeff_symbols[0] == coeff_symbols[1], 'Only i==j interactions allowed for eam style'
                     for i in xrange( len(symbols) ):
                         if symbols[i] == coeff_symbols[0]:
@@ -218,7 +218,7 @@ class Potential(object):
         #generate additional command lines
         command = ''
         
-        for command_line in self.__dm['LAMMPS-potential'].iterlist('command'):
+        for command_line in self.__dm.iterlist('command'):
             command += self.__pair_terms(command_line.iterlist('term'), symbols, self.symbols).strip() + '\n'
 
         return mass + style + coeff + command
@@ -238,13 +238,13 @@ class Potential(object):
                     line += ' ' + str( os.path.join(self.pot_dir, tval) )
 
                 #print all symbols being used for symbolsList
-                elif ttype == 'symbolsList' and tval == True:
+                elif ttype == 'symbolsList' and (tval is True or tval == 'True'):
                     for coeff_symbol in coeff_symbols:
                         if coeff_symbol in system_symbols:
                             line += ' ' + coeff_symbol
                 
                 #print symbols being used with model in appropriate order for symbols
-                elif ttype == 'symbols' and tval == True:
+                elif ttype == 'symbols' and (tval is True or tval == 'True'):
                     for system_symbol in system_symbols:
                         if system_symbol in coeff_symbols:
                             line += ' ' + system_symbol

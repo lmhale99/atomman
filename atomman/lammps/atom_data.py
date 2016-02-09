@@ -147,41 +147,40 @@ def dump(fname, system, units='metal', atom_style='atomic'):
         f.write('\nAtoms\n\n')
         props = style.atom(atom_style)
         
+        #Count how many terms are being printed
+        all_size = 0
+        for v in props.itervalues():
+            all_size += v[0]
+        
+        outarray = np.empty((system.natoms, all_size))
+        start = 0
+        print_string = ''
+        
+        #iterate over all properties and set values for printing
+        for name, v in props.iteritems():
+            size, dim, dtype = v
+            try:
+                unit = units_dict[dim]
+            except:
+                unit = None
+            
+            if dtype == int:
+                for i in xrange(size):
+                    print_string += ' %i'
+            else:
+                for i in xrange(size):  
+                    print_string += ' %.13e'
+            
+            if name == 'a_id':
+                outarray[:, start:start+size] = np.arange(1, system.natoms+1).reshape((system.natoms, size))
+            else:
+                outarray[:, start:start+size] = uc.get_in_units(system.atoms_prop(key=name), unit).reshape((system.natoms, size))
+            start += size
+        print_string = print_string.strip() + '\n'
+        
         #iterate over all atoms
         for i in xrange(system.natoms):
-            line = ''
-            
-            #iterate over all atom_style properties
-            for name, v in props.iteritems():
-                size, dim, dtype = v
-                
-                #use atom index + 1 for a_id
-                if name == 'a_id':
-                    value = i+1
-                
-                #get value in appropriate units
-                else:
-                    try:
-                        unit = units_dict[dim]
-                    except:
-                        unit = None
-                    value = uc.get_in_units(system.atoms_prop(a_id=i, key=name), unit)                        
-
-                #add property values to the line 
-                if isinstance(value, (int, long)) or (isinstance(value, np.ndarray) and am.tools.is_dtype_int(value.dtype)):
-                    try:
-                        for val in value.flatten():
-                            line += '%i ' % val
-                    except:
-                        line += '%i ' % value
-                else:
-                    try:
-                        for val in value.flatten():
-                            line += '%.13e ' % val
-                    except:
-                        line += '%.13e ' % value
-                
-            f.write(line.strip()+'\n')
+            f.write(print_string % tuple(outarray[i]))
         
             
         #Test for velocity info
@@ -192,41 +191,40 @@ def dump(fname, system, units='metal', atom_style='atomic'):
             f.write('\nVelocities\n\n')
             props = style.velocity(atom_style) 
         
+            #Count how many terms are being printed
+            all_size = 0
+            for v in props.itervalues():
+                all_size += v[0]
+            
+            outarray = np.empty((system.natoms, all_size))
+            start = 0
+            print_string = ''
+            
+            #iterate over all properties and set values for printing
+            for name, v in props.iteritems():
+                size, dim, dtype = v
+                try:
+                    unit = units_dict[dim]
+                except:
+                    unit = None
+
+                if dtype == int:
+                    for i in xrange(size):
+                        print_string += ' %i'
+                else:
+                    for i in xrange(size):  
+                        print_string += ' %.13e'
+                
+                if name == 'a_id':
+                    outarray[:, start:start+size] = np.arange(1, system.natoms+1).reshape((system.natoms, size))
+                else:
+                    outarray[:, start:start+size] = uc.get_in_units(system.atoms_prop(key=name), unit).reshape((system.natoms, size))
+                start += size
+            print_string = print_string.strip() + '\n'
+            
             #iterate over all atoms
             for i in xrange(system.natoms):
-                line = ''
-                
-                #iterate over all atom_style properties
-                for name, v in props.iteritems():
-                    size, dim, dtype = v
-                    
-                    #use atom index + 1 for a_id
-                    if name == 'a_id':
-                        value = i+1
-                    
-                    #get value in appropriate units
-                    else:
-                        try:
-                            unit = units_dict[dim]
-                        except:
-                            unit = None
-                        value = uc.get_in_units(system.atoms_prop(a_id=i, key=name), unit)
-                    
-                    #add property values to the line 
-                    if isinstance(value, (int, long)) or (isinstance(value, np.ndarray) and am.tools.is_dtype_int(value.dtype)):
-                        try:
-                            for val in value.flatten():
-                                line += '%i ' % val
-                        except:
-                            line += '%i ' % value
-                    else:
-                        try:
-                            for val in value.flatten():
-                                line += '%.13e ' % val
-                        except:
-                            line += '%.13e ' % value
-                    
-                f.write(line.strip()+'\n')
+                f.write(print_string % tuple(outarray[i]))
     
     #return appropriate unts, atom_style, boundary, and read_data LAMMPS commands    
     boundary = ''

@@ -31,7 +31,7 @@ def load(fname, prop_info=None):
     #read box_unit if specified in prop_info
     if prop_info is not None:
         prop_info = prop_info.find('LAMMPS-dump-atoms_prop-relate')
-        box_unit = prop_info['LAMMPS-dump-atoms_prop-relate']['box_prop'].get('unit', None)
+        box_unit = prop_info['box_prop'].get('unit', None)
 
     with open(fname, 'r') as f:
         pbc = None
@@ -61,7 +61,7 @@ def load(fname, prop_info=None):
                         readatoms = False
                         
                         #cycle over the defined atoms_prop in prop_info
-                        for prop, p_keys in prop_info['LAMMPS-dump-atoms_prop-relate']['atoms_prop'].iteritems():
+                        for prop, p_keys in prop_info['atoms_prop'].iteritems():
                             #set default keys
                             dtype = p_keys.get('dtype', None)
                             shape = p_keys.get('shape', None)
@@ -70,7 +70,7 @@ def load(fname, prop_info=None):
                             value = np.empty(shape)
                             
                             #cycle over the defined LAMMPS-attributes in prop_info
-                            for attr, a_keys in prop_info['LAMMPS-dump-atoms_prop-relate']['LAMMPS-attribute'].iteritems():
+                            for attr, a_keys in prop_info['LAMMPS-attribute'].iteritems():
                                 
                                 #cycle over list of relations for each LAMMPS-attribute
                                 for relation in a_keys.iterlist('relation'):
@@ -188,6 +188,7 @@ def load(fname, prop_info=None):
                                 prop_info = __prop_info_default_load(name_list)
                                 with open(fname+'.json', 'w') as fj:
                                     prop_info.json(fp=fj, indent=4)
+                                prop_info = prop_info.find('LAMMPS-dump-atoms_prop-relate')
                             
                             #create system and flag that it is time to read data
                             system = am.System(atoms=am.Atoms(natoms=natoms), box=box, pbc=pbc)
@@ -222,7 +223,7 @@ def dump(fname, system, prop_info=None, xf='%.13e'):
     
     #read box_unit if specified in prop_info
     prop_info = prop_info.find('LAMMPS-dump-atoms_prop-relate')
-    box_unit = prop_info['LAMMPS-dump-atoms_prop-relate']['box_prop'].get('unit', None)
+    box_unit = prop_info['box_prop'].get('unit', None)
         
     #open fname
     with open(fname, 'w') as f:
@@ -273,51 +274,43 @@ def dump(fname, system, prop_info=None, xf='%.13e'):
             f.write('%f %f %f\n' % ( ylo_bound, yhi_bound, uc.get_in_units(system.box.xz, box_unit) ))
             f.write('%f %f %f\n' % ( zlo_bound, zhi_bound, uc.get_in_units(system.box.yz, box_unit) ))
 
-        #write atomic header info
-        f.write('ITEM: ATOMS id')
-        for attr in prop_info['LAMMPS-dump-atoms_prop-relate']['LAMMPS-attribute']:
-            f.write(' %s'%attr)
-        f.write('\n')
-        
-        #write atomic info for all atoms
-        for i in xrange(system.natoms):
-            f.write('%i' % (i+1))
+        #write atomic header info and prepare outarray for writing
+        header = 'ITEM: ATOMS id'
+        print_string = '%i'
+        outarray = np.empty((system.natoms, len(prop_info['LAMMPS-attribute'])))
+        start = 0
+        for attr, a_keys in prop_info['LAMMPS-attribute'].iteritems():
             
-            #write each attribute value
-            for attr, a_keys in prop_info['LAMMPS-dump-atoms_prop-relate']['LAMMPS-attribute'].iteritems():
-                
-                #get first prop relation for attr
-                relation = a_keys.list('relation')[0]
-                prop = relation['prop']
-                
-                #set unit and scale info
-                unit = relation.get('unit', None)
-                if unit == 'scaled':
-                    unit = None
-                    scale = True
-                else:
-                    scale = False
-                
-                #retrieve value and dtype
-                value = uc.get_in_units(system.atoms_prop(a_id=i, key=prop, scale=scale), unit)
-                dtype = system.atoms.dtype[prop]
-                
-                #pull out index value
-                if 'index' in relation:
-                    if isinstance(relation['index'], (int, long)):
-                        value = value[relation['index']]
-                    else:
-                        value = value[tuple(relation['index'])]
-                
-                #save ints and bools as ints
-                if issubclass(dtype.type, np.int) or issubclass(dtype.type, np.bool):
-                    f.write(' %i' % value)
-                
-                #save floats using xf format
-                else:
-                    f.write(' '+xf % value)
-                
-            f.write('\n')
+            #get first prop relation for attr
+            relation = a_keys.list('relation')[0]
+            prop =   relation.get('prop')
+            index = (Ellipsis, ) + tuple(relation.list('index'))
+            unit =  relation.get('unit', None)
+            if unit == 'scaled':
+                unit = None
+                scale = True
+            else:
+                scale = False            
+            
+            #pass values to outarray
+            outarray[:,start] = uc.get_in_units(system.atoms_prop(key=prop, scale=scale), unit)[index].reshape((system.natoms))
+            start += 1
+            
+            #prepare header and print_string
+            header += ' %s' % attr
+            if am.tools.is_dtype_int(system.atoms.dtype[prop]):
+                print_string += ' %i'
+            else:
+                print_string += ' ' + xf
+            
+        f.write(header + '\n')
+        print_string += '\n'
+        
+        #iterate over all atoms
+        for i in xrange(system.natoms):
+            vals = (i+1, ) + tuple(outarray[i])
+            f.write(print_string % vals)
+        
 
 def __prop_info_default_load(name_list):
     """Construct default conversion model for atom_dump.load()"""

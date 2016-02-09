@@ -3,7 +3,7 @@
 import numpy as np
 
 #atomman imports
-from atomman.models import DataModelDict
+from DataModelDict import DataModelDict
 
 def log_extract(log_info):
     """Parses a LAMMPS screen output/log file and returns a data model containing the information."""
@@ -11,7 +11,6 @@ def log_extract(log_info):
     #Create DataModelDict root
     log_dict = DataModelDict()
     log_dict['LAMMPS-log-thermo-data'] = DataModelDict()
-    log_dict['LAMMPS-log-thermo-data']['simulation'] = []
     
     #Initialize necessary parameters
     thermoread = False
@@ -43,12 +42,10 @@ def log_extract(log_info):
                     thermo = DataModelDict()
                     for i in xrange(len(headers)):
                         thermoval = thermolist[:,i]
-                        #if np.allclose(thermoval, np.asarray(thermoval, dtype='int32')):
-                        #    thermoval = np.asarray(thermoval, dtype='int32')
                         thermo[headers[i]] = list(thermoval)
                         
                     #add dictionary to simulation list
-                    log_dict['LAMMPS-log-thermo-data']['simulation'].append(DataModelDict([('thermo',thermo)]))                    
+                    log_dict['LAMMPS-log-thermo-data'].append('simulation', DataModelDict([('thermo',thermo)]))                    
                     
                     #reset thermoread and thermolist
                     thermolist = None
@@ -59,9 +56,5 @@ def log_extract(log_info):
             elif terms[0] == 'Step':
                 headers = terms
                 thermoread = True
-                   
-    #downsize simulation if it only has one term
-    if len(log_dict['LAMMPS-log-thermo-data']['simulation']) == 1:
-        log_dict['LAMMPS-log-thermo-data']['simulation'] = log_dict['LAMMPS-log-thermo-data']['simulation'][0]
     
     return log_dict     
