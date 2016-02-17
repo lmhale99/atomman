@@ -209,6 +209,7 @@ def parse(units):
     #Else assume units is already a number
     else:
         return units
+   
         
 #Initial build and reset.  Only called first time module is loaded        
 build_unit()

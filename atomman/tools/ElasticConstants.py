@@ -4,7 +4,7 @@ import numpy as np
 
 from axes_check import axes_check
 import atomman
-from atomman.models import DataModelDict
+from DataModelDict import DataModelDict
 
 class ElasticConstants(object):
     """Class for storing and converting elastic constant values"""
@@ -78,10 +78,13 @@ class ElasticConstants(object):
         value = np.asarray(value, dtype='float64')
         assert value.shape == (6,6),  'Cij must be 6x6'
         
+        #zero out near-zero terms
+        value[np.isclose(value/value.max(), 0.0, atol=1e-9)] = 0.0
+        
         #check symmetry
         for i in xrange(6):
             for j in xrange(i):
-                assert np.isclose(value[i,j], value[j,i]), '6x6 matrix not symmetric!' 
+                assert np.isclose(value[i,j], value[j,i], atol=1e-9), '6x6 matrix not symmetric!' 
         self.__c_ij = value
     
     @property
