@@ -7,11 +7,11 @@ import sys
 def crystal(model):
     """Read in a data model containing a crystal-structure and return a System unit cell."""
     
-    struct = DataModelDict(model).find('crystal-structure')
+    cell = DataModelDict(model).find('cell')
     
     #identify the crystal system
-    c_system = struct['cell'].keys()[0]
-    cell = struct.find(c_system)
+    c_system = cell.keys()[0]
+    cell = cell[c_system]
     
     if c_system == 'cubic': 
         a = b = c = uc.value_unit(cell['a'])
@@ -57,62 +57,50 @@ def crystal(model):
     
     #create list of atoms and list of elements
     atoms = []
-    symbols = []
-    atype = 1
+    sym_dict = {}
     scale = None
     
     prop = DataModelDict()
-    for site in struct.iterlist('site'):
-        atype_props = {}
+    for atom in cell.iterlist('atom'):
         
-        #set atom type values
-        assert atype == site['constituent']['component'], 'invalid site component'
-        try:
-            symbol = site['constituent']['symbol']
-        except:
-            try:
-                symbol = site['constituent']['element']
-            except:
-                symbol = None
-        symbols.append(symbol)
-        
-        for property in site['constituent'].iterlist('atom-property'):
-            atype_props[property['name']] = uc.value_unit(property)
+        atype = atom['constituent']['component']
 
-        #set per-atom values
-        for atom in site.iterlist('atom'):
+        if atype not in sym_dict:
+            sym_dict[atype] = atom['constituent'].get('symbol', None)
+        else:
+            assert sym_dict[atype] == atom['constituent'].get('symbol', None), 'Inconsistent constituent component-symbols'
             
-            #Add atype for atom
-            prop.append('atype', atype)
+        #Add atype for atom
+        prop.append('atype', atype)
                     
-            #read in pos for atom and unit info
-            pos = np.array(atom['equivalent-position']['value'], dtype='float64')
-            unit = atom['equivalent-position'].get('unit', None)
-            if unit == 'scaled':
-                unit = None
-                if scale:
-                    pass
-                elif scale is None:
-                    scale = True
-                else:
-                    raise ValueError('Cannot mix box-scaled and absolute positions')
+        #read in pos for atom and unit info
+        pos = np.array(atom['position']['value'], dtype='float64')
+        unit = atom['position'].get('unit', None)
+        if unit == 'scaled':
+            unit = None
+            if scale:
+                pass
+            elif scale is None:
+                scale = True
             else:
-                scale = False
+                raise ValueError('Cannot mix box-scaled and absolute positions')
+        else:
+            scale = False
                         
-            #Add pos for atom
-            prop.append('pos', uc.set_in_units(pos, unit))
+        #Add pos for atom
+        prop.append('pos', uc.set_in_units(pos, unit))
             
-            #Add atom-type properties
-            for k, v in atype_props.iteritems():
-                prop.append(k, v)
-                
-            #Add per-atom properties       
-            for property in site['constituent'].iterlist('atom-property'):
-                prop.append(property['name'], uc.value_unit(property))
-        
+        #Add per-atom properties       
+        for property in atom.iterlist('atom-property'):
+            prop.append(property['name'], uc.value_unit(property))
+    
         atype += 1
     atoms = am.Atoms(natoms=len(prop['atype']), prop=prop)
     system = am.System(box=box, atoms=atoms, scale=scale)
+    
+    symbols = [None for i in xrange(max(sym_dict.keys()))]
+    for i in sym_dict.keys():
+        symbols[i-1] = sym_dict[i]
     
     return system, symbols        
     
@@ -120,6 +108,6 @@ def crystal(model):
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         with open(sys.argv[1]) as f:
-            ucell = crystal(f)
-        print 'symbols =', ucell[1]
-        print ucell[0]
+            ucell, symbols = crystal(f)
+        print 'symbols =', symbols
+        print ucell

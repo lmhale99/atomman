@@ -1,4 +1,4 @@
-#from Cif import Cif
+from cif import *
 from crystal import crystal
 
 #from ElasticConstants import ElasticConstants
