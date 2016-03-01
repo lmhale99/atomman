@@ -156,7 +156,7 @@ def parse(units):
     """Convert units as strings (or None) into numbers."""
     
     #Units of None does no scaling
-    if units is None:
+    if units is None or units == 'scaled':
         return 1
 
     #Parse string and return number value

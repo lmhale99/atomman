@@ -184,7 +184,7 @@ class Potential(object):
                 continue
             
             #Many-body potentials will contain a symbols term
-            if len(coeff_line.listall('symbols')) > 0:
+            if len(coeff_line.all('symbols')) > 0:
                 many = True
             else:
                 many = False

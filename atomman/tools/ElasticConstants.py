@@ -5,6 +5,7 @@ import numpy as np
 from axes_check import axes_check
 import atomman
 from DataModelDict import DataModelDict
+import atomman.unitconvert as uc
 
 class ElasticConstants(object):
     """Class for storing and converting elastic constant values"""
@@ -285,7 +286,7 @@ class ElasticConstants(object):
             c_dict = {}
             for C in model['C']:
                 key = 'C' + C['ij'][0] + C['ij'][2]
-                c_dict[key] = atomman.value_unit(C['stiffness'])
+                c_dict[key] = uc.value_unit(C['stiffness'])
             self.Cij = ElasticConstants(**c_dict).Cij 
         
         #Return DataModelDict if model not given
@@ -298,7 +299,7 @@ class ElasticConstants(object):
             model['elastic-constants'] = DataModelDict()
             model['elastic-constants']['C'] = C = []
             
-            c = atomman.get_in_units(self.Cij, unit)
+            c = uc.get_in_units(self.Cij, unit)
             c_dict = DataModelDict()
             
             if crystal_system == 'cubic':

@@ -8,6 +8,8 @@ import numpy as np
 from Atoms import Atoms
 from Box import Box
 from atomman.tools import nlist, dvect
+import atomman.unitconvert as uc
+from DataModelDict import DataModelDict
      
 class System(object):
     """Class for representing an atomic system."""
@@ -215,3 +217,107 @@ class System(object):
         cmult -- int factor that changes the underlying binning algorithm. Default is 1, which should be the fastest. 
         """
         self.prop['nlist'] = nlist(self, cutoff, cmult)
+        
+        
+    def model(self, **kwargs):
+        """
+        Return a DataModelDict 'cell' representation of the system
+        
+        Keyword Arguments:
+        box_unit -- length unit to use for the box. Default is angstrom.
+        symbols -- list of symbols corresponding to the atom types. Optional.
+        prop_units -- dictionary where the keys are the property keys to include, and the values are units to use.
+                      if not given, only the positions in scaled units are included.
+        """
+        
+        box_unit = kwargs.get('box_unit', 'angstrom')
+        symbols = kwargs.get('symbols', [None for i in xrange(self.natypes)])
+        if not isinstance(symbols, list):
+            symbols = [symbols]
+        assert len(symbols) == self.natypes, 'Number of symbols does not match number of atom types'
+        prop_units = kwargs.get('prop_units', {})
+        if 'pos' not in prop_units:
+            prop_units['pos'] = 'scaled'        
+        
+        a = uc.get_in_units(self.box.a, box_unit)
+        b = uc.get_in_units(self.box.b, box_unit)
+        c = uc.get_in_units(self.box.c, box_unit)
+        alpha = self.box.alpha
+        beta =  self.box.beta
+        gamma = self.box.gamma
+    
+        cell = DataModelDict()
+        if alpha == 90.0 and beta == 90.0 and gamma == 90.0:
+            if np.allclose(a, b, c):
+                c_family = 'cubic'
+                cell[c_family] = DataModelDict()
+                cell[c_family]['a'] = DataModelDict([('value', (a+b+c)/3), ('unit', box_unit)])
+                
+            elif np.isclose(a, b):
+                c_family = 'tetragonal'
+                cell[c_family]['a'] = DataModelDict([('value', (a+b)/2), ('unit', box_unit)])
+                cell[c_family]['c'] = DataModelDict([('value', c), ('unit', box_unit)])
+            
+            else:
+                c_family = 'orthorhombic'
+                cell[c_family]['a'] = DataModelDict([('value', a), ('unit', box_unit)])
+                cell[c_family]['b'] = DataModelDict([('value', b), ('unit', box_unit)])
+                cell[c_family]['c'] = DataModelDict([('value', c), ('unit', box_unit)])
+                
+        else:
+            raise ValueError('Non-orthogonal boxes comming')
+        
+        for i in xrange(self.natoms):
+            atom = DataModelDict()
+            atom['constituent'] = DataModelDict()
+            atom['constituent']['component'] = self.atoms_prop(a_id=i, key='atype')
+            symbol = symbols[self.atoms_prop(a_id=i, key='atype')-1]
+            if symbol is not None:
+                atom['constituent']['symbol'] = symbol
+            
+            atom['position'] = DataModelDict()
+            if prop_units['pos'] == 'scaled':
+                atom['position']['value'] = list(self.atoms_prop(a_id=i, key='pos', scale=True))
+                atom['position']['unit'] = 'scaled'
+            else:
+                atom['position']['value'] = list(uc.get_in_units(self.atoms_prop(a_id=i, key='pos'), prop_units['pos']))
+                atom['position']['unit'] = prop_units['pos']
+                
+            for key, unit in prop_units.iteritems():
+                if key != 'pos' and key != 'atype':
+                    value = uc.get_in_units(self.atoms_prop(a_id=i, key=key), unit)
+                    try:
+                        value = list(value)
+                    except:
+                        pass
+                    aprop = DataModelDict([('name',  key), 
+                                           ('value', value),
+                                           ('unit',  unit)])
+                    
+                    atom.append('atom-property', aprop)
+                    
+            
+            cell[c_family].append('atom', atom)
+            
+        return DataModelDict([('cell', cell)])
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        

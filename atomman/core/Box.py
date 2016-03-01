@@ -272,8 +272,7 @@ class Box(object):
     def set_lengths(self, lx, ly, lz, xy=0.0, xz=0.0, yz=0.0, origin=[0.0, 0.0, 0.0]):
         """Set the box using LAMMPS-style lengths (lx, ly, lz), tilt factors (xy, xz, yz) and origin."""
         
-        assert lx > 0 and ly > 0 and lz > 0,                            'All lengths must be positive'
-        assert abs(xy) < lx/2. and abs(xz) < lx/2. and abs(yz) < ly/2., 'Invalid angles/tilts'
+        assert lx > 0 and ly > 0 and lz > 0,                            'box lengths must be positive'
         
         #Construct vects array
         self.vects = [[lx, 0.0, 0.0],
