@@ -146,10 +146,7 @@ def get_in_units(value, units):
     
 def value_unit(term):
     """Used for data model elements with value, unit"""
-    try:
-        unit = term['unit']
-    except:
-        unit = None
+    unit = term.get('unit', None)
     return set_in_units(term['value'], unit)
     
 def parse(units):
