@@ -28,9 +28,9 @@ def cif_cell(model):
     box = am.Box(a=a, b=b, c=c, alpha=alpha, beta=beta, gamma=gamma)
           
     #Read atom site fractions
-    xlist = alldict.all('_atom_site_fract_x')
-    ylist = alldict.all('_atom_site_fract_y')
-    zlist = alldict.all('_atom_site_fract_z')
+    xlist = alldict.finds('_atom_site_fract_x')
+    ylist = alldict.finds('_atom_site_fract_y')
+    zlist = alldict.finds('_atom_site_fract_z')
  
     if len(xlist) == 0 or len(xlist) != len(ylist) or len(xlist) != len(zlist):
         raise ValueError('Invalid atom site fractions')
@@ -44,9 +44,9 @@ def cif_cell(model):
         raise ValueError('Invalid atom site fractions')
         
     #Read in symmetry lists
-    symms = alldict.all('_space_group_symop_operation_xyz')
+    symms = alldict.finds('_space_group_symop_operation_xyz')
     if len(symms) == 0:
-        symms = alldict.all('_symmetry_equiv_pos_as_xyz')
+        symms = alldict.finds('_symmetry_equiv_pos_as_xyz')
     if len(symms) == 0:
         raise ValueError('No symmetries listed')
     
@@ -82,9 +82,9 @@ def cif_cell(model):
     
     system = am.System(box=box, atoms=atoms, scale=True)
        
-    elements = alldict.all('_atom_site_type_symbol')
+    elements = alldict.finds('_atom_site_type_symbol')
     if len(elements) == 0:
-        elements = alldict.all('_atom_site_label')
+        elements = alldict.finds('_atom_site_label')
     if len(elements) == 0:
         raise ValueError('No atom site symbols or labels!')
         

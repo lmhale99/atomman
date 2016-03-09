@@ -7,7 +7,7 @@ import sys
 def crystal(model):
     """Read in a data model containing a crystal-structure and return a System unit cell."""
     
-    a_sys = DataModelDict(model).find('atom-system')
+    a_sys = DataModelDict(model).find('atomic-system')
 
     #identify the crystal system
     c_system = a_sys['cell'].keys()[0]
@@ -57,84 +57,68 @@ def crystal(model):
     
     #create list of atoms and list of elements
     atoms = []
-    sym_dict = {}
     scale = None
     
     prop = DataModelDict()
     
-    if 'atom-sites' in a_sys:
-        assert 'atom-properties' not in a_sys, 'atom-system model cannot have both atom-sites and atom-properties'
+    all_atypes = np.array(a_sys.finds('component'))
+    all_symbols = np.array(a_sys.finds('symbol'))
+    all_elements = np.array(a_sys.finds('element'))
     
-        for site in a_sys['atom-sites'].iterlist('site'):
-            
-            atype = site['type']
-
-            if atype not in sym_dict:
-                sym_dict[atype] = site.get('symbol', None)
-            else:
-                assert sym_dict[atype] == site.get('symbol', None), 'Inconsistent type-symbol pairings'
-                
-            #Add atype for site
-            prop.append('atype', atype)
-                        
-            #read in pos for site and unit info
-            pos = np.array(site['position']['value'], dtype='float64')
-            unit = site['position'].get('unit', None)
-            if unit == 'scaled':
-                unit = None
-                if scale:
-                    pass
-                elif scale is None:
-                    scale = True
-                else:
-                    raise ValueError('Cannot mix box-scaled and absolute positions')
-            else:
-                scale = False
-                            
-            #Add pos for site
-            prop.append('pos', uc.set_in_units(pos, unit))
-                
-            #Add per-site properties       
-            for property in site.iterlist('site-property'):
-                prop.append(property['name'], uc.value_unit(property))
-        
-    elif 'atom-properties' in a_sys:
-        a_props = a_sys['atom-properties']
-        prop['atypes'] = uc.value_unit(a_props['type'])
-        all_symbols = a_props['symbol'].list('value')
-        for atype, sym in zip(prop['atypes'], all_symbols):
-            if atype not in sym_dict:
-                sym_dict[atype] = sym
-            else:
-                assert sym_dict[atype] == sym, 'Inconsistent type-symbol pairings'
-        prop['pos'] = np.empty(len(prop['atypes']), 3)
-        prop['pos'][:,0] = uc.value_unit(a_props['position-x'])
-        prop['pos'][:,1] = uc.value_unit(a_props['position-y'])
-        prop['pos'][:,2] = uc.value_unit(a_props['position-z'])
-        
-        unit = a_props['position-x'].get('unit', None)
-        if unit == 'scaled':
-            assert a_props['position-y'].get('unit', None) == 'scaled', 'Cannot mix box-scaled and absolute positions'
-            assert a_props['position-z'].get('unit', None) == 'scaled', 'Cannot mix box-scaled and absolute positions'
-            scale = True
+    if len(all_atypes) == 0:
+        if len(all_symbols) != 0:
+            symbols, atypes = np.unique(all_symbols, return_inverse)
+        elif len(all_elements) != 0:
+            symbols, atypes = np.unique(all_elements, return_inverse)
         else:
-            assert a_props['position-y'].get('unit', None) != 'scaled', 'Cannot mix box-scaled and absolute positions'
-            assert a_props['position-z'].get('unit', None) != 'scaled', 'Cannot mix box-scaled and absolute positions'
-            scale = False
-        
-        #Add additional properties       
-        for property in site.iterlist('property'):
-            prop[property['name']] = uc.value_unit(property)
-        
+            raise ValueError('No atom components, symbols or elements listed')
+            
     else:
-        raise ValueError('atom-system model has neither atom-sites or atom-properties')
+        atypes = all_atypes
+        symbols = [None for i in xrange(max(all_atypes))]
         
+        if len(all_elements) != 0 and len(all_symbols) == 0:
+            all_symbols = all_elements
+        
+        if len(all_symbols) != 0:
+            assert len(all_symbols) == len(atypes)
+            sym_dict = {}
+            for atype, symbol in zip(atypes, symbols):
+                if atype not in sym_dict:
+                    sym_dict[atype] = symbol
+                else:
+                    assert sym_dict[atype] == symbol
+            
+            for atype, symbol in sym_dict.iteritems():
+                symbols[atype] = symbol
+    
+    prop['atype'] = atypes
+    prop['pos'] = np.zeros((len(prop['atype']), 3), dtype='float64')
+    count = 0
+    
+    pos_units = []
+    for atom in a_sys.iteraslist('atom'):
+                      
+        #read in pos for atom and unit info
+        prop['pos'][count] = uc.value_unit(atom['position'])
+        pos_units.append(atom['position'].get('unit', None))
+            
+        #Add per-atom properties       
+        for property in atom.iteraslist('property'):
+            if property['name'] not in prop:
+                value = uc.value_unit(property)
+                prop[property['name']] = np.zeros((len(prop['atype']), len(value)), dtype=value.dtype)
+                
+            prop[property['name']][count] = uc.value_unit(property)
+        count += 1
+    
+    pos_unit = np.unique(pos_units)
+    assert len(pos_unit) == 1, 'Mixed units for positions'
+    if pos_unit[0] == 'scaled': scale=True
+    else:                       scale=False
+    
     atoms = am.Atoms(natoms=len(prop['atype']), prop=prop)
     system = am.System(box=box, atoms=atoms, scale=scale)
-    
-    symbols = [None for i in xrange(max(sym_dict.keys()))]
-    for i in sym_dict.keys():
-        symbols[i-1] = sym_dict[i]
     
     return system, symbols        
     

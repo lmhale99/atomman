@@ -27,7 +27,7 @@ class Potential(object):
 
         self.__dm = DataModelDict(model).find('LAMMPS-potential')        
         
-        for atom in self.__dm.iterlist('atom'):
+        for atom in self.__dm.iteraslist('atom'):
             #Check if element is listed
             try:
                 test = atom['element']
@@ -94,7 +94,7 @@ class Potential(object):
     def symbols(self):
         """List of all atom-model symbols."""
         symbols = []
-        for atom in self.__dm.iterlist('atom'):
+        for atom in self.__dm.iteraslist('atom'):
             symbols.append(str(atom['symbol']))    
         return symbols
     
@@ -113,7 +113,7 @@ class Potential(object):
         
         elements = []
         for symbol in symbols:
-            for atom in self.__dm.iterlist('atom'):
+            for atom in self.__dm.iteraslist('atom'):
                 if symbol == atom['symbol']:
                     elements.append(str(atom['element']))
                     break
@@ -136,7 +136,7 @@ class Potential(object):
         
         masses = []
         for symbol in symbols:
-            for atom in self.__dm.iterlist('atom'):
+            for atom in self.__dm.iteraslist('atom'):
                 if symbol == atom['symbol']:
                     masses.append(atom['mass'])
                     break
@@ -167,11 +167,11 @@ class Potential(object):
         #Generate pair_style line
         style = 'pair_style ' + self.__dm['pair_style']['type'] 
         terms = self.__dm['pair_style'].get('term', None)
-        style += self.__pair_terms(self.__dm['pair_style'].iterlist('term')) + '\n'
+        style += self.__pair_terms(self.__dm['pair_style'].iteraslist('term')) + '\n'
        
         #Generate pair_coeff lines
         coeff = ''
-        for coeff_line in self.__dm.iterlist('pair_coeff'):
+        for coeff_line in self.__dm.iteraslist('pair_coeff'):
             if 'interaction' in coeff_line:
                 interaction = coeff_line['interaction'].get('symbol', ['*', '*'])            
             else:
@@ -180,7 +180,7 @@ class Potential(object):
             #Always include coeff lines that act on all atoms in the system
             if interaction == ['*', '*']:
                 coeff_symbols = self.symbols
-                coeff += 'pair_coeff * *' + self.__pair_terms(coeff_line.iterlist('term'), symbols, coeff_symbols) + '\n'
+                coeff += 'pair_coeff * *' + self.__pair_terms(coeff_line.iteraslist('term'), symbols, coeff_symbols) + '\n'
                 continue
             
             #Many-body potentials will contain a symbols term
@@ -193,7 +193,7 @@ class Potential(object):
             if many:
                 coeff_symbols = interaction
                 print interaction
-                coeff += 'pair_coeff * *' + self.__pair_terms(coeff_line.iterlist('term'), symbols, coeff_symbols) + '\n'
+                coeff += 'pair_coeff * *' + self.__pair_terms(coeff_line.iteraslist('term'), symbols, coeff_symbols) + '\n'
                 
             #Treat as pair potential
             else:
@@ -205,7 +205,7 @@ class Potential(object):
                     assert coeff_symbols[0] == coeff_symbols[1], 'Only i==j interactions allowed for eam style'
                     for i in xrange( len(symbols) ):
                         if symbols[i] == coeff_symbols[0]:
-                            coeff += 'pair_coeff %i %i' % (i + 1, i + 1) + self.__pair_terms(coeff_line.iterlist('term'), symbols, coeff_symbols) + '\n'
+                            coeff += 'pair_coeff %i %i' % (i + 1, i + 1) + self.__pair_terms(coeff_line.iteraslist('term'), symbols, coeff_symbols) + '\n'
                 
                 #All other pair potentials
                 else:
@@ -213,13 +213,13 @@ class Potential(object):
                         for j in xrange( i, len(symbols) ):
                             if (symbols[i] == coeff_symbols[0] and symbols[j] == coeff_symbols[1]) or (symbols[i] == coeff_symbols[1] and symbols[j] == coeff_symbols[0]):
                                
-                                coeff += 'pair_coeff %i %i' % (i + 1, j + 1) + self.__pair_terms(coeff_line.iterlist('term'), symbols, coeff_symbols) + '\n'
+                                coeff += 'pair_coeff %i %i' % (i + 1, j + 1) + self.__pair_terms(coeff_line.iteraslist('term'), symbols, coeff_symbols) + '\n'
 
         #generate additional command lines
         command = ''
         
-        for command_line in self.__dm.iterlist('command'):
-            command += self.__pair_terms(command_line.iterlist('term'), symbols, self.symbols).strip() + '\n'
+        for command_line in self.__dm.iteraslist('command'):
+            command += self.__pair_terms(command_line.iteraslist('term'), symbols, self.symbols).strip() + '\n'
 
         return mass + style + coeff + command
     

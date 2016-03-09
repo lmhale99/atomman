@@ -225,16 +225,24 @@ class System(object):
         
         Keyword Arguments:
         box_unit -- length unit to use for the box. Default is angstrom.
-        symbols -- list of symbols corresponding to the atom types. Optional.
+        symbols -- list of atom-model symbols corresponding to the atom types. 
+        elements -- list of element tags corresponding to the atom types. 
         prop_units -- dictionary where the keys are the property keys to include, and the values are units to use.
                       if not given, only the positions in scaled units are included.
         """
         
         box_unit = kwargs.get('box_unit', 'angstrom')
+        
         symbols = kwargs.get('symbols', [None for i in xrange(self.natypes)])
         if not isinstance(symbols, list):
             symbols = [symbols]
         assert len(symbols) == self.natypes, 'Number of symbols does not match number of atom types'
+        
+        elements = kwargs.get('elements', [None for i in xrange(self.natypes)])
+        if not isinstance(elements, list):
+            elements = [elements]
+        assert len(elements) == self.natypes, 'Number of elements does not match number of atom types'
+        
         prop_units = kwargs.get('prop_units', {})
         if 'pos' not in prop_units:
             prop_units['pos'] = 'scaled'        
@@ -246,7 +254,8 @@ class System(object):
         beta =  self.box.beta
         gamma = self.box.gamma
     
-        cell = DataModelDict()
+        model = DataModelDict()
+        model['cell'] = cell = DataModelDict()
         if alpha == 90.0 and beta == 90.0 and gamma == 90.0:
             if np.allclose(a, b, c):
                 c_family = 'cubic'
@@ -269,11 +278,16 @@ class System(object):
         
         for i in xrange(self.natoms):
             atom = DataModelDict()
-            atom['constituent'] = DataModelDict()
-            atom['constituent']['component'] = self.atoms_prop(a_id=i, key='atype')
+            
+            atom['component'] = self.atoms_prop(a_id=i, key='atype')
+            
             symbol = symbols[self.atoms_prop(a_id=i, key='atype')-1]
             if symbol is not None:
-                atom['constituent']['symbol'] = symbol
+                atom['symbol'] = symbol
+                
+            element = elements[self.atoms_prop(a_id=i, key='atype')-1]
+            if element is not None:
+                atom['element'] = element
             
             atom['position'] = DataModelDict()
             if prop_units['pos'] == 'scaled':
@@ -281,7 +295,6 @@ class System(object):
                 atom['position']['unit'] = 'scaled'
             else:
                 atom['position']['value'] = list(uc.get_in_units(self.atoms_prop(a_id=i, key='pos'), prop_units['pos']))
-                atom['position']['unit'] = prop_units['pos']
                 
             for key, unit in prop_units.iteritems():
                 if key != 'pos' and key != 'atype':
@@ -290,16 +303,16 @@ class System(object):
                         value = list(value)
                     except:
                         pass
-                    aprop = DataModelDict([('name',  key), 
-                                           ('value', value),
-                                           ('unit',  unit)])
+                    prop = DataModelDict([('name',  key), 
+                                          ('value', value),
+                                          ('unit',  unit)])
                     
-                    atom.append('atom-property', aprop)
+                    atom.append('property', prop)
                     
             
-            cell[c_family].append('atom', atom)
+            model.append('atom', atom)
             
-        return DataModelDict([('cell', cell)])
+        return DataModelDict([('atomic-system', model)])
         
         
         
