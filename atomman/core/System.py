@@ -257,21 +257,30 @@ class System(object):
         model = DataModelDict()
         model['cell'] = cell = DataModelDict()
         if alpha == 90.0 and beta == 90.0 and gamma == 90.0:
-            if np.allclose(a, b, c):
-                c_family = 'cubic'
-                cell[c_family] = DataModelDict()
-                cell[c_family]['a'] = DataModelDict([('value', (a+b+c)/3), ('unit', box_unit)])
-                
-            elif np.isclose(a, b):
-                c_family = 'tetragonal'
-                cell[c_family]['a'] = DataModelDict([('value', (a+b)/2), ('unit', box_unit)])
-                cell[c_family]['c'] = DataModelDict([('value', c), ('unit', box_unit)])
-            
+            if np.isclose(b/a, 1.):
+                if np.isclose(c/a, 1.):
+                    c_family = 'cubic'
+                    cell[c_family] = DataModelDict()
+                    cell[c_family]['a'] = DataModelDict([('value', (a+b+c)/3), ('unit', box_unit)])
+                else:
+                    c_family = 'tetragonal'
+                    cell[c_family] = DataModelDict()
+                    cell[c_family]['a'] = DataModelDict([('value', (a+b)/2), ('unit', box_unit)])
+                    cell[c_family]['c'] = DataModelDict([('value', c), ('unit', box_unit)])
             else:
-                c_family = 'orthorhombic'
-                cell[c_family]['a'] = DataModelDict([('value', a), ('unit', box_unit)])
-                cell[c_family]['b'] = DataModelDict([('value', b), ('unit', box_unit)])
-                cell[c_family]['c'] = DataModelDict([('value', c), ('unit', box_unit)])
+                if np.isclose(b/a, 3.0**0.5):
+                    c_family = 'hexagonal'
+                    cell[c_family] = DataModelDict()
+                    a_av = (a + b/(3.0**0.5))/2.
+                    cell[c_family]['a'] = DataModelDict([('value', a_av), ('unit', box_unit)])
+                    cell[c_family]['c'] = DataModelDict([('value', c), ('unit', box_unit)])
+                
+                else:
+                    c_family = 'orthorhombic'
+                    cell[c_family] = DataModelDict()
+                    cell[c_family]['a'] = DataModelDict([('value', a), ('unit', box_unit)])
+                    cell[c_family]['b'] = DataModelDict([('value', b), ('unit', box_unit)])
+                    cell[c_family]['c'] = DataModelDict([('value', c), ('unit', box_unit)])
                 
         else:
             raise ValueError('Non-orthogonal boxes comming')
