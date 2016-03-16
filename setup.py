@@ -6,7 +6,7 @@ def readme():
     
 
 setup(name='atomman',
-      version='0.2',
+      version='0.5',
       description='Atomistic Manipulation Toolkit',
       long_description=readme(),
       classifiers=[

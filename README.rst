@@ -1,8 +1,8 @@
 AtomMan
 -------
 
-Atomistic Manipulation Toolkit 
-
+Atomistic Manipulation Toolkit
+ 
 This package is designed to allow easy manipulation of large-scale atomistic systems and the rapid development and use of property calculation metrics. 
 
 Atomistic systems are represented using three basic classes: Atoms, Box, and System.  Atoms stores atomic properties using a numpy array to minimize memory requirements and allow for the properties to be used and set using numpy vectorization.  Box defines a generic parallelopid with methods for accessing different representations.  System combines an Atoms object and a Box object, along with the handling of periodic boundaries.
