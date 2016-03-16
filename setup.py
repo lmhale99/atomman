@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 def readme():
     with open('README.rst') as f:
@@ -21,7 +21,7 @@ setup(name='atomman',
       author='Lucas Hale',
       author_email='lucas.hale@nist.gov',
       license='NIST',
-      packages=['atomman'],
+      packages=find_packages(),
       install_requires=[
         'mendeleev==0.1.0',
         'DataModelDict',
