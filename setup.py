@@ -23,6 +23,7 @@ setup(name='atomman',
       license='NIST',
       packages=['atomman'],
       install_requires=[
+        'mendeleev==0.1.0',
         'numpy', 
         'matplotlib',
         'scipy',
