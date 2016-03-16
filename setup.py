@@ -24,6 +24,7 @@ setup(name='atomman',
       packages=['atomman'],
       install_requires=[
         'mendeleev==0.1.0',
+        'DataModelDict',
         'numpy', 
         'matplotlib',
         'scipy',
