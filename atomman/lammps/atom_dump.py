@@ -73,7 +73,7 @@ def load(fname, prop_info=None):
                             for attr, a_keys in prop_info['LAMMPS-attribute'].iteritems():
                                 
                                 #cycle over list of relations for each LAMMPS-attribute
-                                for relation in a_keys.iterlist('relation'):
+                                for relation in a_keys.iteraslist('relation'):
                                     
                                     #if atoms prop and relation prop match
                                     if relation['prop'] == prop:
