@@ -83,14 +83,14 @@ def crystal(model):
         if len(all_symbols) != 0:
             assert len(all_symbols) == len(atypes)
             sym_dict = {}
-            for atype, symbol in zip(atypes, symbols):
+            for atype, symbol in zip(atypes, all_symbols):
                 if atype not in sym_dict:
                     sym_dict[atype] = symbol
                 else:
                     assert sym_dict[atype] == symbol
             
             for atype, symbol in sym_dict.iteritems():
-                symbols[atype] = symbol
+                symbols[atype-1] = symbol
     
     prop['atype'] = atypes
     prop['pos'] = np.zeros((len(prop['atype']), 3), dtype='float64')
