@@ -3,7 +3,7 @@ import atomman.unitconvert as uc
 from DataModelDict import DataModelDict
 import numpy as np
 from copy import deepcopy
-
+list
 def load(fname, prop_info=None):
     """
     Read a LAMMPS-style dump file and return a System.
@@ -282,9 +282,9 @@ def dump(fname, system, prop_info=None, xf='%.13e'):
         for attr, a_keys in prop_info['LAMMPS-attribute'].iteritems():
             
             #get first prop relation for attr
-            relation = a_keys.list('relation')[0]
+            relation = a_keys.aslist('relation')[0]
             prop =   relation.get('prop')
-            index = (Ellipsis, ) + tuple(relation.list('index'))
+            index = (Ellipsis, ) + tuple(relation.aslist('index'))
             unit =  relation.get('unit', None)
             if unit == 'scaled':
                 unit = None
