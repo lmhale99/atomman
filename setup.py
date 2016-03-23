@@ -23,13 +23,11 @@ setup(name='atomman',
       license='NIST',
       packages=find_packages(),
       install_requires=[
-        'mendeleev==0.1.0',
         'DataModelDict',
         'numpy', 
         'matplotlib',
         'scipy',
-        'numericalunits',
-        'xmltodict'
+        'numericalunits'
       ],
       include_package_data=True,
       zip_safe=False)

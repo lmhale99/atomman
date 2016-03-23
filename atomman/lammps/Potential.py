@@ -1,5 +1,5 @@
 from DataModelDict import DataModelDict
-import mendeleev
+from atomman.tools import atomic_mass
 import os
 
 class Potential(object):
@@ -50,7 +50,7 @@ class Potential(object):
             try:
                 mass_check = atom['mass']
             except:
-                atom['mass'] = mendeleev.element(str(atom['element'])).mass
+                atom['mass'] = atomic_mass(atom['element'])
 
             assert isinstance(atom['mass'], float), 'Mass needs to be a number!'
         
@@ -192,7 +192,6 @@ class Potential(object):
             #Treat as a many-body potential
             if many:
                 coeff_symbols = interaction
-                print interaction
                 coeff += 'pair_coeff * *' + self.__pair_terms(coeff_line.iteraslist('term'), symbols, coeff_symbols) + '\n'
                 
             #Treat as pair potential

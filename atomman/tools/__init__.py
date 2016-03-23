@@ -6,6 +6,7 @@ from istypes import *
 from nlist import nlist
 from supersize import supersize
 from vect_angle import vect_angle
+from atomic_mass import atomic_mass
 #from slip_vector import slip_vector
 
 
