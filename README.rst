@@ -1,19 +1,109 @@
 AtomMan
--------
+=======
 
 Atomistic Manipulation Toolkit
  
-This package is designed to allow easy manipulation of large-scale atomistic systems and the rapid development and use of property calculation metrics. 
+AtomMan: the Atomistic Manipulation Toolkit is a Python library for 
+creating, representing, manipulating, and analyzing large-scale atomic 
+systems of atoms. The focus of the package is to facilitate the rapid design 
+and development of simulations that are fully documented and easily adaptable 
+to new potentials, configurations, etc.  
 
-Atomistic systems are represented using three basic classes: Atoms, Box, and System.  Atoms stores atomic properties using a numpy array to minimize memory requirements and allow for the properties to be used and set using numpy vectorization.  Box defines a generic parallelopid with methods for accessing different representations.  System combines an Atoms object and a Box object, along with the handling of periodic boundaries.
+The code has no requirements that limit which systems it can be used on, i.e.
+it should work on Linux, Mac and Windows computers.
 
-The lammps module has methods and classes to assist in the creation of LAMMPS 
-input scripts and the exchange of information between LAMMPS and atomman.
+The latest release can be installed using pip::
 
-The tools module contains numerous methods associated with analysis of the systems.
+    pip install atomman
 
-The model module contains tools associated with interacting with json/xml based data models.
+The code and all documentation is hosted on GitHub and can be directly 
+downloaded at: `https://github.com/usnistgov/atomman`_.  
 
-The defect module contains routines for creating and analysing structural defects.
+Documentation and examples in the form of Jupyter Notebooks for the various 
+components of the code can be found by clicking on the links in the description 
+below.
 
-Demonstration Jupyter Notebooks for using the different classes, functions, modules and methods can be found in the contained Notebooks directory.
+1. The core of atomman features:
+
+    - Classes for representing an atomic system:
+        
+        + `Box`_ class defining a general parallelopid with instant conversions
+          to/from lattice vector, unit cell, and LAMMPS-style parameter 
+          representations.
+          
+        + `Atoms`_ class that stores the per-atom positions and properties for
+          a collection of atoms. The underlying structure of the class uses 
+          Numpy arrays and views to efficiently store the values and allow for 
+          fast calculations.
+          
+        + `System`_ class that combines an Atoms object and a System object, 
+          along with handling periodic boundaries.
+        
+    - Full `unit conversion`_ capabilities.
+
+2. The lammps module provides tools for setting up, running, and analyzing 
+   LAMMPS simulations directly from Python.  
+   
+    - `General LAMMPS`_ functionality, such as creating systems in LAMMPS,
+      writing input files, reading/writing atom and dump files, calling LAMMPS
+      to run, and recieving LAMMPS errors and log file thermo data.
+     
+    - `Potential`_ class for reading LAMMPS-potential data models.  This class
+      and the data models allow for the modular treatment of any LAMMPS 
+      implemented interatomic potentials. In other words, it allows for 
+      potentials to be easily swapped.
+      
+    - `atom_data`_ load() and dump() functions allow for reading/writing of 
+      LAMMPS atom coordination files. These functions work with any LAMMPS 
+      atom_style and units options.
+      
+    - `atom_dump`_ load() and dump() functions allow for reading/writing of 
+      LAMMPS dump coordination files. Additional JSON files are created that 
+      define the proper conversion of the dump files to Python, and provide 
+      metadata information to the terms (units, complete name, data structure, 
+      etc).      
+
+3. The defects module the following components:
+
+    - `point`_ defect creation. Add vacancies, substitutionals, positional 
+      interstitials, and dumbbell interstitials to a system.
+      
+    - `Stroh`_ method calculation. Solve the anisotropic elasticity solution
+      for a perfectly straight dislocation of any character using the Stroh
+      method. Once solved, the elastic energy coefficient and position-based
+      displacements and stresses can be obtained. Dislocation monopole systems
+      can be constructed using the Stroh displacements. (Soon...)
+      
+    - `dd`_: differential displacement plot for evaluating the core structure
+      of dislocations. (Soon...)
+    
+    - `nye`_ tensor calculation for evaluating the core structure of 
+      dislocations. (Soon...)
+
+4. The models module has tools for reading in Systems:
+
+    - `crystal`_ reads in a atomic-system data model file and returns a System.
+    
+    - `cif`_ has two functions for reading CIF crystallographic files. 
+    
+        + cif_cell() reads a CIF file and returns a System and list of 
+          elements.
+          
+        + cif_load() reads a CIF file and returns a DataModelDict 
+          representation of all of the lines.
+          
+5. The convert module has tools for converting Systems to other codes:
+
+    - `ase_Atoms`_: from_ase_Atoms() and to_ase_Atoms() convert between 
+      ase.Atoms classes and atomman.System classes. NOTE: ase has requirements
+      that are not compatible with Windows systems.
+    
+    - `pymatgen_Structure`_: from_pymatgen_Structure() and 
+      to_pymatgen_Structure() convert between 
+      pymatgen.Structure classes and atomman.System classes. NOTE: pymatgen has 
+      requirements that are not compatible with Windows systems.
+      
+6. The tools module collects all of the additional features that don't have 
+   homes anywhere else.
+   
+   - `tools`_ outlines these various features.
