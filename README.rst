@@ -82,9 +82,11 @@ below.
 
 4. The models module has tools for reading in Systems:
 
-    - `crystal`_ reads in a atomic-system data model file and returns a System.
+    - `crystal`_ reads in a atomic-system data model file and returns a System. 
+      (documentation soon...)
     
     - `cif`_ has two functions for reading CIF crystallographic files. 
+      (documentation soon...)
     
         + cif_cell() reads a CIF file and returns a System and list of 
           elements.
@@ -96,14 +98,34 @@ below.
 
     - `ase_Atoms`_: from_ase_Atoms() and to_ase_Atoms() convert between 
       ase.Atoms classes and atomman.System classes. NOTE: ase has requirements
-      that are not compatible with Windows systems.
+      that are not compatible with Windows systems. (documentation soon...)
     
     - `pymatgen_Structure`_: from_pymatgen_Structure() and 
       to_pymatgen_Structure() convert between 
       pymatgen.Structure classes and atomman.System classes. NOTE: pymatgen has 
-      requirements that are not compatible with Windows systems.
+      requirements that are not compatible with Windows systems. (documentation soon...)
       
 6. The tools module collects all of the additional features that don't have 
    homes anywhere else.
    
-   - `tools`_ outlines these various features.
+   - `ElasticConstants`_ class for interacting and transforming representations
+     of the elastic constant tensor.
+   
+   - `nlist`_ function for constructing neighbor lists. (documentation soon...)
+   
+   - `plot tools`_ that help make pretty looking plots of properties. (soon ...)
+   
+   - `other tools`_ for system manipulation, calculations, etc. (documentation soon...)
+   
+.. _https://github.com/usnistgov/atomman: https://github.com/usnistgov/atomman
+.. _Box: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.Box.ipynb
+.. _Atoms: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.Atoms.ipynb
+.. _System: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.System.ipynb
+.. _unit conversion: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.unitconvert.ipynb
+.. _General LAMMPS: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.lammps.ipynb
+.. _Potential: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.lammps.Potential.ipynb
+.. _atom_data: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.lammps.atom_data.ipynb
+.. _atom_dump: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.lammps.atom_dump.ipynb
+.. _point: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.defect.point.ipynb
+.. _ElasticConstants: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.tools.ElasticConstants.ipynb
+
