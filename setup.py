@@ -16,11 +16,10 @@ setup(name='atomman',
         'Programming Language :: Python :: 2.7',
         'Topic :: Scientific/Engineering :: Physics'
       ],
-      keywords='atom atomic atomistic molecular dynamics', 
+      keywords=['atom', 'atomic', 'atomistic', 'molecular dynamics'], 
       url='https://github.com/usnistgov/atomman',
       author='Lucas Hale',
       author_email='lucas.hale@nist.gov',
-      license='NIST',
       packages=find_packages(),
       install_requires=[
         'DataModelDict',
