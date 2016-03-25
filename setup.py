@@ -17,7 +17,7 @@ setup(name='atomman',
         'Topic :: Scientific/Engineering :: Physics'
       ],
       keywords='atom atomic atomistic molecular dynamics', 
-      url='git@github.com:lmhale99/atomman.git',
+      url='https://github.com/usnistgov/atomman',
       author='Lucas Hale',
       author_email='lucas.hale@nist.gov',
       license='NIST',
