@@ -17,7 +17,6 @@ class ElasticConstants(object):
         Cij -- 6x6 Voigt representation of elastic stiffness
         Sij -- 6x6 Voigt representation of elastic compliance
         Cijkl -- 3x3x3x3 representation of elastic stiffness
-  
         model -- DataModelDict, string, or file-like object of data model containing elastic constants
         C11, C12, ... C66 -- Individual components of Cij.  Must be in full sets for crystal system:
             cubic:        C11, C12, C44
@@ -58,16 +57,8 @@ class ElasticConstants(object):
             raise TypeError('Invalid argument keywords')
             
     def __str__(self):
-        """Returns formatted string of Cij."""
-        c = self.Cij
-        c[abs(c / c.max()) < 1e-8] = 0.0
-    
-        return '\n'.join(['[[%7.3f, %7.3f, %7.3f, %7.3f, %7.3f, %7.3f],' % (c[0,0], c[0,1], c[0,2], c[0,3], c[0,4], c[0,5]),
-                          ' [%7.3f, %7.3f, %7.3f, %7.3f, %7.3f, %7.3f],' % (c[1,0], c[1,1], c[1,2], c[1,3], c[1,4], c[1,5]),
-                          ' [%7.3f, %7.3f, %7.3f, %7.3f, %7.3f, %7.3f],' % (c[2,0], c[2,1], c[2,2], c[2,3], c[2,4], c[2,5]),
-                          ' [%7.3f, %7.3f, %7.3f, %7.3f, %7.3f, %7.3f],' % (c[3,0], c[3,1], c[3,2], c[3,3], c[3,4], c[3,5]),
-                          ' [%7.3f, %7.3f, %7.3f, %7.3f, %7.3f, %7.3f],' % (c[4,0], c[4,1], c[4,2], c[4,3], c[4,4], c[4,5]),
-                          ' [%7.3f, %7.3f, %7.3f, %7.3f, %7.3f, %7.3f]]' % (c[5,0], c[5,1], c[5,2], c[5,3], c[5,4], c[5,5])])
+        """Calling string returns str(self.Cij)."""
+        return str(self.Cij)
     
     @property
     def Cij(self):
@@ -139,6 +130,7 @@ class ElasticConstants(object):
                              [c[0,2,0,0], c[0,2,1,1], c[0,2,2,2], c[0,2,1,2], c[0,2,0,2], c[0,2,0,1]],
                              [c[0,1,0,0], c[0,1,1,1], c[0,1,2,2], c[0,1,1,2], c[0,1,0,2], c[0,1,0,1]]]) 
 
+#This is the wrong conversion!
 #    @property
 #    def Sijkl(self):
 #        """The compliance constants in 3x3x3x3 format"""
@@ -151,7 +143,7 @@ class ElasticConstants(object):
     
     def transform(self, axes, tol=1e-8):
         """Transforms the elastic constant matrix based on the supplied axes."""
-        
+        axes = np.asarray(axes, dtype='float64')
         T = axes_check(axes)
         
         Q = np.einsum('km,ln->mnkl', T, T)
@@ -280,8 +272,6 @@ class ElasticConstants(object):
         if 'model' in kwargs:        
             assert len(kwargs) == 1, 'no keyword arguments supported with model reading' 
             model = DataModelDict(kwargs['model']).find('elastic-constants')
-            assert len(model) == 1, 'Exactly one elastic-constants branch must be in data model'
-            model = datamodel[0]
             
             c_dict = {}
             for C in model['C']:
@@ -381,7 +371,7 @@ class ElasticConstants(object):
         return 1 / ( (s[0,0] + s[1,1] + s[2,2]) + 2*(s[0,1] + s[1,2] + s[0,2]) )
         
     @property        
-    def shear(self, style='Hill', unit='GPa'):
+    def shear(self):
         """The Hill shear modulus estimate. Equal to average of Voigt and Reuss shear modulus."""
         return (self.shear_Voigt + self.shear_Reuss) / 2
      
