@@ -4,7 +4,7 @@ from point import *
 #from disl_monopole_params import disl_monopole_params
 #from nye import nye
 
-#from Stroh import Stroh
+from Stroh import Stroh
 
 
 
