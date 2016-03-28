@@ -6,7 +6,7 @@ def readme():
     
 
 setup(name='atomman',
-      version='0.5.2',
+      version='0.6',
       description='Atomistic Manipulation Toolkit',
       long_description=readme(),
       classifiers=[
@@ -22,6 +22,7 @@ setup(name='atomman',
       author_email='lucas.hale@nist.gov',
       packages=find_packages(),
       install_requires=[
+        'xmltodict',
         'DataModelDict',
         'numpy', 
         'matplotlib',
