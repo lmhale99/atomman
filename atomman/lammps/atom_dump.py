@@ -415,7 +415,7 @@ def __prop_info_default_dump(system):
                     yield d
             else:
                 yield tup + (i,)    
-    
+                
     prop_info = DataModelDict()
     prop_info['LAMMPS-dump-atoms_prop-relate'] = DataModelDict()
     prop_info['LAMMPS-dump-atoms_prop-relate']['box_prop'] = DataModelDict([('unit', None)])
@@ -461,5 +461,5 @@ def __prop_info_default_dump(system):
                 indexes = [val for val in __iterindex((), p)]
                 for name, index in zip(names, indexes):
                     attrs[name] = DataModelDict([('relation', DataModelDict([('prop', prop), 
-                                                                             ('index', index)]) )])
+                                                                             ('index', list(index))]) )])
     return prop_info        
