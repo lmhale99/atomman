@@ -21,7 +21,7 @@ downloaded at: `https://github.com/usnistgov/atomman`_.
 
 Documentation and examples in the form of Jupyter Notebooks for the various 
 components of the code can be found by clicking on the links in the description 
-below.
+below. 
 
 1. The core of atomman features:
 
@@ -72,21 +72,13 @@ below.
       for a perfectly straight dislocation of any character using the Stroh
       method. Once solved, the elastic energy coefficient and position-based
       displacements and stresses can be obtained. Dislocation monopole systems
-      can be constructed using the Stroh displacements. (Soon...)
-      
-    - `dd`_: differential displacement plot for evaluating the core structure
-      of dislocations. (Soon...)
-    
-    - `nye`_ tensor calculation for evaluating the core structure of 
-      dislocations. (Soon...)
+      can be constructed using the Stroh displacements.
 
 4. The models module has tools for reading in Systems:
 
-    - `crystal`_ reads in a atomic-system data model file and returns a System. 
-      (documentation soon...)
-    
-    - `cif`_ has two functions for reading CIF crystallographic files. 
-      (documentation soon...)
+    - crystal reads in a atomic-system data model file and returns a System. 
+
+    - cif has two functions for reading CIF crystallographic files. 
     
         + cif_cell() reads a CIF file and returns a System and list of 
           elements.
@@ -96,14 +88,14 @@ below.
           
 5. The convert module has tools for converting Systems to other codes:
 
-    - `ase_Atoms`_: from_ase_Atoms() and to_ase_Atoms() convert between 
+    - ase_Atoms: from_ase_Atoms() and to_ase_Atoms() convert between 
       ase.Atoms classes and atomman.System classes. NOTE: ase has requirements
-      that are not compatible with Windows systems. (documentation soon...)
+      that are not compatible with Windows systems. 
     
-    - `pymatgen_Structure`_: from_pymatgen_Structure() and 
+    - pymatgen_Structure: from_pymatgen_Structure() and 
       to_pymatgen_Structure() convert between 
       pymatgen.Structure classes and atomman.System classes. NOTE: pymatgen has 
-      requirements that are not compatible with Windows systems. (documentation soon...)
+      requirements that are not compatible with Windows systems. 
       
 6. The tools module collects all of the additional features that don't have 
    homes anywhere else.
@@ -111,11 +103,9 @@ below.
    - `ElasticConstants`_ class for interacting and transforming representations
      of the elastic constant tensor.
    
-   - `nlist`_ function for constructing neighbor lists. (documentation soon...)
+   - nlist function for constructing neighbor lists. 
    
-   - `plot tools`_ that help make pretty looking plots of properties. (soon ...)
-   
-   - `other tools`_ for system manipulation, calculations, etc. (documentation soon...)
+   - other tools for system manipulation, calculations, etc. 
    
 .. _https://github.com/usnistgov/atomman: https://github.com/usnistgov/atomman
 .. _Box: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.Box.ipynb
@@ -128,4 +118,5 @@ below.
 .. _atom_dump: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.lammps.atom_dump.ipynb
 .. _point: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.defect.point.ipynb
 .. _ElasticConstants: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.tools.ElasticConstants.ipynb
+.. _Stroh: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.defect.Stroh.ipynb
 
