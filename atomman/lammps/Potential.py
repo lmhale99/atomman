@@ -5,7 +5,7 @@ import os
 class Potential(object):
     """class for building LAMMPS input lines from a LAMMPS-potential data model.""" 
     
-    def __init__(self, model, pot_dir=''):
+    def __init__(self, model, pot_dir=None):
         """
         initializes an instance associated with a LAMMPS-potential data model.
         
