@@ -56,6 +56,8 @@ class Potential(object):
         
         if pot_dir is not None:
             self.pot_dir = pot_dir
+        else:
+            self.pot_dir = ''
             
     def __str__(self):
         """The string of the Potential returns its human-readable id"""
