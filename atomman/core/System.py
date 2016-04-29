@@ -7,6 +7,7 @@ import numpy as np
 #Internal imports
 from Atoms import Atoms
 from Box import Box
+import atomman as am
 from atomman.tools import nlist, dvect
 import atomman.unitconvert as uc
 from DataModelDict import DataModelDict
@@ -217,7 +218,39 @@ class System(object):
         cmult -- int factor that changes the underlying binning algorithm. Default is 1, which should be the fastest. 
         """
         self.prop['nlist'] = nlist(self, cutoff, cmult)
-        
+    
+    def load(self, style, input, **kwargs):
+        """Load a System."""
+    
+        if style == 'system_model':
+            key = kwargs.get('key', 'atomic-system')
+            system, symbols = am.convert.system_model.load(input, key)
+            
+        elif style == 'cif':
+            data_set = kwargs.get('data_set', None)
+            system, symbols = am.convert.cif.load(input, data_set)
+            
+        elif style == 'atom_data':
+            pbc = kwargs.get('pbc', (True, True, True))
+            atom_style = kwargs.get('atom_style', 'atomic')
+            units = kwargs.get('units', 'metal')
+            system, symbols = am.lammps.atom_data.load(input, pbc, atom_style, units)
+
+        elif style == 'atom_dump':
+            prop_info = kwargs.get('prop_info', None)
+            system, symbols = am.lammps.atom_dump.load(input, prop_info)
+            
+        elif style == 'ase_Atoms':
+            system, symbols = am.convert.ase_Atoms.load(input)
+            
+        elif style == 'pymatgen_Structure':
+            system, symbols = am.convert.pymatgen_Structure.load(input)
+            
+        self.__box = system.box
+        self.__atoms = system.atoms
+        self.__pbc = system.pbc
+        self.__prop = system.prop
+        return symbols
         
     def model(self, **kwargs):
         """
