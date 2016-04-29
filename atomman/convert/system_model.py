@@ -4,10 +4,10 @@ import atomman as am
 import atomman.unitconvert as uc
 import sys
 
-def crystal(model):
+def load(model, key='atomic-system'):
     """Read in a data model containing a crystal-structure and return a System unit cell."""
     
-    a_sys = DataModelDict(model).find('atomic-system')
+    a_sys = DataModelDict(model).find(key)
 
     #identify the crystal system
     c_system = a_sys['cell'].keys()[0]

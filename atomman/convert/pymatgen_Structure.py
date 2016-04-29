@@ -7,7 +7,7 @@ try:
 except:
     has_pmg = False
     
-def from_pymatgen_Struct(pmg_struct):
+def load(pmg_struct):
     """Convert a pymatgen.Structure into an atomman.System and list of elements."""
     assert has_pmg, 'ase not imported'
 
@@ -24,7 +24,7 @@ def from_pymatgen_Struct(pmg_struct):
 
     
     
-def to_pymatgen_Struct(system, elements):
+def dump(system, elements):
     """Convert an atomman.System and list of elements into a pymatgen.Structure."""
     assert has_pmg, 'ase not imported'
 

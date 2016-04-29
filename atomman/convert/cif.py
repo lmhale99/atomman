@@ -4,21 +4,30 @@ import atomman as am
 import atomman.unitconvert as uc
 import sys
 
-def cif_cell(model):
+def load(cif_file, data_set = None):
     """Read in a cif file or DataModelDict of a cif file and return a System."""    
     try:
-        alldict = cif_load(model)
+        alldict = model(cif_file)
     except:
-        alldict = DataModelDict(model)
-
+        alldict = DataModelDict(cif_file)
+    
+    if data_set is None:
+        data_set = -1
+    if isinstance(data_set, (int, long)):
+        data_set = alldict.keys()[data_set]
+    if len(data_set) < 5 or data_set[:5] != 'data_':
+        data_set = 'data_' + data_set
+    
+    alldict = alldict[data_set]
+    
     #Read box cell parameters
     try:
-        a =     __tofloat(alldict.find('_cell_length_a') )
-        b =     __tofloat(alldict.find('_cell_length_b') )
-        c =     __tofloat(alldict.find('_cell_length_c') )
-        alpha = __tofloat(alldict.find('_cell_angle_alpha') )
-        beta =  __tofloat(alldict.find('_cell_angle_beta') )
-        gamma = __tofloat(alldict.find('_cell_angle_gamma') )
+        a =     __tofloat(alldict.get('_cell_length_a') )
+        b =     __tofloat(alldict.get('_cell_length_b') )
+        c =     __tofloat(alldict.get('_cell_length_c') )
+        alpha = __tofloat(alldict.get('_cell_angle_alpha') )
+        beta =  __tofloat(alldict.get('_cell_angle_beta') )
+        gamma = __tofloat(alldict.get('_cell_angle_gamma') )
     except:
         raise ValueError('Invalid cell parameters')
     
@@ -28,9 +37,9 @@ def cif_cell(model):
     box = am.Box(a=a, b=b, c=c, alpha=alpha, beta=beta, gamma=gamma)
           
     #Read atom site fractions
-    xlist = alldict.finds('_atom_site_fract_x')
-    ylist = alldict.finds('_atom_site_fract_y')
-    zlist = alldict.finds('_atom_site_fract_z')
+    xlist = alldict.aslist('_atom_site_fract_x')
+    ylist = alldict.aslist('_atom_site_fract_y')
+    zlist = alldict.aslist('_atom_site_fract_z')
  
     if len(xlist) == 0 or len(xlist) != len(ylist) or len(xlist) != len(zlist):
         raise ValueError('Invalid atom site fractions')
@@ -44,9 +53,9 @@ def cif_cell(model):
         raise ValueError('Invalid atom site fractions')
         
     #Read in symmetry lists
-    symms = alldict.finds('_space_group_symop_operation_xyz')
+    symms = alldict.aslist('_space_group_symop_operation_xyz')
     if len(symms) == 0:
-        symms = alldict.finds('_symmetry_equiv_pos_as_xyz')
+        symms = alldict.aslist('_symmetry_equiv_pos_as_xyz')
     if len(symms) == 0:
         raise ValueError('No symmetries listed')
     
@@ -82,9 +91,9 @@ def cif_cell(model):
     
     system = am.System(box=box, atoms=atoms, scale=True)
        
-    elements = alldict.finds('_atom_site_type_symbol')
+    elements = alldict.aslist('_atom_site_type_symbol')
     if len(elements) == 0:
-        elements = alldict.finds('_atom_site_label')
+        elements = alldict.aslist('_atom_site_label')
     if len(elements) == 0:
         raise ValueError('No atom site symbols or labels!')
         
@@ -98,11 +107,11 @@ def cif_cell(model):
     
     return system, elements
 
-def cif_load(model):
+def model(cif_file):
     """Read in a cif file and return a DataModelDict of the data."""
-    if hasattr(model, 'read'):
-        model = model.read()
-    alldict = __parse(model)
+    if hasattr(cif_file, 'read'):
+        cif_file = cif_file.read()
+    alldict = __parse(cif_file)
     
     return alldict
     

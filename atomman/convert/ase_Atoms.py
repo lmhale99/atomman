@@ -1,5 +1,5 @@
 import atomman as am
-from collections import OrderedSet
+#from collections import OrderedSet
 
 try:
     import ase
@@ -7,7 +7,7 @@ try:
 except:
     has_ase = False
     
-def from_ase_Atoms(ase_atoms):
+def load(ase_atoms):
     """Convert an ase.Atoms into an atomman.System and list of elements."""
     assert has_ase, 'ase not imported'
     box = am.Box(vects = ase_atoms.get_cell())
@@ -22,7 +22,7 @@ def from_ase_Atoms(ase_atoms):
     
     return am.System(atoms=atoms, box=box), elements
 
-def to_ase_Atoms(system, elements):
+def dump(system, elements):
     """Convert an atomman.System and list of elements into an ase.Atoms."""
     assert has_ase, 'ase not imported'
     
