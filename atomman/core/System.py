@@ -356,7 +356,12 @@ class System(object):
             
         return DataModelDict([('atomic-system', model)])
         
-        
+    def supersize(self, a_size, b_size, c_size):
+        system = am.tools.supersize(self, a_size, b_size, c_size)
+        self.__box = system.box
+        self.__atoms = system.atoms
+        self.__pbc = system.pbc
+        self.__prop = system.prop
         
         
         
