@@ -1,7 +1,8 @@
 import numpy as np
 import atomman as am
+import atomman.unitconvert as uc
 
-def point(system, ptd_type=None, atype=None, pos=None, ptd_id=None, db_vect=None, scale=False):
+def point(system, ptd_type=None, atype=None, pos=None, ptd_id=None, db_vect=None, scale=False, atol=None):
     """
     Returns a new System where a point defect has been inserted.
     
@@ -17,6 +18,7 @@ def point(system, ptd_type=None, atype=None, pos=None, ptd_id=None, db_vect=None
     ptd_id -- atom id where defect is added.  Alternative to using pos ('v', 's', 'db' styles).
     db_vect -- vector associated with the dumbbell interstitial ('db' style).
     scale -- indicates if pos and db_vect are absolute (False) or box-relative (True). Default is False.
+    atol -- absolute tolerance for position-based searching. Default is 1e-3 angstroms.
     
     Adds atom property old_id if it doesn't already exist that tracks the original atom ids
     """ 
@@ -28,24 +30,24 @@ def point(system, ptd_type=None, atype=None, pos=None, ptd_id=None, db_vect=None
     if ptd_type == 'v':
         assert atype is None,                   'atype is meaningless for vacancy insertion'
         assert db_vect is None,                 'db_vect is meaningless for vacancy insertion'
-        return vacancy(system, pos=pos, ptd_id=ptd_id, scale=scale)
+        return vacancy(system, pos=pos, ptd_id=ptd_id, scale=scale, atol=atol)
         
     #If interstitial
     elif ptd_type == 'i':
         assert ptd_id is None,                   'ptd_id is meaningless for interstitial insertion'
         assert db_vect is None,                  'db_vect is meaningless for interstitial insertion' 
-        return interstitial(system, atype=atype, pos=pos, scale=scale)
+        return interstitial(system, atype=atype, pos=pos, scale=scale, atol=atol)
                 
     #If substitutional
     elif ptd_type == 's':
         assert db_vect is None,                  'db_vect is meaningless for substitutional insertion'
-        return substitutional(system, atype=atype, pos=pos, ptd_id=ptd_id, scale=scale)
+        return substitutional(system, atype=atype, pos=pos, ptd_id=ptd_id, scale=scale, atol=atol)
             
     #if dumbbell
     elif ptd_type == 'db':
-        return dumbbell(system, atype=atype, pos=pos, ptd_id=ptd_id, db_vect=db_vect, scale=scale)
+        return dumbbell(system, atype=atype, pos=pos, ptd_id=ptd_id, db_vect=db_vect, scale=scale, atol=atol)
     
-def vacancy(system, pos=None, ptd_id=None, scale=False):
+def vacancy(system, pos=None, ptd_id=None, scale=False, atol=None):
     """
     Returns a new System where a vacancy point defect has been inserted.
     
@@ -62,10 +64,12 @@ def vacancy(system, pos=None, ptd_id=None, scale=False):
     
     #if pos is supplied, use isclose and where to identify the id of the atom at pos
     if pos is not None:
+        if atol is None: 
+            atol = uc.set_in_units(1e-3, 'angstrom')
         if scale:
             pos = system.unscale(pos)
         assert ptd_id is None,                                                      'pos and ptd_id cannot both be supplied'
-        ptd_id = np.where(np.isclose(pos_list, pos).all(axis=1))
+        ptd_id = np.where(np.isclose(pos_list, pos, atol=atol).all(axis=1))
         assert len(ptd_id) == 1 and len(ptd_id[0]) == 1,                            'Unique atom at pos not identified'
         ptd_id = long(ptd_id[0][0])
     
@@ -88,7 +92,7 @@ def vacancy(system, pos=None, ptd_id=None, scale=False):
     
     return d_system
           
-def interstitial(system, atype=None, pos=None, scale=False):
+def interstitial(system, atype=None, pos=None, scale=False, atol=None):
     """
     Returns a new System where a positional interstitial point defect has been inserted.
     
@@ -103,11 +107,13 @@ def interstitial(system, atype=None, pos=None, scale=False):
   
     pos_list = system.atoms.view['pos']
     
+    if atol is None: 
+        atol = uc.set_in_units(1e-3, 'angstrom')
     if scale:
         pos = system.unscale(pos)
-    
+
     #Use isclose and where to check that no atoms are already at pos
-    ptd_id = np.where(np.isclose(pos_list, pos).all(axis=1))
+    ptd_id = np.where(np.isclose(pos_list, pos, atol=atol).all(axis=1))
     assert len(ptd_id) == 1 and len(ptd_id[0]) == 0,                                'atom already at pos'
     
     assert isinstance(atype, (int, long)) and atype > 0,                            'atype must be a positive integer'   
@@ -130,7 +136,7 @@ def interstitial(system, atype=None, pos=None, scale=False):
     
     return d_system
     
-def substitutional(system, atype=None, pos=None, ptd_id=None, scale=False):
+def substitutional(system, atype=None, pos=None, ptd_id=None, scale=False, atol=None):
     """
     Returns a new System where a substitutional point defect has been inserted.
     
@@ -148,10 +154,12 @@ def substitutional(system, atype=None, pos=None, ptd_id=None, scale=False):
     
     #if pos is supplied, use isclose and where to identify the id of the atom at pos
     if pos is not None:
+        if atol is None: 
+            atol = uc.set_in_units(1e-3, 'angstrom')
         if scale:
-            pos = system.unscale(pos)
+            pos = system.unscale(pos)        
         assert ptd_id is None,                                                      'pos and ptd_id cannot both be supplied'
-        ptd_id = np.where(np.isclose(pos_list, pos).all(axis=1))
+        ptd_id = np.where(np.isclose(pos_list, pos, atol=atol).all(axis=1))
         assert len(ptd_id) == 1 and len(ptd_id[0]) == 1,                            'Unique atom at pos not identified'
         ptd_id = long(ptd_id[0][0])
     
@@ -178,7 +186,7 @@ def substitutional(system, atype=None, pos=None, ptd_id=None, scale=False):
         
     return d_system
         
-def dumbbell(system, atype=None, pos=None, ptd_id=None, db_vect=None, scale=False):
+def dumbbell(system, atype=None, pos=None, ptd_id=None, db_vect=None, scale=False, atol=None):
     """
     Returns a new System where a dumbbell interstitial point defect has been inserted.
     
@@ -197,10 +205,12 @@ def dumbbell(system, atype=None, pos=None, ptd_id=None, db_vect=None, scale=Fals
     
     #if pos is supplied, use isclose and where to identify the id of the atom at pos
     if pos is not None:
+        if atol is None: 
+            atol = uc.set_in_units(1e-3, 'angstrom')
         if scale:
             pos = system.unscale(pos)
         assert ptd_id is None,                                                      'pos and ptd_id cannot both be supplied'
-        ptd_id = np.where(np.isclose(pos_list, pos).all(axis=1))
+        ptd_id = np.where(np.isclose(pos_list, pos, atol=atol).all(axis=1))
         assert len(ptd_id) == 1 and len(ptd_id[0]) == 1,                            'Unique atom at pos not identified'
         ptd_id = long(ptd_id[0][0])
     
