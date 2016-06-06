@@ -1,5 +1,6 @@
 import atomman as am
 import atomman.unitconvert as uc
+import numpy as np
 
 try:
     import pymatgen as pmg

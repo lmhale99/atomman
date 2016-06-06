@@ -1,5 +1,5 @@
 import atomman as am
-#from collections import OrderedSet
+import numpy as np
 
 try:
     import ase
@@ -15,7 +15,7 @@ def load(ase_atoms):
     atoms.prop(key = 'pos', value=ase_atoms.get_positions())
 
     all_elements = np.array(ase_atoms.get_chemical_symbols())
-    elements, atype = np.unique(all_elements, return_inverse)
+    elements, atype = np.unique(all_elements, return_inverse=True)
     atype += 1
     
     atoms.prop(key='atype', value=atype)
