@@ -6,4 +6,5 @@ from Potential   import Potential
 from run         import run
 from sys_gen     import sys_gen
 import style
+from normalize import normalize
 

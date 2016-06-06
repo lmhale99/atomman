@@ -121,14 +121,7 @@ class System(object):
             self.atoms.view['pos'][:] = self.unscale(spos)
         else:
             self.__box.set(**kwargs)
-    
-    def box_normalize(self):
-        """Extends box.normalize()."""
-        
-        spos = self.scale(self.atoms.view['pos'])
-        self.__box.normalize()
-        self.atoms.view['pos'][:] = self.unscale(spos)
-    
+            
     @property
     def pbc(self):
         """The periodic boundary condition settings for the System."""
@@ -184,6 +177,20 @@ class System(object):
         #call atomman.tools.dvect using self system's box and pbc
         return dvect(pos_0, pos_1, self.box, self.pbc)
 
+    def normalize(self, style='lammps'):
+        """
+        Normalizes the System to be compatible with external codes.
+        
+        Keyword Arguments:
+        style -- Defines the style of the normalization.  Only 'lammps' currently supported.
+        """
+        if style == 'lammps':
+            system = am.lammps.normalize(self)
+            self.atoms_prop(key='pos', value=system.atoms_prop(key='pos'))
+            self.box_set(vects=system.box.vects) 
+        else:
+            raise ValueError('Unknown style')
+        
     def wrap(self):
         """Wrap atoms around periodic boundaries and extend non-periodic boundaries such that all atoms are within the box."""
         
@@ -228,7 +235,7 @@ class System(object):
             
         elif style == 'cif':
             data_set = kwargs.get('data_set', None)
-            system, symbols = am.convert.cif.load(input, data_set)
+            system, symbols = am.convert.cif.load(input)
             
         elif style == 'atom_data':
             pbc = kwargs.get('pbc', (True, True, True))
@@ -245,7 +252,12 @@ class System(object):
             
         elif style == 'pymatgen_Structure':
             system, symbols = am.convert.pymatgen_Structure.load(input)
-            
+        
+        elif style = 'poscar':
+            system, symbols = am.convert.poscar.load(input)
+        
+        else:
+            raise ValueError('Unsupported style')
         self.__box = system.box
         self.__atoms = system.atoms
         self.__pbc = system.pbc

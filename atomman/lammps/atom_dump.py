@@ -257,7 +257,7 @@ def dump(fname, system, prop_info=None, xf='%.13e'):
         else:
             f.write('ITEM: BOX BOUNDS xy xz yz')
             for i in xrange(3):
-                if system.pbc(i):
+                if system.pbc[i]:
                     f.write(' pp')
                 else:
                     f.write(' fm')

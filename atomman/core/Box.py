@@ -26,7 +26,7 @@ class Box(object):
     set_abc() -- set box with a, b, c, (alpha, beta, gamma, and origin).
     set_lengths() -- set box with lx, ly, lz, (xy, xz, yz, and origin).
     set_hi_los() -- set box with xlo, xhi, ylo, yhi, zlo, zhi, (xy, xz, and yz).
-    normalize() -- normalizes a generic box to be compatible with the LAMMPS representations.
+    is_lammps_norm() -- returns True if box vectors are LAMMPS compatible.
     """
 
     def __init__(self, **kwargs):
@@ -43,7 +43,6 @@ class Box(object):
         """
         self.__vects = np.eye(3, dtype='float64')
         self.__origin = np.zeros(3, dtype='float64')
-        self.__isnorm = True
         
         if len(kwargs) > 0:
             self.set(**kwargs)
@@ -59,16 +58,6 @@ class Box(object):
         self.__vects[:] = value
         #Zero out near zero terms
         self.__vects[np.isclose(self.__vects/self.__vects.max(), 0.0, atol=1e-9)] = 0.0
-        
-        #Check if box vectors are consistent with LAMMPS normalization
-        if (self.__vects[0,1] == 0.0 and self.__vects[0,2] == 0.0 and self.__vects[1,2] == 0.0 and
-            self.__vects[0,0] > 0.0 and self.__vects[1,1] > 0.0 and self.__vects[2,2] > 0.0 and
-            abs(self.__vects[1,0]) < self.__vects[0,0]/2. and 
-            abs(self.__vects[2,0]) < self.__vects[0,0]/2. and 
-            abs(self.__vects[2,1]) < self.__vects[1,1]/2.):
-            self.__isnorm = True
-        else:
-            self.__isnorm = False
         
     @property
     def origin(self):
@@ -127,73 +116,73 @@ class Box(object):
     @property    
     def lx(self):
         """LAMMPS-style box length lx"""
-        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        assert self.is_lammps_norm(),                       'Box is not normalized for LAMMPS style parameters'
         return self.__vects[0,0]
     
     @property    
     def ly(self):
         """LAMMPS-style box length ly"""
-        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        assert self.is_lammps_norm(),                       'Box is not normalized for LAMMPS style parameters'
         return self.__vects[1,1]
 
     @property    
     def lz(self):
         """LAMMPS-style box length lz"""
-        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        assert self.is_lammps_norm(),                       'Box is not normalized for LAMMPS style parameters'
         return self.__vects[2,2]
         
     @property    
     def xy(self):
         """LAMMPS-style box tilt factor xy"""
-        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        assert self.is_lammps_norm(),                       'Box is not normalized for LAMMPS style parameters'
         return self.__vects[1,0]
         
     @property    
     def xz(self):
         """LAMMPS-style box tilt factor xz"""
-        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        assert self.is_lammps_norm(),                       'Box is not normalized for LAMMPS style parameters'
         return self.__vects[2,0]
 
     @property    
     def yz(self):
         """LAMMPS-style box tilt factor yz"""
-        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        assert self.is_lammps_norm(),                       'Box is not normalized for LAMMPS style parameters'
         return self.__vects[2,1]        
          
     @property    
     def xlo(self):
         """LAMMPS-style box xlo"""
-        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        assert self.is_lammps_norm(),                       'Box is not normalized for LAMMPS style parameters'
         return self.__origin[0]
         
     @property    
     def ylo(self):
         """LAMMPS-style box ylo"""
-        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        assert self.is_lammps_norm(),                       'Box is not normalized for LAMMPS style parameters'
         return self.__origin[1]
 
     @property    
     def zlo(self):
         """LAMMPS-style box zlo"""
-        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        assert self.is_lammps_norm(),                       'Box is not normalized for LAMMPS style parameters'
         return self.__origin[2]   
         
     @property    
     def xhi(self):
         """LAMMPS-style box xhi"""
-        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        assert self.is_lammps_norm(),                       'Box is not normalized for LAMMPS style parameters'
         return self.__origin[0] + self.__vects[0,0]
         
     @property    
     def yhi(self):
         """LAMMPS-style box yhi"""
-        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        assert self.is_lammps_norm(),                       'Box is not normalized for LAMMPS style parameters'
         return self.__origin[1] + self.__vects[1,1]
 
     @property    
     def zhi(self):
         """LAMMPS-style box zhi"""
-        assert self.__isnorm,                       'Box is not normalized for LAMMPS style parameters'
+        assert self.is_lammps_norm(),                       'Box is not normalized for LAMMPS style parameters'
         return self.__origin[2] + self.__vects[2,2]         
     
     def __str__(self):
@@ -246,7 +235,12 @@ class Box(object):
         elif 'a' in kwargs:            
             self.set_abc(**kwargs)
         
-        else:
+        elif 'origin' in kwargs:
+            origin = kwargs.pop('origin')
+            assert len(kwargs) == 0, 'Invalid arguments'
+            self.origin = origin
+            
+        else:    
             raise TypeError('Invalid arguments')
         
     def set_vectors(self, avect, bvect, cvect, origin=[0.0, 0.0, 0.0]):
@@ -292,28 +286,14 @@ class Box(object):
         #Call set_lengths
         self.set_lengths(lx=lx, ly=ly, lz=lz, xy=xy, xz=xz, yz=yz, origin=origin)
     
-    def normalize(self):
-        """Rotates the box so that avect_y = avect_z = bvect_z = 0.0."""
-        
-        #Extract vectors and vector magnitudes
-        avect = self.avect
-        bvect = self.bvect
-        cvect = self.cvect
-        a = (avect[0]**2 + avect[1]**2 + avect[2]**2)**0.5 
-        b = (bvect[0]**2 + bvect[1]**2 + bvect[2]**2)**0.5 
-        c = (cvect[0]**2 + cvect[1]**2 + cvect[2]**2)**0.5 
-        
-        #test right handedness
-        test = np.dot(np.cross(avect, bvect), cvect)
-        assert test > 0, 'Supplied vectors are not right handed'
-        
-        #Convert to normalized lx, ly, lz, xy, xz, yz
-        lx = a
-        xy = np.dot(bvect, avect/lx)
-        ly = (b**2 - xy**2)**0.5
-        xz = np.dot(cvect, avect/lx)
-        yz = (np.dot(bvect, cvect) - xy * xz) / ly
-        lz = (c**2 - xz**2 - yz**2)**0.5
-    
-        #Call set_lengths
-        self.set_lengths(lx=lx, ly=ly, lz=lz, xy=xy, xz=xz, yz=yz, origin=self.origin)     
+    def is_lammps_norm(self):
+        """
+        Tests if box is compatible with LAMMPS.
+        Note: large box tilt factors not adjusted.  Use LAMMPS command 'box tilt large' if needed.
+        """        
+        if (self.__vects[0,1] == 0.0 and self.__vects[0,2] == 0.0 and self.__vects[1,2] == 0.0 and
+            self.__vects[0,0] > 0.0 and self.__vects[1,1] > 0.0 and self.__vects[2,2] > 0.0):
+            return True
+        else:
+            return False
+       

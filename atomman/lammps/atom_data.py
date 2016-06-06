@@ -164,7 +164,7 @@ def dump(fname, system, units='metal', atom_style='atomic'):
             except:
                 unit = None
             
-            if dtype == int:
+            if np.issubdtype(dtype, 'int64'):
                 for i in xrange(size):
                     print_string += ' %i'
             else:
@@ -208,7 +208,7 @@ def dump(fname, system, units='metal', atom_style='atomic'):
                 except:
                     unit = None
 
-                if dtype == int:
+                if np.issubdtype(dtype, 'int64'):
                     for i in xrange(size):
                         print_string += ' %i'
                 else:
