@@ -57,7 +57,7 @@ class Box(object):
         
         self.__vects[:] = value
         #Zero out near zero terms
-        self.__vects[np.isclose(self.__vects/self.__vects.max(), 0.0, atol=1e-9)] = 0.0
+        self.__vects[np.isclose(self.__vects/abs(self.__vects).max(), 0.0, atol=1e-9)] = 0.0
         
     @property
     def origin(self):

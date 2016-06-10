@@ -1,6 +1,8 @@
 import os
 import numpy as np
-from atomman.lammps import atom_dump, run
+from run import run
+import atom_dump
+#import atomman.lammps as lmp 
    
 def create_sys(lammps_exe, system_info):
     """
@@ -26,9 +28,11 @@ def create_sys(lammps_exe, system_info):
     f = open('create_sys.in', 'w')
     f.write(script)
     f.close()
+    
+    print lammps_exe
     output = run(lammps_exe, 'create_sys.in')
 
-    system = atom_dump.load('temp.dump')
+    system = lmp.atom_dump.load('temp.dump')
     os.remove('create_sys.in')
     os.remove('log.lammps')
     os.remove('temp.dump')

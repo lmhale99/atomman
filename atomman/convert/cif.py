@@ -4,11 +4,14 @@ import numpy as np
 
 
 def load(cif):
-    if hasattr(cif, 'read'):
-        cif = cif.read()
     
     dps = diffpy.Structure.structure.Structure()
-    dps.readStr(cif)
+    
+    if hasattr(cif, 'read'):
+        cif = cif.read()
+        dps.readStr(cif)
+    else:
+        dps.read(cif)
     
     all_elements = dps.element
     elements, all_atype = np.unique(all_elements, return_inverse=True)

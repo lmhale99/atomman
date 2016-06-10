@@ -253,7 +253,7 @@ class System(object):
         elif style == 'pymatgen_Structure':
             system, symbols = am.convert.pymatgen_Structure.load(input)
         
-        elif style = 'poscar':
+        elif style == 'poscar':
             system, symbols = am.convert.poscar.load(input)
         
         else:
@@ -301,7 +301,7 @@ class System(object):
     
         model = DataModelDict()
         model['cell'] = cell = DataModelDict()
-        if alpha == 90.0 and beta == 90.0 and gamma == 90.0:
+        if np.allclose([alpha, beta, gamma], [90.0, 90.0, 90.0]):
             if np.isclose(b/a, 1.):
                 if np.isclose(c/a, 1.):
                     c_family = 'cubic'
