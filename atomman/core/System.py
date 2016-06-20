@@ -333,7 +333,7 @@ class System(object):
         for i in xrange(self.natoms):
             atom = DataModelDict()
             
-            atom['component'] = self.atoms_prop(a_id=i, key='atype')
+            atom['component'] = int(self.atoms_prop(a_id=i, key='atype'))
             
             symbol = symbols[self.atoms_prop(a_id=i, key='atype')-1]
             if symbol is not None:
