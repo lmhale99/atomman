@@ -3,10 +3,15 @@ import numpy as np
 import atomman as am
 import atomman.unitconvert as uc
 import sys
+import os
 
 def load(model, key='atomic-system'):
     """Read in a data model containing a crystal-structure and return a System unit cell."""
     
+    if isinstance(model, (str, unicode)) and os.path.isfile(model):
+        with open(model) as f:
+            model = f.read()
+            
     a_sys = DataModelDict(model).find(key)
 
     #identify the crystal system
