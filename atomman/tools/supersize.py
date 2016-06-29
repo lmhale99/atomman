@@ -18,7 +18,7 @@ def supersize(system, a_size, b_size, c_size):
     """
     #initial parameter setup
     sizes = [a_size, b_size, c_size]
-    mults = np.array([0, 0, 0], dtype='int32')
+    mults = np.array([0, 0, 0], dtype=int)
     vects = system.box.vects
     origin = system.box.origin
     spos = system.atoms_prop(key='pos', scale=True)
