@@ -245,7 +245,9 @@ class System(object):
 
         elif style == 'atom_dump':
             prop_info = kwargs.get('prop_info', None)
-            system, symbols = am.lammps.atom_dump.load(input, prop_info)
+            #system, symbols = am.lammps.atom_dump.load(input, prop_info)
+            system = am.lammps.atom_dump.load(input, prop_info)
+            symbols = [None for i in xrange(system.natypes)]
             
         elif style == 'ase_Atoms':
             system, symbols = am.convert.ase_Atoms.load(input)

@@ -115,9 +115,9 @@ def nlist(system, cutoff, cmult=1):
             medium = long[u+1:]
             v_pos = pos[medium]
             try:
-                d = np.linalg.norm(dvect(u_pos, v_pos, system.box(), system.pbc), axis=1)
+                d = np.linalg.norm(dvect(u_pos, v_pos, system.box, system.pbc), axis=1)
             except:
-                d = np.linalg.norm([dvect(u_pos, v_pos, system.box(), system.pbc)], axis=1)
+                d = np.linalg.norm([dvect(u_pos, v_pos, system.box, system.pbc)], axis=1)
             vlist = medium[np.where(d < cutoff)]
             for v_index in vlist:
                 neighbors = __append_neighbor(neighbors, u_index, v_index)
