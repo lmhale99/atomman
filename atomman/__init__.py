@@ -1,5 +1,4 @@
 from core import *
-from base_units import int, float
 import unitconvert
 import defect
 import lammps
