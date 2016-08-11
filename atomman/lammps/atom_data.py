@@ -133,9 +133,12 @@ def dump(fname, system, units='metal', atom_style='atomic'):
         #header info
         f.write('\n%i atoms\n' % system.natoms)
         f.write('%i atom types\n' % system.natypes)
-        f.write('%f %f xlo xhi\n' % (uc.get_in_units(system.box.xlo, length), uc.get_in_units(system.box.xhi, length)))
-        f.write('%f %f ylo yhi\n' % (uc.get_in_units(system.box.ylo, length), uc.get_in_units(system.box.yhi, length)))
-        f.write('%f %f zlo zhi\n' % (uc.get_in_units(system.box.zlo, length), uc.get_in_units(system.box.zhi, length)))
+        #f.write('%f %f xlo xhi\n' % (uc.get_in_units(system.box.xlo, length), uc.get_in_units(system.box.xhi, length)))
+        #f.write('%f %f ylo yhi\n' % (uc.get_in_units(system.box.ylo, length), uc.get_in_units(system.box.yhi, length)))
+        #f.write('%f %f zlo zhi\n' % (uc.get_in_units(system.box.zlo, length), uc.get_in_units(system.box.zhi, length)))
+        f.write('%s %s xlo xhi\n' % (repr(uc.get_in_units(system.box.xlo, length)), repr(uc.get_in_units(system.box.xhi, length))))
+        f.write('%s %s ylo yhi\n' % (repr(uc.get_in_units(system.box.ylo, length)), repr(uc.get_in_units(system.box.yhi, length))))
+        f.write('%s %s zlo zhi\n' % (repr(uc.get_in_units(system.box.zlo, length)), repr(uc.get_in_units(system.box.zhi, length))))
         
         #add tilts if tilt values not equal to zero
         if system.box.xy == 0.0 and system.box.xz == 0.0 and system.box.yz == 0.0:

@@ -5,14 +5,21 @@ import atomman.unitconvert as uc
 import sys
 import os
 
-def load(model, key='atomic-system'):
+def load(model, key='atomic-system', index=0):
     """Read in a data model containing a crystal-structure and return a System unit cell."""
     
     if isinstance(model, (str, unicode)) and os.path.isfile(model):
         with open(model) as f:
             model = f.read()
-            
-    a_sys = DataModelDict(model).find(key)
+    
+    #Pull system model out of data model using key and index
+    a_sys = DataModelDict(model).finds(key)
+    if len(a_sys) == 0:
+        raise KeyError(key + ' not found in model')
+    try:
+        a_sys = a_sys[index]
+    except:
+        raise IndexError('Invalid index ' + str(index) + ' for model key ' + key)
 
     #identify the crystal system
     c_system = a_sys['cell'].keys()[0]
