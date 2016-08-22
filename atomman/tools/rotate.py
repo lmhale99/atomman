@@ -47,16 +47,21 @@ def rotate_cubic(system, axes):
     
     #test for cubic
     a = system.box.a
-    if True:
-    #try:
+    try:
         assert np.isclose(a, system.box.b), str(a) + ' ' + str(system.box.b)
         assert np.isclose(a, system.box.c), str(a) + ' ' + str(system.box.c)
         assert np.isclose(90.0, system.box.alpha), str(system.box.alpha)
         assert np.isclose(90.0, system.box.beta), str(system.box.beta)
         assert np.isclose(90.0, system.box.gamma), str(system.box.gamma)
-    else:
-    #except:
+    except:
         raise ValueError('Cubic system not given')
+    
+    #Test for integer axes values
+    try:
+        for ax_val in axes.flat:
+            assert np.isclose(ax_val, int(ax_val))
+    except:
+        raise ValueError('axes values must be integers')    
     
     #Get magnitudes of the axes
     mag = np.linalg.norm(axes, axis=1)
