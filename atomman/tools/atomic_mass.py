@@ -3577,7 +3577,7 @@ def atomic_mass(term):
     Elements can be specified using atomic numbers or symbols.
     Isotopes are specified using symbols followed by -#, where # is the mass number (eg. 'He-3')
     Deuterium and tritium can alternatively be specified using D and T respectively.
-    Values obptained from NIST reference database: http://www.nist.gov/pml/data/comp.cfm
+    Values obtained from NIST reference database: http://www.nist.gov/pml/data/comp.cfm
     """
     
     try:
@@ -3589,9 +3589,9 @@ def atomic_mass(term):
         return atomic_mass_dict[term]
     except:
         if term in atom_symbol_index.values():
-            raise ValueError('No standard weight for element '+term+'. Specify an isotope instead.')
+            raise ValueError('No standard weight for element '+str(term)+'. Specify an isotope instead.')
         else:
-            raise KeyError('Unknown element/isotope symbol: '+term)
+            raise KeyError('Unknown element/isotope symbol: '+str(term))
         
     
         
