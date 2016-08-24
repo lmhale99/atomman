@@ -103,11 +103,10 @@ class Atoms(object):
     def __setitem__(self, index, value):
         """Index setting of atoms."""
         assert isinstance(value, Atoms)
-        newdata = self[index].data
-        assert value.data.shape == newdata.shape
+        assert value.data.shape == self[index].data.shape
         assert value.prop() == self.prop()
         assert value.dtype == self.dtype
-        newdata[:] = value.data.copy()        
+        self.data[index] = value.data.copy()       
     
     @property
     def natoms(self):
@@ -175,13 +174,16 @@ class Atoms(object):
 
             else:
                 value = np.asarray(value)
+
+                if value.ndim == 0:
+                    value = value.reshape(1)
                 if value.ndim == 1:
                     value = value[:,np.newaxis]
-                
+
                 if key not in self.view:
                     if dtype is None:
                         dtype = value.dtype
-                    assert len(value) == self.natoms, 'Array size does not match number of atoms'                    
+                    #assert len(value) == self.natoms, 'Array size does not match number of atoms'                    
                     self.__add_prop(key, value[0].size, value[0].shape, dtype)
                 if dtype is not None:
                     assert dtype == self.dtype[key], 'dtype already assigned as %s' % self.dtype[key]
@@ -208,6 +210,8 @@ class Atoms(object):
                 return value
             else:
                 value = np.asarray(value)
+                if value.ndim == 0:
+                    value = value.reshape(1)
                 
                 if key not in self.view:
                     if dtype is None:
@@ -235,7 +239,7 @@ class Atoms(object):
         if end > len(self.data[0]):
             
             #create larger array
-            data = np.empty((self.natoms, end +  10))
+            data = np.zeros((self.natoms, end +  10))
             data[:, :self.__start] = self.data[:, :self.__start]
             self.data = data
             
