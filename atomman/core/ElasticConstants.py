@@ -4,7 +4,7 @@ import numpy as np
 
 from DataModelDict import DataModelDict as DM
 
-from atomman.tools.axes_check import axes_check
+import atomman as am
 import atomman.unitconvert as uc
 
 class ElasticConstants(object):
@@ -144,7 +144,7 @@ class ElasticConstants(object):
     def transform(self, axes, tol=1e-8):
         """Transforms the elastic constant matrix based on the supplied axes."""
         axes = np.asarray(axes, dtype='float64')
-        T = axes_check(axes)
+        T = am.tools.axes_check(axes)
         
         Q = np.einsum('km,ln->mnkl', T, T)
         C = np.einsum('ghij,ghmn,mnkl->ijkl', Q, self.Cijkl, Q)
