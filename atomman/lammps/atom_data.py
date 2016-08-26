@@ -5,13 +5,14 @@ import numpy as np
 import style
 import atomman as am
 import atomman.unitconvert as uc
+from atomman.tools import uber_open_rmode
 
-def load(fname, pbc=(True, True, True), atom_style='atomic', units='metal'):
+def load(data, pbc=(True, True, True), atom_style='atomic', units='metal'):
     """
     Read a LAMMPS-style atom data file and return a System.
     
     Argument:
-    fname = name (and location) of file to read data from.
+    data = file name, file-like object or string to read data from.
     
     Keyword Arguments:
     pbc -- list or tuple of three boolean values indicating which System directions are periodic. Default is (True, True, True).
@@ -29,7 +30,7 @@ def load(fname, pbc=(True, True, True), atom_style='atomic', units='metal'):
     xz = 0.0
     yz = 0.0
     system = None
-    with open(fname, 'r') as fp:
+    with uber_open_rmode(data) as fp:
         #loop over all lines in fp
         for line in fp:
             terms = line.split()

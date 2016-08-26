@@ -1,6 +1,6 @@
 import atomman as am
 import numpy as np
-
+import os
 try:
     import diffpy.Structure
     has_diffpy = True
@@ -14,11 +14,17 @@ def load(cif):
     
     dps = diffpy.Structure.structure.Structure()
     
+    #load from an open file-like object
     if hasattr(cif, 'read'):
-        cif = cif.read()
-        dps.readStr(cif)
-    else:
+        dps.readStr(cif.read())
+    
+    #load using a file name
+    elif os.path.isfile(cif):
         dps.read(cif)
+    
+    #load from a string
+    else:
+        dps.readStr(cif)
     
     all_elements = dps.element
     elements, all_atype = np.unique(all_elements, return_inverse=True)

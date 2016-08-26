@@ -1,7 +1,7 @@
 import atomman as am
 import numpy as np
 
-
+from atomman.tools import uber_open_rmode
 
 def load(fname):
     """
@@ -9,7 +9,7 @@ def load(fname):
     Returns an atomman.System, and a list of elements if the file gives them. 
     """
     #Read in all lines of the file
-    with open(fname) as f:
+    with uber_open_rmode(fname) as f:
         lines = f.read().split('\n')
     
     #Interpret box information

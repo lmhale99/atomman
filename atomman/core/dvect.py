@@ -3,7 +3,7 @@ import numpy as np
 def dvect(pos_0, pos_1, box, pbc):
     """Computes the shortest distance between pos_0 and pos_1 using box and pbc info.
     
-    Keyword Arguments:
+    Arguments:
     pos_0, pos_1 -- vector positions or arrays of vector positions. The sizes and shapes of pos_0 and pos_1 have to be compatible with numpy broadcasting.
     box -- A Box instance.
     pbc -- Three boolean values indicating which box directions are periodic.     

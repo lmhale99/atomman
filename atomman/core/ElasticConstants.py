@@ -28,7 +28,6 @@ class ElasticConstants(object):
        
         if len(kwargs) == 0:
             self.__c_ij = np.zeros((6,6), dtype='float64')
-            self.crystal_system = 'triclinic'
         elif 'Cij' in kwargs:
             assert len(kwargs) == 1, 'Cij cannot be specified with other keyword arguments'
             self.Cij = kwargs['Cij']

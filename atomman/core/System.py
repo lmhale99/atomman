@@ -5,23 +5,22 @@ from copy import deepcopy
 import numpy as np
 
 #Internal imports
-from Atoms import Atoms
-from Box import Box
+from .Atoms import Atoms
+from .Box import Box
 import atomman as am
-from atomman.tools import nlist, dvect
 import atomman.unitconvert as uc
-from DataModelDict import DataModelDict
+from DataModelDict import DataModelDict as DM
      
 class System(object):
     """Class for representing an atomic system."""
     
     def __init__(self, atoms=Atoms(), box=Box(), pbc=(True, True, True), scale=False, prop={}):
         """
-        Initilize a System by joining an Atoms and Box instance.
+        Initilize a System by joining an am.Atoms and am.Box instance.
         
         Keyword Arguments:
-        atoms -- Instance of Atoms to include.
-        box -- Instance of Box to include.
+        atoms -- Instance of am.Atoms to include.
+        box -- Instance of am.Box to include.
         pbc -- Tuple of three booleans where True indicates a given box dimension is periodic. Default is all True.
         scale -- If True, atoms' pos will be scaled relative to the box.  Default is False.
         prop -- Dictionary of free-form system-wide properties.
@@ -49,7 +48,7 @@ class System(object):
         
     @property    
     def atoms(self): 
-        """The Atoms instance within the System."""
+        """The am.Atoms instance within the System."""
         return self.__atoms
         
     def atoms_prop(self, a_id=None, key=None, value=None, dtype=None, scale=False):
@@ -94,7 +93,7 @@ class System(object):
     
     @property
     def box(self):
-        """The Box instance within the system"""
+        """The am.Box instance within the system"""
         return self.__box
     
     def box_set(self, **kwargs): 
@@ -175,7 +174,7 @@ class System(object):
             pos_1 = self.atoms.view['pos'][pos_1]
         
         #call atomman.tools.dvect using self system's box and pbc
-        return dvect(pos_0, pos_1, self.box, self.pbc)
+        return am.dvect(pos_0, pos_1, self.box, self.pbc)
 
     def normalize(self, style='lammps'):
         """
@@ -224,7 +223,7 @@ class System(object):
         cutoff -- radial cutoff distance for including atoms as neighbors.
         cmult -- int factor that changes the underlying binning algorithm. Default is 1, which should be the fastest. 
         """
-        self.prop['nlist'] = nlist(self, cutoff, cmult)
+        self.prop['nlist'] = am.nlist(self, cutoff, cmult)
     
     def load(self, style, input, **kwargs):
         """Load a System."""
@@ -271,39 +270,39 @@ class System(object):
         beta =  self.box.beta
         gamma = self.box.gamma
     
-        model = DataModelDict()
-        model['cell'] = cell = DataModelDict()
+        model = DM()
+        model['cell'] = cell = DM()
         if np.allclose([alpha, beta, gamma], [90.0, 90.0, 90.0]):
             if np.isclose(b/a, 1.):
                 if np.isclose(c/a, 1.):
                     c_family = 'cubic'
-                    cell[c_family] = DataModelDict()
-                    cell[c_family]['a'] = DataModelDict([('value', (a+b+c)/3), ('unit', box_unit)])
+                    cell[c_family] = DM()
+                    cell[c_family]['a'] = DM([('value', (a+b+c)/3), ('unit', box_unit)])
                 else:
                     c_family = 'tetragonal'
-                    cell[c_family] = DataModelDict()
-                    cell[c_family]['a'] = DataModelDict([('value', (a+b)/2), ('unit', box_unit)])
-                    cell[c_family]['c'] = DataModelDict([('value', c), ('unit', box_unit)])
+                    cell[c_family] = DM()
+                    cell[c_family]['a'] = DM([('value', (a+b)/2), ('unit', box_unit)])
+                    cell[c_family]['c'] = DM([('value', c), ('unit', box_unit)])
             else:
                 if np.isclose(b/a, 3.0**0.5):
                     c_family = 'hexagonal'
-                    cell[c_family] = DataModelDict()
+                    cell[c_family] = DM()
                     a_av = (a + b/(3.0**0.5))/2.
-                    cell[c_family]['a'] = DataModelDict([('value', a_av), ('unit', box_unit)])
-                    cell[c_family]['c'] = DataModelDict([('value', c), ('unit', box_unit)])
+                    cell[c_family]['a'] = DM([('value', a_av), ('unit', box_unit)])
+                    cell[c_family]['c'] = DM([('value', c), ('unit', box_unit)])
                 
                 else:
                     c_family = 'orthorhombic'
-                    cell[c_family] = DataModelDict()
-                    cell[c_family]['a'] = DataModelDict([('value', a), ('unit', box_unit)])
-                    cell[c_family]['b'] = DataModelDict([('value', b), ('unit', box_unit)])
-                    cell[c_family]['c'] = DataModelDict([('value', c), ('unit', box_unit)])
+                    cell[c_family] = DM()
+                    cell[c_family]['a'] = DM([('value', a), ('unit', box_unit)])
+                    cell[c_family]['b'] = DM([('value', b), ('unit', box_unit)])
+                    cell[c_family]['c'] = DM([('value', c), ('unit', box_unit)])
                 
         else:
             raise ValueError('Non-orthogonal boxes comming')
         
         for i in xrange(self.natoms):
-            atom = DataModelDict()
+            atom = DM()
             
             atom['component'] = int(self.atoms_prop(a_id=i, key='atype'))
             
@@ -315,7 +314,7 @@ class System(object):
             if element is not None:
                 atom['element'] = element
             
-            atom['position'] = DataModelDict()
+            atom['position'] = DM()
             if prop_units['pos'] == 'scaled':
                 atom['position']['value'] = list(self.atoms_prop(a_id=i, key='pos', scale=True))
                 atom['position']['unit'] = 'scaled'
@@ -329,7 +328,7 @@ class System(object):
                         value = list(value)
                     except:
                         pass
-                    prop = DataModelDict([('name',  key), 
+                    prop = DM([('name',  key), 
                                           ('value', value),
                                           ('unit',  unit)])
                     
@@ -338,10 +337,10 @@ class System(object):
             
             model.append('atom', atom)
             
-        return DataModelDict([('atomic-system', model)])
+        return DM([('atomic-system', model)])
         
     def supersize(self, a_size, b_size, c_size):
-        system = am.tools.supersize(self, a_size, b_size, c_size)
+        system = am.supersize(self, a_size, b_size, c_size)
         self.__box = system.box
         self.__atoms = system.atoms
         self.__pbc = system.pbc

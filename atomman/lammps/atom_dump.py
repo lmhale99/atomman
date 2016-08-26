@@ -3,16 +3,17 @@ import atomman.unitconvert as uc
 from DataModelDict import DataModelDict
 import numpy as np
 from copy import deepcopy
-list
-def load(fname, prop_info=None):
+from atomman.tools import uber_open_rmode
+
+def load(data, prop_info=None):
     """
     Read a LAMMPS-style dump file and return a System.
     
     Argument:
-    fname -- name (and location) of file to read data from.
+    data = file name, file-like object or string to read data from.
     
     Keyword Argument:
-    prop_info -- DataModelDict for relating the per-atom properties to/from the dump file and the System. Will create a default json instance <fname>.json if prop_info is not given and <fname>.json doesn't already exist.
+    prop_info -- DataModelDict for relating the per-atom properties to/from the dump file and the System. Will create a default json instance <data>.json if prop_info is not given and <data>.json doesn't already exist.
     """
     
     #read in prop_info if supplied
@@ -22,7 +23,7 @@ def load(fname, prop_info=None):
     #check for default prop_info file
     else:
         try:
-            with open(fname+'.json') as fj:
+            with open(data+'.json') as fj:
                 prop_info = DataModelDict(fj)
         except:
             prop_info = None
@@ -33,7 +34,7 @@ def load(fname, prop_info=None):
         prop_info = prop_info.find('LAMMPS-dump-atoms_prop-relate')
         box_unit = prop_info['box_prop'].get('unit', None)
 
-    with open(fname, 'r') as f:
+    with uber_open_rmode(data) as f:
         pbc = None
         box = None
         natoms = None
@@ -184,10 +185,11 @@ def load(fname, prop_info=None):
                             prop_vals = np.empty((natoms, len(name_list)))
                             
                             #create and save default prop_info Data Model if needed
-                            if prop_info is None:                                                       
+                            if prop_info is None:                                                         
                                 prop_info = __prop_info_default_load(name_list)
-                                with open(fname+'.json', 'w') as fj:
-                                    prop_info.json(fp=fj, indent=4)
+                                if isinstance(data, (str, unicode)) and len(data) < 80:
+                                    with open(data+'.json', 'w') as fj:
+                                        prop_info.json(fp=fj, indent=4)
                                 prop_info = prop_info.find('LAMMPS-dump-atoms_prop-relate')
                             
                             #create system and flag that it is time to read data
