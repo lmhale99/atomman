@@ -2,7 +2,7 @@ import numpy as np
 import atomman as am
 import atomman.unitconvert as uc
 
-def point(system, ptd_type=None, atype=None, pos=None, ptd_id=None, db_vect=None, scale=False, atol=None):
+def point(system, ptd_type, atype=None, pos=None, ptd_id=None, db_vect=None, scale=False, atol=None):
     """
     Returns a new System where a point defect has been inserted.
     

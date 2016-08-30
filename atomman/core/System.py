@@ -243,8 +243,9 @@ class System(object):
         box_unit -- length unit to use for the box. Default is angstrom.
         symbols -- list of atom-model symbols corresponding to the atom types. 
         elements -- list of element tags corresponding to the atom types. 
-        prop_units -- dictionary where the keys are the property keys to include, and the values are units to use.
-                      if not given, only the positions in scaled units are included.
+        prop_units -- dictionary where the keys are the property keys to 
+                      include, and the values are units to use. If not given, 
+                      only the positions in scaled units are included.
         """
         
         box_unit = kwargs.get('box_unit', 'angstrom')
@@ -317,9 +318,9 @@ class System(object):
             atom['position'] = DM()
             if prop_units['pos'] == 'scaled':
                 atom['position']['value'] = list(self.atoms_prop(a_id=i, key='pos', scale=True))
-                atom['position']['unit'] = 'scaled'
             else:
                 atom['position']['value'] = list(uc.get_in_units(self.atoms_prop(a_id=i, key='pos'), prop_units['pos']))
+            atom['position']['unit'] = prop_units['pos']
                 
             for key, unit in prop_units.iteritems():
                 if key != 'pos' and key != 'atype':

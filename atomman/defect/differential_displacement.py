@@ -96,8 +96,9 @@ def differential_displacement(base_system, disl_system, burgers_vector, plot_ran
         
             #plot the arrows
             for center, length, width in zip(arrow_centers, arrow_lengths, arrow_widths):
-                ax1.quiver(center[0], center[1], length[0], length[1], pivot='middle',
-                           angles='xy', scale_units='xy', scale=1, width=width)
+                if width > 1e-7:
+                    ax1.quiver(center[0], center[1], length[0], length[1], pivot='middle',
+                               angles='xy', scale_units='xy', scale=1, width=width)
                 
         elif component == 'xy':
             #scale arrow lengths and vectors
