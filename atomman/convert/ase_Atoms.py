@@ -29,9 +29,10 @@ def dump(system, elements):
     
     assert has_ase, 'ase not imported'
     
+    elements = np.asarray(elements)
     positions = system.atoms_prop(key='pos')
     cell = system.box.vects
-    atypes = system.atoms_prop(key='atype')
+    atype = system.atoms_prop(key='atype')
     symbols = elements[atype-1]
     pbc = system.pbc
     
