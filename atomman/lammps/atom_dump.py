@@ -4,6 +4,7 @@ from DataModelDict import DataModelDict
 import numpy as np
 from copy import deepcopy
 from atomman.tools import uber_open_rmode
+import os
 
 def load(data, prop_info=None):
     """
@@ -18,6 +19,9 @@ def load(data, prop_info=None):
     
     #read in prop_info if supplied
     if prop_info is not None:
+        if os.path.isfile(prop_info):
+            with open(prop_info) as f:
+                prop_info = f.read()
         prop_info = DataModelDict(prop_info)
     
     #check for default prop_info file
@@ -198,13 +202,13 @@ def load(data, prop_info=None):
                             readatoms = True 
     return system      
 
-def dump(fname, system, prop_info=None, xf='%.13e'):
+def dump(system, fname, prop_info=None, xf='%.13e'):
     """
     Write a LAMMPS-style dump file from a System.
     
     Arguments:
-    fname -- name (and location) of file to save data to.
     system -- System to write to the dump file.
+    fname -- name (and location) of file to save data to.    
     
     Keyword Arguments:
     prop_info -- DataModelDict for relating the per-atom properties to/from the dump file and the System. Will create a default json instance <fname>.json if prop_info is not given and <fname>.json doesn't already exist.
@@ -221,6 +225,9 @@ def dump(fname, system, prop_info=None, xf='%.13e'):
             with open(fname+'.json', 'w') as fj:
                 prop_info.json(fp=fj, indent=4)
     else:
+        if os.path.isfile(prop_info):
+            with open(prop_info) as f:
+                prop_info = f.read()
         prop_info = DataModelDict(prop_info)
     
     #read box_unit if specified in prop_info

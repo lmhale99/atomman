@@ -1,12 +1,12 @@
 import subprocess as sp
 from log_extract import log_extract
 
-def run(lammps_exe, script_name, mpi_command=None):
+def run(lammps_command, script_name, mpi_command=None):
     """
     Calls LAMMPS to run. Returns data model containing LAMMPS output.
     
     Arguments:
-    lammps_exe -- The LAMMPS inline run command (sans -in script_name).
+    lammps_command -- The LAMMPS inline run command (sans -in script_name).
     script_name -- Path of the LAMMPS input script to use.
     mpi_command -- (optional) The MPI inline command to run LAMMPS in parallel.
     
@@ -15,11 +15,11 @@ def run(lammps_exe, script_name, mpi_command=None):
     additional outer quotes) or split into a list based on the spaces.
     """
     
-    #convert lammps_exe into list of terms
-    if isinstance(lammps_exe, (str, unicode)) and ' ' in lammps_exe:
-        lammps_exe = lammps_exe.split(' ')
-    elif not isinstance(lammps_exe, list):
-        lammps_exe = [lammps_exe]   
+    #convert lammps_command into list of terms
+    if isinstance(lammps_command, (str, unicode)) and ' ' in lammps_command:
+        lammps_command = lammps_command.split(' ')
+    elif not isinstance(lammps_command, list):
+        lammps_command = [lammps_command]   
         
     #convert script_name into list of terms
     if isinstance(script_name, (str, unicode)) and ' ' in script_name:
@@ -37,7 +37,7 @@ def run(lammps_exe, script_name, mpi_command=None):
     
     #try to run lammps as a subprocess and return log_extract output
     try:
-        return log_extract(sp.check_output(mpi_command + lammps_exe + ['-in'] + script_name))
+        return log_extract(sp.check_output(mpi_command + lammps_command + ['-in'] + script_name))
     
     #pass LAMMPS error to Python error if failed
     except sp.CalledProcessError as e:        

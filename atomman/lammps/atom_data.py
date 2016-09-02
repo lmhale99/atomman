@@ -107,13 +107,13 @@ def load(data, pbc=(True, True, True), atom_style='atomic', units='metal'):
     assert system.natypes == natypes, 'Number of atom types does not match!'
     return system
 
-def dump(fname, system, units='metal', atom_style='atomic'):
+def dump(system, fname, units='metal', atom_style='atomic'):
     """
     Write a LAMMPS-style atom data file from a System.
     
     Argument:
-    fname -- name (and location) of file to save data to.
     system -- System to write to the atom data file.
+    fname -- name (and location) of file to save data to.
     
     Keyword Arguments:
     atom_style -- LAMMPS atom_style option associated with the data file.  Default is 'atomic'.

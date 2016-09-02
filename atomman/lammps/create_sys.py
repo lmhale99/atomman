@@ -2,14 +2,13 @@ import os
 import numpy as np
 from run import run
 import atom_dump
-#import atomman.lammps as lmp 
    
-def create_sys(lammps_exe, system_info):
+def create_sys(lammps_command, system_info):
     """
     Uses LAMMPS to generate a System based on the supplied system_info.
     
     Arguments:
-    lammps_exe -- name (and location) of the LAMMPS executable to use.
+    lammps_command -- the lammps command/executable to use.
     system_info -- LAMMPS input script command lines associated with creating a new system.
     
     system_info can be generated using atomman.lammps.sys_gen.
@@ -29,11 +28,11 @@ def create_sys(lammps_exe, system_info):
     f.write(script)
     f.close()
     
-    print lammps_exe
-    output = run(lammps_exe, 'create_sys.in')
+    output = run(lammps_command, 'create_sys.in')
 
-    system = lmp.atom_dump.load('temp.dump')
+    system = atom_dump.load('temp.dump')
     os.remove('create_sys.in')
     os.remove('log.lammps')
     os.remove('temp.dump')
+    os.remove('temp.dump.json')
     return system      

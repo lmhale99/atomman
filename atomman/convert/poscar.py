@@ -3,13 +3,13 @@ import numpy as np
 
 from atomman.tools import uber_open_rmode
 
-def load(fname):
+def load(poscar):
     """
     Reads a poscar-style coordination file for a system.
     Returns an atomman.System, and a list of elements if the file gives them. 
     """
     #Read in all lines of the file
-    with uber_open_rmode(fname) as f:
+    with uber_open_rmode(poscar) as f:
         lines = f.read().split('\n')
     
     #Interpret box information
@@ -59,7 +59,7 @@ def load(fname):
     
         
 
-def dump(fname, system, header='', elements=None, style='direct',  box_scale=1.0):
+def dump(system, fp=None, fname=None, header='', elements=None, style='direct',  box_scale=1.0):
     """
     Generates a poscar-style coordination file for the system.
     
@@ -74,7 +74,9 @@ def dump(fname, system, header='', elements=None, style='direct',  box_scale=1.0
     box_scale -- a universal scaling constant applied to the box vectors. Default is 1.0.
     """
     assert '\n' not in header, 'header can only be one line'
-    assert '\n' not in style, 'header can only be one line'
+    assert '\n' not in style, 'style can only be one line'
+    assert fname is None or fp is None, 'fp and fname cannot both be given'
+    
     box_scale = float(box_scale)
     
     #scale box vectors and write out the values
@@ -110,7 +112,16 @@ def dump(fname, system, header='', elements=None, style='direct',  box_scale=1.0
         for p in pos[atype==a]:
             poscar_string += '\n%s %s %s' % (repr(p[0]), repr(p[1]), repr(p[2]))
     
-    #Save to the file
-    with open(fname, 'w') as f:
-        f.write(poscar_string)
+    #Save to the file pointer
+    if fp is not None:
+        fp.write(poscar_string) 
+    
+    #Save to the file name
+    elif fname is not None:
+        with open(fname, 'w') as f:
+            f.write(poscar_string)
+    
+    #Return as a string
+    else:
+        return poscar_string
    

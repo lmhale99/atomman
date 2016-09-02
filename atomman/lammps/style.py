@@ -165,6 +165,8 @@ def velocity(atom_style='atomic'):
     Returns a dictionary where the keys are velocity property names and values are tuples consisting of:
     (size, physical-quantity, data-type). 
     """
+    int = np.dtype('int32')
+    float = np.dtype('float64')
     
     params = OrderedDict()
     
@@ -190,9 +192,9 @@ def velocity(atom_style='atomic'):
         
     elif atom_style[:6] == 'hybrid':
         substyles = atom_style.split()
-        params = velocity()
+        params = velocity('atomic')
         for substyle in substyles[1:]:
-            subparams = atom_style_params(atom_style=substyle)
+            subparams = velocity(atom_style=substyle)
             for k, v in subparams.iteritems():
                 if k not in params:
                     params[k] = v
