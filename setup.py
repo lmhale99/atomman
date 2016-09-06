@@ -6,11 +6,11 @@ def readme():
     
 
 setup(name='atomman',
-      version='0.6',
+      version='1.0',
       description='Atomistic Manipulation Toolkit',
       long_description=readme(),
       classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Science/Research',
         'Natural Language :: English',
         'Programming Language :: Python :: 2.7',

@@ -7,116 +7,100 @@ AtomMan: the Atomistic Manipulation Toolkit is a Python library for
 creating, representing, manipulating, and analyzing large-scale atomic 
 systems of atoms. The focus of the package is to facilitate the rapid design 
 and development of simulations that are fully documented and easily adaptable 
-to new potentials, configurations, etc.  
+to new potentials, configurations, etc.  The code has no requirements that 
+limit which systems it can be used on, i.e. it should work on Linux, Mac and 
+Windows computers.
 
-The code has no requirements that limit which systems it can be used on, i.e.
-it should work on Linux, Mac and Windows computers.
+Features:
+
+1. Allows for efficient and fast calculations on millions of atoms, each with many freely defined per-atom properties.
+2. Create dislocation monopoles and evaluate them with differential displacement and Nye tensor plots.
+3. Generate point defects.
+4. Call LAMMPS directly from Python and instantly retrieve the resulting data or LAMMPS error statement.
+5. Easily convert systems to/from the other Python atomic environments of ASE and PyMatGen.
+6. Can create systems based on CIF crystal structure files, and LAMMPS atom and dump files.
+7. Built-in unit conversions.
+
+Installation
+------------
+
+The atomman package is designed for Python 2.7. It makes heavy use of numpy, so
+it's easiest to download a Python environment like Anaconda. 
 
 The latest release can be installed using pip::
 
     pip install atomman
 
-The code and all documentation is hosted on GitHub and can be directly 
-downloaded at: `https://github.com/usnistgov/atomman`_.  
+This pip command should install atomman and any other required packages, but
+occasionally a requirement may have to be installed separately. The list of required packages are given below.
 
-Documentation and examples in the form of Jupyter Notebooks for the various 
-components of the code can be found by clicking on the links in the description 
-below. 
-
-1. The core of atomman features:
-
-    - Classes for representing an atomic system:
-        
-        + `Box`_ class defining a general parallelopid with instant conversions
-          to/from lattice vector, unit cell, and LAMMPS-style parameter 
-          representations.
-          
-        + `Atoms`_ class that stores the per-atom positions and properties for
-          a collection of atoms. The underlying structure of the class uses 
-          Numpy arrays and views to efficiently store the values and allow for 
-          fast calculations.
-          
-        + `System`_ class that combines an Atoms object and a System object, 
-          along with handling periodic boundaries.
-        
-    - Full `unit conversion`_ capabilities.
-
-2. The lammps module provides tools for setting up, running, and analyzing 
-   LAMMPS simulations directly from Python.  
-   
-    - `General LAMMPS`_ functionality, such as creating systems in LAMMPS,
-      writing input files, reading/writing atom and dump files, calling LAMMPS
-      to run, and recieving LAMMPS errors and log file thermo data.
-     
-    - `Potential`_ class for reading LAMMPS-potential data models.  This class
-      and the data models allow for the modular treatment of any LAMMPS 
-      implemented interatomic potentials. In other words, it allows for 
-      potentials to be easily swapped.
-      
-    - `atom_data`_ load() and dump() functions allow for reading/writing of 
-      LAMMPS atom coordination files. These functions work with any LAMMPS 
-      atom_style and units options.
-      
-    - `atom_dump`_ load() and dump() functions allow for reading/writing of 
-      LAMMPS dump coordination files. Additional JSON files are created that 
-      define the proper conversion of the dump files to Python, and provide 
-      metadata information to the terms (units, complete name, data structure, 
-      etc).      
-
-3. The defects module the following components:
-
-    - `point`_ defect creation. Add vacancies, substitutionals, positional 
-      interstitials, and dumbbell interstitials to a system.
-      
-    - `Stroh`_ method calculation. Solve the anisotropic elasticity solution
-      for a perfectly straight dislocation of any character using the Stroh
-      method. Once solved, the elastic energy coefficient and position-based
-      displacements and stresses can be obtained. Dislocation monopole systems
-      can be constructed using the Stroh displacements.
-
-4. The models module has tools for reading in Systems:
-
-    - crystal reads in a atomic-system data model file and returns a System. 
-
-    - cif has two functions for reading CIF crystallographic files. 
+Alternatively, all code and documentation can be downloaded from GitHub. 
     
-        + cif_cell() reads a CIF file and returns a System and list of 
-          elements.
-          
-        + cif_load() reads a CIF file and returns a DataModelDict 
-          representation of all of the lines.
-          
-5. The convert module has tools for converting Systems to other codes:
-
-    - ase_Atoms: from_ase_Atoms() and to_ase_Atoms() convert between 
-      ase.Atoms classes and atomman.System classes. NOTE: ase has requirements
-      that are not compatible with Windows systems. 
+    - The stable releases are available at `https://github.com/usnistgov/atomman`_.
     
-    - pymatgen_Structure: from_pymatgen_Structure() and 
-      to_pymatgen_Structure() convert between 
-      pymatgen.Structure classes and atomman.System classes. NOTE: pymatgen has 
-      requirements that are not compatible with Windows systems. 
+    - The working development versions are at `https://github.com/lmhale99/atomman`_.
+    
+Documentation
+-------------
+
+Tutorials and full reference documentation can be found on GitHub in the form 
+of Jupyter Notebooks. This provides explanations as well as examples of 
+functioning code. They can also be downloaded and used interactively.
+
+The links below are to the tutorials for the most recent stable release:
+
+    - `Introduction to atomman`_
+    
+    - `Interacting with LAMMPS`_
+    
+    
+Required packages
+-----------------
+
+This is a list of the required Python packages
+
+    - `xmltodict`_ converts XML files to Python dictionaries. Used by 
+      DataModelDict.
+    
+    - `DataModelDict`_ class allowing for easy transformations between 
+      XML/JSON/Python representations of structured data models.
       
-6. The tools module collects all of the additional features that don't have 
-   homes anywhere else.
-   
-   - `ElasticConstants`_ class for interacting and transforming representations
-     of the elastic constant tensor.
-   
-   - nlist function for constructing neighbor lists. 
-   
-   - other tools for system manipulation, calculations, etc. 
-   
+    - 'numericalunits'_ helps with unit conversions.  
+      
+    - `numpy`_, 'scipy`_, and 'matplotlib'_ Python scientific tools
+    
+Optional packages
+-----------------
+
+This is a list of additional Python packages that can add functionality
+
+    - `diffpy.Structure`_ - CIF reader. Required for loading systems from
+    CIF files.
+    
+    - `ase`_ the Atomic Simulation Environment for interacting with small 
+    systems and DFT calculations. Required for converting to/from ase.Atoms 
+    objects.
+    
+    - `pymatgen`_ the Python Materials Genomics package used by the Materials
+    Project for DFT calculations. Required for converting to/from 
+    pymatgen.Structure objects.
+       
 .. _https://github.com/usnistgov/atomman: https://github.com/usnistgov/atomman
-.. _Box: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.Box.ipynb
-.. _Atoms: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.Atoms.ipynb
-.. _System: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.System.ipynb
-.. _unit conversion: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.unitconvert.ipynb
-.. _General LAMMPS: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.lammps.ipynb
-.. _Potential: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.lammps.Potential.ipynb
-.. _atom_data: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.lammps.atom_data.ipynb
-.. _atom_dump: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.lammps.atom_dump.ipynb
-.. _point: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.defect.point.ipynb
-.. _ElasticConstants: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.tools.ElasticConstants.ipynb
-.. _Stroh: https://github.com/usnistgov/atomman/blob/master/Notebooks/atomman.defect.Stroh.ipynb
+.. _https://github.com/lmhale99/atomman: https://github.com/lmhale99/atomman
+.. _Introduction to atomman: https://github.com/usnistgov/atomman/blob/master/docs/tutorial/1%20Basics.ipynb
+.. _Interacting with LAMMPS: https://github.com/usnistgov/atomman/blob/master/docs/tutorial/2%20LAMMPS%20Functionality.ipynb
+.. _xmltodict: https://github.com/martinblech/xmltodict
+.. _DataModelDict: https://github.com/usnistgov/DataModelDict
+.. _numericalunits: https://pypi.python.org/pypi/numericalunits
+.. _numpy: http://www.numpy.org/
+.. _scipy: https://www.scipy.org/
+.. _matplotlib: http://matplotlib.org/
+.. _diffpy.Structure: http://www.diffpy.org/diffpy.Structure/
+.. _ase: https://wiki.fysik.dtu.dk/ase/
+.. _pymatgen: http://pymatgen.org/
+
+
+
+
+
 
