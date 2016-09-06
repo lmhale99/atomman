@@ -65,9 +65,9 @@ This is a list of the required Python packages
     - `DataModelDict`_ class allowing for easy transformations between 
       XML/JSON/Python representations of structured data models.
       
-    - 'numericalunits'_ helps with unit conversions.  
+    - `numericalunits`_ helps with unit conversions.  
       
-    - `numpy`_, 'scipy`_, and 'matplotlib'_ Python scientific tools
+    - `numpy`_, `scipy`_, and `matplotlib`_ Python scientific tools
     
 Optional packages
 -----------------
