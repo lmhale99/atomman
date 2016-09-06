@@ -75,15 +75,15 @@ Optional packages
 This is a list of additional Python packages that can add functionality
 
     - `diffpy.Structure`_ - CIF reader. Required for loading systems from
-    CIF files.
+      CIF files.
     
     - `ase`_ the Atomic Simulation Environment for interacting with small 
-    systems and DFT calculations. Required for converting to/from ase.Atoms 
-    objects.
+      systems and DFT calculations. Required for converting to/from ase.Atoms 
+      objects.
     
     - `pymatgen`_ the Python Materials Genomics package used by the Materials
-    Project for DFT calculations. Required for converting to/from 
-    pymatgen.Structure objects.
+      Project for DFT calculations. Required for converting to/from 
+      pymatgen.Structure objects.
        
 .. _https://github.com/usnistgov/atomman: https://github.com/usnistgov/atomman
 .. _https://github.com/lmhale99/atomman: https://github.com/lmhale99/atomman
