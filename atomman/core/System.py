@@ -285,19 +285,19 @@ class System(object):
                     cell[c_family]['a'] = DM([('value', (a+b)/2), ('unit', box_unit)])
                     cell[c_family]['c'] = DM([('value', c), ('unit', box_unit)])
             else:
-                if np.isclose(b/a, 3.0**0.5):
-                    c_family = 'hexagonal'
-                    cell[c_family] = DM()
-                    a_av = (a + b/(3.0**0.5))/2.
-                    cell[c_family]['a'] = DM([('value', a_av), ('unit', box_unit)])
-                    cell[c_family]['c'] = DM([('value', c), ('unit', box_unit)])
+                #if np.isclose(b/a, 3.0**0.5):
+                #    c_family = 'hexagonal'
+                #    cell[c_family] = DM()
+                #    a_av = (a + b/(3.0**0.5))/2.
+                #    cell[c_family]['a'] = DM([('value', a_av), ('unit', box_unit)])
+                #    cell[c_family]['c'] = DM([('value', c), ('unit', box_unit)])
                 
-                else:
-                    c_family = 'orthorhombic'
-                    cell[c_family] = DM()
-                    cell[c_family]['a'] = DM([('value', a), ('unit', box_unit)])
-                    cell[c_family]['b'] = DM([('value', b), ('unit', box_unit)])
-                    cell[c_family]['c'] = DM([('value', c), ('unit', box_unit)])
+                #else:
+                c_family = 'orthorhombic'
+                cell[c_family] = DM()
+                cell[c_family]['a'] = DM([('value', a), ('unit', box_unit)])
+                cell[c_family]['b'] = DM([('value', b), ('unit', box_unit)])
+                cell[c_family]['c'] = DM([('value', c), ('unit', box_unit)])
                 
         else:
             raise ValueError('Non-orthogonal boxes comming')

@@ -47,7 +47,7 @@ def sys_gen(units = 'metal',
             type_basis += ' &\n             basis %i %i'%(i+1,  ucell.atoms_prop(a_id=i, key='atype'))
     
     vects = ucell.box.vects
-    
+
     #Test if box is cubic
     if vects[1][0] == 0.0 and vects[2][0] == 0.0 and vects[2][1] == 0.0:
         region_box = 'region box block %i %i %i %i %i %i' % (size[0,0], size[0,1], size[1,0], size[1,1], size[2,0], size[2,1])
