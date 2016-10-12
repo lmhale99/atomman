@@ -17,17 +17,23 @@ class ElasticConstants(object):
         Cij -- 6x6 Voigt representation of elastic stiffness
         Sij -- 6x6 Voigt representation of elastic compliance
         Cijkl -- 3x3x3x3 representation of elastic stiffness
+        Sijkl -- 3x3x3x3 representation of elastic compliance
         model -- DataModelDict, string, or file-like object of data model containing elastic constants
-        C11, C12, ... C66 -- Individual components of Cij.  Must be in full sets for crystal system:
+        C11, C12, ... C66 -- Individual components of Cij for a standardized representation:
+            isotropic:    C11, C12
             cubic:        C11, C12, C44
             hexagonal:    C11, C33, C12, C13, C44
             tetragonal:   C11, C33, C12, C13, C16, C44, C66
+            rhombohedral: C11, C33, C12, C13, C14, C15, C44
             orthorhombic: C11, C22, C33, C12, C13, C23, C44, C55, C66
-            other systems: all Cij where i <= j
+            monoclinic:   C11, C12, C13, C15, C22, C23, C25, C33, C35, C44, C46, C55, C66
+            triclinic:    all Cij where i <= j
         """
-       
+        #Initialize for no arguments
         if len(kwargs) == 0:
             self.__c_ij = np.zeros((6,6), dtype='float64')
+        
+        #Initialize for matrix arguments
         elif 'Cij' in kwargs:
             assert len(kwargs) == 1, 'Cij cannot be specified with other keyword arguments'
             self.Cij = kwargs['Cij']
@@ -37,19 +43,30 @@ class ElasticConstants(object):
         elif 'Cijkl' in kwargs:
             assert len(kwargs) == 1, 'Cijkl cannot be specified with other keyword arguments'
             self.Cijkl = kwargs['Cijkl']
-        #elif 'Sijkl' in kwargs:
-        #    assert len(kwargs) == 1, 'Sijkl cannot be specified with other keyword arguments'
-        #    self.Sijkl = kwargs['Sijkl']
+        elif 'Sijkl' in kwargs:
+            assert len(kwargs) == 1, 'Sijkl cannot be specified with other keyword arguments'
+            self.Sijkl = kwargs['Sijkl']
+        
+        #Initialize using data model
         elif 'model' in kwargs:
             self.model(**kwargs)
+        
+        #Initialize for individually specified parameters
+        elif len(kwargs) == 2:
+            self.isotropic(**kwargs)
         elif len(kwargs) == 3:
             self.cubic(**kwargs)
         elif len(kwargs) == 5:
             self.hexagonal(**kwargs)
-        elif len(kwargs) == 7:
-            self.tetragonal(**kwargs)
+        elif len(kwargs) == 6 or len(kwargs) == 7:
+            if 'C66' in kwargs:
+                self.tetragonal(**kwargs)
+            else:
+                self.rhombohedral(**kwargs)
         elif len(kwargs) == 9:
             self.orthorhombic(**kwargs)
+        elif len(kwargs) == 13:
+            self.monoclinic(**kwargs)
         elif len(kwargs) == 21:
             self.triclinic(**kwargs)
         else:
@@ -88,6 +105,20 @@ class ElasticConstants(object):
         value = np.asarray(value, dtype='float64')
         assert value.shape == (6,6),  'Sij must be 6x6'
         self.Cij = np.linalg.inv(value)
+    
+    @property
+    def Cij9(self):
+        """The stiffness constants in 9x9 format"""
+        c = self.Cij
+        return np.array([[c[0,0],c[0,1],c[0,2],c[0,3],c[0,4],c[0,5],c[0,3],c[0,4],c[0,5]],
+                         [c[0,0],c[1,1],c[1,2],c[1,3],c[1,4],c[1,5],c[1,3],c[1,4],c[1,5]],
+                         [c[0,0],c[1,1],c[2,2],c[2,3],c[2,4],c[2,5],c[2,3],c[2,4],c[2,5]],
+                         [c[0,0],c[1,1],c[2,2],c[3,3],c[3,4],c[3,5],c[3,3],c[3,4],c[3,5]],
+                         [c[0,0],c[1,1],c[2,2],c[3,3],c[4,4],c[4,5],c[3,3],c[4,4],c[4,5]],
+                         [c[0,0],c[1,1],c[2,2],c[3,3],c[4,4],c[5,5],c[3,3],c[4,4],c[5,5]],
+                         [c[0,0],c[1,1],c[2,2],c[3,3],c[3,4],c[3,5],c[3,3],c[3,4],c[3,5]],
+                         [c[0,0],c[1,1],c[2,2],c[3,3],c[4,4],c[4,5],c[3,3],c[4,4],c[4,5]],
+                         [c[0,0],c[1,1],c[2,2],c[3,3],c[4,4],c[5,5],c[3,3],c[4,4],c[5,5]]])    
     
     @property
     def Cijkl(self):
@@ -129,16 +160,48 @@ class ElasticConstants(object):
                              [c[0,2,0,0], c[0,2,1,1], c[0,2,2,2], c[0,2,1,2], c[0,2,0,2], c[0,2,0,1]],
                              [c[0,1,0,0], c[0,1,1,1], c[0,1,2,2], c[0,1,1,2], c[0,1,0,2], c[0,1,0,1]]]) 
 
-#This is the wrong conversion!
-#    @property
-#    def Sijkl(self):
-#        """The compliance constants in 3x3x3x3 format"""
-#        return np.linalg.inv(self.Cijkl)
+    @property
+    def Sijkl(self):
+        """The compliance constants in 3x3x3x3 format"""
+        s = self.Sij
+        s[3:,:] = s[3:,:]/2.
+        s[:,3:] = s[:,3:]/2.
+        return np.array([[[[s[0,0],s[0,5],s[0,4]], [s[0,5],s[0,1],s[0,3]], [s[0,4],s[0,3],s[0,2]]],
+                          [[s[5,0],s[5,5],s[5,4]], [s[5,5],s[5,1],s[5,3]], [s[5,4],s[5,3],s[5,2]]],
+                          [[s[4,0],s[4,5],s[4,4]], [s[4,5],s[4,1],s[4,3]], [s[4,4],s[4,3],s[4,2]]]], 
+                          
+                         [[[s[5,0],s[5,5],s[5,4]], [s[5,5],s[5,1],s[5,3]], [s[5,4],s[5,3],s[5,2]]],
+                          [[s[1,0],s[1,5],s[1,4]], [s[1,5],s[1,1],s[1,3]], [s[1,4],s[1,3],s[1,2]]],
+                          [[s[3,0],s[3,5],s[3,4]], [s[3,5],s[3,1],s[3,3]], [s[3,4],s[3,3],s[3,2]]]],
+                                 
+                         [[[s[4,0],s[4,5],s[4,4]], [s[4,5],s[4,1],s[4,3]], [s[4,4],s[4,3],s[4,2]]],
+                          [[s[3,0],s[3,5],s[3,4]], [s[3,5],s[3,1],s[3,3]], [s[3,4],s[3,3],s[3,2]]],
+                          [[s[2,0],s[2,5],s[2,4]], [s[2,5],s[2,1],s[2,3]], [s[2,4],s[2,3],s[2,2]]]]])    
         
-#    @Sijkl.setter
-#    def Sijkl(self, value):
-#        value = np.asarray(value, dtype='float64')
-#        assert value.shape == (3,3,3,3), 'Sijkl must be 3x3x3x3'
+    @Sijkl.setter
+    def Sijkl(self, value):
+        s = np.asarray(value, dtype='float64')
+        assert s.shape == (3,3,3,3),  'Sijkl must be 3x3x3x3'
+    
+        #check symmetry
+        indexes = np.array([[0,0], [1,1], [2,2], [1,2], [0,2], [0,1]], dtype=int)
+        for ij in range(6):
+            for kl in range(ij, 6):
+                i, j, k, l = indexes[ij,0], indexes[ij,1], indexes[kl,0], indexes[kl,1]
+                assert np.isclose(s[i,j,k,l], s[j,i,k,l])
+                assert np.isclose(s[i,j,k,l], s[j,i,l,k])
+                assert np.isclose(s[i,j,k,l], s[k,l,j,i])
+                assert np.isclose(s[i,j,k,l], s[l,k,j,i])
+                assert np.isclose(s[i,j,k,l], s[i,j,l,k])
+                assert np.isclose(s[i,j,k,l], s[k,l,i,j])
+                assert np.isclose(s[i,j,k,l], s[l,k,i,j]) 
+        
+        self.Sij = np.array([[   s[0,0,0,0],    s[0,0,1,1],    s[0,0,2,2], 2.*s[0,0,1,2], 2.*s[0,0,0,2], 2.*s[0,0,0,1]],
+                             [   s[1,1,0,0],    s[1,1,1,1],    s[1,1,2,2], 2.*s[1,1,1,2], 2.*s[1,1,0,2], 2.*s[1,1,0,1]],
+                             [   s[2,2,0,0],    s[2,2,1,1],    s[2,2,2,2], 2.*s[2,2,1,2], 2.*s[2,2,0,2], 2.*s[2,2,0,1]],
+                             [2.*s[1,2,0,0], 2.*s[1,2,1,1], 2.*s[1,2,2,2], 4.*s[1,2,1,2], 4.*s[1,2,0,2], 4.*s[1,2,0,1]],
+                             [2.*s[0,2,0,0], 2.*s[0,2,1,1], 2.*s[0,2,2,2], 4.*s[0,2,1,2], 4.*s[0,2,0,2], 4.*s[0,2,0,1]],
+                             [2.*s[0,1,0,0], 2.*s[0,1,1,1], 2.*s[0,1,2,2], 4.*s[0,1,1,2], 4.*s[0,1,0,2], 4.*s[0,1,0,1]]]) 
     
     def transform(self, axes, tol=1e-8):
         """Transforms the elastic constant matrix based on the supplied axes."""
@@ -151,6 +214,21 @@ class ElasticConstants(object):
         
         return ElasticConstants(Cijkl=C)  
 
+    def isotropic(self, **kwargs):
+        """Set values with only isotropic moduli."""
+        
+        if len(kwargs) != 2: raise TypeError('Invalid arguments')
+        c11 = kwargs['C11']
+        c12 = kwargs['C12']
+        c44 = (c11 - c12) / 2
+        
+        self.Cij = np.array([[c11, c12, c12, 0.0, 0.0, 0.0],
+                             [c12, c11, c12, 0.0, 0.0, 0.0],
+                             [c12, c12, c11, 0.0, 0.0, 0.0],
+                             [0.0, 0.0, 0.0, c44, 0.0, 0.0],
+                             [0.0, 0.0, 0.0, 0.0, c44, 0.0],
+                             [0.0, 0.0, 0.0, 0.0, 0.0, c44]]) 
+        
     def cubic(self, **kwargs):
         """Set values with only cubic moduli: C11, C12, C44."""
             
@@ -160,11 +238,11 @@ class ElasticConstants(object):
         c44 = kwargs['C44']
             
         self.Cij = np.array([[c11, c12, c12, 0.0, 0.0, 0.0],
-                        [c12, c11, c12, 0.0, 0.0, 0.0],
-                        [c12, c12, c11, 0.0, 0.0, 0.0],
-                        [0.0, 0.0, 0.0, c44, 0.0, 0.0],
-                        [0.0, 0.0, 0.0, 0.0, c44, 0.0],
-                        [0.0, 0.0, 0.0, 0.0, 0.0, c44]])    
+                             [c12, c11, c12, 0.0, 0.0, 0.0],
+                             [c12, c12, c11, 0.0, 0.0, 0.0],
+                             [0.0, 0.0, 0.0, c44, 0.0, 0.0],
+                             [0.0, 0.0, 0.0, 0.0, c44, 0.0],
+                             [0.0, 0.0, 0.0, 0.0, 0.0, c44]])    
     
     def hexagonal(self, **kwargs):
         """Set values with only hexagonal moduli: C11, C33, C12, C13, C44."""
@@ -176,30 +254,52 @@ class ElasticConstants(object):
         c13 = kwargs['C13']
         c44 = kwargs['C44']
         c66 = (c11 - c12) / 2    
+        
         self.Cij = np.array([[c11, c12, c13, 0.0, 0.0, 0.0],
-                            [c12, c11, c13, 0.0, 0.0, 0.0],
-                            [c13, c13, c33, 0.0, 0.0, 0.0],
-                            [0.0, 0.0, 0.0, c44, 0.0, 0.0],
-                            [0.0, 0.0, 0.0, 0.0, c44, 0.0],
-                            [0.0, 0.0, 0.0, 0.0, 0.0, c66]])
+                             [c12, c11, c13, 0.0, 0.0, 0.0],
+                             [c13, c13, c33, 0.0, 0.0, 0.0],
+                             [0.0, 0.0, 0.0, c44, 0.0, 0.0],
+                             [0.0, 0.0, 0.0, 0.0, c44, 0.0],
+                             [0.0, 0.0, 0.0, 0.0, 0.0, c66]])
                 
-    def tetragonal(self, **kwargs):
-        """Set values with only tetragonal moduli: C11, C33, C12, C13, C16, C44, C66."""
+    def rhombohedral(self, **kwargs):
+        """Set values with only rhombohedral moduli: C11, C33, C12, C13, C14, C15, C44."""
             
-        if len(kwargs) != 7: raise TypeError('Invalid arguments')
+        if len(kwargs) != 6 or len(kwargs) != 7: raise TypeError('Invalid arguments')
         c11 = kwargs['C11']
         c33 = kwargs['C33']
         c12 = kwargs['C12']
         c13 = kwargs['C13']
-        c16 = kwargs['C16']
+        c14 = kwargs['C14']
+        c15 = kwargs.get('C15', 0.0)
+        c44 = kwargs['C44']
+        c66 = (c11 - c12) / 2
+        
+        self.Cij = np.array([[c11, c12, c13, c14, c15, 0.0],
+                             [c12, c11, c13,-c14,-c15, 0.0],
+                             [c13, c13, c33, 0.0, 0.0, 0.0],
+                             [c14,-c14, 0.0, c44, 0.0,-c15],
+                             [c15,-c15, 0.0, 0.0, c44, c14],
+                             [0.0, 0.0, 0.0,-c15, c14, c66]])
+
+    def tetragonal(self, **kwargs):
+        """Set values with only tetragonal moduli: C11, C33, C12, C13, C16, C44, C66."""
+            
+        if len(kwargs) != 6 or len(kwargs) != 7: raise TypeError('Invalid arguments')
+        c11 = kwargs['C11']
+        c33 = kwargs['C33']
+        c12 = kwargs['C12']
+        c13 = kwargs['C13']
+        c16 = kwargs.get('C16', 0.0)
         c44 = kwargs['C44']
         c66 = kwargs['C66']
+        
         self.Cij = np.array([[c11, c12, c13, 0.0, 0.0, c16],
-                            [c12, c11, c13, 0.0, 0.0,-c16],
-                            [c13, c13, c33, 0.0, 0.0, 0.0],
-                            [0.0, 0.0, 0.0, c44, 0.0, 0.0],
-                            [0.0, 0.0, 0.0, 0.0, c44, 0.0],
-                            [c16,-c16, 0.0, 0.0, 0.0, c66]])
+                             [c12, c11, c13, 0.0, 0.0,-c16],
+                             [c13, c13, c33, 0.0, 0.0, 0.0],
+                             [0.0, 0.0, 0.0, c44, 0.0, 0.0],
+                             [0.0, 0.0, 0.0, 0.0, c44, 0.0],
+                             [c16,-c16, 0.0, 0.0, 0.0, c66]])
         
     def orthorhombic(self, **kwargs):
         """Set values with only orthorhombic moduli: C11, C22, C33, C12, C13, C23, C44, C55, C66"""
@@ -214,13 +314,39 @@ class ElasticConstants(object):
         c44 = kwargs['C44']
         c55 = kwargs['C55']
         c66 = kwargs['C66']
-        self.Cij = np.array([[c11, c12, c13, 0.0, 0.0, 0.0],
-                            [c12, c22, c23, 0.0, 0.0, 0.0],
-                            [c13, c23, c33, 0.0, 0.0, 0.0],
-                            [0.0, 0.0, 0.0, c44, 0.0, 0.0],
-                            [0.0, 0.0, 0.0, 0.0, c55, 0.0],
-                            [0.0, 0.0, 0.0, 0.0, 0.0, c66]])
         
+        self.Cij = np.array([[c11, c12, c13, 0.0, 0.0, 0.0],
+                             [c12, c22, c23, 0.0, 0.0, 0.0],
+                             [c13, c23, c33, 0.0, 0.0, 0.0],
+                             [0.0, 0.0, 0.0, c44, 0.0, 0.0],
+                             [0.0, 0.0, 0.0, 0.0, c55, 0.0],
+                             [0.0, 0.0, 0.0, 0.0, 0.0, c66]])
+
+    def monoclinic(self, **kwargs):
+        """Set values with only monoclinic moduli: C11, C12, C13, C15, C22, C23, C25, C33, C35, C44, C46, C55, C66"""
+            
+        if len(kwargs) != 13: raise TypeError('Invalid arguments')
+        c11 = kwargs['C11']
+        c12 = kwargs['C12']
+        c13 = kwargs['C13']
+        c15 = kwargs['C15']
+        c22 = kwargs['C22']
+        c23 = kwargs['C23']
+        c25 = kwargs['C25']
+        c33 = kwargs['C33']
+        c35 = kwargs['C35']
+        c44 = kwargs['C44']
+        c46 = kwargs['C46']
+        c55 = kwargs['C55']
+        c66 = kwargs['C66']
+        
+        self.Cij = np.array([[c11, c12, c13, 0.0, c15, 0.0],
+                             [c12, c22, c23, 0.0, c25, 0.0],
+                             [c13, c23, c33, 0.0, c35, 0.0],
+                             [0.0, 0.0, 0.0, c44, 0.0, c46],
+                             [c15, c25, c35, 0.0, c55, 0.0],
+                             [0.0, 0.0, 0.0, c46, 0.0, c66]])
+                             
     def triclinic(self, **kwargs):
         """Set values with all 21 unique moduli: Cij where i <= j"""
             
@@ -246,12 +372,13 @@ class ElasticConstants(object):
         c55 = kwargs['C55']
         c56 = kwargs['C56']
         c66 = kwargs['C66']
+        
         self.Cij = np.array([[c11, c12, c13, c14, c15, c16],
-                            [c12, c22, c23, c24, c25, c26],
-                            [c13, c23, c33, c34, c35, c36],
-                            [c14, c24, c34, c44, c45, c46],
-                            [c15, c25, c35, c45, c55, c56],
-                            [c16, c26, c36, c46, c56, c66]])
+                             [c12, c22, c23, c24, c25, c26],
+                             [c13, c23, c33, c34, c35, c36],
+                             [c14, c24, c34, c44, c45, c46],
+                             [c15, c25, c35, c45, c55, c56],
+                             [c16, c26, c36, c46, c56, c66]])
     
     def model(self, **kwargs):
         """
