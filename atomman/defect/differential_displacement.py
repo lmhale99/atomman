@@ -36,7 +36,7 @@ def differential_displacement(base_system, disl_system, burgers_vector, plot_ran
     """
     #Burgers vector setup
     if crystallographic_axes is not None:
-        T = am.tools.ax_check(crystallographic_axes)
+        T = am.tools.axes_check(crystallographic_axes)
         burgers_vector = T.dot(burgers_vector)
     burgers_vector_magnitude = np.linalg.norm(burgers_vector)
     burgers_vector_uvect = burgers_vector / burgers_vector_magnitude    
