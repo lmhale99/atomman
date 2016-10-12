@@ -153,11 +153,9 @@ class Stroh(object):
         
         ii = np.array([1.j])
         updn = np.array([1, -1, 1, -1, 1, -1])
-        x = np.dot(pos, self.__m)
-        y = np.dot(pos, self.__n)
+        eta = self.eta(pos)
         
-        Nu = (x + np.outer(self.p, y)).T
-        disp = 1 / (2 * np.pi * ii) * np.einsum('a,a,ai,a,na->ni', updn, self.k, self.A, self.L.dot(self.__burgers), np.log(Nu))
+        disp = 1 / (2 * np.pi * ii) * np.einsum('a,a,ai,a,na->ni', updn, self.k, self.A, self.L.dot(self.__burgers), np.log(eta))
         disp = np.real_if_close(disp, tol=self.__tol)
         
         if np.asarray(pos).ndim == 1:
@@ -175,15 +173,21 @@ class Stroh(object):
         
         ii = np.array([1.j])
         updn = np.array([1, -1, 1, -1, 1, -1])
-        x = np.dot(pos, self.__m)
-        y = np.dot(pos, self.__n)
+        eta = self.eta(pos)
         
-        Nu = (x + np.outer(self.p, y)).T
         mpn = self.__m + np.outer(self.p, self.__n)
-        stress = 1 / (2 * np.pi * ii) * np.einsum('a,a,ijkl,al,ak,a,na->nij', updn, self.k, self.__Cijkl, mpn, self.A, self.L.dot(self.__burgers), 1/Nu)
+        stress = 1 / (2 * np.pi * ii) * np.einsum('a,a,ijkl,al,ak,a,na->nij', updn, self.k, self.__Cijkl, mpn, self.A, self.L.dot(self.__burgers), 1/eta)
         stress = np.real_if_close(stress, tol=self.__tol)
         
         if np.asarray(pos).ndim == 1:
             return stress[0]
         else:
             return stress
+
+    def eta(self, pos):
+        """Compute the position dependent eta factor"""
+        
+        x = np.dot(pos, self.__m)
+        y = np.dot(pos, self.__n)
+        
+        return (x + np.outer(self.p, y)).T
