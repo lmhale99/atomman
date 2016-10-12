@@ -165,12 +165,12 @@ class System(object):
         
         pos_0 = np.asarray(pos_0)
         #if pos_0 is integer(s), use as atom indexes of self system 
-        if pos_0.dtype == int:
+        if am.tools.is_dtype_int(pos_0.dtype):
             pos_0 = self.atoms.view['pos'][pos_0]
         
         pos_1 = np.asarray(pos_1)
         #if pos_1 is integer(s), use as atom indexes of self system
-        if pos_1.dtype == int:
+        if am.tools.is_dtype_int(pos_1.dtype):
             pos_1 = self.atoms.view['pos'][pos_1]
         
         #call atomman.tools.dvect using self system's box and pbc
