@@ -23,9 +23,9 @@ def nlist(system, cutoff, cmult=1):
                                  vects[0] + vects[2],
                                  vects[1] + vects[2],
                                  vects[0] + vects[1] + vects[2]])
-    supermin = corners.min(axis=0) - cutoff
-    supermax = corners.max(axis=0) + cutoff
-
+    supermin = corners.min(axis=0) - 2*cutoff
+    supermax = corners.max(axis=0) + 2*cutoff
+    
     #Construct bins
     binsize = cutoff/cmult
     xbins = np.arange(supermin[0], supermax[0], binsize)
