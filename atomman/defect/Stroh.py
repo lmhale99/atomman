@@ -130,7 +130,21 @@ class Stroh(object):
     def k(self):
         """k normalization factors"""
         return deepcopy(self.__k)
-    
+
+    @property
+    def K_tensor(self):
+        """The energy coefficient tensor"""
+        
+        ii = np.array([1.j])
+        updn = np.array([1, -1, 1, -1, 1, -1])
+        
+        coeff = ii * np.einsum('s,s,si,sj->ij', updn, self.k, self.L, self.L)
+        coeff = np.real_if_close(coeff, tol=self.__tol)
+        
+        coeff[np.isclose(coeff / coeff.max(), 0.0, atol=self.__tol)] = 0.0
+        
+        return coeff
+        
     @property
     def preln(self):
         """The pre-ln strain energy factor"""
@@ -138,10 +152,10 @@ class Stroh(object):
         ii = np.array([1.j])
         updn = np.array([1, -1, 1, -1, 1, -1])
         
-        coeff = ii * np.einsum('s,s,si,sj->ij', updn, self.k, self.L, self.L) / (4 * np.pi)
-        coeff = np.real_if_close(coeff, tol=self.__tol)
+        factor = ii * np.einsum('s,s,si,sj->ij', updn, self.k, self.L, self.L) / (4 * np.pi)
+        factor = np.real_if_close(factor, tol=self.__tol)
         
-        return self.__burgers.dot(coeff.dot(self.__burgers))
+        return self.__burgers.dot(factor.dot(self.__burgers))
 
     def displacement(self, pos):
         """
