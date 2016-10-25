@@ -12,7 +12,7 @@ def hex_to_ortho(cell, tol=1e-5):
     except:
         raise ValueError('Not a standard hexagonal box')
     
-    newcell = am.tools.supersize(cell, 1, 2, 1) 
+    newcell = am.supersize(cell, 1, 2, 1) 
     newcell.normalize(style='lammps')
     
     new_b = cell.box.b * 3.**0.5
@@ -34,7 +34,7 @@ def trig_to_hex(cell, tol=1e-5):
     except:
         raise ValueError('Not a standard trigonal box')
     
-    newcell = am.tools.supersize(cell, 3, 1, 1) 
+    newcell = am.supersize(cell, 3, 1, 1) 
 
     newcell.box_set(avect = cell.box.bvect - cell.box.avect,
                     bvect = cell.box.avect - cell.box.cvect,
