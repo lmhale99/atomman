@@ -48,7 +48,7 @@ def nlist(system, cutoff, cmult=1):
             check[i] = xrange(-1, 2) 
 
     #construct list of ghost atoms in the superbox
-    
+    ghost_pos = []
     for x in check[0]:
         for y in check[1]:
             for z in check[2]:
