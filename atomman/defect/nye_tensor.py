@@ -1,5 +1,6 @@
 import numpy as np
 import atomman as am
+import warnings
 
 def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbor_list=None, neighbor_list_cutoff=None):
     """Computes strain properties and Nye tensor for a defect containing system."""
@@ -13,8 +14,10 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbor_list=None,
         neighbor_list = system.prop['nlist']
     
     #If p_vectors is only given for one atom, apply to all atoms
-    if p_vectors.ndim == 2:
-        p_vectors = np.broadcast_to(p_vectors, (system.natoms, len(p_vectors), 3))
+    if len(p_vectors) == 1:
+        p_vectors = np.broadcast_to(p_vectors, (system.natoms, len(p_vectors[0]), 3))
+    elif len(p_vectors) != system.natoms:
+        p_vectors = np.broadcast_to(p_vectors, (system.natoms, len(p_vectors), 3))        
     
     #If axes are given, transform p accordingly
     if axes is not None:
@@ -47,12 +50,16 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbor_list=None,
     
     #Loop to calculate correspondence tensor, G, and strain data   
     for i in xrange(system.natoms):
-        p = p_vectors[i]
+        p = np.asarray(p_vectors[i])
+        if p.ndim == 1:
+            p = np.array([p])
         p_mags = np.linalg.norm(p, axis=1)
         r1 = p_mags.min()
         
         #Calculate radial neighbor vectors, q
         q = system.dvect(i, neighbor_list[i][1:neighbor_list[i][0]+1])
+        if q.ndim == 1:
+            q = np.array([q])
         q_mags = np.linalg.norm(q, axis=1)
         
         #Calculate cos_thetas between all p's and q's.
@@ -92,8 +99,7 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbor_list=None,
         #Compute lattice correspondence tensor, G, from P and Q
         if c == 0:
             G[i] = np.identity(3)
-            print i+1
-            raise ValueError('An atom lacks pair sets. Check neighbor list')
+            warnings.warn('An atom lacks pair sets. Check neighbor list')
         else:   
             G[i], resid, rank, s = np.linalg.lstsq(Q[:c], P[:c])
 
@@ -110,6 +116,8 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbor_list=None,
     for i in xrange(system.natoms):
         neighbors = neighbor_list[i][1:neighbor_list[i][0]+1]
         Q = system.dvect(i, neighbors)
+        if Q.ndim == 1:
+            Q = np.array([Q])
         dG = G[neighbors] - G[i]        
         for x in xrange(3):
             gradG[x,:] = np.linalg.lstsq(Q, dG[:,x,:])[0].T
