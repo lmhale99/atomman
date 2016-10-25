@@ -7,7 +7,7 @@ import atomman as am
 
 def differential_displacement(base_system, disl_system, burgers_vector, plot_range, 
        neighbor_list = None, neighbor_list_cutoff = None, component = 'standard',
-       crystallographic_axes = None, plot_scale = 1, save_file = None, show = True):
+       axes = None, plot_scale = 1, save_file = None, show = True):
     """
     Function for generating a differential displacement plot for a 
     dislocation containing system.
@@ -25,7 +25,7 @@ def differential_displacement(base_system, disl_system, burgers_vector, plot_ran
     neighbor_list_cutoff -- cutoff for computing a neighbor list for 
                             base_system.
     component -- indicates the style of the calculation to use.
-    crystallographic_axes -- 3x3 numpy array indicating the crystallographic 
+    axes -- 3x3 numpy array indicating the crystallographic 
                              axes corresponding to the box's Cartesian axes. 
                              If given, only used for transforming the 
                              burgers_vector.
@@ -35,8 +35,8 @@ def differential_displacement(base_system, disl_system, burgers_vector, plot_ran
     show -- Boolean flag for showing the figure. Default is True.  
     """
     #Burgers vector setup
-    if crystallographic_axes is not None:
-        T = am.tools.axes_check(crystallographic_axes)
+    if axes is not None:
+        T = am.tools.axes_check(axes)
         burgers_vector = T.dot(burgers_vector)
     burgers_vector_magnitude = np.linalg.norm(burgers_vector)
     burgers_vector_uvect = burgers_vector / burgers_vector_magnitude    
@@ -45,7 +45,7 @@ def differential_displacement(base_system, disl_system, burgers_vector, plot_ran
     if neighbor_list is not None:
         assert neighbor_list_cutoff is None, 'neighbor_list and neighbor_list_cutoff cannot both be given'
     elif neighbor_list_cutoff is not None:
-        neighbor_list = am.tools.nlist(base_system, neighbor_list_cutoff)
+        neighbor_list = am.nlist(base_system, neighbor_list_cutoff)
     elif 'nlist' in base_system.prop:
         neighbor_list = base_system.prop['nlist']
     
