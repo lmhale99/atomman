@@ -73,8 +73,8 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbor_list=None,
         
         #Search for duplicate index_pairings
         u, u_count = np.unique(index_pairing, return_counts=True)
-        for match in u[(u!=-1) & (u_count > 1)]:
-            print index_pairing==match
+        #for match in u[(u!=-1) & (u_count > 1)]:
+        #    print index_pairing==match
         
         for n in xrange(neighbor_list[i][0]):               
             #Check if the particular p has already been assigned to another q
