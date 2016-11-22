@@ -1,6 +1,7 @@
 #External library imports
 import numericalunits as nu
 import numpy as np
+import ast
 
 def build_unit():
     """Builds the unit dictionary based on current working units"""
@@ -134,6 +135,27 @@ def reset_units(seed=None, length=None, mass=None, time=None, energy=None, charg
         nu.set_derived_units_and_constants()
     build_unit()    
 
+def set_literal(term):
+    """Convert string 'value unit' to numbers in working units"""
+    j = len(term)
+    
+    #Loop until done
+    while True:
+        
+        #Split into value, unit terms
+        value = term[:j].strip()
+        unit = term[j:].strip()
+        if len(unit) == 0: unit = None
+
+        #Return number if value, unit pair is valid 
+        try: return set_in_units(ast.literal_eval(value), unit)
+        except: pass
+    
+        #Find the next splitting point
+        try: j = term[:j].rindex(' ')
+        except: raise ValueError('Failed to parse term')
+    
+    
 def set_in_units(value, units):
     """Convert value from specified units to working units"""
     units = parse(units)
@@ -145,7 +167,7 @@ def get_in_units(value, units):
     return np.asarray(value) / units
     
 def value_unit(term):
-    """Used for data model elements with value, unit"""
+    """Used for dictionary elements with value, unit keys"""
     unit = term.get('unit', None)
     return set_in_units(term['value'], unit)
     
