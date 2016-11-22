@@ -1,60 +1,47 @@
+import pandas as pd
 
 #External library imports
+from StringIO import StringIO
+
 import numpy as np
 
 #atomman imports
-from DataModelDict import DataModelDict
+from DataModelDict import DataModelDict as DM
 
 def log_extract(log_info):
     """Parses a LAMMPS screen output/log file and returns a data model containing the information."""
     
-    #Create DataModelDict root
-    log_dict = DataModelDict()
-    log_dict['LAMMPS-log-thermo-data'] = DataModelDict()
-    
-    #Initialize necessary parameters
-    thermoread = False
-    thermolist = None
-    
-    #Convert string to list if needed
     if isinstance(log_info, (str, unicode)):
-        log_info = log_info.split('\n')    
+        log_info = StringIO(log_info)
     
+    headers = []
+    footers = []
+    i = 0
     #for all lines in file/output
     for line in log_info:
         terms = line.split()
-     
-        #If the line has terms
-        if len(terms)>0:
- 
-            #thermoread indicates time to read data
-            if thermoread:
-                
-                #save values in list if they are numbers
-                if terms[0].isdigit():
-                    if thermolist is None:
-                        thermolist = np.array([terms], dtype='float64')
-                    else:
-                        thermolist = np.append(thermolist, np.array([terms], dtype='float64'), axis=0)                    
-                
-                #if not values, transform to dictionary
-                else:
-                    thermo = DataModelDict()
-                    for i in xrange(len(headers)):
-                        thermoval = thermolist[:,i]
-                        thermo[headers[i]] = list(thermoval)
-                        
-                    #add dictionary to simulation list
-                    log_dict['LAMMPS-log-thermo-data'].append('simulation', DataModelDict([('thermo',thermo)]))                    
-                    
-                    #reset thermoread and thermolist
-                    thermolist = None
-                    thermoread = False    
-                    
-                    
-            #If the line starts with Step, then save headers and set thermoread
-            elif terms[0] == 'Step':
-                headers = terms
-                thermoread = True
+        
+        if 'Memory usage per processor =' in line:
+            headers.append(i+1)
+        elif 'Loop time of' in line:
+            footers.append(i-1)
+        i += 1
+    log_info.seek(0)
     
+    #Create DataModelDict root
+    log_dict = DM()
+    log_dict['LAMMPS-log-thermo-data'] = DM()
+    
+    #for all lines in file/output
+    for header, footer in zip(headers, footers):
+
+        df = pd.read_csv(log_info, header=header,skipfooter=i-footer, sep='\s+', engine='python', skip_blank_lines=False)
+        log_info.seek(0)            
+        thermo = DM()
+        for j in df:
+            thermo[str(j)] = df[j].values.tolist()
+        
+        simulation = DM([('thermo', thermo)])
+        log_dict['LAMMPS-log-thermo-data'].append('simulation', simulation)
+                
     return log_dict     
