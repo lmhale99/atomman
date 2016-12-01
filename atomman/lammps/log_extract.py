@@ -24,7 +24,7 @@ def log_extract(log_info):
         if 'Memory usage per processor =' in line:
             headers.append(i+1)
         elif 'Loop time of' in line:
-            footers.append(i-1)
+            footers.append(i)
         i += 1
     log_info.seek(0)
     
@@ -34,9 +34,10 @@ def log_extract(log_info):
     
     #for all lines in file/output
     for header, footer in zip(headers, footers):
-
+        #print header, footer
         df = pd.read_csv(log_info, header=header,skipfooter=i-footer, sep='\s+', engine='python', skip_blank_lines=False)
         log_info.seek(0)            
+        #print df
         thermo = DM()
         for j in df:
             thermo[str(j)] = df[j].values.tolist()
