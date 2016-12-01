@@ -27,6 +27,7 @@ setup(name='atomman',
         'numpy', 
         'matplotlib',
         'scipy',
+        'pandas',
         'numericalunits'
       ],
       include_package_data=True,
