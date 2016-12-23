@@ -78,7 +78,7 @@ class Potential(object):
         return self.__dm['potential']['id']
     
     @property    
-    def uuid(self):
+    def key(self):
         """uuid hash-key."""
         return self.__dm['potential']['key']
     
