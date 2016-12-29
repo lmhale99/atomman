@@ -265,7 +265,7 @@ class ElasticConstants(object):
     def rhombohedral(self, **kwargs):
         """Set values with only rhombohedral moduli: C11, C33, C12, C13, C14, C15, C44."""
             
-        if len(kwargs) != 6 or len(kwargs) != 7: raise TypeError('Invalid arguments')
+        if len(kwargs) != 6 and len(kwargs) != 7: raise TypeError('Invalid arguments')
         c11 = kwargs['C11']
         c33 = kwargs['C33']
         c12 = kwargs['C12']
@@ -285,7 +285,7 @@ class ElasticConstants(object):
     def tetragonal(self, **kwargs):
         """Set values with only tetragonal moduli: C11, C33, C12, C13, C16, C44, C66."""
             
-        if len(kwargs) != 6 or len(kwargs) != 7: raise TypeError('Invalid arguments')
+        if len(kwargs) != 6 and len(kwargs) != 7: raise TypeError('Invalid arguments')
         c11 = kwargs['C11']
         c33 = kwargs['C33']
         c12 = kwargs['C12']
