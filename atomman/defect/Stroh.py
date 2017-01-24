@@ -132,18 +132,24 @@ class Stroh(object):
         return deepcopy(self.__k)
 
     @property
+    def K_coeff(self):
+        """The energy coefficient"""
+        
+        return self.__burgers.dot(self.K_tensor.dot(self.__burgers)) / self.__burgers.dot(self.__burgers)        
+        
+    @property
     def K_tensor(self):
         """The energy coefficient tensor"""
         
         ii = np.array([1.j])
         updn = np.array([1, -1, 1, -1, 1, -1])
         
-        coeff = ii * np.einsum('s,s,si,sj->ij', updn, self.k, self.L, self.L)
-        coeff = np.real_if_close(coeff, tol=self.__tol)
+        K = ii * np.einsum('s,s,si,sj->ij', updn, self.k, self.L, self.L)
+        K = np.real_if_close(K, tol=self.__tol)
         
-        coeff[np.isclose(coeff / coeff.max(), 0.0, atol=self.__tol)] = 0.0
+        K[np.isclose(K / K.max(), 0.0, atol=self.__tol)] = 0.0
         
-        return coeff
+        return K
         
     @property
     def preln(self):
