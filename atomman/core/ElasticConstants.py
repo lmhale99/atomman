@@ -59,10 +59,12 @@ class ElasticConstants(object):
         elif len(kwargs) == 5:
             self.hexagonal(**kwargs)
         elif len(kwargs) == 6 or len(kwargs) == 7:
-            if 'C66' in kwargs:
-                self.tetragonal(**kwargs)
-            else:
+            if 'C14' in kwargs:
                 self.rhombohedral(**kwargs)
+            else:
+                self.tetragonal(**kwargs)
+        elif len(kwargs) == 8:
+            self.rhombohedral(**kwargs)
         elif len(kwargs) == 9:
             self.orthorhombic(**kwargs)
         elif len(kwargs) == 13:
@@ -215,13 +217,83 @@ class ElasticConstants(object):
         return ElasticConstants(Cijkl=C)  
 
     def isotropic(self, **kwargs):
-        """Set values with only isotropic moduli."""
+        """Set values with isotropic moduli: two of (C11, C12, mu=C44, E, v, K, lambda)."""
         
-        if len(kwargs) != 2: raise TypeError('Invalid arguments')
-        c11 = kwargs['C11']
-        c12 = kwargs['C12']
-        c44 = (c11 - c12) / 2
+        try:
+            #Move mu to C44 if given
+            if 'mu' in kwargs:
+                kwargs['C44'] = kwargs.pop('mu')
+            
+            #Check len of kwargs
+            assert len(kwargs) == 2
         
+            #Pop required dependent terms
+            if   'C11' in kwargs:
+                c11 = kwargs.pop('C11')
+                if   'C12' in kwargs:
+                    c12 = kwargs.pop('C12')
+                    c44 = (c11 - c12) / 2
+                elif 'C44' in kwargs:
+                    c44 = kwargs.pop('C44')
+                    c12 = c11 - 2 * c44
+                elif 'E' in kwargs: assert False
+                    
+                elif 'v' in kwargs: assert False
+                
+                elif 'K' in kwargs: assert False
+                
+                elif 'lambda' in kwargs: assert False
+                
+                else: assert False    
+            elif 'C12' in kwargs:
+                c12 = kwargs.pop('C12')
+                if   'C44' in kwargs:
+                    c44 = kwargs.pop('C44')
+                    c11 = 2 * c44 + c12
+                elif 'E' in kwargs: assert False
+                
+                elif 'v' in kwargs: assert False
+                
+                elif 'K' in kwargs: assert False
+                
+                elif 'lambda' in kwargs: assert False
+                
+                else: assert False    
+            elif 'C44' in kwargs:
+                c44 = kwargs.pop('C44')
+                if  'E' in kwargs: assert False
+                
+                elif 'v' in kwargs: assert False
+                
+                elif 'K' in kwargs: assert False
+                
+                elif 'lambda' in kwargs: assert False
+                
+                else: assert False   
+            elif  'E' in kwargs: 
+                if 'v' in kwargs: assert False
+                
+                elif 'K' in kwargs: assert False
+                
+                elif 'lambda' in kwargs: assert False
+                
+                else: assert False
+            elif 'v' in kwargs:               
+                if 'K' in kwargs: assert False
+                
+                elif 'lambda' in kwargs: assert False
+                
+                else: assert False
+                
+            elif 'K' in kwargs:                 
+                if 'lambda' in kwargs: assert False
+                
+                else: assert False
+        
+        except:
+            raise TypeError('isotropic style takes two keyword arguments of (C11, C12, mu=C44, E, v, K, lambda)')
+        
+        #Build Cij array
         self.Cij = np.array([[c11, c12, c12, 0.0, 0.0, 0.0],
                              [c12, c11, c12, 0.0, 0.0, 0.0],
                              [c12, c12, c11, 0.0, 0.0, 0.0],
@@ -230,13 +302,20 @@ class ElasticConstants(object):
                              [0.0, 0.0, 0.0, 0.0, 0.0, c44]]) 
         
     def cubic(self, **kwargs):
-        """Set values with only cubic moduli: C11, C12, C44."""
-            
-        if len(kwargs) != 3: raise TypeError('Invalid arguments')
-        c11 = kwargs['C11']
-        c12 = kwargs['C12']
-        c44 = kwargs['C44']
-            
+        """Set values with cubic moduli: C11, C12, C44."""
+        
+        try:
+            #Check len of kwargs
+            assert len(kwargs) == 3
+        
+            #Pop required independent terms
+            c11 = kwargs.pop('C11')
+            c12 = kwargs.pop('C12')
+            c44 = kwargs.pop('C44')
+        except:
+            raise TypeError('cubic style takes keyword arguments C11, C12, and C66')
+        
+        #Build Cij array
         self.Cij = np.array([[c11, c12, c12, 0.0, 0.0, 0.0],
                              [c12, c11, c12, 0.0, 0.0, 0.0],
                              [c12, c12, c11, 0.0, 0.0, 0.0],
@@ -245,16 +324,36 @@ class ElasticConstants(object):
                              [0.0, 0.0, 0.0, 0.0, 0.0, c44]])    
     
     def hexagonal(self, **kwargs):
-        """Set values with only hexagonal moduli: C11, C33, C12, C13, C44."""
+        """Set values with hexagonal moduli: C33, C13, C44, and two of (2*C66=C11-C12)."""
             
-        if len(kwargs) != 5: raise TypeError('Invalid arguments')
-        c11 = kwargs['C11']
-        c33 = kwargs['C33']
-        c12 = kwargs['C12']
-        c13 = kwargs['C13']
-        c44 = kwargs['C44']
-        c66 = (c11 - c12) / 2    
+        try:
+            #Check len of kwargs
+            assert len(kwargs) == 5
         
+            #Pop required independent terms
+            c33 = kwargs.pop('C33')
+            c13 = kwargs.pop('C13')
+            c44 = kwargs.pop('C44')
+        
+            #Pop required dependent terms
+            if 'C11' in kwargs and 'C12' in kwargs:
+                c11 = kwargs.pop('C11')
+                c12 = kwargs.pop('C12')
+                c66 = (c11 - c12) / 2
+            elif 'C11' in kwargs and 'C66' in kwargs:
+                c11 = kwargs.pop('C11')
+                c66 = kwargs.pop('C66')
+                c12 = c11 - 2 * c66
+            elif 'C12' in kwargs and 'C66' in kwargs:
+                c12 = kwargs.pop('C12')
+                c66 = kwargs.pop('C66')
+                c11 = 2 * c66 + c12
+            else:
+                assert False
+        except:
+            raise TypeError('hexagonal style takes keyword arguments C33, C13, C44, and two of (2*C66=C11-C12)')
+        
+        #Build Cij array
         self.Cij = np.array([[c11, c12, c13, 0.0, 0.0, 0.0],
                              [c12, c11, c13, 0.0, 0.0, 0.0],
                              [c13, c13, c33, 0.0, 0.0, 0.0],
@@ -263,18 +362,47 @@ class ElasticConstants(object):
                              [0.0, 0.0, 0.0, 0.0, 0.0, c66]])
                 
     def rhombohedral(self, **kwargs):
-        """Set values with only rhombohedral moduli: C11, C33, C12, C13, C14, C15, C44."""
+        """Set values with rhombohedral moduli: C33, C13, C14, C44, at least two of (2*C66=C11-C12) and optional C15."""
             
-        if len(kwargs) != 6 and len(kwargs) != 7: raise TypeError('Invalid arguments')
-        c11 = kwargs['C11']
-        c33 = kwargs['C33']
-        c12 = kwargs['C12']
-        c13 = kwargs['C13']
-        c14 = kwargs['C14']
-        c15 = kwargs.get('C15', 0.0)
-        c44 = kwargs['C44']
-        c66 = (c11 - c12) / 2
+        try:
+            #Check len of kwargs
+            assert len(kwargs) >= 6 and len(kwargs) <= 8
+            
+            #Pop required independent terms
+            c33 = kwargs.pop('C33')
+            c13 = kwargs.pop('C13')
+            c14 = kwargs.pop('C14')
+            c44 = kwargs.pop('C44')
         
+            #Pop required dependent terms
+            if 'C11' in kwargs and 'C12' in kwargs:
+                c11 = kwargs.pop('C11')
+                c12 = kwargs.pop('C12')
+                c66 = (c11 - c12) / 2
+                if 'C66' in kwargs:
+                    assert np.isclose(c66, kwargs['C66'])
+                    c66 = kwargs.pop('C66')        
+            elif 'C11' in kwargs and 'C66' in kwargs:
+                c11 = kwargs.pop('C11')
+                c66 = kwargs.pop('C66')
+                c12 = c11 - 2 * c66
+            elif 'C12' in kwargs and 'C66' in kwargs:
+                c12 = kwargs.pop('C12')
+                c66 = kwargs.pop('C66')
+                c11 = 2 * c66 + c12
+            else:
+                assert False
+            
+            #Check for optional term
+            if len(kwargs) == 0:
+                c15 = 0.0
+            else:
+                c15 = kwargs.pop('C15')
+                assert len(kwargs) == 0
+        except:
+            raise TypeError('rhombohedral style takes keyword arguments C33, C13, C14, C44, at least two of (2*C66=C11-C12) and optional C15')
+        
+        #Build Cij array
         self.Cij = np.array([[c11, c12, c13, c14, c15, 0.0],
                              [c12, c11, c13,-c14,-c15, 0.0],
                              [c13, c13, c33, 0.0, 0.0, 0.0],
@@ -283,17 +411,30 @@ class ElasticConstants(object):
                              [0.0, 0.0, 0.0,-c15, c14, c66]])
 
     def tetragonal(self, **kwargs):
-        """Set values with only tetragonal moduli: C11, C33, C12, C13, C16, C44, C66."""
-            
-        if len(kwargs) != 6 and len(kwargs) != 7: raise TypeError('Invalid arguments')
-        c11 = kwargs['C11']
-        c33 = kwargs['C33']
-        c12 = kwargs['C12']
-        c13 = kwargs['C13']
-        c16 = kwargs.get('C16', 0.0)
-        c44 = kwargs['C44']
-        c66 = kwargs['C66']
+        """Set values with tetragonal moduli: C11, C33, C12, C13, C44, C66, and optional C16."""
         
+        try:
+            #Check len of kwargs
+            assert len(kwargs) == 6 or len(kwargs) == 7
+
+            #Pop required independent terms
+            c11 = kwargs.pop('C11')
+            c33 = kwargs.pop('C33')
+            c12 = kwargs.pop('C12')
+            c13 = kwargs.pop('C13')
+            c44 = kwargs.pop('C44')
+            c66 = kwargs.pop('C66')
+            
+            #Check for optional term
+            if len(kwargs) == 0:
+                c16 = 0.0
+            else:
+                c16 = kwargs.pop('C16')
+                assert len(kwargs) == 0        
+        except:
+            raise TypeError('tetragonal style takes keyword arguments C11, C33, C12, C13, C44, C66, and optional C16')
+        
+        #Build Cij array
         self.Cij = np.array([[c11, c12, c13, 0.0, 0.0, c16],
                              [c12, c11, c13, 0.0, 0.0,-c16],
                              [c13, c13, c33, 0.0, 0.0, 0.0],
@@ -302,19 +443,26 @@ class ElasticConstants(object):
                              [c16,-c16, 0.0, 0.0, 0.0, c66]])
         
     def orthorhombic(self, **kwargs):
-        """Set values with only orthorhombic moduli: C11, C22, C33, C12, C13, C23, C44, C55, C66"""
+        """Set values with orthorhombic moduli: C11, C22, C33, C12, C13, C23, C44, C55, C66"""
+         
+        try:
+            #Check len of kwargs
+            assert len(kwargs) == 9
             
-        if len(kwargs) != 9: raise TypeError('Invalid arguments')
-        c11 = kwargs['C11']
-        c22 = kwargs['C22']
-        c33 = kwargs['C33']
-        c12 = kwargs['C12']
-        c13 = kwargs['C13']
-        c23 = kwargs['C23']
-        c44 = kwargs['C44']
-        c55 = kwargs['C55']
-        c66 = kwargs['C66']
-        
+            #Set required independent terms
+            c11 = kwargs['C11']
+            c22 = kwargs['C22']
+            c33 = kwargs['C33']
+            c12 = kwargs['C12']
+            c13 = kwargs['C13']
+            c23 = kwargs['C23']
+            c44 = kwargs['C44']
+            c55 = kwargs['C55']
+            c66 = kwargs['C66']
+        except:
+            raise TypeError('orthorhombic style takes keyword arguments C11, C22, C33, C12, C13, C23, C44, C55, C66')
+            
+        #Build Cij array
         self.Cij = np.array([[c11, c12, c13, 0.0, 0.0, 0.0],
                              [c12, c22, c23, 0.0, 0.0, 0.0],
                              [c13, c23, c33, 0.0, 0.0, 0.0],
@@ -323,23 +471,30 @@ class ElasticConstants(object):
                              [0.0, 0.0, 0.0, 0.0, 0.0, c66]])
 
     def monoclinic(self, **kwargs):
-        """Set values with only monoclinic moduli: C11, C12, C13, C15, C22, C23, C25, C33, C35, C44, C46, C55, C66"""
-            
-        if len(kwargs) != 13: raise TypeError('Invalid arguments')
-        c11 = kwargs['C11']
-        c12 = kwargs['C12']
-        c13 = kwargs['C13']
-        c15 = kwargs['C15']
-        c22 = kwargs['C22']
-        c23 = kwargs['C23']
-        c25 = kwargs['C25']
-        c33 = kwargs['C33']
-        c35 = kwargs['C35']
-        c44 = kwargs['C44']
-        c46 = kwargs['C46']
-        c55 = kwargs['C55']
-        c66 = kwargs['C66']
+        """Set values with monoclinic moduli: C11, C12, C13, C15, C22, C23, C25, C33, C35, C44, C46, C55, C66"""
         
+        try:
+            #Check len of kwargs
+            assert len(kwargs) == 13
+        
+            #Set required independent terms
+            c11 = kwargs['C11']
+            c12 = kwargs['C12']
+            c13 = kwargs['C13']
+            c15 = kwargs['C15']
+            c22 = kwargs['C22']
+            c23 = kwargs['C23']
+            c25 = kwargs['C25']
+            c33 = kwargs['C33']
+            c35 = kwargs['C35']
+            c44 = kwargs['C44']
+            c46 = kwargs['C46']
+            c55 = kwargs['C55']
+            c66 = kwargs['C66']
+        except:
+            raise TypeError('monoclinic style takes keyword arguments C11, C12, C13, C15, C22, C23, C25, C33, C35, C44, C46, C55, C66')
+            
+        #Build Cij array
         self.Cij = np.array([[c11, c12, c13, 0.0, c15, 0.0],
                              [c12, c22, c23, 0.0, c25, 0.0],
                              [c13, c23, c33, 0.0, c35, 0.0],
@@ -350,29 +505,36 @@ class ElasticConstants(object):
     def triclinic(self, **kwargs):
         """Set values with all 21 unique moduli: Cij where i <= j"""
             
-        if len(kwargs) != 21: raise TypeError('Invalid arguments')
-        c11 = kwargs['C11']
-        c12 = kwargs['C12']
-        c13 = kwargs['C13']
-        c14 = kwargs['C14']
-        c15 = kwargs['C15']
-        c16 = kwargs['C16']
-        c22 = kwargs['C22']
-        c23 = kwargs['C23']
-        c24 = kwargs['C24']
-        c25 = kwargs['C25']
-        c26 = kwargs['C26']
-        c33 = kwargs['C33']
-        c34 = kwargs['C34']
-        c35 = kwargs['C35']
-        c36 = kwargs['C36']
-        c44 = kwargs['C44']
-        c45 = kwargs['C45']
-        c46 = kwargs['C46']
-        c55 = kwargs['C55']
-        c56 = kwargs['C56']
-        c66 = kwargs['C66']
+        try:
+            #Check len of kwargs
+            assert len(kwargs) == 21
         
+            #Set required independent terms
+            c11 = kwargs['C11']
+            c12 = kwargs['C12']
+            c13 = kwargs['C13']
+            c14 = kwargs['C14']
+            c15 = kwargs['C15']
+            c16 = kwargs['C16']
+            c22 = kwargs['C22']
+            c23 = kwargs['C23']
+            c24 = kwargs['C24']
+            c25 = kwargs['C25']
+            c26 = kwargs['C26']
+            c33 = kwargs['C33']
+            c34 = kwargs['C34']
+            c35 = kwargs['C35']
+            c36 = kwargs['C36']
+            c44 = kwargs['C44']
+            c45 = kwargs['C45']
+            c46 = kwargs['C46']
+            c55 = kwargs['C55']
+            c56 = kwargs['C56']
+            c66 = kwargs['C66']
+        except:
+            raise TypeError('triclinic style takes keyword arguments of all Cij where i <= j')
+        
+        #Build Cij array        
         self.Cij = np.array([[c11, c12, c13, c14, c15, c16],
                              [c12, c22, c23, c24, c25, c26],
                              [c13, c23, c33, c34, c35, c36],
