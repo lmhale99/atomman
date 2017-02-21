@@ -1,4 +1,5 @@
 import numpy as np
+import warnings
 from copy import deepcopy
 from dvect import dvect
 
@@ -10,6 +11,8 @@ def nlist(system, cutoff, cmult=1):
     system -- System to calculate the neighbor list for.
     cutoff -- radial cutoff distance for neighbors.
     cmult -- parameter associated with the binning routine.  Default value is most likely the fastest."""
+    warnings.simplefilter('always')
+    warnings.warn('nlist function is replaced with NeighborList class', DeprecationWarning)
     
     natoms = system.natoms
     vects = system.box.vects
@@ -23,8 +26,8 @@ def nlist(system, cutoff, cmult=1):
                                  vects[0] + vects[2],
                                  vects[1] + vects[2],
                                  vects[0] + vects[1] + vects[2]])
-    supermin = corners.min(axis=0) - 2*cutoff
-    supermax = corners.max(axis=0) + 2*cutoff
+    supermin = corners.min(axis=0) - 1.01 * cutoff
+    supermax = corners.max(axis=0) + 1.01 * cutoff
     
     #Construct bins
     binsize = cutoff/cmult
@@ -32,13 +35,16 @@ def nlist(system, cutoff, cmult=1):
     ybins = np.arange(supermin[1], supermax[1], binsize)
     zbins = np.arange(supermin[2], supermax[2], binsize)
   
-    #Create index lists for real atoms
+    #Build xyz box index for each atom
     x_index = np.digitize(pos[:, 0], xbins) - 1
     y_index = np.digitize(pos[:, 1], ybins) - 1
     z_index = np.digitize(pos[:, 2], zbins) - 1
     xyz_index = np.hstack((x_index[:, np.newaxis], y_index[:, np.newaxis], z_index[:, np.newaxis]))
+    
+    #Relate atom's id to xyz_index
     atom_index = np.arange(natoms, dtype=int)
     
+    #Identify all bins with real atoms
     real_bins = unique_rows(xyz_index)
     
     #create iterators based on pbc

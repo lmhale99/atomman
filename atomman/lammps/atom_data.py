@@ -145,7 +145,8 @@ def dump(system, fname, units='metal', atom_style='atomic'):
         if system.box.xy == 0.0 and system.box.xz == 0.0 and system.box.yz == 0.0:
             pass
         else:
-            f.write('%f %f %f xy xz yz\n' % (uc.get_in_units(system.box.xy, length), uc.get_in_units(system.box.xz, length), uc.get_in_units(system.box.yz, length)))
+            #f.write('%f %f %f xy xz yz\n' % (uc.get_in_units(system.box.xy, length), uc.get_in_units(system.box.xz, length), uc.get_in_units(system.box.yz, length)))
+            f.write('%s %s %s xy xz yz\n' % (repr(uc.get_in_units(system.box.xy, length)), repr(uc.get_in_units(system.box.xz, length)), repr(uc.get_in_units(system.box.yz, length))))
         
         #Write atom info
         f.write('\nAtoms\n\n')

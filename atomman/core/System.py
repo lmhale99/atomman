@@ -1,12 +1,13 @@
 #Standard library imports
 from copy import deepcopy
+import warnings
 
 #External library imports
 import numpy as np
 
 #Internal imports
-from .Atoms import Atoms
-from .Box import Box
+from . import Atoms
+from . import Box
 import atomman as am
 import atomman.unitconvert as uc
 from DataModelDict import DataModelDict as DM
@@ -27,10 +28,10 @@ class System(object):
         """
                 
         assert isinstance(box, Box), 'Invalid box entry'
-        self.__box = box
+        self.__box = deepcopy(box)
         
         assert isinstance(atoms, Atoms), 'Invalid atoms entry'
-        self.__atoms = atoms
+        self.__atoms = deepcopy(atoms)
         
         if scale is True:
             self.atoms.view['pos'][:] = self.unscale(atoms.view['pos'])
@@ -223,7 +224,19 @@ class System(object):
         cutoff -- radial cutoff distance for including atoms as neighbors.
         cmult -- int factor that changes the underlying binning algorithm. Default is 1, which should be the fastest. 
         """
-        self.prop['nlist'] = am.nlist(self, cutoff, cmult)
+        warnings.simplefilter('always')
+        warnings.warn('nlist method is replaced with neighbors method', DeprecationWarning)
+        self.prop['nlist'] = am.nlist(self, cutoff, cmult=cmult)
+        
+    def neighbors(self, cutoff, cmult=1, initialsize=20):
+        """Build neighbor list for all atoms based on a cutoff.
+        
+        Keyword Arguments:
+        cutoff -- radial cutoff distance for including atoms as neighbors.
+        cmult -- int factor that changes the underlying binning algorithm. Default is 1, which should be the fastest. 
+        """
+
+        self.prop['neighbors'] = am.NeighborList(self, cutoff, cmult=cmult, initialsize=initialsize)
     
     def load(self, style, input, **kwargs):
         """Load a System."""
