@@ -1,4 +1,5 @@
 #Standard library imports
+from collections import OrderedDict
 from copy import deepcopy
 import warnings
 
@@ -26,19 +27,38 @@ class System(object):
         scale -- If True, atoms' pos will be scaled relative to the box.  Default is False.
         prop -- Dictionary of free-form system-wide properties.
         """
-                
+        
+        #Check parameter types
         assert isinstance(box, Box), 'Invalid box entry'
+        assert isinstance(atoms, Atoms), 'Invalid atoms entry'
+        assert isinstance(prop, dict), 'invalid prop dictionary'
+        
+        #Copy box
         self.__box = deepcopy(box)
         
-        assert isinstance(atoms, Atoms), 'Invalid atoms entry'
-        self.__atoms = deepcopy(atoms)
+        #Copy atoms
+        data = deepcopy(atoms.data)
         
+        #Reassign atom views to new data array
+        view = OrderedDict()
+        start = 0
+        for k in atoms.view:
+            vshape = atoms.view[k].shape
+            view[k] = data[:, start : start + atoms.view[k][0].size]
+            view[k].shape = vshape
+            start = start + view[k][0].size
+        
+        #Save new atoms
+        self.__atoms = am.Atoms(data=data, view=view, prop_dtype=atoms.dtype)
+        
+        #Rescale pos if needed
         if scale is True:
             self.atoms.view['pos'][:] = self.unscale(atoms.view['pos'])
         
+        #Save pbc
         self.pbc = pbc
         
-        assert isinstance(prop, dict), 'invalid prop dictionary'
+        #Save prop dict
         self.__prop = prop
 
     def __str__(self):

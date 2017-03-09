@@ -16,10 +16,10 @@ def rotate_cubic(system, axes):
     
     
     axes = np.asarray(axes)
-    
+
     #rotate system generically
     system = am.rotate(system, axes)
-    
+
     #test for cubic
     a = system.box.a
     try:
@@ -43,6 +43,7 @@ def rotate_cubic(system, axes):
     
     #compute number of atoms for the new system
     natoms = system.natoms*mag[0]*mag[1]*mag[2]
+
     if np.isclose(int(round(natoms)), natoms):
         natoms = int(round(natoms))
     else:
@@ -78,6 +79,7 @@ def rotate_cubic(system, axes):
     
     #deepcopy the data array to guarantee that it is new and separate
     data = deepcopy(data)
+    
 
     #rebuild views
     start = 0
@@ -87,9 +89,11 @@ def rotate_cubic(system, axes):
         view[k] = data[:, start : start + system.atoms.view[k][0].size]
         view[k].shape = vshape
         start = start + system.atoms.view[k][0].size
-    
-    #create atoms from natoms, data, view and dtype
-    atoms = am.Atoms(natoms=natoms, data=data, view=view, prop_dtype=system.atoms.dtype)
 
+    #create atoms from natoms, data, view and dtype
+    atoms = am.Atoms(data=data, view=view, prop_dtype=system.atoms.dtype)
+    
+    assert natoms == atoms.natoms, 'natom mismatch after rotation!'
+    
     #return new system
     return am.System(box=box, atoms=atoms)
