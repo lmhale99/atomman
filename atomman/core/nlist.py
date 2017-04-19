@@ -11,8 +11,9 @@ def nlist(system, cutoff, cmult=1):
     system -- System to calculate the neighbor list for.
     cutoff -- radial cutoff distance for neighbors.
     cmult -- parameter associated with the binning routine.  Default value is most likely the fastest."""
-    warnings.simplefilter('always')
-    warnings.warn('nlist function is replaced with NeighborList class', DeprecationWarning)
+    with warnings.catch_warnings():
+        warnings.simplefilter('always')
+        warnings.warn('nlist function is replaced with NeighborList class', DeprecationWarning)
     
     natoms = system.natoms
     vects = system.box.vects

@@ -244,8 +244,9 @@ class System(object):
         cutoff -- radial cutoff distance for including atoms as neighbors.
         cmult -- int factor that changes the underlying binning algorithm. Default is 1, which should be the fastest. 
         """
-        warnings.simplefilter('always')
-        warnings.warn('nlist method is replaced with neighbors method', DeprecationWarning)
+        with warnings.catch_warnings():
+            warnings.simplefilter('always')
+            warnings.warn('nlist method is replaced with neighbors method', DeprecationWarning)
         self.prop['nlist'] = am.nlist(self, cutoff, cmult=cmult)
         
     def neighbors(self, cutoff, cmult=1, initialsize=20):
