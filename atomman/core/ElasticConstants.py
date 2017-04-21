@@ -1,3 +1,4 @@
+from __future__ import division
 from copy import deepcopy
 
 import numpy as np
@@ -137,6 +138,7 @@ class ElasticConstants(object):
                          [[[c[4,0],c[4,5],c[4,4]], [c[4,5],c[4,1],c[4,3]], [c[4,4],c[4,3],c[4,2]]],
                           [[c[3,0],c[3,5],c[3,4]], [c[3,5],c[3,1],c[3,3]], [c[3,4],c[3,3],c[3,2]]],
                           [[c[2,0],c[2,5],c[2,4]], [c[2,5],c[2,1],c[2,3]], [c[2,4],c[2,3],c[2,2]]]]])
+    
     @Cijkl.setter
     def Cijkl(self, value):
         c = np.asarray(value, dtype='float64')
@@ -217,81 +219,107 @@ class ElasticConstants(object):
         return ElasticConstants(Cijkl=C)  
 
     def isotropic(self, **kwargs):
-        """Set values with isotropic moduli: two of (C11, C12, mu=C44, E, v, K, lambda)."""
+        """Set values with isotropic moduli: two of (C11=M, C12=lambda, C44=mu, E, v, K)."""
         
         try:
-            #Move mu to C44 if given
+            #Handle equivalent terms
+            if 'M' in kwargs:
+                kwargs['C11'] = kwargs.pop('M')
+            if 'lambda' in kwargs:
+                kwargs['C12'] = kwargs.pop('lambda')
             if 'mu' in kwargs:
                 kwargs['C44'] = kwargs.pop('mu')
             
             #Check len of kwargs
             assert len(kwargs) == 2
         
-            #Pop required dependent terms
+            #Pop and convert terms
             if   'C11' in kwargs:
                 c11 = kwargs.pop('C11')
+                
                 if   'C12' in kwargs:
                     c12 = kwargs.pop('C12')
                     c44 = (c11 - c12) / 2
+                
+                else:
+                    if 'C44' in kwargs:
+                        c44 = kwargs.pop('C44')
+                        
+                    elif 'E' in kwargs: 
+                        E = kwargs.pop('E')
+                        S = (E**2 + 9 * c11**2 - 10 * E * c11)**0.5
+                        c44 = (3 * c11 + E - S) / 8
+                        
+                    elif 'v' in kwargs: 
+                        v = kwargs.pop('v')
+                        c44 = c11 * (1 - 2 * v) / (2 * (1 - v))
+                    
+                    elif 'K' in kwargs: 
+                        K = kwargs.pop('K')
+                        c44 = 3 * (c11 - K) / 4
+                
+                    c12 = c11 - 2 * c44
+                    
+            else:
+                if 'C12' in kwargs:
+                    c12 = kwargs.pop('C12')
+                    
+                    if   'C44' in kwargs:
+                        c44 = kwargs.pop('C44')
+                    
+                    elif 'E' in kwargs:
+                        E = kwargs.pop('E')
+                        R = (E**2 + 9 * c12**2 + 2 * E * c12)**0.5
+                        c44 = (E - 3 * c12 + R) / 4
+                        
+                    elif 'v' in kwargs:
+                        v = kwargs.pop('v')
+                        c44 = c12 * (1 - 2 * v) / (2 * v)
+                        
+                    elif 'K' in kwargs:
+                        K = kwargs.pop('K')
+                        c44 = 3 * (K - c12) / 2
+                        
                 elif 'C44' in kwargs:
                     c44 = kwargs.pop('C44')
-                    c12 = c11 - 2 * c44
-                elif 'E' in kwargs: assert False
                     
-                elif 'v' in kwargs: assert False
+                    if  'E' in kwargs:
+                        E = kwargs.pop('E')
+                        c12 = c44 * (E - 2 * c44) / (3 * c44 - E)
+                        
+                    elif 'v' in kwargs:
+                        v = kwargs.pop('v')
+                        c12 = 2 * c44 * v / (1 - 2 * v)
+                        
+                    elif 'K' in kwargs:
+                        K = kwargs.pop('K')
+                        c12 = K - 2 * c44 / 3
+                        
+                elif  'E' in kwargs: 
+                    E = kwargs.pop('E')
+                    
+                    if 'v' in kwargs: 
+                        v = kwargs.pop('v')
+                        c12 = E * v / ((1 + v) * (1 - 2 * v))
+                        c44 = E / (2 * (1 + v))
+                        
+                    elif 'K' in kwargs: 
+                        K = kwargs.pop('K')
+                        c12 = 3 * K * (3 * K - E) / (9 * K - E)
+                        C44 = 3 * K * E / (9 * K - E)
+                        
+                elif 'v' in kwargs:
+                    v = kwargs.pop('v')
+                    
+                    if 'K' in kwargs: 
+                        K = kwargs.pop('K')
+                        c12 = 3 * K * v / (1 + v)
+                        c44 = 3 * K * (1 - 2 * v) / (2 * (1 + v))
                 
-                elif 'K' in kwargs: assert False
-                
-                elif 'lambda' in kwargs: assert False
-                
-                else: assert False    
-            elif 'C12' in kwargs:
-                c12 = kwargs.pop('C12')
-                if   'C44' in kwargs:
-                    c44 = kwargs.pop('C44')
-                    c11 = 2 * c44 + c12
-                elif 'E' in kwargs: assert False
-                
-                elif 'v' in kwargs: assert False
-                
-                elif 'K' in kwargs: assert False
-                
-                elif 'lambda' in kwargs: assert False
-                
-                else: assert False    
-            elif 'C44' in kwargs:
-                c44 = kwargs.pop('C44')
-                if  'E' in kwargs: assert False
-                
-                elif 'v' in kwargs: assert False
-                
-                elif 'K' in kwargs: assert False
-                
-                elif 'lambda' in kwargs: assert False
-                
-                else: assert False   
-            elif  'E' in kwargs: 
-                if 'v' in kwargs: assert False
-                
-                elif 'K' in kwargs: assert False
-                
-                elif 'lambda' in kwargs: assert False
-                
-                else: assert False
-            elif 'v' in kwargs:               
-                if 'K' in kwargs: assert False
-                
-                elif 'lambda' in kwargs: assert False
-                
-                else: assert False
-                
-            elif 'K' in kwargs:                 
-                if 'lambda' in kwargs: assert False
-                
-                else: assert False
+                c11 = c12 + 2 * c44
         
         except:
-            raise TypeError('isotropic style takes two keyword arguments of (C11, C12, mu=C44, E, v, K, lambda)')
+            raise TypeError('isotropic style takes two unique keyword arguments of (C11=M, C12=lambda, C44=mu, E, v, K)')
         
         #Build Cij array
         self.Cij = np.array([[c11, c12, c12, 0.0, 0.0, 0.0],
@@ -328,8 +356,8 @@ class ElasticConstants(object):
             
         try:
             #Check len of kwargs
-            assert len(kwargs) == 5
-        
+            assert len(kwargs) >= 5 and len(kwargs) <=6
+                
             #Pop required independent terms
             c33 = kwargs.pop('C33')
             c13 = kwargs.pop('C13')
@@ -340,10 +368,17 @@ class ElasticConstants(object):
                 c11 = kwargs.pop('C11')
                 c12 = kwargs.pop('C12')
                 c66 = (c11 - c12) / 2
+                
+                #Check if redundant C66 is given
+                if 'C66' in kwargs:
+                    assert np.isclose(c66, kwargs['C66'])
+                    c66 = kwargs.pop('C66')
+                
             elif 'C11' in kwargs and 'C66' in kwargs:
                 c11 = kwargs.pop('C11')
                 c66 = kwargs.pop('C66')
                 c12 = c11 - 2 * c66
+                
             elif 'C12' in kwargs and 'C66' in kwargs:
                 c12 = kwargs.pop('C12')
                 c66 = kwargs.pop('C66')
@@ -379,13 +414,17 @@ class ElasticConstants(object):
                 c11 = kwargs.pop('C11')
                 c12 = kwargs.pop('C12')
                 c66 = (c11 - c12) / 2
+                
+                #Check if redundant C66 is given
                 if 'C66' in kwargs:
                     assert np.isclose(c66, kwargs['C66'])
-                    c66 = kwargs.pop('C66')        
+                    c66 = kwargs.pop('C66')
+                    
             elif 'C11' in kwargs and 'C66' in kwargs:
                 c11 = kwargs.pop('C11')
                 c66 = kwargs.pop('C66')
                 c12 = c11 - 2 * c66
+                
             elif 'C12' in kwargs and 'C66' in kwargs:
                 c12 = kwargs.pop('C12')
                 c66 = kwargs.pop('C66')
@@ -641,36 +680,54 @@ class ElasticConstants(object):
                              ('ij', ij)                              ]) )
             return model
 
-    @property
-    def bulk(self):
-        """The Hill bulk modulus estimate.  Equal to average of Voigt and Reuss bulk modulus."""
-        return (self.bulk_Voigt + self.bulk_Reuss) / 2
-    
-    @property
-    def bulk_Voigt(self):
-        """The Voigt bulk modulus estimate. Uses hydrostatic stress."""
-        c = self.Cij
-        return ( (c[0,0] + c[1,1] + c[2,2]) + 2*(c[0,1] + c[1,2] + c[0,2]) ) / 9
+    def bulk(self, style='Hill'):
+        """
+        Returns a bulk modulus estimate.
         
-    @property
-    def bulk_Reuss(self):
-        """The Reuss bulk modulus estimate. Uses hydrostatic strain."""
-        s = self.Sij
-        return 1 / ( (s[0,0] + s[1,1] + s[2,2]) + 2*(s[0,1] + s[1,2] + s[0,2]) )
+        Argument:
+        - style -- indicates which style of estimate to use. 
+                   Default value is 'Hill'.
+            - 'Hill' -- Hill estimate (average of Voigt and Reuss).
+            - 'Voigt' -- Voigt estimate. Uses Cij.
+            - 'Reuss' -- Reuss estimate. Uses Sij.
+        """
         
-    @property        
-    def shear(self):
-        """The Hill shear modulus estimate. Equal to average of Voigt and Reuss shear modulus."""
-        return (self.shear_Voigt + self.shear_Reuss) / 2
-     
-    @property
-    def shear_Voigt(self):
-        """The Voigt shear modulus estimate. Uses non-hydrostatic stresses."""
-        c = self.Cij
-        return ( (c[0,0] + c[1,1] + c[2,2]) - (c[0,1] + c[1,2] + c[0,2]) + 3*(c[3,3] + c[4,4] + c[5,5]) ) / 15
+        if   style == 'Hill':
+            return (self.bulk('Voigt') + self.bulk('Reuss')) / 2
         
-    @property
-    def shear_Reuss(self):
-        """The Reuss shear modulus estimate. Uses non-hydrostatic strains."""
-        s = self.Sij
-        return 15 / ( 4*(s[0,0] + s[1,1] + s[2,2]) - 4*(s[0,1] + s[1,2] + s[0,2]) + 3*(s[3,3] + s[4,4] + s[5,5]) )    
+        elif style == 'Voigt':
+            c = self.Cij
+            return ( (c[0,0] + c[1,1] + c[2,2]) + 2*(c[0,1] + c[1,2] + c[0,2]) ) / 9
+        
+        elif style == 'Reuss':
+            s = self.Sij
+            return 1 / ( (s[0,0] + s[1,1] + s[2,2]) + 2*(s[0,1] + s[1,2] + s[0,2]) )
+        
+        else:
+            raise ValueError('Unknown estimate style')
+
+
+    def shear(self, style='Hill'):
+        """
+        Returns a shear modulus estimate.
+        
+        Argument:
+        - style -- indicates which style of estimate to use. 
+                   Default value is 'Hill'.
+            - 'Hill' -- Hill estimate (average of Voigt and Reuss).
+            - 'Voigt' -- Voigt estimate. Uses Cij.
+            - 'Reuss' -- Reuss estimate. Uses Sij.
+        """
+        if   style == 'Hill':
+            return (self.shear('Voigt') + self.shear('Reuss')) / 2
+            
+        elif style == 'Voigt':
+            c = self.Cij
+            return ( (c[0,0] + c[1,1] + c[2,2]) - (c[0,1] + c[1,2] + c[0,2]) + 3*(c[3,3] + c[4,4] + c[5,5]) ) / 15
+        
+        elif style == 'Reuss':
+            s = self.Sij
+            return 15 / ( 4*(s[0,0] + s[1,1] + s[2,2]) - 4*(s[0,1] + s[1,2] + s[0,2]) + 3*(s[3,3] + s[4,4] + s[5,5]) )
+        
+        else:
+            raise ValueError('Unknown estimate style')
