@@ -107,21 +107,25 @@ def prettygrid(grid, xedges, yedges, cmap='jet', propname='', czero=True, scale=
     else:
         vmax = grid.max()
         vmin = grid.min()
+
         if abs(grid).max() != 0.0:
-            vrounder = np.floor(np.log10(abs(grid).max()))
+            vrounder = np.floor(np.log10(grid.max() - grid.min()))
+
             vmax = np.around(2 * vmax / 10.**vrounder) * 10.**vrounder / 2.
             vmin = np.around(2 * vmin / 10.**vrounder) * 10.**vrounder / 2.
+
             if vmax == vmin:
                 if vmax > 0:
                     vmin = 0
                 else:
                     vmax = 0
+        
         else:
             vmax = 1e-15
             vmin = -1e-15
     vmin*=scale
     vmax*=scale
-    
+
     vticks = np.linspace(vmin, vmax, 11, endpoint=True)
 
     #Plot figure on screen

@@ -1,7 +1,7 @@
 import numpy as np
 import warnings
 from copy import deepcopy
-from dvect import dvect
+from .dvect import dvect
 
 def nlist(system, cutoff, cmult=1):
     """

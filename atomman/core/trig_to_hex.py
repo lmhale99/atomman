@@ -1,5 +1,5 @@
 import numpy as np
-from supersize import supersize
+from .supersize import supersize
 
 def trig_to_hex(cell, tol=1e-5):    
     try:

@@ -5,7 +5,7 @@ from copy import deepcopy
 #External library imports
 import numpy as np
 
-from atomman.tools import is_dtype_int, is_dtype_bool
+from ..tools import is_dtype_int, is_dtype_bool
 
 class Atoms(object):
     """

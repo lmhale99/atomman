@@ -1,5 +1,6 @@
 import numpy as np
-from atomman.tools import ElasticConstants, axes_check
+from .. import ElasticConstants
+from ..tools import axes_check
 from copy import deepcopy
 
 class Stroh(object):

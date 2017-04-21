@@ -6,7 +6,7 @@ import subprocess as sp
 from .Log import Log
 
 
-def run(lammps_command, script_name, mpi_command=None, restart_script_name=None, return_style='model', logfile='log.lammps', flatten_thermo=None):
+def run(lammps_command, script_name, mpi_command=None, restart_script_name=None, return_style='object', logfile='log.lammps', flatten=None):
     """
     Calls LAMMPS to run. Returns data model containing LAMMPS output.
     
@@ -19,13 +19,13 @@ def run(lammps_command, script_name, mpi_command=None, restart_script_name=None,
                    None (no mpi).
     restart_script_name -- alternative script to use for restarting if logfile 
                            already exists. Default is None (no restarting)
-    return_style -- format for the returned data. Default value is 'model' (for now)
+    return_style -- format for the returned data. Default value is 'object'.
+        'object' -- returns an atomman.lammps.Log object
         'model' -- returns a DataModelDict
-        'object' -- returns an atomman.lammps.Log object    
     logfile -- specifies the path to the logfile to write to. Default value is
                'log.lammps'
-    flatten_thermo -- indicates if the thermo data should be flattened to a 
-                      single table. Default value is None (no flattening)
+    flatten -- indicates if the simulation data should be flattened to a 
+               single table. Default value is None (no flattening)
         None -- leave all individual runs/restarts as separate tables
         'first' -- only use the first entry for a given Step value
         'last' -- only use the last entry for a given Step value
@@ -109,8 +109,8 @@ def run(lammps_command, script_name, mpi_command=None, restart_script_name=None,
     #Read in from current logfile
     log.read(logfile)
     
-    if flatten_thermo is not None:
-        log.flatten(flatten_thermo)
+    if flatten is not None:
+        log.flatten(flatten)
 
     if return_style == 'object':
         return log

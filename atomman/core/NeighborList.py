@@ -5,8 +5,8 @@ from copy import deepcopy
 import numpy as np
 
 #Internal imports
-from . import dvect
-from . import System
+from .dvect import dvect
+from .System import System
 from ..tools import uber_open_rmode
 
 class NeighborList(object):
@@ -40,10 +40,7 @@ class NeighborList(object):
     
     def __getitem__(self, key):
         """get returns the list of neighbors for the specified atom."""
-        if isinstance(key, (int, long, np.int)):
-            return self.__neighbors[key, :self.coord[key]]
-        else:
-            raise IndexError('Index must be an int')
+        return self.__neighbors[key, :self.coord[key]]
     
     def build(self, system, cutoff, cmult=1, initialsize=20):
         """
@@ -97,7 +94,7 @@ class NeighborList(object):
         real_bins = self.__unique_rows(xyz_index)
         
         #create iterators based on pbc
-        check = [(0), (0), (0)]
+        check = [(0,), (0,), (0,)]
         for i in xrange(3):
             if pbc[i]:
                 check[i] = (-1, 0, 1) 

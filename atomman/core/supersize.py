@@ -1,4 +1,7 @@
-import atomman
+from .Atoms import Atoms
+from .Box import Box
+from .System import System
+
 import numpy as np
 
 
@@ -46,9 +49,9 @@ def supersize(system, a_size, b_size, c_size):
         vects[i] *= mults[i]
         
     #initilize new Box and Atoms
-    box = atomman.Box(vects=vects, origin=origin)
+    box = Box(vects=vects, origin=origin)
     natoms = system.natoms * mults[0] * mults[1] * mults[2]
-    atoms = atomman.Atoms(natoms=natoms)
+    atoms = Atoms(natoms=natoms)
     
     #Copy over all property values using numpy broadcasting
     for prop in system.atoms_prop():
@@ -96,7 +99,7 @@ def supersize(system, a_size, b_size, c_size):
     #save pos values, return new System
     atoms.prop(key='pos', value=n_spos + xyz)
     
-    return atomman.System(box=box, atoms=atoms, scale=True)
+    return System(box=box, atoms=atoms, scale=True)
         
         
     

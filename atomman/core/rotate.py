@@ -1,4 +1,3 @@
-import atomman as am
 from copy import deepcopy
 
 from ..tools import axes_check

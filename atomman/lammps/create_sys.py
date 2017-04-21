@@ -22,7 +22,6 @@ def create_sys(lammps_command, system_info):
                            'atom_modify sort 0 0.0',
                            '',                           
                            'dump dumpit all custom 100000 temp.dump id type x y z',
-                           'dump_modify dumpit format "%i %i %.13e %.13e %.13e"',                           
                            'run 0'])
     f = open('create_sys.in', 'w')
     f.write(script)

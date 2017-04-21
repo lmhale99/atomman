@@ -45,9 +45,16 @@ def differential_displacement(base_system, disl_system, burgers_vector, plot_ran
     if neighbor_list is not None:
         assert neighbor_list_cutoff is None, 'neighbor_list and neighbor_list_cutoff cannot both be given'
     elif neighbor_list_cutoff is not None:
-        neighbor_list = am.nlist(base_system, neighbor_list_cutoff)
+        neighbor_list = am.NeighborList(base_system, neighbor_list_cutoff)
+    elif 'neighbors' in base_system.prop:
+        neighbor_list = base_system.prop['neighbors']
     elif 'nlist' in base_system.prop:
         neighbor_list = base_system.prop['nlist']
+    
+    if isinstance(neighbor_list, am.NeighborList):
+        objectnlist = True
+    else:
+        objectnlist = False
     
     #Identify atoms in plot range
     base_pos = base_system.atoms_prop(key='pos')
@@ -66,10 +73,13 @@ def differential_displacement(base_system, disl_system, burgers_vector, plot_ran
 
         #Plot a circle for atom i
         color = cm.hsv((base_pos[i, 2] - plot_range[2,0]) / (plot_range[2,1] - plot_range[2,0]))
-        ax1.add_patch(mpatches.Circle(base_pos[i, :2], atom_circle_radius, fc=color))
+        ax1.add_patch(mpatches.Circle(base_pos[i, :2], atom_circle_radius, fc=color, ec='k'))
     
         #make list of all neighbors for atom i
-        neighbor_indices = neighbor_list[i, 1 : neighbor_list[i, 0] + 1]
+        if objectnlist:
+            neighbor_indices = neighbor_list[i]
+        else:
+            neighbor_indices = neighbor_list[i, 1 : neighbor_list[i, 0] + 1]
 
         #Compute distance vectors between atom i and its neighbors for both systems        
         base_dvectors = base_system.dvect(int(i), neighbor_indices)

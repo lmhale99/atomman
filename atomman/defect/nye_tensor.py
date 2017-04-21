@@ -9,9 +9,16 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbor_list=None,
     if neighbor_list is not None:
         assert neighbor_list_cutoff is None, 'neighbor_list and neighbor_list_cutoff cannot both be given'
     elif neighbor_list_cutoff is not None:
-        neighbor_list = am.nlist(system, neighbor_list_cutoff)
+        neighbor_list = am.NeighborList(system, neighbor_list_cutoff)
+    elif 'neighbors' in system.prop:
+        neighbor_list = system.prop['neighbors']
     elif 'nlist' in system.prop:
         neighbor_list = system.prop['nlist']
+    
+    if isinstance(neighbor_list, am.NeighborList):
+        objectnlist = True
+    else:
+        objectnlist = False
     
     #If p_vectors is only given for one atom, apply to all atoms
     if len(p_vectors) == 1:
@@ -33,9 +40,12 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbor_list=None,
                     [[ 0, 1, 0],[-1, 0, 0],[ 0, 0, 0]]])
     
     #Identify largest number of nearest neighbors
-    nmax = 0
-    for ns in neighbor_list:
-        if ns[0] > nmax: nmax=ns[0]
+    if objectnlist:
+        nmax = neighbor_list.coord.max()
+    else:
+        nmax = 0
+        for ns in neighbor_list:
+            if ns[0] > nmax: nmax=ns[0]
     
     #Initialize variables (done here to reduce memory allocations making it slightly faster)
     strain = np.empty((system.natoms, 3, 3))
@@ -57,7 +67,10 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbor_list=None,
         r1 = p_mags.min()
         
         #Calculate radial neighbor vectors, q
-        q = system.dvect(i, neighbor_list[i][1:neighbor_list[i][0]+1])
+        if objectnlist:
+            q = system.dvect(i, neighbor_list[i])
+        else:
+            q = system.dvect(i, neighbor_list[i][1:neighbor_list[i][0]+1])
         if q.ndim == 1:
             q = np.array([q])
         q_mags = np.linalg.norm(q, axis=1)
@@ -76,7 +89,7 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbor_list=None,
         #for match in u[(u!=-1) & (u_count > 1)]:
         #    print index_pairing==match
         
-        for n in xrange(neighbor_list[i][0]):               
+        for n in xrange(len(q)):
             #Check if the particular p has already been assigned to another q
             #Remove the p-q pair that is farther from r1
             if index_pairing[n] >=0:
@@ -91,7 +104,7 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbor_list=None,
 
         #Construct reduced P, Q matrices from p-q pairs
         c = 0
-        for n in xrange(neighbor_list[i][0]):
+        for n in xrange(len(q)):
             if index_pairing[n] >= 0:
                 Q[c] = q[n]
                 P[c] = p[index_pairing[n]]
@@ -114,7 +127,10 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbor_list=None,
 
     #Construct the gradient tensor of G, gradG
     for i in xrange(system.natoms):
-        neighbors = neighbor_list[i][1:neighbor_list[i][0]+1]
+        if objectnlist:
+            neighbors = neighbor_list[i]
+        else:
+            neighbors = neighbor_list[i][1:neighbor_list[i][0]+1]
         Q = system.dvect(i, neighbors)
         if Q.ndim == 1:
             Q = np.array([Q])

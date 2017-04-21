@@ -155,7 +155,6 @@ def set_literal(term):
         try: j = term[:j].rindex(' ')
         except: raise ValueError('Failed to parse term')
     
-    
 def set_in_units(value, units):
     """Convert value from specified units to working units"""
     units = parse(units)

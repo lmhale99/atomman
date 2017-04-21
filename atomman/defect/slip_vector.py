@@ -12,14 +12,24 @@ def slip_vector(system_0, system_1, neighbor_list=None, neighbor_list_cutoff=Non
         assert neighbor_list_cutoff is None, 'neighbor_list and neighbor_list_cutoff cannot both be given'
     elif neighbor_list_cutoff is not None:
         neighbor_list = am.nlist(system_0, neighbor_list_cutoff)
+    elif 'neighbors' in system_0.prop:
+        neighbor_list = system_0.prop['neighbors']
     elif 'nlist' in system_0.prop:
         neighbor_list = system_0.prop['nlist']
+    
+    if isinstance(neighbor_list, am.NeighborList):
+        objectnlist = True
+    else:
+        objectnlist = False
     
     #Calculate the slip vector
     slip = np.zeros((system_0.natoms, 3))
     
     for i in xrange(system_0.natoms):
-        js = neighbor_list[i, 1:neighbor_list[i, 0]+1]
+        if objectnlist:
+            js = neighbor_list[i]
+        else:
+            js = neighbor_list[i, 1:neighbor_list[i, 0]+1]
         slip[i] = -np.sum(system_1.dvect(i, js) - system_0.dvect(i, js), axis=0)
             
     return slip
