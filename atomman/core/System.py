@@ -1,4 +1,5 @@
 #Standard library imports
+from __future__ import division
 from collections import OrderedDict
 from copy import deepcopy
 import warnings
@@ -226,9 +227,9 @@ class System(object):
                 min = spos[:, i].min()
                 max = spos[:, i].max()
                 if min < mins[i]: mins[i] = min - 0.001
-                if max > maxs[i]: maxs[i] = max + 0.001             
+                if max > maxs[i]: maxs[i] = max + 0.001
                         
-        self.atoms.view['pos'][:] = self.unscale(spos)          
+        self.atoms.view['pos'][:] = self.unscale(spos)
         
         origin = self.box.origin + mins.dot(self.box.vects) 
         avect = self.box.avect * (maxs[0] - mins[0])
@@ -280,6 +281,8 @@ class System(object):
         prop_units -- dictionary where the keys are the property keys to 
                       include, and the values are units to use. If not given, 
                       only the positions in scaled units are included.
+        a_std, b_std, c_std -- standard deviation of lattice constants values to
+                               include as value errors.
         """
         
         box_unit = kwargs.get('box_unit', 'angstrom')
@@ -296,43 +299,88 @@ class System(object):
         
         prop_units = kwargs.get('prop_units', {})
         if 'pos' not in prop_units:
-            prop_units['pos'] = 'scaled'        
+            prop_units['pos'] = 'scaled'
         
-        a = uc.get_in_units(self.box.a, box_unit)
-        b = uc.get_in_units(self.box.b, box_unit)
-        c = uc.get_in_units(self.box.c, box_unit)
+        a = self.box.a
+        b = self.box.b
+        c = self.box.c
         alpha = self.box.alpha
         beta =  self.box.beta
         gamma = self.box.gamma
+        
+        if 'a_std' in kwargs and 'b_std' in kwargs and 'c_std' in kwargs:
+            errors = True
+            a_std = kwargs['a_std']
+            b_std = kwargs['b_std']
+            c_std = kwargs['c_std']
+        else:
+            errors = False
+        
     
         model = DM()
         model['cell'] = cell = DM()
+        
+        # Test for orthorhombic angles
         if np.allclose([alpha, beta, gamma], [90.0, 90.0, 90.0]):
             if np.isclose(b/a, 1.):
                 if np.isclose(c/a, 1.):
+                    
+                    # For cubic (a = b = c)
                     c_family = 'cubic'
+                    
                     cell[c_family] = DM()
-                    cell[c_family]['a'] = DM([('value', (a+b+c)/3), ('unit', box_unit)])
+                    cell[c_family]['a'] = DM()
+                    
+                    a_ave = (a + b + c) / 3
+                    cell[c_family]['a']['value'] = uc.get_in_units(a_ave, box_unit)
+                    
+                    if errors is True:
+                        a_std_ave = (a_std + b_std + c_std) / 3
+                        cell[c_family]['a']['error'] = uc.get_in_units(a_std_ave, box_unit)
+                    
+                    cell[c_family]['a']['unit'] = box_unit
+                
                 else:
+                    # For tetrahedral (a = b != c)
                     c_family = 'tetragonal'
+                    
                     cell[c_family] = DM()
-                    cell[c_family]['a'] = DM([('value', (a+b)/2), ('unit', box_unit)])
-                    cell[c_family]['c'] = DM([('value', c), ('unit', box_unit)])
+                    cell[c_family]['a'] = DM()
+                    cell[c_family]['c'] = DM()
+                    
+                    a_ave = (a + b) / 2
+                    cell[c_family]['a']['value'] = uc.get_in_units(a_ave, box_unit)
+                    cell[c_family]['c']['value'] = uc.get_in_units(c, box_unit)
+                    
+                    if errors is True:
+                        a_std_ave = (a_std + b_std) / 2
+                        cell[c_family]['a']['error'] = uc.get_in_units(a_std_ave, box_unit)
+                        cell[c_family]['c']['error'] = uc.get_in_units(c_std, box_unit)
+                        
+                    cell[c_family]['a']['unit'] = box_unit
+                    cell[c_family]['c']['unit'] = box_unit
+
             else:
-                #if np.isclose(b/a, 3.0**0.5):
-                #    c_family = 'hexagonal'
-                #    cell[c_family] = DM()
-                #    a_av = (a + b/(3.0**0.5))/2.
-                #    cell[c_family]['a'] = DM([('value', a_av), ('unit', box_unit)])
-                #    cell[c_family]['c'] = DM([('value', c), ('unit', box_unit)])
-                
-                #else:
+                # For orthorhombic (a != b != c)
                 c_family = 'orthorhombic'
-                cell[c_family] = DM()
-                cell[c_family]['a'] = DM([('value', a), ('unit', box_unit)])
-                cell[c_family]['b'] = DM([('value', b), ('unit', box_unit)])
-                cell[c_family]['c'] = DM([('value', c), ('unit', box_unit)])
                 
+                cell[c_family] = DM()
+                cell[c_family]['a'] = DM()
+                cell[c_family]['b'] = DM()
+                cell[c_family]['c'] = DM()
+                
+                cell[c_family]['a']['value'] = uc.get_in_units(a, box_unit)
+                cell[c_family]['b']['value'] = uc.get_in_units(b, box_unit)
+                cell[c_family]['c']['value'] = uc.get_in_units(c, box_unit)
+                
+                if errors is True:
+                    cell[c_family]['a']['error'] = uc.get_in_units(a_std, box_unit)
+                    cell[c_family]['b']['error'] = uc.get_in_units(b_std, box_unit)
+                    cell[c_family]['c']['error'] = uc.get_in_units(c_std, box_unit)
+                
+                cell[c_family]['a']['unit'] = box_unit
+                cell[c_family]['b']['unit'] = box_unit
+                cell[c_family]['c']['unit'] = box_unit
         else:
             raise ValueError('Non-orthogonal boxes comming')
         

@@ -1,3 +1,5 @@
+import datetime
+
 import pandas as pd
 
 import numpy as np
@@ -12,8 +14,10 @@ class Log(object):
     def __init__(self, log_info=None):
         """Intitializes a Log object."""
         
-        #Initialize simulations array
+        #Initialize simulation properties
         self.__simulations = []
+        self.__lammps_version = None
+        self.__lammps_date = None
         
         #Read log data if supplied
         if log_info is not None:
@@ -22,9 +26,11 @@ class Log(object):
     def read(self, log_info, append=True):
         """Parses a LAMMPS screen output/log file for thermodynamic data."""
         
-        #Remove existing data if append is False
+        #Rset properties and values if append is False
         if append is False:
             self.__simulations = []
+            self.__lammps_version = None
+            self.__lammps_date = None
         
         #Handle file names, strings and open file-like objects equivalently
         with uber_open_rmode(log_info) as log_info:
@@ -40,6 +46,15 @@ class Log(object):
                 if len(line.split()) == 0:
                     continue
                     
+                #Save the LAMMPS version information
+                if line[:8] == 'LAMMPS (' and self.lammps_version is None:
+                    month = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 
+                             'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8,
+                             'Sep': 9, 'Oct': 10,'Nov': 11,'Dec': 12}
+                    self.__lammps_version = line.strip()[8:-1]
+                    d = self.lammps_version.split('-')[0].split()
+                    self.__lammps_date = datetime.date(int(d[2]), month[d[1]], int(d[0])) 
+                   
                 #This is listed before both run and minimize simulations    
                 if 'Memory usage per processor =' in line:
                     headers.append(i+1)
@@ -73,6 +88,14 @@ class Log(object):
     @property
     def simulations(self):
         return self.__simulations
+    
+    @property
+    def lammps_version(self):
+        return self.__lammps_version
+        
+    @property
+    def lammps_date(self):
+        return self.__lammps_date
     
     def flatten(self, style='last'):
         """Combines all simulations into one 

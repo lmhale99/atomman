@@ -19,7 +19,7 @@ def load(data, prop_info=None):
     
     #read in prop_info if supplied
     if prop_info is not None:
-        if os.path.isfile(prop_info):
+        if isinstance(prop_info, (str, unicode)) and os.path.isfile(prop_info):
             with open(prop_info) as f:
                 prop_info = f.read()
         prop_info = DataModelDict(prop_info)
@@ -42,6 +42,7 @@ def load(data, prop_info=None):
         pbc = None
         box = None
         natoms = None
+        system = None
         
         readnatoms = False
         readatoms = False
@@ -200,6 +201,9 @@ def load(data, prop_info=None):
                             system = am.System(atoms=am.Atoms(natoms=natoms), box=box, pbc=pbc)
                             system.prop['timestep'] = timestep
                             readatoms = True 
+    if system is None:
+        raise ValueError('Failed to properly load dump file '+str(data)[:50])
+    
     return system      
 
 def dump(system, fname, prop_info=None, xf='%.13e'):

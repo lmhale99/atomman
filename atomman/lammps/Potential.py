@@ -1,16 +1,18 @@
-from DataModelDict import DataModelDict
-from atomman.tools import atomic_mass
 import os
 
+from DataModelDict import DataModelDict as DM
+from atomman.tools import atomic_mass, uber_open_rmode
+
+
 class Potential(object):
-    """class for building LAMMPS input lines from a LAMMPS-potential data model.""" 
+    """class for building LAMMPS input lines from a potential-LAMMPS data model.""" 
     
     def __init__(self, model, pot_dir=None):
         """
-        initializes an instance associated with a LAMMPS-potential data model.
+        initializes an instance associated with a potential-LAMMPS data model.
         
         Arguments:
-        model -- a string or file-like obect of a json/xml data model containing a LAMMPS-potential branch.
+        model -- a string or file-like obect of a json/xml data model containing a potential-LAMMPS branch.
         pot_dir -- (optional) the directory location of any artifacts associated with the potential.
         """
         
@@ -18,14 +20,19 @@ class Potential(object):
             
     def load(self, model, pot_dir=None):
         """
-        loads LAMMPS-potential data model info.
+        loads potential-LAMMPS data model info.
         
         Arguments:
-        model -- a string or file-like obect of a json/xml data model containing a LAMMPS-potential branch.
+        model -- a string or file-like obect of a json/xml data model containing a potential-LAMMPS branch.
         pot_dir -- (optional) the directory location of any artifacts associated with the potential.
         """
 
-        self.__dm = DataModelDict(model).find('LAMMPS-potential')        
+        # Load model and find potential-LAMMPS
+        if isinstance(model, DM):
+             self.__dm = model.find('potential-LAMMPS')
+        else:
+            with uber_open_rmode(model) as f:
+                self.__dm = DM(f).find('potential-LAMMPS')
         
         for atom in self.__dm.iteraslist('atom'):
             #Check if element is listed
@@ -74,12 +81,22 @@ class Potential(object):
         
     @property
     def id(self):
-        """Human-readable identifier."""
-        return self.__dm['potential']['id']
+        """Human-readable identifier for the LAMMPS implementation."""
+        return self.__dm['id']
     
     @property    
     def key(self):
-        """uuid hash-key."""
+        """uuid hash-key for the LAMMPS implementation."""
+        return self.__dm['key']
+    
+    @property
+    def potid(self):
+        """Human-readable identifier for the potential model."""
+        return self.__dm['potential']['id']
+    
+    @property    
+    def potkey(self):
+        """uuid hash-key for the potential model."""
         return self.__dm['potential']['key']
     
     @property
