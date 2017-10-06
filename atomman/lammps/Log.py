@@ -32,6 +32,9 @@ class Log(object):
             self.__lammps_version = None
             self.__lammps_date = None
         
+        #Strings found before run and mimize simulations
+        sim_trigger = ['Memory usage per processor =','Per MPI rank memory allocation (min/avg/max) =']
+        
         #Handle file names, strings and open file-like objects equivalently
         with uber_open_rmode(log_info) as log_info:
         
@@ -55,8 +58,8 @@ class Log(object):
                     d = self.lammps_version.split('-')[0].split()
                     self.__lammps_date = datetime.date(int(d[2]), month[d[1]], int(d[0])) 
                    
-                #This is listed before both run and minimize simulations    
-                if 'Memory usage per processor =' in line:
+                #Check for strings listed before run and minimize simulations
+                if any([trigger in line for trigger in sim_trigger]):
                     headers.append(i+1)
                 
                 #This follows both run and minimize simulations
