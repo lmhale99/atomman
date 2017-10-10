@@ -10,7 +10,7 @@ def getreadme():
         return f.read()
     
 setup(name = 'atomman',
-      version = getversion(),
+      version = '1.1.3',
       description = 'Atomistic Manipulation Toolkit',
       long_description = getreadme(),
       classifiers = [
@@ -26,7 +26,7 @@ setup(name = 'atomman',
         'atomistic', 
         'molecular dynamics'
       ], 
-      url = 'https://github.com/usnistgov/atomman',
+      url = 'https://github.com/usnistgov/atomman/',
       author = 'Lucas Hale',
       author_email = 'lucas.hale@nist.gov',
       packages = find_packages(),
