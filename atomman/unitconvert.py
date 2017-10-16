@@ -1,7 +1,15 @@
-#External library imports
-import numericalunits as nu
-import numpy as np
+# Standard Python libraries
+from __future__ import (absolute_import, print_function,
+                        division, unicode_literals)
 import ast
+
+# https://pypi.python.org/pypi/numericalunits
+import numericalunits as nu
+
+# http://www.numpy.org/
+import numpy as np
+
+# atomman imports
 from .compatibility import iteritems, range, stringtype
 
 def build_unit():
