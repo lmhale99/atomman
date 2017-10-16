@@ -1,3 +1,6 @@
+from __future__ import (absolute_import, print_function,
+                        division, unicode_literals)
+
 # Define rootdir
 import os
 rootdir = os.path.dirname(os.path.abspath(__file__))
@@ -6,8 +9,9 @@ rootdir = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(rootdir, 'VERSION')) as version_file:
     __version__ = version_file.read().strip()
 
-from .core import *
+from . import compatibility
 from . import unitconvert
+from .core import *
 from . import defect
 from . import lammps
 from . import tools
