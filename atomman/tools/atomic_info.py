@@ -1,125 +1,25 @@
-atom_symbol_index = {
-    1: "H", 
-    2: "He", 
-    3: "Li", 
-    4: "Be", 
-    5: "B", 
-    6: "C", 
-    7: "N", 
-    8: "O", 
-    9: "F", 
-    10: "Ne", 
-    11: "Na", 
-    12: "Mg", 
-    13: "Al", 
-    14: "Si", 
-    15: "P", 
-    16: "S", 
-    17: "Cl", 
-    18: "Ar", 
-    19: "K", 
-    20: "Ca", 
-    21: "Sc", 
-    22: "Ti", 
-    23: "V", 
-    24: "Cr", 
-    25: "Mn", 
-    26: "Fe", 
-    27: "Co", 
-    28: "Ni", 
-    29: "Cu", 
-    30: "Zn", 
-    31: "Ga", 
-    32: "Ge", 
-    33: "As", 
-    34: "Se", 
-    35: "Br", 
-    36: "Kr", 
-    37: "Rb", 
-    38: "Sr", 
-    39: "Y", 
-    40: "Zr", 
-    41: "Nb", 
-    42: "Mo", 
-    43: "Tc", 
-    44: "Ru", 
-    45: "Rh", 
-    46: "Pd", 
-    47: "Ag", 
-    48: "Cd", 
-    49: "In", 
-    50: "Sn", 
-    51: "Sb", 
-    52: "Te", 
-    53: "I", 
-    54: "Xe", 
-    55: "Cs", 
-    56: "Ba", 
-    57: "La", 
-    58: "Ce", 
-    59: "Pr", 
-    60: "Nd", 
-    61: "Pm", 
-    62: "Sm", 
-    63: "Eu", 
-    64: "Gd", 
-    65: "Tb", 
-    66: "Dy", 
-    67: "Ho", 
-    68: "Er", 
-    69: "Tm", 
-    70: "Yb", 
-    71: "Lu", 
-    72: "Hf", 
-    73: "Ta", 
-    74: "W", 
-    75: "Re", 
-    76: "Os", 
-    77: "Ir", 
-    78: "Pt", 
-    79: "Au", 
-    80: "Hg", 
-    81: "Tl", 
-    82: "Pb", 
-    83: "Bi", 
-    84: "Po", 
-    85: "At", 
-    86: "Rn", 
-    87: "Fr", 
-    88: "Ra", 
-    89: "Ac", 
-    90: "Th", 
-    91: "Pa", 
-    92: "U", 
-    93: "Np", 
-    94: "Pu", 
-    95: "Am", 
-    96: "Cm", 
-    97: "Bk", 
-    98: "Cf", 
-    99: "Es", 
-    100: "Fm", 
-    101: "Md", 
-    102: "No", 
-    103: "Lr", 
-    104: "Rf", 
-    105: "Db", 
-    106: "Sg", 
-    107: "Bh", 
-    108: "Hs", 
-    109: "Mt", 
-    110: "Ds", 
-    111: "Rg", 
-    112: "Cn", 
-    113: "Uut", 
-    114: "Fl", 
-    115: "Uup", 
-    116: "Lv", 
-    117: "Uus", 
-    118: "Uuo"
-}
+# Standard Python libraries
+from __future__ import (absolute_import, print_function,
+                        division, unicode_literals)
 
-atomic_mass_dict = {
+__all__ = ['atomic_number', 'atomic_symbol', 'atomic_mass']
+
+# List of all atomic symbols in order
+atomic_symbols = ["H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg",
+                 "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", 
+                 "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn", "Ga", "Ge", "As", "Se",
+                 "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh",
+                 "Pd", "Ag", "Cd", "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba",
+                 "La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho",
+                 "Er", "Tm", "Yb", "Lu", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt",
+                 "Au", "Hg", "Tl", "Pb", "Bi", "Po", "At", "Rn", "Fr", "Ra", "Ac",
+                 "Th", "Pa", "U", "Np", "Pu", "Am", "Cm", "Bk", "Cf", "Es", "Fm",
+                 "Md", "No", "Lr", "Rf", "Db", "Sg", "Bh", "Hs", "Mt", "Ds", "Rg",
+                 "Cn", "Uut", "Fl", "Uup", "Lv", "Uus", "Uuo"]
+
+# Dictionary of all standard atomic weights of elements and relative atomic
+# masses of isotopes in a.m.u.s
+atomic_masses = {
     "H": 1.007975, 
     "He": 4.002602, 
     "Li": 6.967499999999999, 
@@ -3569,32 +3469,75 @@ atomic_mass_dict = {
     "Uuo-294": 294.21392, 
     "Uuo-295": 295.21624
 }
+
+def atomic_number(symbol):
+    """
+    Return the corresponding atomic number for a given atomic symbol.
     
+    Parameters
+    ----------
+    symbol : str
+        An atomic symbol.
+    
+    Return
+    ------
+    int
+        The corresponding atomic number.
+    """
+    return atomic_symbols.index(symbol) + 1
+
+def atomic_symbol(number):
+    """
+    Return the corresponding atomic symbol for a given atomic number.
+    
+    Parameters
+    ----------
+    number : int
+        An atomic number.
+    
+    Return
+    ------
+    int
+        The corresponding atomic symbol.
+    """
+    return atomic_symbols[number-1]
+
 def atomic_mass(term):
     """
-    Returns the average standard atomic weight for an element or 
-    the relative atomic mass for an isotope.
-    Elements can be specified using atomic numbers or symbols.
-    Isotopes are specified using symbols followed by -#, where # is the mass number (eg. 'He-3')
-    Deuterium and tritium can alternatively be specified using D and T respectively.
-    Values obtained from NIST reference database: http://www.nist.gov/pml/data/comp.cfm
+    Get the atomic mass of an element or isotope.  Isotopes are specified
+    using symbols followed by -#, where # is the mass number (eg. 'He-3').
+    Deuterium and tritium can alternatively be specified using D and T
+    respectively.  Values obtained from NIST reference database:
+    http://www.nist.gov/pml/data/comp.cfm
+    
+    Parameters
+    ----------
+    term : str or int
+        The atomic number or atomic/isotope symbol to retrieve the mass for.
+        
+    Returns
+    -------
+    float
+        The average standard atomic weight of an element or the relative
+        atomic mass of an isotope.
     """
     
     try:
-        term = atom_symbol_index[int(term)]
+        # Try converting term to an int
+        term = int(term)
     except:
         pass
-        
-    try:
-        return atomic_mass_dict[term]
-    except:
-        if term in atom_symbol_index.values():
-            raise ValueError('No standard weight for element '+str(term)+'. Specify an isotope instead.')
-        else:
-            raise KeyError('Unknown element/isotope symbol: '+str(term))
-        
+    else:
+        # Convert int terms from atomic numbers to symbols
+        term = atomic_symbol(term)
     
-        
-        
-
-
+    try:
+        # Try fetching atomic mass using term
+        return atomic_masses[term]
+    except:
+        # Error if element symbol exists but has no standard weight
+        if term in atomic_symbols:
+            raise ValueError('No standard weight for element ' + term + '. Specify an isotope instead.')
+        # Error for unknown element/isotope symbol
+        else:
+            raise KeyError('Unknown element/isotope symbol: ' + term)
