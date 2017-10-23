@@ -10,8 +10,10 @@ ispython3 = sys.version_info[0] == 3
 # Python 2 settings
 if ispython2:
     stringtype = basestring
+    inttype = (int, long)
     unicode = unicode
     long = long
+    int = long
     range = xrange
     
     def iteritems(d):
@@ -22,6 +24,8 @@ if ispython2:
 elif ispython3:
     stringtype = str
     unicode = str
+    inttype = int
+    int = int
     long = int
     range = range
     
