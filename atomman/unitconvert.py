@@ -24,7 +24,11 @@ def build_unit():
     
     # Copy all float attributes of numericalunits to unit
     for key, value in iteritems(nu.__dict__):
-        if key[:2] != '__' and isinstance(value, float):
+        try:
+            key = key.decode('UTF-8')
+        except:
+            pass
+        if key[:1] != '_' and isinstance(value, float):
             unit[key] = value
 
 def reset_units(seed=None, **kwargs):
