@@ -90,6 +90,7 @@ class ElasticConstants(object):
         assert value.shape == (6,6),  'Cij must be 6x6'
         
         #zero out near-zero terms
+        assert value.max() > 0.0, 'Cij values not valid'
         value[np.isclose(value/value.max(), 0.0, atol=1e-9)] = 0.0
         
         #check symmetry
