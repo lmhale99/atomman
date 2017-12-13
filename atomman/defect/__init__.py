@@ -7,9 +7,7 @@ from nye_tensor_p import nye_tensor_p
 
 from Stroh import Stroh
 
+from GammaSurface import GammaSurface
 
-
-
-
-
-    
+from peierlsnabarro_disregistry import peierlsnabarro_disregistry
+from SemiDiscretePeierlsNabarro import SemiDiscretePeierlsNabarro
