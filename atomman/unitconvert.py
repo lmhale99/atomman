@@ -3,6 +3,8 @@ import numericalunits as nu
 import numpy as np
 import ast
 
+from DataModelDict import DataModelDict as DM
+
 def build_unit():
     """Builds the unit dictionary based on current working units"""
     
@@ -166,9 +168,51 @@ def get_in_units(value, units):
     return np.asarray(value) / units
     
 def value_unit(term):
-    """Used for dictionary elements with value, unit keys"""
+    """Used for dictionary elements with value, (index,) unit keys"""
     unit = term.get('unit', None)
-    return set_in_units(term['value'], unit)
+    value = set_in_units(term['value'], unit)
+    
+    if 'index' in term:
+        indices = []
+        for index in term['index']:
+            indices.append(np.array(index.split(), dtype='int64'))
+        indices = np.array(indices)
+
+        newvalue = np.zeros(tuple(np.max(indices, axis=0)))
+        newvalue[list((indices-1).T)] = value
+        value = newvalue
+    
+    return value
+    
+def model(value, units):
+    """Generates DataModelDict representation of data"""
+    
+    datamodel = DM()
+    
+    value = get_in_units(value, units)
+    
+    # Single value
+    if value.ndim == 0:
+        datamodel['value'] = value
+    
+    # 1D array
+    elif value.ndim == 1:
+        datamodel['value'] = list(value)
+    
+    # Higher-order tensor
+    else:
+        shape = value.shape
+        datamodel['value'] = list(value.flatten())
+        
+        datamodel['index'] = []
+        for index in np.array(np.unravel_index(range(len(datamodel['value'])), shape)).T:
+            strindex = []
+            for i in index:
+                strindex.append(str(i+1))
+            datamodel['index'].append(' '.join(strindex))
+        
+    datamodel['unit'] = units
+    return datamodel
     
 def parse(units):
     """Convert units as strings (or None) into numbers."""
@@ -229,6 +273,6 @@ def parse(units):
         return units
    
         
-#Initial build and reset.  Only called first time module is loaded        
+#Initial build and reset.  Only called first time module is loaded
 build_unit()
 reset_units()
