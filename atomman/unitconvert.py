@@ -6,6 +6,8 @@ import ast
 # https://pypi.python.org/pypi/numericalunits
 import numericalunits as nu
 
+from DataModelDict import DataModelDict as DM
+
 # http://www.numpy.org/
 import numpy as np
 
@@ -154,7 +156,7 @@ def set_literal(term):
                 j = term[:j].rindex(' ')
             except: 
                 raise ValueError('Failed to parse term')
-    
+
 def set_in_units(value, units):
     """
     Convert value from specified units to working units.
@@ -173,7 +175,7 @@ def set_in_units(value, units):
     """
     units = parse(units)
     return np.asarray(value) * units
-        
+
 def get_in_units(value, units):
     """
     Convert value from working units to specified units.
@@ -192,7 +194,7 @@ def get_in_units(value, units):
     """
     units = parse(units)
     return np.asarray(value) / units
-    
+
 def value_unit(term):
     """
     Reads numerical value from dictionary containing 'value' and 'unit' keys.
@@ -210,8 +212,105 @@ def value_unit(term):
     
     """
     unit = term.get('unit', None)
-    return set_in_units(term['value'], unit)
+    value = set_in_units(term['value'], unit)
     
+    if 'index' in term:
+        indices = []
+        for index in term['index']:
+            indices.append(np.array(index.split(), dtype='int64'))
+        indices = np.array(indices)
+
+        newvalue = np.zeros(tuple(np.max(indices, axis=0)))
+        newvalue[list((indices-1).T)] = value
+        value = newvalue
+    
+    return value
+
+def error_unit(term):
+    """
+    Reads numerical error from dictionary containing 'error' and 'unit' keys.
+    
+    Parameters
+    ----------
+    term : dict
+        Dictionary containing 'error' and 'unit' keys.
+        
+    Returns
+    -------
+    numpy.ndarray
+        The result of calling set_in_units() by passing the dictionary keys 
+        'error' and 'unit' as parameters.
+    
+    """
+    unit = term.get('unit', None)
+    error = set_in_units(term['error'], unit)
+    
+    if 'index' in term:
+        indices = []
+        for index in term['index']:
+            indices.append(np.array(index.split(), dtype='int64'))
+        indices = np.array(indices)
+
+        newvalue = np.zeros(tuple(np.max(indices, axis=0)))
+        newvalue[list((indices-1).T)] = error
+        error = newvalue
+    
+    return error
+
+def model(value, units, error=None):
+    """
+    Generates DataModelDict representation of data.
+    
+    Parameters
+    ----------
+    value : float, numpy.ndarray, etc.
+        A numerical value or list/array of values.
+    units : str
+        The units to convert value to (from working units).
+    error : float, numpy.ndarray, etc., optional
+        A value error to include.  If given, must be the same
+        size/shape as value.
+    
+    Returns
+    -------
+    DataModelDict
+        Model representation of the value(s).
+    """
+    
+    datamodel = DM()
+    
+    value = get_in_units(value, units)
+    if error is not None:
+        error = get_in_units(error, units)
+    
+    # Single value
+    if value.ndim == 0:
+        datamodel['value'] = value
+        if error is not None:
+            datamodel['error'] = error
+    
+    # 1D array
+    elif value.ndim == 1:
+        datamodel['value'] = list(value)
+        if error is not None:
+            datamodel['error'] = list(error)
+            
+    # Higher-order tensor
+    else:
+        shape = value.shape
+        datamodel['value'] = list(value.flatten())
+        if error is not None:
+            datamodel['error'] = list(error.flatten())
+        datamodel['index'] = []
+        for index in np.array(np.unravel_index(range(len(datamodel['value'])), shape)).T:
+            strindex = []
+            for i in index:
+                strindex.append(str(i+1))
+            datamodel['index'].append(' '.join(strindex))
+        
+    datamodel['unit'] = units
+    return datamodel
+
 def parse(units):
     """
     Convert units as strings (or None) into scaling numbers.  This function
@@ -221,8 +320,6 @@ def parse(units):
     - '*' for multiplication.
     - '/' for division.
     - '^' for powers.
-    
-    
     
     Parameters
     ----------
