@@ -1,30 +1,45 @@
-import atomman as am
-import numpy as np
+# Standard Python libraries
+from __future__ import (absolute_import, print_function,
+                        division, unicode_literals)
 import os
+
+# http://www.numpy.org/
+import numpy as np
+
+# http://www.diffpy.org/diffpy.structure/
 try:
     import diffpy.Structure
     has_diffpy = True
 except:
     has_diffpy = False
 
+# atomman imports
+import atomman.core.Atoms
+import atomman.core.Box
+import atomman.core.System
+from ..tools import uber_open_rmode
+    
 def load(cif):
-    """Reads in a CIF crystal file and returns an atomman.System and list of elements."""
+    """
+    Reads in a CIF crystal file.
+    
+    cif : str or file-like object
+        The cif content to read.
+    
+    Returns
+    -------
+    system : atomman.System
+        An atomman representation of a system.
+    elements : list
+        The list of elemental symbols corresponding to the system's atom types.
+    """
     
     assert has_diffpy, 'diffpy.Structure not imported'
     
+    # Read in cif file to diffpy Structure
     dps = diffpy.Structure.structure.Structure()
-    
-    #load from an open file-like object
-    if hasattr(cif, 'read'):
-        dps.readStr(cif.read())
-    
-    #load using a file name
-    elif os.path.isfile(cif):
-        dps.read(cif)
-    
-    #load from a string
-    else:
-        dps.readStr(cif)
+    with uber_open_rmode(cif) as f:
+        dps.readStr(f.read())
     
     all_elements = dps.element
     elements, all_atype = np.unique(all_elements, return_inverse=True)
@@ -43,13 +58,13 @@ def load(cif):
             atype.append(a1)
             pos.append(p1)
     
-    atoms = am.Atoms(natoms=len(pos), prop={'atype':atype, 'pos':pos})    
+    atoms = atomman.core.Atoms(atype=atype, pos=pos)
     
-    box = am.Box(a=dps.lattice.a, 
-                 b=dps.lattice.b, 
-                 c=dps.lattice.c, 
-                 alpha=dps.lattice.alpha, 
-                 beta=dps.lattice.beta, 
-                 gamma=dps.lattice.gamma)
+    box = atomman.core.Box(a=dps.lattice.a,
+                               b=dps.lattice.b,
+                               c=dps.lattice.c,
+                               alpha=dps.lattice.alpha,
+                               beta=dps.lattice.beta,
+                               gamma=dps.lattice.gamma)
     
-    return am.System(atoms=atoms, box=box, pbc=(True,True,True), scale=True), list(elements)
+    return atomman.core.System(atoms=atoms, box=box, scale=True), list(elements)
