@@ -10,11 +10,11 @@ import numpy as np
 # atomman imports
 from . import Atoms
 from . import Box
-import atommantest.core.supersize
-import atommantest.core.dvect
-import atommantest.core.NeighborList
-import atommantest.core.load
-import atommantest.convert.system_model
+import atomman.core.supersize
+import atomman.core.dvect
+import atomman.core.NeighborList
+import atomman.core.load
+import atomman.convert.system_model
 from ..compatibility import iteritems, range
 
 class System(object):
@@ -320,7 +320,7 @@ class System(object):
             pos_1 = np.asarray(pos_1)
         
         # Call atomman.core.dvect using self's box and pbc
-        return atommantest.core.dvect(pos_0, pos_1, self.box, self.pbc, code=code)
+        return atomman.core.dvect(pos_0, pos_1, self.box, self.pbc, code=code)
     
     def neighborlist(self, **kwargs):
         """
@@ -351,7 +351,7 @@ class System(object):
             raise KeywordError("Cannot give 'system' as it is taken as the current object")
         else:
             kwargs['system'] = self
-        self.neighbors = atommantest.core.NeighborList(**kwargs)
+        self.neighbors = atomman.core.NeighborList(**kwargs)
     
     def supersize(self, a_size, b_size, c_size):
         """
@@ -375,7 +375,7 @@ class System(object):
             Single int or two integers specifying replication along the cvect
             direction.
         """
-        system = atommantest.core.supersize(self, a_size, b_size, c_size)
+        system = atomman.core.supersize(self, a_size, b_size, c_size)
         self.__box = system.box
         self.__atoms = system.atoms
         self.pbc = system.pbc
@@ -394,7 +394,7 @@ class System(object):
         kwargs
             Any extra keyword arguments to pass to the underlying load methods.
         """
-        system, symbols = atommantest.core.load(style, input, **kwargs)
+        system, symbols = atomman.core.load(style, input, **kwargs)
         self.__box = system.box
         self.__atoms = system.atoms
         self.pbc = system.pbc
@@ -424,4 +424,4 @@ class System(object):
             Standard deviation of c lattice constant to include if available.
         """
             
-        return atommantest.convert.system_model.dump(self, **kwargs)
+        return atomman.convert.system_model.dump(self, **kwargs)
