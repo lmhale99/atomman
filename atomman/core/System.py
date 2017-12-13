@@ -1,449 +1,427 @@
-#Standard library imports
-from __future__ import division
+# Standard Python libraries
+from __future__ import (absolute_import, print_function,
+                        division, unicode_literals)
 from collections import OrderedDict
 from copy import deepcopy
-import warnings
 
-#External library imports
+# http://www.numpy.org/
 import numpy as np
 
-#Internal imports
+# atomman imports
 from . import Atoms
 from . import Box
-import atomman as am
-import atomman.unitconvert as uc
-from DataModelDict import DataModelDict as DM
-     
+import atommantest.core.supersize
+import atommantest.core.dvect
+import atommantest.core.NeighborList
+import atommantest.core.load
+import atommantest.convert.system_model
+from ..compatibility import iteritems, range
+
 class System(object):
-    """Class for representing an atomic system."""
+    """
+    A representation of an atomic system.  This combines Atoms with Box and
+    adds methods and attributes involving both.
+    """
     
-    def __init__(self, atoms=Atoms(), box=Box(), pbc=(True, True, True), scale=False, prop={}):
+    def __init__(self, atoms=Atoms(), box=Box(), pbc=(True, True, True), scale=False):
         """
         Initilize a System by joining an am.Atoms and am.Box instance.
         
-        Keyword Arguments:
-        atoms -- Instance of am.Atoms to include.
-        box -- Instance of am.Box to include.
-        pbc -- Tuple of three booleans where True indicates a given box dimension is periodic. Default is all True.
-        scale -- If True, atoms' pos will be scaled relative to the box.  Default is False.
-        prop -- Dictionary of free-form system-wide properties.
+        Parameters
+        ----------
+        atoms : atomman.Atoms
+            The underlying Atoms object to build system around.
+        box : atomman.Box
+            The underlying box object to build system around.
+        pbc : tuple or list of bool
+            Indicates which of the dimensions related to the three box vectors
+            are periodic.  Default value is (True, True, True).
+        scale : bool
+            If True, atoms.pos will be scaled relative to the box.  Default
+            value is False.
         """
         
-        #Check parameter types
-        assert isinstance(box, Box), 'Invalid box entry'
-        assert isinstance(atoms, Atoms), 'Invalid atoms entry'
-        assert isinstance(prop, dict), 'invalid prop dictionary'
+        # Check data types
+        if not isinstance(atoms, Atoms):
+            raise TypeError('Invalid atoms type')
+        if not isinstance(box, Box):
+            raise TypeError('Invalid box type')
+        if not isinstance(scale, bool):
+            raise TypeError('Invalid scale type')
         
-        #Copy box
-        self.__box = deepcopy(box)
-        
-        #Copy atoms
-        data = deepcopy(atoms.data)
-        
-        #Reassign atom views to new data array
-        view = OrderedDict()
-        start = 0
-        for k in atoms.view:
-            vshape = atoms.view[k].shape
-            view[k] = data[:, start : start + atoms.view[k][0].size]
-            view[k].shape = vshape
-            start = start + view[k][0].size
-        
-        #Save new atoms
-        self.__atoms = am.Atoms(data=data, view=view, prop_dtype=atoms.dtype)
-        
-        #Rescale pos if needed
-        if scale is True:
-            self.atoms.view['pos'][:] = self.unscale(atoms.view['pos'])
-        
-        #Save pbc
+        # Set properties
+        self.__atoms = atoms
+        self.__box = box
         self.pbc = pbc
-        
-        #Save prop dict
-        self.__prop = prop
 
+        # Rescale pos if needed
+        if scale is True:
+            self.atoms_prop('pos', value=atoms.pos, scale=True)
+    
     def __str__(self):
+        """str : The string representation of a system."""
         return '\n'.join([str(self.box),
                           'natoms = ' + str(self.natoms),
                           'natypes = ' + str(self.natypes),
                           str(self.atoms)])
-        
-    @property    
-    def atoms(self): 
-        """The am.Atoms instance within the System."""
+    
+    def __len__(self):
+        return self.natoms
+    
+    @property
+    def atoms(self):
+        """atomman.Atoms : underlying Atoms object."""
         return self.__atoms
-        
-    def atoms_prop(self, a_id=None, key=None, value=None, dtype=None, scale=False):
-        """
-        Extends atoms.prop() with a scale argument.
-        
-        Keyword Arguments:
-        a_id -- atom index.
-        key -- atom property name.
-        value -- value(s) to assign to properties associated with a_id and/or term.
-        dtype -- data type to explicitly set or retrieve value as. 
-        scale -- boolean indicating if property is a 3D vector to be scaled relative to the box vectors.
-
-        If no arguments given, returns a list of the assigned property keys. Otherwise, a_id and/or key must be specified. The key specifies which property, and the a_id which atom(s) to access. With no value argument, prop() returns which value(s) are associated with the given a_id and/or key. With a value argument, the value is saved according to the given a_id and/or key. The positions are stored in absolute coordinates, but the scale argument allows for pos (and other 3D vectors) in box-scaled units to be converted during assignment and retrieval.
-        """   
-  
-        #No scaling is identical to atoms.prop()
-        if scale is False:
-            return self.__atoms.prop(a_id=a_id, key=key, value=value, dtype=dtype)
-                
-        #Unscale value before assigning
-        elif value is not None:
-            value = self.unscale(value)
-            self.__atoms.prop(a_id=a_id, key=key, value=value, dtype=dtype)
-        
-        #Call atoms.prop() and scale values being returned 
-        else:
-            value = self.__atoms.prop(a_id=a_id, key=key, dtype=dtype)
-            if value is None:
-                return None
-            else:
-                return self.scale(value)              
+    
     @property
     def natoms(self):
-        """The number of atoms."""
+        """int : The number of atoms in the Atoms class."""
         return self.__atoms.natoms
     
     @property
+    def atypes(self):
+        """list of int : List of unique atom types."""
+        return self.__atoms.atypes
+    
+    @property
     def natypes(self):
-        """The maximum atype value."""
+        """int : The number of atom types in the Atoms class."""
         return self.__atoms.natypes
     
     @property
     def box(self):
-        """The am.Box instance within the system"""
+        """atommman.Box : underlying Box object."""
         return self.__box
     
-    def box_set(self, **kwargs): 
-        """
-        Extends box.set() with a scale argument.
-        
-        If no arguments (excluding scale) given, box is set to square unit box with origin = [0,0,0].
-        Otherwise, must give one of the following sets:
-        - vects, (and origin).
-        - avect, bvect, cvect, (and origin).
-        - a, b, c, (alpha, beta, gamma, and origin).
-        - lx, ly, lz, (xy, xz, yz, and origin).
-        - xlo, xhi, ylo, yhi, zlo, zhi, (xy, xz, and yz).
-        
-        The scale keyword argument affects how the atom positions are handled when the box is changed.
-        scale = False (default). The absolute atom positions remain unchanged.
-        scale = True. The scaled (box-relative) positions remain unchanged.
-        """
-        
-        scale = kwargs.pop('scale', False)
-        if scale:
-            spos = self.scale(self.atoms.view['pos'])
-            self.__box.set(**kwargs)
-            self.atoms.view['pos'][:] = self.unscale(spos)
-        else:
-            self.__box.set(**kwargs)
-            
     @property
     def pbc(self):
-        """The periodic boundary condition settings for the System."""
+        """list of bool : The periodic boundary condition settings."""
         return self.__pbc
         
     @pbc.setter
     def pbc(self, value):
         pbc = np.asarray(value, dtype=bool)
-        assert pbc.shape == (3L,), 'invalid pbc entry' 
+        assert pbc.shape == (3,), 'invalid pbc entry' 
         self.__pbc = pbc
     
-    @property
-    def prop(self):
-        """OrderedDict of free-form System properties"""
-        return self.__prop
+    def atoms_prop(self, key=None, index=None, value=None, a_id=None, scale=False):
+        """
+        Extends Atoms.prop() by adding a scale argument.
+        
+        Parameters
+        ----------
+        key : str, optional
+            Per-atom property name.
+        index : int, list, slice, optional
+            Index of atoms.
+        value : any, optional
+            Property values to assign.
+        a_id : int, optional
+            Integer atom index.  Left in for backwards compatibility.
+        scale : bool, optional
+            Flag indicating if values should be scaled/unscaled. If True:
+            - Values being retrieved are scaled from absolute Cartesian to box relative vectors.
+            - Values being set are unscaled from box relative to absolute Cartesian vectors.
+            Default value is False.
+        """
+        
+        # Check that scale is bool
+        if not isinstance(scale, bool):
+            raise TypeError('Invalid scale type')
+        
+        # Call atoms.prop() for scale is False
+        if scale is False:
+            if value is None:
+                return self.atoms.prop(key=key, index=index, a_id=a_id)
+            else:
+                self.atoms.prop(key=key, index=index, value=value, a_id=a_id)
+        
+        # Handle property scaling if scale is True
+        else:
+            # Handle a_id
+            if a_id is not None:
+                if index is not None:
+                    raise ValueError('a_id and index cannot both be given')
+                index = a_id
+            
+            # Get values if value is None
+            if value is None:
+                # If no key, return copy of atoms (all or a slice) with scaled pos
+                if key is None:
+                    if index is None:
+                        newatoms = deepcopy(self.atoms)
+                    else:
+                        newatoms = deepcopy(self.atoms[index])
+                    newatoms.pos = self.scale(newatoms.pos)
+                    return newatoms
+                
+                # If key is given, return scaled property values
+                else:
+                    if index is None:
+                        value = self.atoms.view[key]
+                    else:
+                        value = self.atoms.view[key][index]
+                    return self.scale(value)
+            
+            # Set values if value is given
+            else:
+                # If no key, unscale pos of Atoms value and set to atoms (or a slice)
+                if key is None:
+                    if not isinstance(value, Atoms):
+                        raise TypeError('If key is None, value must be instance of atomman.Atoms')
+                    
+                    value.pos = self.unscale(value.pos)
+                    if index is None:
+                        self.atoms[:] = value
+                    else:
+                        self.atoms[index] = value
+                
+                # If key is given, unscale value and set to property
+                else:
+                    value = self.unscale(value)
+                    if index is None:
+                        self.atoms.view[key] = value
+                    else:
+                        self.atoms.view[key][index] = value
+    
+    def box_set(self, **kwargs):
+        """
+        Extends box.set() with a scale argument.
+        
+        Parameters
+        ----------
+        scale : bool
+            If True, the scaled (box-relative) positions remain unchanged.
+            Default value is False (absolute positions unchanged).
+        other kwargs : any
+            Any other kwargs allowed by box.set().
+        """
+        
+        # Pop scale
+        scale = kwargs.pop('scale', False)
+        if not isinstance(scale, bool):
+            raise TypeError('Invalid scale type')
+        
+        # Hold scaled positions constant
+        if scale is True:
+            spos = self.atoms_prop('pos', scale=True)
+            self.box.set(**kwargs)
+            self.atoms_prop('pos', value=spos, scale=True)
+        
+        # Call box.set without scaling
+        else:
+            self.box.set(**kwargs)
     
     def scale(self, value):
-        """Converts 3D vectors from absolute to scaled box coordinates."""
-
+        """
+        Scales 3D vectors from absolute Cartesian coordinates to relative box
+        coordinates.
+        
+        Parameters
+        ----------
+        value : numpy.ndarray
+            Values to scale.
+        """
+        
+        # Retrieve parameters
         value = np.asarray(value)
         vects = self.box.vects
         inverse = np.linalg.inv(vects)
         origin = self.box.origin
         
+        # Convert
         return (value - origin).dot(inverse)
           
     def unscale(self, value):
-        """Converts 3D vectors from scaled box to absolute coordinates."""
-
+        """
+        Unscales 3D vectors from relative box coordinates to absolute
+        Cartesian coordinates.
+        
+        Parameters
+        ----------
+        value : numpy.ndarray
+            Values to unscale.
+        """
+        
+        # Retrieve parameters
         value = np.asarray(value)
         vects = self.box.vects
         origin = self.box.origin
         
+        # Convert
         return value.dot(vects) + origin
-    
-    def dvect(self, pos_0, pos_1):
-        """Computes the shortest distance between two (sets of) positions taking self system's pbc information into account.
-        
-        The arguments pos_0 and pos_1 can either be atom index values for the current system, a single position, or a list of positions.
-        Note that numpy broadcasting rules apply to the treatment of the arguments.
-        """
-        
-        pos_0 = np.asarray(pos_0)
-        #if pos_0 is integer(s), use as atom indexes of self system 
-        if am.tools.is_dtype_int(pos_0.dtype):
-            pos_0 = self.atoms.view['pos'][pos_0]
-        
-        pos_1 = np.asarray(pos_1)
-        #if pos_1 is integer(s), use as atom indexes of self system
-        if am.tools.is_dtype_int(pos_1.dtype):
-            pos_1 = self.atoms.view['pos'][pos_1]
-        
-        #call atomman.tools.dvect using self system's box and pbc
-        return am.dvect(pos_0, pos_1, self.box, self.pbc)
-
-    def normalize(self, style='lammps'):
-        """
-        Normalizes the System to be compatible with external codes.
-        
-        Keyword Arguments:
-        style -- Defines the style of the normalization.  Only 'lammps' currently supported.
-        """
-        if style == 'lammps':
-            system = am.lammps.normalize(self)
-            self.atoms_prop(key='pos', value=system.atoms_prop(key='pos'))
-            self.box_set(vects=system.box.vects) 
-        else:
-            raise ValueError('Unknown style')
         
     def wrap(self):
-        """Wrap atoms around periodic boundaries and extend non-periodic boundaries such that all atoms are within the box."""
+        """
+        Wrap atoms around periodic boundaries and extend non-periodic
+        boundaries such that all atoms are within the box.
+        """
         
+        # mins and maxs are box dimensions relative to box vectors, i.e 0 to 1
         mins = np.array([0.0, 0.0, 0.0])
         maxs = np.array([1.0, 1.0, 1.0])
-
-        spos = self.scale(self.atoms.view['pos'])
         
-        for i in xrange(3):
+        # Retrieve scaled pos
+        spos = self.atoms_prop('pos', scale=True)
+        
+        # Loop over three pbc directions
+        for i in range(3):
+            
+            # Wrap atoms across periodic boundaries
             if self.pbc[i]:
                 spos[:, i] -= np.floor(spos[:, i])
+            
+            # Shift min and max to encompass atoms across non-periodic bounds
             else:
                 min = spos[:, i].min()
                 max = spos[:, i].max()
                 if min < mins[i]: mins[i] = min - 0.001
                 if max > maxs[i]: maxs[i] = max + 0.001
-                        
-        self.atoms.view['pos'][:] = self.unscale(spos)
         
+        # Unscale spos and save to pos
+        self.atoms_prop('pos', value=spos, scale=True)
+        
+        # Modify box vectors and origin by new min and max
         origin = self.box.origin + mins.dot(self.box.vects) 
         avect = self.box.avect * (maxs[0] - mins[0])
         bvect = self.box.bvect * (maxs[1] - mins[1])
         cvect = self.box.cvect * (maxs[2] - mins[2])
-        
-        self.box_set(avect=avect, bvect=bvect, cvect=cvect, origin=origin)          
-        
-    def nlist(self, cutoff, cmult=1):
-        """Build neighbor list for all atoms based on a cutoff.
-        
-        Keyword Arguments:
-        cutoff -- radial cutoff distance for including atoms as neighbors.
-        cmult -- int factor that changes the underlying binning algorithm. Default is 1, which should be the fastest. 
+        self.box_set(avect=avect, bvect=bvect, cvect=cvect, origin=origin)
+    
+    def dvect(self, pos_0, pos_1, code=None):
         """
-        with warnings.catch_warnings():
-            warnings.simplefilter('always')
-            warnings.warn('nlist method is replaced with neighbors method', DeprecationWarning)
-        self.prop['nlist'] = am.nlist(self, cutoff, cmult=cmult)
+        Computes the shortest distance between pos_0 and pos_1 using box 
+        dimensions and accounting for periodic boundaries.
         
-    def neighbors(self, cutoff, cmult=1, initialsize=20):
-        """Build neighbor list for all atoms based on a cutoff.
-        
-        Keyword Arguments:
-        cutoff -- radial cutoff distance for including atoms as neighbors.
-        cmult -- int factor that changes the underlying binning algorithm. Default is 1, which should be the fastest. 
+        Parameters
+        ----------
+        pos_0 : numpy.ndarray or index
+            Absolute Cartesian vector position(s) to use as reference point(s).
+            If the value can be used as an index, then self.atoms.pos[pos_0]
+            is taken.
+        pos_1 : numpy.ndarray or index
+            Absolute Cartesian vector position(s) to find relative to pos_0.
+            If the value can be used as an index, then self.atoms.pos[pos_1]
+            is taken.
+        code: str, optional
+            Option for specifying which underlying code function to use:
+            - 'cython' uses the version of the function built in cython (faster).
+            - 'python' uses the purely python version.
+            Default is 'cython' if the code can be imported, otherwise 'python'.
         """
-
-        self.prop['neighbors'] = am.NeighborList(self, cutoff, cmult=cmult, initialsize=initialsize)
+        # Test if pos_0 and pos_1 can be used as numpy array indices
+        try:
+            pos_0 = self.atoms.view['pos'][pos_0]
+        except:
+            pos_0 = np.asarray(pos_0)
+        try:
+            pos_1 = self.atoms.view['pos'][pos_1]
+        except:
+            pos_1 = np.asarray(pos_1)
+        
+        # Call atomman.core.dvect using self's box and pbc
+        return atommantest.core.dvect(pos_0, pos_1, self.box, self.pbc, code=code)
+    
+    def neighborlist(self, **kwargs):
+        """
+        Builds a neighbor list for the system.  The resulting NeighborList
+        object is saved to the object as attribute 'neighbors'.
+        
+        Parameters
+        ----------
+        cutoff : float, optional
+            Radial cutoff distance for identifying neighbors.  Must be given if
+            model is not given.
+        model : str or file-like object, optional
+            Gives the file path or content to load.  If given, initialsize is
+            the only other allowed parameter.
+        cmult : int, optional
+            Parameter associated with the binning routine.  Default value is most
+            likely the fastest.
+        code: str, optional
+            Option for specifying which underlying code function of nlist to use:
+            - 'cython' uses the version of the function built in cython (faster).
+            - 'python' uses the purely python version.
+            Default is 'cython' if the code can be imported, otherwise 'python'.
+        initialsize : int, optional
+            The number of neighbor positions to initially assign to each atom.
+            Default value is 20.
+        """
+        if 'system' in kwargs:
+            raise KeywordError("Cannot give 'system' as it is taken as the current object")
+        else:
+            kwargs['system'] = self
+        self.neighbors = atommantest.core.NeighborList(**kwargs)
+    
+    def supersize(self, a_size, b_size, c_size):
+        """
+        Increases the system's size by replicating it along the box vectors.
+        
+        The multiplier values *_size are taken to be integer tuples (m, n) where
+        m <= 0 and n >= 0.  The system multiplication works such that if n = -m,
+        then the seed system's origin will be at the center of the new system.
+        If only one integer is given, then it is assigned to m or n depending on
+        its sign, and the other value is taken to be 0.
+        
+        Parameters
+        ----------
+        a_size : int or tuple of int
+            Single int or two integers specifying replication along the avect
+            direction.
+        b_size -- int or tuple of int
+            Single int or two integers specifying replication along the bvect
+            direction.
+        c_size -- int or tuple of int
+            Single int or two integers specifying replication along the cvect
+            direction.
+        """
+        system = atommantest.core.supersize(self, a_size, b_size, c_size)
+        self.__box = system.box
+        self.__atoms = system.atoms
+        self.pbc = system.pbc
     
     def load(self, style, input, **kwargs):
-        """Load a System."""
+        """
+        Read in system content from another format.  The system will
+        be updated and the list of atomic symbols added as a symbols attribute.
         
-        system, symbols = am.load(style, input, **kwargs)
+        Parameters
+        ----------
+        style : str
+            Indicates the format of the content to load as an atomman.System
+        input : str, file-like object or object
+            The content to load.
+        kwargs
+            Any extra keyword arguments to pass to the underlying load methods.
+        """
+        system, symbols = atommantest.core.load(style, input, **kwargs)
         self.__box = system.box
         self.__atoms = system.atoms
-        self.__pbc = system.pbc
-        self.__prop = system.prop
-        return symbols
-        
+        self.pbc = system.pbc
+        self.symbols = symbols
+    
     def model(self, **kwargs):
         """
-        Return a DataModelDict 'cell' representation of the system
+        Return a DataModelDict 'cell' representation of the system.
         
-        Keyword Arguments:
-        box_unit -- length unit to use for the box. Default is angstrom.
-        symbols -- list of atom-model symbols corresponding to the atom types. 
-        elements -- list of element tags corresponding to the atom types. 
-        prop_units -- dictionary where the keys are the property keys to 
-                      include, and the values are units to use. If not given, 
-                      only the positions in scaled units are included.
-        a_std, b_std, c_std -- standard deviation of lattice constants values to
-                               include as value errors.
+        Parameters
+        ----------
+        box_unit : str, optional
+            Length unit to use for the box. Default value is 'Angstrom'.
+        symbols : list, optional
+            list of atom-model symbols corresponding to the atom types.
+        elements : list, optional
+            list of element tags corresponding to the atom types.
+        prop_units : dict, optional
+            dictionary where the keys are the property keys to include, and
+            the values are units to use. If not given, only the positions in
+            scaled units are included.
+        a_std : float, optional
+            Standard deviation of a lattice constant to include if available.
+        b_std : float, optional
+            Standard deviation of b lattice constant to include if available.
+        c_std : float, optional
+            Standard deviation of c lattice constant to include if available.
         """
-        
-        box_unit = kwargs.get('box_unit', 'angstrom')
-        
-        symbols = kwargs.get('symbols', [None for i in xrange(self.natypes)])
-        if not isinstance(symbols, list):
-            symbols = [symbols]
-        assert len(symbols) == self.natypes, 'Number of symbols does not match number of atom types'
-        
-        elements = kwargs.get('elements', [None for i in xrange(self.natypes)])
-        if not isinstance(elements, list):
-            elements = [elements]
-        assert len(elements) == self.natypes, 'Number of elements does not match number of atom types'
-        
-        prop_units = kwargs.get('prop_units', {})
-        if 'pos' not in prop_units:
-            prop_units['pos'] = 'scaled'
-        
-        a = self.box.a
-        b = self.box.b
-        c = self.box.c
-        alpha = self.box.alpha
-        beta =  self.box.beta
-        gamma = self.box.gamma
-        
-        if 'a_std' in kwargs and 'b_std' in kwargs and 'c_std' in kwargs:
-            errors = True
-            a_std = kwargs['a_std']
-            b_std = kwargs['b_std']
-            c_std = kwargs['c_std']
-        else:
-            errors = False
-        
-    
-        model = DM()
-        model['cell'] = cell = DM()
-        
-        # Test for orthorhombic angles
-        if np.allclose([alpha, beta, gamma], [90.0, 90.0, 90.0]):
-            if np.isclose(b/a, 1.):
-                if np.isclose(c/a, 1.):
-                    
-                    # For cubic (a = b = c)
-                    c_family = 'cubic'
-                    
-                    cell[c_family] = DM()
-                    cell[c_family]['a'] = DM()
-                    
-                    a_ave = (a + b + c) / 3
-                    cell[c_family]['a']['value'] = uc.get_in_units(a_ave, box_unit)
-                    
-                    if errors is True:
-                        a_std_ave = (a_std + b_std + c_std) / 3
-                        cell[c_family]['a']['error'] = uc.get_in_units(a_std_ave, box_unit)
-                    
-                    cell[c_family]['a']['unit'] = box_unit
-                
-                else:
-                    # For tetrahedral (a = b != c)
-                    c_family = 'tetragonal'
-                    
-                    cell[c_family] = DM()
-                    cell[c_family]['a'] = DM()
-                    cell[c_family]['c'] = DM()
-                    
-                    a_ave = (a + b) / 2
-                    cell[c_family]['a']['value'] = uc.get_in_units(a_ave, box_unit)
-                    cell[c_family]['c']['value'] = uc.get_in_units(c, box_unit)
-                    
-                    if errors is True:
-                        a_std_ave = (a_std + b_std) / 2
-                        cell[c_family]['a']['error'] = uc.get_in_units(a_std_ave, box_unit)
-                        cell[c_family]['c']['error'] = uc.get_in_units(c_std, box_unit)
-                        
-                    cell[c_family]['a']['unit'] = box_unit
-                    cell[c_family]['c']['unit'] = box_unit
-
-            else:
-                # For orthorhombic (a != b != c)
-                c_family = 'orthorhombic'
-                
-                cell[c_family] = DM()
-                cell[c_family]['a'] = DM()
-                cell[c_family]['b'] = DM()
-                cell[c_family]['c'] = DM()
-                
-                cell[c_family]['a']['value'] = uc.get_in_units(a, box_unit)
-                cell[c_family]['b']['value'] = uc.get_in_units(b, box_unit)
-                cell[c_family]['c']['value'] = uc.get_in_units(c, box_unit)
-                
-                if errors is True:
-                    cell[c_family]['a']['error'] = uc.get_in_units(a_std, box_unit)
-                    cell[c_family]['b']['error'] = uc.get_in_units(b_std, box_unit)
-                    cell[c_family]['c']['error'] = uc.get_in_units(c_std, box_unit)
-                
-                cell[c_family]['a']['unit'] = box_unit
-                cell[c_family]['b']['unit'] = box_unit
-                cell[c_family]['c']['unit'] = box_unit
-        else:
-            raise ValueError('Non-orthogonal boxes comming')
-        
-        for i in xrange(self.natoms):
-            atom = DM()
             
-            atom['component'] = int(self.atoms_prop(a_id=i, key='atype'))
-            
-            symbol = symbols[self.atoms_prop(a_id=i, key='atype')-1]
-            if symbol is not None:
-                atom['symbol'] = symbol
-                
-            element = elements[self.atoms_prop(a_id=i, key='atype')-1]
-            if element is not None:
-                atom['element'] = element
-            
-            atom['position'] = DM()
-            if prop_units['pos'] == 'scaled':
-                atom['position']['value'] = list(self.atoms_prop(a_id=i, key='pos', scale=True))
-            else:
-                atom['position']['value'] = list(uc.get_in_units(self.atoms_prop(a_id=i, key='pos'), prop_units['pos']))
-            atom['position']['unit'] = prop_units['pos']
-                
-            for key, unit in prop_units.iteritems():
-                if key != 'pos' and key != 'atype':
-                    value = uc.get_in_units(self.atoms_prop(a_id=i, key=key), unit)
-                    try:
-                        value = list(value)
-                    except:
-                        pass
-                    prop = DM([('name',  key), 
-                                          ('value', value),
-                                          ('unit',  unit)])
-                    
-                    atom.append('property', prop)
-                    
-            
-            model.append('atom', atom)
-            
-        return DM([('atomic-system', model)])
-        
-    def supersize(self, a_size, b_size, c_size):
-        system = am.supersize(self, a_size, b_size, c_size)
-        self.__box = system.box
-        self.__atoms = system.atoms
-        self.__pbc = system.pbc
-        self.__prop = system.prop
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        return atommantest.convert.system_model.dump(self, **kwargs)

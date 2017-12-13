@@ -1,37 +1,60 @@
-import atomman as am
+# Standard Python libraries
+from __future__ import (absolute_import, print_function,
+                        division, unicode_literals)
+
+import atommantest.convert
+#import atommantest.lammps.atom_data
+#import atommantest.lammps.atom_dump
+from ..compatibility import range
 
 def load(style, input, **kwargs):
-    """Load a System."""
-
+    """
+    Load a System.
+    
+    Parameters
+    ----------
+    style : str
+        Indicates the format of the content to load as an atomman.System
+    input : str, file-like object or object
+        The content to load.
+    kwargs
+        Any extra keyword arguments to pass to the underlying load methods.
+        
+    Returns
+    -------
+    system : atomman.System
+        The system object associated with the data model.
+    symbols : list
+        The list of atomic symbols corresponding to the system's atom types.
+        Will be a list of None if symbol information is not in input.
+    """
+    
     if style == 'system_model':
-        key = kwargs.get('key', 'atomic-system')
-        index = kwargs.get('index', 0)
-        system, symbols = am.convert.system_model.load(input, key, index)
+        system, symbols = atommantest.convert.system_model.load(input, **kwargs)
         
     elif style == 'cif':
-        data_set = kwargs.get('data_set', None)
-        system, symbols = am.convert.cif.load(input)
+        system, symbols = atommantest.convert.cif.load(input, **kwargs)
         
-    elif style == 'atom_data':
-        pbc = kwargs.get('pbc', (True, True, True))
-        atom_style = kwargs.get('atom_style', 'atomic')
-        units = kwargs.get('units', 'metal')
-        system = am.lammps.atom_data.load(input, pbc, atom_style, units)
-        symbols = [None for i in xrange(system.natypes)]
+    #elif style == 'atom_data':
+    #    pbc = kwargs.get('pbc', (True, True, True))
+    #    atom_style = kwargs.get('atom_style', 'atomic')
+    #    units = kwargs.get('units', 'metal')
+    #    system = atommantest.lammps.atom_data.load(input, pbc, atom_style, units)
+    #    symbols = [None for i in range(system.natypes)]
         
-    elif style == 'atom_dump':
-        prop_info = kwargs.get('prop_info', None)
-        system = am.lammps.atom_dump.load(input, prop_info)
-        symbols = [None for i in xrange(system.natypes)]
+    #elif style == 'atom_dump':
+    #    prop_info = kwargs.get('prop_info', None)
+    #    system = atommantest.lammps.atom_dump.load(input, prop_info)
+    #    symbols = [None for i in range(system.natypes)]
         
     elif style == 'ase_Atoms':
-        system, symbols = am.convert.ase_Atoms.load(input)
+        system, symbols = atommantest.convert.ase_Atoms.load(input, **kwargs)
         
     elif style == 'pymatgen_Structure':
-        system, symbols = am.convert.pymatgen_Structure.load(input)
+        system, symbols = atommantest.convert.pymatgen_Structure.load(input, **kwargs)
     
     elif style == 'poscar':
-        system, symbols = am.convert.poscar.load(input)
+        system, symbols = atommantest.convert.poscar.load(input, **kwargs)
     
     else:
         raise ValueError('Unsupported style')

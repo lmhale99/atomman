@@ -6,7 +6,7 @@ from __future__ import (absolute_import, print_function,
 import numpy as np
 
 # atomman imports
-from .dvect import dvect
+from . import dvect
 
 def displacement(system_0, system_1, box_reference='final'):
     """

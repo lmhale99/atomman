@@ -6,9 +6,9 @@ from __future__ import (absolute_import, print_function,
 import numpy as np
 
 # atomman imports
-from .Atoms import Atoms
-from .Box import Box
-from .System import System
+from . import Atoms
+from . import Box
+import atommantest.core.System
 from ..compatibility import range, inttype
 
 def supersize(system, a_size, b_size, c_size):
@@ -61,11 +61,13 @@ def supersize(system, a_size, b_size, c_size):
                 sizes[i] = (sizes[i], 0)
         
         elif isinstance(sizes[i], tuple):
-            try:
-                assert len(sizes[i]) == 2
-                assert isinstance(sizes[i][0], (int, long)) and sizes[i][0] <= 0
-                assert isinstance(sizes[i][1], (int, long)) and sizes[i][1] >= 0
-            except:
+            if True:
+                assert len(sizes[i]) == 2, str(len(sizes[i]))
+                assert isinstance(sizes[i][0], inttype), str(sizes[i][0])
+                assert sizes[i][0] <= 0, str(sizes[i][0])
+                assert isinstance(sizes[i][1], inttype), str(sizes[i][1])
+                assert sizes[i][1] >= 0, str(sizes[i][1])
+            else:
                 raise TypeError('Invalid system multipliers')
         else:
             raise TypeError('Invalid system multipliers')
@@ -86,29 +88,30 @@ def supersize(system, a_size, b_size, c_size):
     atoms = Atoms(natoms=natoms)
     
     # Copy over all property values (except pos) using numpy broadcasting
-    props = system.atoms.prop.keys()
-    props.pop('pos')
-    for key in props:
+    for key in system.atoms_prop():
+        if key == 'pos':
+            continue
+    
         # Get old array
-        old = system.atoms.prop[key]
+        old = system.atoms.view[key]
         
         # Create new array and broadcast old to it
         new = np.empty((mults[0] * mults[1] * mults[2],) + old.shape, dtype = old.dtype)
         new[:] = old
         
         # Reshape new and save to atoms
-        n_shape = new.shape
-        n_shape = (n_shape[0] * n_shape[1],) + n_shape[2:]
-        atoms.prop[key] = np.array(new.reshape(n_shape))
+        new_shape = new.shape
+        new_shape = (new_shape[0] * new_shape[1],) + new_shape[2:]
+        atoms.view[key] = np.array(new.reshape(new_shape))
     
     # Expand spos using broadcasting
     new_spos = np.empty((mults[0] * mults[1] * mults[2],) + spos.shape)
     new_spos[:] = spos
     
     # Reshape spos
-    n_shape = n_spos.shape
-    n_shape = (n_shape[0]*n_shape[1],) + n_shape[2:]
-    n_spos = n_spos.reshape(n_shape)
+    new_shape = new_spos.shape
+    new_shape = (new_shape[0]*new_shape[1],) + new_shape[2:]
+    new_spos = new_spos.reshape(new_shape)
     
     # Use broadcasting to create arrays to add to spos
     test = np.empty(mults[0] * system.natoms)
@@ -139,6 +142,6 @@ def supersize(system, a_size, b_size, c_size):
          * np.array([1 / mults[0], 1 / mults[1], 1 / mults[2]]))
     
     # Save pos values, return new System
-    atoms.prop['pos'] = new_spos + xyz
+    atoms.view['pos'] = new_spos + xyz
     
-    return System(box=box, atoms=atoms, scale=True)
+    return atommantest.core.System(box=box, atoms=atoms, scale=True)

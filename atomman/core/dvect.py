@@ -7,11 +7,13 @@ import numpy as np
 
 # atomman imports
 try:
-    from .dvect_cython import dvect_cython
+    from .cythonized import dvect_cython
 except:
     cython_imported = False
 else:
     cython_imported = True
+    
+from ..compatibility import range
     
 def dvect(pos_0, pos_1, box, pbc, code=None):
     """
@@ -73,25 +75,25 @@ def dvect_python(pos_0, pos_1, box, pbc):
         periodic (True means periodic).
     """
     
-    # convert positions to np.arrays
+    # Convert positions to np.arrays
     pos_0 = np.asarray(pos_0)
     pos_1 = np.asarray(pos_1)
     
-    # get box values
+    # Get box values
     avect = box.avect
     bvect = box.bvect
     cvect = box.cvect 
     
-    # compute the non-periodic distances between pos_0 and pos_1
+    # Compute the non-periodic distances between pos_0 and pos_1
     delta = pos_1 - pos_0
     if delta.ndim == 1:
         delta = delta[np.newaxis]
     
-    # create iterators based on pbc
-    check = [xrange(1), xrange(1), xrange(1)]
-    for i in xrange(3):
+    # Create iterators based on pbc
+    check = [(0,), (0,), (0,)]
+    for i in range(3):
         if pbc[i]:
-            check[i] = xrange(-1, 2)
+            check[i] = (-1, 0, 1)
     
     # Add all combinations of system vectors to delta to identify shortest d vector(s)
     d = delta.copy()
