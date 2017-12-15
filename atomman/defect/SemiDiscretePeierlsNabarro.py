@@ -20,7 +20,10 @@ from .. import unitconvert as uc
 from .GammaSurface import GammaSurface
 
 class SemiDiscretePeierlsNabarro(object):
-    """Class representation of the Semi-Discrete Peierls-Nabarro dislocation model."""
+    """
+    Class representation of the Semi-Discrete varational Peierls-Nabarro 
+    dislocation model.
+    """
     
     def __init__(self, *args, **kwargs):
         """
@@ -82,19 +85,17 @@ class SemiDiscretePeierlsNabarro(object):
             are used.  Default value is all zeros.
         alpha : list of float, optional
             The alpha coefficient(s) used by the nonlocal energy term.  Default
-            value is [].
+            value is [0.0].
         beta : numpy.ndarray, optional
             The (3,3) array of beta coefficient(s) used by the gradient energy
             term.  Default value is all zeros.
-        cutoffelastic : float, optional
-            The cutoff distance to use for computing the configuration-
-            independent component to the elastic energy.  Default value is
-            500 Angstroms.
+        cutofflongrange : float, optional
+            The cutoff distance to use for computing the long-range energy.
+            Default value is 1000 Angstroms.
         burgers : numpy.ndarray, optional
-            The (3) array of the dislocation's Burgers vector relative to the
-            dislocation system.  Used only by the configuration-independent
-            elastic energy term.  Default value is all zeros (configuration-
-            independent component will be excluded).
+            The (3,) array of the dislocation's Burgers vector relative to the
+            dislocation system.  Used only by the long-range energy.  Default
+            value is all zeros (long-range energy will be excluded).
         fullstress : bool, optional
             Flag indicating which stress energy algorithm to use.  Default
             value is True.
@@ -128,10 +129,12 @@ class SemiDiscretePeierlsNabarro(object):
         
         # Set optional keyword parameters
         self.__tau = kwargs.get('tau', np.zeros((3,3)))
-        self.__alpha = kwargs.get('alpha', [])
+        self.__alpha = kwargs.get('alpha', [0.0])
+        if not isinstance(self.__alpha, list):
+            self.__alpha = [self.__alpha]
         self.__beta = kwargs.get('beta', np.zeros((3,3)))
-        self.__cutoffelastic = kwargs.get('cutoffelastic',
-                                          uc.set_in_units(1000, 'Angstrom'))
+        self.__cutofflongrange = kwargs.get('cutofflongrange',
+                                            uc.set_in_units(1000, 'Angstrom'))
         self.__burgers = kwargs.get('burgers', np.zeros(3))
         self.__fullstress = kwargs.get('fullstress', True)
         self.__cdiffelastic = kwargs.get('cdiffelastic', False)
@@ -175,13 +178,11 @@ class SemiDiscretePeierlsNabarro(object):
         beta : numpy.ndarray, optional
             The (3,3) array of beta coefficient(s) used by the gradient energy
             term.
-        cutoffelastic : float, optional
-            The cutoff distance to use for computing the configuration-
-            independent component to the elastic energy.
+        cutofflongrange : float, optional
+            The cutoff distance to use for computing the long-range energy.
         burgers : numpy.ndarray, optional
-            The (3) array of the dislocation's Burgers vector relative to the
-            dislocation system.  Used only by the configuration-independent
-            elastic energy term.
+            The (3,) array of the dislocation's Burgers vector relative to the
+            dislocation system.  Used only by the long-range energy.
         fullstress : bool, optional
             Flag indicating which stress energy algorithm to use.
         cdiffelastic : bool, optional
@@ -233,8 +234,11 @@ class SemiDiscretePeierlsNabarro(object):
         self.__K_tensor = kwargs.pop('K_tensor', self.__K_tensor)
         self.__tau = kwargs.pop('tau', self.__tau)
         self.__alpha = kwargs.pop('alpha', self.__alpha)
+        if not isinstance(self.__alpha, list):
+            self.__alpha = [self.__alpha]
         self.__beta = kwargs.pop('beta', self.__beta)
-        self.__cutoffelastic = kwargs.pop('cutoffelastic', self.__cutoffelastic)
+        self.__cutofflongrange = kwargs.pop('cutofflongrange', 
+                                            self.__cutofflongrange)
         self.__burgers = kwargs.pop('burgers', self.__burgers)
         self.__fullstress = kwargs.pop('fullstress', self.__fullstress)
         self.__cdiffelastic = kwargs.pop('cdiffelastic', self.__cdiffelastic)
@@ -253,12 +257,12 @@ class SemiDiscretePeierlsNabarro(object):
     def x(self):
         """numpy.ndarray : The x coordinates."""
         return deepcopy(self.__x)
-        
+    
     @property
     def disregistry(self):
         """numpy.ndarray : The disregistry vector for each x coordinate."""
         return deepcopy(self.__disregistry)
-        
+    
     @property
     def gamma(self):
         """atomman.defect.GammaSurface : The stacking fault map."""
@@ -268,47 +272,47 @@ class SemiDiscretePeierlsNabarro(object):
     def axes(self):
         """numpy.ndarray : Axes for orienting the disregistry to gamma."""
         return deepcopy(self.__axes)
-        
+    
     @property
     def K_tensor(self):
         """numpy.ndarray : Dislocation energy coefficient tensor for system."""
         return deepcopy(self.__K_tensor)
-        
+    
     @property
     def tau(self):
         """numpy.ndarray : The applied stress state."""
         return deepcopy(self.__tau)
-        
+    
     @property
     def alpha(self):
         """list of float : Coefficients for nonlocal energy correction."""
         return deepcopy(self.__alpha)
-        
+    
     @property
     def beta(self):
         """numpy.ndarray : Coefficients for gradient energy correction."""
         return deepcopy(self.__beta)
-        
+    
     @property
-    def cutoffelastic(self):
-        """float : Cutoff distance for configuration-independent elastic energy."""
-        return self.__cutoffelastic
-        
+    def cutofflongrange(self):
+        """float : Cutoff distance for long-range elastic energy."""
+        return self.__cutofflongrange
+    
     @property
     def burgers(self):
-        """numpy.ndarray : Burgers vector used for configuration-independent elastic energy."""
+        """numpy.ndarray : Full Burgers vector for long-range elastic energy."""
         return deepcopy(self.__burgers)
-        
+    
     @property
     def fullstress(self):
         """bool : Flag indicating which stress algorithm was used."""
         return self.__fullstress
-        
+    
     @property
     def cdiffelastic(self):
         """bool : Flag indicating if elastic energy used central difference for computing the dislocation density."""
         return self.__cdiffelastic
-        
+    
     @property
     def cdiffgradient(self):
         """bool : Flag indicating if gradient energy used central difference for computing the dislocation density."""
@@ -323,12 +327,12 @@ class SemiDiscretePeierlsNabarro(object):
     def min_method(self):
         """str : scipy.optimize.minimize method used."""
         return self.__min_method
-        
+    
     @property
     def min_options(self):
         """dict : scipy.optimize.minimize options used."""
         return self.__min_options
-        
+    
     def disldensity(self, x=None, disregistry=None, cdiff=False):
         """
         Computes the dislocation density as the numerical derivative of
@@ -423,13 +427,10 @@ class SemiDiscretePeierlsNabarro(object):
     
     def elastic_energy(self, x=None, disregistry=None):
         """
-        Computes the elastic energy for the dislocation based on the
-        dislocation density, K_tensor, cutoffelastic, and burgers vector.
-        The first component is dependent on the configuration, while the
-        second is not (constant during minimization).
+        Computes the short-range configuration-dependent elastic energy term
+        for the dislocation based on the dislocation density and K_tensor.
         
             E_elastic = 1/(4π) Σ_i Σ_j χ(i,j,Δx) K_lm ρ_l[i] ρ_m[j]
-                        + 1/(4π) K_lm b_l b_m ln(L)
                         
             χ(i,j,Δx) = (3/2) Δx² + ψ(i-1,j-1,Δx) + ψ(i,j,Δx) - ψ(i,j-1,Δx) - ψ(j,i-1,Δx)
             
@@ -486,26 +487,41 @@ class SemiDiscretePeierlsNabarro(object):
         dx = x[1] - x[0]
         cdiff = self.cdiffelastic
         Kij = self.__K_tensor
-        b = self.__burgers
-        L = self.__cutoffelastic
         
         rho = self.disldensity(x=x, disregistry=d, cdiff=cdiff)[1]
         j = np.arange(len(rho), dtype=int)
         
         energy = 0.0
         
-        # Compute configuration-dependent component
-        # (looping over i, vectorization over j)
+        # Compute elastic energy (looping over i, vectorization over j)
         # 1/(4π) Σ_i Σ_j χ(i,j,Δx) K_lm ρ_l[i] ρ_m[j]
         for i in j:
             energy += np.sum(chi(i, j, dx) * np.inner(rho[i].dot(Kij), rho)) / (4 * np.pi)
         
-        # Compute configuration-independent component
-        # 1/(4π) K_lm b_l b_m ln(L)
-        energy += np.inner(b.dot(Kij), b) * np.log(L) / (2 * np.pi)
-        
         return energy
-            
+    
+    def longrange_energy(self):
+        """
+        Computes the long-range elastic energy term for the dislocation using
+        the K_tensor, Burgers vector and long-range cutoff.  This term is
+        configuration-independent and thus the method takes no parameters.
+        
+            E_longrange = 1/(2π) K_lm b_l b_m ln(L)
+        
+        Returns
+        -------
+        float
+            The long-range energy for the dislocation.
+        """
+        # Extract values
+        Kij = self.__K_tensor
+        b = self.__burgers
+        L = self.__cutofflongrange
+        
+        # Compute long-range energy
+        # 1/(2π) K_lm b_l b_m ln(L)
+        return np.inner(b.dot(Kij), b) * np.log(L) / (2 * np.pi)
+    
     def stress_energy(self, x=None, disregistry=None):
         """
         Computes the stress energy due to the applied stress, tau.
@@ -551,7 +567,7 @@ class SemiDiscretePeierlsNabarro(object):
         else:
             # -1/2 Σ_i τ_2l (δ_l[i] + δ_l[i+1]) Δx
             return -0.5 * np.sum(np.inner(tau[1,:], (d[:-1] + d[1:]) * dx))
-            
+    
     def gradient_energy(self, x=None, disregistry=None):
         """
         Computes the gradient energy correction using beta coefficients.
@@ -587,7 +603,7 @@ class SemiDiscretePeierlsNabarro(object):
         
         # Σ_j β_lj / 4 Σ_i ρ_l[i]² Δx
         return np.sum( np.inner(rho**2 * dx, beta) ) / 4
-            
+    
     def nonlocal_energy(self, x=None, disregistry=None):
         """
         Computes the nonlocal energy correction using alpha coefficient(s).
@@ -627,7 +643,7 @@ class SemiDiscretePeierlsNabarro(object):
             energy += a * np.sum(d[m:-m] * dd * dx)
             
         return energy
-            
+    
     def total_energy(self, x=None, disregistry=None):
         """
         Computes the total energy for the dislocation.
@@ -655,10 +671,11 @@ class SemiDiscretePeierlsNabarro(object):
             
         return (self.misfit_energy(x, disregistry)
                 + self.elastic_energy(x, disregistry)
+                + self.longrange_energy()
                 + self.stress_energy(x, disregistry)
                 + self.nonlocal_energy(x, disregistry)
                 + self.gradient_energy(x, disregistry))
-            
+    
     def load(self, model, gamma=None):
         """
         Load solution from a data model.
@@ -681,7 +698,7 @@ class SemiDiscretePeierlsNabarro(object):
         self.__tau = uc.value_unit(params['tau'])
         self.__alpha = uc.value_unit(params['alpha'])
         self.__beta = uc.value_unit(params['beta'])
-        self.__cutoffelastic = uc.value_unit(params['cutoffelastic'])
+        self.__cutofflongrange = uc.value_unit(params['cutofflongrange'])
         self.__burgers = uc.value_unit(params['burgers'])
         self.__fullstress = params['fullstress']
         self.__cdiffelastic = params['cdiffelastic']
@@ -689,7 +706,7 @@ class SemiDiscretePeierlsNabarro(object):
         self.__cdiffstress = params['cdiffstress']
         self.__min_method = params['min_method']
         self.__min_options = params['min_options']
-            
+        
         # Load gamma
         if gamma is None:
             try:
@@ -734,16 +751,17 @@ class SemiDiscretePeierlsNabarro(object):
         params['cdiffelastic'] = self.cdiffelastic
         params['cdiffgradient'] = self.cdiffgradient
         params['cdiffstress'] = self.cdiffstress
-        params['cutoffelastic'] = uc.model(self.__cutoffelastic, length_unit)
+        params['cutofflongrange'] = uc.model(self.__cutofflongrange, length_unit)
         params['burgers'] = uc.model(self.__burgers, length_unit)
         params['fullstress'] = self.fullstress
         params['min_method'] = self.min_method
         params['min_options'] = self.min_options
         
         if include_gamma is True:
-            sdpn['generalized-stacking-fault'] = self.__gamma.model(length_unit=length_unit,
-                                                                  energy_unit=energy_unit,
-                                                                  pressure_unit=pressure_unit)
+            sdpn['generalized-stacking-fault'] = self.__gamma.model(
+                                                  length_unit=length_unit,
+                                                  energy_unit=energy_unit,
+                                                  pressure_unit=pressure_unit)
         
         sdpn['solution'] = solution = DM()
         solution['x'] = uc.model(self.__x, length_unit)
