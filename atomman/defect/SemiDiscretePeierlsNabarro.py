@@ -252,6 +252,8 @@ class SemiDiscretePeierlsNabarro(object):
         res = minimize(min_func, d13, args=(first, last),
                        method=self.min_method, options=self.min_options)
         self.__disregistry = recompose(res.x, first, last)
+        
+        self.__res = res
     
     @property
     def x(self):
@@ -332,6 +334,11 @@ class SemiDiscretePeierlsNabarro(object):
     def min_options(self):
         """dict : scipy.optimize.minimize options used."""
         return self.__min_options
+        
+    @property
+    def res(self):
+        """OptimizeResult : scipy.optimize.minimize result."""
+        return self.__res
     
     def disldensity(self, x=None, disregistry=None, cdiff=False):
         """
@@ -697,6 +704,8 @@ class SemiDiscretePeierlsNabarro(object):
         self.__K_tensor = uc.value_unit(params['K_tensor'])
         self.__tau = uc.value_unit(params['tau'])
         self.__alpha = uc.value_unit(params['alpha'])
+        if not isinstance(self.__alpha, list):
+            self.__alpha = [self.__alpha]
         self.__beta = uc.value_unit(params['beta'])
         self.__cutofflongrange = uc.value_unit(params['cutofflongrange'])
         self.__burgers = uc.value_unit(params['burgers'])
@@ -747,6 +756,7 @@ class SemiDiscretePeierlsNabarro(object):
         params['K_tensor'] = uc.model(self.__K_tensor, pressure_unit)
         params['tau'] = uc.model(self.__tau, pressure_unit)
         params['alpha'] = uc.model(self.__alpha, pressure_unit+'/'+length_unit)
+        
         params['beta'] = uc.model(self.__beta, pressure_unit+'*'+length_unit)
         params['cdiffelastic'] = self.cdiffelastic
         params['cdiffgradient'] = self.cdiffgradient
