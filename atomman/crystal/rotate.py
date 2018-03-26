@@ -6,8 +6,8 @@ from __future__ import (absolute_import, print_function,
 import numpy as np
 
 # atomman imports
-import atomman.core.System
-import atomman.core.supersize
+import atommantest.core.System
+import atommantest.core.supersize
 from .miller import vectortocartesian, vector4to3
 
 def rotate(system, hkls, tol=1e-5):
@@ -25,6 +25,11 @@ def rotate(system, hkls, tol=1e-5):
         A (3, 3) array of the Miller crystal vectors or a (3, 4) array of
         Miller-Bravais hexagonal crystal vectors to use in transforming the
         system.
+    tol : float, optional
+        Tolerance parameter used in rounding atomic positions near the
+        boundaries to the boundary values.  In box-relative coordinates, any
+        atomic positions within tol of 0 or 1 will be rounded to 0 or 1,
+        respectively.  Default value is 1e-5.
         
     Returns
     -------
@@ -38,7 +43,7 @@ def rotate(system, hkls, tol=1e-5):
         hkls = np.asarray(hkls, dtype='int64')
        
         if hkls.shape == (3, 4):
-            hkls = atomman.crystal.miller.vector4to3(hkls)
+            hkls = atommantest.crystal.miller.vector4to3(hkls)
         assert hkls.shape == (3, 3)
     except:
         raise ValueError('Invalid hkls crystal indices')
@@ -49,7 +54,7 @@ def rotate(system, hkls, tol=1e-5):
                                                   system.box.cvect)))
     
     # Convert hkls to Cartesian units and compute new volume and natoms
-    newvects = atomman.crystal.miller.vectortocartesian(hkls, box=system.box)
+    newvects = atommantest.crystal.miller.vectortocartesian(hkls, box=system.box)
     newvolume = np.abs(newvects[0].dot(np.cross(newvects[1], newvects[2])))
     newnatoms = int(round(newvolume / volume) * natoms)
     
@@ -72,7 +77,7 @@ def rotate(system, hkls, tol=1e-5):
     a_mults = (corners[:,0].min()-1, corners[:,0].max()+1)
     b_mults = (corners[:,1].min()-1, corners[:,1].max()+1)
     c_mults = (corners[:,2].min()-1, corners[:,2].max()+1)
-    system2 = atomman.core.supersize(system, a_mults, b_mults, c_mults)
+    system2 = atommantest.core.supersize(system, a_mults, b_mults, c_mults)
     
     # Change system.box.vects to newvects
     system2.box_set(vects=newvects, scale=False)
@@ -89,7 +94,7 @@ def rotate(system, hkls, tol=1e-5):
     assert len(aindex[0]) == newnatoms, 'Filtering failed: ' + str(newnatoms) + 'atoms expected, ' + str(len(aindex[0])) + ' found'
     
     # Build new system
-    newsystem = atomman.core.System(atoms=system2.atoms[aindex], box=system2.box)
+    newsystem = atommantest.core.System(atoms=system2.atoms[aindex], box=system2.box)
     
     # Normalize box vectors
     newsystem.box_set(a=newsystem.box.a, b=newsystem.box.b, c=newsystem.box.c,
