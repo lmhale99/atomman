@@ -6,9 +6,9 @@ from __future__ import (absolute_import, print_function,
 import numpy as np
 
 # atomman imports
-import atommantest.core.Atoms
-import atommantest.core.Box
-import atommantest.core.System
+import atomman.core.Atoms
+import atomman.core.Box
+import atomman.core.System
 from ...compatibility import range
 from ...tools import uber_open_rmode
 
@@ -41,7 +41,7 @@ def load(poscar, prop={}):
     avect = np.array(lines[2].split(), dtype='float64') * box_scale
     bvect = np.array(lines[3].split(), dtype='float64') * box_scale
     cvect = np.array(lines[4].split(), dtype='float64') * box_scale
-    box = atommantest.core.Box(avect=avect, bvect=bvect, cvect=cvect)
+    box = atomman.core.Box(avect=avect, bvect=bvect, cvect=cvect)
     
     # Read in elements, number of types, and style info
     try:
@@ -90,7 +90,7 @@ def load(poscar, prop={}):
     prop['atype'] = atype
     prop['pos'] = pos
     
-    atoms = atommantest.core.Atoms(prop=prop)
-    system = atommantest.core.System(atoms=atoms, box=box, scale=scale)
+    atoms = atomman.core.Atoms(prop=prop)
+    system = atomman.core.System(atoms=atoms, box=box, scale=scale)
     
     return system, elements

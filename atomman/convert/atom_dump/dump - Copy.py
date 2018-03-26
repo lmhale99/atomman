@@ -4,7 +4,7 @@ from __future__ import (absolute_import, print_function,
 from io import StringIO, open
 
 # atomman imports
-import atommantest.unitconvert as uc
+import atomman.unitconvert as uc
 from ...lammps import style
 from .. import table
 from .standard_prop_info import standard_prop_info

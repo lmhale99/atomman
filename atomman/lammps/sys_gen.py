@@ -6,14 +6,14 @@ from __future__ import (absolute_import, print_function,
 import numpy as np
 
 # atomman imports
-import atommantest.Atoms
-import atommantest.System
+import atomman.Atoms
+import atomman.System
 from ..compatibility import range
 
 def sys_gen(units = 'metal',
             atom_style = 'atomic',
             pbc = (True, True, True),
-            ucell = atommantest.System(atoms=atommantest.Atoms(atype=1, pos=[[0.0, 0.0, 0.0],
+            ucell = atomman.System(atoms=atomman.Atoms(atype=1, pos=[[0.0, 0.0, 0.0],
                                                      [0.5, 0.5, 0.0],
                                                      [0.0, 0.5, 0.5],
                                                      [0.5, 0.0, 0.5]])),

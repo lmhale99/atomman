@@ -4,10 +4,10 @@ from __future__ import (absolute_import, print_function,
 from collections import OrderedDict
                         
 # atomman imports
-import atommantest.unitconvert as uc
-import atommantest.core.Atoms
-import atommantest.core.Box
-import atommantest.core.System
+import atomman.unitconvert as uc
+import atomman.core.Atoms
+import atomman.core.Box
+import atomman.core.System
 from .process_prop_info import *
 from ...lammps import style
 from .. import table
@@ -167,12 +167,12 @@ def load(data, lammps_units='metal', prop_name=None,
                         atomsstart = i + 1
     
     # Create system
-    box = atommantest.core.Box(xlo=xlo, xhi=xhi,
+    box = atomman.core.Box(xlo=xlo, xhi=xhi,
                                ylo=ylo, yhi=yhi,
                                zlo=zlo, zhi=zhi,
                                xy=xy, xz=xz, yz=yz)
-    atoms=atommantest.core.Atoms(natoms=natoms)
-    system = atommantest.core.System(box=box, atoms=atoms, pbc=pbc)
+    atoms=atomman.core.Atoms(natoms=natoms)
+    system = atomman.core.System(box=box, atoms=atoms, pbc=pbc)
     
     # Generate prop_info
     prop_info = process_prop_info(prop_name=prop_name,

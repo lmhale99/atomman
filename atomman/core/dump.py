@@ -2,7 +2,7 @@
 from __future__ import (absolute_import, print_function,
                         division, unicode_literals)
 
-import atommantest.convert
+import atomman.convert
 
 def dump(style, system, f=None, **kwargs):
     """
@@ -27,27 +27,27 @@ def dump(style, system, f=None, **kwargs):
     """
     
     if style == 'system_model':
-        return atommantest.convert.system_model.dump(system, f=f, **kwargs)
+        return atomman.convert.system_model.dump(system, f=f, **kwargs)
     
     elif style == 'atom_data':
-        return atommantest.convert.atom_data.dump(system, f=f, **kwargs)
+        return atomman.convert.atom_data.dump(system, f=f, **kwargs)
     
     elif style == 'atom_dump':
-        return atommantest.convert.atom_dump.dump(system, f=f, **kwargs)
+        return atomman.convert.atom_dump.dump(system, f=f, **kwargs)
     
     elif style == 'table':
-        return atommantest.convert.table.dump(system, f=f, **kwargs)
+        return atomman.convert.table.dump(system, f=f, **kwargs)
     
     elif style == 'ase_Atoms':
         assert f is None, 'f not allowed with style ase_Atoms'
-        return atommantest.convert.ase_Atoms.dump(system, **kwargs)
+        return atomman.convert.ase_Atoms.dump(system, **kwargs)
     
     elif style == 'pymatgen_Structure':
         assert f is None, 'f not allowed with style pymatgen_Structure'
-        return atommantest.convert.pymatgen_Structure.dump(system, **kwargs)
+        return atomman.convert.pymatgen_Structure.dump(system, **kwargs)
     
     elif style == 'poscar':
-        return atommantest.convert.poscar.dump(system, f=f, **kwargs)
+        return atomman.convert.poscar.dump(system, f=f, **kwargs)
     
     else:
         raise ValueError('Unsupported style')

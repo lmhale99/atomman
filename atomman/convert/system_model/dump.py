@@ -6,9 +6,9 @@ from __future__ import (absolute_import, print_function,
 from DataModelDict import DataModelDict as DM
 
 # atomman imports
-import atommantest.unitconvert as uc
-from atommantest.compatibility import range, iteritems
-import atommantest.crystal
+import atomman.unitconvert as uc
+from atomman.compatibility import range, iteritems
+import atomman.crystal
 
 def dump(system, **kwargs):
     """
@@ -91,7 +91,7 @@ def dump(system, **kwargs):
     model['cell'] = cell = DM()
     
     # Test crystal family
-    c_family = atommantest.crystal.identifyfamily(system.box)
+    c_family = atomman.crystal.identifyfamily(system.box)
     if c_family is None:
         c_family = 'triclinic'
     cell[c_family] = DM()

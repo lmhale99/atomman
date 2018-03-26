@@ -5,7 +5,7 @@ from io import StringIO, open
 from collections import OrderedDict
 
 # atomman imports
-import atommantest.unitconvert as uc
+import atomman.unitconvert as uc
 from ...lammps import style
 from .process_prop_info import process_prop_info
 from ...compatibility import range

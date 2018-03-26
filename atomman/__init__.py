@@ -16,10 +16,10 @@ from . import unitconvert
 from . import crystal
 from .core import *
 #from . import defect
-#from . import lammps
+from . import lammps
 from . import tools
 from . import convert
-#from . import plot
+from . import plot
 
 # Define default working units
 unitconvert.reset_units(length = 'angstrom', mass = 'amu', energy='eV', charge='e')

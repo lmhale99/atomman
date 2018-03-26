@@ -10,11 +10,11 @@ import numpy as np
 from DataModelDict import DataModelDict as DM
 
 # atomman imports
-import atommantest.core.Atoms
-import atommantest.core.Box
-import atommantest.core.System
-import atommantest.unitconvert as uc
-from atommantest.compatibility import range, iteritems
+import atomman.core.Atoms
+import atomman.core.Box
+import atomman.core.System
+import atomman.unitconvert as uc
+from atomman.compatibility import range, iteritems
 
 def load(model, key='atomic-system', index=0):
     """
@@ -93,7 +93,7 @@ def load(model, key='atomic-system', index=0):
         beta = cell['beta']
         gamma = cell['gamma']
     
-    box = atommantest.core.Box(a=a, b=b, c=c, alpha=alpha, beta=beta, gamma=gamma)
+    box = atomman.core.Box(a=a, b=b, c=c, alpha=alpha, beta=beta, gamma=gamma)
     
     # Count atypes and generate list of symbols if given
     atoms = []
@@ -161,7 +161,7 @@ def load(model, key='atomic-system', index=0):
     else:
         scale=False
     
-    atoms = atommantest.core.Atoms(**prop)
-    system = atommantest.core.System(box=box, atoms=atoms, scale=scale)
+    atoms = atomman.core.Atoms(**prop)
+    system = atomman.core.System(box=box, atoms=atoms, scale=scale)
     
     return system, symbols

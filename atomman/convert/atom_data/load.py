@@ -3,13 +3,13 @@ from __future__ import (absolute_import, print_function,
                         division, unicode_literals)
 
 # atomman imports
-import atommantest.unitconvert as uc
+import atomman.unitconvert as uc
 from .atoms_prop_info import atoms_prop_info
 from .velocities_prop_info import velocities_prop_info
-from atommantest.lammps import style
-import atommantest.core.Atoms
-import atommantest.core.Box
-import atommantest.core.System
+from atomman.lammps import style
+import atomman.core.Atoms
+import atomman.core.Box
+import atomman.core.System
 from .. import table
 from ...tools import uber_open_rmode
 
@@ -91,12 +91,12 @@ def load(data, pbc=(True, True, True), atom_style='atomic', units='metal'):
                     velocitiesstart = i + 1
     
     # Create system
-    box = atommantest.core.Box(xlo=xlo, xhi=xhi,
+    box = atomman.core.Box(xlo=xlo, xhi=xhi,
                                ylo=ylo, yhi=yhi,
                                zlo=zlo, zhi=zhi,
                                xy=xy, xz=xz, yz=yz)
-    atoms=atommantest.core.Atoms(natoms=natoms)
-    system = atommantest.core.System(box=box, atoms=atoms, pbc=pbc)
+    atoms=atomman.core.Atoms(natoms=natoms)
+    system = atomman.core.System(box=box, atoms=atoms, pbc=pbc)
     
     # Read in Atoms info
     if atomsstart is not None:

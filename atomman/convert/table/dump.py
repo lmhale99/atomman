@@ -4,7 +4,7 @@ from __future__ import (absolute_import, print_function,
 from collections import OrderedDict
 
 # atomman imports
-import atommantest.unitconvert as uc
+import atomman.unitconvert as uc
 from .process_prop_info import process_prop_info
 from ...compatibility import range
 from ...tools import indexstr

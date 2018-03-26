@@ -3,7 +3,7 @@ from __future__ import (absolute_import, print_function,
                         division, unicode_literals)
 
 # atomman imports
-from atommantest.lammps import style
+from atomman.lammps import style
 
 def velocities_prop_info(atom_style='atomic', units='metal'):
     """

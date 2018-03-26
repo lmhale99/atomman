@@ -6,9 +6,9 @@ from __future__ import (absolute_import, print_function,
 import numpy as np
 
 # atomman imports
-import atommantest.core.Atoms
-import atommantest.core.Box
-import atommantest.core.System
+import atomman.core.Atoms
+import atomman.core.Box
+import atomman.core.System
 
 # https://wiki.fysik.dtu.dk/ase/
 try:
@@ -39,7 +39,7 @@ def load(aseatoms, prop={}):
     assert has_ase, 'ase not imported'
     
     # Get box/cell information
-    box = atommantest.core.Box(vects = aseatoms.get_cell())
+    box = atomman.core.Box(vects = aseatoms.get_cell())
     pbc = aseatoms.get_pbc()
     
     # Get element information
@@ -49,9 +49,9 @@ def load(aseatoms, prop={}):
     # Get atomic information
     prop['atype'] = atype + 1
     prop['pos'] = aseatoms.get_positions()
-    atoms = atommantest.core.Atoms(prop=prop)
+    atoms = atomman.core.Atoms(prop=prop)
     
     # Build system
-    system = atommantest.core.System(atoms=atoms, box=box, pbc=pbc)
+    system = atomman.core.System(atoms=atoms, box=box, pbc=pbc)
     
     return system, elements

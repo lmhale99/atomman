@@ -11,7 +11,7 @@ from DataModelDict import DataModelDict as DM
 
 # atomman imports
 from ..tools import axes_check
-import atommantest.unitconvert as uc
+import atomman.unitconvert as uc
 from ..compatibility import iteritems, range
 
 class ElasticConstants(object):

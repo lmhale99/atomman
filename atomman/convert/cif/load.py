@@ -14,9 +14,9 @@ except:
     has_diffpy = False
 
 # atomman imports
-import atommantest.core.Atoms
-import atommantest.core.Box
-import atommantest.core.System
+import atomman.core.Atoms
+import atomman.core.Box
+import atomman.core.System
 from ...tools import uber_open_rmode
 
 def load(cif):
@@ -58,13 +58,13 @@ def load(cif):
             atype.append(a1)
             pos.append(p1)
     
-    atoms = atommantest.core.Atoms(atype=atype, pos=pos)
+    atoms = atomman.core.Atoms(atype=atype, pos=pos)
     
-    box = atommantest.core.Box(a=dps.lattice.a,
+    box = atomman.core.Box(a=dps.lattice.a,
                                b=dps.lattice.b,
                                c=dps.lattice.c,
                                alpha=dps.lattice.alpha,
                                beta=dps.lattice.beta,
                                gamma=dps.lattice.gamma)
     
-    return atommantest.core.System(atoms=atoms, box=box, scale=True), list(elements)
+    return atomman.core.System(atoms=atoms, box=box, scale=True), list(elements)

@@ -6,9 +6,9 @@ from __future__ import (absolute_import, print_function,
 import numpy as np
 
 # atomman imports
-import atommantest.core.Atoms
-import atommantest.core.Box
-import atommantest.core.System
+import atomman.core.Atoms
+import atomman.core.Box
+import atomman.core.System
 
 #http://pymatgen.org
 try:
@@ -37,7 +37,7 @@ def load(structure):
     assert has_pmg, 'pymatgen not imported'
     
     # Get box/lattice information
-    box = atommantest.core.Box(vects = structure.lattice.matrix)
+    box = atomman.core.Box(vects = structure.lattice.matrix)
     
     # Get element information
     all_elements =  np.array([str(symbol) for symbol in structure.species])
@@ -47,10 +47,10 @@ def load(structure):
     prop = structure.site_properties
     prop['atype'] = atype + 1
     prop['pos'] = structure.cart_coords
-    atoms = atommantest.core.Atoms(prop=prop)
+    atoms = atomman.core.Atoms(prop=prop)
     
     # Build system
-    system = atommantest.core.System(atoms=atoms, box=box)
+    system = atomman.core.System(atoms=atoms, box=box)
     
     return system, list(elements)
     

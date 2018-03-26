@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 
 # atomman imports
-import atommantest.unitconvert as uc
+import atomman.unitconvert as uc
 from ..tools import axes_check, vect_angle
 from ..compatibility import inttype
 

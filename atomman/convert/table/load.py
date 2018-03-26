@@ -9,9 +9,9 @@ import numpy as np
 import pandas as pd
 
 # atomman imports
-import atommantest.core.Atoms
-import atommantest.core.System
-import atommantest.unitconvert as uc
+import atomman.core.Atoms
+import atomman.core.System
+import atomman.unitconvert as uc
 from .process_prop_info import process_prop_info
 from ...tools import uber_open_rmode
 
@@ -81,7 +81,7 @@ def load(table, box, system=None, prop_name=None, table_name=None, shape=None,
     # Generate System
     natoms = len(df)
     if system is None:
-        system = atommantest.core.System(atoms=atommantest.core.Atoms(natoms=natoms), box=box)
+        system = atomman.core.System(atoms=atomman.core.Atoms(natoms=natoms), box=box)
     
     # Loop over all properties
     for prop in prop_info:
