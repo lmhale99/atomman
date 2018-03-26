@@ -4,13 +4,14 @@ from setuptools import setup, find_packages
 def getversion():
     with open(os.path.join('atomman', 'VERSION')) as version_file:
         version = version_file.read().strip()
+    return version
 
 def getreadme():
     with open('README.rst') as f:
         return f.read()
     
 setup(name = 'atomman',
-      version = '1.1.3',
+      version = getversion(),
       description = 'Atomistic Manipulation Toolkit',
       long_description = getreadme(),
       classifiers = [

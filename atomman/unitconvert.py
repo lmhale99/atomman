@@ -6,6 +6,7 @@ import ast
 # https://pypi.python.org/pypi/numericalunits
 import numericalunits as nu
 
+# https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
 
 # http://www.numpy.org/
@@ -214,18 +215,12 @@ def value_unit(term):
     unit = term.get('unit', None)
     value = set_in_units(term['value'], unit)
     
-    if 'index' in term:
-        indices = []
-        for index in term['index']:
-            indices.append(np.array(index.split(), dtype='int64'))
-        indices = np.array(indices)
-
-        newvalue = np.zeros(tuple(np.max(indices, axis=0)))
-        newvalue[list((indices-1).T)] = value
-        value = newvalue
+    if 'shape' in term:
+        shape = tuple(term['shape'])
+        value = value.reshape(shape)
     
     return value
-
+    
 def error_unit(term):
     """
     Reads numerical error from dictionary containing 'error' and 'unit' keys.
@@ -245,18 +240,12 @@ def error_unit(term):
     unit = term.get('unit', None)
     error = set_in_units(term['error'], unit)
     
-    if 'index' in term:
-        indices = []
-        for index in term['index']:
-            indices.append(np.array(index.split(), dtype='int64'))
-        indices = np.array(indices)
-
-        newvalue = np.zeros(tuple(np.max(indices, axis=0)))
-        newvalue[list((indices-1).T)] = error
-        error = newvalue
+    if 'shape' in term:
+        shape = tuple(term['shape'])
+        error = error.reshape(shape)
     
     return error
-
+    
 def model(value, units, error=None):
     """
     Generates DataModelDict representation of data.
@@ -295,19 +284,14 @@ def model(value, units, error=None):
         if error is not None:
             datamodel['error'] = list(error)
             
-    # Higher-order tensor
+    # Higher-order array requires shape
     else:
         shape = value.shape
         datamodel['value'] = list(value.flatten())
         if error is not None:
             datamodel['error'] = list(error.flatten())
-        datamodel['index'] = []
-        for index in np.array(np.unravel_index(range(len(datamodel['value'])), shape)).T:
-            strindex = []
-            for i in index:
-                strindex.append(str(i+1))
-            datamodel['index'].append(' '.join(strindex))
-        
+        datamodel['shape'] = list(shape)
+    
     datamodel['unit'] = units
     return datamodel
 
@@ -420,6 +404,6 @@ def parse(units):
     # Else assume units is already a number
     else:
         return units
-   
+
 # Initial reset.  Only called first time module is loaded.
 reset_units()

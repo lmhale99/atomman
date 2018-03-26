@@ -92,14 +92,14 @@ class Stroh(object):
         k = 1. / (2. * np.einsum('si,si->s', A, L))
         
         #Calculation verification checks
-        #try:
-        #    assert np.allclose(np.einsum('s,si,sj->ij', k,A,L), np.identity(3, dtype='complex128'), atol=tol)
-        #    assert np.allclose(np.einsum('s,si,sj->ij', k,A,A), np.zeros((3,3), dtype='complex128'), atol=tol)
-        #    assert np.allclose(np.einsum('s,si,sj->ij', k,L,L), np.zeros((3,3), dtype='complex128'), atol=tol)
-        #    assert np.allclose(np.einsum('s,t,si,ti->st', k**.5,k**.5,A,L) + np.einsum('s,t,ti,si->st', k**.5,k**.5,A,L),
-        #                                 np.identity(6, dtype='complex128'), atol = tol)
-        #except:
-        #    raise ValueError('Stroh checks failed!')
+        try:
+            assert np.allclose(np.einsum('s,si,sj->ij', k,A,L), np.identity(3, dtype='complex128'), atol=tol)
+            assert np.allclose(np.einsum('s,si,sj->ij', k,A,A), np.zeros((3,3), dtype='complex128'), atol=tol)
+            assert np.allclose(np.einsum('s,si,sj->ij', k,L,L), np.zeros((3,3), dtype='complex128'), atol=tol)
+            assert np.allclose(np.einsum('s,t,si,ti->st', k**.5,k**.5,A,L) + np.einsum('s,t,ti,si->st', k**.5,k**.5,A,L),
+                                         np.identity(6, dtype='complex128'), atol = tol)
+        except:
+            raise ValueError('Stroh checks failed!')
     
         #assign property values
         self.__burgers = burgers
