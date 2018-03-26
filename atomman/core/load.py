@@ -2,9 +2,7 @@
 from __future__ import (absolute_import, print_function,
                         division, unicode_literals)
 
-import atomman.convert
-#import atomman.lammps.atom_data
-#import atomman.lammps.atom_dump
+import atommantest.convert
 from ..compatibility import range
 
 def load(style, input, **kwargs):
@@ -30,31 +28,31 @@ def load(style, input, **kwargs):
     """
     
     if style == 'system_model':
-        system, symbols = atomman.convert.system_model.load(input, **kwargs)
-        
+        system, symbols = atommantest.convert.system_model.load(input, **kwargs)
+    
     elif style == 'cif':
-        system, symbols = atomman.convert.cif.load(input, **kwargs)
-        
-    #elif style == 'atom_data':
-    #    pbc = kwargs.get('pbc', (True, True, True))
-    #    atom_style = kwargs.get('atom_style', 'atomic')
-    #    units = kwargs.get('units', 'metal')
-    #    system = atomman.lammps.atom_data.load(input, pbc, atom_style, units)
-    #    symbols = [None for i in range(system.natypes)]
-        
-    #elif style == 'atom_dump':
-    #    prop_info = kwargs.get('prop_info', None)
-    #    system = atomman.lammps.atom_dump.load(input, prop_info)
-    #    symbols = [None for i in range(system.natypes)]
-        
+        system, symbols = atommantest.convert.cif.load(input, **kwargs)
+    
+    elif style == 'atom_data':
+        system = atommantest.convert.atom_data.load(input, **kwargs)
+        symbols = [None for i in range(system.natypes)]
+    
+    elif style == 'atom_dump':
+        system = atommantest.convert.atom_dump.load(input, **kwargs)
+        symbols = [None for i in range(system.natypes)]
+    
+    elif style == 'table':
+        system = atommantest.convert.table.load(input, **kwargs)
+        symbols = [None for i in range(system.natypes)]
+    
     elif style == 'ase_Atoms':
-        system, symbols = atomman.convert.ase_Atoms.load(input, **kwargs)
-        
+        system, symbols = atommantest.convert.ase_Atoms.load(input, **kwargs)
+    
     elif style == 'pymatgen_Structure':
-        system, symbols = atomman.convert.pymatgen_Structure.load(input, **kwargs)
+        system, symbols = atommantest.convert.pymatgen_Structure.load(input, **kwargs)
     
     elif style == 'poscar':
-        system, symbols = atomman.convert.poscar.load(input, **kwargs)
+        system, symbols = atommantest.convert.poscar.load(input, **kwargs)
     
     else:
         raise ValueError('Unsupported style')

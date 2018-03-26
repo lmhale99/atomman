@@ -12,6 +12,7 @@ import pandas as pd
 
 # atomman imports
 from ..compatibility import iteritems, int, inttype, range
+from ..tools import indexstr
 
 class Atoms(object):
     """
@@ -307,7 +308,7 @@ class Atoms(object):
             if key is None:
                 # Return list of property names when no parameters are given
                 if index is None:
-                    return self.view.keys()
+                    return list(self.view.keys())
                 # Return copy of slice if only index is given
                 else:
                     return deepcopy(self[index])
@@ -336,48 +337,11 @@ class Atoms(object):
                 else:
                     self.view[key][index] = value
         
-    def to_dataframe(self):
+    def df(self):
         """
-        Returns a pandas.DataFrame version of the atoms.  NOTE: The 
-        underlying data is copied meaning that calling this at least
-        doubles the memory cost.
+        Returns a pandas.DataFrame of all atomic properties.  Multi-dimensional
+        per-atom data will be converted into multiple table columns.
         """
-        
-        def indexstr(shape):
-            """
-            Iterates through all unique indicies of an array with a given shape.
-            
-            Parameters
-            ----------
-            shape : tuple of int
-                The array shape to iterate through.
-                
-            Yields
-            ------
-            index : tuple of int
-                A unique index set of the array.
-            istr : str
-                A string representation of index with numbers in [].
-            """
-            
-            if tuple(shape) == ():
-                # Yield for empty shape
-                yield (), ''
-            else:
-                # Loop over all values of the first index of shape
-                for i in range(shape[0]):
-                    index1 = (i,)
-                    istr1 = '['+str(i)+']'
-                    
-                    # Recursively go through other indicies of shape
-                    for index2, istr2 in indexstr(shape[1:]):
-                        
-                        # Combine index components
-                        index = index1 + index2
-                        istr = istr1 + istr2
-                        
-                        # Yield composite
-                        yield index, istr
         
         # Initialize new dictionary of values
         values = OrderedDict()

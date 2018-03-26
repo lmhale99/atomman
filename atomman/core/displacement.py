@@ -8,7 +8,7 @@ import numpy as np
 # atomman imports
 from . import dvect
 
-def displacement(system_0, system_1, box_reference='final'):
+def displacement(system_0, system_1, box_reference='final', code=None):
     """
     Compute the displacement vectors between all matching atoms for two systems.
     
@@ -40,9 +40,9 @@ def displacement(system_0, system_1, box_reference='final'):
         raise ValueError('systems have different number of atoms')
     
     if box_reference == 'final':
-        disp = dvect(system_0.atoms.pos, system_1.atoms.pos, system_1.box, system_1.pbc)
+        disp = dvect(system_0.atoms.pos, system_1.atoms.pos, system_1.box, system_1.pbc, code=code)
     elif box_reference == 'initial':
-        disp = dvect(system_0.atoms.pos, system_1.atoms.pos, system_0.box, system_0.pbc)
+        disp = dvect(system_0.atoms.pos, system_1.atoms.pos, system_0.box, system_0.pbc, code=code)
     elif box_reference is None:
         disp = system_1.atoms.pos - system_0.atoms.pos
     else:

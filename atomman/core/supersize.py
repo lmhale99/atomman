@@ -8,7 +8,7 @@ import numpy as np
 # atomman imports
 from . import Atoms
 from . import Box
-import atomman.core.System
+import atommantest.core.System
 from ..compatibility import range, inttype
 
 def supersize(system, a_size, b_size, c_size):
@@ -144,4 +144,4 @@ def supersize(system, a_size, b_size, c_size):
     # Save pos values, return new System
     atoms.view['pos'] = new_spos + xyz
     
-    return atomman.core.System(box=box, atoms=atoms, scale=True)
+    return atommantest.core.System(box=box, atoms=atoms, scale=True)

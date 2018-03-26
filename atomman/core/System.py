@@ -7,15 +7,21 @@ from copy import deepcopy
 # http://www.numpy.org/
 import numpy as np
 
+# https://pandas.pydata.org/
+import pandas as pd
+
 # atomman imports
 from . import Atoms
 from . import Box
-import atomman.core.supersize
-import atomman.core.dvect
-import atomman.core.NeighborList
-import atomman.core.load
-import atomman.convert.system_model
+import atommantest.core.supersize
+import atommantest.core.dvect
+import atommantest.core.NeighborList
+import atommantest.core.dump
+import atommantest.core.load
+import atommantest.convert.system_model
+import atommantest.crystal.rotate
 from ..compatibility import iteritems, range
+from ..tools import indexstr
 
 class System(object):
     """
@@ -63,6 +69,7 @@ class System(object):
         return '\n'.join([str(self.box),
                           'natoms = ' + str(self.natoms),
                           'natypes = ' + str(self.natypes),
+                          'pbc = ' + str(self.pbc),
                           str(self.atoms)])
     
     def __len__(self):
@@ -183,6 +190,52 @@ class System(object):
                         self.atoms.view[key] = value
                     else:
                         self.atoms.view[key][index] = value
+    
+    def atoms_df(self, scale=False):
+        """
+        Extends Atoms.df() by adding a scale argument.
+        
+        Parameters
+        ----------
+        scale : bool or list, optional
+            Indicates if/which per-atom properties are to be scaled to box
+            relative values.  If False (default), no properties will be scaled.
+            If True, pos will be scaled.  Multiple properties can be scaled by
+            providing a list of the property names to scale.
+            
+        Returns
+        -------
+        pandas.DataFrame
+            Tabulated DataFrame version of the atomic data.
+        """
+        # Handle scale values
+        if scale is True:
+            scale = ['pos']
+        elif scale is False:
+            scale = []
+        elif not isinstance(scale, list):
+            scale = [scale]
+        
+        # Initialize new dictionary of values
+        values = OrderedDict()
+        for key in self.atoms.view.keys():
+            
+            value = self.atoms.view[key]
+            if key in scale:
+                value = self.scale(value)
+            
+            # Flatten multidimensional arrays
+            for index, istr in indexstr(self.atoms.view[key].shape[1:]):
+                newkey = key + istr
+                
+                # Copy values over
+                if index == ():
+                    values[newkey] = value
+                else:
+                    values[newkey] = value[(Ellipsis, ) + index]
+        
+        # Return DataFrame
+        return pd.DataFrame(values)
     
     def box_set(self, **kwargs):
         """
@@ -320,7 +373,7 @@ class System(object):
             pos_1 = np.asarray(pos_1)
         
         # Call atomman.core.dvect using self's box and pbc
-        return atomman.core.dvect(pos_0, pos_1, self.box, self.pbc, code=code)
+        return atommantest.core.dvect(pos_0, pos_1, self.box, self.pbc, code=code)
     
     def neighborlist(self, **kwargs):
         """
@@ -351,7 +404,7 @@ class System(object):
             raise KeywordError("Cannot give 'system' as it is taken as the current object")
         else:
             kwargs['system'] = self
-        self.neighbors = atomman.core.NeighborList(**kwargs)
+        self.neighbors = atommantest.core.NeighborList(**kwargs)
     
     def supersize(self, a_size, b_size, c_size):
         """
@@ -375,7 +428,31 @@ class System(object):
             Single int or two integers specifying replication along the cvect
             direction.
         """
-        system = atomman.core.supersize(self, a_size, b_size, c_size)
+        system = atommantest.core.supersize(self, a_size, b_size, c_size)
+        self.__box = system.box
+        self.__atoms = system.atoms
+        self.pbc = system.pbc
+    
+    def rotate(self, hkls, tol=1e-5):
+        """
+        Transforms the system representing a periodic crystal cell from a standard
+        orientation to a specified orientation. Note: if hexagonal indices are
+        given, the vectors will be reduced to the smallest hkl integer
+        representation.
+        
+        Parameters
+        ----------
+        hkls : numpy.ndarray of int
+            A (3, 3) array of the Miller crystal vectors or a (3, 4) array of
+            Miller-Bravais hexagonal crystal vectors to use in transforming the
+            system.
+        tol : float, optional
+            Tolerance parameter used in rounding atomic positions near the
+            boundaries to the boundary values.  In box-relative coordinates, any
+            atomic positions within tol of 0 or 1 will be rounded to 0 or 1,
+            respectively.  Default value is 1e-5.
+        """
+        system = atommantest.crystal.rotate(self, hkls, tol=tol)
         self.__box = system.box
         self.__atoms = system.atoms
         self.pbc = system.pbc
@@ -394,34 +471,29 @@ class System(object):
         kwargs
             Any extra keyword arguments to pass to the underlying load methods.
         """
-        system, symbols = atomman.core.load(style, input, **kwargs)
+        system, symbols = atommantest.core.load(style, input, **kwargs)
         self.__box = system.box
         self.__atoms = system.atoms
         self.pbc = system.pbc
         self.symbols = symbols
     
-    def model(self, **kwargs):
+    def dump(self, style, f=None, **kwargs):
         """
-        Return a DataModelDict 'cell' representation of the system.
-        
+        Convert a System to another format.
+    
         Parameters
         ----------
-        box_unit : str, optional
-            Length unit to use for the box. Default value is 'Angstrom'.
-        symbols : list, optional
-            list of atom-model symbols corresponding to the atom types.
-        elements : list, optional
-            list of element tags corresponding to the atom types.
-        prop_units : dict, optional
-            dictionary where the keys are the property keys to include, and
-            the values are units to use. If not given, only the positions in
-            scaled units are included.
-        a_std : float, optional
-            Standard deviation of a lattice constant to include if available.
-        b_std : float, optional
-            Standard deviation of b lattice constant to include if available.
-        c_std : float, optional
-            Standard deviation of c lattice constant to include if available.
-        """
+        style : str
+            Indicates the format of the content to dump the atomman.System as.
+        f : str or file-like object
+            File path or buffer to save content to for the text-based formats.
+        kwargs
+            Any extra keyword arguments to pass to the underlying dump methods.
             
-        return atomman.convert.system_model.dump(self, **kwargs)
+        Returns
+        -------
+        str, object or tuple
+            Any content returned by the underlying dump methods.
+        """
+        
+        return atommantest.core.dump(style, self, f=f, **kwargs)

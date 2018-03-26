@@ -11,7 +11,7 @@ from DataModelDict import DataModelDict as DM
 
 # atomman imports
 from ..tools import axes_check
-import atomman.unitconvert as uc
+import atommantest.unitconvert as uc
 from ..compatibility import iteritems, range
 
 class ElasticConstants(object):
@@ -249,8 +249,8 @@ class ElasticConstants(object):
         Parameters
         ----------
         axes : numpy.ndarray
-            (3, 3) array giving three right-hand orthogonal vectors to use for
-            transforming.
+            (3, 3) array giving three right-handed orthogonal vectors to use
+            for transforming.
         tol : float, optional
             Relative tolerance to use in identifying near-zero terms.
             
@@ -869,7 +869,7 @@ class ElasticConstants(object):
             model['elastic-constants']['C'] = C = []
             
             # Get values in the specified unit
-            c = uc.get_in_units(self.Cij, unit)
+            c = self.Cij
             c_dict = DM()
             
             if crystal_system == 'cubic':
