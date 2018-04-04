@@ -30,11 +30,15 @@ def dvect_cython(pos_0, pos_1, box, pbc):
     """
     # Convert pos_0 to numpy array with proper dimensions
     pos_0 = np.asarray(pos_0)
+    if pos_0.ndim == 0:
+        raise TypeError('Invalid pos_0')
     if pos_0.ndim == 1:
         pos_0 = pos_0[np.newaxis, :]
     
     # Convert pos_1 to numpy array with proper dimensions
     pos_1 = np.asarray(pos_1)
+    if pos_1.ndim == 0:
+        raise TypeError('Invalid pos_1')
     if pos_1.ndim == 1:
         pos_1 = pos_1[np.newaxis, :]
 
@@ -126,7 +130,8 @@ cdef np.ndarray[np.float64_t, ndim=2] cdvect(
     
     return d
 
-def nlist_cython(system, float cutoff, int cmult=1, code=None, initialsize=20):
+def nlist_cython(system, float cutoff, int cmult=1, code=None, initialsize=20,
+                 deltasize=10):
     """
     Calculates a neighbor list for all atoms in a System taking periodic
     boundaries into account.
@@ -146,6 +151,10 @@ def nlist_cython(system, float cutoff, int cmult=1, code=None, initialsize=20):
     initialsize : int, optional
         The number of neighbor positions to initially assign to each atom.
         Default value is 20.
+    deltasize : int, optional
+        Specifies the number of extra neighbor positions to allow each atom
+        when the number of neighbors exceeds the underlying array size.
+        Default value is 10.
     """
     
     pos = system.atoms.pos
@@ -153,13 +162,14 @@ def nlist_cython(system, float cutoff, int cmult=1, code=None, initialsize=20):
     origin = system.box.origin
     pbc = system.pbc
     return cnlist(pos, vects, origin, pbc, cutoff, cmult=cmult,
-                  initialsize=initialsize)
+                  initialsize=initialsize, deltasize=deltasize)
 
 cdef cnlist(np.ndarray[np.float64_t, ndim=2] pos,
             np.ndarray[np.float64_t, ndim=2] vects,
             np.ndarray[np.float64_t, ndim=1] origin,
             pbc, float cutoff, int cmult=1,
-            size_t initialsize=20):
+            size_t initialsize=20,
+            size_t deltasize=10):
     
     # Extract and define parameters
     cdef size_t maxneighbors = initialsize
@@ -183,8 +193,8 @@ cdef cnlist(np.ndarray[np.float64_t, ndim=2] pos,
     cdef np.ndarray[np.float64_t, ndim=2] ghostpos = np.empty((0, 3))
     cdef np.ndarray[np.int64_t, ndim=1] ghostindex = np.empty(0, dtype='int64')
     cdef np.ndarray[np.int64_t, ndim=2] neighbors = np.zeros((natoms, maxneighbors+1), dtype='int64')
-    
-    # Determine orthogonal superbox that fully encompases the system
+
+    # Determine orthogonal superbox that fully encompasses the system
     corners = origin + np.array([[0, 0, 0], 
                                  vects[0], 
                                  vects[1], 
@@ -323,11 +333,11 @@ cdef cnlist(np.ndarray[np.float64_t, ndim=2] pos,
                         neighbors[vindex, 0] += 1
                         
                         # Extend system size if needed
-                        if neighbors[uindex, 0] == maxneighbors or neighbors[vindex, 0] == maxneighbors:
-                            newneighbors = np.zeros((natoms, maxneighbors + 11), dtype='int64')
+                        if neighbors[uindex, 0] > maxneighbors or neighbors[vindex, 0] > maxneighbors:
+                            newneighbors = np.zeros((natoms, maxneighbors + deltasize + 1), dtype='int64')
                             newneighbors[:, :maxneighbors+1] = neighbors[:, :maxneighbors+1]
                             neighbors = newneighbors
-                            maxneighbors += 10
+                            maxneighbors += deltasize
                         
                         # Assign neighbors
                         neighbors[uindex, neighbors[uindex, 0]] = vindex

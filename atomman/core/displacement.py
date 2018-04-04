@@ -24,6 +24,9 @@ def displacement(system_0, system_1, box_reference='final', code=None):
         - 'final' uses system_1's box and pbc (Default)
         - None computes the straight difference between the positions without
           accounting for periodic boundaries.
+    code : str, optional
+        Option for specifying which code version of dvect to use (see dvect's
+        documentation for values).
     
     Returns
     -------

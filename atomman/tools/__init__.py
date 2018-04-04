@@ -10,3 +10,5 @@ from .vect_angle import vect_angle
 from .uber_open_rmode import uber_open_rmode
 from .indexstr import indexstr
 from .filltemplate import filltemplate
+from .crystalsystem import *
+from . import miller

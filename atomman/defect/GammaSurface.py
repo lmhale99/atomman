@@ -1,5 +1,6 @@
 # Standard Python imports
-from __future__ import print_function, division
+from __future__ import (absolute_import, print_function,
+                        division, unicode_literals)
 from collections import OrderedDict
 import os
 
@@ -18,9 +19,10 @@ import matplotlib.pyplot as plt
 # https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
 
-# https://github.com/usnistgov/atomman
+# atomman imports
 from .. import Box
 from .. import unitconvert as uc
+from ..compatibility import stringtype
 
 class GammaSurface(object):
     """
@@ -53,12 +55,12 @@ class GammaSurface(object):
     
     @property
     def a1vect(self):
-        """numpy.array : Crystal vector for the a1 direction."""
+        """numpy.ndarray : Crystal vector for the a1 direction."""
         return self.__a1vect
     
     @a1vect.setter
     def a1vect(self, value):
-        if isinstance(value, (str, unicode)):
+        if isinstance(value, stringtype):
             value = value.split()
         value = np.asarray(value, dtype=float)
         if value.shape != (3,):
@@ -67,12 +69,12 @@ class GammaSurface(object):
     
     @property
     def a2vect(self):
-        """numpy.array : Crystal vector for the a1 direction."""
+        """numpy.ndarray : Crystal vector for the a1 direction."""
         return self.__a2vect
     
     @a2vect.setter
     def a2vect(self, value):
-        if isinstance(value, (str, unicode)):
+        if isinstance(value, stringtype):
             value = value.split()
         value = np.asarray(value, dtype=float)
         if value.shape != (3,):
@@ -443,7 +445,7 @@ class GammaSurface(object):
         return self.__delta_fit(a1, a2)
     
     def E_gsf_surface_plot(self, normalize=False, smooth=True, xvect=None,
-                         length_unit='Angstrom', energyperarea_unit='eV/Angstrom^2',
+                         length_unit='angstrom', energyperarea_unit='eV/angstrom^2',
                          numx=100, numy=100, xsize=None, ysize=None,
                          cmap=None):
         """
@@ -463,10 +465,10 @@ class GammaSurface(object):
             a1vect.
         length_unit : str, optional
             The unit of length to display non-normalized axes values in.
-            Default value is 'Angstrom'.
+            Default value is 'angstrom'.
         energyperarea_unit : str, optional
             The unit of energy per area to display the stacking fault energies
-            in. Default value is 'eV/Angstrom^2'.
+            in. Default value is 'eV/angstrom^2'.
         numx : int, optional
             The number of plotting points to use along the x-axis.  Default
             value is 100.
@@ -554,7 +556,7 @@ class GammaSurface(object):
         return fig
     
     def E_gsf_line_plot(self, vect=None, num=100, xsize=10, ysize=6,
-                      length_unit='Angstrom', energyperarea_unit='eV/Angstrom^2'):
+                      length_unit='angstrom', energyperarea_unit='eV/angstrom^2'):
         """
         Generates a line plot for the interpolated generalized stacking fault
         energy along a specified crystallographic vector in the (a1, a2) plane.
@@ -572,14 +574,14 @@ class GammaSurface(object):
             The size in inches to make the figure's x dimensions.  Default
             value is 10.
         ysize : float
-            The size in inches to make the figure's x dimensions.  Default
+            The size in inches to make the figure's y dimensions.  Default
             value is 6.
         length_unit : str, optional
             The unit of length to display the x-axis coordinates in.
-            Default value is 'Angstrom'.
+            Default value is 'angstrom'.
         energyperarea_unit : str, optional
             The unit of energy per area to display the stacking fault energies
-            in. Default value is 'eV/Angstrom^2'.
+            in. Default value is 'eV/angstrom^2'.
         
         Returns
         -------

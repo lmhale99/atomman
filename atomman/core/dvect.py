@@ -78,6 +78,10 @@ def dvect_python(pos_0, pos_1, box, pbc):
     # Convert positions to np.arrays
     pos_0 = np.asarray(pos_0)
     pos_1 = np.asarray(pos_1)
+    if pos_0.ndim == 0:
+        raise TypeError('Invalid pos_0')
+    if pos_1.ndim == 0:
+        raise TypeError('Invalid pos_1')
     
     # Get box values
     avect = box.avect

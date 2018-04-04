@@ -249,8 +249,8 @@ class Atoms(object):
     
     @property
     def atypes(self):
-        """list of int : List of unique atom types."""
-        return np.unique(self.atype)
+        """tuple : List of unique int atom types."""
+        return tuple(np.unique(self.atype))
     
     @property
     def natypes(self):

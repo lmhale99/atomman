@@ -9,7 +9,7 @@ import numpy as np
 def normalize(system):
     """
     The normalize function takes any arbitrary system and transforms it to
-    be comptatible with LAMMPS.  In particular, LAMMPS systems must have:
+    be compatible with LAMMPS.  In particular, LAMMPS systems must have:
         1. Right-handed box vectors.
         2. avect = [lx, 0.0, 0.0]
         3. bvect = [xy, ly,  0.0]

@@ -13,13 +13,13 @@ with open(os.path.join(rootdir, 'VERSION')) as version_file:
 # atomman imports
 from . import compatibility
 from . import unitconvert
-from . import crystal
-from .core import *
-#from . import defect
-from . import lammps
 from . import tools
-from . import convert
+from . import lammps
+from .dump import *
+from .core import *
+from .load import *
 from . import plot
+from . import defect
 
 # Define default working units
 unitconvert.reset_units(length = 'angstrom', mass = 'amu', energy='eV', charge='e')

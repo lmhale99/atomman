@@ -16,7 +16,7 @@ else:
     cython_imported = True
 from .dvect import dvect
 
-def nlist(system, cutoff, cmult=1, code=None, initialsize=20):
+def nlist(system, cutoff, cmult=1, code=None, initialsize=20, deltasize=10):
     """
     Calculates a neighbor list for all atoms in a System taking periodic
     boundaries into account.
@@ -38,6 +38,10 @@ def nlist(system, cutoff, cmult=1, code=None, initialsize=20):
     initialsize : int, optional
         The number of neighbor positions to initially assign to each atom.
         Default value is 20.
+    deltasize : int, optional
+        Specifies the number of extra neighbor positions to allow each atom
+        when the number of neighbors exceeds the underlying array size.
+        Default value is 10.
         
     Returns
     -------
@@ -51,28 +55,30 @@ def nlist(system, cutoff, cmult=1, code=None, initialsize=20):
     if code is None:
         if cython_imported is True:
             return nlist_cython(system, cutoff, cmult=cmult, code=code,
-                                initialsize=initialsize)
+                                initialsize=initialsize, deltasize=deltasize)
         elif cython_imported is False:
             return nlist_python(system, cutoff, cmult=cmult, code=code,
-                                initialsize=initialsize)
+                                initialsize=initialsize, deltasize=deltasize)
     
     elif code == 'cython':
         if cython_imported is True:
             return nlist_cython(system, cutoff, cmult=cmult, code=code,
-                                initialsize=initialsize)
+                                initialsize=initialsize, deltasize=deltasize)
         else:
             raise ValueError('cython version of nlist not loaded')
     
     elif code == 'python':
         return nlist_python(system, cutoff, cmult=cmult, code=code,
-                            initialsize=initialsize)
+                            initialsize=initialsize, deltasize=deltasize)
     
     else:
         raise ValueError("Invalid code style: only 'cython' and 'python' allowed")
 
-def nlist_python(system, cutoff, cmult=1, code=None, initialsize=20):
+def nlist_python(system, cutoff, cmult=1, code=None, initialsize=20,
+                 deltasize=10):
     """
-    Calculates a neighbor list for all atoms in a System taking periodic boundaries into account.
+    Calculates a neighbor list for all atoms in a System taking periodic
+    boundaries into account.
     
     Parameters
     ----------
@@ -91,6 +97,10 @@ def nlist_python(system, cutoff, cmult=1, code=None, initialsize=20):
     initialsize : int, optional
         The number of neighbor positions to initially assign to each atom.
         Default value is 20.
+    deltasize : int, optional
+        Specifies the number of extra neighbor positions to allow each atom
+        when the number of neighbors exceeds the underlying array size.
+        Default value is 10.
     """
     
     # Extract parameters
@@ -103,7 +113,7 @@ def nlist_python(system, cutoff, cmult=1, code=None, initialsize=20):
     # Build neighbors array
     neighbors = np.zeros((natoms, initialsize + 1), dtype='int64')
     
-    # Determine orthogonal superbox that fully encompases the system
+    # Determine orthogonal super-box that fully encompasses the system
     corners = origin + np.array([[0, 0, 0], 
                                  vects[0], 
                                  vects[1], 
@@ -139,7 +149,7 @@ def nlist_python(system, cutoff, cmult=1, code=None, initialsize=20):
         if pbc[i]:
             check[i] = (-1, 0, 1) 
     
-    # Construct list of ghost atoms in the superbox
+    # Construct list of ghost atoms in the super-box
     ghostpos = []
     for x in check[0]:
         for y in check[1]:
@@ -180,7 +190,8 @@ def nlist_python(system, cutoff, cmult=1, code=None, initialsize=20):
             xyzbins[x, y, z, xyzbins[x, y, z, 0]] = atomindex[i]
         except:
             oldsize = len(xyzbins[0, 0, 0])
-            newbins = np.zeros((len(xbins), len(ybins), len(zbins), oldsize + 10), dtype='int64')
+            newbins = np.zeros((len(xbins), len(ybins), len(zbins), oldsize+10),
+                                dtype='int64')
             newbins[:, :, :, :oldsize] = xyzbins[:, :, :, :oldsize]
             xyzbins = newbins
             xyzbins[x, y, z, xyzbins[x, y, z, 0]] = atomindex[i]
@@ -210,7 +221,7 @@ def nlist_python(system, cutoff, cmult=1, code=None, initialsize=20):
                 d = np.linalg.norm([system.dvect(upos, vpos, code=code)], axis=1)
             vlist = mediumlist[np.where(d < cutoff)]
             for vindex in vlist:
-                neighbors = __append_neighbor(neighbors, uindex, vindex)
+                neighbors = __append_neighbor(neighbors, uindex, vindex, deltasize)
     
     
     # Sort each atom's neighbors
@@ -219,7 +230,7 @@ def nlist_python(system, cutoff, cmult=1, code=None, initialsize=20):
     
     return neighbors
 
-def __append_neighbor(n, a, b):
+def __append_neighbor(n, a, b, deltasize=10):
     """Adds atom ids a and b to each other's list of neighbors."""
     if b not in n[a, 1:n[a, 0]+1] and a != b:
         n[a, 0] += 1
@@ -229,7 +240,7 @@ def __append_neighbor(n, a, b):
             n[b, n[b, 0]] = a
         except:
             old_size = len(n[0])
-            newlist = np.zeros((len(n), old_size + 10), dtype='int64')
+            newlist = np.zeros((len(n), old_size + deltasize), dtype='int64')
             newlist[:, :old_size] = n[:, :old_size]
             n = newlist
             n[a, n[a, 0]] = b
