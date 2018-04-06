@@ -24,8 +24,8 @@ Features:
 Installation
 ------------
 
-The atomman package is designed for Python 2.7. It makes heavy use of numpy, so
-it's easiest to download a Python environment like Anaconda. 
+As of version 1.2, the atomman package is Python 2/3 compatible. It makes heavy use of numpy, so
+it's easiest to download a Python environment like Anaconda.
 
 The latest release can be installed using pip::
 
@@ -43,17 +43,14 @@ Alternatively, all code and documentation can be downloaded from GitHub.
 Documentation
 -------------
 
-Tutorials and full reference documentation can be found on GitHub in the form 
-of Jupyter Notebooks. This provides explanations as well as examples of 
-functioning code. They can also be downloaded and used interactively.
+Tutorial Jupyter Notebooks can be found in the doc/tutorial directory.  The tutorials come in two flavors:
+    
+    - The tutorials starting with ##. provide a general overview/example of the various capabilities.
+    
+    - The tutorials starting with ##.#. give more detailed descriptions and list options available to the tools mentioned in the overview tutorials.
+    
+Documentation for the code itself can be found in the doc/html directory.
 
-The links below are to the tutorials for the most recent stable release:
-
-    - `Introduction to atomman`_
-    
-    - `Interacting with LAMMPS`_
-    
-    
 Required packages
 -----------------
 
@@ -78,13 +75,15 @@ This is a list of additional Python packages that can add functionality
     - `diffpy.Structure`_ - CIF reader. Required for loading systems from
       CIF files.
     
-    - `ase`_ the Atomic Simulation Environment for interacting with small 
+    - `ase`_ - The Atomic Simulation Environment for interacting with small 
       systems and DFT calculations. Required for converting to/from ase.Atoms 
       objects.
     
-    - `pymatgen`_ the Python Materials Genomics package used by the Materials
+    - `pymatgen`_ - The Python Materials Genomics package used by the Materials
       Project for DFT calculations. Required for converting to/from 
       pymatgen.Structure objects.
+      
+    - `cython`_ - Allows for construction of c/Python hybrid code for faster calculations.  Alternate cython versions of some of the calculation heavy functions can be built if cython is installed.
        
 .. _https://github.com/usnistgov/atomman: https://github.com/usnistgov/atomman
 .. _https://github.com/lmhale99/atomman: https://github.com/lmhale99/atomman
@@ -100,9 +99,3 @@ This is a list of additional Python packages that can add functionality
 .. _diffpy.Structure: http://www.diffpy.org/diffpy.Structure/
 .. _ase: https://wiki.fysik.dtu.dk/ase/
 .. _pymatgen: http://pymatgen.org/
-
-
-
-
-
-

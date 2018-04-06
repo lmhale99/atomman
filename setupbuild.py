@@ -1,10 +1,17 @@
 import os
 from setuptools import setup, find_packages
 from setuptools.extension import Extension
+from Cython.Build import cythonize
+import numpy
+
+# This setup file is for building Python extensions:
+#   python setupbuild.py build_ext --inplace
 
 # List cython extensions
 extensions = [Extension("atomman.core.cythonized",
-                       ["atomman/core/cythonized.c"])]
+                       ["atomman/core/cythonized.pyx"],
+                       include_dirs=[numpy.get_include()])]
+extensions = cythonize(extensions)
 
 def getversion():
     """Fetches version information from VERSION file"""
