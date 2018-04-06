@@ -29,14 +29,14 @@ def dvect_cython(pos_0, pos_1, box, pbc):
         periodic (True means periodic).
     """
     # Convert pos_0 to numpy array with proper dimensions
-    pos_0 = np.asarray(pos_0)
+    pos_0 = np.asarray(pos_0, dtype='float64')
     if pos_0.ndim == 0:
         raise TypeError('Invalid pos_0')
     if pos_0.ndim == 1:
         pos_0 = pos_0[np.newaxis, :]
     
     # Convert pos_1 to numpy array with proper dimensions
-    pos_1 = np.asarray(pos_1)
+    pos_1 = np.asarray(pos_1, dtype='float64')
     if pos_1.ndim == 0:
         raise TypeError('Invalid pos_1')
     if pos_1.ndim == 1:
