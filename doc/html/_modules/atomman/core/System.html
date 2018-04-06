@@ -1,0 +1,800 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>atomman.core.System &#8212; atomman 1.2.alpha documentation</title>
+    <link rel="stylesheet" href="../../../_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../../../index.html">atomman 1.2.alpha documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for atomman.core.System</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Standard Python libraries</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
+                        <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
+
+<span class="c1"># http://www.numpy.org/</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># https://pandas.pydata.org/</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># atomman imports</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">Atoms</span><span class="p">,</span> <span class="n">Box</span><span class="p">,</span> <span class="n">dvect</span><span class="p">,</span> <span class="n">NeighborList</span>
+<span class="kn">from</span> <span class="nn">..lammps</span> <span class="k">import</span> <span class="n">normalize</span> <span class="k">as</span> <span class="n">lmp_normalize</span>
+<span class="kn">from</span> <span class="nn">..compatibility</span> <span class="k">import</span> <span class="n">iteritems</span><span class="p">,</span> <span class="nb">range</span><span class="p">,</span> <span class="n">inttype</span><span class="p">,</span> <span class="n">stringtype</span>
+<span class="kn">from</span> <span class="nn">..tools</span> <span class="k">import</span> <span class="n">indexstr</span><span class="p">,</span> <span class="n">miller</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">dump</span>
+
+<div class="viewcode-block" id="System"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System">[docs]</a><span class="k">class</span> <span class="nc">System</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A representation of an atomic system.  This combines Atoms with Box and</span>
+<span class="sd">    adds methods and attributes involving both.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="n">Atoms</span><span class="p">(),</span> <span class="n">box</span><span class="o">=</span><span class="n">Box</span><span class="p">(),</span> <span class="n">pbc</span><span class="o">=</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                 <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">()):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initilize a System by joining an am.Atoms and am.Box instance.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        atoms : atomman.Atoms, optional</span>
+<span class="sd">            The underlying Atoms object to build system around.</span>
+<span class="sd">        box : atomman.Box, optional</span>
+<span class="sd">            The underlying box object to build system around.</span>
+<span class="sd">        pbc : tuple or list of bool, optional</span>
+<span class="sd">            Indicates which of the dimensions related to the three box vectors</span>
+<span class="sd">            are periodic.  Default value is (True, True, True).</span>
+<span class="sd">        scale : bool, optional</span>
+<span class="sd">            If True, atoms.pos will be scaled relative to the box.  Default</span>
+<span class="sd">            value is False.</span>
+<span class="sd">        symbols : tuple, optional</span>
+<span class="sd">            A list of the element symbols for each atom atype.  If len(symbols)</span>
+<span class="sd">            is less than natypes, then missing values will be set to None.</span>
+<span class="sd">            Default value is (,), i.e. all values set to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># Check data types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">Atoms</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Invalid atoms type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">box</span><span class="p">,</span> <span class="n">Box</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Invalid box type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Invalid scale type&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Set properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__atoms</span> <span class="o">=</span> <span class="n">atoms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__box</span> <span class="o">=</span> <span class="n">box</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="n">pbc</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">symbols</span><span class="p">,</span> <span class="n">stringtype</span><span class="p">):</span>
+            <span class="n">symbols</span> <span class="o">=</span> <span class="p">(</span><span class="n">symbols</span><span class="p">,)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">symbols</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natypes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__symbols</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">symbols</span><span class="p">)</span>
+        
+        <span class="c1"># Rescale pos if needed</span>
+        <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">atoms_prop</span><span class="p">(</span><span class="s1">&#39;pos&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;str : The string representation of a system.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">),</span>
+                          <span class="s1">&#39;natoms = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">),</span>
+                          <span class="s1">&#39;natypes = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natypes</span><span class="p">),</span>
+                          <span class="s1">&#39;symbols = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">symbols</span><span class="p">),</span>
+                          <span class="s1">&#39;pbc = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pbc</span><span class="p">),</span>
+                          <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">)])</span>
+    
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;atomman.Atoms : underlying Atoms object.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__atoms</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">natoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;int : The number of atoms in the Atoms class.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__atoms</span><span class="o">.</span><span class="n">natoms</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">atypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;tuple : List of unique int atom types.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__atoms</span><span class="o">.</span><span class="n">atypes</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">natypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;int : The number of atom types in the Atoms class.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__atoms</span><span class="o">.</span><span class="n">natypes</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">box</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;atommman.Box : underlying Box object.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__box</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pbc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;list of bool : The periodic boundary condition settings.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pbc</span>
+        
+    <span class="nd">@pbc</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">pbc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">pbc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">pbc</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,),</span> <span class="s1">&#39;invalid pbc entry&#39;</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pbc</span> <span class="o">=</span> <span class="n">pbc</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">symbols</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;tuple : The element model symbols associated with each atype.&quot;&quot;&quot;</span>
+        
+        <span class="c1"># Check if there are symbols for all atypes</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__symbols</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natypes</span><span class="p">:</span>
+            <span class="n">symbols</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natypes</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__symbols</span><span class="p">)):</span>
+                <span class="n">symbols</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__symbols</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__symbols</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">symbols</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__symbols</span>
+    
+    <span class="nd">@symbols</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">symbols</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">stringtype</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="n">value</span><span class="p">,)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">natypes</span><span class="p">,</span> <span class="s1">&#39;length of symbols does not match natypes&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__symbols</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="System.atoms_prop"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.atoms_prop">[docs]</a>    <span class="k">def</span> <span class="nf">atoms_prop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">a_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extends Atoms.prop() by adding a scale argument.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str, optional</span>
+<span class="sd">            Per-atom property name.</span>
+<span class="sd">        index : int, list, slice, optional</span>
+<span class="sd">            Index of atoms.</span>
+<span class="sd">        value : any, optional</span>
+<span class="sd">            Property values to assign.</span>
+<span class="sd">        a_id : int, optional</span>
+<span class="sd">            Integer atom index.  Left in for backwards compatibility.</span>
+<span class="sd">        scale : bool, optional</span>
+<span class="sd">            Flag indicating if values should be scaled/unscaled. If True:</span>
+<span class="sd">            - Values being retrieved are scaled from absolute Cartesian to box relative vectors.</span>
+<span class="sd">            - Values being set are unscaled from box relative to absolute Cartesian vectors.</span>
+<span class="sd">            Default value is False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># Check that scale is bool</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Invalid scale type&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Call atoms.prop() for scale is False</span>
+        <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">prop</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">a_id</span><span class="o">=</span><span class="n">a_id</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">prop</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">a_id</span><span class="o">=</span><span class="n">a_id</span><span class="p">)</span>
+        
+        <span class="c1"># Handle property scaling if scale is True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Handle a_id</span>
+            <span class="k">if</span> <span class="n">a_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;a_id and index cannot both be given&#39;</span><span class="p">)</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">a_id</span>
+            
+            <span class="c1"># Get values if value is None</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># If no key, return copy of atoms (all or a slice) with scaled pos</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">newatoms</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">newatoms</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+                    <span class="n">newatoms</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">newatoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">newatoms</span>
+                
+                <span class="c1"># If key is given, return scaled property values</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">view</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">view</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            
+            <span class="c1"># Set values if value is given</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># If no key, unscale pos of Atoms value and set to atoms (or a slice)</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Atoms</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;If key is None, value must be instance of atomman.Atoms&#39;</span><span class="p">)</span>
+                    
+                    <span class="n">value</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unscale</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                
+                <span class="c1"># If key is given, unscale value and set to property</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unscale</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">view</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">view</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+    
+<div class="viewcode-block" id="System.atoms_df"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.atoms_df">[docs]</a>    <span class="k">def</span> <span class="nf">atoms_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extends Atoms.df() by adding a scale argument.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        scale : bool or list, optional</span>
+<span class="sd">            Indicates if/which per-atom properties are to be scaled to box</span>
+<span class="sd">            relative values.  If False (default), no properties will be scaled.</span>
+<span class="sd">            If True, pos will be scaled.  Multiple properties can be scaled by</span>
+<span class="sd">            providing a list of the property names to scale.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas.DataFrame</span>
+<span class="sd">            Tabulated DataFrame version of the atomic data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Handle scale values</span>
+        <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="p">[</span><span class="n">scale</span><span class="p">]</span>
+        
+        <span class="c1"># Initialize new dictionary of values</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">view</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">scale</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            
+            <span class="c1"># Flatten multidimensional arrays</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">istr</span> <span class="ow">in</span> <span class="n">indexstr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">view</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+                <span class="n">newkey</span> <span class="o">=</span> <span class="n">key</span> <span class="o">+</span> <span class="n">istr</span>
+                
+                <span class="c1"># Copy values over</span>
+                <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="p">():</span>
+                    <span class="n">values</span><span class="p">[</span><span class="n">newkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">values</span><span class="p">[</span><span class="n">newkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">[(</span><span class="bp">Ellipsis</span><span class="p">,</span> <span class="p">)</span> <span class="o">+</span> <span class="n">index</span><span class="p">]</span>
+        
+        <span class="c1"># Return DataFrame</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">values</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="System.box_set"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.box_set">[docs]</a>    <span class="k">def</span> <span class="nf">box_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extends box.set() with a scale argument.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        scale : bool</span>
+<span class="sd">            If True, the scaled (box-relative) positions remain unchanged.</span>
+<span class="sd">            Default value is False (absolute positions unchanged).</span>
+<span class="sd">        other kwargs : any</span>
+<span class="sd">            Any other kwargs allowed by box.set().</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># Pop scale</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Invalid scale type&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Hold scaled positions constant</span>
+        <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">spos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms_prop</span><span class="p">(</span><span class="s1">&#39;pos&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">atoms_prop</span><span class="p">(</span><span class="s1">&#39;pos&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">spos</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="c1"># Call box.set without scaling</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="System.scale"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.scale">[docs]</a>    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Scales 3D vectors from absolute Cartesian coordinates to relative box</span>
+<span class="sd">        coordinates.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : numpy.ndarray</span>
+<span class="sd">            Values to scale.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># Retrieve parameters</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">vects</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">vects</span>
+        <span class="n">inverse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">vects</span><span class="p">)</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">origin</span>
+        
+        <span class="c1"># Convert</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="n">origin</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">inverse</span><span class="p">)</span></div>
+          
+<div class="viewcode-block" id="System.unscale"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.unscale">[docs]</a>    <span class="k">def</span> <span class="nf">unscale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Unscales 3D vectors from relative box coordinates to absolute</span>
+<span class="sd">        Cartesian coordinates.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : numpy.ndarray</span>
+<span class="sd">            Values to unscale.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># Retrieve parameters</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">vects</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">vects</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">origin</span>
+        
+        <span class="c1"># Convert</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vects</span><span class="p">)</span> <span class="o">+</span> <span class="n">origin</span></div>
+        
+<div class="viewcode-block" id="System.wrap"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.wrap">[docs]</a>    <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wrap atoms around periodic boundaries and extend non-periodic</span>
+<span class="sd">        boundaries such that all atoms are within the box.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># mins and maxs are box dimensions relative to box vectors, i.e 0 to 1</span>
+        <span class="n">mins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+        <span class="n">maxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+        
+        <span class="c1"># Retrieve scaled pos</span>
+        <span class="n">spos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms_prop</span><span class="p">(</span><span class="s1">&#39;pos&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="c1"># Loop over three pbc directions</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            
+            <span class="c1"># Wrap atoms across periodic boundaries</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbc</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">spos</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">spos</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+            
+            <span class="c1"># Shift min and max to encompass atoms across non-periodic bounds</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">min</span> <span class="o">=</span> <span class="n">spos</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+                <span class="nb">max</span> <span class="o">=</span> <span class="n">spos</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">min</span> <span class="o">&lt;</span> <span class="n">mins</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span> <span class="n">mins</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span> <span class="o">-</span> <span class="mf">0.001</span>
+                <span class="k">if</span> <span class="nb">max</span> <span class="o">&gt;</span> <span class="n">maxs</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span> <span class="n">maxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span> <span class="o">+</span> <span class="mf">0.001</span>
+        
+        <span class="c1"># Unscale spos and save to pos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atoms_prop</span><span class="p">(</span><span class="s1">&#39;pos&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">spos</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="c1"># Modify box vectors and origin by new min and max</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="n">mins</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">vects</span><span class="p">)</span> 
+        <span class="n">avect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">avect</span> <span class="o">*</span> <span class="p">(</span><span class="n">maxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">mins</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">bvect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">bvect</span> <span class="o">*</span> <span class="p">(</span><span class="n">maxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">mins</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">cvect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">cvect</span> <span class="o">*</span> <span class="p">(</span><span class="n">maxs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">mins</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">box_set</span><span class="p">(</span><span class="n">avect</span><span class="o">=</span><span class="n">avect</span><span class="p">,</span> <span class="n">bvect</span><span class="o">=</span><span class="n">bvect</span><span class="p">,</span> <span class="n">cvect</span><span class="o">=</span><span class="n">cvect</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="System.dvect"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.dvect">[docs]</a>    <span class="k">def</span> <span class="nf">dvect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos_0</span><span class="p">,</span> <span class="n">pos_1</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the shortest distance between pos_0 and pos_1 using box </span>
+<span class="sd">        dimensions and accounting for periodic boundaries.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pos_0 : numpy.ndarray or index</span>
+<span class="sd">            Absolute Cartesian vector position(s) to use as reference point(s).</span>
+<span class="sd">            If the value can be used as an index, then self.atoms.pos[pos_0]</span>
+<span class="sd">            is taken.</span>
+<span class="sd">        pos_1 : numpy.ndarray or index</span>
+<span class="sd">            Absolute Cartesian vector position(s) to find relative to pos_0.</span>
+<span class="sd">            If the value can be used as an index, then self.atoms.pos[pos_1]</span>
+<span class="sd">            is taken.</span>
+<span class="sd">        code: str, optional</span>
+<span class="sd">            Option for specifying which underlying code function to use:</span>
+<span class="sd">            - &#39;cython&#39; uses the version of the function built in cython (faster).</span>
+<span class="sd">            - &#39;python&#39; uses the purely python version.</span>
+<span class="sd">            Default is &#39;cython&#39; if the code can be imported, otherwise &#39;python&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Test if pos_0 and pos_1 can be used as numpy array indices</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">pos_0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pos_0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">pos_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pos_0</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">pos_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pos_1</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">pos_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pos_1</span><span class="p">)</span>
+        
+        <span class="c1"># Call dvect using self&#39;s box and pbc</span>
+        <span class="k">return</span> <span class="n">dvect</span><span class="p">(</span><span class="n">pos_0</span><span class="p">,</span> <span class="n">pos_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbc</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="n">code</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="System.neighborlist"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.neighborlist">[docs]</a>    <span class="k">def</span> <span class="nf">neighborlist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Builds a neighbor list for the system.  The resulting NeighborList</span>
+<span class="sd">        object is saved to the object as attribute &#39;neighbors&#39;.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cutoff : float, optional</span>
+<span class="sd">            Radial cutoff distance for identifying neighbors.  Must be given if</span>
+<span class="sd">            model is not given.</span>
+<span class="sd">        model : str or file-like object, optional</span>
+<span class="sd">            Gives the file path or content to load.  If given, no other</span>
+<span class="sd">            parameters are allowed.</span>
+<span class="sd">        cmult : int, optional</span>
+<span class="sd">            Parameter associated with the binning routine.  Default value is most</span>
+<span class="sd">            likely the fastest.</span>
+<span class="sd">        code: str, optional</span>
+<span class="sd">            Option for specifying which underlying code function of nlist to use:</span>
+<span class="sd">            - &#39;cython&#39; uses the version of the function built in cython (faster).</span>
+<span class="sd">            - &#39;python&#39; uses the purely python version.</span>
+<span class="sd">            Default is &#39;cython&#39; if the code can be imported, otherwise &#39;python&#39;.</span>
+<span class="sd">        initialsize : int, optional</span>
+<span class="sd">            The number of neighbor positions to initially assign to each atom.</span>
+<span class="sd">            Default value is 20.</span>
+<span class="sd">        deltasize : int, optional</span>
+<span class="sd">            Specifies the number of extra neighbor positions to allow each atom</span>
+<span class="sd">            when the number of neighbors exceeds the underlying array size.</span>
+<span class="sd">            Default value is 10.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        atomman.NeighborList</span>
+<span class="sd">            The compiled list of neighbors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;system&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">KeywordError</span><span class="p">(</span><span class="s2">&quot;Parameter &#39;system&#39; not allowed&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;system&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="n">NeighborList</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="System.supersize"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.supersize">[docs]</a>    <span class="k">def</span> <span class="nf">supersize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a_size</span><span class="p">,</span> <span class="n">b_size</span><span class="p">,</span> <span class="n">c_size</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a larger system from a given system by replicating it along the</span>
+<span class="sd">        system&#39;s box vectors.</span>
+<span class="sd">        </span>
+<span class="sd">        The multiplier values \*_size are taken to be integer tuples (m, n) where</span>
+<span class="sd">        m &lt;= 0 and n &gt;= 0.  The system multiplication works such that if n = -m,</span>
+<span class="sd">        then the seed system&#39;s origin will be at the center of the new system.</span>
+<span class="sd">        If only one integer is given, then it is assigned to m or n depending on</span>
+<span class="sd">        its sign, and the other value is taken to be 0.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        a_size : int or tuple of int</span>
+<span class="sd">            Single int or two integers specifying replication along the avect</span>
+<span class="sd">            direction.</span>
+<span class="sd">        b_size -- int or tuple of int</span>
+<span class="sd">            Single int or two integers specifying replication along the bvect</span>
+<span class="sd">            direction.</span>
+<span class="sd">        c_size -- int or tuple of int</span>
+<span class="sd">            Single int or two integers specifying replication along the cvect</span>
+<span class="sd">            direction.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        atomman.System</span>
+<span class="sd">            A new system created by replicating the given seed system according to</span>
+<span class="sd">            the \*_size parameters.</span>
+<span class="sd">          </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Extract parameters</span>
+        <span class="n">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">a_size</span><span class="p">,</span> <span class="n">b_size</span><span class="p">,</span> <span class="n">c_size</span><span class="p">]</span>
+        <span class="n">mults</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">vects</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">vects</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">origin</span>
+        <span class="n">spos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms_prop</span><span class="p">(</span><span class="s1">&#39;pos&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="c1"># Check the *_size values</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            
+            <span class="c1"># Change single int to tuple of two int</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">inttype</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+            
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                <span class="k">if</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">inttype</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="k">assert</span> <span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">inttype</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="k">assert</span> <span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Invalid system multipliers&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Invalid system multipliers&#39;</span><span class="p">)</span>
+            
+            <span class="c1"># Calculate full multipliers </span>
+            <span class="n">mults</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">mults</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Cannot multiply system dimension by zero&#39;</span><span class="p">)</span>
+                
+            <span class="c1"># Scale box and first set of positions accordingly</span>
+            <span class="n">spos</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">/=</span> <span class="n">mults</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">origin</span> <span class="o">+=</span> <span class="n">vects</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">sizes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">vects</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">mults</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            
+        <span class="c1"># Initialize new Box and Atoms</span>
+        <span class="n">box</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">vects</span><span class="o">=</span><span class="n">vects</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">)</span>
+        <span class="n">natoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span> <span class="o">*</span> <span class="n">mults</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">mults</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">mults</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">atoms</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">(</span><span class="n">natoms</span><span class="o">=</span><span class="n">natoms</span><span class="p">)</span>
+        
+        <span class="c1"># Copy over all property values (except pos) using numpy broadcasting</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms_prop</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;pos&#39;</span><span class="p">:</span>
+                <span class="k">continue</span>
+        
+            <span class="c1"># Get old array</span>
+            <span class="n">old</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">view</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            
+            <span class="c1"># Create new array and broadcast old to it</span>
+            <span class="n">new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">mults</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">mults</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">mults</span><span class="p">[</span><span class="mi">2</span><span class="p">],)</span> <span class="o">+</span> <span class="n">old</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">old</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="n">new</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">old</span>
+            
+            <span class="c1"># Reshape new and save to atoms</span>
+            <span class="n">new_shape</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">shape</span>
+            <span class="n">new_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">new_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],)</span> <span class="o">+</span> <span class="n">new_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+            <span class="n">atoms</span><span class="o">.</span><span class="n">view</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">new_shape</span><span class="p">))</span>
+        
+        <span class="c1"># Expand spos using broadcasting</span>
+        <span class="n">new_spos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">mults</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">mults</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">mults</span><span class="p">[</span><span class="mi">2</span><span class="p">],)</span> <span class="o">+</span> <span class="n">spos</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">new_spos</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">spos</span>
+        
+        <span class="c1"># Reshape spos</span>
+        <span class="n">new_shape</span> <span class="o">=</span> <span class="n">new_spos</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">new_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">new_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],)</span> <span class="o">+</span> <span class="n">new_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="n">new_spos</span> <span class="o">=</span> <span class="n">new_spos</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">new_shape</span><span class="p">)</span>
+        
+        <span class="c1"># Use broadcasting to create arrays to add to spos</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">mults</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">)</span>
+        <span class="n">test</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">,</span> <span class="n">mults</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">test</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">mults</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+        <span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">mults</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">test</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">mults</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">test</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">mults</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">test</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">mults</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">test</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+        <span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">mults</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">test</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">mults</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">test</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">mults</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">test</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">mults</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">test</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">test</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        
+        <span class="c1"># xyz is displacement values to add to spos</span>
+        <span class="n">xyz</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">y</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">z</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]))</span> 
+             <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span> <span class="o">/</span> <span class="n">mults</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">mults</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">mults</span><span class="p">[</span><span class="mi">2</span><span class="p">]]))</span>
+        
+        <span class="c1"># Save pos values, return new System</span>
+        <span class="n">atoms</span><span class="o">.</span><span class="n">view</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_spos</span> <span class="o">+</span> <span class="n">xyz</span>
+        
+        <span class="k">return</span> <span class="n">System</span><span class="p">(</span><span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="System.rotate"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.rotate">[docs]</a>    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hkls</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transforms a System representing a periodic crystal cell from a standard</span>
+<span class="sd">        orientation to a specified orientation. Note: if hexagonal indices are</span>
+<span class="sd">        given, the vectors will be reduced to the smallest hkl integer</span>
+<span class="sd">        representation.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        hkls : numpy.ndarray of int</span>
+<span class="sd">            A (3, 3) array of the Miller crystal vectors or a (3, 4) array of</span>
+<span class="sd">            Miller-Bravais hexagonal crystal vectors to use in transforming the</span>
+<span class="sd">            system.</span>
+<span class="sd">        tol : float, optional</span>
+<span class="sd">            Tolerance parameter used in rounding atomic positions near the</span>
+<span class="sd">            boundaries to the boundary values.  In box-relative coordinates, any</span>
+<span class="sd">            atomic positions within tol of 0 or 1 will be rounded to 0 or 1,</span>
+<span class="sd">            respectively.  Default value is 1e-5.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        atomman.System</span>
+<span class="sd">            A new fully periodic system rotated and transformed according to the</span>
+<span class="sd">            hkls crystal vectors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># Check parameters</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">hkls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">hkls</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int64&#39;</span><span class="p">)</span>
+           
+            <span class="k">if</span> <span class="n">hkls</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+                <span class="n">hkls</span> <span class="o">=</span> <span class="n">miller</span><span class="o">.</span><span class="n">vector4to3</span><span class="p">(</span><span class="n">hkls</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">hkls</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid hkls crystal indices&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Get natoms and volume of system</span>
+        <span class="n">natoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">avect</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">bvect</span><span class="p">,</span>
+                                                    <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">cvect</span><span class="p">)))</span>
+        
+        <span class="c1"># Convert hkls to Cartesian units and compute new volume and natoms</span>
+        <span class="n">newvects</span> <span class="o">=</span> <span class="n">miller</span><span class="o">.</span><span class="n">vectortocartesian</span><span class="p">(</span><span class="n">hkls</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">)</span>
+        <span class="n">newvolume</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">newvects</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">newvects</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">newvects</span><span class="p">[</span><span class="mi">2</span><span class="p">])))</span>
+        <span class="n">newnatoms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">newvolume</span> <span class="o">/</span> <span class="n">volume</span><span class="p">)</span> <span class="o">*</span> <span class="n">natoms</span><span class="p">)</span>
+        
+        <span class="c1"># Check new values</span>
+        <span class="k">if</span> <span class="n">newnatoms</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;New box has no atoms/volume: vectors are parallel or planar&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Identify box corners of new system wrt hkls</span>
+        <span class="n">corners</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int64&#39;</span><span class="p">)</span>
+        <span class="n">corners</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">corners</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">corners</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">corners</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">corners</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">corners</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">corners</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">corners</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        
+        <span class="c1"># Create a supercell of system that contains all box corners</span>
+        <span class="n">a_mults</span> <span class="o">=</span> <span class="p">(</span><span class="n">corners</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">corners</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">b_mults</span> <span class="o">=</span> <span class="p">(</span><span class="n">corners</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">corners</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">c_mults</span> <span class="o">=</span> <span class="p">(</span><span class="n">corners</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">corners</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">system2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">supersize</span><span class="p">(</span><span class="n">a_mults</span><span class="p">,</span> <span class="n">b_mults</span><span class="p">,</span> <span class="n">c_mults</span><span class="p">)</span>
+        
+        <span class="c1"># Change system.box.vects to newvects</span>
+        <span class="n">system2</span><span class="o">.</span><span class="n">box_set</span><span class="p">(</span><span class="n">vects</span><span class="o">=</span><span class="n">newvects</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        
+        <span class="c1"># Round atom positions near box boundaries to the boundaries</span>
+        <span class="n">spos</span> <span class="o">=</span> <span class="n">system2</span><span class="o">.</span><span class="n">atoms_prop</span><span class="p">(</span><span class="s1">&#39;pos&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">spos</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">spos</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">tol</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">spos</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">spos</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">tol</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        
+        <span class="c1"># Identify all atoms whose positions are 0 &lt;= x &lt; 1</span>
+        <span class="n">aindex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(((</span><span class="n">spos</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">spos</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">)</span>
+                         <span class="o">&amp;</span> <span class="p">(</span><span class="n">spos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">spos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">)</span>
+                         <span class="o">&amp;</span> <span class="p">(</span><span class="n">spos</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">spos</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">aindex</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="n">newnatoms</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Filtering failed: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">newnatoms</span><span class="p">)</span> <span class="o">+</span>
+                             <span class="s1">&#39;atoms expected, &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">aindex</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="o">+</span> <span class="s1">&#39; found&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Make newsystem by cutting out all atoms in system2 outside boundaries</span>
+        <span class="n">newsystem</span> <span class="o">=</span> <span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">system2</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="n">aindex</span><span class="p">],</span> <span class="n">box</span><span class="o">=</span><span class="n">system2</span><span class="o">.</span><span class="n">box</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span>
+        
+        <span class="c1"># Normalize newsystem</span>
+        <span class="n">newsystem</span> <span class="o">=</span> <span class="n">newsystem</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+        
+        <span class="k">return</span> <span class="n">newsystem</span></div>
+    
+<div class="viewcode-block" id="System.normalize"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.normalize">[docs]</a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;lammps&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Normalizes a system&#39;s box vectors and atom positions to be compatible</span>
+<span class="sd">        with simulation codes.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        style : str, optional</span>
+<span class="sd">            Indicates the normalization style to use.  Default (and only</span>
+<span class="sd">            current option) is &#39;lammps&#39;.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        atomman.System</span>
+<span class="sd">            A new system that has been normalized.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">style</span> <span class="o">==</span> <span class="s1">&#39;lammps&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">lmp_normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown style (only &#39;lammps&#39; is currently supported)&quot;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="System.dump"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a System to another format.</span>
+<span class="sd">    </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        style : str</span>
+<span class="sd">            Indicates the format of the content to dump the atomman.System as.</span>
+<span class="sd">        kwargs</span>
+<span class="sd">            Any extra keyword arguments to pass to the underlying dump methods.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str, object or tuple</span>
+<span class="sd">            Any content returned by the underlying dump methods.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">dump</span><span class="p">(</span><span class="n">style</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">Tutorials</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../atomman.html">atomman package</a></li>
+</ul>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../../../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="../../../py-modindex.html" title="Python Module Index"
+              >modules</a> |
+            <a href="../../../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Lucas Hale.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

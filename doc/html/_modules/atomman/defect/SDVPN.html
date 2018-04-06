@@ -1,0 +1,878 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>atomman.defect.SDVPN &#8212; atomman 1.2.alpha documentation</title>
+    <link rel="stylesheet" href="../../../_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../../../index.html">atomman 1.2.alpha documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for atomman.defect.SDVPN</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="c1"># Standard Python libraries</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
+                        <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="c1"># http://www.numpy.org/</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># https://www.scipy.org/</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">minimize</span>
+
+<span class="c1"># https://github.com/usnistgov/DataModelDict</span>
+<span class="kn">from</span> <span class="nn">DataModelDict</span> <span class="k">import</span> <span class="n">DataModelDict</span> <span class="k">as</span> <span class="n">DM</span>
+
+<span class="c1"># atomman imports</span>
+<span class="kn">import</span> <span class="nn">atomman.unitconvert</span> <span class="k">as</span> <span class="nn">uc</span>
+<span class="kn">from</span> <span class="nn">..tools</span> <span class="k">import</span> <span class="n">axes_check</span>
+<span class="kn">from</span> <span class="nn">.GammaSurface</span> <span class="k">import</span> <span class="n">GammaSurface</span>
+
+<div class="viewcode-block" id="SDVPN"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN">[docs]</a><span class="k">class</span> <span class="nc">SDVPN</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class representation of the semidiscrete variational Peierls-Nabarro</span>
+<span class="sd">    dislocation model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Class initializer. Calls either load() or solve() based on the given</span>
+<span class="sd">        parameters.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        *args : list </span>
+<span class="sd">            Any unnamed arguments passed on to set().</span>
+<span class="sd">        *kwargs : dict </span>
+<span class="sd">            Any named arguments to pass on.  If &#39;model&#39; is in kwargs, then</span>
+<span class="sd">            model() is called.  Else, *args and **kwargs are saved as class</span>
+<span class="sd">            properties, and then solve() is called.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># Load solution from existing model</span>
+        <span class="k">if</span> <span class="s1">&#39;model&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">gamma</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;gamma&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">],</span> <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;model keyword cannot be given with calculation parameters&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Solve new problem</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Set default parameters</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__set</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            
+            <span class="c1"># Call solve</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">__set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">K_tensor</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets default values for class parameters.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : numpy.ndarray</span>
+<span class="sd">            An array of shape (N) giving the x coordinates corresponding to</span>
+<span class="sd">            the disregistry solution.</span>
+<span class="sd">        disregistry : numpy.ndarray</span>
+<span class="sd">            A (N,3) array giving the initial disregistry vector guess at each</span>
+<span class="sd">            x coordinate.</span>
+<span class="sd">        gamma : atomman.defect.GammaSurface</span>
+<span class="sd">            The gamma surface (stacking fault map) to use for computing the</span>
+<span class="sd">            misfit energy.</span>
+<span class="sd">        axes : numpy.ndarray</span>
+<span class="sd">            A (3,3) array defining the crystal directions of the dislocation</span>
+<span class="sd">            system. Used to orient the disregistry vector to the gamma surface</span>
+<span class="sd">            in computing the misfit energy.</span>
+<span class="sd">        K_tensor : numpy.ndarray</span>
+<span class="sd">            A (3,3) array giving the anisotropic elastic energy coefficients</span>
+<span class="sd">            corresponding to the dislocation system&#39;s orientation.  Can be</span>
+<span class="sd">            computed with atomman.defect.Stroh.</span>
+<span class="sd">        tau : numpy.ndarray, optional</span>
+<span class="sd">            A (3,3) array giving the stress tensor to apply to the system</span>
+<span class="sd">            using the stress energy term.  Only the xy, yy, and yz components</span>
+<span class="sd">            are used.  Default value is all zeros.</span>
+<span class="sd">        alpha : list of float, optional</span>
+<span class="sd">            The alpha coefficient(s) used by the nonlocal energy term.  Default</span>
+<span class="sd">            value is [0.0].</span>
+<span class="sd">        beta : numpy.ndarray, optional</span>
+<span class="sd">            The (3,3) array of beta coefficient(s) used by the surface energy</span>
+<span class="sd">            term.  Default value is all zeros.</span>
+<span class="sd">        cutofflongrange : float, optional</span>
+<span class="sd">            The cutoff distance to use for computing the long-range energy.</span>
+<span class="sd">            Default value is 1000 angstroms.</span>
+<span class="sd">        burgers : numpy.ndarray, optional</span>
+<span class="sd">            The (3,) array of the dislocation&#39;s Burgers vector relative to the</span>
+<span class="sd">            dislocation system.  Used only by the long-range energy.  Default</span>
+<span class="sd">            value is all zeros (long-range energy will be excluded).</span>
+<span class="sd">        fullstress : bool, optional</span>
+<span class="sd">            Flag indicating which stress energy algorithm to use.  Default</span>
+<span class="sd">            value is True.</span>
+<span class="sd">        cdiffelastic : bool, optional</span>
+<span class="sd">            Flag indicating if the dislocation density for the elastic energy</span>
+<span class="sd">            component is computed with central difference (True) or simply</span>
+<span class="sd">            neighboring values (False).  Default value is False.</span>
+<span class="sd">        cdiffsurface : bool, optional</span>
+<span class="sd">            Flag indicating if the dislocation density for the surface energy</span>
+<span class="sd">            component is computed with central difference (True) or simply</span>
+<span class="sd">            neighboring values (False).  Default value is True.</span>
+<span class="sd">        cdiffstress : bool, optional</span>
+<span class="sd">            Flag indicating if the dislocation density for the stress energy</span>
+<span class="sd">            component is computed with central difference (True) or simply</span>
+<span class="sd">            neighboring values (False).  Only matters if fullstress is True.</span>
+<span class="sd">            Default value is False.</span>
+<span class="sd">        min_method : str, optional</span>
+<span class="sd">            The scipy.optimize.minimize method to use.  Default value is</span>
+<span class="sd">            &#39;Powell&#39;.</span>
+<span class="sd">        min_options : dict, optional</span>
+<span class="sd">            Any options to pass on to scipy.optimize.minimize. Default value</span>
+<span class="sd">            is {}.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># Set mandatory parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span> <span class="o">=</span> <span class="n">disregistry</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__gamma</span> <span class="o">=</span> <span class="n">gamma</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__axes</span> <span class="o">=</span> <span class="n">axes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__K_tensor</span> <span class="o">=</span> <span class="n">K_tensor</span>
+        
+        <span class="c1"># Set optional keyword parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tau</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tau&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__beta</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;beta&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cutofflongrange</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cutofflongrange&#39;</span><span class="p">,</span>
+                                            <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__burgers</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;burgers&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__fullstress</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fullstress&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffelastic</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cdiffelastic&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffsurface</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cdiffsurface&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffstress</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cdiffstress&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__min_method</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;min_method&#39;</span><span class="p">,</span> <span class="s1">&#39;Powell&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__min_options</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;min_options&#39;</span><span class="p">,</span> <span class="p">{})</span>
+    
+<div class="viewcode-block" id="SDVPN.solve"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solves the semidiscrete variational Peierls-Nabarro dislocation</span>
+<span class="sd">        disregistry through energy minimization using the set class</span>
+<span class="sd">        properties.  All parameters are optional keyword arguments that</span>
+<span class="sd">        replace the class properties.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : numpy.ndarray, optional</span>
+<span class="sd">            An array of shape (N) giving the x coordinates corresponding to</span>
+<span class="sd">            the disregistry solution.</span>
+<span class="sd">        disregistry : numpy.ndarray, optional</span>
+<span class="sd">            A (N,3) array giving the initial disregistry vector guess at each</span>
+<span class="sd">            x coordinate.</span>
+<span class="sd">        gamma : atomman.defect.GammaSurface, optional</span>
+<span class="sd">            The gamma surface (stacking fault map) to use for computing the</span>
+<span class="sd">            misfit energy.</span>
+<span class="sd">        axes : numpy.ndarray, optional</span>
+<span class="sd">            A (3,3) array defining the crystal directions of the dislocation</span>
+<span class="sd">            system. Used to orient the disregistry vector to the gamma surface</span>
+<span class="sd">            in computing the misfit energy.</span>
+<span class="sd">        K_tensor : numpy.ndarray, optional</span>
+<span class="sd">            A (3,3) array giving the anisotropic elastic energy coefficients</span>
+<span class="sd">            corresponding to the dislocation system&#39;s orientation.  Can be</span>
+<span class="sd">            computed with atomman.defect.Stroh.</span>
+<span class="sd">        tau : numpy.ndarray, optional</span>
+<span class="sd">            A (3,3) array giving the stress tensor to apply to the system</span>
+<span class="sd">            using the stress energy term.  Only the xy, yy, and yz components</span>
+<span class="sd">            are used.</span>
+<span class="sd">        alpha : list of float, optional</span>
+<span class="sd">            The alpha coefficient(s) used by the nonlocal energy term.</span>
+<span class="sd">        beta : numpy.ndarray, optional</span>
+<span class="sd">            The (3,3) array of beta coefficient(s) used by the surface energy</span>
+<span class="sd">            term.</span>
+<span class="sd">        cutofflongrange : float, optional</span>
+<span class="sd">            The cutoff distance to use for computing the long-range energy.</span>
+<span class="sd">        burgers : numpy.ndarray, optional</span>
+<span class="sd">            The (3,) array of the dislocation&#39;s Burgers vector relative to the</span>
+<span class="sd">            dislocation system.  Used only by the long-range energy.</span>
+<span class="sd">        fullstress : bool, optional</span>
+<span class="sd">            Flag indicating which stress energy algorithm to use.</span>
+<span class="sd">        cdiffelastic : bool, optional</span>
+<span class="sd">            Flag indicating if the dislocation density for the elastic energy</span>
+<span class="sd">            component is computed with central difference (True) or simply</span>
+<span class="sd">            neighboring values (False).</span>
+<span class="sd">        cdiffsurface : bool, optional</span>
+<span class="sd">            Flag indicating if the dislocation density for the surface energy</span>
+<span class="sd">            component is computed with central difference (True) or simply</span>
+<span class="sd">            neighboring values (False).</span>
+<span class="sd">        cdiffstress : bool, optional</span>
+<span class="sd">            Flag indicating if the dislocation density for the stress energy</span>
+<span class="sd">            component is computed with central difference (True) or simply</span>
+<span class="sd">            neighboring values (False).  Only matters if fullstress is True.</span>
+<span class="sd">        min_method : str, optional</span>
+<span class="sd">            The scipy.optimize.minimize method to use.</span>
+<span class="sd">        min_options : dict, optional</span>
+<span class="sd">            Any options to pass on to scipy.optimize.minimize.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># Define subfunctions</span>
+        <span class="k">def</span> <span class="nf">decompose</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Breaks disregistry into components for minimization&quot;&quot;&quot;</span>
+            <span class="n">d13</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
+            <span class="n">first</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">last</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">d13</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span>
+
+        <span class="k">def</span> <span class="nf">recompose</span><span class="p">(</span><span class="n">d13</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Reassembles the disregistry components&quot;&quot;&quot;</span>
+            <span class="n">half</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d13</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">half</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">first</span>
+            <span class="n">d</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">last</span>
+            <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">d13</span><span class="p">[:</span><span class="n">half</span><span class="p">]</span>
+            <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">d13</span><span class="p">[</span><span class="n">half</span><span class="p">:]</span>
+            <span class="k">return</span> <span class="n">d</span>
+
+        <span class="k">def</span> <span class="nf">min_func</span><span class="p">(</span><span class="n">d13</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Function for minimizing&quot;&quot;&quot;</span>
+            <span class="n">disregistry</span> <span class="o">=</span> <span class="n">recompose</span><span class="p">(</span><span class="n">d13</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_energy</span><span class="p">(</span><span class="n">disregistry</span><span class="o">=</span><span class="n">disregistry</span><span class="p">)</span>
+        
+        <span class="c1"># Handle parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__x</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;disregistry&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__gamma</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;gamma&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__gamma</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__axes</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__axes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__K_tensor</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;K_tensor&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__K_tensor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tau</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;tau&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tau</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__beta</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;beta&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__beta</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cutofflongrange</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cutofflongrange&#39;</span><span class="p">,</span> 
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">__cutofflongrange</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__burgers</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;burgers&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__burgers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__fullstress</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fullstress&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fullstress</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffelastic</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cdiffelastic&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffelastic</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffsurface</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cdiffsurface&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffsurface</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffstress</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cdiffstress&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffstress</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__min_method</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;min_method&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__min_method</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__min_options</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;min_options&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__min_options</span><span class="p">)</span>
+        
+        <span class="c1"># Solve disregistry</span>
+        <span class="n">d13</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span> <span class="o">=</span> <span class="n">decompose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">disregistry</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">min_func</span><span class="p">,</span> <span class="n">d13</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">),</span>
+                       <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min_method</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min_options</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span> <span class="o">=</span> <span class="n">recompose</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">__res</span> <span class="o">=</span> <span class="n">res</span></div>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;numpy.ndarray : The x coordinates.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__x</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">disregistry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;numpy.ndarray : The disregistry vector for each x coordinate.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gamma</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;atomman.defect.GammaSurface : The stacking fault map.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__gamma</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">axes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;numpy.ndarray : Axes for orienting the disregistry to gamma.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__axes</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">K_tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;numpy.ndarray : Dislocation energy coefficient tensor for system.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__K_tensor</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tau</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;numpy.ndarray : The applied stress state.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tau</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;list of float : Coefficients for nonlocal energy correction.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">beta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;numpy.ndarray : Coefficients for gradient energy correction.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__beta</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cutofflongrange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;float : Cutoff distance for long-range elastic energy.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cutofflongrange</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">burgers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;numpy.ndarray : Full Burgers vector for long-range elastic energy.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__burgers</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fullstress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;bool : Flag indicating which stress algorithm was used.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fullstress</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cdiffelastic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;bool : Flag indicating if elastic energy used central difference for computing the dislocation density.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffelastic</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cdiffsurface</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;bool : Flag indicating if surface energy used central difference for computing the dislocation density.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffsurface</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cdiffstress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;bool : Flag indicating if stress energy used central difference for computing the dislocation density.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffstress</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">min_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;str : scipy.optimize.minimize method used.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__min_method</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">min_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;dict : scipy.optimize.minimize options used.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__min_options</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">res</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;OptimizeResult : scipy.optimize.minimize result.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__res</span>
+    
+<div class="viewcode-block" id="SDVPN.disldensity"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.disldensity">[docs]</a>    <span class="k">def</span> <span class="nf">disldensity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cdiff</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the dislocation density as the numerical derivative of</span>
+<span class="sd">        disregistry with respect to x.  Uses either neighboring values</span>
+<span class="sd">        </span>
+<span class="sd">            ρ[i] = (δ[i] - δ[i-1]) / (x[i] - x[i-1])</span>
+<span class="sd">        </span>
+<span class="sd">        or central difference</span>
+<span class="sd">        </span>
+<span class="sd">            ρ[i] = (δ[i+1] - δ[i-1]) / (x[i+1] - x[i-1])</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cdiff : bool</span>
+<span class="sd">            Flag indicating how to compute the derivative.  A value of False</span>
+<span class="sd">            (default) compares nearest values while a value of True compares</span>
+<span class="sd">            next-nearest (i.e., central difference).</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        newx : numpy.array</span>
+<span class="sd">            The x positions corresponding to the dislocation density values.</span>
+<span class="sd">        rho : numpy.array</span>
+<span class="sd">            The computed dislocation density.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Default values are class properties</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__x</span>
+        <span class="k">if</span> <span class="n">disregistry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">disregistry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span>
+        
+        <span class="c1"># Extract values</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">disregistry</span>
+        
+        <span class="k">if</span> <span class="n">cdiff</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="c1"># ρ[i] = (δ[i] - δ[i-1]) / (x[i] - x[i-1])</span>
+            <span class="n">rho</span> <span class="o">=</span> <span class="p">((</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">d</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">T</span>
+            
+            <span class="c1"># newx is all x except the first</span>
+            <span class="n">newx</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        
+        <span class="k">elif</span> <span class="n">cdiff</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1"># ρ[i] = (δ[i+1] - δ[i-1]) / (x[i+1] - x[i-1])</span>
+            <span class="n">rho</span> <span class="o">=</span> <span class="p">((</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">-</span> <span class="n">d</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]))</span><span class="o">.</span><span class="n">T</span>
+            
+            <span class="c1"># newx is all x except the first and last</span>
+            <span class="n">newx</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;cdiff must be bool&#39;</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="p">(</span><span class="n">newx</span><span class="p">,</span> <span class="n">rho</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="SDVPN.misfit_energy"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.misfit_energy">[docs]</a>    <span class="k">def</span> <span class="nf">misfit_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the misfit energy for the disregistry using the stored gamma</span>
+<span class="sd">        surface</span>
+<span class="sd">        </span>
+<span class="sd">            E_misfit = Σ γ(δ)Δx</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : numpy.ndarray, optional</span>
+<span class="sd">            x-coordinates.  Default value is the stored x-coordinates.</span>
+<span class="sd">        disregistry : numpy.ndarray, optional</span>
+<span class="sd">            (N, 3) shaped array of disregistry vectors at each x-coordinate.</span>
+<span class="sd">            Default value is the stored disregistry values.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The misfit energy for the dislocation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Default values are class properties</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__x</span>
+        <span class="k">if</span> <span class="n">disregistry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">disregistry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span>
+        
+        <span class="c1"># Extract values</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">disregistry</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__axes</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__gamma</span>
+        
+        <span class="c1"># Strip out y-component of disregistry and transform for gamma</span>
+        <span class="n">disreg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">d</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)),</span> <span class="n">d</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">axes_check</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">disreg</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        
+        <span class="c1"># Σ γ(δ)Δx</span>
+        <span class="k">return</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="SDVPN.elastic_energy"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.elastic_energy">[docs]</a>    <span class="k">def</span> <span class="nf">elastic_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the short-range configuration-dependent elastic energy term</span>
+<span class="sd">        for the dislocation based on the dislocation density and K_tensor.</span>
+<span class="sd">        </span>
+<span class="sd">            E_elastic = 1/(4π) Σ_i Σ_j χ(i,j,Δx) K_lm ρ_l[i] ρ_m[j]</span>
+<span class="sd">            </span>
+<span class="sd">            χ(i,j,Δx) = (3/2) Δx² + ψ(i-1,j-1,Δx) + ψ(i,j,Δx) - ψ(i,j-1,Δx) - ψ(j,i-1,Δx)</span>
+<span class="sd">            </span>
+<span class="sd">            ψ(i,j,Δx) = (1/2) (i-j)² Δx² ln(\|i-j\|Δx)</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : numpy.ndarray, optional</span>
+<span class="sd">            x-coordinates.  Default value is the stored x-coordinates.</span>
+<span class="sd">        disregistry : numpy.ndarray, optional</span>
+<span class="sd">            (N, 3) shaped array of disregistry vectors at each x-coordinate.</span>
+<span class="sd">            Default value is the stored disregistry values.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The elastic energy for the dislocation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Define subfunctions</span>
+        <span class="k">def</span> <span class="nf">chi</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">dx</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Computes the chi subfunction:</span>
+<span class="sd">                χ(i,j,Δx) = (3/2) Δx² + ψ(i-1,j-1,Δx) + ψ(i,j,Δx)</span>
+<span class="sd">                                      - ψ(i,j-1,Δx) - ψ(j,i-1,Δx)</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="mf">3.</span><span class="o">/</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">psi</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span> <span class="o">+</span> <span class="n">psi</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span>
+                                    <span class="o">-</span> <span class="n">psi</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span> <span class="o">-</span> <span class="n">psi</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dx</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">psi</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">dx</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Computes the psi subfunction:</span>
+<span class="sd">                ψ(i,j,Δx) = (1/2) (i-j)² Δx² ln(|i-j|Δx)</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1"># Suppress NaN runtime warnings</span>
+            <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">RuntimeWarning</span><span class="p">)</span>
+                
+                <span class="c1"># ψ(i,j,Δx) = (1/2) (i-j)² Δx² ln(|i-j|Δx)</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">)</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
+            
+            <span class="c1"># Replace NaN values with 0.0</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            
+            <span class="k">return</span> <span class="n">p</span>
+        
+        <span class="c1"># Default values are class properties</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__x</span>
+        <span class="k">if</span> <span class="n">disregistry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">disregistry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span>
+        
+        <span class="c1"># Extract values</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">disregistry</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">cdiff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cdiffelastic</span>
+        <span class="n">Kij</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__K_tensor</span>
+        
+        <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disldensity</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">cdiff</span><span class="o">=</span><span class="n">cdiff</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rho</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        
+        <span class="n">energy</span> <span class="o">=</span> <span class="mf">0.0</span>
+        
+        <span class="c1"># Compute elastic energy (looping over i, vectorization over j)</span>
+        <span class="c1"># 1/(4π) Σ_i Σ_j χ(i,j,Δx) K_lm ρ_l[i] ρ_m[j]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">j</span><span class="p">:</span>
+            <span class="n">energy</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">chi</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">rho</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Kij</span><span class="p">),</span> <span class="n">rho</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">energy</span></div>
+    
+<div class="viewcode-block" id="SDVPN.longrange_energy"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.longrange_energy">[docs]</a>    <span class="k">def</span> <span class="nf">longrange_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the long-range elastic energy term for the dislocation using</span>
+<span class="sd">        the K_tensor, Burgers vector and long-range cutoff.  This term is</span>
+<span class="sd">        configuration-independent and thus the method takes no parameters.</span>
+<span class="sd">        </span>
+<span class="sd">            E_longrange = 1/(2π) K_lm b_l b_m ln(L)</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The long-range energy for the dislocation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Extract values</span>
+        <span class="n">Kij</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__K_tensor</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__burgers</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cutofflongrange</span>
+        
+        <span class="c1"># Compute long-range energy</span>
+        <span class="c1"># 1/(2π) K_lm b_l b_m ln(L)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Kij</span><span class="p">),</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="SDVPN.stress_energy"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.stress_energy">[docs]</a>    <span class="k">def</span> <span class="nf">stress_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the stress energy due to the applied stress, tau.</span>
+<span class="sd">        If fullstress is True:</span>
+<span class="sd">        </span>
+<span class="sd">            E_stress = -1/2 Σ_i (x[i]² - x[i-1]²) ρ_l τ_2l</span>
+<span class="sd">        </span>
+<span class="sd">        If fullstress is False:</span>
+<span class="sd">        </span>
+<span class="sd">            E_stress = -1/2 Σ_i τ_2l (δ_l[i] + δ_l[i+1]) Δx</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : numpy.ndarray, optional</span>
+<span class="sd">            x-coordinates.  Default value is the stored x-coordinates.</span>
+<span class="sd">        disregistry : numpy.ndarray, optional</span>
+<span class="sd">            (N, 3) shaped array of disregistry vectors at each x-coordinate.</span>
+<span class="sd">            Default value is the stored disregistry values.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The stress energy for the dislocation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Default values are class properties</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__x</span>
+        <span class="k">if</span> <span class="n">disregistry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">disregistry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span>
+        
+        <span class="c1"># Extract values</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">disregistry</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tau</span>
+        <span class="n">full</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullstress</span>
+        <span class="n">cdiff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cdiffstress</span>
+        
+        <span class="k">if</span> <span class="n">full</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disldensity</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">cdiff</span><span class="o">=</span><span class="n">cdiff</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># -1/2 Σ_i (x[i]² - x[i-1]²) ρ_l τ_2l</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">tau</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]))</span>
+            
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># -1/2 Σ_i τ_2l (δ_l[i] + δ_l[i+1]) Δx</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">tau</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span> <span class="p">(</span><span class="n">d</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">*</span> <span class="n">dx</span><span class="p">))</span></div>
+    
+<div class="viewcode-block" id="SDVPN.surface_energy"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.surface_energy">[docs]</a>    <span class="k">def</span> <span class="nf">surface_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the gradient surface energy correction using beta</span>
+<span class="sd">        coefficients.</span>
+<span class="sd">        </span>
+<span class="sd">            E_surface = Σ_j β_lj / 4 Σ_i ρ_l[i]² Δx</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : numpy.ndarray, optional</span>
+<span class="sd">            x-coordinates.  Default value is the stored x-coordinates.</span>
+<span class="sd">        disregistry : numpy.ndarray, optional</span>
+<span class="sd">            (N, 3) shaped array of disregistry vectors at each x-coordinate.</span>
+<span class="sd">            Default value is the stored disregistry values.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The surface energy for the dislocation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Default values are class properties</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__x</span>
+        <span class="k">if</span> <span class="n">disregistry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">disregistry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span>
+            
+        <span class="c1"># Extract values</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">disregistry</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__beta</span>
+        <span class="n">cdiff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffsurface</span>
+        
+        <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disldensity</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">cdiff</span><span class="o">=</span><span class="n">cdiff</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        
+        <span class="c1"># Σ_j β_lj / 4 Σ_i ρ_l[i]² Δx</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">rho</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">dx</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span> <span class="p">)</span> <span class="o">/</span> <span class="mi">4</span></div>
+    
+<div class="viewcode-block" id="SDVPN.nonlocal_energy"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.nonlocal_energy">[docs]</a>    <span class="k">def</span> <span class="nf">nonlocal_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the nonlocal energy correction using alpha coefficient(s).</span>
+<span class="sd">        </span>
+<span class="sd">            E_nonlocal = Σ_m α_m Σ_i δ[i] (δ[i] - (δ[i+m] + δ[i-m]) / 2) Δx</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : numpy.ndarray, optional</span>
+<span class="sd">            x-coordinates.  Default value is the stored x-coordinates.</span>
+<span class="sd">        disregistry : numpy.ndarray, optional</span>
+<span class="sd">            (N, 3) shaped array of disregistry vectors at each x-coordinate.</span>
+<span class="sd">            Default value is the stored disregistry values.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The nonlocal energy for the dislocation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Default values are class properties</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__x</span>
+        <span class="k">if</span> <span class="n">disregistry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">disregistry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span>
+            
+        <span class="c1"># Extract values</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">disregistry</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span>
+        
+        <span class="n">energy</span> <span class="o">=</span> <span class="mf">0.0</span>
+        
+        <span class="c1"># Σ_m α_m Σ_i δ[i] (δ[i] - (δ[i+m] + δ[i-m]) / 2) Δx</span>
+        <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">alpha</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">num</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">dd</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">m</span><span class="p">:</span><span class="o">-</span><span class="n">m</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="p">:]</span> <span class="o">+</span> <span class="n">d</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="p">])</span>
+            <span class="n">energy</span> <span class="o">+=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">m</span><span class="p">:</span><span class="o">-</span><span class="n">m</span><span class="p">]</span> <span class="o">*</span> <span class="n">dd</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">energy</span></div>
+    
+<div class="viewcode-block" id="SDVPN.total_energy"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.total_energy">[docs]</a>    <span class="k">def</span> <span class="nf">total_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the total energy for the dislocation.</span>
+<span class="sd">        </span>
+<span class="sd">            E_total = E_elastic + E_misfit + E_stress + E_surface + E_nonlocal</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : numpy.ndarray, optional</span>
+<span class="sd">            x-coordinates.  Default value is the stored x-coordinates.</span>
+<span class="sd">        disregistry : numpy.ndarray, optional</span>
+<span class="sd">            (N, 3) shaped array of disregistry vectors at each x-coordinate.</span>
+<span class="sd">            Default value is the stored disregistry values.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The total energy for the dislocation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Default values are class properties</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__x</span>
+        <span class="k">if</span> <span class="n">disregistry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">disregistry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span>
+            
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">misfit_energy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="p">)</span>
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">elastic_energy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="p">)</span>
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">longrange_energy</span><span class="p">()</span>
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">stress_energy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="p">)</span>
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonlocal_energy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="p">)</span>
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface_energy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="p">))</span></div>
+    
+<div class="viewcode-block" id="SDVPN.load"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load solution from a data model.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or DataModelDict</span>
+<span class="sd">            The semi-discrete-Peierls-Nabarro data model to load.</span>
+<span class="sd">        gamma : atomman.defect.GammaSurface</span>
+<span class="sd">            The gamma surface to use.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># Identify model element</span>
+        <span class="n">sdpn</span> <span class="o">=</span> <span class="n">DM</span><span class="p">(</span><span class="n">model</span><span class="p">)</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;semi-discrete-Peierls-Nabarro&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Load calculation parameters</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">sdpn</span><span class="p">[</span><span class="s1">&#39;parameter&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__axes</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;axes&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__K_tensor</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;K_tensor&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__tau</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;tau&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__beta</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;beta&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cutofflongrange</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;cutofflongrange&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__burgers</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;burgers&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__fullstress</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;fullstress&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffelastic</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;cdiffelastic&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffsurface</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;cdiffsurface&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cdiffstress</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;cdiffstress&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__min_method</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;min_method&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__min_options</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;min_options&#39;</span><span class="p">]</span>
+        
+        <span class="c1"># Load gamma</span>
+        <span class="k">if</span> <span class="n">gamma</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">gamma</span> <span class="o">=</span> <span class="n">GammaSurface</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No gamma surface in model or given!&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">GammaSurface</span><span class="p">):</span>
+            <span class="n">gamma</span> <span class="o">=</span> <span class="n">GammaSurface</span><span class="p">(</span><span class="n">gamma</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__gamma</span> <span class="o">=</span> <span class="n">gamma</span>
+        
+        <span class="c1"># Load calculation solution</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">sdpn</span><span class="p">[</span><span class="s1">&#39;solution&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__x</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">solution</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">solution</span><span class="p">[</span><span class="s1">&#39;disregistry&#39;</span><span class="p">])</span></div>
+    
+<div class="viewcode-block" id="SDVPN.model"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.model">[docs]</a>    <span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length_unit</span><span class="o">=</span><span class="s1">&#39;angstrom&#39;</span><span class="p">,</span> <span class="n">energy_unit</span><span class="o">=</span><span class="s1">&#39;eV&#39;</span><span class="p">,</span>
+              <span class="n">pressure_unit</span><span class="o">=</span><span class="s1">&#39;GPa&#39;</span><span class="p">,</span> <span class="n">include_gamma</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a data model for the object.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        length_unit : str</span>
+<span class="sd">            The unit of length to save values as.  Default is &#39;angstrom&#39;.</span>
+<span class="sd">        energy_unit : str</span>
+<span class="sd">            The unit of energy to save values as.  Default is &#39;eV&#39;.</span>
+<span class="sd">        pressure_unit : str</span>
+<span class="sd">            The unit of pressure to save values as.  Default is &#39;GPa&#39;.</span>
+<span class="sd">        include_gamma : bool</span>
+<span class="sd">            Flag indicating if the gamma surface data is to be included.</span>
+<span class="sd">            Default value is False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">DM</span><span class="p">()</span>
+        <span class="n">model</span><span class="p">[</span><span class="s1">&#39;semidiscrete-variational-Peierls-Nabarro&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sdpn</span> <span class="o">=</span> <span class="n">DM</span><span class="p">()</span>
+        
+        <span class="n">sdpn</span><span class="p">[</span><span class="s1">&#39;parameter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span> <span class="o">=</span> <span class="n">DM</span><span class="p">()</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;axes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__axes</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;K_tensor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__K_tensor</span><span class="p">,</span> <span class="n">pressure_unit</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;tau&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__tau</span><span class="p">,</span> <span class="n">pressure_unit</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span><span class="p">,</span> <span class="n">pressure_unit</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="n">length_unit</span><span class="p">)</span>
+        
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;beta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__beta</span><span class="p">,</span> <span class="n">pressure_unit</span><span class="o">+</span><span class="s1">&#39;*&#39;</span><span class="o">+</span><span class="n">length_unit</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;cdiffelastic&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cdiffelastic</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;cdiffsurface&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cdiffsurface</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;cdiffstress&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cdiffstress</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;cutofflongrange&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__cutofflongrange</span><span class="p">,</span> <span class="n">length_unit</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;burgers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__burgers</span><span class="p">,</span> <span class="n">length_unit</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;fullstress&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullstress</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;min_method&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_method</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;min_options&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_options</span>
+        
+        <span class="k">if</span> <span class="n">include_gamma</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">sdpn</span><span class="p">[</span><span class="s1">&#39;generalized-stacking-fault&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__gamma</span><span class="o">.</span><span class="n">model</span><span class="p">(</span>
+                                                  <span class="n">length_unit</span><span class="o">=</span><span class="n">length_unit</span><span class="p">,</span>
+                                                  <span class="n">energy_unit</span><span class="o">=</span><span class="n">energy_unit</span><span class="p">,</span>
+                                                  <span class="n">pressure_unit</span><span class="o">=</span><span class="n">pressure_unit</span><span class="p">)</span>
+        
+        <span class="n">sdpn</span><span class="p">[</span><span class="s1">&#39;solution&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">solution</span> <span class="o">=</span> <span class="n">DM</span><span class="p">()</span>
+        <span class="n">solution</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__x</span><span class="p">,</span> <span class="n">length_unit</span><span class="p">)</span>
+        <span class="n">solution</span><span class="p">[</span><span class="s1">&#39;disregistry&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span><span class="p">,</span> <span class="n">length_unit</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">model</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">Tutorials</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../atomman.html">atomman package</a></li>
+</ul>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../../../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="../../../py-modindex.html" title="Python Module Index"
+              >modules</a> |
+            <a href="../../../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Lucas Hale.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>
