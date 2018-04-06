@@ -7,6 +7,8 @@ import numpy as np
 
 from .crystalsystem import ishexagonal
 
+__all__ = ['vector3to4', 'vector4to3', 'vectortocartesian']
+
 def vector3to4(indices):
     """
     Converts 3-term Miller (hkl) indices to 4-term hexagonal (hkil)
@@ -24,7 +26,7 @@ def vector3to4(indices):
         (..., 4) array of Miller-Bravais crystallographic indices.
     
     Raises
-    ------    
+    ------
     AssertionError
         If indices dimensions are not (..., 3).
     """

@@ -34,7 +34,7 @@ class Atoms(object):
             2. For new keys, checks are done that data is compatible with host.natoms.
             3. New keys are also added as attributes to host Atoms object, if allowed.
             4. For existing keys, new values are saved over the old ones as opposed to
-               only changing the name assignment.
+            only changing the name assignment.
 
             Parameters
             ----------

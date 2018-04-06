@@ -1,4 +1,5 @@
 from .point import *
+from .point import __all__ as point_all
 
 from .differential_displacement import differential_displacement
 from .disregistry import disregistry
@@ -11,3 +12,9 @@ from .Stroh import Stroh
 from .GammaSurface import GammaSurface
 from .pn_arctan_disregistry import pn_arctan_disregistry
 from .SDVPN import SDVPN
+
+__all__ = ['differential_displacement', 'disregistry', 'slip_vector',
+           'nye_tensor', 'nye_tensor_p', 'Stroh', 'GammaSurface',
+           'pn_arctan_disregistry', 'SDVPN']
+__all__.extend(point_all)
+__all__.sort()

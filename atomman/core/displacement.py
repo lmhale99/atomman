@@ -19,11 +19,10 @@ def displacement(system_0, system_1, box_reference='final', code=None):
     system_1 : atomman.System
         The final system to calculate displacements to.
     box_reference : str or None
-        Specifies which system's boundary conditions to use.
-        - 'initial' uses system_0's box and pbc
-        - 'final' uses system_1's box and pbc (Default)
-        - None computes the straight difference between the positions without
-          accounting for periodic boundaries.
+        Specifies which system's boundary conditions to use.  'initial' uses
+        system_0's box and pbc.  'final' uses system_1's box and pbc (Default)
+        None computes the straight difference between the positions without
+        accounting for periodic boundaries.
     code : str, optional
         Option for specifying which code version of dvect to use (see dvect's
         documentation for values).

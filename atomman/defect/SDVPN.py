@@ -403,7 +403,7 @@ class SDVPN(object):
         Parameters
         ----------
         x : numpy.ndarray, optional
-            (N) x-coordinates.  Default value is the stored x-coordinates.
+            x-coordinates.  Default value is the stored x-coordinates.
         disregistry : numpy.ndarray, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.
@@ -439,15 +439,15 @@ class SDVPN(object):
         for the dislocation based on the dislocation density and K_tensor.
         
             E_elastic = 1/(4π) Σ_i Σ_j χ(i,j,Δx) K_lm ρ_l[i] ρ_m[j]
-                        
+            
             χ(i,j,Δx) = (3/2) Δx² + ψ(i-1,j-1,Δx) + ψ(i,j,Δx) - ψ(i,j-1,Δx) - ψ(j,i-1,Δx)
             
-            ψ(i,j,Δx) = (1/2) (i-j)² Δx² ln(|i-j|Δx)
+            ψ(i,j,Δx) = (1/2) (i-j)² Δx² ln(\|i-j\|Δx)
         
         Parameters
         ----------
         x : numpy.ndarray, optional
-            (N) x-coordinates.  Default value is the stored x-coordinates.
+            x-coordinates.  Default value is the stored x-coordinates.
         disregistry : numpy.ndarray, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.
@@ -544,7 +544,7 @@ class SDVPN(object):
         Parameters
         ----------
         x : numpy.ndarray, optional
-            (N) x-coordinates.  Default value is the stored x-coordinates.
+            x-coordinates.  Default value is the stored x-coordinates.
         disregistry : numpy.ndarray, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.
@@ -586,7 +586,7 @@ class SDVPN(object):
         Parameters
         ----------
         x : numpy.ndarray, optional
-            (N) x-coordinates.  Default value is the stored x-coordinates.
+            x-coordinates.  Default value is the stored x-coordinates.
         disregistry : numpy.ndarray, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.
@@ -622,7 +622,7 @@ class SDVPN(object):
         Parameters
         ----------
         x : numpy.ndarray, optional
-            (N) x-coordinates.  Default value is the stored x-coordinates.
+            x-coordinates.  Default value is the stored x-coordinates.
         disregistry : numpy.ndarray, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.
@@ -662,7 +662,7 @@ class SDVPN(object):
         Parameters
         ----------
         x : numpy.ndarray, optional
-            (N) x-coordinates.  Default value is the stored x-coordinates.
+            x-coordinates.  Default value is the stored x-coordinates.
         disregistry : numpy.ndarray, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.

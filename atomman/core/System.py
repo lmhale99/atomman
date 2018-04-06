@@ -445,7 +445,7 @@ class System(object):
         Creates a larger system from a given system by replicating it along the
         system's box vectors.
         
-        The multiplier values *_size are taken to be integer tuples (m, n) where
+        The multiplier values \*_size are taken to be integer tuples (m, n) where
         m <= 0 and n >= 0.  The system multiplication works such that if n = -m,
         then the seed system's origin will be at the center of the new system.
         If only one integer is given, then it is assigned to m or n depending on
@@ -467,7 +467,7 @@ class System(object):
         -------
         atomman.System
             A new system created by replicating the given seed system according to
-            the *_size parameters.
+            the \*_size parameters.
           
         """
         # Extract parameters

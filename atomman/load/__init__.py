@@ -1,6 +1,6 @@
 # Standard Python libraries
 from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
+                        division)
 
 from .ase_Atoms import load as load_ase_Atoms
 from .cif import load as load_cif
@@ -10,6 +10,10 @@ from .system_model import load as load_system_model
 from .poscar import load as load_poscar
 from .atom_data import load as load_atom_data
 from .atom_dump import load as load_atom_dump
+
+__all__ = ['load', 'load_ase_Atoms', 'load_pymatgen_Structure', 'load_table',
+           'load_system_model', 'load_poscar', 'load_atom_data',
+           'load_atom_dump', 'load_cif']
 
 def load(style, input, **kwargs):
     """

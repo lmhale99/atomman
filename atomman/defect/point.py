@@ -10,6 +10,8 @@ import numpy as np
 from ..core import Atoms, System
 import atomman.unitconvert as uc
 
+__all__ = ['point', 'vacancy', 'interstitial', 'substitutional', 'dumbbell']
+
 def point(system, ptd_type='v', pos=None, ptd_id=None,
           db_vect=None, scale=False, atol=None, **kwargs):
     """
@@ -79,14 +81,14 @@ def point(system, ptd_type='v', pos=None, ptd_id=None,
     
     else:
         raise ValueError('Invalid ptd_type. Options are: v, i, s, or db')
-    
+
 def vacancy(system, pos=None, ptd_id=None, scale=False,
             atol=uc.set_in_units(1e-3, 'angstrom')):
     """
     Generates a new system by adding a vacancy point defect.
     1. Removes the indicated atom from the system
     2. Adds per-atom property old_id if it doesn't exist corresponding to the
-       atom ids in the original system.
+    atom ids in the original system.
     
     Parameters
     ----------
@@ -155,10 +157,10 @@ def interstitial(system, pos, scale=False, atol=uc.set_in_units(1e-3, 'angstrom'
     Generates a new system by adding an interstitial point defect.
     1. Adds a new atom to the end of the Atoms list.
     2. Adds per-atom property old_id if it doesn't exist corresponding to the
-       atom ids in the original system.
+    atom ids in the original system.
     3. Sets any of the new atom's per-atom properties to values given as
-       kwargs.  Any undefined properties are given zero values except atype,
-       which is set to 1.
+    kwargs.  Any undefined properties are given zero values except atype,
+    which is set to 1.
     
     Parameters
     ----------
@@ -222,11 +224,11 @@ def substitutional(system, pos=None, ptd_id=None, atype=1,scale=False,
     """
     Generates a new system by adding a substitutional point defect.
     1. Moves the indicated atom to the end of the list and changes its atype
-       to the value given.
+    to the value given.
     2. Adds per-atom property old_id if it doesn't exist corresponding to the
-       atom ids in the original system.
+    atom ids in the original system.
     3. Sets any of the moved atom's per-atom properties to values given as
-       kwargs.  Any undefined properties are left unchanged.
+    kwargs.  Any undefined properties are left unchanged.
     
     Parameters
     ----------
@@ -312,11 +314,12 @@ def dumbbell(system, pos=None, ptd_id=None, db_vect=None, scale=False,
              atol=uc.set_in_units(1e-3, 'angstrom'), **kwargs):
     """
     Generates a new system by adding a dumbbell interstitial point defect.
+    
     1. Copies the indicated atom and moves both the original and copy to the
-       end of the Atoms list.
+    end of the Atoms list.
     2. Displaces the dumbbell atoms position's by +-db_vect.
     3. Adds per-atom property old_id if it doesn't exist corresponding to the
-       atom ids in the original system.
+    atom ids in the original system.
     4. Sets any of the new atom's per-atom properties to values given as
        kwargs.  Any undefined properties are left unchanged.
     
@@ -337,7 +340,7 @@ def dumbbell(system, pos=None, ptd_id=None, db_vect=None, scale=False,
     atol : float, optional
         Absolute tolerance for position-based searching. Default value is 1e-3
         angstroms.
-    **kwargs : any, optional
+    \*\*kwargs : any, optional
         Keyword arguments corresponding to per-atom property values for the
         new atom in the dumbbell.  By default, all properties are left
         unchanged (i.e. same as atom that was copied).

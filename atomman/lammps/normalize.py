@@ -10,11 +10,11 @@ def normalize(system):
     """
     The normalize function takes any arbitrary system and transforms it to
     be compatible with LAMMPS.  In particular, LAMMPS systems must have:
-        1. Right-handed box vectors.
-        2. avect = [lx, 0.0, 0.0]
-        3. bvect = [xy, ly,  0.0]
-        4. cvect = [xz, yz,  lz]
-        5. All atoms initially inside the box dimensions.
+    1. Right-handed box vectors.
+    2. avect = [lx, 0.0, 0.0]
+    3. bvect = [xy, ly,  0.0]
+    4. cvect = [xz, yz,  lz]
+    5. All atoms initially inside the box dimensions.
     Note: large box tilt factors are not adjusted with this function.
     As such, the LAMMPS command 'box tilt large' may be needed.
     

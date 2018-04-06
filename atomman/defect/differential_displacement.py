@@ -67,12 +67,11 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
         neighbors or cutoff must be given, or system_0 have a neighbors
         attribute.
     component : str, optional
-        Indicates the style of the calculation to use:
-        - 'standard' (default) plots the differential displacements between
-          atoms in the Burgers direction.
-        - 'xy' plots the differential displacements within the xy plotting
-          plane.  This is useful for screw dislocations with localized
-          non-screw components.
+        Indicates the style of the calculation to use.  'standard' (default)
+        plots the differential displacements between atoms in the Burgers
+        direction.  'xy' plots the differential displacements within the xy
+        plotting plane.  This is useful for screw dislocations with localized
+        non-screw components.
     axes : arraly-like object, optional
         3x3 transformation array to apply to the Burgers vector to make it
         correspond to the system's orientation.
@@ -81,7 +80,9 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
         arrows.  Default value is 1 (no scaling).
     save_file : str, optional
         If given then the plot will be saved to a file with this name.
-    show -- Boolean flag for showing the figure. Default is True.
+    show : bool, optional
+        Flag for showing the figure. Default is True.
+    
     """
     # Transform burgers using axes
     if axes is not None:
