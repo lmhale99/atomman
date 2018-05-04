@@ -9,10 +9,11 @@ from .system_model import dump as dump_system_model
 from .poscar import dump as dump_poscar
 from .atom_data import dump as dump_atom_data
 from .atom_dump import dump as dump_atom_dump
+from .spglib_cell import dump as dump_spglib_cell
 
 __all__ = ['dump', 'dump_ase_Atoms', 'dump_pymatgen_Structure', 'dump_table',
            'dump_system_model', 'dump_poscar', 'dump_atom_data',
-           'dump_atom_dump']
+           'dump_atom_dump', 'dump_spglib_cell']
 
 def dump(style, system, **kwargs):
     """
@@ -54,5 +55,8 @@ def dump(style, system, **kwargs):
     elif style == 'poscar':
         return dump_poscar(system, **kwargs)
     
+    elif style == 'spglib_cell':
+        return dump_spglib_cell(system, **kwargs)
+        
     else:
         raise ValueError('Unsupported style')

@@ -10,10 +10,11 @@ from .system_model import load as load_system_model
 from .poscar import load as load_poscar
 from .atom_data import load as load_atom_data
 from .atom_dump import load as load_atom_dump
+from .spglib_cell import load as load_spglib_cell
 
 __all__ = ['load', 'load_ase_Atoms', 'load_pymatgen_Structure', 'load_table',
            'load_system_model', 'load_poscar', 'load_atom_data',
-           'load_atom_dump', 'load_cif']
+           'load_atom_dump', 'load_cif', 'load_spglib_cell']
 
 def load(style, input, **kwargs):
     """
@@ -57,6 +58,9 @@ def load(style, input, **kwargs):
     
     elif style == 'poscar':
         return load_poscar(input, **kwargs)
+    
+    elif style == 'spglib_cell':
+        return load_spglib_cell(input, **kwargs)
     
     else:
         raise ValueError('Unsupported style')
