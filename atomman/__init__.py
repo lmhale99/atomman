@@ -1,6 +1,13 @@
+"""
+Attributes
+----------
+rootdir : str
+    The absolute path to the iprPy package's root directory used to locate
+    contained data files.
+"""
+
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division)
+from __future__ import absolute_import, print_function, division
 import os
 
 # Define rootdir
