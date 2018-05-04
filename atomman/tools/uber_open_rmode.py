@@ -26,6 +26,11 @@ class uber_open_rmode():
         
     def __enter__(self):
         """Define different open actions."""
+        def isfile(data):
+            try:
+                return os.path.isfile(self.data)
+            except:
+                return False
         
         # Any open file-like objects in 'r' mode will have a read attribute
         if hasattr(self.data, 'read'):
@@ -33,7 +38,7 @@ class uber_open_rmode():
             self.to_close = False
         
         # If data is path to a file, open the file
-        elif os.path.isfile(self.data):
+        elif isfile(self.data):
             self.open_file = open(self.data, 'rb')
             self.to_close = True
         
