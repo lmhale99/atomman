@@ -112,7 +112,7 @@ def run(lammps_command, script_name, mpi_command=None,
     # Pass LAMMPS error to a Python error if failed
     except sp.CalledProcessError as e:
         if e.output != '':
-            lines = e.output.split('\n')
+            lines = e.output.decode("utf-8").split('\n')
             raise ValueError('Invalid LAMMPS input: \n%s' % lines[-2])
         else:
             raise OSError('Failed to run LAMMPS')
