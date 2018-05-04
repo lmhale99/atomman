@@ -38,7 +38,7 @@ def point(system, ptd_type='v', pos=None, ptd_id=None,
         Indicates if pos and db_vect are Cartesian (False) or box-relative
         (True). Default value is False.
     atol : float, optional
-        Absolute tolerance for position-based searching. Default value is 1e-3
+        Absolute tolerance for position-based searching. Default value is 0.01
         angstroms.
     **kwargs : any, optional
         Keyword arguments corresponding to per-atom property values for the
@@ -56,6 +56,7 @@ def point(system, ptd_type='v', pos=None, ptd_id=None,
     atomman.System
         A new system containing the defect.
     """
+    
     # If vacancy
     if ptd_type == 'v':
         assert db_vect is None, "db_vect not allowed with ptd_type=='v'"
@@ -82,8 +83,7 @@ def point(system, ptd_type='v', pos=None, ptd_id=None,
     else:
         raise ValueError('Invalid ptd_type. Options are: v, i, s, or db')
 
-def vacancy(system, pos=None, ptd_id=None, scale=False,
-            atol=uc.set_in_units(1e-3, 'angstrom')):
+def vacancy(system, pos=None, ptd_id=None, scale=False, atol=None):
     """
     Generates a new system by adding a vacancy point defect.
     1. Removes the indicated atom from the system
@@ -103,7 +103,7 @@ def vacancy(system, pos=None, ptd_id=None, scale=False,
         Indicates if pos is Cartesian (False) or box-relative (True). Default
         value is False.
     atol : float, optional
-        Absolute tolerance for position-based searching. Default value is 1e-3
+        Absolute tolerance for position-based searching. Default value is 0.01
         angstroms.
     
     Returns
@@ -111,6 +111,10 @@ def vacancy(system, pos=None, ptd_id=None, scale=False,
     atomman.System
         A new system with the vacancy added.
     """
+    # Set default atol
+    if atol is None:
+        atol = uc.set_in_units(0.01, 'angstrom')
+    
     # Identify the id of the atom at pos
     if pos is not None:
         if ptd_id is not None:
@@ -119,7 +123,8 @@ def vacancy(system, pos=None, ptd_id=None, scale=False,
         if scale:
             pos = system.unscale(pos)
         
-        ptd_id = np.where(np.isclose(system.atoms.pos, pos, atol=atol).all(axis=1))
+        dist = np.linalg.norm(system.dvect(pos, system.atoms.pos), axis=1)
+        ptd_id = np.where(np.isclose(dist, 0.0, atol=atol))
         if len(ptd_id) == 1 and len(ptd_id[0]) == 1:
             ptd_id = ptd_id[0][0]
         else:
@@ -143,7 +148,8 @@ def vacancy(system, pos=None, ptd_id=None, scale=False,
     
     # Build new system
     d_system = System(box=deepcopy(system.box), pbc=deepcopy(system.pbc),
-                      atoms=deepcopy(system.atoms[index]))
+                      atoms=deepcopy(system.atoms[index]),
+                      symbols=system.symbols)
     
     # Add property old_id with each atom's original id
     if 'old_id' not in d_system.atoms_prop():
@@ -151,8 +157,7 @@ def vacancy(system, pos=None, ptd_id=None, scale=False,
     
     return d_system
 
-def interstitial(system, pos, scale=False, atol=uc.set_in_units(1e-3, 'angstrom'),
-                 **kwargs):
+def interstitial(system, pos, scale=False, atol=None, **kwargs):
     """
     Generates a new system by adding an interstitial point defect.
     1. Adds a new atom to the end of the Atoms list.
@@ -172,7 +177,7 @@ def interstitial(system, pos, scale=False, atol=uc.set_in_units(1e-3, 'angstrom'
         Indicates if pos is Cartesian (False) or box-relative (True).  Default
         value is False.
     atol : float, optional
-        Absolute tolerance for position-based searching. Default value is 1e-3
+        Absolute tolerance for position-based searching. Default value is 0.01
         angstroms.
     **kwargs : any, optional
         Keyword arguments corresponding to per-atom property values for the
@@ -184,11 +189,16 @@ def interstitial(system, pos, scale=False, atol=uc.set_in_units(1e-3, 'angstrom'
     atomman.System
         A new system with the interstitial added.
     """
+    # Set default atol
+    if atol is None:
+        atol = uc.set_in_units(0.01, 'angstrom')
+    
     if scale:
         pos = system.unscale(pos)
     
     # Check that no atoms are already at pos
-    ptd_id = np.where(np.isclose(system.atoms.pos, pos, atol=atol).all(axis=1))
+    dist = np.linalg.norm(system.dvect(pos, system.atoms.pos), axis=1)
+    ptd_id = np.where(np.isclose(dist, 0.0, atol=atol))
     if not (len(ptd_id) == 1 and len(ptd_id[0]) == 0):
         raise ValueError('atom already at pos')
     
@@ -198,7 +208,8 @@ def interstitial(system, pos, scale=False, atol=uc.set_in_units(1e-3, 'angstrom'
     
     # Build new system with atom 0 copied
     d_system = System(box=deepcopy(system.box), pbc=deepcopy(system.pbc),
-                      atoms=deepcopy(system.atoms[index]))
+                      atoms=deepcopy(system.atoms[index]),
+                      symbols=system.symbols)
     
     # Add property old_id with each atom's original id
     if 'old_id' not in d_system.atoms_prop():
@@ -220,7 +231,7 @@ def interstitial(system, pos, scale=False, atol=uc.set_in_units(1e-3, 'angstrom'
     return d_system
 
 def substitutional(system, pos=None, ptd_id=None, atype=1,scale=False,
-                   atol=uc.set_in_units(1e-3, 'angstrom'), **kwargs):
+                   atol=None, **kwargs):
     """
     Generates a new system by adding a substitutional point defect.
     1. Moves the indicated atom to the end of the list and changes its atype
@@ -246,7 +257,7 @@ def substitutional(system, pos=None, ptd_id=None, atype=1,scale=False,
         Indicates if pos is Cartesian (False) or box-relative (True).  Default
         value is False.
     atol : float, optional
-        Absolute tolerance for position-based searching. Default value is 1e-3
+        Absolute tolerance for position-based searching. Default value is 0.01
         angstroms.
     **kwargs : any, optional
         Keyword arguments corresponding to per-atom property values for the
@@ -258,6 +269,10 @@ def substitutional(system, pos=None, ptd_id=None, atype=1,scale=False,
     atomman.System
         A new system with the substitutional added.
     """
+    # Set default atol
+    if atol is None:
+        atol = uc.set_in_units(0.01, 'angstrom')
+    
     # Identify the id of the atom at pos
     if pos is not None:
         if ptd_id is not None:
@@ -266,7 +281,8 @@ def substitutional(system, pos=None, ptd_id=None, atype=1,scale=False,
         if scale:
             pos = system.unscale(pos)
         
-        ptd_id = np.where(np.isclose(system.atoms.pos, pos, atol=atol).all(axis=1))
+        dist = np.linalg.norm(system.dvect(pos, system.atoms.pos), axis=1)
+        ptd_id = np.where(np.isclose(dist, 0.0, atol=atol))
         if len(ptd_id) == 1 and len(ptd_id[0]) == 1:
             ptd_id = ptd_id[0][0]
         else:
@@ -291,7 +307,8 @@ def substitutional(system, pos=None, ptd_id=None, atype=1,scale=False,
     
     # Build new system
     d_system = System(box=deepcopy(system.box), pbc=deepcopy(system.pbc),
-                      atoms=deepcopy(system.atoms[index]))
+                      atoms=deepcopy(system.atoms[index]),
+                      symbols=system.symbols)
     
     # Add property old_id with each atom's original id
     if 'old_id' not in d_system.atoms_prop():
@@ -311,7 +328,7 @@ def substitutional(system, pos=None, ptd_id=None, atype=1,scale=False,
     return d_system
 
 def dumbbell(system, pos=None, ptd_id=None, db_vect=None, scale=False,
-             atol=uc.set_in_units(1e-3, 'angstrom'), **kwargs):
+             atol=None, **kwargs):
     """
     Generates a new system by adding a dumbbell interstitial point defect.
     
@@ -338,7 +355,7 @@ def dumbbell(system, pos=None, ptd_id=None, db_vect=None, scale=False,
         Indicates if pos and db_vect are Cartesian (False) or box-relative
         (True).  Default value is False.
     atol : float, optional
-        Absolute tolerance for position-based searching. Default value is 1e-3
+        Absolute tolerance for position-based searching. Default value is 0.01
         angstroms.
     \*\*kwargs : any, optional
         Keyword arguments corresponding to per-atom property values for the
@@ -350,6 +367,10 @@ def dumbbell(system, pos=None, ptd_id=None, db_vect=None, scale=False,
     atomman.System
         A new system with the dumbbell added.
     """
+    # Set default atol
+    if atol is None:
+        atol = uc.set_in_units(0.01, 'angstrom')
+    
     # Identify the id of the atom at pos
     if pos is not None:
         if ptd_id is not None:
@@ -358,7 +379,8 @@ def dumbbell(system, pos=None, ptd_id=None, db_vect=None, scale=False,
         if scale:
             pos = system.unscale(pos)
         
-        ptd_id = np.where(np.isclose(system.atoms.pos, pos, atol=atol).all(axis=1))
+        dist = np.linalg.norm(system.dvect(pos, system.atoms.pos), axis=1)
+        ptd_id = np.where(np.isclose(dist, 0.0, atol=atol))
         if len(ptd_id) == 1 and len(ptd_id[0]) == 1:
             ptd_id = ptd_id[0][0]
         else:
@@ -385,7 +407,8 @@ def dumbbell(system, pos=None, ptd_id=None, db_vect=None, scale=False,
     
     # Build new system
     d_system = System(box=deepcopy(system.box), pbc=deepcopy(system.pbc),
-                      atoms=deepcopy(system.atoms[index]))
+                      atoms=deepcopy(system.atoms[index]),
+                      symbols=system.symbols)
     
     # Add property old_id with each atom's original id
     if 'old_id' not in d_system.atoms_prop():
