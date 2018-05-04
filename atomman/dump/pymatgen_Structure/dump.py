@@ -5,7 +5,7 @@ from __future__ import (absolute_import, print_function,
 # http://www.numpy.org/
 import numpy as np
 
-#http://pymatgen.org
+# http://pymatgen.org
 try:
     import pymatgen as pmg
     has_pmg = True
