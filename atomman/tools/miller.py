@@ -11,7 +11,7 @@ __all__ = ['vector3to4', 'vector4to3', 'vectortocartesian']
 
 def vector3to4(indices):
     """
-    Converts 3-term Miller (hkl) indices to 4-term hexagonal (hkil)
+    Converts 3-term Miller [uvw] indices to 4-term hexagonal [uvtw]
     Miller-Bravias indices. Note that vectors will be normalized to
     smallest integer representations.
     
@@ -54,8 +54,8 @@ def vector3to4(indices):
     
 def vector4to3(indices):
     """
-    Converts 4-term hexagonal Miller-Bravias (hkil) indices to 3-term 
-    Miller (hkl) indices. Note that vectors will be normalized to 
+    Converts 4-term hexagonal Miller-Bravias [uvtw] indices to 3-term 
+    Miller [uvw] indices. Note that vectors will be normalized to 
     smallest integer representations.
     
     Parameters
@@ -103,8 +103,8 @@ def vectortocartesian(indices, box):
     Parameters
     ----------
     indices : np.ndarray of int
-        (..., 3) array of Miller crystallographic indices or 
-        (..., 4) array of Miller-Bravais crystallographic indices.
+        (..., 3) array of [uvw] Miller crystallographic indices or 
+        (..., 4) array of [uvtw] Miller-Bravais crystallographic indices.
     box : atomman.Box
         Box that defines the lattice cell vectors to use. 
    

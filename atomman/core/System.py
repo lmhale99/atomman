@@ -398,7 +398,11 @@ class System(object):
             pos_1 = np.asarray(pos_1)
         
         # Call dvect using self's box and pbc
-        return dvect(pos_0, pos_1, self.box, self.pbc, code=code)
+        vects = dvect(pos_0, pos_1, self.box, self.pbc, code=code)
+        if len(vects) == 1:
+            return vects[0]
+        else:
+            return vects
     
     def neighborlist(self, **kwargs):
         """
@@ -573,16 +577,16 @@ class System(object):
         
         return System(box=box, atoms=atoms, scale=True, symbols=self.symbols)
     
-    def rotate(self, hkls, tol=1e-5):
+    def rotate(self, uvws, tol=1e-5):
         """
         Transforms a System representing a periodic crystal cell from a standard
         orientation to a specified orientation. Note: if hexagonal indices are
-        given, the vectors will be reduced to the smallest hkl integer
+        given, the vectors will be reduced to the smallest uvw integer
         representation.
         
         Parameters
         ----------
-        hkls : numpy.ndarray of int
+        uvws : numpy.ndarray of int
             A (3, 3) array of the Miller crystal vectors or a (3, 4) array of
             Miller-Bravais hexagonal crystal vectors to use in transforming the
             system.
@@ -596,26 +600,26 @@ class System(object):
         -------
         atomman.System
             A new fully periodic system rotated and transformed according to the
-            hkls crystal vectors.
+            uvws crystal vectors.
         """
         
         # Check parameters
         try:
-            hkls = np.asarray(hkls, dtype='int64')
+            uvws = np.asarray(uvws, dtype='int64')
            
-            if hkls.shape == (3, 4):
-                hkls = miller.vector4to3(hkls)
-            assert hkls.shape == (3, 3)
+            if uvws.shape == (3, 4):
+                uvws = miller.vector4to3(uvws)
+            assert uvws.shape == (3, 3)
         except:
-            raise ValueError('Invalid hkls crystal indices')
+            raise ValueError('Invalid uvws crystal indices')
         
         # Get natoms and volume of system
         natoms = self.natoms
         volume = np.abs(self.box.avect.dot(np.cross(self.box.bvect,
                                                     self.box.cvect)))
         
-        # Convert hkls to Cartesian units and compute new volume and natoms
-        newvects = miller.vectortocartesian(hkls, box=self.box)
+        # Convert uvws to Cartesian units and compute new volume and natoms
+        newvects = miller.vectortocartesian(uvws, box=self.box)
         newvolume = np.abs(newvects[0].dot(np.cross(newvects[1], newvects[2])))
         newnatoms = int(round(newvolume / volume) * natoms)
         
@@ -623,16 +627,16 @@ class System(object):
         if newnatoms == 0:
             raise ValueError('New box has no atoms/volume: vectors are parallel or planar')
         
-        # Identify box corners of new system wrt hkls
+        # Identify box corners of new system wrt uvws
         corners = np.empty((8,3), dtype='int64')
         corners[0] = np.zeros(3)
-        corners[1] = hkls[0]
-        corners[2] = hkls[1]
-        corners[3] = hkls[2]
-        corners[4] = hkls[0] + hkls[1]
-        corners[5] = hkls[0] + hkls[2]
-        corners[6] = hkls[1] + hkls[2]
-        corners[7] = hkls[0] + hkls[1] + hkls[2]
+        corners[1] = uvws[0]
+        corners[2] = uvws[1]
+        corners[3] = uvws[2]
+        corners[4] = uvws[0] + uvws[1]
+        corners[5] = uvws[0] + uvws[2]
+        corners[6] = uvws[1] + uvws[2]
+        corners[7] = uvws[0] + uvws[1] + uvws[2]
         
         # Create a supercell of system that contains all box corners
         a_mults = (corners[:,0].min()-1, corners[:,0].max()+1)
