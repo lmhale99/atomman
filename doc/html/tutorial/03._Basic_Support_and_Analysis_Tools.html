@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Basic Support and Analysis Tools &#8212; atomman 1.2.alpha documentation</title>
+    <title>Introduction to atomman: Basic Support and Analysis Tools &#8212; atomman 1.2.0 documentation</title>
     <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -18,11 +26,12 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: ElasticConstants class" href="03.1._ElasticConstants_class.html" />
     <link rel="prev" title="Introduction to atomman: Running LAMMPS and the Log class" href="02.2_Running_LAMMPS_and_the_Log_class.html" /> 
-  </head><body>
+  </head>
+  <body>
     <div class="header-wrapper" role="banner">
       <div class="header">
         <div class="headertitle"><a
-          href="../index.html">atomman 1.2.alpha documentation</a></div>
+          href="../index.html">atomman 1.2.0 documentation</a></div>
         <div class="rel" role="navigation" aria-label="related navigation">
           <a href="02.2_Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
              accesskey="P">previous</a> |
@@ -215,7 +224,7 @@ div.nboutput div.output_area.stderr {
 <p><strong>Lucas M. Hale</strong>,
 <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
 <em>Materials Science and Engineering Division, NIST</em>.</p>
-<p>Notebook last updated: 2018-04-05</p>
+<p>Notebook last updated: 2018-05-29</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
@@ -223,11 +232,11 @@ div.nboutput div.output_area.stderr {
 basic support features and simple analysis of the atomistic systems.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
@@ -252,16 +261,16 @@ basic support features and simple analysis of the atomistic systems.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.alpha
+atomman version = 1.2.0
 </pre></div></div>
 </div>
 <p>Construct a demonstration 2x2x2 diamond cubic silicon system</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">5.431</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
 <span class="n">pos</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.00</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.00</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">],</span>
@@ -292,11 +301,11 @@ and transformed to other Cartesian coordinate systems.</p>
 Notebook</a> for more details
 and a full description of all of the class methods.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Define an ElasticConstants object for diamond cubic silicon</span>
 <span class="c1"># values taken from http://www.ioffe.ru/SVA/NSM/Semicond/Si/mechanic.html</span>
 <span class="n">C11</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">16.60</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="mi">11</span><span class="p">,</span> <span class="s1">&#39;dyn/cm^2&#39;</span><span class="p">)</span>
@@ -308,11 +317,11 @@ and a full description of all of the class methods.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Get 6x6 Cij Voigt representation of elastic constants in GPa</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cij (GPa) =&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Cij</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">))</span>
@@ -349,19 +358,19 @@ the System’s periodic dimensions.</p>
 position(s) to use as reference point(s). If the value can be used as
 an index, then self.atoms.pos[pos_0] is taken.</li>
 <li><strong>pos_1</strong> (<em>numpy.ndarray or index</em>) Absolute Cartesian vector
-position(s) to find relative to pos_0. If the value can be used as an
-index, then self.atoms.pos[pos_1] is taken.</li>
+position(s) to find relative to pos_0. If the value can be used as
+an index, then self.atoms.pos[pos_1] is taken.</li>
 <li><strong>code</strong> (<em>str, optional</em>) Option for specifying which underlying
 code function to use. ‘cython’ uses the version of the function built
 in cython (faster). ‘python’ uses the purely python version. Default
 is ‘cython’ if the code can be imported, otherwise ‘python’.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Calculate shortest vector between atoms 1 and 60</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">dvect</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">60</span><span class="p">))</span>
 </pre></div>
@@ -372,15 +381,15 @@ is ‘cython’ if the code can be imported, otherwise ‘python’.</li>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 4.07325  4.07325 -4.07325]]
+[ 4.07325  4.07325 -4.07325]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Calculate shortest distance between position [5., 5., 5.] and all atoms in system</span>
 <span class="n">pos</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span>
 
@@ -413,7 +422,7 @@ is ‘cython’ if the code can be imported, otherwise ‘python’.</li>
 <p>The atomman.displacement() function compares two systems with the same
 number of atoms and calculates the vector differences between all atoms
 with the same atomic id’s. The vectors returned are the shortest vectors
-after taking periodic boundaries in consideration, i.e.&nbsp;it uses dvect().</p>
+after taking periodic boundaries in consideration, i.e. it uses dvect().</p>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>system_0</strong> (<em>atomman.System</em>) The initial system to calculate
@@ -432,11 +441,11 @@ without accounting for periodic boundaries.</li>
 of dvect to use (see dvect’s documentation for details).</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Copy system and randomly displace atoms</span>
 <span class="n">system2</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
 <span class="n">system2</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
@@ -452,70 +461,70 @@ of dvect to use (see dvect’s documentation for details).</li>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 1.94760963  0.88237754  2.86458534]
- [ 1.71800104  2.84656421  2.83744657]
- [ 1.03503475  0.85728035  1.10854788]
- [ 0.200874    1.14359589  1.74101941]
- [ 0.47365415  2.43384396  1.33122947]
- [ 0.02485216  0.10055684  1.56341116]
- [ 2.15250975  2.40900804  2.46473197]
- [ 0.23717076  2.14840994  1.80686749]
- [ 0.59489223  0.29526409  0.65598156]
- [ 1.5649211   1.92366246  1.79461095]
- [ 2.59028275  2.2573958   1.05520988]
- [ 1.19149332  0.44667407  2.39431727]
- [ 0.38508164  0.04654789  1.82467246]
- [ 2.98161399  0.90922642  1.26693824]
- [ 0.38169624  2.30195727  2.56177588]
- [ 0.2909753   1.28991377  1.13595559]
- [ 2.44667264  0.59720544  0.89143997]
- [ 2.14712461  0.60398229  1.45072603]
- [ 0.77772116  0.05280898  2.94578467]
- [ 2.51772365  1.9414579   0.11527551]
- [ 0.65922045  2.56770357  1.38254887]
- [ 1.10530368  1.81843729  2.69823438]
- [ 2.44533568  2.00482232  1.15774173]
- [ 0.66048404  0.63254557  0.79225441]
- [ 0.62211988  2.48576638  2.25485781]
- [ 0.24046216  1.79326903  2.68454393]
- [ 1.7501736   0.43760257  2.70722008]
- [ 2.58619909  2.58275653  0.12137733]
- [ 0.21962587  2.44941314  2.61529503]
- [ 2.80119184  2.47318708  2.93477091]
- [ 0.73772802  2.51888971  2.86130974]
- [ 1.3297938   0.98921077  1.24329166]
- [ 0.03291052  0.84399888  2.54297832]
- [ 2.33885957  0.88733102  1.41827191]
- [ 0.90186283  2.04738101  0.32363001]
- [ 1.69088492  2.40693227  2.49667699]
- [ 2.5128828   2.04266176  0.82652291]
- [ 0.74898546  1.82035901  0.13594067]
- [ 0.7930011   0.20015504  1.18974291]
- [ 0.5992328   0.96044139  2.65388523]
- [ 0.82610541  0.76698417  2.36060642]
- [ 0.55452302  2.18368787  2.25722592]
- [ 1.43424999  1.84150705  2.78182041]
- [ 2.48294721  2.73637958  0.86695216]
- [ 1.4673722   1.27867887  0.03907049]
- [ 1.00740585  0.14761933  1.15272144]
- [ 2.55026786  1.67872734  2.75377749]
- [ 1.51327147  1.07593384  0.7002204 ]
- [ 0.15615398  0.02890516  1.06967028]
- [ 0.076353    0.33664508  2.84106733]
- [ 1.18061059  0.13499181  0.30850256]
- [ 2.80601793  0.95030615  1.94395086]
- [ 2.47265774  1.47045797  1.17077417]
- [ 1.48105516  2.98414399  0.45368999]
- [ 0.2235069   2.06498458  1.06858688]
- [ 1.74855997  0.22526443  1.77561021]
- [ 0.11405186  1.96369822  0.00435835]
- [ 1.79194257  1.29826333  2.5880032 ]
- [ 1.26888981  0.36409394  1.63195505]
- [ 2.49997372  0.28130742  1.71529641]
- [ 1.54271325  1.32835325  0.20076758]
- [ 2.56428072  2.15595097  2.69974074]
- [ 2.16278313  2.32880511  0.41359663]
- [ 2.56323417  1.52831121  2.48072009]]
+[[ 2.66827012  0.80394803  0.64645608]
+ [ 2.36497482  2.92689521  0.74203184]
+ [ 2.60824603  2.35011597  1.165886  ]
+ [ 2.7138511   1.54596029  0.23073004]
+ [ 0.43766355  2.4315704   2.62390253]
+ [ 0.01838068  0.30520984  0.35925247]
+ [ 0.64777125  2.66470126  1.14095877]
+ [ 1.01010276  0.03378811  0.04331337]
+ [ 1.12347322  1.53276455  2.22459068]
+ [ 0.79075686  1.81121114  2.51296463]
+ [ 2.40245602  0.9936886   2.81524537]
+ [ 2.44227714  0.63832523  1.56058964]
+ [ 0.41543111  2.88999574  0.61482665]
+ [ 1.50927427  1.25939621  0.77528605]
+ [ 1.81564928  0.97009157  0.74231277]
+ [ 0.13594322  2.22713158  1.65481535]
+ [ 1.71218509  1.99013404  2.49356913]
+ [ 0.96217731  0.84654231  2.95599208]
+ [ 0.04389676  0.28002775  2.9960977 ]
+ [ 0.16667739  0.65006597  1.48189688]
+ [ 2.5726049   1.66513696  2.73052337]
+ [ 1.69707865  2.29647205  2.04938706]
+ [ 2.24920857  0.57729154  2.57527413]
+ [ 2.70605159  2.91866766  2.78509124]
+ [ 1.45098221  0.4200919   0.9914056 ]
+ [ 1.07515819  1.89507431  2.93118757]
+ [ 0.32866995  2.83054676  0.31386925]
+ [ 1.22715519  1.75988772  1.66598699]
+ [ 0.87986728  0.61941986  2.9701303 ]
+ [ 0.18117665  1.5725641   1.68370991]
+ [ 2.90124228  2.43892531  2.47677492]
+ [ 0.33710119  1.22086864  0.17894038]
+ [ 2.99011557  1.60798335  2.50677633]
+ [ 1.99678741  0.07254577  0.17519493]
+ [ 2.02230997  0.42993433  1.55443386]
+ [ 0.58805056  0.84585102  1.66435858]
+ [ 1.59588628  2.32821401  2.08282277]
+ [ 2.49882991  1.85881291  2.40139562]
+ [ 1.10848294  1.95458445  1.74423747]
+ [ 1.45700148  2.3340691   0.03053367]
+ [ 0.17956914  2.74232541  0.58075082]
+ [ 2.9550886   0.07610512  2.38029524]
+ [ 0.10651367  2.77515443  2.18314725]
+ [ 1.31934675  2.11824906  0.55325605]
+ [ 2.45771365  0.68755239  2.11151458]
+ [ 0.85020896  0.4012362   2.26432404]
+ [ 0.80404685  1.21246926  2.7563263 ]
+ [ 1.28350699  1.08457973  0.2771318 ]
+ [ 0.81149562  1.53669604  2.35174986]
+ [ 0.96035694  2.8977847   1.05714436]
+ [ 2.73537829  0.89333627  2.63200905]
+ [ 1.52590786  2.3724587   1.43242139]
+ [ 2.08673802  2.17813608  0.29386541]
+ [ 2.08920283  0.20011184  1.28180971]
+ [ 0.30350688  2.60157214  0.19237549]
+ [ 1.01724333  1.27863684  2.40170918]
+ [ 0.99930291  2.80094218  0.97914271]
+ [ 2.53206321  2.2775696   0.98825609]
+ [ 1.97545373  0.88344303  2.05579085]
+ [ 2.46254759  0.5828893   0.50695515]
+ [ 0.73926195  1.17549934  0.30530886]
+ [ 1.25581689  0.73755285  2.24690608]
+ [ 2.51384201  0.39086662  1.65212577]
+ [ 1.8899478   2.20560406  1.84063317]]
 </pre></div></div>
 </div>
 </div>
@@ -550,22 +559,22 @@ exceeds the underlying array size. Default value is 10.</li>
 <li>(<em>atomman.NeighborList</em>) The compiled list of neighbors.</li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Identify neighbors within 3 angstroms</span>
 <span class="n">neighbors</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">neighborlist</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Show average atomic coordination</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Average coordination =&#39;</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">coord</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 </pre></div>
@@ -580,11 +589,11 @@ Average coordination = 4.0
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># List neighbor atoms of atom 6</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Neighbors of atom 6 =&#39;</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span>
 </pre></div>
@@ -610,16 +619,16 @@ Neighbors of atom 6 = [ 2 11 33 40]
 associated with an element’s atomic symbol.</li>
 <li><strong>atomman.tools.atomic_symbol()</strong> returns the elemental symbol
 associated with an given atomic number.</li>
-<li><strong>atomman.tools.atomic_mass()</strong> returns the atomic mass of an element
-or isotope. The atom can be identified with atomic number or
+<li><strong>atomman.tools.atomic_mass()</strong> returns the atomic mass of an
+element or isotope. The atom can be identified with atomic number or
 atomic/isotope symbol.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Get atomic number for an atomic symbol</span>
 <span class="n">num</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">atomic_number</span><span class="p">(</span><span class="s1">&#39;Fe&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
@@ -650,11 +659,11 @@ Fe
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Get atomic mass for an isotope</span>
 <span class="n">mass</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">atomic_mass</span><span class="p">(</span><span class="s1">&#39;Al-26&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">mass</span><span class="p">)</span>
@@ -681,11 +690,11 @@ right-handed.</li>
 be used for crystal transformations.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">axes</span> <span class="o">=</span> <span class="p">[[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
         <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
         <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
@@ -709,11 +718,11 @@ be used for crystal transformations.</li>
 <p>The filltemplate() function takes a template and fills in values for
 delimited template variables.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">madlibs</span> <span class="o">=</span> <span class="s2">&quot;My friend &lt;name&gt; really likes to use templates to &lt;verb&gt;, says that they are &lt;adjective&gt;!&quot;</span>
 <span class="n">s_delimiter</span> <span class="o">=</span> <span class="s1">&#39;&lt;&#39;</span>
 <span class="n">e_delimiter</span> <span class="o">=</span> <span class="s1">&#39;&gt;&#39;</span>
@@ -741,11 +750,11 @@ My friend Charlie really likes to use templates to program, says that they are d
 <p>Iterates through all indicies of an array with a given shape, returning
 both the numeric index and a string representation.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">istr</span> <span class="ow">in</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">indexstr</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;index -&gt;&#39;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">index</span><span class="p">),</span> <span class="s1">&#39;, istr -&gt;&#39;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">istr</span><span class="p">))</span>
 </pre></div>
@@ -767,19 +776,20 @@ index -&gt; (2, 1) , istr -&gt; &#39;[2][1]&#39;
 </div>
 <div class="section" id="4.5.-uber_open_rmode">
 <h3>4.5. uber_open_rmode<a class="headerlink" href="#4.5.-uber_open_rmode" title="Permalink to this headline">¶</a></h3>
-<p>uber_open_rmode is a context manager that allows for similar reading of
-content from a file or from a string variable. It equivalently handles:</p>
+<p>uber_open_rmode is a context manager that allows for similar reading
+of content from a file or from a string variable. It equivalently
+handles:</p>
 <ul class="simple">
 <li>str path name to a file</li>
 <li>str content</li>
 <li>open file-like object</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Define str and save to file</span>
 <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;Here I am, read me!&#39;</span>
 <span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;text.txt&#39;</span>
@@ -816,11 +826,11 @@ b&#39;Here I am, read me!&#39;
 <h3>4.6. vect_angle()<a class="headerlink" href="#4.6.-vect_angle()" title="Permalink to this headline">¶</a></h3>
 <p>The vect_angle() function returns the angle between two vectors.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">vect1</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
 <span class="n">vect2</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
 
@@ -835,9 +845,9 @@ b&#39;Here I am, read me!&#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Angle between [-0.96211096 -0.11047753  0.95432341] and [-0.93688964  0.65919101 -0.4760178 ] =
-77.1785157804 degrees
-1.34701921217 radians
+Angle between [ 0.45451412 -0.8547266   0.09722675] and [-0.61388269 -0.01006638 -0.22234222] =
+117.36576372 degrees
+2.04841900604 radians
 </pre></div></div>
 </div>
 </div>
@@ -853,14 +863,14 @@ Miller and Miller-Bravais indices to Cartesian vectors based on a
 supplied box.</li>
 </ul>
 <p><strong>Note</strong>: The returned indices will be the smallest integer
-representations possible, i.e.&nbsp;direction is retained but magnitude may
+representations possible, i.e. direction is retained but magnitude may
 be different.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Test single value case</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector3to4</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">])))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector4to3</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">])))</span>
@@ -877,22 +887,22 @@ be different.</p>
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Generate random hkl crystal indices</span>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Generate random uvw crystal indices</span>
 <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
 
-<span class="c1"># Convert to hexagonal hkil&#39;s</span>
+<span class="c1"># Convert to hexagonal uvtw&#39;s</span>
 <span class="n">indices</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector3to4</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
 
-<span class="c1"># Convert back to hkl&#39;s</span>
+<span class="c1"># Convert back to uvw&#39;s</span>
 <span class="n">indices</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector4to3</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
 </pre></div>
@@ -903,25 +913,25 @@ be different.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 2  3  3]
- [ 2 -1  1]
- [ 4  3 -2]]
+[[ 1  3 -4]
+ [ 3  0  2]
+ [ 1  5 -1]]
 
-[[ 1  4 -5  9]
- [ 5 -4 -1  3]
- [ 5  2 -7 -6]]
+[[ -1   5  -4 -12]
+ [  2  -1  -1   2]
+ [ -1   3  -2  -1]]
 
-[[ 2  3  3]
- [ 2 -1  1]
- [ 4  3 -2]]
+[[ 1  3 -4]
+ [ 3  0  2]
+ [ 1  5 -1]]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Define a hexagonal box</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">2.51</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">c</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.07</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
@@ -984,49 +994,49 @@ a standard triclinic box.</li>
 criteria:</p>
 <ul class="simple">
 <li>cubic:<ul>
-<li><span class="math notranslate">\(a = b = c\)</span></li>
-<li><span class="math notranslate">\(\alpha = \beta = \gamma = 90\)</span></li>
+<li><span class="math">\(a = b = c\)</span></li>
+<li><span class="math">\(\alpha = \beta = \gamma = 90\)</span></li>
 </ul>
 </li>
 <li>hexagonal:<ul>
-<li><span class="math notranslate">\(a = b \ne c\)</span></li>
-<li><span class="math notranslate">\(\alpha = \beta = 90\)</span></li>
-<li><span class="math notranslate">\(\gamma = 120\)</span></li>
+<li><span class="math">\(a = b \ne c\)</span></li>
+<li><span class="math">\(\alpha = \beta = 90\)</span></li>
+<li><span class="math">\(\gamma = 120\)</span></li>
 </ul>
 </li>
 <li>tetragonal:<ul>
-<li><span class="math notranslate">\(a = b \ne c\)</span></li>
-<li><span class="math notranslate">\(\alpha = \beta = \gamma = 90\)</span></li>
+<li><span class="math">\(a = b \ne c\)</span></li>
+<li><span class="math">\(\alpha = \beta = \gamma = 90\)</span></li>
 </ul>
 </li>
 <li>rhombohedral:<ul>
-<li><span class="math notranslate">\(a = b = c\)</span></li>
-<li><span class="math notranslate">\(\alpha = \beta = \gamma \ne 90\)</span></li>
+<li><span class="math">\(a = b = c\)</span></li>
+<li><span class="math">\(\alpha = \beta = \gamma \ne 90\)</span></li>
 </ul>
 </li>
 <li>orthorhombic:<ul>
-<li><span class="math notranslate">\(a \ne b \ne c\)</span></li>
-<li><span class="math notranslate">\(\alpha = \beta = \gamma = 90\)</span></li>
+<li><span class="math">\(a \ne b \ne c\)</span></li>
+<li><span class="math">\(\alpha = \beta = \gamma = 90\)</span></li>
 </ul>
 </li>
 <li>monoclinic:<ul>
-<li><span class="math notranslate">\(a \ne b \ne c\)</span></li>
-<li><span class="math notranslate">\(\alpha = \gamma = 90\)</span></li>
-<li><span class="math notranslate">\(\beta \ne 90\)</span></li>
+<li><span class="math">\(a \ne b \ne c\)</span></li>
+<li><span class="math">\(\alpha = \gamma = 90\)</span></li>
+<li><span class="math">\(\beta \ne 90\)</span></li>
 </ul>
 </li>
 <li>triclinic:<ul>
-<li><span class="math notranslate">\(a \ne b \ne c\)</span></li>
-<li><span class="math notranslate">\(\alpha \ne \beta \ne \gamma\)</span></li>
+<li><span class="math">\(a \ne b \ne c\)</span></li>
+<li><span class="math">\(\alpha \ne \beta \ne \gamma\)</span></li>
 </ul>
 </li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Define an orthogonal box</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">2.51</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">b</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">3.13</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
@@ -1060,11 +1070,11 @@ istriclinic =    False
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Define a non-standard tetragonal box with a=c!=b</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;identifyfamily =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">identifyfamily</span><span class="p">(</span><span class="n">box</span><span class="p">))</span>
@@ -1081,11 +1091,11 @@ identifyfamily = None
 </div>
 <p><strong>File Cleanup</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;text.txt&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1165,7 +1175,7 @@ identifyfamily = None
           
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Lucas Hale.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
         </div>
         <div class="clearer"></div>

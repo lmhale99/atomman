@@ -3,9 +3,7 @@
   {
    "cell_type": "markdown",
    "metadata": {
-    "collapsed": true,
-    "deletable": true,
-    "editable": true
+    "collapsed": true
    },
    "source": [
     "#  Introduction to atomman: NeighborList class\n",
@@ -20,9 +18,7 @@
   {
    "cell_type": "markdown",
    "metadata": {
-    "collapsed": true,
-    "deletable": true,
-    "editable": true
+    "collapsed": true
    },
    "source": [
     "## 1. Introduction\n",
@@ -44,10 +40,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "**Library Imports**"
    ]
@@ -55,11 +48,7 @@
   {
    "cell_type": "code",
    "execution_count": 1,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "outputs": [],
    "source": [
     "# Standard Python libraries\n",
@@ -76,10 +65,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "Construct a 10x10x10 bcc supercell system."
    ]
@@ -87,11 +73,7 @@
   {
    "cell_type": "code",
    "execution_count": 2,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -105,16 +87,13 @@
     "box = am.Box(a=2.8665, b=2.8665, c=2.8665)\n",
     "atoms = am.Atoms(atype=1, pos=[[0.0, 0.0, 0.0], [0.5, 0.5, 0.5]])\n",
     "system = am.System(atoms=atoms, box=box, scale=True)\n",
-    "system.supersize(10, 10, 10)\n",
+    "system = system.supersize(10, 10, 10)\n",
     "print(system.natoms)"
    ]
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "## 2. Identifying neighbors\n",
     "\n",
@@ -123,10 +102,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "### 2.1 Initialization\n",
     "\n",
@@ -157,11 +133,7 @@
   {
    "cell_type": "code",
    "execution_count": 3,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "outputs": [],
    "source": [
     "# Generate a new NeighborList object\n",
@@ -170,10 +142,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "### 2.2 The coord attribute\n",
     "\n",
@@ -183,11 +152,7 @@
   {
    "cell_type": "code",
    "execution_count": 4,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -205,10 +170,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "### 2.3 Per-atom neighbor lists\n",
     "\n",
@@ -218,11 +180,7 @@
   {
    "cell_type": "code",
    "execution_count": 5,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -239,11 +197,7 @@
   {
    "cell_type": "code",
    "execution_count": 6,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -262,10 +216,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "## 3. build()\n",
     "\n",
@@ -294,11 +245,7 @@
   {
    "cell_type": "code",
    "execution_count": 7,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -316,10 +263,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "## 4. dump() and load()\n",
     "\n",
@@ -328,10 +272,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "### 4.1 dump()\n",
     "\n",
@@ -345,11 +286,7 @@
   {
    "cell_type": "code",
    "execution_count": 8,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -2371,10 +2308,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "### 4.2 load()\n",
     "\n",
@@ -2388,11 +2322,7 @@
   {
    "cell_type": "code",
    "execution_count": 9,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -2409,10 +2339,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "### 4.3 Load on initializing\n",
     "\n",
@@ -2422,11 +2349,7 @@
   {
    "cell_type": "code",
    "execution_count": 10,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -2443,10 +2366,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "**File Cleanup**"
    ]
@@ -2454,11 +2374,7 @@
   {
    "cell_type": "code",
    "execution_count": 11,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "outputs": [],
    "source": [
     "os.remove('neighborlist.txt')"
@@ -2481,7 +2397,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.6.3"
+   "version": "3.6.4"
   }
  },
  "nbformat": 4,

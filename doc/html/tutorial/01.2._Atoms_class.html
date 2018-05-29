@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Atoms class &#8212; atomman 1.2.alpha documentation</title>
+    <title>Introduction to atomman: Atoms class &#8212; atomman 1.2.0 documentation</title>
     <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -18,11 +26,12 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: System Class" href="01.3._System_class.html" />
     <link rel="prev" title="Introduction to atomman: Box Class" href="01.1._Box_Class.html" /> 
-  </head><body>
+  </head>
+  <body>
     <div class="header-wrapper" role="banner">
       <div class="header">
         <div class="headertitle"><a
-          href="../index.html">atomman 1.2.alpha documentation</a></div>
+          href="../index.html">atomman 1.2.0 documentation</a></div>
         <div class="rel" role="navigation" aria-label="related navigation">
           <a href="01.1._Box_Class.html" title="Introduction to atomman: Box Class"
              accesskey="P">previous</a> |
@@ -236,11 +245,11 @@ attributes were designed with the old versions in mind, but there is no
 guarantee of complete backwards compatibility.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
@@ -275,11 +284,11 @@ function parameters. Included for backwards compatibility.</li>
 defining extra per-atom properties.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Define 10 atom system with random positions</span>
 <span class="c1"># Notes: natoms inferred from first dimension of pos. Same atype assigned to all atoms</span>
 <span class="n">atoms</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">atype</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
@@ -293,16 +302,16 @@ defining extra per-atom properties.</li>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   1.031 |   2.698 |   3.712
-      1 |       1 |   2.018 |   1.690 |   0.496
-      2 |       1 |   0.612 |   1.229 |   0.378
-      3 |       1 |   1.105 |   2.446 |   2.071
-      4 |       1 |   0.334 |   1.838 |   1.440
-      5 |       1 |   3.573 |   2.621 |   3.879
-      6 |       1 |   2.964 |   3.395 |   2.872
-      7 |       1 |   1.075 |   0.520 |   1.584
-      8 |       1 |   3.043 |   1.890 |   2.492
-      9 |       1 |   3.265 |   3.101 |   2.392
+      0 |       1 |   0.485 |   1.987 |   0.459
+      1 |       1 |   2.811 |   3.216 |   2.914
+      2 |       1 |   3.795 |   3.128 |   3.211
+      3 |       1 |   3.613 |   3.041 |   3.025
+      4 |       1 |   3.804 |   0.086 |   0.257
+      5 |       1 |   3.313 |   0.101 |   1.815
+      6 |       1 |   2.066 |   2.819 |   2.267
+      7 |       1 |   2.967 |   1.024 |   0.733
+      8 |       1 |   3.339 |   1.088 |   0.242
+      9 |       1 |   1.399 |   1.470 |   1.684
 </pre></div></div>
 </div>
 </div>
@@ -315,11 +324,11 @@ defining extra per-atom properties.</li>
 <li><strong>natypes</strong> gives the number of unique atype values.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atoms.natoms -&gt; &#39;</span><span class="p">,</span> <span class="n">atoms</span><span class="o">.</span><span class="n">natoms</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len(atoms) -&gt;   &#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atoms.atypes -&gt; &#39;</span><span class="p">,</span> <span class="n">atoms</span><span class="o">.</span><span class="n">atypes</span><span class="p">)</span>
@@ -345,7 +354,7 @@ atoms.natypes -&gt; 1
 <p>The per-atom properties of an Atoms instance can be interacted with in
 one of three ways:</p>
 <ul class="simple">
-<li>as attributes of the Atoms instance, i.e.&nbsp;atoms.myprop.</li>
+<li>as attributes of the Atoms instance, i.e. atoms.myprop.</li>
 <li>as items in the Atoms.view dictionary.</li>
 <li>by calling the Atoms.prop() method (see <a class="reference external" href="#section5">Section 5</a>).</li>
 </ul>
@@ -358,11 +367,11 @@ either:</p>
 <li>atoms.view.keys()</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atoms.prop() -&gt;     &#39;</span><span class="p">,</span> <span class="n">atoms</span><span class="o">.</span><span class="n">prop</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atoms.view.keys() -&gt;&#39;</span><span class="p">,</span> <span class="n">atoms</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 </pre></div>
@@ -381,11 +390,11 @@ atoms.view.keys() -&gt; odict_keys([&#39;atype&#39;, &#39;pos&#39;])
 <div class="section" id="3.2-Accessing-per-atom-properties">
 <h3>3.2 Accessing per-atom properties<a class="headerlink" href="#3.2-Accessing-per-atom-properties" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atoms.atype -&gt;            &#39;</span><span class="p">,</span> <span class="n">atoms</span><span class="o">.</span><span class="n">atype</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;atoms.view[&#39;atype&#39;] -&gt;    &quot;</span><span class="p">,</span> <span class="n">atoms</span><span class="o">.</span><span class="n">view</span><span class="p">[</span><span class="s1">&#39;atype&#39;</span><span class="p">])</span>
 </pre></div>
@@ -406,11 +415,11 @@ atoms.view[&#39;atype&#39;] -&gt;     [1 1 1 1 1 1 1 1 1 1]
 <p>The same three options can be used for setting values to existing
 per-atom properties.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;setting: atoms.atype[2] = 2&#39;</span><span class="p">)</span>
 <span class="n">atoms</span><span class="o">.</span><span class="n">atype</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
 
@@ -450,11 +459,11 @@ assigned to all atoms.</li>
 assigned to a different atom.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Assign stress as attribute (same value for all atoms)</span>
 <span class="c1"># Note first dimension is 1!</span>
 <span class="n">atoms</span><span class="o">.</span><span class="n">stress</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
@@ -487,11 +496,11 @@ atoms.stress[0] -&gt;
 Atoms.df() method. This is convenient for viewing and analyzing the
 per-atom property values.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># String representation of atoms only shows id, atype and pos</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
 </pre></div>
@@ -503,31 +512,31 @@ per-atom property values.</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   1.031 |   2.698 |   3.712
-      1 |       1 |   2.018 |   1.690 |   0.496
-      2 |       2 |   0.612 |   1.229 |   0.378
-      3 |       1 |   1.105 |   2.446 |   2.071
-      4 |       1 |   0.334 |   1.838 |   1.440
-      5 |       2 |   3.573 |   2.621 |   3.879
-      6 |       1 |   2.964 |   3.395 |   2.872
-      7 |       1 |   1.075 |   0.520 |   1.584
-      8 |       1 |   3.043 |   1.890 |   2.492
-      9 |       1 |   3.265 |   3.101 |   2.392
+      0 |       1 |   0.485 |   1.987 |   0.459
+      1 |       1 |   2.811 |   3.216 |   2.914
+      2 |       2 |   3.795 |   3.128 |   3.211
+      3 |       1 |   3.613 |   3.041 |   3.025
+      4 |       1 |   3.804 |   0.086 |   0.257
+      5 |       2 |   3.313 |   0.101 |   1.815
+      6 |       1 |   2.066 |   2.819 |   2.267
+      7 |       1 |   2.967 |   1.024 |   0.733
+      8 |       1 |   3.339 |   1.088 |   0.242
+      9 |       1 |   1.399 |   1.470 |   1.684
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Atoms.df() generates DataFrame of all per-atom properties in tabular form</span>
 <span class="n">atoms</span><span class="o">.</span><span class="n">df</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>Out[9]:
 </pre></div>
 </div>
@@ -569,9 +578,9 @@ per-atom property values.</p>
     <tr>
       <th>0</th>
       <td>1</td>
-      <td>1.031494</td>
-      <td>2.697618</td>
-      <td>3.711551</td>
+      <td>0.485056</td>
+      <td>1.987139</td>
+      <td>0.459160</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -585,9 +594,9 @@ per-atom property values.</p>
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>2.017969</td>
-      <td>1.690212</td>
-      <td>0.496027</td>
+      <td>2.811214</td>
+      <td>3.215579</td>
+      <td>2.913942</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -601,9 +610,9 @@ per-atom property values.</p>
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>0.611652</td>
-      <td>1.229090</td>
-      <td>0.378278</td>
+      <td>3.794902</td>
+      <td>3.128208</td>
+      <td>3.210755</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -617,9 +626,9 @@ per-atom property values.</p>
     <tr>
       <th>3</th>
       <td>1</td>
-      <td>1.104891</td>
-      <td>2.445955</td>
-      <td>2.070829</td>
+      <td>3.612501</td>
+      <td>3.040889</td>
+      <td>3.024934</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -633,9 +642,9 @@ per-atom property values.</p>
     <tr>
       <th>4</th>
       <td>1</td>
-      <td>0.334468</td>
-      <td>1.838245</td>
-      <td>1.440169</td>
+      <td>3.803683</td>
+      <td>0.086216</td>
+      <td>0.256521</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -649,9 +658,9 @@ per-atom property values.</p>
     <tr>
       <th>5</th>
       <td>2</td>
-      <td>3.573085</td>
-      <td>2.620747</td>
-      <td>3.878725</td>
+      <td>3.312797</td>
+      <td>0.101339</td>
+      <td>1.815361</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -665,9 +674,9 @@ per-atom property values.</p>
     <tr>
       <th>6</th>
       <td>1</td>
-      <td>2.963564</td>
-      <td>3.395381</td>
-      <td>2.872060</td>
+      <td>2.066376</td>
+      <td>2.819465</td>
+      <td>2.267386</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -681,9 +690,9 @@ per-atom property values.</p>
     <tr>
       <th>7</th>
       <td>1</td>
-      <td>1.074514</td>
-      <td>0.519711</td>
-      <td>1.584109</td>
+      <td>2.967333</td>
+      <td>1.023866</td>
+      <td>0.733150</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -697,9 +706,9 @@ per-atom property values.</p>
     <tr>
       <th>8</th>
       <td>1</td>
-      <td>3.043196</td>
-      <td>1.889808</td>
-      <td>2.491843</td>
+      <td>3.339426</td>
+      <td>1.088156</td>
+      <td>0.242196</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -713,9 +722,9 @@ per-atom property values.</p>
     <tr>
       <th>9</th>
       <td>1</td>
-      <td>3.264516</td>
-      <td>3.100655</td>
-      <td>2.391951</td>
+      <td>1.398506</td>
+      <td>1.469765</td>
+      <td>1.683977</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -746,11 +755,11 @@ in <a class="reference external" href="#section3">Section 3</a>) then apply the 
 Atoms instance containing only the selected atom(s). Useful for
 generating subsets.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Get only the atoms with x position greater than 3</span>
 <span class="n">upperatoms</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">upperatoms</span><span class="p">)</span>
@@ -763,9 +772,11 @@ generating subsets.</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       2 |   3.573 |   2.621 |   3.879
-      1 |       1 |   3.043 |   1.890 |   2.492
-      2 |       1 |   3.265 |   3.101 |   2.392
+      0 |       2 |   3.795 |   3.128 |   3.211
+      1 |       1 |   3.613 |   3.041 |   3.025
+      2 |       1 |   3.804 |   0.086 |   0.257
+      3 |       2 |   3.313 |   0.101 |   1.815
+      4 |       1 |   3.339 |   1.088 |   0.242
 </pre></div></div>
 </div>
 </div>
@@ -776,11 +787,11 @@ indexing. The value being assigned must be an Atoms instance of
 compatible size and same per-atom properties as the Atoms instance it is
 being assigned to.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Copy first atom in atoms to last atom in upperatoms</span>
 <span class="n">upperatoms</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">upperatoms</span><span class="p">)</span>
@@ -793,17 +804,19 @@ being assigned to.</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       2 |   3.573 |   2.621 |   3.879
-      1 |       1 |   3.043 |   1.890 |   2.492
-      2 |       1 |   1.031 |   2.698 |   3.712
+      0 |       2 |   3.795 |   3.128 |   3.211
+      1 |       1 |   3.613 |   3.041 |   3.025
+      2 |       1 |   3.804 |   0.086 |   0.257
+      3 |       2 |   3.313 |   0.101 |   1.815
+      4 |       1 |   0.485 |   1.987 |   0.459
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Swap atoms 0 and 1 in atoms.</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
@@ -820,28 +833,28 @@ being assigned to.</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   1.031 |   2.698 |   3.712
-      1 |       1 |   2.018 |   1.690 |   0.496
-      2 |       2 |   0.612 |   1.229 |   0.378
-      3 |       1 |   1.105 |   2.446 |   2.071
-      4 |       1 |   0.334 |   1.838 |   1.440
-      5 |       2 |   3.573 |   2.621 |   3.879
-      6 |       1 |   2.964 |   3.395 |   2.872
-      7 |       1 |   1.075 |   0.520 |   1.584
-      8 |       1 |   3.043 |   1.890 |   2.492
-      9 |       1 |   3.265 |   3.101 |   2.392
+      0 |       1 |   0.485 |   1.987 |   0.459
+      1 |       1 |   2.811 |   3.216 |   2.914
+      2 |       2 |   3.795 |   3.128 |   3.211
+      3 |       1 |   3.613 |   3.041 |   3.025
+      4 |       1 |   3.804 |   0.086 |   0.257
+      5 |       2 |   3.313 |   0.101 |   1.815
+      6 |       1 |   2.066 |   2.819 |   2.267
+      7 |       1 |   2.967 |   1.024 |   0.733
+      8 |       1 |   3.339 |   1.088 |   0.242
+      9 |       1 |   1.399 |   1.470 |   1.684
 
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   2.018 |   1.690 |   0.496
-      1 |       1 |   1.031 |   2.698 |   3.712
-      2 |       2 |   0.612 |   1.229 |   0.378
-      3 |       1 |   1.105 |   2.446 |   2.071
-      4 |       1 |   0.334 |   1.838 |   1.440
-      5 |       2 |   3.573 |   2.621 |   3.879
-      6 |       1 |   2.964 |   3.395 |   2.872
-      7 |       1 |   1.075 |   0.520 |   1.584
-      8 |       1 |   3.043 |   1.890 |   2.492
-      9 |       1 |   3.265 |   3.101 |   2.392
+      0 |       1 |   2.811 |   3.216 |   2.914
+      1 |       1 |   0.485 |   1.987 |   0.459
+      2 |       2 |   3.795 |   3.128 |   3.211
+      3 |       1 |   3.613 |   3.041 |   3.025
+      4 |       1 |   3.804 |   0.086 |   0.257
+      5 |       2 |   3.313 |   0.101 |   1.815
+      6 |       1 |   2.066 |   2.819 |   2.267
+      7 |       1 |   2.967 |   1.024 |   0.733
+      8 |       1 |   3.339 |   1.088 |   0.242
+      9 |       1 |   1.399 |   1.470 |   1.684
 </pre></div></div>
 </div>
 </div>
@@ -866,11 +879,11 @@ backwards compatibility.</li>
 <p>With no arguments, prop() returns the list of assigned per-atom
 properties.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">prop</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -886,11 +899,11 @@ properties.</p>
 <p>If the value parameter is not given, prop() will return a copy of the
 value associated with the key, index combination.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># key by itself returns the property value</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;atoms.prop(&#39;atype&#39;) -&gt;&quot;</span><span class="p">,</span> <span class="n">atoms</span><span class="o">.</span><span class="n">prop</span><span class="p">(</span><span class="s1">&#39;atype&#39;</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">()</span>
@@ -915,23 +928,23 @@ atoms.prop(&#39;atype&#39;) -&gt; [1 1 2 1 1 2 1 1 1 1]
 
 atoms.prop(index=slice(1,5)) -&gt;
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   1.031 |   2.698 |   3.712
-      1 |       2 |   0.612 |   1.229 |   0.378
-      2 |       1 |   1.105 |   2.446 |   2.071
-      3 |       1 |   0.334 |   1.838 |   1.440
+      0 |       1 |   0.485 |   1.987 |   0.459
+      1 |       2 |   3.795 |   3.128 |   3.211
+      2 |       1 |   3.613 |   3.041 |   3.025
+      3 |       1 |   3.804 |   0.086 |   0.257
 
 atoms.prop(key=&#39;pos&#39;, index=0) -&gt;
-[ 2.01796901  1.69021155  0.49602686]
+[ 2.81121419  3.21557903  2.91394194]
 </pre></div></div>
 </div>
 <p>Values can be set to Atoms using the value parameter. Any values set are
 copied to the Atoms instance as opposed to assigned by reference.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Set all values of a given property</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;calling: atoms.prop(key=&#39;atype&#39;, value=7)&quot;</span><span class="p">)</span>
 <span class="n">atoms</span><span class="o">.</span><span class="n">prop</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;atype&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span>
@@ -960,11 +973,11 @@ atoms.prop(&#39;atype&#39;) -&gt; [7 7 7 7 1 7 7 7 7 7]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Copy atom 0 to atom 9</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;calling: atoms.prop(index=9, value=atoms.prop(index=0))&quot;</span><span class="p">)</span>
 <span class="n">atoms</span><span class="o">.</span><span class="n">prop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">atoms</span><span class="o">.</span><span class="n">prop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
@@ -979,25 +992,25 @@ atoms.prop(&#39;atype&#39;) -&gt; [7 7 7 7 1 7 7 7 7 7]
 <div class="highlight"><pre>
 calling: atoms.prop(index=9, value=atoms.prop(index=0))
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       7 |   2.018 |   1.690 |   0.496
-      1 |       7 |   1.031 |   2.698 |   3.712
-      2 |       7 |   0.612 |   1.229 |   0.378
-      3 |       7 |   1.105 |   2.446 |   2.071
-      4 |       1 |   0.334 |   1.838 |   1.440
-      5 |       7 |   3.573 |   2.621 |   3.879
-      6 |       7 |   2.964 |   3.395 |   2.872
-      7 |       7 |   1.075 |   0.520 |   1.584
-      8 |       7 |   3.043 |   1.890 |   2.492
-      9 |       7 |   2.018 |   1.690 |   0.496
+      0 |       7 |   2.811 |   3.216 |   2.914
+      1 |       7 |   0.485 |   1.987 |   0.459
+      2 |       7 |   3.795 |   3.128 |   3.211
+      3 |       7 |   3.613 |   3.041 |   3.025
+      4 |       1 |   3.804 |   0.086 |   0.257
+      5 |       7 |   3.313 |   0.101 |   1.815
+      6 |       7 |   2.066 |   2.819 |   2.267
+      7 |       7 |   2.967 |   1.024 |   0.733
+      8 |       7 |   3.339 |   1.088 |   0.242
+      9 |       7 |   2.811 |   3.216 |   2.914
 </pre></div></div>
 </div>
 <p>Demonstrate safe copy of prop() using only value parameter.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Generate atoms1 with 3 atoms (all with atype=1, pos=[0,0,0])</span>
 <span class="n">atoms1</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">natoms</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atoms1 -&gt;&#39;</span><span class="p">)</span>
@@ -1018,11 +1031,11 @@ atoms1 -&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Directly setting atoms2 = atoms1 makes them point to the same reference</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;setting atoms2 = atoms1&#39;</span><span class="p">)</span>
 <span class="n">atoms2</span> <span class="o">=</span> <span class="n">atoms1</span>
@@ -1051,11 +1064,11 @@ atoms1 -&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Seting atoms3 to atoms1 using prop() copies values *not* reference.</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;setting: atoms3 = am.Atoms(natoms=3)&#39;</span><span class="p">)</span>
 <span class="n">atoms3</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">natoms</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
@@ -1173,7 +1186,7 @@ atoms3 -&gt;
           
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Lucas Hale.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
         </div>
         <div class="clearer"></div>

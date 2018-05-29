@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Load and Dump &#8212; atomman 1.2.alpha documentation</title>
+    <title>Introduction to atomman: Load and Dump &#8212; atomman 1.2.0 documentation</title>
     <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -18,11 +26,12 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: LAMMPS functionality" href="02._LAMMPS_Functionality.html" />
     <link rel="prev" title="Introduction to atomman: System Class" href="01.3._System_class.html" /> 
-  </head><body>
+  </head>
+  <body>
     <div class="header-wrapper" role="banner">
       <div class="header">
         <div class="headertitle"><a
-          href="../index.html">atomman 1.2.alpha documentation</a></div>
+          href="../index.html">atomman 1.2.0 documentation</a></div>
         <div class="rel" role="navigation" aria-label="related navigation">
           <a href="01.3._System_class.html" title="Introduction to atomman: System Class"
              accesskey="P">previous</a> |
@@ -215,7 +224,7 @@ div.nboutput div.output_area.stderr {
 <p><strong>Lucas M. Hale</strong>,
 <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
 <em>Materials Science and Engineering Division, NIST</em>.</p>
-<p>Notebook last updated: 2018-04-05</p>
+<p>Notebook last updated: 2018-05-29</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
@@ -250,34 +259,34 @@ atomman/load directory.</p>
 <p>Alternatively, there are atomman.dump() and atomman.dump_style()
 functions that can be used to dump a system to the different style
 formats. The dump() function takes style, system and kwargs as
-parameters, while the dump_style() functions take system and kwargs. The
-underlying code is found in the atomman/dump directory.</p>
+parameters, while the dump_style() functions take system and kwargs.
+The underlying code is found in the atomman/dump directory.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [25]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
 
 <span class="c1"># http://www.numpy.org/</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">atomman</span> <span class="kn">as</span> <span class="nn">am</span>
-<span class="kn">import</span> <span class="nn">atomman.unitconvert</span> <span class="kn">as</span> <span class="nn">uc</span>
+<span class="kn">import</span> <span class="nn">atomman</span> <span class="k">as</span> <span class="nn">am</span>
+<span class="kn">import</span> <span class="nn">atomman.unitconvert</span> <span class="k">as</span> <span class="nn">uc</span>
 </pre></div>
 </div>
 </div>
 <p>Generate test system information (CsCl)</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [26]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Generate box</span>
 <span class="n">alat</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">alat</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">alat</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">alat</span><span class="p">)</span>
@@ -290,10 +299,10 @@ underlying code is found in the atomman/dump directory.</p>
 <span class="n">atoms</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">atype</span><span class="o">=</span><span class="n">atype</span><span class="p">,</span> <span class="n">charge</span><span class="o">=</span><span class="n">charge</span><span class="p">,</span> <span class="n">stress</span><span class="o">=</span><span class="n">stress</span><span class="p">)</span>
 
 <span class="c1"># Build system from box and atoms, and scale atoms</span>
-<span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Cs&#39;</span><span class="p">,</span> <span class="s1">&#39;Cl&#39;</span><span class="p">])</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Cs&#39;</span><span class="p">,</span> <span class="s1">&#39;Cl&#39;</span><span class="p">])</span>
 
 <span class="c1"># Print system information</span>
-<span class="k">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
 <span class="n">system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -309,7 +318,7 @@ cvect =  [ 0.000,  0.000,  3.200]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 2
 natypes = 2
-symbols = (u&#39;Cs&#39;, u&#39;Cl&#39;)
+symbols = (&#39;Cs&#39;, &#39;Cl&#39;)
 pbc = [ True  True  True]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
@@ -317,12 +326,25 @@ pbc = [ True  True  True]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[26]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[2]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -331,6 +353,7 @@ pbc = [ True  True  True]
       <th>pos[0]</th>
       <th>pos[1]</th>
       <th>pos[2]</th>
+      <th>charge</th>
       <th>stress[0][0]</th>
       <th>stress[0][1]</th>
       <th>stress[0][2]</th>
@@ -340,7 +363,6 @@ pbc = [ True  True  True]
       <th>stress[2][0]</th>
       <th>stress[2][1]</th>
       <th>stress[2][2]</th>
-      <th>charge</th>
     </tr>
   </thead>
   <tbody>
@@ -350,16 +372,16 @@ pbc = [ True  True  True]
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
@@ -367,16 +389,16 @@ pbc = [ True  True  True]
       <td>1.6</td>
       <td>1.6</td>
       <td>1.6</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>-1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -391,8 +413,8 @@ values with proper units that is compatible with JSON or XML databases.
 The downside is that the representation is not as efficient or
 convenient as tabular formats for large numbers of atoms and atomic
 properties.</p>
-<div class="section" id="2.1.-dump(‘system_model’)">
-<h3>2.1. dump(‘system_model’)<a class="headerlink" href="#2.1.-dump(‘system_model’)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="2.1.-dump('system_model')">
+<h3>2.1. dump(‘system_model’)<a class="headerlink" href="#2.1.-dump('system_model')" title="Permalink to this headline">¶</a></h3>
 <p>Keyword Parameters</p>
 <ul class="simple">
 <li><strong>box_unit</strong> (<em>str, optional</em>) Length unit to use for the box.
@@ -417,18 +439,18 @@ constant to include if available.</li>
 <li><strong>model</strong> (<em>DataModelDict</em>) A data model of the system.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [27]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">model</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;system_model&#39;</span><span class="p">,</span>  <span class="n">box_unit</span><span class="o">=</span><span class="s1">&#39;angstrom&#39;</span><span class="p">,</span> <span class="n">prop_units</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;charge&#39;</span><span class="p">:</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;stress&#39;</span><span class="p">:</span> <span class="s1">&#39;GPa&#39;</span><span class="p">})</span>
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;JSON system model:&#39;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
-<span class="k">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;JSON system model:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;XML system model:&#39;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">xml</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;XML system model:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">xml</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -446,8 +468,8 @@ XML system model:
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="2.2.-load(‘system_model’)">
-<h3>2.2. load(‘system_model’)<a class="headerlink" href="#2.2.-load(‘system_model’)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="2.2.-load('system_model')">
+<h3>2.2. load(‘system_model’)<a class="headerlink" href="#2.2.-load('system_model')" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>model</strong> (<em>str, file-like object or DataModelDict</em>) The data model
@@ -464,13 +486,13 @@ entries, the index specifies which to access. Default value is 0
 data model.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [28]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">model_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;system_model&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">model_system</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_system</span><span class="p">)</span>
 <span class="n">model_system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -486,7 +508,7 @@ cvect =  [ 0.000,  0.000,  3.200]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 2
 natypes = 2
-symbols = (u&#39;Cs&#39;, u&#39;Cl&#39;)
+symbols = (&#39;Cs&#39;, &#39;Cl&#39;)
 pbc = [ True  True  True]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
@@ -494,12 +516,25 @@ pbc = [ True  True  True]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[28]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[4]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -508,6 +543,7 @@ pbc = [ True  True  True]
       <th>pos[0]</th>
       <th>pos[1]</th>
       <th>pos[2]</th>
+      <th>charge</th>
       <th>stress[0][0]</th>
       <th>stress[0][1]</th>
       <th>stress[0][2]</th>
@@ -517,7 +553,6 @@ pbc = [ True  True  True]
       <th>stress[2][0]</th>
       <th>stress[2][1]</th>
       <th>stress[2][2]</th>
-      <th>charge</th>
     </tr>
   </thead>
   <tbody>
@@ -527,16 +562,16 @@ pbc = [ True  True  True]
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
@@ -544,16 +579,16 @@ pbc = [ True  True  True]
       <td>1.6</td>
       <td>1.6</td>
       <td>1.6</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>-1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -566,14 +601,14 @@ pbc = [ True  True  True]
 <p>The POSCAR format is a simple tabular format used by VASP that captures
 box, element types and position. It is limited in that it cannot contain
 extra per-atom properties.</p>
-<div class="section" id="3.1.-dump(‘poscar’)">
-<h3>3.1. dump(‘poscar’)<a class="headerlink" href="#3.1.-dump(‘poscar’)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="3.1.-dump('poscar')">
+<h3>3.1. dump(‘poscar’)<a class="headerlink" href="#3.1.-dump('poscar')" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>fname</strong> (<em>str, optional</em>) Path to file where POSCAR content is
 saved to. If not given, a str of the content will be returned.</li>
 <li><strong>header</strong> (<em>str, optional</em>) The comment line to place at the top of
-the file. Default value is ’’.</li>
+the file. Default value is ‘’.</li>
 <li><strong>symbols</strong> (<em>list of str, optional</em>) List of the element symbols
 that correspond to the atom types. If not given, will use
 system.symbols if set, otherwise no element content will be included.</li>
@@ -590,13 +625,13 @@ point numbers. Default value is ‘%.13e’.</li>
 fname is not given).</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [29]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">poscar</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;poscar&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="s1">&#39;Test POSCAR content for CsCl&#39;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">poscar</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">poscar</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -618,8 +653,8 @@ direct
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="3.2.-load(‘poscar’)">
-<h3>3.2. load(‘poscar’)<a class="headerlink" href="#3.2.-load(‘poscar’)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="3.2.-load('poscar')">
+<h3>3.2. load(‘poscar’)<a class="headerlink" href="#3.2.-load('poscar')" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>poscar</strong> (<em>str or file-like object</em>) The POSCAR content to read.</li>
@@ -632,11 +667,11 @@ properties to include.</li>
 data model.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [30]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Extract extra per-atom properties from currently loaded system</span>
 <span class="n">prop</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms_prop</span><span class="p">():</span>
@@ -645,7 +680,7 @@ data model.</li>
 
 <span class="c1"># Load poscar and pass in prop dictionary</span>
 <span class="n">poscar_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;poscar&#39;</span><span class="p">,</span> <span class="n">poscar</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="n">prop</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">poscar_system</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">poscar_system</span><span class="p">)</span>
 <span class="n">poscar_system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -661,7 +696,7 @@ cvect =  [ 0.000,  0.000,  3.200]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 2
 natypes = 2
-symbols = (u&#39;Cs&#39;, u&#39;Cl&#39;)
+symbols = (&#39;Cs&#39;, &#39;Cl&#39;)
 pbc = [ True  True  True]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
@@ -669,12 +704,25 @@ pbc = [ True  True  True]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[30]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[6]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -683,6 +731,7 @@ pbc = [ True  True  True]
       <th>pos[0]</th>
       <th>pos[1]</th>
       <th>pos[2]</th>
+      <th>charge</th>
       <th>stress[0][0]</th>
       <th>stress[0][1]</th>
       <th>stress[0][2]</th>
@@ -692,7 +741,6 @@ pbc = [ True  True  True]
       <th>stress[2][0]</th>
       <th>stress[2][1]</th>
       <th>stress[2][2]</th>
-      <th>charge</th>
     </tr>
   </thead>
   <tbody>
@@ -702,16 +750,16 @@ pbc = [ True  True  True]
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
@@ -719,16 +767,16 @@ pbc = [ True  True  True]
       <td>1.6</td>
       <td>1.6</td>
       <td>1.6</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>-1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -743,8 +791,8 @@ representing crystallographic information and is used by different
 crystal databases. Loading CIF files requires that the
 <a class="reference external" href="https://github.com/diffpy">diffpy.Structure</a> package be installed
 (Not yet Python3 compatible as of Feb 7 2018).</p>
-<div class="section" id="4.1.-load(‘cif’)">
-<h3>4.1. load(‘cif’)<a class="headerlink" href="#4.1.-load(‘cif’)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="4.1.-load('cif')">
+<h3>4.1. load(‘cif’)<a class="headerlink" href="#4.1.-load('cif')" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>cif</strong> (<em>str or file-like object</em>) The cif content to read.</li>
@@ -754,11 +802,11 @@ crystal databases. Loading CIF files requires that the
 <li><strong>system</strong> (<em>atomman.System</em>) An atomman representation of a system.</li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [31]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># CIF file taken from Crystallography Open Database (COD): http://www.crystallography.net/</span>
 <span class="n">cif</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;#------------------------------------------------------------------------------</span>
 <span class="s2">#$Date: 2016-02-13 21:28:24 +0200 (Sat, 13 Feb 2016) $</span>
@@ -918,18 +966,18 @@ crystal databases. Loading CIF files requires that the
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [32]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="k">try</span><span class="p">:</span>
     <span class="n">cif_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;cif&#39;</span><span class="p">,</span> <span class="n">cif</span><span class="p">)</span>
 <span class="k">except</span> <span class="ne">AssertionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;AssertionError:&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;AssertionError:&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">cif_system</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">cif_system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">cif_system</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">cif_system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -938,20 +986,7 @@ crystal databases. Loading CIF files requires that the
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 3.303,  0.000,  0.000]
-bvect =  [ 0.000,  3.303,  0.000]
-cvect =  [ 0.000,  0.000,  3.303]
-origin = [ 0.000,  0.000,  0.000]
-natoms = 2
-natypes = 1
-symbols = (&#39;Ta&#39;,)
-pbc = [ True  True  True]
-     id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.000 |   0.000 |   0.000
-      1 |       1 |   1.651 |   1.651 |   1.651
-   atype   pos[0]   pos[1]   pos[2]
-0      1  0.00000  0.00000  0.00000
-1      1  1.65128  1.65128  1.65128
+AssertionError: diffpy.Structure not imported
 </pre></div></div>
 </div>
 </div>
@@ -960,8 +995,8 @@ pbc = [ True  True  True]
 <h2>5. table style<a class="headerlink" href="#5.-table-style" title="Permalink to this headline">¶</a></h2>
 <p>The table style returns the atomic information in a generic table
 format.</p>
-<div class="section" id="5.1-dump(‘table’)">
-<h3>5.1 dump(‘table’)<a class="headerlink" href="#5.1-dump(‘table’)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="5.1-dump('table')">
+<h3>5.1 dump(‘table’)<a class="headerlink" href="#5.1-dump('table')" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>fp</strong> (<em>str or file-like object, optional</em>) File path or file-like
@@ -973,12 +1008,13 @@ Must be given if prop_info is not.</li>
 correspond to each prop_name. If not given, the table_name values
 will be based on the prop_name values.</li>
 <li><strong>shape</strong> (<em>list, optional</em>) The shape of each per-atom property. If
-not given, will be inferred from the length of each table_name value.</li>
+not given, will be inferred from the length of each table_name
+value.</li>
 <li><strong>unit</strong> (<em>list, optional</em>) Lists the units for each prop_name as
 stored in the table. For a value of None, no conversion will be
 performed for that property. For a value of ‘scaled’, the
 corresponding table values will be taken in box-scaled units. If not
-given, all unit values will be set to None (i.e.&nbsp;no conversions).</li>
+given, all unit values will be set to None (i.e. no conversions).</li>
 <li><strong>dtype</strong> (<em>list, optional</em>) Allows for the data type of each
 property to be explicitly given. Values of None will infer the data
 type from the corresponding property values. If not given, all values
@@ -1003,13 +1039,13 @@ returned).</li>
 <li>(<em>str</em>) The generated data table. Only returned if fp is None.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [37]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">table</span><span class="p">,</span> <span class="n">prop_info</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">,</span> <span class="n">float_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%.5f</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">return_prop_info</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">table</span><span class="p">,</span> <span class="n">prop_info</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">,</span> <span class="n">float_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%.5f</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_prop_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1018,23 +1054,23 @@ returned).</li>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atype pos[0] pos[1] pos[2] stress[0][0] stress[0][1] stress[0][2] stress[1][0] stress[1][1] stress[1][2] stress[2][0] stress[2][1] stress[2][2] charge
-1 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 1.00000
-2 1.60000 1.60000 1.60000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 -1.00000
+atype pos[0] pos[1] pos[2] charge stress[0][0] stress[0][1] stress[0][2] stress[1][0] stress[1][1] stress[1][2] stress[2][0] stress[2][1] stress[2][2]
+1 0.00000 0.00000 0.00000 1.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000
+2 1.60000 1.60000 1.60000 -1.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000
 
 </pre></div></div>
 </div>
 <p>The prop_info returned is json describing the conversion between atoms
 property and table representations of the data.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [38]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Show the generated prop_info conversion info</span>
 <span class="k">for</span> <span class="n">pinfo</span> <span class="ow">in</span> <span class="n">prop_info</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">pinfo</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pinfo</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1043,15 +1079,15 @@ property and table representations of the data.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{u&#39;dtype&#39;: None, u&#39;prop_name&#39;: u&#39;atype&#39;, u&#39;table_name&#39;: [u&#39;atype&#39;], u&#39;shape&#39;: (), u&#39;unit&#39;: None}
-{u&#39;dtype&#39;: None, u&#39;prop_name&#39;: u&#39;pos&#39;, u&#39;table_name&#39;: [u&#39;pos[0]&#39;, u&#39;pos[1]&#39;, u&#39;pos[2]&#39;], u&#39;shape&#39;: (3L,), u&#39;unit&#39;: None}
-{u&#39;dtype&#39;: None, u&#39;prop_name&#39;: u&#39;stress&#39;, u&#39;table_name&#39;: [u&#39;stress[0][0]&#39;, u&#39;stress[0][1]&#39;, u&#39;stress[0][2]&#39;, u&#39;stress[1][0]&#39;, u&#39;stress[1][1]&#39;, u&#39;stress[1][2]&#39;, u&#39;stress[2][0]&#39;, u&#39;stress[2][1]&#39;, u&#39;stress[2][2]&#39;], u&#39;shape&#39;: (3L, 3L), u&#39;unit&#39;: None}
-{u&#39;dtype&#39;: None, u&#39;prop_name&#39;: u&#39;charge&#39;, u&#39;table_name&#39;: [u&#39;charge&#39;], u&#39;shape&#39;: (), u&#39;unit&#39;: None}
+{&#39;prop_name&#39;: &#39;atype&#39;, &#39;shape&#39;: (), &#39;table_name&#39;: [&#39;atype&#39;], &#39;unit&#39;: None, &#39;dtype&#39;: None}
+{&#39;prop_name&#39;: &#39;pos&#39;, &#39;shape&#39;: (3,), &#39;table_name&#39;: [&#39;pos[0]&#39;, &#39;pos[1]&#39;, &#39;pos[2]&#39;], &#39;unit&#39;: None, &#39;dtype&#39;: None}
+{&#39;prop_name&#39;: &#39;charge&#39;, &#39;shape&#39;: (), &#39;table_name&#39;: [&#39;charge&#39;], &#39;unit&#39;: None, &#39;dtype&#39;: None}
+{&#39;prop_name&#39;: &#39;stress&#39;, &#39;shape&#39;: (3, 3), &#39;table_name&#39;: [&#39;stress[0][0]&#39;, &#39;stress[0][1]&#39;, &#39;stress[0][2]&#39;, &#39;stress[1][0]&#39;, &#39;stress[1][1]&#39;, &#39;stress[1][2]&#39;, &#39;stress[2][0]&#39;, &#39;stress[2][1]&#39;, &#39;stress[2][2]&#39;], &#39;unit&#39;: None, &#39;dtype&#39;: None}
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="5.2-load(‘table’)">
-<h3>5.2 load(‘table’)<a class="headerlink" href="#5.2-load(‘table’)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="5.2-load('table')">
+<h3>5.2 load(‘table’)<a class="headerlink" href="#5.2-load('table')" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>table</strong> (<em>str or file-like object</em>) The table content, file path or
@@ -1068,12 +1104,13 @@ Must be given if prop_info is not.</li>
 correspond to each prop_name. If not given, the table_name values
 will be based on the prop_name values.</li>
 <li><strong>shape</strong> (<em>list, optional</em>) The shape of each per-atom property. If
-not given, will be inferred from the length of each table_name value.</li>
+not given, will be inferred from the length of each table_name
+value.</li>
 <li><strong>unit</strong> (<em>list, optional</em>) Lists the units for each prop_name as
 stored in the table. For a value of None, no conversion will be
 performed for that property. For a value of ‘scaled’, the
 corresponding table values will be taken in box-scaled units. If not
-given, all unit values will be set to None (i.e.&nbsp;no conversions).</li>
+given, all unit values will be set to None (i.e. no conversions).</li>
 <li><strong>dtype</strong> (<em>list, optional</em>) Allows for the data type of each
 property to be explicitly given. Values of None will infer the data
 type from the corresponding property values. If not given, all values
@@ -1091,16 +1128,16 @@ corresponds to a single atoms property. Each dictionary must have a
 <li>(<em>atomman.System</em>) The generated system.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [39]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Pass table with box and prop_info</span>
 <span class="n">table_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">system</span><span class="o">.</span><span class="n">box</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Cs&#39;</span><span class="p">,</span> <span class="s1">&#39;Cl&#39;</span><span class="p">],</span>
                        <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">prop_info</span><span class="o">=</span><span class="n">prop_info</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">table_system</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">table_system</span><span class="p">)</span>
 <span class="n">table_system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1116,7 +1153,7 @@ cvect =  [ 0.000,  0.000,  3.200]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 2
 natypes = 2
-symbols = (u&#39;Cs&#39;, u&#39;Cl&#39;)
+symbols = (&#39;Cs&#39;, &#39;Cl&#39;)
 pbc = [ True  True  True]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
@@ -1124,12 +1161,25 @@ pbc = [ True  True  True]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[39]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[11]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1138,6 +1188,7 @@ pbc = [ True  True  True]
       <th>pos[0]</th>
       <th>pos[1]</th>
       <th>pos[2]</th>
+      <th>charge</th>
       <th>stress[0][0]</th>
       <th>stress[0][1]</th>
       <th>stress[0][2]</th>
@@ -1147,7 +1198,6 @@ pbc = [ True  True  True]
       <th>stress[2][0]</th>
       <th>stress[2][1]</th>
       <th>stress[2][2]</th>
-      <th>charge</th>
     </tr>
   </thead>
   <tbody>
@@ -1157,16 +1207,16 @@ pbc = [ True  True  True]
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
@@ -1174,29 +1224,29 @@ pbc = [ True  True  True]
       <td>1.6</td>
       <td>1.6</td>
       <td>1.6</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>-1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [40]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Using the generated prop_info from dump makes the resulting properties have the right shape.</span>
-<span class="k">print</span><span class="p">(</span><span class="n">table_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">table_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">stress</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1205,9 +1255,9 @@ pbc = [ True  True  True]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[0. 0. 0.]
- [0. 0. 0.]
- [0. 0. 0.]]
+[[ 0.  0.  0.]
+ [ 0.  0.  0.]
+ [ 0.  0.  0.]]
 </pre></div></div>
 </div>
 </div>
@@ -1216,8 +1266,8 @@ pbc = [ True  True  True]
 <h2>6. atom_data style<a class="headerlink" href="#6.-atom_data-style" title="Permalink to this headline">¶</a></h2>
 <p>The atom_data format is the atomic data files used by LAMMPS for
 importing initial configurations.</p>
-<div class="section" id="6.1.-dump(‘atom_data’)">
-<h3>6.1. dump(‘atom_data’)<a class="headerlink" href="#6.1.-dump(‘atom_data’)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="6.1.-dump('atom_data')">
+<h3>6.1. dump(‘atom_data’)<a class="headerlink" href="#6.1.-dump('atom_data')" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>f</strong> (<em>str or file-like object, optional</em>) File path or file-like
@@ -1241,13 +1291,13 @@ given).</li>
 created data file in (returned if return_info is True).</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [41]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">data</span><span class="p">,</span> <span class="n">read_info</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;atom_data&#39;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1271,13 +1321,13 @@ Atoms
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [42]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># read_info contains the LAMMPS command lines for reading the data content</span>
-<span class="k">print</span><span class="p">(</span><span class="n">read_info</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">read_info</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1295,8 +1345,8 @@ boundary p p p
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="6.2.-load(‘atom_data’)">
-<h3>6.2. load(‘atom_data’)<a class="headerlink" href="#6.2.-load(‘atom_data’)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="6.2.-load('atom_data')">
+<h3>6.2. load(‘atom_data’)<a class="headerlink" href="#6.2.-load('atom_data')" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>data</strong> (<em>str or file-like object</em>) The atom data content to read.
@@ -1317,16 +1367,16 @@ will be automatically converted to atomman.unitconvert’s set working
 units.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Read in data file</span>
 <span class="n">data_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;atom_data&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Cs&#39;</span><span class="p">,</span> <span class="s1">&#39;Cl&#39;</span><span class="p">])</span>
 
 <span class="c1"># Note that only atype and pos are retrieved as that is all the data file format held</span>
-<span class="k">print</span><span class="p">(</span><span class="n">data_system</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_system</span><span class="p">)</span>
 <span class="n">data_system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1342,7 +1392,7 @@ cvect =  [ 0.000,  0.000,  3.200]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 2
 natypes = 2
-symbols = (u&#39;Cs&#39;, u&#39;Cl&#39;)
+symbols = (&#39;Cs&#39;, &#39;Cl&#39;)
 pbc = [ True  True  True]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
@@ -1350,12 +1400,25 @@ pbc = [ True  True  True]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>Out[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1391,33 +1454,34 @@ pbc = [ True  True  True]
 <h2>7. atom_dump style<a class="headerlink" href="#7.-atom_dump-style" title="Permalink to this headline">¶</a></h2>
 <p>The atom_dump format is the LAMMPS dump files containing atomic
 coordinates and other per-atom properties.</p>
-<div class="section" id="7.1-dump(‘atom_dump’)">
-<h3>7.1 dump(‘atom_dump’)<a class="headerlink" href="#7.1-dump(‘atom_dump’)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="7.1-dump('atom_dump')">
+<h3>7.1 dump(‘atom_dump’)<a class="headerlink" href="#7.1-dump('atom_dump')" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>f</strong> (<em>str or file-like object, optional</em>) File path or file-like
 object to write the table to. If not given, then the table is
 returned as a string.</li>
-<li><strong>lammps_units</strong> (<em>str, optional</em>) The LAMMPS units option associated
-with the table values. This is used for the box dimensions and
-default units for standard dump properties (not compute/fix
+<li><strong>lammps_units</strong> (<em>str, optional</em>) The LAMMPS units option
+associated with the table values. This is used for the box dimensions
+and default units for standard dump properties (not compute/fix
 definitions).</li>
 <li><strong>scale</strong> (<em>bool, optional</em>) Flag indicating if atom positions are to
 be scaled relative to the box (True) or given in absolute Cartesian
 values (False, default).</li>
 <li><strong>prop_name</strong> (<em>list, optional</em>) The Atoms properties to include. If
-neither prop_name or prop_info are given, all system properties will
-be included.</li>
+neither prop_name or prop_info are given, all system properties
+will be included.</li>
 <li><strong>table_name</strong> (<em>list, optional</em>) The dump table column name(s) that
 correspond to each prop_name. If not given, the table_name values
 will be based on the prop_name and shape values.</li>
 <li><strong>shape</strong> (<em>list, optional</em>) The shape of each per-atom property. If
-not given, will be inferred from the length of each table_name value.</li>
+not given, will be inferred from the length of each table_name
+value.</li>
 <li><strong>unit</strong> (<em>list, optional</em>) Lists the units for each prop_name as
 stored in the table. For a value of None, no conversion will be
 performed for that property. For a value of ‘scaled’, the
 corresponding table values will be taken in box-scaled units. If not
-given, all unit values will be set to None (i.e.&nbsp;no conversions).</li>
+given, all unit values will be set to None (i.e. no conversions).</li>
 <li><strong>dtype</strong> (<em>list, optional</em>) Allows for the data type of each
 property to be explicitly given. Values of None will infer the data
 type from the corresponding property values. If not given, all values
@@ -1439,20 +1503,20 @@ returned).</li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li><strong>content</strong> (<em>str</em>) The generated atom_data content. Only returned if
-f is None.</li>
+<li><strong>content</strong> (<em>str</em>) The generated atom_data content. Only returned
+if f is None.</li>
 <li><strong>prop_info</strong> (<em>list of dict</em>) The full prop_info detailing the
 property-table conversion.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [43]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">atom_dump</span><span class="p">,</span> <span class="n">prop_info</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;atom_dump&#39;</span><span class="p">,</span> <span class="n">return_prop_info</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">atom_dump</span><span class="p">,</span> <span class="n">prop_info</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;atom_dump&#39;</span><span class="p">,</span> <span class="n">return_prop_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">atom_dump</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">atom_dump</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1469,21 +1533,21 @@ ITEM: BOX BOUNDS pp pp pp
 0.0000000000000 3.2000000000000
 0.0000000000000 3.2000000000000
 0.0000000000000 3.2000000000000
-ITEM: ATOMS id type x y z stress[0][0] stress[0][1] stress[0][2] stress[1][0] stress[1][1] stress[1][2] stress[2][0] stress[2][1] stress[2][2] q
-1 1 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 1.0000000000000
-2 2 1.6000000000000 1.6000000000000 1.6000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 -1.0000000000000
+ITEM: ATOMS id type x y z q stress[0][0] stress[0][1] stress[0][2] stress[1][0] stress[1][1] stress[1][2] stress[2][0] stress[2][1] stress[2][2]
+1 1 0.0000000000000 0.0000000000000 0.0000000000000 1.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000
+2 2 1.6000000000000 1.6000000000000 1.6000000000000 -1.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000 0.0000000000000
 
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [44]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Show the generated prop_info conversion info</span>
 <span class="k">for</span> <span class="n">pinfo</span> <span class="ow">in</span> <span class="n">prop_info</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">pinfo</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pinfo</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1492,16 +1556,16 @@ ITEM: ATOMS id type x y z stress[0][0] stress[0][1] stress[0][2] stress[1][0] st
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{u&#39;dtype&#39;: None, u&#39;prop_name&#39;: u&#39;a_id&#39;, u&#39;table_name&#39;: [u&#39;id&#39;], u&#39;shape&#39;: (), u&#39;unit&#39;: None}
-{u&#39;dtype&#39;: None, u&#39;prop_name&#39;: u&#39;atype&#39;, u&#39;table_name&#39;: [u&#39;type&#39;], u&#39;shape&#39;: (), u&#39;unit&#39;: None}
-{u&#39;dtype&#39;: None, u&#39;prop_name&#39;: u&#39;pos&#39;, u&#39;table_name&#39;: [u&#39;x&#39;, u&#39;y&#39;, u&#39;z&#39;], u&#39;shape&#39;: (3L,), u&#39;unit&#39;: u&#39;angstrom&#39;}
-{u&#39;dtype&#39;: None, u&#39;prop_name&#39;: u&#39;stress&#39;, u&#39;table_name&#39;: [u&#39;stress[0][0]&#39;, u&#39;stress[0][1]&#39;, u&#39;stress[0][2]&#39;, u&#39;stress[1][0]&#39;, u&#39;stress[1][1]&#39;, u&#39;stress[1][2]&#39;, u&#39;stress[2][0]&#39;, u&#39;stress[2][1]&#39;, u&#39;stress[2][2]&#39;], u&#39;shape&#39;: (3L, 3L), u&#39;unit&#39;: None}
-{u&#39;dtype&#39;: None, u&#39;prop_name&#39;: u&#39;charge&#39;, u&#39;table_name&#39;: [u&#39;q&#39;], u&#39;shape&#39;: (), u&#39;unit&#39;: u&#39;e&#39;}
+{&#39;prop_name&#39;: &#39;a_id&#39;, &#39;table_name&#39;: [&#39;id&#39;], &#39;shape&#39;: (), &#39;unit&#39;: None, &#39;dtype&#39;: None}
+{&#39;prop_name&#39;: &#39;atype&#39;, &#39;table_name&#39;: [&#39;type&#39;], &#39;shape&#39;: (), &#39;unit&#39;: None, &#39;dtype&#39;: None}
+{&#39;prop_name&#39;: &#39;pos&#39;, &#39;table_name&#39;: [&#39;x&#39;, &#39;y&#39;, &#39;z&#39;], &#39;shape&#39;: (3,), &#39;unit&#39;: &#39;angstrom&#39;, &#39;dtype&#39;: None}
+{&#39;prop_name&#39;: &#39;charge&#39;, &#39;table_name&#39;: [&#39;q&#39;], &#39;shape&#39;: (), &#39;unit&#39;: &#39;e&#39;, &#39;dtype&#39;: None}
+{&#39;prop_name&#39;: &#39;stress&#39;, &#39;shape&#39;: (3, 3), &#39;table_name&#39;: [&#39;stress[0][0]&#39;, &#39;stress[0][1]&#39;, &#39;stress[0][2]&#39;, &#39;stress[1][0]&#39;, &#39;stress[1][1]&#39;, &#39;stress[1][2]&#39;, &#39;stress[2][0]&#39;, &#39;stress[2][1]&#39;, &#39;stress[2][2]&#39;], &#39;unit&#39;: None, &#39;dtype&#39;: None}
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="7.2-load(‘atom_dump’)">
-<h3>7.2 load(‘atom_dump’)<a class="headerlink" href="#7.2-load(‘atom_dump’)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="7.2-load('atom_dump')">
+<h3>7.2 load(‘atom_dump’)<a class="headerlink" href="#7.2-load('atom_dump')" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>data</strong> (<em>str or file-like object</em>) The content, file path or
@@ -1512,8 +1576,9 @@ be assigned during loading.</li>
 parameters. Default value is ‘metal’.</li>
 <li><strong>prop_name</strong> (<em>list, optional</em>) The Atoms properties to generate.</li>
 <li><strong>table_name</strong> (<em>list, optional</em>) The table column name(s) that
-correspond to each prop_name. If prop_name, table_name and prop_info
-are not given, prop_name and table_name will be read in from data.</li>
+correspond to each prop_name. If prop_name, table_name and
+prop_info are not given, prop_name and table_name will be read in
+from data.</li>
 <li><strong>shape</strong> (<em>list, optional</em>) The shape of each per-atom property. If
 not given, will be taken from standard LAMMPS parameter names, or
 left at () for direct property-table conversion.</li>
@@ -1521,7 +1586,7 @@ left at () for direct property-table conversion.</li>
 stored in the table. For a value of None, no conversion will be
 performed for that property. For a value of ‘scaled’, the
 corresponding table values will be taken in box-scaled units. If not
-given, all unit values will be set to None (i.e.&nbsp;no conversions).</li>
+given, all unit values will be set to None (i.e. no conversions).</li>
 <li><strong>dtype</strong> (<em>list, optional</em>) Allows for the data type of each
 property to be explicitly given. Values of None will infer the data
 type from the corresponding property values. If not given, all values
@@ -1541,15 +1606,15 @@ prop_info is to be returned. Default value is False.</li>
 property-table conversion. Returned if return_prop_info is True.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [45]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Read in dump file</span>
 <span class="n">atom_dump_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;atom_dump&#39;</span><span class="p">,</span> <span class="n">atom_dump</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Cs&#39;</span><span class="p">,</span> <span class="s1">&#39;Cl&#39;</span><span class="p">])</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">atom_dump_system</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">atom_dump_system</span><span class="p">)</span>
 <span class="n">atom_dump_system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1565,7 +1630,7 @@ cvect =  [ 0.000,  0.000,  3.200]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 2
 natypes = 2
-symbols = (u&#39;Cs&#39;, u&#39;Cl&#39;)
+symbols = (&#39;Cs&#39;, &#39;Cl&#39;)
 pbc = [ True  True  True]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
@@ -1573,12 +1638,25 @@ pbc = [ True  True  True]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[45]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[18]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1587,6 +1665,7 @@ pbc = [ True  True  True]
       <th>pos[0]</th>
       <th>pos[1]</th>
       <th>pos[2]</th>
+      <th>charge</th>
       <th>stress[0][0]</th>
       <th>stress[0][1]</th>
       <th>stress[0][2]</th>
@@ -1596,7 +1675,6 @@ pbc = [ True  True  True]
       <th>stress[2][0]</th>
       <th>stress[2][1]</th>
       <th>stress[2][2]</th>
-      <th>charge</th>
     </tr>
   </thead>
   <tbody>
@@ -1606,16 +1684,16 @@ pbc = [ True  True  True]
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
@@ -1623,16 +1701,16 @@ pbc = [ True  True  True]
       <td>1.6</td>
       <td>1.6</td>
       <td>1.6</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>-1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -1646,22 +1724,22 @@ pbc = [ True  True  True]
 package of <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/">ase</a>. Requires that ase
 be installed.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [46]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">ase</span>
-    <span class="n">has_ase</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">has_ase</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;ase not installed&#39;</span><span class="p">)</span>
-    <span class="n">has_ase</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ase not installed&#39;</span><span class="p">)</span>
+    <span class="n">has_ase</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="8.1.-dump(‘ase_Atoms’)">
-<h3>8.1. dump(‘ase_Atoms’)<a class="headerlink" href="#8.1.-dump(‘ase_Atoms’)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="8.1.-dump('ase_Atoms')">
+<h3>8.1. dump(‘ase_Atoms’)<a class="headerlink" href="#8.1.-dump('ase_Atoms')" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>symbols</strong> (<em>list</em>) A list of unique elemental symbols to pair with
@@ -1675,18 +1753,19 @@ atoms.</li>
 to include.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [47]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="k">if</span> <span class="n">has_ase</span><span class="p">:</span>
-    <span class="n">aseatoms</span><span class="p">,</span> <span class="n">prop</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;ase_Atoms&#39;</span><span class="p">,</span> <span class="n">return_prop</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">aseatoms</span><span class="p">,</span> <span class="n">prop</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;ase_Atoms&#39;</span><span class="p">,</span> <span class="n">return_prop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;ase not installed&#39;</span><span class="p">)</span>
-    <span class="n">aseatoms</span><span class="p">,</span> <span class="n">prop</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="k">print</span><span class="p">(</span><span class="n">aseatoms</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ase not installed&#39;</span><span class="p">)</span>
+    <span class="n">aseatoms</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">prop</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">aseatoms</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1696,18 +1775,18 @@ to include.</li>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Atoms(symbols=&#39;CsCl&#39;, pbc=True, cell=[3.2, 3.2, 3.2])
-{u&#39;stress&#39;: array([[[0., 0., 0.],
-        [0., 0., 0.],
-        [0., 0., 0.]],
+{&#39;charge&#39;: array([ 1., -1.]), &#39;stress&#39;: array([[[ 0.,  0.,  0.],
+        [ 0.,  0.,  0.],
+        [ 0.,  0.,  0.]],
 
-       [[0., 0., 0.],
-        [0., 0., 0.],
-        [0., 0., 0.]]]), u&#39;charge&#39;: array([ 1., -1.])}
+       [[ 0.,  0.,  0.],
+        [ 0.,  0.,  0.],
+        [ 0.,  0.,  0.]]])}
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="8.2.-load(‘ase_Atoms’)">
-<h3>8.2. load(‘ase_Atoms’)<a class="headerlink" href="#8.2.-load(‘ase_Atoms’)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="8.2.-load('ase_Atoms')">
+<h3>8.2. load(‘ase_Atoms’)<a class="headerlink" href="#8.2.-load('ase_Atoms')" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>aseatoms</strong> (<em>ase.Atoms</em>) An ase representation of a collection of
@@ -1720,18 +1799,18 @@ properties to include.</li>
 <li><strong>system</strong> (<em>atomman.System</em>) A atomman representation of a system.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [48]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="k">if</span> <span class="n">has_ase</span><span class="p">:</span>
     <span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;ase_Atoms&#39;</span><span class="p">,</span> <span class="n">aseatoms</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="n">prop</span><span class="p">)</span>
 
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;ase not installed (elements and system unchanged from above)&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ase not installed (elements and system unchanged from above)&#39;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
 <span class="n">system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1755,12 +1834,25 @@ pbc = [ True  True  True]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[48]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[21]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1769,6 +1861,7 @@ pbc = [ True  True  True]
       <th>pos[0]</th>
       <th>pos[1]</th>
       <th>pos[2]</th>
+      <th>charge</th>
       <th>stress[0][0]</th>
       <th>stress[0][1]</th>
       <th>stress[0][2]</th>
@@ -1778,7 +1871,6 @@ pbc = [ True  True  True]
       <th>stress[2][0]</th>
       <th>stress[2][1]</th>
       <th>stress[2][2]</th>
-      <th>charge</th>
     </tr>
   </thead>
   <tbody>
@@ -1788,16 +1880,16 @@ pbc = [ True  True  True]
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
@@ -1805,16 +1897,16 @@ pbc = [ True  True  True]
       <td>1.6</td>
       <td>1.6</td>
       <td>1.6</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>-1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -1827,31 +1919,23 @@ pbc = [ True  True  True]
 <p>There is also built-in converters between the alternate Python atomistic
 package of <a class="reference external" href="http://pymatgen.org/">pymatgen</a>. Requires that pymatgen
 be installed. (No longer supports Python 2).</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [49]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">pymatgen</span> <span class="kn">as</span> <span class="nn">pmg</span>
-    <span class="n">has_pmg</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="kn">import</span> <span class="nn">pymatgen</span> <span class="k">as</span> <span class="nn">pmg</span>
+    <span class="n">has_pmg</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;pymatgen not installed&#39;</span><span class="p">)</span>
-    <span class="n">has_pmg</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;pymatgen not installed&#39;</span><span class="p">)</span>
+    <span class="n">has_pmg</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-pymatgen not installed
-</pre></div></div>
-</div>
-<div class="section" id="9.1.-dump(‘pymatgen_Structure’)">
-<h3>9.1. dump(‘pymatgen_Structure’)<a class="headerlink" href="#9.1.-dump(‘pymatgen_Structure’)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="9.1.-dump('pymatgen_Structure')">
+<h3>9.1. dump(‘pymatgen_Structure’)<a class="headerlink" href="#9.1.-dump('pymatgen_Structure')" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>symbols</strong> (<em>list</em>) A list of unique elemental symbols to pair with
@@ -1863,18 +1947,18 @@ system’s atypes. Will try to use system.symbols if not given.</li>
 structure.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [50]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="k">if</span> <span class="n">has_pmg</span><span class="p">:</span>
     <span class="n">structure</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;pymatgen_Structure&#39;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;pymatgen not installed&#39;</span><span class="p">)</span>
-    <span class="n">structure</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;pymatgen not installed&#39;</span><span class="p">)</span>
+    <span class="n">structure</span> <span class="o">=</span> <span class="kc">None</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1883,13 +1967,24 @@ structure.</li>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-pymatgen not installed
-None
+Full Formula (Cs1 Cl1)
+Reduced Formula: CsCl
+abc   :   3.200000   3.200000   3.200000
+angles:  90.000000  90.000000  90.000000
+Sites (2)
+  #  SP      a    b    c    charge  stress
+---  ----  ---  ---  ---  --------  ---------------
+  0  Cs    0    0    0           1  [[ 0.  0.  0.]
+                                     [ 0.  0.  0.]
+                                     [ 0.  0.  0.]]
+  1  Cl    0.5  0.5  0.5        -1  [[ 0.  0.  0.]
+                                     [ 0.  0.  0.]
+                                     [ 0.  0.  0.]]
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="9.2.-load(‘pymatgen_Structure’)">
-<h3>9.2. load(‘pymatgen_Structure’)<a class="headerlink" href="#9.2.-load(‘pymatgen_Structure’)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="9.2.-load('pymatgen_Structure')">
+<h3>9.2. load(‘pymatgen_Structure’)<a class="headerlink" href="#9.2.-load('pymatgen_Structure')" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>structure</strong> (<em>pymatgen.Structure</em>) A pymatgen representation of a
@@ -1900,17 +1995,17 @@ structure.</li>
 <li><strong>system</strong> (<em>atomman.System</em>) A atomman representation of a system.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [51]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="k">if</span> <span class="n">has_pmg</span><span class="p">:</span>
     <span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;pymatgen_Structure&#39;</span><span class="p">,</span> <span class="n">structure</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;pymatgen not installed (elements and system unchanged from above)&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;pymatgen not installed (elements and system unchanged from above)&#39;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
 <span class="n">system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1920,7 +2015,6 @@ structure.</li>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-pymatgen not installed (elements and system unchanged from above)
 avect =  [ 3.200,  0.000,  0.000]
 bvect =  [ 0.000,  3.200,  0.000]
 cvect =  [ 0.000,  0.000,  3.200]
@@ -1935,12 +2029,25 @@ pbc = [ True  True  True]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[51]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[24]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1949,6 +2056,7 @@ pbc = [ True  True  True]
       <th>pos[0]</th>
       <th>pos[1]</th>
       <th>pos[2]</th>
+      <th>charge</th>
       <th>stress[0][0]</th>
       <th>stress[0][1]</th>
       <th>stress[0][2]</th>
@@ -1958,7 +2066,6 @@ pbc = [ True  True  True]
       <th>stress[2][0]</th>
       <th>stress[2][1]</th>
       <th>stress[2][2]</th>
-      <th>charge</th>
     </tr>
   </thead>
   <tbody>
@@ -1968,16 +2075,16 @@ pbc = [ True  True  True]
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
@@ -1985,16 +2092,203 @@ pbc = [ True  True  True]
       <td>1.6</td>
       <td>1.6</td>
       <td>1.6</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>-1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</div>
+</div>
+<div class="section" id="10.-spglib_cell-style">
+<h2>10. spglib_cell style<a class="headerlink" href="#10.-spglib_cell-style" title="Permalink to this headline">¶</a></h2>
+<p>To facilitate analyzing systems with the
+<a class="reference external" href="https://atztogo.github.io/spglib/python-spglib.html">spglib</a> space
+group analysis code, there is built-in converters to the tuple cell
+information that the spglib package uses.</p>
+<div class="section" id="10.1.-dump('spglib_cell')">
+<h3>10.1. dump(‘spglib_cell’)<a class="headerlink" href="#10.1.-dump('spglib_cell')" title="Permalink to this headline">¶</a></h3>
+<p>Returns</p>
+<ul class="simple">
+<li><strong>lattice</strong> (<em>numpy.ndarray</em>) The three lattice box vectors.</li>
+<li><strong>scaled_positions</strong> (<em>numpy.ndarray</em>) All box-scaled atomic
+coordinates.</li>
+<li><strong>numbers</strong> (<em>numpy.ndarray</em>) The integer atom types for each atom
+position.</li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">cell</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;spglib_cell&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;lattice:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cell</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;scaled_positions:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cell</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;numbers:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cell</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+lattice:
+[[ 3.2  0.   0. ]
+ [ 0.   3.2  0. ]
+ [ 0.   0.   3.2]]
+scaled_positions:
+[[ 0.   0.   0. ]
+ [ 0.5  0.5  0.5]]
+numbers:
+[2 1]
+</pre></div></div>
+</div>
+<p>This cell can be passed to functions of spglib, such as
+standardize_cell() which returns a standardized version of the
+associated unit cell.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">spglib</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;spglib not installed&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">spglib</span><span class="o">.</span><span class="n">standardize_cell</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;lattice:&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">cell</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;scaled_positions:&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">cell</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;numbers:&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">cell</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+lattice:
+[[ 3.2  0.   0. ]
+ [ 0.   3.2  0. ]
+ [ 0.   0.   3.2]]
+scaled_positions:
+[[ 0.   0.   0. ]
+ [ 0.5  0.5  0.5]]
+numbers:
+[2 1]
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="9.2.-load('spglib_cell')">
+<h3>9.2. load(‘spglib_cell’)<a class="headerlink" href="#9.2.-load('spglib_cell')" title="Permalink to this headline">¶</a></h3>
+<p>Parameters</p>
+<ul class="simple">
+<li><strong>cell</strong> (<em>tuple</em>) The cell information in the format used by spglib.</li>
+<li><strong>symbols</strong> (<em>list</em>) Symbol information tp give to the system.</li>
+</ul>
+<p>Returns</p>
+<ul class="simple">
+<li><strong>system</strong> (<em>atomman.System</em>) A atomman representation of a system.</li>
+</ul>
+<p><strong>NOTE</strong>: This function does not allow per-atom properties to be passed
+directly because it assumes the cell information is obtained from an
+spglib function, such as standardize_cell(), which does not consider
+that information.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;spglib_cell&#39;</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="n">system</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+<span class="n">system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 3.200,  0.000,  0.000]
+bvect =  [ 0.000,  3.200,  0.000]
+cvect =  [ 0.000,  0.000,  3.200]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 2
+natypes = 2
+symbols = (&#39;Cl&#39;, &#39;Cs&#39;)
+pbc = [ True  True  True]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       2 |   0.000 |   0.000 |   0.000
+      1 |       1 |   1.600 |   1.600 |   1.600
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[27]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>atype</th>
+      <th>pos[0]</th>
+      <th>pos[1]</th>
+      <th>pos[2]</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>1.6</td>
+      <td>1.6</td>
+      <td>1.6</td>
     </tr>
   </tbody>
 </table>
@@ -2075,7 +2369,7 @@ pbc = [ True  True  True]
           
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Lucas Hale.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
         </div>
         <div class="clearer"></div>

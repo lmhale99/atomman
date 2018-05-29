@@ -4,23 +4,32 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>atomman.lammps.Log &#8212; atomman 1.2.alpha documentation</title>
+    <title>atomman.lammps.Log &#8212; atomman 1.2.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head><body>
+  </head>
+  <body>
     <div class="header-wrapper" role="banner">
       <div class="header">
         <div class="headertitle"><a
-          href="../../../index.html">atomman 1.2.alpha documentation</a></div>
+          href="../../../index.html">atomman 1.2.0 documentation</a></div>
         <div class="rel" role="navigation" aria-label="related navigation">
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |
@@ -160,8 +169,8 @@
                 <span class="c1"># Reset file pointer</span>
                 <span class="n">log_info</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                 
-                <span class="c1"># Append simulation results</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__simulations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span></div>
+                <span class="c1"># Append simulation results</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__simulations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
     
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">simulations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -205,8 +214,8 @@
                     <span class="n">merged_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">merged_df</span><span class="p">[</span><span class="n">merged_df</span><span class="o">.</span><span class="n">Step</span> <span class="o">&lt;</span> <span class="n">thermo</span><span class="o">.</span><span class="n">Step</span><span class="o">.</span><span class="n">min</span><span class="p">()],</span> <span class="n">thermo</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unsupported style&#39;</span><span class="p">)</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">__simulations</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;thermo&#39;</span><span class="p">:</span><span class="n">merged_df</span><span class="p">}]</span></div>
+        </div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__simulations</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;thermo&#39;</span><span class="p">:</span><span class="n">merged_df</span><span class="p">}]</span>
     
 <div class="viewcode-block" id="Log.model"><a class="viewcode-back" href="../../../atomman.lammps.Log.html#atomman.lammps.Log.model">[docs]</a>    <span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flatten</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -245,8 +254,8 @@
             
             <span class="c1"># Append simulation results to DataModelDict root</span>
             <span class="n">log_model</span><span class="p">[</span><span class="s1">&#39;LAMMPS-log-thermo-data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;simulation&#39;</span><span class="p">,</span> <span class="n">sim_model</span><span class="p">)</span>
-            
-        <span class="k">return</span> <span class="n">log_model</span></div></div>
+            </div></div>
+        <span class="k">return</span> <span class="n">log_model</span>
 </pre></div>
 
           </div>
@@ -293,7 +302,7 @@
           
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Lucas Hale.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
         </div>
         <div class="clearer"></div>

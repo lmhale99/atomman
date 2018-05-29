@@ -2,10 +2,7 @@
  "cells": [
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "# Introduction to atomman: Potential class\n",
     "\n",
@@ -18,20 +15,14 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "<a id='section1'></a>"
    ]
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "## 1. Introduction\n",
     "\n",
@@ -42,28 +33,21 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "**Library Imports**"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 1,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "atomman version = 1.2.alpha\n"
+      "atomman version = 1.2.0\n"
      ]
     }
    ],
@@ -87,10 +71,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "## 2. Class Basics <a id='section2'></a>\n",
     "\n",
@@ -99,10 +80,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "### 2.1.Demonstration data model <a id='section2.1'></a>\n",
     "\n",
@@ -111,12 +89,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
-   "metadata": {
-    "collapsed": true,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 2,
+   "metadata": {},
    "outputs": [],
    "source": [
     "# Define data model record in JSON format\n",
@@ -163,10 +137,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "### 2.2. Load a data model with Potential <a id='section2.2'></a>\n",
     "\n",
@@ -181,12 +152,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 3,
+   "metadata": {},
    "outputs": [],
    "source": [
     "potential = lmp.Potential(eam_alloy_json)"
@@ -194,22 +161,15 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "Alternatively, a data model can be loaded by an existing Potential object with the load() method.  It has the same parameters as the class initializer."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 12,
-   "metadata": {
-    "collapsed": true,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 4,
+   "metadata": {},
    "outputs": [],
    "source": [
     "potential.load(eam_alloy_json, pot_dir='potential_folder')"
@@ -217,10 +177,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "### 2.3. Potential identifiers <a id='section2.3'></a>\n",
     "\n",
@@ -239,12 +196,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 13,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 5,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -266,22 +219,15 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "The string representation of the Potential returns its id."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 16,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 6,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -297,10 +243,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "### 2.4. Other attributes <a id='section2.4'></a>\n",
     "\n",
@@ -317,12 +260,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 30,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 7,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -331,8 +270,8 @@
       "potential.atom_style -> atomic\n",
       "potential.pair_style -> eam/alloy\n",
       "potential.units ->      metal\n",
-      "potential.symbols ->    [u'Ni', u'Al', u'Co']\n",
-      "potential.pot_dir ->    new_potential_folder\n"
+      "potential.symbols ->    ['Ni', 'Al', 'Co']\n",
+      "potential.pot_dir ->    potential_folder\n"
      ]
     }
    ],
@@ -346,22 +285,15 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "The pot_dir can also be changed at any time."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 15,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 8,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -379,10 +311,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "## 3. Elements and Masses <a id='section3'></a>\n",
     "\n",
@@ -398,29 +327,22 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "Calling the methods without parameters uses all symbols."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 17,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 9,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "potential.symbols ->    [u'Ni', u'Al', u'Co']\n",
-      "potential.elements() -> [u'Ni', u'Al', u'Co']\n",
+      "potential.symbols ->    ['Ni', 'Al', 'Co']\n",
+      "potential.elements() -> ['Ni', 'Al', 'Co']\n",
       "potential.masses() ->   [58.6934, 26.981539, 58.9332]\n"
      ]
     }
@@ -434,31 +356,24 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "Calling the methods with symbols gives values for that particular set."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 19,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 10,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "potential.elements('Ni') -> [u'Ni']\n",
+      "potential.elements('Ni') -> ['Ni']\n",
       "potential.masses('Ni') -> [58.6934]\n",
       "\n",
-      "potential.elements(['Al', 'Al', 'Co', 'Al']) -> [u'Al', u'Al', u'Co', u'Al']\n",
+      "potential.elements(['Al', 'Al', 'Co', 'Al']) -> ['Al', 'Al', 'Co', 'Al']\n",
       "potential.masses(['Al', 'Al', 'Co', 'Al']) ->   [26.981539, 26.981539, 58.9332, 26.981539]\n",
       "\n"
      ]
@@ -477,10 +392,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "## 4. Generate LAMMPS commands <a id='section4'></a>\n",
     "\n",
@@ -495,22 +407,15 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "Without symbols gives LAMMPS commands for all symbols in the same order as the data model."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 20,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 11,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -534,22 +439,15 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "Give a list of symbols to dynamically generate commands based on the elements in the associated atomic system."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 22,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 12,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -571,12 +469,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 23,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 13,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -601,10 +495,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "## 5. potential_LAMMPS Data Model <a id='section5'></a>\n",
     "\n",
@@ -613,10 +504,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "### 5.1. potential_LAMMPS data model schema <a id='section5'></a>\n",
     "\n",
@@ -645,10 +533,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "#### 5.1.1. The \"potential\" branch <a id='section5.1.1'></a>\n",
     "\n",
@@ -663,12 +548,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 26,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 14,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -694,10 +575,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "#### 5.1.2. The \"atom\" branch <a id='section5.1.2'></a>\n",
     "\n",
@@ -714,12 +592,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 27,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 15,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -748,12 +622,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 28,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 16,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -796,10 +666,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "#### 5.1.3. The \"pair_style\" branch <a id='section5.1.3'></a>\n",
     "\n",
@@ -815,12 +682,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 31,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 17,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -860,10 +723,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "#### 5.1.4. The \"pair_coeff\" branch <a id='section5.1.4'></a>\n",
     "\n",
@@ -892,12 +752,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 32,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 18,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -1008,12 +864,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 33,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 19,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -1064,10 +916,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "#### 5.1.5. The \"command\" branch <a id='section5.1.5'></a>\n",
     "\n",
@@ -1085,12 +934,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 34,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 20,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -1140,10 +985,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "### 5.2. Example data models <a id='section5.2'></a>\n",
     "\n",
@@ -1152,22 +994,15 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "#### 5.2.1. Lennard-Jones and other two-body style potentials <a id='section5.2.1'></a>"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 35,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 21,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -1333,10 +1168,7 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "#### 5.2.2. eam/alloy and other many-body potentials from single parameter files <a id='section5.2.2'></a>\n",
     "\n",
@@ -1345,12 +1177,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 36,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 22,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -1442,23 +1270,78 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "#### 5.2.3. COMB and other potentials requiring additional commands <a id='section5.2.3'></a>"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "metadata": {
-    "collapsed": true,
-    "deletable": true,
-    "editable": true
-   },
-   "outputs": [],
+   "execution_count": 23,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "{\n",
+      "    \"potential-LAMMPS\": {\n",
+      "        \"key\": \"c6623d40-a3f2-4b2f-948a-3b277f174116\",\n",
+      "        \"id\": \"COMB-demo--LAMMPS--v2\",\n",
+      "        \"potential\": {\n",
+      "            \"key\": \"5ec2aac4-3dd4-4f5c-afb4-21749577c038\",\n",
+      "            \"id\": \"COMB-demo\"\n",
+      "        },\n",
+      "        \"units\": \"nano\",\n",
+      "        \"atom_style\": \"charge\",\n",
+      "        \"atom\": [\n",
+      "            {\n",
+      "                \"element\": \"O\"\n",
+      "            },\n",
+      "            {\n",
+      "                \"element\": \"Cu\"\n",
+      "            },\n",
+      "            {\n",
+      "                \"element\": \"Ni\"\n",
+      "            }\n",
+      "        ],\n",
+      "        \"pair_style\": {\n",
+      "            \"type\": \"comb\",\n",
+      "            \"term\": {\n",
+      "                \"option\": \"polar_off\"\n",
+      "            }\n",
+      "        },\n",
+      "        \"pair_coeff\": {\n",
+      "            \"term\": [\n",
+      "                {\n",
+      "                    \"file\": \"file.comb\"\n",
+      "                },\n",
+      "                {\n",
+      "                    \"symbols\": true\n",
+      "                }\n",
+      "            ]\n",
+      "        },\n",
+      "        \"command\": {\n",
+      "            \"term\": [\n",
+      "                {\n",
+      "                    \"option\": \"fix\"\n",
+      "                },\n",
+      "                {\n",
+      "                    \"option\": \"qeq/comb\"\n",
+      "                },\n",
+      "                {\n",
+      "                    \"parameter\": 10\n",
+      "                },\n",
+      "                {\n",
+      "                    \"parameter\": 0.0001\n",
+      "                }                \n",
+      "            ]\n",
+      "        }\n",
+      "    }\n",
+      "}\n"
+     ]
+    }
+   ],
    "source": [
     "print(\"\"\"{\n",
     "    \"potential-LAMMPS\": {\n",
@@ -1519,22 +1402,15 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "#### 5.2.4. MEAM and other many-body potentials with library and parameter files <a id='section5.2.4'></a>"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 37,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 24,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -1638,22 +1514,15 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "#### 5.2.5. hybrid-style potentials <a id='section5.2.5'></a>"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 38,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 25,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -1851,22 +1720,15 @@
   },
   {
    "cell_type": "markdown",
-   "metadata": {
-    "deletable": true,
-    "editable": true
-   },
+   "metadata": {},
    "source": [
     "#### 5.2.6. Original eam pair_style <a id='section5.2.6'></a>"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 39,
-   "metadata": {
-    "collapsed": false,
-    "deletable": true,
-    "editable": true
-   },
+   "execution_count": 26,
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -1979,23 +1841,23 @@
  ],
  "metadata": {
   "kernelspec": {
-   "display_name": "Python 2",
+   "display_name": "Python 3",
    "language": "python",
-   "name": "python2"
+   "name": "python3"
   },
   "language_info": {
    "codemirror_mode": {
     "name": "ipython",
-    "version": 2
+    "version": 3
    },
    "file_extension": ".py",
    "mimetype": "text/x-python",
    "name": "python",
    "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython2",
-   "version": "2.7.13"
+   "pygments_lexer": "ipython3",
+   "version": "3.6.4"
   }
  },
  "nbformat": 4,
- "nbformat_minor": 0
+ "nbformat_minor": 1
 }

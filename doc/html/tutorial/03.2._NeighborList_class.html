@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: NeighborList class &#8212; atomman 1.2.alpha documentation</title>
+    <title>Introduction to atomman: NeighborList class &#8212; atomman 1.2.0 documentation</title>
     <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -18,11 +26,12 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Defect Creation and Analysis" href="04._Defect_Creation_and_Analysis.html" />
     <link rel="prev" title="Introduction to atomman: ElasticConstants class" href="03.1._ElasticConstants_class.html" /> 
-  </head><body>
+  </head>
+  <body>
     <div class="header-wrapper" role="banner">
       <div class="header">
         <div class="headertitle"><a
-          href="../index.html">atomman 1.2.alpha documentation</a></div>
+          href="../index.html">atomman 1.2.0 documentation</a></div>
         <div class="rel" role="navigation" aria-label="related navigation">
           <a href="03.1._ElasticConstants_class.html" title="Introduction to atomman: ElasticConstants class"
              accesskey="P">previous</a> |
@@ -253,11 +262,11 @@ Python implementation. Even so, the routine is likely not fully
 implemented and could potentially benefit from further improvement.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
@@ -273,15 +282,15 @@ implemented and could potentially benefit from further improvement.</p>
 </div>
 <p>Construct a 10x10x10 bcc supercell system.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">2.8665</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">2.8665</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mf">2.8665</span><span class="p">)</span>
 <span class="n">atoms</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">atype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]])</span>
 <span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">system</span><span class="o">.</span><span class="n">supersize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">supersize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -329,11 +338,11 @@ neighbor positions to allow each atom when the number of neighbors
 exceeds the underlying array size. Default value is 10.</li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Generate a new NeighborList object</span>
 <span class="n">neighbors</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">NeighborList</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">system</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
 </pre></div>
@@ -342,14 +351,14 @@ exceeds the underlying array size. Default value is 10.</li>
 </div>
 <div class="section" id="2.2-The-coord-attribute">
 <h3>2.2 The coord attribute<a class="headerlink" href="#2.2-The-coord-attribute" title="Permalink to this headline">¶</a></h3>
-<p>The number of neighbors, i.e.&nbsp;coordination, for each atom can be
+<p>The number of neighbors, i.e. coordination, for each atom can be
 retrieved using the coord attribute.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The coordination of atom 4 =&#39;</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">coord</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Average number of neighbors =&#39;</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">coord</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 </pre></div>
@@ -370,11 +379,11 @@ Average number of neighbors = 8.0
 <p>The list of identified neighbors can be obtained using numerical
 indexing on the NeighborList object.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The neighbor atoms of atom 3 are&#39;</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -388,11 +397,11 @@ The neighbor atoms of atom 3 are [  2   4  22  24 202 204 222 224]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># The neighbor lists can also be iterated over for each atom</span>
 <span class="k">for</span> <span class="n">nlist</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">nlist</span><span class="p">)</span>
@@ -437,11 +446,11 @@ neighbor positions to allow each atom when the number of neighbors
 exceeds the underlying array size. Default value is 10.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Identify nearest and next-nearest neighbors with a larger cutoff</span>
 <span class="n">neighbors</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">system</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">2.9</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Average number of neighbors =&#39;</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">coord</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
@@ -470,11 +479,11 @@ regenerating the list of neighbors is time consuming.</p>
 <li><strong>fname</strong> (<em>str</em>) The file name to save the content to.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">neighbors</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;neighborlist.txt&#39;</span><span class="p">)</span>
 
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;neighborlist.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -2503,11 +2512,11 @@ regenerating the list of neighbors is time consuming.</p>
 to load.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">neighbors</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;neighborlist.txt&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Average number of neighbors =&#39;</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">coord</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 </pre></div>
@@ -2527,11 +2536,11 @@ Average number of neighbors = 14.0
 <p>The content can also be loaded during initialization using the model
 parameter.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">neighbors</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">NeighborList</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;neighborlist.txt&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Average number of neighbors =&#39;</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">coord</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 </pre></div>
@@ -2547,11 +2556,11 @@ Average number of neighbors = 14.0
 </div>
 <p><strong>File Cleanup</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;neighborlist.txt&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -2631,7 +2640,7 @@ Average number of neighbors = 14.0
           
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Lucas Hale.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
         </div>
         <div class="clearer"></div>

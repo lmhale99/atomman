@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Defining Atomic Systems &#8212; atomman 1.2.alpha documentation</title>
+    <title>Introduction to atomman: Defining Atomic Systems &#8212; atomman 1.2.0 documentation</title>
     <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -18,11 +26,12 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Box Class" href="01.1._Box_Class.html" />
     <link rel="prev" title="Introduction to atomman: Unit Conversions" href="00._Unit_Conversions.html" /> 
-  </head><body>
+  </head>
+  <body>
     <div class="header-wrapper" role="banner">
       <div class="header">
         <div class="headertitle"><a
-          href="../index.html">atomman 1.2.alpha documentation</a></div>
+          href="../index.html">atomman 1.2.0 documentation</a></div>
         <div class="rel" role="navigation" aria-label="related navigation">
           <a href="00._Unit_Conversions.html" title="Introduction to atomman: Unit Conversions"
              accesskey="P">previous</a> |
@@ -215,7 +224,7 @@ div.nboutput div.output_area.stderr {
 <p><strong>Lucas M. Hale</strong>,
 <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
 <em>Materials Science and Engineering Division, NIST</em>.</p>
-<p>Notebook last updated: 2018-04-05</p>
+<p>Notebook last updated: 2018-05-29</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
@@ -223,11 +232,11 @@ div.nboutput div.output_area.stderr {
 atomistic systems using atomman.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
@@ -251,7 +260,7 @@ atomistic systems using atomman.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.alpha
+atomman version = 1.2.0
 </pre></div></div>
 </div>
 </div>
@@ -270,11 +279,11 @@ for more detailed information and options.</p>
 <p>Boxes can be defined using a variety of formats. Here, we’ll define a
 box using lattice parameters.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># a = 4.05 angstroms (Al fcc lattice constant)</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.05</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 
@@ -289,11 +298,11 @@ box using lattice parameters.</p>
 <p>The string of Box shows four Cartesian vectors: the three box vectors
 (avect, bvect, and cvect) and the origin position.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -312,11 +321,11 @@ origin = [ 0.000,  0.000,  0.000]
 <p>The parameters of the Box can also be retrieved in a variety of formats.
 Some examples are shown here.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;a =&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;b =&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;c =&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
@@ -363,11 +372,11 @@ to 1 for all atoms.</li>
 [0,0,0] for all atoms.</li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Create Atoms for an fcc unit cell</span>
 <span class="n">atype</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">pos</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
@@ -384,11 +393,11 @@ to 1 for all atoms.</li>
 <h4>2.2.2. Accessing Atoms properties<a class="headerlink" href="#2.2.2.-Accessing-Atoms-properties" title="Permalink to this headline">¶</a></h4>
 <p>The string of Atoms shows id, atype, and pos for all atoms.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -407,11 +416,11 @@ to 1 for all atoms.</li>
 </div>
 <p>The per-atom properties can be accessed as attributes of the object.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atoms.atype -&gt;&#39;</span><span class="p">,</span> <span class="n">atoms</span><span class="o">.</span><span class="n">atype</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atoms.pos[2] -&gt;&#39;</span><span class="p">,</span> <span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 </pre></div>
@@ -429,18 +438,18 @@ atoms.pos[2] -&gt; [ 0.5  0.   0.5]
 <p>The per-atom properties can also be converted into a flat
 pandas.DataFrame with the df() method.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [9]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">atoms</span><span class="o">.</span><span class="n">df</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[9]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -525,11 +534,11 @@ value.</li>
 relative to the box vectors.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [32]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">,</span> <span class="n">pbc</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
 </pre></div>
@@ -567,11 +576,11 @@ Notebook</a> for more detailed
 information on the different styles and options.</p>
 <p>Create content in POSCAR format</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [36]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">fcc_poscar</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;POSCAR for fcc Al standard unit cell</span>
 <span class="s2">1.0</span>
 <span class="s2">4.05 0.00 0.00</span>
@@ -595,11 +604,11 @@ be a str of the content, a file path or a file-like object.</li>
 <li><strong>**kwargs</strong> (<em>any</em>) any extra style-specific keyword arguments.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [37]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">new_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;poscar&#39;</span><span class="p">,</span> <span class="n">fcc_poscar</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">new_system</span><span class="p">)</span>
 </pre></div>
@@ -637,20 +646,20 @@ and options.</p>
 <div class="section" id="4.1.-System.rotate()">
 <h3>4.1. System.rotate()<a class="headerlink" href="#4.1.-System.rotate()" title="Permalink to this headline">¶</a></h3>
 <p>The rotate() method transforms the system such that the new box vectors
-correspond to three integer [hkl] crystal vectors with respect to the
+correspond to three integer [uvw] crystal vectors with respect to the
 current box vectors. This ensures that atomic compatibilities across all
 periodic boundaries.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Rotate system to crystal vectors [110], [-110], [001]</span>
-<span class="n">hkls</span> <span class="o">=</span> <span class="p">[[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="n">uvws</span> <span class="o">=</span> <span class="p">[[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
         <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
         <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
-<span class="n">system</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">hkls</span><span class="p">)</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">uvws</span><span class="p">)</span>
 
 <span class="c1"># Show system is transformed and expanded</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
@@ -668,30 +677,30 @@ cvect =  [ 0.000,  0.000,  4.050]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 8
 natypes = 1
-symbols = (None,)
+symbols = (&#39;Al&#39;,)
 pbc = [ True  True  True]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.707 |   2.157 |   4.050
-      1 |       1 |   2.139 |   0.725 |   2.025
-      2 |       1 |   0.707 |   5.020 |   4.050
-      3 |       1 |   3.571 |   5.020 |   4.050
-      4 |       1 |   2.139 |   3.589 |   2.025
-      5 |       1 |   3.571 |   2.157 |   4.050
-      6 |       1 |   5.003 |   0.725 |   2.025
-      7 |       1 |   5.003 |   3.589 |   2.025
+      0 |       1 |   5.728 |   2.864 |   4.050
+      1 |       1 |   0.000 |   0.000 |   4.050
+      2 |       1 |   2.864 |   5.728 |   4.050
+      3 |       1 |   1.432 |   1.432 |   2.025
+      4 |       1 |   1.432 |   4.296 |   2.025
+      5 |       1 |   2.864 |   2.864 |   4.050
+      6 |       1 |   4.296 |   1.432 |   2.025
+      7 |       1 |   4.296 |   4.296 |   2.025
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="4.2.-System.supersize()">
 <h3>4.2. System.supersize()<a class="headerlink" href="#4.2.-System.supersize()" title="Permalink to this headline">¶</a></h3>
-<p>A larger System (i.e.&nbsp;supercell) can be generated using the supersize()
+<p>A larger System (i.e. supercell) can be generated using the supersize()
 method</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Make system a 2x2x2 supercell of itself</span>
 <span class="n">system</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">supersize</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
@@ -710,73 +719,73 @@ cvect =  [ 0.000,  0.000,  8.100]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 64
 natypes = 1
-symbols = (None,)
+symbols = (&#39;Al&#39;,)
 pbc = [ True  True  True]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.707 |   2.157 |   4.050
-      1 |       1 |   2.139 |   0.725 |   2.025
-      2 |       1 |   0.707 |   5.020 |   4.050
-      3 |       1 |   3.571 |   5.020 |   4.050
-      4 |       1 |   2.139 |   3.589 |   2.025
-      5 |       1 |   3.571 |   2.157 |   4.050
-      6 |       1 |   5.003 |   0.725 |   2.025
-      7 |       1 |   5.003 |   3.589 |   2.025
-      8 |       1 |   6.435 |   2.157 |   4.050
-      9 |       1 |   7.867 |   0.725 |   2.025
-     10 |       1 |   6.435 |   5.020 |   4.050
-     11 |       1 |   9.298 |   5.020 |   4.050
-     12 |       1 |   7.867 |   3.589 |   2.025
-     13 |       1 |   9.298 |   2.157 |   4.050
-     14 |       1 |  10.730 |   0.725 |   2.025
-     15 |       1 |  10.730 |   3.589 |   2.025
-     16 |       1 |   0.707 |   7.884 |   4.050
-     17 |       1 |   2.139 |   6.452 |   2.025
-     18 |       1 |   0.707 |  10.748 |   4.050
-     19 |       1 |   3.571 |  10.748 |   4.050
-     20 |       1 |   2.139 |   9.316 |   2.025
-     21 |       1 |   3.571 |   7.884 |   4.050
-     22 |       1 |   5.003 |   6.452 |   2.025
-     23 |       1 |   5.003 |   9.316 |   2.025
-     24 |       1 |   6.435 |   7.884 |   4.050
-     25 |       1 |   7.867 |   6.452 |   2.025
-     26 |       1 |   6.435 |  10.748 |   4.050
-     27 |       1 |   9.298 |  10.748 |   4.050
-     28 |       1 |   7.867 |   9.316 |   2.025
-     29 |       1 |   9.298 |   7.884 |   4.050
-     30 |       1 |  10.730 |   6.452 |   2.025
-     31 |       1 |  10.730 |   9.316 |   2.025
-     32 |       1 |   0.707 |   2.157 |   8.100
-     33 |       1 |   2.139 |   0.725 |   6.075
-     34 |       1 |   0.707 |   5.020 |   8.100
-     35 |       1 |   3.571 |   5.020 |   8.100
-     36 |       1 |   2.139 |   3.589 |   6.075
-     37 |       1 |   3.571 |   2.157 |   8.100
-     38 |       1 |   5.003 |   0.725 |   6.075
-     39 |       1 |   5.003 |   3.589 |   6.075
-     40 |       1 |   6.435 |   2.157 |   8.100
-     41 |       1 |   7.867 |   0.725 |   6.075
-     42 |       1 |   6.435 |   5.020 |   8.100
-     43 |       1 |   9.298 |   5.020 |   8.100
-     44 |       1 |   7.867 |   3.589 |   6.075
-     45 |       1 |   9.298 |   2.157 |   8.100
-     46 |       1 |  10.730 |   0.725 |   6.075
-     47 |       1 |  10.730 |   3.589 |   6.075
-     48 |       1 |   0.707 |   7.884 |   8.100
-     49 |       1 |   2.139 |   6.452 |   6.075
-     50 |       1 |   0.707 |  10.748 |   8.100
-     51 |       1 |   3.571 |  10.748 |   8.100
-     52 |       1 |   2.139 |   9.316 |   6.075
-     53 |       1 |   3.571 |   7.884 |   8.100
-     54 |       1 |   5.003 |   6.452 |   6.075
-     55 |       1 |   5.003 |   9.316 |   6.075
-     56 |       1 |   6.435 |   7.884 |   8.100
-     57 |       1 |   7.867 |   6.452 |   6.075
-     58 |       1 |   6.435 |  10.748 |   8.100
-     59 |       1 |   9.298 |  10.748 |   8.100
-     60 |       1 |   7.867 |   9.316 |   6.075
-     61 |       1 |   9.298 |   7.884 |   8.100
-     62 |       1 |  10.730 |   6.452 |   6.075
-     63 |       1 |  10.730 |   9.316 |   6.075
+      0 |       1 |   5.728 |   2.864 |   4.050
+      1 |       1 |   0.000 |   0.000 |   4.050
+      2 |       1 |   2.864 |   5.728 |   4.050
+      3 |       1 |   1.432 |   1.432 |   2.025
+      4 |       1 |   1.432 |   4.296 |   2.025
+      5 |       1 |   2.864 |   2.864 |   4.050
+      6 |       1 |   4.296 |   1.432 |   2.025
+      7 |       1 |   4.296 |   4.296 |   2.025
+      8 |       1 |  11.455 |   2.864 |   4.050
+      9 |       1 |   5.728 |   0.000 |   4.050
+     10 |       1 |   8.591 |   5.728 |   4.050
+     11 |       1 |   7.159 |   1.432 |   2.025
+     12 |       1 |   7.159 |   4.296 |   2.025
+     13 |       1 |   8.591 |   2.864 |   4.050
+     14 |       1 |  10.023 |   1.432 |   2.025
+     15 |       1 |  10.023 |   4.296 |   2.025
+     16 |       1 |   5.728 |   8.591 |   4.050
+     17 |       1 |   0.000 |   5.728 |   4.050
+     18 |       1 |   2.864 |  11.455 |   4.050
+     19 |       1 |   1.432 |   7.159 |   2.025
+     20 |       1 |   1.432 |  10.023 |   2.025
+     21 |       1 |   2.864 |   8.591 |   4.050
+     22 |       1 |   4.296 |   7.159 |   2.025
+     23 |       1 |   4.296 |  10.023 |   2.025
+     24 |       1 |  11.455 |   8.591 |   4.050
+     25 |       1 |   5.728 |   5.728 |   4.050
+     26 |       1 |   8.591 |  11.455 |   4.050
+     27 |       1 |   7.159 |   7.159 |   2.025
+     28 |       1 |   7.159 |  10.023 |   2.025
+     29 |       1 |   8.591 |   8.591 |   4.050
+     30 |       1 |  10.023 |   7.159 |   2.025
+     31 |       1 |  10.023 |  10.023 |   2.025
+     32 |       1 |   5.728 |   2.864 |   8.100
+     33 |       1 |   0.000 |   0.000 |   8.100
+     34 |       1 |   2.864 |   5.728 |   8.100
+     35 |       1 |   1.432 |   1.432 |   6.075
+     36 |       1 |   1.432 |   4.296 |   6.075
+     37 |       1 |   2.864 |   2.864 |   8.100
+     38 |       1 |   4.296 |   1.432 |   6.075
+     39 |       1 |   4.296 |   4.296 |   6.075
+     40 |       1 |  11.455 |   2.864 |   8.100
+     41 |       1 |   5.728 |   0.000 |   8.100
+     42 |       1 |   8.591 |   5.728 |   8.100
+     43 |       1 |   7.159 |   1.432 |   6.075
+     44 |       1 |   7.159 |   4.296 |   6.075
+     45 |       1 |   8.591 |   2.864 |   8.100
+     46 |       1 |  10.023 |   1.432 |   6.075
+     47 |       1 |  10.023 |   4.296 |   6.075
+     48 |       1 |   5.728 |   8.591 |   8.100
+     49 |       1 |   0.000 |   5.728 |   8.100
+     50 |       1 |   2.864 |  11.455 |   8.100
+     51 |       1 |   1.432 |   7.159 |   6.075
+     52 |       1 |   1.432 |  10.023 |   6.075
+     53 |       1 |   2.864 |   8.591 |   8.100
+     54 |       1 |   4.296 |   7.159 |   6.075
+     55 |       1 |   4.296 |  10.023 |   6.075
+     56 |       1 |  11.455 |   8.591 |   8.100
+     57 |       1 |   5.728 |   5.728 |   8.100
+     58 |       1 |   8.591 |  11.455 |   8.100
+     59 |       1 |   7.159 |   7.159 |   6.075
+     60 |       1 |   7.159 |  10.023 |   6.075
+     61 |       1 |   8.591 |   8.591 |   8.100
+     62 |       1 |  10.023 |   7.159 |   6.075
+     63 |       1 |  10.023 |  10.023 |   6.075
 </pre></div></div>
 </div>
 </div>
@@ -866,7 +875,7 @@ LAMMPS.</li>
           
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Lucas Hale.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
         </div>
         <div class="clearer"></div>

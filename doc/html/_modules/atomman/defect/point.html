@@ -4,23 +4,32 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>atomman.defect.point &#8212; atomman 1.2.alpha documentation</title>
+    <title>atomman.defect.point &#8212; atomman 1.2.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head><body>
+  </head>
+  <body>
     <div class="header-wrapper" role="banner">
       <div class="header">
         <div class="headertitle"><a
-          href="../../../index.html">atomman 1.2.alpha documentation</a></div>
+          href="../../../index.html">atomman 1.2.0 documentation</a></div>
         <div class="rel" role="navigation" aria-label="related navigation">
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |
@@ -79,7 +88,7 @@
 <span class="sd">        Indicates if pos and db_vect are Cartesian (False) or box-relative</span>
 <span class="sd">        (True). Default value is False.</span>
 <span class="sd">    atol : float, optional</span>
-<span class="sd">        Absolute tolerance for position-based searching. Default value is 1e-3</span>
+<span class="sd">        Absolute tolerance for position-based searching. Default value is 0.01</span>
 <span class="sd">        angstroms.</span>
 <span class="sd">    **kwargs : any, optional</span>
 <span class="sd">        Keyword arguments corresponding to per-atom property values for the</span>
@@ -97,6 +106,7 @@
 <span class="sd">    atomman.System</span>
 <span class="sd">        A new system containing the defect.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="c1"># If vacancy</span>
     <span class="k">if</span> <span class="n">ptd_type</span> <span class="o">==</span> <span class="s1">&#39;v&#39;</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">db_vect</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;db_vect not allowed with ptd_type==&#39;v&#39;&quot;</span>
@@ -123,8 +133,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid ptd_type. Options are: v, i, s, or db&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="vacancy"><a class="viewcode-back" href="../../../atomman.defect.html#atomman.defect.vacancy">[docs]</a><span class="k">def</span> <span class="nf">vacancy</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ptd_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">atol</span><span class="o">=</span><span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)):</span>
+<div class="viewcode-block" id="vacancy"><a class="viewcode-back" href="../../../atomman.defect.html#atomman.defect.vacancy">[docs]</a><span class="k">def</span> <span class="nf">vacancy</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ptd_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a new system by adding a vacancy point defect.</span>
 <span class="sd">    1. Removes the indicated atom from the system</span>
@@ -144,7 +153,7 @@
 <span class="sd">        Indicates if pos is Cartesian (False) or box-relative (True). Default</span>
 <span class="sd">        value is False.</span>
 <span class="sd">    atol : float, optional</span>
-<span class="sd">        Absolute tolerance for position-based searching. Default value is 1e-3</span>
+<span class="sd">        Absolute tolerance for position-based searching. Default value is 0.01</span>
 <span class="sd">        angstroms.</span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
@@ -152,6 +161,10 @@
 <span class="sd">    atomman.System</span>
 <span class="sd">        A new system with the vacancy added.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Set default atol</span>
+    <span class="k">if</span> <span class="n">atol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">atol</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+    
     <span class="c1"># Identify the id of the atom at pos</span>
     <span class="k">if</span> <span class="n">pos</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">ptd_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -160,7 +173,8 @@
         <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
             <span class="n">pos</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">unscale</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
         
-        <span class="n">ptd_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">dvect</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ptd_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">))</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ptd_id</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">ptd_id</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">ptd_id</span> <span class="o">=</span> <span class="n">ptd_id</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -184,7 +198,8 @@
     
     <span class="c1"># Build new system</span>
     <span class="n">d_system</span> <span class="o">=</span> <span class="n">System</span><span class="p">(</span><span class="n">box</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">box</span><span class="p">),</span> <span class="n">pbc</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">pbc</span><span class="p">),</span>
-                      <span class="n">atoms</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="n">index</span><span class="p">]))</span>
+                      <span class="n">atoms</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="n">index</span><span class="p">]),</span>
+                      <span class="n">symbols</span><span class="o">=</span><span class="n">system</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span>
     
     <span class="c1"># Add property old_id with each atom&#39;s original id</span>
     <span class="k">if</span> <span class="s1">&#39;old_id&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d_system</span><span class="o">.</span><span class="n">atoms_prop</span><span class="p">():</span>
@@ -192,8 +207,7 @@
     
     <span class="k">return</span> <span class="n">d_system</span></div>
 
-<div class="viewcode-block" id="interstitial"><a class="viewcode-back" href="../../../atomman.defect.html#atomman.defect.interstitial">[docs]</a><span class="k">def</span> <span class="nf">interstitial</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">),</span>
-                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="interstitial"><a class="viewcode-back" href="../../../atomman.defect.html#atomman.defect.interstitial">[docs]</a><span class="k">def</span> <span class="nf">interstitial</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a new system by adding an interstitial point defect.</span>
 <span class="sd">    1. Adds a new atom to the end of the Atoms list.</span>
@@ -213,7 +227,7 @@
 <span class="sd">        Indicates if pos is Cartesian (False) or box-relative (True).  Default</span>
 <span class="sd">        value is False.</span>
 <span class="sd">    atol : float, optional</span>
-<span class="sd">        Absolute tolerance for position-based searching. Default value is 1e-3</span>
+<span class="sd">        Absolute tolerance for position-based searching. Default value is 0.01</span>
 <span class="sd">        angstroms.</span>
 <span class="sd">    **kwargs : any, optional</span>
 <span class="sd">        Keyword arguments corresponding to per-atom property values for the</span>
@@ -225,11 +239,16 @@
 <span class="sd">    atomman.System</span>
 <span class="sd">        A new system with the interstitial added.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Set default atol</span>
+    <span class="k">if</span> <span class="n">atol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">atol</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+    
     <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
         <span class="n">pos</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">unscale</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
     
     <span class="c1"># Check that no atoms are already at pos</span>
-    <span class="n">ptd_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">dvect</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ptd_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">))</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ptd_id</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">ptd_id</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;atom already at pos&#39;</span><span class="p">)</span>
     
@@ -239,7 +258,8 @@
     
     <span class="c1"># Build new system with atom 0 copied</span>
     <span class="n">d_system</span> <span class="o">=</span> <span class="n">System</span><span class="p">(</span><span class="n">box</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">box</span><span class="p">),</span> <span class="n">pbc</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">pbc</span><span class="p">),</span>
-                      <span class="n">atoms</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="n">index</span><span class="p">]))</span>
+                      <span class="n">atoms</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="n">index</span><span class="p">]),</span>
+                      <span class="n">symbols</span><span class="o">=</span><span class="n">system</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span>
     
     <span class="c1"># Add property old_id with each atom&#39;s original id</span>
     <span class="k">if</span> <span class="s1">&#39;old_id&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d_system</span><span class="o">.</span><span class="n">atoms_prop</span><span class="p">():</span>
@@ -261,7 +281,7 @@
     <span class="k">return</span> <span class="n">d_system</span></div>
 
 <div class="viewcode-block" id="substitutional"><a class="viewcode-back" href="../../../atomman.defect.html#atomman.defect.substitutional">[docs]</a><span class="k">def</span> <span class="nf">substitutional</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ptd_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">atype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                   <span class="n">atol</span><span class="o">=</span><span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                   <span class="n">atol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a new system by adding a substitutional point defect.</span>
 <span class="sd">    1. Moves the indicated atom to the end of the list and changes its atype</span>
@@ -287,7 +307,7 @@
 <span class="sd">        Indicates if pos is Cartesian (False) or box-relative (True).  Default</span>
 <span class="sd">        value is False.</span>
 <span class="sd">    atol : float, optional</span>
-<span class="sd">        Absolute tolerance for position-based searching. Default value is 1e-3</span>
+<span class="sd">        Absolute tolerance for position-based searching. Default value is 0.01</span>
 <span class="sd">        angstroms.</span>
 <span class="sd">    **kwargs : any, optional</span>
 <span class="sd">        Keyword arguments corresponding to per-atom property values for the</span>
@@ -299,6 +319,10 @@
 <span class="sd">    atomman.System</span>
 <span class="sd">        A new system with the substitutional added.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Set default atol</span>
+    <span class="k">if</span> <span class="n">atol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">atol</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+    
     <span class="c1"># Identify the id of the atom at pos</span>
     <span class="k">if</span> <span class="n">pos</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">ptd_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -307,7 +331,8 @@
         <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
             <span class="n">pos</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">unscale</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
         
-        <span class="n">ptd_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">dvect</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ptd_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">))</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ptd_id</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">ptd_id</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">ptd_id</span> <span class="o">=</span> <span class="n">ptd_id</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -332,7 +357,8 @@
     
     <span class="c1"># Build new system</span>
     <span class="n">d_system</span> <span class="o">=</span> <span class="n">System</span><span class="p">(</span><span class="n">box</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">box</span><span class="p">),</span> <span class="n">pbc</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">pbc</span><span class="p">),</span>
-                      <span class="n">atoms</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="n">index</span><span class="p">]))</span>
+                      <span class="n">atoms</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="n">index</span><span class="p">]),</span>
+                      <span class="n">symbols</span><span class="o">=</span><span class="n">system</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span>
     
     <span class="c1"># Add property old_id with each atom&#39;s original id</span>
     <span class="k">if</span> <span class="s1">&#39;old_id&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d_system</span><span class="o">.</span><span class="n">atoms_prop</span><span class="p">():</span>
@@ -352,7 +378,7 @@
     <span class="k">return</span> <span class="n">d_system</span></div>
 
 <div class="viewcode-block" id="dumbbell"><a class="viewcode-back" href="../../../atomman.defect.html#atomman.defect.dumbbell">[docs]</a><span class="k">def</span> <span class="nf">dumbbell</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ptd_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">db_vect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-             <span class="n">atol</span><span class="o">=</span><span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+             <span class="n">atol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a new system by adding a dumbbell interstitial point defect.</span>
 <span class="sd">    </span>
@@ -379,7 +405,7 @@
 <span class="sd">        Indicates if pos and db_vect are Cartesian (False) or box-relative</span>
 <span class="sd">        (True).  Default value is False.</span>
 <span class="sd">    atol : float, optional</span>
-<span class="sd">        Absolute tolerance for position-based searching. Default value is 1e-3</span>
+<span class="sd">        Absolute tolerance for position-based searching. Default value is 0.01</span>
 <span class="sd">        angstroms.</span>
 <span class="sd">    \*\*kwargs : any, optional</span>
 <span class="sd">        Keyword arguments corresponding to per-atom property values for the</span>
@@ -391,6 +417,10 @@
 <span class="sd">    atomman.System</span>
 <span class="sd">        A new system with the dumbbell added.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Set default atol</span>
+    <span class="k">if</span> <span class="n">atol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">atol</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+    
     <span class="c1"># Identify the id of the atom at pos</span>
     <span class="k">if</span> <span class="n">pos</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">ptd_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -399,7 +429,8 @@
         <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
             <span class="n">pos</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">unscale</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
         
-        <span class="n">ptd_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">dvect</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ptd_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">))</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ptd_id</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">ptd_id</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">ptd_id</span> <span class="o">=</span> <span class="n">ptd_id</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -426,7 +457,8 @@
     
     <span class="c1"># Build new system</span>
     <span class="n">d_system</span> <span class="o">=</span> <span class="n">System</span><span class="p">(</span><span class="n">box</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">box</span><span class="p">),</span> <span class="n">pbc</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">pbc</span><span class="p">),</span>
-                      <span class="n">atoms</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="n">index</span><span class="p">]))</span>
+                      <span class="n">atoms</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="n">index</span><span class="p">]),</span>
+                      <span class="n">symbols</span><span class="o">=</span><span class="n">system</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span>
     
     <span class="c1"># Add property old_id with each atom&#39;s original id</span>
     <span class="k">if</span> <span class="s1">&#39;old_id&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d_system</span><span class="o">.</span><span class="n">atoms_prop</span><span class="p">():</span>
@@ -491,7 +523,7 @@
           
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Lucas Hale.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
         </div>
         <div class="clearer"></div>

@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>lammps &#8212; atomman 1.2.alpha documentation</title>
+    <title>lammps &#8212; atomman 1.2.0 documentation</title>
     <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -18,11 +26,12 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Potential" href="atomman.lammps.Potential.html" />
     <link rel="prev" title="tools" href="atomman.tools.html" /> 
-  </head><body>
+  </head>
+  <body>
     <div class="header-wrapper" role="banner">
       <div class="header">
         <div class="headertitle"><a
-          href="index.html">atomman 1.2.alpha documentation</a></div>
+          href="index.html">atomman 1.2.0 documentation</a></div>
         <div class="rel" role="navigation" aria-label="related navigation">
           <a href="atomman.tools.html" title="tools"
              accesskey="P">previous</a> |
@@ -68,16 +77,16 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>lammps_command</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – The LAMMPS inline run command (sans -in script_name).</li>
 <li><strong>script_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – Path of the LAMMPS input script to use.</li>
-<li><strong>mpi_command</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – The MPI inline command to run LAMMPS in parallel. Default value is
+<li><strong>mpi_command</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><em>None</em></a><em>, </em><em>optional</em>) – The MPI inline command to run LAMMPS in parallel. Default value is
 None (no mpi).</li>
-<li><strong>restart_script_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Alternative script to use for restarting if logfile already exists.
+<li><strong>restart_script_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><em>None</em></a><em>, </em><em>optional</em>) – Alternative script to use for restarting if logfile already exists.
 Default value is None (no restarting).</li>
 <li><strong>return_style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a><em>, </em><em>optional</em>) – The format for the returned data. Default value is ‘object’.
 ‘object’ – returns an atomman.lammps.Log object.
 ‘model’ – returns a DataModelDict.</li>
 <li><strong>logfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a><em>, </em><em>optional</em>) – Specifies the path to the logfile to write to.  Default value is
 ‘log.lammps’.</li>
-<li><strong>flatten</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Specifies if the simulations are to be flattened, and which flatten
+<li><strong>flatten</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><em>None</em></a><em>, </em><em>optional</em>) – Specifies if the simulations are to be flattened, and which flatten
 style to use:
 - None does not flatten the simulations (default).
 - ‘first’ uses the values from the earliest simulation.
@@ -97,7 +106,7 @@ style to use:
 
 <dl class="function">
 <dt id="atomman.lammps.normalize">
-<code class="descclassname">atomman.lammps.</code><code class="descname">normalize</code><span class="sig-paren">(</span><em>system</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomman/lammps/normalize.html#normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#atomman.lammps.normalize" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">atomman.lammps.</code><code class="descname">normalize</code><span class="sig-paren">(</span><em>system</em>, <em>return_transform=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomman/lammps/normalize.html#normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#atomman.lammps.normalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>The normalize function takes any arbitrary system and transforms it to
 be compatible with LAMMPS.  In particular, LAMMPS systems must have:
 1. Right-handed box vectors.
@@ -111,11 +120,20 @@ As such, the LAMMPS command ‘box tilt large’ may be needed.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>system</strong> (<a class="reference internal" href="atomman.System.html#atomman.System" title="atomman.System"><em>atomman.System</em></a>) – The system to normalize.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>system</strong> (<a class="reference internal" href="atomman.System.html#atomman.System" title="atomman.System"><em>atomman.System</em></a>) – The system to normalize.</li>
+<li><strong>return_transform</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the transformation matrix used during the normalization
+is to be returned as well.  Default value is False</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A new system that has been normalized.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="atomman.System.html#atomman.System" title="atomman.System">atomman.System</a></td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>newsystem</strong> (<em>atomman.System</em>) – A new system that has been normalized.</li>
+<li><strong>transform</strong> (<em>np.ndarray</em>) – The transformation matrix associated with the normalization.  Returned
+if return_transform is True.</li>
+</ul>
+</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -187,7 +205,7 @@ As such, the LAMMPS command ‘box tilt large’ may be needed.</p>
           
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Lucas Hale.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
         </div>
         <div class="clearer"></div>

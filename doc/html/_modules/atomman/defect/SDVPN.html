@@ -4,23 +4,32 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>atomman.defect.SDVPN &#8212; atomman 1.2.alpha documentation</title>
+    <title>atomman.defect.SDVPN &#8212; atomman 1.2.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head><body>
+  </head>
+  <body>
     <div class="header-wrapper" role="banner">
       <div class="header">
         <div class="headertitle"><a
-          href="../../../index.html">atomman 1.2.alpha documentation</a></div>
+          href="../../../index.html">atomman 1.2.0 documentation</a></div>
         <div class="rel" role="navigation" aria-label="related navigation">
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |
@@ -294,8 +303,8 @@
         <span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">min_func</span><span class="p">,</span> <span class="n">d13</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">),</span>
                        <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min_method</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min_options</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span> <span class="o">=</span> <span class="n">recompose</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">)</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">__res</span> <span class="o">=</span> <span class="n">res</span></div>
+        </div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__res</span> <span class="o">=</span> <span class="n">res</span>
     
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -431,8 +440,8 @@
             <span class="n">newx</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;cdiff must be bool&#39;</span><span class="p">)</span>
-            
-        <span class="k">return</span> <span class="p">(</span><span class="n">newx</span><span class="p">,</span> <span class="n">rho</span><span class="p">)</span></div>
+            </div>
+        <span class="k">return</span> <span class="p">(</span><span class="n">newx</span><span class="p">,</span> <span class="n">rho</span><span class="p">)</span>
     
 <div class="viewcode-block" id="SDVPN.misfit_energy"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.misfit_energy">[docs]</a>    <span class="k">def</span> <span class="nf">misfit_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -471,8 +480,8 @@
         <span class="n">T</span> <span class="o">=</span> <span class="n">axes_check</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span>
         <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">disreg</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
         
-        <span class="c1"># Σ γ(δ)Δx</span>
-        <span class="k">return</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
+        <span class="c1"># Σ γ(δ)Δx</span></div>
+        <span class="k">return</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
     
 <div class="viewcode-block" id="SDVPN.elastic_energy"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.elastic_energy">[docs]</a>    <span class="k">def</span> <span class="nf">elastic_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -546,8 +555,8 @@
         <span class="c1"># 1/(4π) Σ_i Σ_j χ(i,j,Δx) K_lm ρ_l[i] ρ_m[j]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">j</span><span class="p">:</span>
             <span class="n">energy</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">chi</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">rho</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Kij</span><span class="p">),</span> <span class="n">rho</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-        
-        <span class="k">return</span> <span class="n">energy</span></div>
+        </div>
+        <span class="k">return</span> <span class="n">energy</span>
     
 <div class="viewcode-block" id="SDVPN.longrange_energy"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.longrange_energy">[docs]</a>    <span class="k">def</span> <span class="nf">longrange_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -568,8 +577,8 @@
         <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cutofflongrange</span>
         
         <span class="c1"># Compute long-range energy</span>
-        <span class="c1"># 1/(2π) K_lm b_l b_m ln(L)</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Kij</span><span class="p">),</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span></div>
+        <span class="c1"># 1/(2π) K_lm b_l b_m ln(L)</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Kij</span><span class="p">),</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
     
 <div class="viewcode-block" id="SDVPN.stress_energy"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.stress_energy">[docs]</a>    <span class="k">def</span> <span class="nf">stress_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -614,8 +623,8 @@
             <span class="k">return</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">tau</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]))</span>
             
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># -1/2 Σ_i τ_2l (δ_l[i] + δ_l[i+1]) Δx</span>
-            <span class="k">return</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">tau</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span> <span class="p">(</span><span class="n">d</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">*</span> <span class="n">dx</span><span class="p">))</span></div>
+            <span class="c1"># -1/2 Σ_i τ_2l (δ_l[i] + δ_l[i+1]) Δx</span></div>
+            <span class="k">return</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">tau</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span> <span class="p">(</span><span class="n">d</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">*</span> <span class="n">dx</span><span class="p">))</span>
     
 <div class="viewcode-block" id="SDVPN.surface_energy"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.surface_energy">[docs]</a>    <span class="k">def</span> <span class="nf">surface_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -651,8 +660,8 @@
         
         <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disldensity</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">cdiff</span><span class="o">=</span><span class="n">cdiff</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         
-        <span class="c1"># Σ_j β_lj / 4 Σ_i ρ_l[i]² Δx</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">rho</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">dx</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span> <span class="p">)</span> <span class="o">/</span> <span class="mi">4</span></div>
+        <span class="c1"># Σ_j β_lj / 4 Σ_i ρ_l[i]² Δx</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">rho</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">dx</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span> <span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
     
 <div class="viewcode-block" id="SDVPN.nonlocal_energy"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.nonlocal_energy">[docs]</a>    <span class="k">def</span> <span class="nf">nonlocal_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -691,8 +700,8 @@
             <span class="n">m</span> <span class="o">=</span> <span class="n">num</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="n">dd</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">m</span><span class="p">:</span><span class="o">-</span><span class="n">m</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="p">:]</span> <span class="o">+</span> <span class="n">d</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="p">])</span>
             <span class="n">energy</span> <span class="o">+=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">m</span><span class="p">:</span><span class="o">-</span><span class="n">m</span><span class="p">]</span> <span class="o">*</span> <span class="n">dd</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
-            
-        <span class="k">return</span> <span class="n">energy</span></div>
+            </div>
+        <span class="k">return</span> <span class="n">energy</span>
     
 <div class="viewcode-block" id="SDVPN.total_energy"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.total_energy">[docs]</a>    <span class="k">def</span> <span class="nf">total_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -723,8 +732,8 @@
                 <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">elastic_energy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="p">)</span>
                 <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">longrange_energy</span><span class="p">()</span>
                 <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">stress_energy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="p">)</span>
-                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonlocal_energy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="p">)</span>
-                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface_energy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="p">))</span></div>
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonlocal_energy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="p">)</span></div>
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface_energy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="p">))</span>
     
 <div class="viewcode-block" id="SDVPN.load"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -771,8 +780,8 @@
         
         <span class="c1"># Load calculation solution</span>
         <span class="n">solution</span> <span class="o">=</span> <span class="n">sdpn</span><span class="p">[</span><span class="s1">&#39;solution&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__x</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">solution</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">solution</span><span class="p">[</span><span class="s1">&#39;disregistry&#39;</span><span class="p">])</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__x</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">solution</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">solution</span><span class="p">[</span><span class="s1">&#39;disregistry&#39;</span><span class="p">])</span>
     
 <div class="viewcode-block" id="SDVPN.model"><a class="viewcode-back" href="../../../atomman.defect.SDVPN.html#atomman.defect.SDVPN.model">[docs]</a>    <span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length_unit</span><span class="o">=</span><span class="s1">&#39;angstrom&#39;</span><span class="p">,</span> <span class="n">energy_unit</span><span class="o">=</span><span class="s1">&#39;eV&#39;</span><span class="p">,</span>
               <span class="n">pressure_unit</span><span class="o">=</span><span class="s1">&#39;GPa&#39;</span><span class="p">,</span> <span class="n">include_gamma</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -819,8 +828,8 @@
         <span class="n">sdpn</span><span class="p">[</span><span class="s1">&#39;solution&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">solution</span> <span class="o">=</span> <span class="n">DM</span><span class="p">()</span>
         <span class="n">solution</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__x</span><span class="p">,</span> <span class="n">length_unit</span><span class="p">)</span>
         <span class="n">solution</span><span class="p">[</span><span class="s1">&#39;disregistry&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__disregistry</span><span class="p">,</span> <span class="n">length_unit</span><span class="p">)</span>
-        
-        <span class="k">return</span> <span class="n">model</span></div></div>
+        </div></div>
+        <span class="k">return</span> <span class="n">model</span>
 </pre></div>
 
           </div>
@@ -867,7 +876,7 @@
           
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Lucas Hale.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
         </div>
         <div class="clearer"></div>

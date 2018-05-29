@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Defect Creation and Analysis &#8212; atomman 1.2.alpha documentation</title>
+    <title>Introduction to atomman: Defect Creation and Analysis &#8212; atomman 1.2.0 documentation</title>
     <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -18,11 +26,12 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Point defect generation" href="04.1._Point_defects.html" />
     <link rel="prev" title="Introduction to atomman: NeighborList class" href="03.2._NeighborList_class.html" /> 
-  </head><body>
+  </head>
+  <body>
     <div class="header-wrapper" role="banner">
       <div class="header">
         <div class="headertitle"><a
-          href="../index.html">atomman 1.2.alpha documentation</a></div>
+          href="../index.html">atomman 1.2.0 documentation</a></div>
         <div class="rel" role="navigation" aria-label="related navigation">
           <a href="03.2._NeighborList_class.html" title="Introduction to atomman: NeighborList class"
              accesskey="P">previous</a> |
@@ -226,11 +235,11 @@ previous section. This Notebook provides an overview of the various
 defect capabilities in atomman.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
@@ -256,7 +265,7 @@ defect capabilities in atomman.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.alpha
+atomman version = 1.2.0
 </pre></div></div>
 </div>
 </div>
@@ -272,10 +281,10 @@ Notebook</a> for more examples.</p>
 <ul class="simple">
 <li><strong>system</strong> (<em>atomman.System</em>) the system to add the defect to.</li>
 <li><strong>ptd_type</strong> (<em>str</em>) indicates which type of point defect to add.<ul>
-<li>=‘v’ – vacancy</li>
-<li>=‘s’ – substitutional</li>
-<li>=‘i’ – positional interstitial</li>
-<li>=‘db’ – dumbbell interstitial</li>
+<li>=’v’ – vacancy</li>
+<li>=’s‘ – substitutional</li>
+<li>=’i’ – positional interstitial</li>
+<li>=’db’ – dumbbell interstitial</li>
 </ul>
 </li>
 <li><strong>atype</strong> (<em>int, optional</em>) atom type for defect atom (‘i’, ‘s’, ‘db’
@@ -292,11 +301,11 @@ absolute (False) or box-relative (True). Default is False.</li>
 searching. Default is 1e-3 angstroms.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Define 2x2x2 bcc demonstration supercell</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">2.8665</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
@@ -332,11 +341,11 @@ searching. Default is 1e-3 angstroms.</li>
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Change atom 5 into &lt;111&gt; dumbbell interstitial pair</span>
 <span class="n">defect_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">point</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="s1">&#39;db&#39;</span><span class="p">,</span> <span class="n">ptd_id</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">db_vect</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">defect_system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">())</span>
@@ -397,11 +406,11 @@ values. Default value is 1e-8.</li>
 <div class="section" id="3.1.-Solve-Stroh-method-for-bcc-iron-a/2&lt;111&gt;{-101}-edge-dislocation.">
 <h3>3.1. Solve Stroh method for bcc iron a/2&lt;111&gt;{-101} edge dislocation.<a class="headerlink" href="#3.1.-Solve-Stroh-method-for-bcc-iron-a/2<111>{-101}-edge-dislocation." title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Burgers vector</span>
 <span class="n">burgers</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
 
@@ -426,11 +435,11 @@ values. Default value is 1e-8.</li>
 <div class="section" id="3.2.-Use-Stroh-solution-to-insert-dislocation-into-atomic-system.">
 <h3>3.2. Use Stroh solution to insert dislocation into atomic system.<a class="headerlink" href="#3.2.-Use-Stroh-solution-to-insert-dislocation-into-atomic-system." title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Create bulk bcc system in proper orientation</span>
 <span class="n">disl_system</span> <span class="o">=</span> <span class="n">ucell</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span>
 <span class="n">disl_system</span> <span class="o">=</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">supersize</span><span class="p">((</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
@@ -476,10 +485,10 @@ the atomic planes above and below the dislocation’s slip plane.</li>
 characterized using the gradient of the deformation tensor. Also
 calculates the strain state for all atoms in the system relative to a
 perfect crystal configuration.</li>
-<li><strong>atomman.defect.differential_displacement()</strong> allows for dislocation
-cores to be characterized using the difference in the displacements
-between all pairs of neighbor atoms relative to a perfect crystal
-configuration.</li>
+<li><strong>atomman.defect.differential_displacement()</strong> allows for
+dislocation cores to be characterized using the difference in the
+displacements between all pairs of neighbor atoms relative to a
+perfect crystal configuration.</li>
 </ul>
 <p>See the <a class="reference external" href="04.3.%20Dislocation%20analysis%20tools.ipynb">04.3. Dislocation analysis tools Jupyter
 Notebook</a> for the
@@ -566,7 +575,7 @@ for a description of the method and examples.</p>
           
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Lucas Hale.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
         </div>
         <div class="clearer"></div>

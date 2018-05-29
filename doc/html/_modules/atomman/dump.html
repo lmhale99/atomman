@@ -4,23 +4,32 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>atomman.dump &#8212; atomman 1.2.alpha documentation</title>
+    <title>atomman.dump &#8212; atomman 1.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
-  </head><body>
+  </head>
+  <body>
     <div class="header-wrapper" role="banner">
       <div class="header">
         <div class="headertitle"><a
-          href="../../index.html">atomman 1.2.alpha documentation</a></div>
+          href="../../index.html">atomman 1.2.0 documentation</a></div>
         <div class="rel" role="navigation" aria-label="related navigation">
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |
@@ -50,10 +59,11 @@
 <span class="kn">from</span> <span class="nn">.poscar</span> <span class="k">import</span> <span class="n">dump</span> <span class="k">as</span> <span class="n">dump_poscar</span>
 <span class="kn">from</span> <span class="nn">.atom_data</span> <span class="k">import</span> <span class="n">dump</span> <span class="k">as</span> <span class="n">dump_atom_data</span>
 <span class="kn">from</span> <span class="nn">.atom_dump</span> <span class="k">import</span> <span class="n">dump</span> <span class="k">as</span> <span class="n">dump_atom_dump</span>
+<span class="kn">from</span> <span class="nn">.spglib_cell</span> <span class="k">import</span> <span class="n">dump</span> <span class="k">as</span> <span class="n">dump_spglib_cell</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;dump&#39;</span><span class="p">,</span> <span class="s1">&#39;dump_ase_Atoms&#39;</span><span class="p">,</span> <span class="s1">&#39;dump_pymatgen_Structure&#39;</span><span class="p">,</span> <span class="s1">&#39;dump_table&#39;</span><span class="p">,</span>
            <span class="s1">&#39;dump_system_model&#39;</span><span class="p">,</span> <span class="s1">&#39;dump_poscar&#39;</span><span class="p">,</span> <span class="s1">&#39;dump_atom_data&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;dump_atom_dump&#39;</span><span class="p">]</span>
+           <span class="s1">&#39;dump_atom_dump&#39;</span><span class="p">,</span> <span class="s1">&#39;dump_spglib_cell&#39;</span><span class="p">]</span>
 
 <div class="viewcode-block" id="dump"><a class="viewcode-back" href="../../atomman.html#atomman.dump">[docs]</a><span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="n">style</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -95,6 +105,9 @@
     <span class="k">elif</span> <span class="n">style</span> <span class="o">==</span> <span class="s1">&#39;poscar&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">dump_poscar</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     
+    <span class="k">elif</span> <span class="n">style</span> <span class="o">==</span> <span class="s1">&#39;spglib_cell&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">dump_spglib_cell</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unsupported style&#39;</span><span class="p">)</span></div>
 </pre></div>
@@ -143,7 +156,7 @@
           
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Lucas Hale.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
         </div>
         <div class="clearer"></div>

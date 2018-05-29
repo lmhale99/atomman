@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>defect &#8212; atomman 1.2.alpha documentation</title>
+    <title>defect &#8212; atomman 1.2.0 documentation</title>
     <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -18,11 +26,12 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="GammaSurface" href="atomman.defect.GammaSurface.html" />
     <link rel="prev" title="Log" href="atomman.lammps.Log.html" /> 
-  </head><body>
+  </head>
+  <body>
     <div class="header-wrapper" role="banner">
       <div class="header">
         <div class="headertitle"><a
-          href="index.html">atomman 1.2.alpha documentation</a></div>
+          href="index.html">atomman 1.2.0 documentation</a></div>
         <div class="rel" role="navigation" aria-label="related navigation">
           <a href="atomman.lammps.Log.html" title="Log"
              accesskey="P">previous</a> |
@@ -157,7 +166,7 @@ the slip plane.</li>
 
 <dl class="function">
 <dt id="atomman.defect.dumbbell">
-<code class="descclassname">atomman.defect.</code><code class="descname">dumbbell</code><span class="sig-paren">(</span><em>system</em>, <em>pos=None</em>, <em>ptd_id=None</em>, <em>db_vect=None</em>, <em>scale=False</em>, <em>atol=8.575922080662433e-14</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomman/defect/point.html#dumbbell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#atomman.defect.dumbbell" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">atomman.defect.</code><code class="descname">dumbbell</code><span class="sig-paren">(</span><em>system</em>, <em>pos=None</em>, <em>ptd_id=None</em>, <em>db_vect=None</em>, <em>scale=False</em>, <em>atol=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomman/defect/point.html#dumbbell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#atomman.defect.dumbbell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a new system by adding a dumbbell interstitial point defect.</p>
 <p>1. Copies the indicated atom and moves both the original and copy to the
 end of the Atoms list.
@@ -179,9 +188,9 @@ given.</li>
 <li><strong>db_vect</strong> (<em>array-like object</em>) – Vector shift to apply to the atoms in the dumbbell.</li>
 <li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if pos and db_vect are Cartesian (False) or box-relative
 (True).  Default value is False.</li>
-<li><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, </em><em>optional</em>) – Absolute tolerance for position-based searching. Default value is 1e-3
+<li><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, </em><em>optional</em>) – Absolute tolerance for position-based searching. Default value is 0.01
 angstroms.</li>
-<li><strong>**kwargs</strong> (<em>any</em><em>, </em><em>optional</em>) – Keyword arguments corresponding to per-atom property values for the
+<li><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#any" title="(in Python v3.6)"><em>any</em></a><em>, </em><em>optional</em>) – Keyword arguments corresponding to per-atom property values for the
 new atom in the dumbbell.  By default, all properties are left
 unchanged (i.e. same as atom that was copied).</li>
 </ul>
@@ -199,7 +208,7 @@ unchanged (i.e. same as atom that was copied).</li>
 
 <dl class="function">
 <dt id="atomman.defect.interstitial">
-<code class="descclassname">atomman.defect.</code><code class="descname">interstitial</code><span class="sig-paren">(</span><em>system</em>, <em>pos</em>, <em>scale=False</em>, <em>atol=8.575922080662433e-14</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomman/defect/point.html#interstitial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#atomman.defect.interstitial" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">atomman.defect.</code><code class="descname">interstitial</code><span class="sig-paren">(</span><em>system</em>, <em>pos</em>, <em>scale=False</em>, <em>atol=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomman/defect/point.html#interstitial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#atomman.defect.interstitial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a new system by adding an interstitial point defect.
 1. Adds a new atom to the end of the Atoms list.
 2. Adds per-atom property old_id if it doesn’t exist corresponding to the
@@ -216,9 +225,9 @@ which is set to 1.</p>
 <li><strong>pos</strong> (<em>array-like object</em>) – Position of the atom being added.</li>
 <li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if pos is Cartesian (False) or box-relative (True).  Default
 value is False.</li>
-<li><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, </em><em>optional</em>) – Absolute tolerance for position-based searching. Default value is 1e-3
+<li><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, </em><em>optional</em>) – Absolute tolerance for position-based searching. Default value is 0.01
 angstroms.</li>
-<li><strong>**kwargs</strong> (<em>any</em><em>, </em><em>optional</em>) – Keyword arguments corresponding to per-atom property values for the
+<li><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#any" title="(in Python v3.6)"><em>any</em></a><em>, </em><em>optional</em>) – Keyword arguments corresponding to per-atom property values for the
 new atom.  By default, atype==1 and all other properties are set to
 be all zeros for the property’s shape.</li>
 </ul>
@@ -318,11 +327,11 @@ points x.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>xmax</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Maximum value of x to use.  Minimum value is taken as -xmax.  At least
+<li><strong>xmax</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><em>None</em></a><em>, </em><em>optional</em>) – Maximum value of x to use.  Minimum value is taken as -xmax.  At least
 2 of xmax, xstep, and xnum must be not None.  Default value is None.</li>
-<li><strong>xstep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Step size to use between each x value.  At least 2 of xmax, xstep, and
+<li><strong>xstep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><em>None</em></a><em>, </em><em>optional</em>) – Step size to use between each x value.  At least 2 of xmax, xstep, and
 xnum must be not None.  Default value is None.</li>
-<li><strong>xnum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Number of x values to use.  At least 2 of xmax, xstep, and xnum must
+<li><strong>xnum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.6)"><em>None</em></a><em>, </em><em>optional</em>) – Number of x values to use.  At least 2 of xmax, xstep, and xnum must
 be not None.  Default value is None.</li>
 <li><strong>burgers</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – The Burgers vector for the dislocation. Default value is [1, 0, 0].</li>
 <li><strong>halfwidth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, </em><em>optional</em>) – The dislocation halfwidth to use. Default value is 1.</li>
@@ -365,16 +374,16 @@ If False, the disregistry will range from -burgers to burgers.</li>
 <li><strong>db_vect</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – Vector associated with the dumbbell interstitial (‘db’ style).</li>
 <li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if pos and db_vect are Cartesian (False) or box-relative
 (True). Default value is False.</li>
-<li><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, </em><em>optional</em>) – Absolute tolerance for position-based searching. Default value is 1e-3
+<li><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, </em><em>optional</em>) – Absolute tolerance for position-based searching. Default value is 0.01
 angstroms.</li>
-<li><strong>**kwargs</strong> (<em>any</em><em>, </em><em>optional</em>) – Keyword arguments corresponding to per-atom property values for the
+<li><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#any" title="(in Python v3.6)"><em>any</em></a><em>, </em><em>optional</em>) – Keyword arguments corresponding to per-atom property values for the
 new atom (‘i’, ‘s’, ‘db’ styles).</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AssertionError" title="(in Python v3.6)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">AssertionError</span></code></a> – If parameters are given for styles that don’t allow them.</li>
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If an invalid ptd_type is given.</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AssertionError" title="(in Python v3.6)"><code class="xref py py-exc docutils literal"><span class="pre">AssertionError</span></code></a> – If parameters are given for styles that don’t allow them.</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – If an invalid ptd_type is given.</li>
 </ul>
 </td>
 </tr>
@@ -425,7 +434,7 @@ attribute.</li>
 
 <dl class="function">
 <dt id="atomman.defect.substitutional">
-<code class="descclassname">atomman.defect.</code><code class="descname">substitutional</code><span class="sig-paren">(</span><em>system</em>, <em>pos=None</em>, <em>ptd_id=None</em>, <em>atype=1</em>, <em>scale=False</em>, <em>atol=8.575922080662433e-14</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomman/defect/point.html#substitutional"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#atomman.defect.substitutional" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">atomman.defect.</code><code class="descname">substitutional</code><span class="sig-paren">(</span><em>system</em>, <em>pos=None</em>, <em>ptd_id=None</em>, <em>atype=1</em>, <em>scale=False</em>, <em>atol=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomman/defect/point.html#substitutional"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#atomman.defect.substitutional" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a new system by adding a substitutional point defect.
 1. Moves the indicated atom to the end of the list and changes its atype
 to the value given.
@@ -446,9 +455,9 @@ given.</li>
 different than the atom’s current id.  Default value is 1.</li>
 <li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if pos is Cartesian (False) or box-relative (True).  Default
 value is False.</li>
-<li><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, </em><em>optional</em>) – Absolute tolerance for position-based searching. Default value is 1e-3
+<li><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, </em><em>optional</em>) – Absolute tolerance for position-based searching. Default value is 0.01
 angstroms.</li>
-<li><strong>**kwargs</strong> (<em>any</em><em>, </em><em>optional</em>) – Keyword arguments corresponding to per-atom property values for the
+<li><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#any" title="(in Python v3.6)"><em>any</em></a><em>, </em><em>optional</em>) – Keyword arguments corresponding to per-atom property values for the
 modified atom.  By default, all properties (except atype) are left
 unchanged.</li>
 </ul>
@@ -466,7 +475,7 @@ unchanged.</li>
 
 <dl class="function">
 <dt id="atomman.defect.vacancy">
-<code class="descclassname">atomman.defect.</code><code class="descname">vacancy</code><span class="sig-paren">(</span><em>system</em>, <em>pos=None</em>, <em>ptd_id=None</em>, <em>scale=False</em>, <em>atol=8.575922080662433e-14</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomman/defect/point.html#vacancy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#atomman.defect.vacancy" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">atomman.defect.</code><code class="descname">vacancy</code><span class="sig-paren">(</span><em>system</em>, <em>pos=None</em>, <em>ptd_id=None</em>, <em>scale=False</em>, <em>atol=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomman/defect/point.html#vacancy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#atomman.defect.vacancy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a new system by adding a vacancy point defect.
 1. Removes the indicated atom from the system
 2. Adds per-atom property old_id if it doesn’t exist corresponding to the
@@ -482,7 +491,7 @@ given.</li>
 <li><strong>ptd_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a><em>, </em><em>optional</em>) – Id of the atom to be removed.  Either pos or ptd_id must be given.</li>
 <li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if pos is Cartesian (False) or box-relative (True). Default
 value is False.</li>
-<li><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, </em><em>optional</em>) – Absolute tolerance for position-based searching. Default value is 1e-3
+<li><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, </em><em>optional</em>) – Absolute tolerance for position-based searching. Default value is 0.01
 angstroms.</li>
 </ul>
 </td>
@@ -563,7 +572,7 @@ angstroms.</li>
           
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Lucas Hale.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
         </div>
         <div class="clearer"></div>

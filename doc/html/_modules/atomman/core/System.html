@@ -4,23 +4,32 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>atomman.core.System &#8212; atomman 1.2.alpha documentation</title>
+    <title>atomman.core.System &#8212; atomman 1.2.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head><body>
+  </head>
+  <body>
     <div class="header-wrapper" role="banner">
       <div class="header">
         <div class="headertitle"><a
-          href="../../../index.html">atomman 1.2.alpha documentation</a></div>
+          href="../../../index.html">atomman 1.2.0 documentation</a></div>
         <div class="rel" role="navigation" aria-label="related navigation">
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |
@@ -99,6 +108,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__atoms</span> <span class="o">=</span> <span class="n">atoms</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__box</span> <span class="o">=</span> <span class="n">box</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="n">pbc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__transformation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">symbols</span><span class="p">,</span> <span class="n">stringtype</span><span class="p">):</span>
             <span class="n">symbols</span> <span class="o">=</span> <span class="p">(</span><span class="n">symbols</span><span class="p">,)</span>
@@ -439,7 +449,11 @@
             <span class="n">pos_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pos_1</span><span class="p">)</span>
         
         <span class="c1"># Call dvect using self&#39;s box and pbc</span>
-        <span class="k">return</span> <span class="n">dvect</span><span class="p">(</span><span class="n">pos_0</span><span class="p">,</span> <span class="n">pos_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbc</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="n">code</span><span class="p">)</span></div>
+        <span class="n">vects</span> <span class="o">=</span> <span class="n">dvect</span><span class="p">(</span><span class="n">pos_0</span><span class="p">,</span> <span class="n">pos_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbc</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="n">code</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vects</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">vects</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">vects</span></div>
     
 <div class="viewcode-block" id="System.neighborlist"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.neighborlist">[docs]</a>    <span class="k">def</span> <span class="nf">neighborlist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -614,16 +628,16 @@
         
         <span class="k">return</span> <span class="n">System</span><span class="p">(</span><span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="System.rotate"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.rotate">[docs]</a>    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hkls</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+<div class="viewcode-block" id="System.rotate"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.rotate">[docs]</a>    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uvws</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">return_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Transforms a System representing a periodic crystal cell from a standard</span>
 <span class="sd">        orientation to a specified orientation. Note: if hexagonal indices are</span>
-<span class="sd">        given, the vectors will be reduced to the smallest hkl integer</span>
+<span class="sd">        given, the vectors will be reduced to the smallest uvw integer</span>
 <span class="sd">        representation.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        hkls : numpy.ndarray of int</span>
+<span class="sd">        uvws : numpy.ndarray of int</span>
 <span class="sd">            A (3, 3) array of the Miller crystal vectors or a (3, 4) array of</span>
 <span class="sd">            Miller-Bravais hexagonal crystal vectors to use in transforming the</span>
 <span class="sd">            system.</span>
@@ -632,31 +646,37 @@
 <span class="sd">            boundaries to the boundary values.  In box-relative coordinates, any</span>
 <span class="sd">            atomic positions within tol of 0 or 1 will be rounded to 0 or 1,</span>
 <span class="sd">            respectively.  Default value is 1e-5.</span>
-<span class="sd">            </span>
+<span class="sd">        return_transform : bool, optional</span>
+<span class="sd">            Indicates if the transformation matrix associated with the</span>
+<span class="sd">            rotation is returned.  Default value is False.</span>
+<span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        atomman.System</span>
 <span class="sd">            A new fully periodic system rotated and transformed according to the</span>
-<span class="sd">            hkls crystal vectors.</span>
+<span class="sd">            uvws crystal vectors.</span>
+<span class="sd">        transform : np.ndarray</span>
+<span class="sd">            The transformation matrix associated with the rotation.</span>
+<span class="sd">            Returned if return_transform is True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="c1"># Check parameters</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">hkls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">hkls</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int64&#39;</span><span class="p">)</span>
+            <span class="n">uvws</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">uvws</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int64&#39;</span><span class="p">)</span>
            
-            <span class="k">if</span> <span class="n">hkls</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
-                <span class="n">hkls</span> <span class="o">=</span> <span class="n">miller</span><span class="o">.</span><span class="n">vector4to3</span><span class="p">(</span><span class="n">hkls</span><span class="p">)</span>
-            <span class="k">assert</span> <span class="n">hkls</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">uvws</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+                <span class="n">uvws</span> <span class="o">=</span> <span class="n">miller</span><span class="o">.</span><span class="n">vector4to3</span><span class="p">(</span><span class="n">uvws</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">uvws</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid hkls crystal indices&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid uvws crystal indices&#39;</span><span class="p">)</span>
         
         <span class="c1"># Get natoms and volume of system</span>
         <span class="n">natoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span>
         <span class="n">volume</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">avect</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">bvect</span><span class="p">,</span>
                                                     <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">cvect</span><span class="p">)))</span>
         
-        <span class="c1"># Convert hkls to Cartesian units and compute new volume and natoms</span>
-        <span class="n">newvects</span> <span class="o">=</span> <span class="n">miller</span><span class="o">.</span><span class="n">vectortocartesian</span><span class="p">(</span><span class="n">hkls</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">)</span>
+        <span class="c1"># Convert uvws to Cartesian units and compute new volume and natoms</span>
+        <span class="n">newvects</span> <span class="o">=</span> <span class="n">miller</span><span class="o">.</span><span class="n">vectortocartesian</span><span class="p">(</span><span class="n">uvws</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">)</span>
         <span class="n">newvolume</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">newvects</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">newvects</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">newvects</span><span class="p">[</span><span class="mi">2</span><span class="p">])))</span>
         <span class="n">newnatoms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">newvolume</span> <span class="o">/</span> <span class="n">volume</span><span class="p">)</span> <span class="o">*</span> <span class="n">natoms</span><span class="p">)</span>
         
@@ -664,16 +684,16 @@
         <span class="k">if</span> <span class="n">newnatoms</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;New box has no atoms/volume: vectors are parallel or planar&#39;</span><span class="p">)</span>
         
-        <span class="c1"># Identify box corners of new system wrt hkls</span>
+        <span class="c1"># Identify box corners of new system wrt uvws</span>
         <span class="n">corners</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int64&#39;</span><span class="p">)</span>
         <span class="n">corners</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-        <span class="n">corners</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">corners</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">corners</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">corners</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">corners</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">corners</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">corners</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">hkls</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">corners</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">uvws</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">corners</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">uvws</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">corners</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">uvws</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">corners</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">uvws</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">uvws</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">corners</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">uvws</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">uvws</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">corners</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">uvws</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">uvws</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">corners</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">uvws</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">uvws</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">uvws</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         
         <span class="c1"># Create a supercell of system that contains all box corners</span>
         <span class="n">a_mults</span> <span class="o">=</span> <span class="p">(</span><span class="n">corners</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">corners</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
@@ -700,12 +720,10 @@
         <span class="c1"># Make newsystem by cutting out all atoms in system2 outside boundaries</span>
         <span class="n">newsystem</span> <span class="o">=</span> <span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">system2</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="n">aindex</span><span class="p">],</span> <span class="n">box</span><span class="o">=</span><span class="n">system2</span><span class="o">.</span><span class="n">box</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span>
         
-        <span class="c1"># Normalize newsystem</span>
-        <span class="n">newsystem</span> <span class="o">=</span> <span class="n">newsystem</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
-        
-        <span class="k">return</span> <span class="n">newsystem</span></div>
+        <span class="c1"># Return normalized system</span>
+        <span class="k">return</span> <span class="n">newsystem</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">return_transform</span><span class="o">=</span><span class="n">return_transform</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="System.normalize"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.normalize">[docs]</a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;lammps&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="System.normalize"><a class="viewcode-back" href="../../../atomman.System.html#atomman.System.normalize">[docs]</a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;lammps&#39;</span><span class="p">,</span> <span class="n">return_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Normalizes a system&#39;s box vectors and atom positions to be compatible</span>
 <span class="sd">        with simulation codes.</span>
@@ -715,14 +733,19 @@
 <span class="sd">        style : str, optional</span>
 <span class="sd">            Indicates the normalization style to use.  Default (and only</span>
 <span class="sd">            current option) is &#39;lammps&#39;.</span>
-<span class="sd">            </span>
+<span class="sd">        return_transform : bool, optional</span>
+<span class="sd">            Indicates if the transformation matrix associated with the</span>
+<span class="sd">            normalization is returned.  Default value is False.</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        atomman.System</span>
+<span class="sd">        newsystem : atomman.System</span>
 <span class="sd">            A new system that has been normalized.</span>
+<span class="sd">        transform : np.ndarray</span>
+<span class="sd">            The transformation matrix associated with the normalization.</span>
+<span class="sd">            Returned if return_transform is True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">style</span> <span class="o">==</span> <span class="s1">&#39;lammps&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">lmp_normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">lmp_normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">return_transform</span><span class="o">=</span><span class="n">return_transform</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown style (only &#39;lammps&#39; is currently supported)&quot;</span><span class="p">)</span></div>
     
@@ -789,7 +812,7 @@
           
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Lucas Hale.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
         </div>
         <div class="clearer"></div>

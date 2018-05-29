@@ -4,12 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Dislocation analysis tools &#8212; atomman 1.2.alpha documentation</title>
+    <title>Introduction to atomman: Dislocation analysis tools &#8212; atomman 1.2.0 documentation</title>
     <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -18,11 +26,12 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro" href="04.4._Semidiscrete_Variational_Peierls-Nabarro.html" />
     <link rel="prev" title="Introduction to atomman: Stroh class" href="04.2._Stroh_class.html" /> 
-  </head><body>
+  </head>
+  <body>
     <div class="header-wrapper" role="banner">
       <div class="header">
         <div class="headertitle"><a
-          href="../index.html">atomman 1.2.alpha documentation</a></div>
+          href="../index.html">atomman 1.2.0 documentation</a></div>
         <div class="rel" role="navigation" aria-label="related navigation">
           <a href="04.2._Stroh_class.html" title="Introduction to atomman: Stroh class"
              accesskey="P">previous</a> |
@@ -223,11 +232,11 @@ div.nboutput div.output_area.stderr {
 for finding and characterizing dislocations.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
@@ -265,11 +274,11 @@ The system constructed in step #2 serves this purpose.</p>
 <p><strong>Note #2</strong>: The final defect systems presented here are for
 demonstration purposes only as no atomic relaxations are performed.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># 0 K values for Al</span>
 <span class="n">alat</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.05</span><span class="p">,</span> <span class="s1">&#39;Å&#39;</span><span class="p">)</span>
 <span class="n">C11</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">1.143e12</span><span class="p">,</span> <span class="s1">&#39;dyn/cm^2&#39;</span><span class="p">)</span>
@@ -310,11 +319,11 @@ demonstration purposes only as no atomic relaxations are performed.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># plot original positions of atoms in system</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fcc_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">fcc_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -329,11 +338,11 @@ demonstration purposes only as no atomic relaxations are performed.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># plot original positions of atoms in system</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -358,13 +367,13 @@ estimated by looking at the magnitude and direction of the slip vector
 of any atoms that the dislocation passed by. The slip vector was
 originally outlined in <a class="reference external" href="http://dx.doi.org/10.1103/PhysRevLett.87.165507">Zimmerman, et. al, Phys Rev Lett 87,
 165507</a>.</p>
-<div class="math notranslate">
+<div class="math">
 \[S_{i \alpha} = -\sum_{\beta=1}^{n_{\alpha}} {\left( x_{i \alpha \beta} - X_{i \alpha \beta} \right)}\]</div>
-<p>where <span class="math notranslate">\(n_{\alpha}\)</span> is the number of nearest neighbor atoms
-<span class="math notranslate">\(\beta\)</span> of atom <span class="math notranslate">\(\alpha\)</span>, <span class="math notranslate">\(x_{i \alpha \beta}\)</span> is the
-vector difference between atoms <span class="math notranslate">\(\alpha\)</span> and <span class="math notranslate">\(\beta\)</span> in the
-current (defect) configuration, and <span class="math notranslate">\(X_{i \alpha \beta}\)</span> is the
-vector difference between atoms <span class="math notranslate">\(\alpha\)</span> and <span class="math notranslate">\(\beta\)</span> in the
+<p>where <span class="math">\(n_{\alpha}\)</span> is the number of nearest neighbor atoms
+<span class="math">\(\beta\)</span> of atom <span class="math">\(\alpha\)</span>, <span class="math">\(x_{i \alpha \beta}\)</span> is the
+vector difference between atoms <span class="math">\(\alpha\)</span> and <span class="math">\(\beta\)</span> in the
+current (defect) configuration, and <span class="math">\(X_{i \alpha \beta}\)</span> is the
+vector difference between atoms <span class="math">\(\alpha\)</span> and <span class="math">\(\beta\)</span> in the
 reference (perfect crystal) configuration.</p>
 <p><strong>Note</strong>: To be general with any crystal and dislocation, the slip
 vector computed here is <em>not</em> scaled by the number of slipped neighbors
@@ -381,19 +390,19 @@ neighbors across the slipped plane.</p>
 associated with system_0 to use. Either neighbors or cutoff must be
 given, or system_0 must have a neighbors attribute.</li>
 <li><strong>cutoff</strong> (<em>float, optional</em>) Cutoff distance for computing a
-neighbor list for system_0. Either neighbors or cutoff must be given,
-or system_0 have a neighbors attribute.</li>
+neighbor list for system_0. Either neighbors or cutoff must be
+given, or system_0 have a neighbors attribute.</li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
 <li>(<em>numpy.ndarray</em>) The computed slip vectors.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Make reference system&#39;s pbc match defect system&#39;s pbc</span>
 <span class="c1"># This avoids free surfaces having large slip vectors</span>
 <span class="n">fcc_system</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
@@ -415,41 +424,49 @@ or system_0 have a neighbors attribute.</li>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_10_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_10_0.png" />
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+burgers ≈ 2.86433839926 Å
+</pre></div></div>
+</div>
 </div>
 </div>
 <div class="section" id="3.-Disregistry">
 <h2>3. Disregistry<a class="headerlink" href="#3.-Disregistry" title="Permalink to this headline">¶</a></h2>
-<p>The disregistry, <span class="math notranslate">\(\delta_i\)</span> characterizes the planar spreading of
-a dislocation in direction <span class="math notranslate">\(\xi\)</span> along a slip plane by measuring
+<p>The disregistry, <span class="math">\(\delta_i\)</span> characterizes the planar spreading of
+a dislocation in direction <span class="math">\(\xi\)</span> along a slip plane by measuring
 the difference in the displacements between the atomic planes of atoms
-just above, <span class="math notranslate">\(u_i^+\)</span>, and below, <span class="math notranslate">\(u_i^-\)</span>, the mathematical
+just above, <span class="math">\(u_i^+\)</span>, and below, <span class="math">\(u_i^-\)</span>, the mathematical
 slip plane. The displacements are taken relative to a perfect crystal
 base configuration.</p>
-<div class="math notranslate">
+<div class="math">
 \[\delta_i(\xi) = u_i^+(\xi) - u_i^-(\xi)\]</div>
 <p>The algorithm used by atomman does the following:</p>
 <ol class="arabic simple">
 <li>Uses the base configuration to identify all atoms in the two atomic
 planes neighboring the slip plane.</li>
-<li>For all atoms identified in #1, finds the unique <span class="math notranslate">\(\xi\)</span>
-coordinates from the base configuration and computes <span class="math notranslate">\(u_i^+\)</span>
-and <span class="math notranslate">\(u_i^-\)</span> for the defect configuration relative to the base
+<li>For all atoms identified in #1, finds the unique <span class="math">\(\xi\)</span>
+coordinates from the base configuration and computes <span class="math">\(u_i^+\)</span>
+and <span class="math">\(u_i^-\)</span> for the defect configuration relative to the base
 configuration.</li>
-<li>Any <span class="math notranslate">\(u_i^+\)</span> or <span class="math notranslate">\(u_i^-\)</span> corresponding to the same
-<span class="math notranslate">\(\xi\)</span> coordinates are averaged, and the values of <span class="math notranslate">\(u_i^+\)</span>
-and <span class="math notranslate">\(u_i^-\)</span> are linearly interpolated to all unique <span class="math notranslate">\(\xi\)</span>
-coordinates. This is done as the <span class="math notranslate">\(\xi\)</span> coordinates may differ
+<li>Any <span class="math">\(u_i^+\)</span> or <span class="math">\(u_i^-\)</span> corresponding to the same
+<span class="math">\(\xi\)</span> coordinates are averaged, and the values of <span class="math">\(u_i^+\)</span>
+and <span class="math">\(u_i^-\)</span> are linearly interpolated to all unique <span class="math">\(\xi\)</span>
+coordinates. This is done as the <span class="math">\(\xi\)</span> coordinates may differ
 for the two atomic planes.</li>
-<li>The disregistry is computed for all unique <span class="math notranslate">\(\xi\)</span> coordinates by
-finding the difference in the interpolated <span class="math notranslate">\(u_i^+\)</span> and
-<span class="math notranslate">\(u_i^-\)</span> displacements.</li>
+<li>The disregistry is computed for all unique <span class="math">\(\xi\)</span> coordinates by
+finding the difference in the interpolated <span class="math">\(u_i^+\)</span> and
+<span class="math">\(u_i^-\)</span> displacements.</li>
 </ol>
 <div class="section" id="3.1-disregistry()">
 <h3>3.1 disregistry()<a class="headerlink" href="#3.1-disregistry()" title="Permalink to this headline">¶</a></h3>
@@ -476,11 +493,11 @@ should fall between two planes of atoms. Default value is [0,0,0].</li>
 disregistry at each x.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">xi</span><span class="p">,</span> <span class="n">disreg</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">disregistry</span><span class="p">(</span><span class="n">fcc_system</span><span class="p">,</span> <span class="n">fcc_disl_system</span><span class="p">)</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
@@ -498,19 +515,11 @@ disregistry at each x.</li>
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-burgers ≈ 2.86433839926 Å
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_13_1.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_13_1.png" />
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_13_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_13_0.png" />
 </div>
 </div>
 </div>
@@ -526,59 +535,59 @@ Y. (2005). Acta Materialia 53,
 <a class="reference external" href="http://dx.doi.org/10.1016/j.msea.2005.03.076">Hartley, C. S. &amp; Mishin, Y. (2005). Materials Science and Engineering:
 A 400-401, 18-21.</a>, as
 well as code obtained from Yuri Mishin.</p>
-<p>The local environment around each atom <span class="math notranslate">\(\alpha\)</span> is characterized
+<p>The local environment around each atom <span class="math">\(\alpha\)</span> is characterized
 using a list of the position vector differences between the atom and all
 neighboring atoms within a cutoff distance.</p>
 <ul class="simple">
-<li><span class="math notranslate">\(p_{i \alpha \beta}\)</span> is the vector difference in the
-defect-free reference system between atom <span class="math notranslate">\(\alpha\)</span> and a
-neighboring atom identified in the reference system, <span class="math notranslate">\(\beta\)</span>.</li>
-<li><span class="math notranslate">\(q_{i \alpha \gamma}\)</span> is the vector difference in the defect
-system between atom <span class="math notranslate">\(\alpha\)</span> and a neighboring atom identified
-in the defect system, <span class="math notranslate">\(\gamma\)</span>.</li>
+<li><span class="math">\(p_{i \alpha \beta}\)</span> is the vector difference in the
+defect-free reference system between atom <span class="math">\(\alpha\)</span> and a
+neighboring atom identified in the reference system, <span class="math">\(\beta\)</span>.</li>
+<li><span class="math">\(q_{i \alpha \gamma}\)</span> is the vector difference in the defect
+system between atom <span class="math">\(\alpha\)</span> and a neighboring atom identified
+in the defect system, <span class="math">\(\gamma\)</span>.</li>
 </ul>
-<p>The list of <span class="math notranslate">\(\beta\)</span> and <span class="math notranslate">\(\gamma\)</span> neighbors may differ, so
-<span class="math notranslate">\(p_{i \alpha \gamma}\)</span> vectors must be identified by uniquely
-pairing as many of the <span class="math notranslate">\(p_{i \alpha \beta}\)</span> vectors to
-<span class="math notranslate">\(q_{i \alpha \gamma}\)</span> vectors based on their directions and
+<p>The list of <span class="math">\(\beta\)</span> and <span class="math">\(\gamma\)</span> neighbors may differ, so
+<span class="math">\(p_{i \alpha \gamma}\)</span> vectors must be identified by uniquely
+pairing as many of the <span class="math">\(p_{i \alpha \beta}\)</span> vectors to
+<span class="math">\(q_{i \alpha \gamma}\)</span> vectors based on their directions and
 magnitudes. Using the pairs, a strain correspondence tensor,
-<span class="math notranslate">\(G_{ij \alpha}\)</span>, is computed as a least squares solution of the
+<span class="math">\(G_{ij \alpha}\)</span>, is computed as a least squares solution of the
 linear matrix equation</p>
-<div class="math notranslate">
+<div class="math">
 \[q_{i \alpha \gamma} = p_{j \alpha \gamma} G_{ij \alpha}\]</div>
 <p>Various strain properties can then be computed using
-<span class="math notranslate">\(G_{ij \alpha}\)</span>:</p>
+<span class="math">\(G_{ij \alpha}\)</span>:</p>
 <ul class="simple">
 <li>strain state</li>
 </ul>
-<div class="math notranslate">
+<div class="math">
 \[E_{ij \alpha} = \frac{(\delta_{ij} - G_{ij \alpha}) + (\delta_{ij} - G_{ji \alpha})}{2}\]</div>
 <ul class="simple">
 <li>strain invariants</li>
 </ul>
-<div class="math notranslate">
+<div class="math">
 \[I_{1 \alpha} = E_{11 \alpha} + E_{22 \alpha} + E_{33 \alpha}\]</div>
-<div class="math notranslate">
+<div class="math">
 \[I_{2 \alpha} = E_{11 \alpha} E_{22 \alpha} + E_{11 \alpha} E_{33 \alpha} + E_{22 \alpha} E_{33 \alpha} - E_{12 \alpha}^2 - E_{13 \alpha}^2 - E_{23 \alpha}^2\]</div>
-<div class="math notranslate">
+<div class="math">
 \[I_{3 \alpha} = \det{E_{ij \alpha}}\]</div>
 <ul class="simple">
 <li>angular velocity</li>
 </ul>
-<div class="math notranslate">
+<div class="math">
 \[R_{ij \alpha} = \frac{(\delta_{ij} - G_{ij \alpha}) - (\delta_{ij} - G_{ji \alpha})}{2}\]</div>
-<div class="math notranslate">
+<div class="math">
 \[\omega_{\alpha} = \sqrt{R_{12 \alpha}^2 + R_{13 \alpha}^2 + R_{23 \alpha}^2}\]</div>
-<p>The Nye tensor, <span class="math notranslate">\(N_{ij \alpha}\)</span>, is related to
-<span class="math notranslate">\(G_{i j \alpha}\)</span> as</p>
-<div class="math notranslate">
+<p>The Nye tensor, <span class="math">\(N_{ij \alpha}\)</span>, is related to
+<span class="math">\(G_{i j \alpha}\)</span> as</p>
+<div class="math">
 \[N_{km \alpha} = - \epsilon_{ijk} \partial_i G_{m j \alpha}\]</div>
-<p>The derivatives of <span class="math notranslate">\(G_{i j \alpha}\)</span> are obtained numerically by
+<p>The derivatives of <span class="math">\(G_{i j \alpha}\)</span> are obtained numerically by
 comparing the change in the strain correspondence tensor between each
-atom <span class="math notranslate">\(\alpha\)</span> and its neighbors <span class="math notranslate">\(\gamma\)</span>. A single value for
+atom <span class="math">\(\alpha\)</span> and its neighbors <span class="math">\(\gamma\)</span>. A single value for
 each deriviative is obtained by least squares fits of the following
 equations</p>
-<div class="math notranslate">
+<div class="math">
 \[G_{i j \gamma} - G_{i j \alpha} = q_{k \alpha \gamma} \partial_k G_{i j \alpha}\]</div>
 <p><strong>Note</strong> that the equations in the original papers on the atomistic Nye
 tensor method had a typo with indicies. This function has been verified
@@ -608,11 +617,11 @@ B planes are identical sites.</li>
 sites, and the sites in between.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Define p_vectors for fcc cubic (standard reference frame)</span>
 <span class="n">p_vectors</span> <span class="o">=</span> <span class="n">alat</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
                              <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span> <span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
@@ -642,15 +651,16 @@ sites, and the sites in between.</li>
  [ 0.    -2.025 -2.025]]
 </pre></div></div>
 </div>
-<p>The p_vectors must be transformed to match the orientation of the defect
-system. This can either be done before calling nye_tensor() as shown
-here, or by using the axes parameter of the nye_tensor() function.</p>
+<p>The p_vectors must be transformed to match the orientation of the
+defect system. This can either be done before calling nye_tensor() as
+shown here, or by using the axes parameter of the nye_tensor()
+function.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Transformed p_vectors</span>
 <span class="n">trans_p_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">p_vectors</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">axes_check</span><span class="p">([</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">]))</span>
 <span class="n">trans_p_vectors</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">trans_p_vectors</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -680,11 +690,11 @@ here, or by using the axes parameter of the nye_tensor() function.</p>
 </div>
 <div class="section" id="3.2-nye_tensor_p()">
 <h3>3.2 nye_tensor_p()<a class="headerlink" href="#3.2-nye_tensor_p()" title="Permalink to this headline">¶</a></h3>
-<p>For convenience, the atomman.defect.nye_tensor_p() function can be used
-to generate p_vector lists for all atoms using a base reference system.
-The reference system should directly correspond to the system that the
-nye_tensor() calculation will be performed on, but be a perfect
-defect-free crystal with all periodic boundaries.</p>
+<p>For convenience, the atomman.defect.nye_tensor_p() function can be
+used to generate p_vector lists for all atoms using a base reference
+system. The reference system should directly correspond to the system
+that the nye_tensor() calculation will be performed on, but be a
+perfect defect-free crystal with all periodic boundaries.</p>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>system</strong> (<em>atomman.system</em>) The base/reference system to use. This
@@ -704,11 +714,11 @@ or system have a neighbors attribute.</li>
 system.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Make reference system&#39;s pbc all periodic</span>
 <span class="n">fcc_system</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
@@ -775,15 +785,15 @@ a neighbors attribute.</li>
 <p>Returns</p>
 <ul class="simple">
 <li>(<em>dict</em>) Contains the per-atom properties ‘strain’,
-‘strain_invariant_1’, ‘strain_invariant_2’, ‘strain_invariant_3’,
-‘angular_velocity’, and ‘Nye_tensor’.</li>
+‘strain_invariant_1’, ‘strain_invariant_2’,
+‘strain_invariant_3’, ‘angular_velocity’, and ‘Nye_tensor’.</li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Compute strain values and Nye tensor</span>
 <span class="n">nye_dict</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">nye_tensor</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="p">,</span> <span class="n">p_vectors</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">],</span> <span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">)</span>
 
@@ -836,7 +846,7 @@ along the plotting y-axis to include in the fit. Values are taken in
 the specified length_unit. If not given, then the limits are set
 based on min and max atomic coordinates along the plotting axis.</li>
 <li><strong>zlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates
-normal to the plotting axes (i.e.&nbsp;plotxaxis X plotyaxis) to include
+normal to the plotting axes (i.e. plotxaxis X plotyaxis) to include
 in the fit. Values are taken in the specified length_unit. If not
 given, then the limits are set based on min and max atomic
 coordinates along the axis.</li>
@@ -847,7 +857,7 @@ bins to use along the plotting y-axis. Default value is 200.</li>
 <li><strong>dots</strong> (<em>bool, optional</em>) If True, then the positions of the atoms
 are shown as circles. Default value is True.</li>
 <li><strong>czero</strong> (<em>bool, optional</em>) If True, the range of property values
-will be centered around zero, i.e.&nbsp;cmax = -cmin. If False, cmax and
+will be centered around zero, i.e. cmax = -cmin. If False, cmax and
 cmin will be independently selected using the property values.
 Default value is True.</li>
 <li><strong>save</strong> (<em>bool, optional</em>) If True, the generated plot will be saved
@@ -873,11 +883,11 @@ plotting bins.</li>
 demonstration purposes and should <em>not</em> be used as there has been no
 atomic relaxations.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [17]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Make contour plots for the strain invariants</span>
 <span class="n">intsum</span><span class="p">,</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="p">,</span> <span class="s1">&#39;strain_invariant_1&#39;</span><span class="p">,</span>
                                             <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">dots</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -912,11 +922,11 @@ atomic relaxations.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [19]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># plot Nye tensor components related to dislocations</span>
 <span class="n">intsum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">intsum</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="p">,</span> <span class="s1">&#39;Nye_tensor&#39;</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
@@ -953,11 +963,11 @@ atomic relaxations.</p>
 </div>
 <p>Burgers vector estimate is obtained from the integer sums over the plots</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [14]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Integration summation estimate of Burgers vector = [</span><span class="si">%f</span><span class="s1">, </span><span class="si">%f</span><span class="s1">, </span><span class="si">%f</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">intsum</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -975,15 +985,15 @@ Integration summation estimate of Burgers vector = [2.986842, 0.005223, -0.00076
 <div class="section" id="4.-Differential-displacement-plot">
 <h2>4. Differential displacement plot<a class="headerlink" href="#4.-Differential-displacement-plot" title="Permalink to this headline">¶</a></h2>
 <p>Dislocation core structures can also be characterized using differential
-displacement plots. For every pair of neighboring atoms <span class="math notranslate">\(\alpha\)</span>
-and <span class="math notranslate">\(\beta\)</span>, a differential displacement vector,
-<span class="math notranslate">\(d_{i \alpha \beta}\)</span> is computed as</p>
-<div class="math notranslate">
+displacement plots. For every pair of neighboring atoms <span class="math">\(\alpha\)</span>
+and <span class="math">\(\beta\)</span>, a differential displacement vector,
+<span class="math">\(d_{i \alpha \beta}\)</span> is computed as</p>
+<div class="math">
 \[d_{i \alpha \beta} =  x_{i \alpha \beta} - X_{i \alpha \beta}\]</div>
-<p>where <span class="math notranslate">\(x_{i \alpha \beta}\)</span> is the vector difference between atoms
-<span class="math notranslate">\(\alpha\)</span> and <span class="math notranslate">\(\beta\)</span> in the current (defect) configuration,
-and <span class="math notranslate">\(X_{i \alpha \beta}\)</span> is the vector difference between atoms
-<span class="math notranslate">\(\alpha\)</span> and <span class="math notranslate">\(\beta\)</span> in the reference (perfect crystal)
+<p>where <span class="math">\(x_{i \alpha \beta}\)</span> is the vector difference between atoms
+<span class="math">\(\alpha\)</span> and <span class="math">\(\beta\)</span> in the current (defect) configuration,
+and <span class="math">\(X_{i \alpha \beta}\)</span> is the vector difference between atoms
+<span class="math">\(\alpha\)</span> and <span class="math">\(\beta\)</span> in the reference (perfect crystal)
 configuration. Plots are then constructed where arrows representing
 components of the differential displacement vectors are positioned
 halfway between the corresponding atoms.</p>
@@ -991,15 +1001,15 @@ halfway between the corresponding atoms.</p>
 <ul class="simple">
 <li><strong>‘standard’</strong> The classic differential displacement representation
 that works for all dislocation types. The arrows are oriented to
-point between atoms <span class="math notranslate">\(\alpha\)</span> and <span class="math notranslate">\(\beta\)</span> for each pair.
+point between atoms <span class="math">\(\alpha\)</span> and <span class="math">\(\beta\)</span> for each pair.
 The magnitudes of the arrows are taken as the component of
-<span class="math notranslate">\(d_{i \alpha \beta}\)</span> parallel to the Burgers vector,
-<span class="math notranslate">\(b_i\)</span>. Large values are adjusted such that the resulting
-magnitudes always fall between <span class="math notranslate">\(\pm b_i / 2\)</span>.</li>
+<span class="math">\(d_{i \alpha \beta}\)</span> parallel to the Burgers vector,
+<span class="math">\(b_i\)</span>. Large values are adjusted such that the resulting
+magnitudes always fall between <span class="math">\(\pm b_i / 2\)</span>.</li>
 <li><strong>‘xy’</strong> An alternate representation that is used for analyzing screw
 dislocations. The arrows’ directions and magnitudes directly show the
-in-plane edge components (i.e.&nbsp;within the plotting xy plane) of
-<span class="math notranslate">\(d_{i \alpha \beta}\)</span>.</li>
+in-plane edge components (i.e. within the plotting xy plane) of
+<span class="math">\(d_{i \alpha \beta}\)</span>.</li>
 </ul>
 <div class="section" id="4.1-differential_displacement()">
 <h3>4.1 differential_displacement()<a class="headerlink" href="#4.1-differential_displacement()" title="Permalink to this headline">¶</a></h3>
@@ -1029,7 +1039,7 @@ along the plotting y-axis to include in the fit. Values are taken in
 the specified length_unit. If not given, then the limits are set
 based on min and max atomic coordinates along the plotting axis.</li>
 <li><strong>zlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates
-normal to the plotting axes (i.e.&nbsp;plotxaxis X plotyaxis) to include
+normal to the plotting axes (i.e. plotxaxis X plotyaxis) to include
 in the fit. Values are taken in the specified length_unit. The
 optimum zlim should encompass only a single periodic slice. If not
 given, then the limits are set based on min and max atomic
@@ -1038,8 +1048,8 @@ coordinates along the axis.</li>
 associated with system_0 to use. Either neighbors or cutoff must be
 given, or system_0 must have a neighbors attribute.</li>
 <li><strong>cutoff</strong> (<em>float, optional</em>) Cutoff distance for computing a
-neighbor list for system_0. Either neighbors or cutoff must be given,
-or system_0 have a neighbors attribute.</li>
+neighbor list for system_0. Either neighbors or cutoff must be
+given, or system_0 have a neighbors attribute.</li>
 <li><strong>component</strong> (<em>str, optional</em>) Indicates the style of the
 calculation to use:<ul>
 <li>‘standard’ (default) plots the differential displacements between
@@ -1057,14 +1067,14 @@ magnitude of the differential displacement arrows. Default value is 1
 (no scaling).</li>
 <li><strong>save_file</strong> (<em>str, optional</em>) If given then the plot will be saved
 to a file with this name.</li>
-<li><strong>show</strong> (<a href="#id4"><span class="problematic" id="id5">*</span></a>Boolean flag for showing the figure. Default is True.</li>
+<li><strong>show</strong> (*Boolean flag for showing the figure. Default is True.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [15]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Make boundaries match defect system to avoid large differential displacements</span>
 <span class="n">fcc_system</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
@@ -1087,11 +1097,11 @@ to a file with this name.</li>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [16]:
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">differential_displacement</span><span class="p">(</span><span class="n">fcc_system</span><span class="p">,</span> <span class="n">fcc_disl_system</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span><span class="n">zaxis</span><span class="p">],</span>
                                     <span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">xlim</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="n">ylim</span><span class="p">,</span> <span class="n">zlim</span><span class="o">=</span><span class="n">zlim</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">)</span>
 </pre></div>
@@ -1179,7 +1189,7 @@ to a file with this name.</li>
           
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Lucas Hale.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
         </div>
         <div class="clearer"></div>
