@@ -2,13 +2,6 @@
 from __future__ import (absolute_import, print_function,
                         division, unicode_literals)
 
-# 
-try:
-    import spglib
-    has_spglib = True
-except:
-    has_spglib = False
-
 def dump(system):
     """
     Convert an atomman.System into the cell tuple used by spglib.
@@ -23,8 +16,6 @@ def dump(system):
     tuple
         (lattice, positions, and numbers) used as inputs for spglib.
     """
-    
-    assert has_spglib, 'spglib not imported'
     
     # Get lattice information
     lattice = system.box.vects

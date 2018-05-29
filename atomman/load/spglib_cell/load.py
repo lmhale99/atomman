@@ -8,13 +8,6 @@ import numpy as np
 # atomman imports
 from ... import Atoms, Box, System
 
-#
-try:
-    import spglib
-    has_spglib = True
-except:
-    has_spglib = False
-
 def load(cell, symbols=()):
     """
     Convert an spglib cell tuple into an atomman.System
@@ -32,8 +25,6 @@ def load(cell, symbols=()):
     system : atomman.System
         A atomman representation of a system.
     """
-    
-    assert has_spglib, 'spglib not imported'
     
     # Separate out cell tuple
     lattice = cell[0]
