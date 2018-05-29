@@ -58,6 +58,7 @@ class System(object):
         self.__atoms = atoms
         self.__box = box
         self.pbc = pbc
+        self.__transformation = np.identity(3)
         
         if isinstance(symbols, stringtype):
             symbols = (symbols,)
@@ -577,7 +578,7 @@ class System(object):
         
         return System(box=box, atoms=atoms, scale=True, symbols=self.symbols)
     
-    def rotate(self, uvws, tol=1e-5):
+    def rotate(self, uvws, tol=1e-5, return_transform=False):
         """
         Transforms a System representing a periodic crystal cell from a standard
         orientation to a specified orientation. Note: if hexagonal indices are
@@ -595,12 +596,18 @@ class System(object):
             boundaries to the boundary values.  In box-relative coordinates, any
             atomic positions within tol of 0 or 1 will be rounded to 0 or 1,
             respectively.  Default value is 1e-5.
-            
+        return_transform : bool, optional
+            Indicates if the transformation matrix associated with the
+            rotation is returned.  Default value is False.
+        
         Returns
         -------
         atomman.System
             A new fully periodic system rotated and transformed according to the
             uvws crystal vectors.
+        transform : np.ndarray
+            The transformation matrix associated with the rotation.
+            Returned if return_transform is True.
         """
         
         # Check parameters
@@ -663,12 +670,10 @@ class System(object):
         # Make newsystem by cutting out all atoms in system2 outside boundaries
         newsystem = System(atoms=system2.atoms[aindex], box=system2.box, symbols=self.symbols)
         
-        # Normalize newsystem
-        newsystem = newsystem.normalize()
-        
-        return newsystem
+        # Return normalized system
+        return newsystem.normalize(return_transform=return_transform)
     
-    def normalize(self, style='lammps'):
+    def normalize(self, style='lammps', return_transform=False):
         """
         Normalizes a system's box vectors and atom positions to be compatible
         with simulation codes.
@@ -678,14 +683,19 @@ class System(object):
         style : str, optional
             Indicates the normalization style to use.  Default (and only
             current option) is 'lammps'.
-            
+        return_transform : bool, optional
+            Indicates if the transformation matrix associated with the
+            normalization is returned.  Default value is False.
         Returns
         -------
-        atomman.System
+        newsystem : atomman.System
             A new system that has been normalized.
+        transform : np.ndarray
+            The transformation matrix associated with the normalization.
+            Returned if return_transform is True.
         """
         if style == 'lammps':
-            return lmp_normalize(self)
+            return lmp_normalize(self, return_transform=return_transform)
         else:
             raise ValueError("Unknown style (only 'lammps' is currently supported)")
     
