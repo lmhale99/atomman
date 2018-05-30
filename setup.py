@@ -2,9 +2,24 @@ import os
 from setuptools import setup, find_packages
 from setuptools.extension import Extension
 
-# List cython extensions
-extensions = [Extension("atomman.core.cythonized",
-                       ["atomman/core/cythonized.c"])]
+try:
+    import numpy
+except:
+    raise ImportError('Install numpy first!')
+
+try:
+    from Cython.Build import cythonize
+except:
+    # List cython extensions
+    extensions = [Extension("atomman.core.cythonized",
+                           ["atomman/core/cythonized.c"],
+                           include_dirs=[numpy.get_include()])]
+else:
+    # List cython extensions
+    extensions = [Extension("atomman.core.cythonized",
+                           ["atomman/core/cythonized.pyx"],
+                           include_dirs=[numpy.get_include()])]
+    extensions = cythonize(extensions)
 
 def getversion():
     """Fetches version information from VERSION file"""
@@ -47,6 +62,7 @@ setup(name = 'atomman',
         'matplotlib',
         'scipy',
         'pandas',
+        'cython',
         'numericalunits'
       ],
       include_package_data = True,
