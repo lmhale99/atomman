@@ -14,7 +14,7 @@ import atomman.unitconvert as uc
 from ... import Atoms, Box, System
 from ...compatibility import range, iteritems
 
-def load(model, key='atomic-system', index=0):
+def load(model, symbols=None, key='atomic-system', index=0):
     """
     Read in a data model containing a crystal structure.
     
@@ -22,6 +22,8 @@ def load(model, key='atomic-system', index=0):
     ----------
     model : str, file-like object or DataModelDict
         The data model to read.
+    symbols : tuple, optional
+        Allows the list of element symbols to be assigned during loading.
     key : str, optional
         The key identifying the root element for the system definition.
         Default value is 'atomic-system'.
@@ -33,9 +35,6 @@ def load(model, key='atomic-system', index=0):
     -------
     system : atomman.System
         The system object associated with the data model.
-    symbols : list
-        The list of atomic symbols corresponding to the system's atom types.
-        Will be a list of None if symbol information is not in the data model.
     """
     
     # Pull system model out of data model using key and index
@@ -103,15 +102,15 @@ def load(model, key='atomic-system', index=0):
     
     if len(all_atypes) == 0:
         if len(all_symbols) != 0:
-            symbols, atypes = np.unique(all_symbols, return_inverse)
+            lsymbols, atypes = np.unique(all_symbols, return_inverse)
         elif len(all_elements) != 0:
-            symbols, atypes = np.unique(all_elements, return_inverse)
+            lsymbols, atypes = np.unique(all_elements, return_inverse)
         else:
             raise ValueError('No atom components, symbols or elements listed')
     
     else:
         atypes = all_atypes
-        symbols = [None for i in range(max(all_atypes))]
+        lsymbols = [None for i in range(max(all_atypes))]
         
         if len(all_elements) != 0 and len(all_symbols) == 0:
             all_symbols = all_elements
@@ -126,7 +125,11 @@ def load(model, key='atomic-system', index=0):
                     assert sym_dict[atype] == symbol
             
             for atype, symbol in iteritems(sym_dict):
-                symbols[atype-1] = symbol
+                lsymbols[atype-1] = symbol
+    
+    # Use lsymbols if symbols parameter is not given.
+    if symbols is None:
+        symbols = lsymbols
     
     # Read per-atom properties
     natoms = len(atypes)
