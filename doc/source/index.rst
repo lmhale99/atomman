@@ -63,7 +63,6 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`
 
 .. _https://github.com/usnistgov/atomman: https://github.com/usnistgov/atomman
 .. _https://github.com/lmhale99/atomman: https://github.com/lmhale99/atomman
