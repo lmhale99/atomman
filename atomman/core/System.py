@@ -303,7 +303,7 @@ class System(object):
         """
         
         # Retrieve parameters
-        value = np.asarray(value)
+        value = np.asarray(value, dtype=float)
         vects = self.box.vects
         inverse = np.linalg.inv(vects)
         origin = self.box.origin
@@ -323,7 +323,7 @@ class System(object):
         """
         
         # Retrieve parameters
-        value = np.asarray(value)
+        value = np.asarray(value, dtype=float)
         vects = self.box.vects
         origin = self.box.origin
         
