@@ -354,8 +354,8 @@ class System(object):
             else:
                 min = spos[:, i].min()
                 max = spos[:, i].max()
-                if min < mins[i]: mins[i] = min - 0.001
-                if max > maxs[i]: maxs[i] = max + 0.001
+                if min <= mins[i]: mins[i] = min - 0.001
+                if max >= maxs[i]: maxs[i] = max + 0.001
         
         # Unscale spos and save to pos
         self.atoms_prop('pos', value=spos, scale=True)
