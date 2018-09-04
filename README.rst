@@ -36,66 +36,77 @@ occasionally a requirement may have to be installed separately. The list of requ
 
 Alternatively, all code and documentation can be downloaded from GitHub. 
     
-    - The stable releases are available at `https://github.com/usnistgov/atomman`_.
+    - The stable releases are available at `https://github.com/usnistgov/atomman <https://github.com/usnistgov/atomman>`__.
     
-    - The working development versions are at `https://github.com/lmhale99/atomman`_.
-    
+    - The working development versions are at `https://github.com/lmhale99/atomman <https://github.com/lmhale99/atomman>`__.
+
 Documentation
 -------------
 
-Tutorial Jupyter Notebooks can be found in the doc/tutorial directory.  The tutorials come in two flavors:
-    
-    - The tutorials starting with ##. provide a general overview/example of the various capabilities.
-    
-    - The tutorials starting with ##.#. give more detailed descriptions and list options available to the tools mentioned in the overview tutorials.
-    
-Documentation for the code itself can be found in the doc/html directory.
+Web-based documentation for the atomman package is available at
+`https://www.ctcms.nist.gov/potentials/atomman <https://www.ctcms.nist.gov/potentials/atomman>`__. Source code for 
+the documentation can be found in the `github doc directory <https://github.com/usnistgov/atomman/tree/master/doc/>`__.
+
+The documentation consists of two main components:
+
+1. **Tutorial Jupyter Notebooks:**
+   `Online html version <https://www.ctcms.nist.gov/potentials/atomman/tutorial/index.html>`__,
+   `Downloadable Notebook version <https://github.com/usnistgov/atomman/tree/master/doc/tutorial>`__.
+   The tutorials starting with ##. provide a general overview/example of the various 
+   capabilities. The tutorials starting with ##.#. give more detailed descriptions
+   and list options available to the tools mentioned in the overview tutorials.
+
+2. **Code Documentation:**
+   `Online html version <https://www.ctcms.nist.gov/potentials/atomman/atomman.html>`__.
+   This provides a rendering of the Python docstrings for the included functions and classes.
 
 Required packages
 -----------------
 
 This is a list of the required Python packages
 
-    - `xmltodict`_ converts XML files to Python dictionaries. Used by 
-      DataModelDict.
-    
-    - `DataModelDict`_ class allowing for easy transformations between 
-      XML/JSON/Python representations of structured data models.
+    - `xmltodict <https://github.com/martinblech/xmltodict>`__ 
+          
+    - `DataModelDict <https://github.com/usnistgov/DataModelDict>`__
+            
+    - `numericalunits <https://pypi.python.org/pypi/numericalunits>`__
       
-    - `numericalunits`_ forms the basis for unit conversions.  
-      
-    - `numpy`_, `scipy`_,  `pandas_`, and `matplotlib`_ Python scientific tools
-      for representing, manipulating and plotting data.
+    - `numpy <http://www.numpy.org/>`__
     
+    - `scipy <https://www.scipy.org/>`__
+    
+    - `pandas <http://pandas.pydata.org/>`__
+    
+    - `matplotlib <http://matplotlib.org/>`__
+
 Optional packages
 -----------------
 
 This is a list of additional Python packages that can add functionality
 
-    - `diffpy.Structure`_ - CIF reader. Required for loading systems from
-      CIF files.
+    - `cython <http://cython.org/>`__: 
+      Allows for construction of c/Python hybrid code for faster calculations.
+      Alternate cython versions of some of the calculation heavy 
+      functions can be built if cython is installed.
+
+    - `diffpy.Structure <http://www.diffpy.org/diffpy.Structure/>`__: 
+      CIF reader. Required for loading systems from CIF files.
     
-    - `ase`_ - The Atomic Simulation Environment for interacting with small 
-      systems and DFT calculations. Required for converting to/from ase.Atoms 
-      objects.
+    - `ase <https://wiki.fysik.dtu.dk/ase/>`__: 
+      The Atomic Simulation Environment for interacting with small systems
+      and DFT calculations. Required for converting to/from ase.Atoms objects.
     
-    - `pymatgen`_ - The Python Materials Genomics package used by the Materials
+    - `pymatgen <http://pymatgen.org/>`__: 
+      The Python Materials Genomics package used by the Materials
       Project for DFT calculations. Required for converting to/from 
       pymatgen.Structure objects.
-      
-    - `cython`_ - Allows for construction of c/Python hybrid code for faster calculations.  Alternate cython versions of some of the calculation heavy functions can be built if cython is installed.
-       
-.. _https://github.com/usnistgov/atomman: https://github.com/usnistgov/atomman
-.. _https://github.com/lmhale99/atomman: https://github.com/lmhale99/atomman
-.. _Introduction to atomman: https://github.com/usnistgov/atomman/blob/master/docs/tutorial/1%20Basics.ipynb
-.. _Interacting with LAMMPS: https://github.com/usnistgov/atomman/blob/master/docs/tutorial/2%20LAMMPS%20Functionality.ipynb
-.. _xmltodict: https://github.com/martinblech/xmltodict
-.. _DataModelDict: https://github.com/usnistgov/DataModelDict
-.. _numericalunits: https://pypi.python.org/pypi/numericalunits
-.. _numpy: http://www.numpy.org/
-.. _scipy: https://www.scipy.org/
-.. _pandas: http://pandas.pydata.org/
-.. _matplotlib: http://matplotlib.org/
-.. _diffpy.Structure: http://www.diffpy.org/diffpy.Structure/
-.. _ase: https://wiki.fysik.dtu.dk/ase/
-.. _pymatgen: http://pymatgen.org/
+
+    - `spglib <https://atztogo.github.io/spglib/python-spglib.html>`__:
+      A Python interface to the spglib spacegroup analysis code.  spglib
+      can be used to analyze and determine the spacegroup for an atomic system.
+      Required for converting to/from spglib.cell objects.
+
+    - `lammps <https://lammps.sandia.gov/doc/Python_library.html>`__:  
+      The Python library interface for the LAMMPS molecular dynamics simulation
+      code that allows for a LAMMPS session to be controlled directly from Python.
+      Required for direct loading/dumping of a system to/from a LAMMPS session.
