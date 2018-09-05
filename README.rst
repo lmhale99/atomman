@@ -59,8 +59,18 @@ Documentation
 
 Web-based documentation for the atomman package is available at
 `https://www.ctcms.nist.gov/potentials/atomman <https://www.ctcms.nist.gov/potentials/atomman>`__.
+
 Source code for the documentation can be found in the
 `github doc directory <https://github.com/usnistgov/atomman/tree/master/doc/>`__.
+The doc directory contains the information both as the source RestructuredText
+files and as unformatted HTML. If you download a copy, you can view the HTML
+version offline by
+
+    cd {atomman_path}/doc/html
+    python -m http.server (for python 3)
+    python -m SimpleHttpServer (for python 2)
+
+Then, opening localhost:8000 in a web browser.
 
 The documentation consists of two main components:
 
