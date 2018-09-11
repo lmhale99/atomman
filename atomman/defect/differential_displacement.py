@@ -19,10 +19,11 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
                               plotyaxis='y', xlim=None, ylim=None, zlim=None,
                               neighbors=None, cutoff=None,
                               component='standard', axes=None,
-                              plot_scale=1, save_file=None, show=True):
+                              plot_scale=1, save_file=None, show=True,
+                              plot_axes=None):
     """
     Generates a differential displacement plot for characterizing dislocations.
-    
+
     Parameters
     ----------
     system_0 : atomman.system
@@ -82,14 +83,16 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
         If given then the plot will be saved to a file with this name.
     show : bool, optional
         Flag for showing the figure. Default is True.
-    
+    plot_axes : matplotlib.Axes.axes object
+        Existing axes to plot on, allows control of the plot after the plotting
+
     """
     # Transform burgers using axes
     if axes is not None:
         T = axes_check(axes)
         burgers = T.dot(burgers)
-    
-    
+
+
     # Neighbor list setup
     if neighbors is not None:
         assert cutoff is None, 'neighbors and cutoff cannot both be given'
@@ -99,7 +102,7 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
         neighbors = system_0.neighbors
     else:
         raise ValueError('neighbors or cutoff is required')
-    
+
     # Give numeric values for str plot axis terms
     if plotxaxis == 'x':
         plotxaxis = [1.0,0.0,0.0]
@@ -107,27 +110,27 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
         plotxaxis = [0.0,1.0,0.0]
     elif plotxaxis == 'z':
         plotxaxis = [0.0,0.0,1.0]
-    
+
     if plotyaxis == 'x':
         plotyaxis = [1.0,0.0,0.0]
     elif plotyaxis == 'y':
         plotyaxis = [0.0,1.0,0.0]
     elif plotyaxis == 'z':
         plotyaxis = [0.0,0.0,1.0]
-    
+
     # Build transformation matrix, T, from plot axes.
     plotxaxis = np.asarray(plotxaxis, dtype='float64')
     plotyaxis = np.asarray(plotyaxis, dtype='float64')
     T = axes_check([plotxaxis, plotyaxis, np.cross(plotxaxis, plotyaxis)])
-    
+
     # Extract positions and transform using T
     pos_0 = np.inner(system_0.atoms.pos, T)
-    
+
     # Transform burgers using plot axes and separate magnitude and direction
     burgers = T.dot(burgers)
     burgers_mag = np.linalg.norm(burgers)
     burgers_uvect = burgers / burgers_mag
-    
+
     # Set plot limits
     if xlim is None:
         xlim = (pos_0[:, 0].min(), pos_0[:, 0].max())
@@ -135,7 +138,7 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
         ylim = (pos_0[:, 1].min(), pos_0[:, 1].max())
     if zlim is None:
         zlim = (pos_0[:, 2].min(), pos_0[:, 2].max())
-    
+
     # Identify only atoms in xlim, ylim, zlim
     in_bounds = ((pos_0[:,0] > xlim[0] - 5.) &
                  (pos_0[:,0] < xlim[1] + 5.) &
@@ -143,44 +146,50 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
                  (pos_0[:,1] < ylim[1] + 5.) &
                  (pos_0[:,2] > zlim[0]) &
                  (pos_0[:,2] < zlim[1]))
-    
-    # Initial plot setup and parameters
-    fig, ax1, = plt.subplots(1, 1, squeeze=True, figsize=(7,7), dpi=72)
+
+    # if plot_axes are passsed do not create new
+    if plot_axes is not None:
+        ax1 = plot_axes
+    else:
+        # Initial plot setup and parameters
+        fig, ax1, = plt.subplots(1, 1, squeeze=True, figsize=(7,7), dpi=72)
+
+
     ax1.axis([xlim[0], xlim[1], ylim[0], ylim[1]])
     atom_circle_radius = burgers_mag / 10
     arrow_width_scale = 1. / 200.
-    
+
     # Loop over all atoms i in plot range
     for i in np.arange(system_0.natoms)[in_bounds]:
-        
+
         # Plot a circle for atom i
         color = cm.hsv((pos_0[i, 2] - zlim[0]) / (zlim[1] - zlim[0]))
         ax1.add_patch(mpatches.Circle(pos_0[i, :2], atom_circle_radius, fc=color, ec='k'))
-        
+
         # Compute distance vectors between atom i and its neighbors for both systems
         dvectors_0 = np.inner(system_0.dvect(int(i), neighbors[i]), T)
         dvectors_1 = np.inner(system_1.dvect(int(i), neighbors[i]), T)
-    
+
         # Compute differential displacement vectors
         dd_vectors = dvectors_1 - dvectors_0
-        
+
         # Compute center point positions for the vectors
         arrow_centers = pos_0[i] + dvectors_0 / 2
-        
+
         # Plot standard differential displacement component
         if component == 'standard':
             # Compute unit distance vectors
             uvectors_0 = dvectors_0 / np.linalg.norm(dvectors_0, axis=1)[:,np.newaxis]
-            
+
             # Compute component of the dd_vector parallel to the burgers vector
             dd_components = dd_vectors.dot(burgers_uvect)
             dd_components[dd_components > burgers_mag / 2] -= burgers_mag
             dd_components[dd_components < -burgers_mag / 2] += burgers_mag
-            
+
             # Scale arrow lengths and vectors
             arrow_lengths = uvectors_0 * dd_components[:,np.newaxis] * plot_scale
             arrow_widths = arrow_width_scale * dd_components * plot_scale
-        
+
             # Plot the arrows
             for center, length, width in zip(arrow_centers, arrow_lengths,
                                              arrow_widths):
@@ -188,7 +197,7 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
                     ax1.quiver(center[0], center[1], length[0], length[1],
                                pivot='middle', angles='xy', scale_units='xy',
                                scale=1, width=width)
-        
+
         # Plot xy differential displacement component
         elif component == 'xy':
             # Scale arrow lengths and vectors
@@ -196,15 +205,17 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
             arrow_lengths[dd_vectors[:, 2] > 0] *= -1
             arrow_widths = arrow_width_scale * (arrow_lengths[:,0]**2
                                               + arrow_lengths[:,1]**2)**0.5
-            
+
             # Plot the arrows
             for center, length, width in zip(arrow_centers, arrow_lengths, arrow_widths):
                 if width > 1e-7:
                     ax1.quiver(center[0], center[1], length[0], length[1], width=width,
                                pivot='middle', angles='xy', scale_units='xy', scale=1)
-    
-    if save_file is not None:
-        plt.savefig(save_file, dpi=800)
-    if show == False:
-        plt.close(fig)
-    plt.show()
+
+    if plot_axes is None:
+        if save_file is not None:
+            plt.savefig(save_file, dpi=800)
+        if show == False:
+            plt.close(fig)
+        else:
+            plt.show()
