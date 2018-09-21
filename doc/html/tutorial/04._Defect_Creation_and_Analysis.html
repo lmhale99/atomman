@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Defect Creation and Analysis &#8212; atomman 1.2.1 documentation</title>
+    <title>Introduction to atomman: Defect Creation and Analysis &#8212; atomman 1.2.3 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.1',
+        VERSION:     '1.2.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="03.2._NeighborList_class.html" title="Introduction to atomman: NeighborList class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -224,7 +224,6 @@ div.nboutput div.output_area.stderr {
 <p><strong>Lucas M. Hale</strong>,
 <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
 <em>Materials Science and Engineering Division, NIST</em>.</p>
-<p>Notebook last updated: 2018-04-05</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
@@ -243,6 +242,7 @@ defect capabilities in atomman.</p>
 <span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -257,6 +257,9 @@ defect capabilities in atomman.</p>
 
 <span class="c1"># Show atomman version</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -265,7 +268,8 @@ defect capabilities in atomman.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.0
+atomman version = 1.2.3
+Notebook executed on 2018-09-21
 </pre></div></div>
 </div>
 </div>
@@ -275,8 +279,8 @@ atomman version = 1.2.0
 and helps with tracking the defect by (1) moving any new/modified atoms
 to the end of the Atoms list and (2) adding per-atom property old_id
 that retains each atom’s original index.</p>
-<p>See <a class="reference external" href="04.1.%20Point%20defects.ipynb">04.1. Point defects Jupyter
-Notebook</a> for more examples.</p>
+<p>See <a class="reference external" href="04.1._Point_defects.html">04.1. Point defects Jupyter Notebook</a>
+for more examples.</p>
 <p>Parameters:</p>
 <ul class="simple">
 <li><strong>system</strong> (<em>atomman.System</em>) the system to add the defect to.</li>
@@ -383,9 +387,8 @@ searching. Default is 1e-3 angstroms.</li>
 <p>The atomman.Stroh class obtains a solution for the Eshelby anisotropic
 elasticity model of a perfectly straight dislocation using the Stroh
 method.</p>
-<p>See the <a class="reference external" href="04.2.%20Stroh%20class.ipynb">04.2. Stroh class Jupyter
-Notebook</a> for more details on the
-methods and theory.</p>
+<p>See the <a class="reference external" href="04.2._Stroh_class.html">04.2. Stroh class Jupyter Notebook</a>
+for more details on the methods and theory.</p>
 <p>Parameters to initialize Stroh object</p>
 <ul class="simple">
 <li><strong>C</strong> (<em>atomman.ElasticConstants</em>) The medium’s elastic constants.</li>
@@ -461,11 +464,21 @@ values. Default value is 1e-8.</li>
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+c:\users\lmh1\documents\python-packages\atomman\atomman\lammps\normalize.py:60: FutureWarning: `rcond` parameter will change to the default of machine precision times ``max(M, N)`` where M and N are the input matrix dimensions.
+To use the future default and silence this warning we advise to pass `rcond=None`, to keep using the old, explicitly pass `rcond=-1`.
+  transformation = np.linalg.lstsq(vects, system.box.vects)[0].T
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04._Defect_Creation_and_Analysis_11_0.png" src="../_images/tutorial_04._Defect_Creation_and_Analysis_11_0.png" />
+<img alt="../_images/tutorial_04._Defect_Creation_and_Analysis_11_1.png" src="../_images/tutorial_04._Defect_Creation_and_Analysis_11_1.png" />
 </div>
 </div>
 </div>
@@ -490,17 +503,17 @@ dislocation cores to be characterized using the difference in the
 displacements between all pairs of neighbor atoms relative to a
 perfect crystal configuration.</li>
 </ul>
-<p>See the <a class="reference external" href="04.3.%20Dislocation%20analysis%20tools.ipynb">04.3. Dislocation analysis tools Jupyter
-Notebook</a> for the
-underlying theory and examples of the tools being used.</p>
+<p>See the <a class="reference external" href="04.3._Dislocation_analysis_tools.html">04.3. Dislocation analysis tools Jupyter
+Notebook</a> for the underlying
+theory and examples of the tools being used.</p>
 </div>
 <div class="section" id="5.-Semidiscrete-variational-Peierls-Nabarro-dislocations">
 <h2>5. Semidiscrete variational Peierls-Nabarro dislocations<a class="headerlink" href="#5.-Semidiscrete-variational-Peierls-Nabarro-dislocations" title="Permalink to this headline">¶</a></h2>
 <p>Classes and functions are included that allow for semidiscrete
 variational Peierls-Nabarro models of dislocations to be solved.</p>
-<p>See the <a class="reference external" href="04.04%20Semidiscrete%20Variational%20Peierls-Nabarro.ipynb">04.4. Semidiscrete Variational Peierls-Nabarro Jupyter
-Notebook</a>
-for a description of the method and examples.</p>
+<p>See the <a class="reference external" href="04.04_Semidiscrete_Variational_Peierls-Nabarro.html">04.4. Semidiscrete Variational Peierls-Nabarro Jupyter
+Notebook</a> for a
+description of the method and examples.</p>
 </div>
 </div>
 
@@ -551,7 +564,7 @@ for a description of the method and examples.</p>
         <li class="right" >
           <a href="03.2._NeighborList_class.html" title="Introduction to atomman: NeighborList class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

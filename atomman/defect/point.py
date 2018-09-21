@@ -338,7 +338,7 @@ def dumbbell(system, pos=None, ptd_id=None, db_vect=None, scale=False,
     3. Adds per-atom property old_id if it doesn't exist corresponding to the
     atom ids in the original system.
     4. Sets any of the new atom's per-atom properties to values given as
-       kwargs.  Any undefined properties are left unchanged.
+    kwargs.  Any undefined properties are left unchanged.
     
     Parameters
     ----------

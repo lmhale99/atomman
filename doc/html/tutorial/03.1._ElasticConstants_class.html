@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: ElasticConstants class &#8212; atomman 1.2.1 documentation</title>
+    <title>Introduction to atomman: ElasticConstants class &#8212; atomman 1.2.3 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.1',
+        VERSION:     '1.2.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="03._Basic_Support_and_Analysis_Tools.html" title="Introduction to atomman: Basic Support and Analysis Tools"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -224,7 +224,6 @@ div.nboutput div.output_area.stderr {
 <p><strong>Lucas M. Hale</strong>,
 <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
 <em>Materials Science and Engineering Division, NIST</em>.</p>
-<p>Notebook last updated: 2018-04-05</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
@@ -244,6 +243,7 @@ crystal. The class methods focus on:</p>
 <span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -254,6 +254,9 @@ crystal. The class methods focus on:</p>
 
 <span class="c1"># Show atomman version</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -262,7 +265,8 @@ crystal. The class methods focus on:</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.0
+atomman version = 1.2.3
+Notebook executed on 2018-09-21
 </pre></div></div>
 </div>
 </div>
@@ -315,12 +319,12 @@ elastic constants to be retrieved:</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Cij (GPa) -&gt;
-[[ 114.3   61.9   61.9    0.     0.     0. ]
- [  61.9  114.3   61.9    0.     0.     0. ]
- [  61.9   61.9  114.3    0.     0.     0. ]
- [   0.     0.     0.    31.6    0.     0. ]
- [   0.     0.     0.     0.    31.6    0. ]
- [   0.     0.     0.     0.     0.    31.6]]
+[[114.3  61.9  61.9   0.    0.    0. ]
+ [ 61.9 114.3  61.9   0.    0.    0. ]
+ [ 61.9  61.9 114.3   0.    0.    0. ]
+ [  0.    0.    0.   31.6   0.    0. ]
+ [  0.    0.    0.    0.   31.6   0. ]
+ [  0.    0.    0.    0.    0.   31.6]]
 </pre></div></div>
 </div>
 <p><strong>Cij9</strong> is the full 9x9 representation.</p>
@@ -341,15 +345,15 @@ Cij (GPa) -&gt;
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Cij9 (GPa) -&gt;
-[[ 114.3   61.9   61.9    0.     0.     0.     0.     0.     0. ]
- [  61.9  114.3   61.9    0.     0.     0.     0.     0.     0. ]
- [  61.9   61.9  114.3    0.     0.     0.     0.     0.     0. ]
- [   0.     0.     0.    31.6    0.     0.    31.6    0.     0. ]
- [   0.     0.     0.     0.    31.6    0.     0.    31.6    0. ]
- [   0.     0.     0.     0.     0.    31.6    0.     0.    31.6]
- [   0.     0.     0.    31.6    0.     0.    31.6    0.     0. ]
- [   0.     0.     0.     0.    31.6    0.     0.    31.6    0. ]
- [   0.     0.     0.     0.     0.    31.6    0.     0.    31.6]]
+[[114.3  61.9  61.9   0.    0.    0.    0.    0.    0. ]
+ [ 61.9 114.3  61.9   0.    0.    0.    0.    0.    0. ]
+ [ 61.9  61.9 114.3   0.    0.    0.    0.    0.    0. ]
+ [  0.    0.    0.   31.6   0.    0.   31.6   0.    0. ]
+ [  0.    0.    0.    0.   31.6   0.    0.   31.6   0. ]
+ [  0.    0.    0.    0.    0.   31.6   0.    0.   31.6]
+ [  0.    0.    0.   31.6   0.    0.   31.6   0.    0. ]
+ [  0.    0.    0.    0.   31.6   0.    0.   31.6   0. ]
+ [  0.    0.    0.    0.    0.   31.6   0.    0.   31.6]]
 </pre></div></div>
 </div>
 <p><strong>Cijkl</strong> is the full 3x3x3x3 representation.</p>
@@ -370,43 +374,43 @@ Cij9 (GPa) -&gt;
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Cijkl (GPa) -&gt;
-[[[[ 114.3    0.     0. ]
-   [   0.    61.9    0. ]
-   [   0.     0.    61.9]]
+[[[[114.3   0.    0. ]
+   [  0.   61.9   0. ]
+   [  0.    0.   61.9]]
 
-  [[   0.    31.6    0. ]
-   [  31.6    0.     0. ]
-   [   0.     0.     0. ]]
+  [[  0.   31.6   0. ]
+   [ 31.6   0.    0. ]
+   [  0.    0.    0. ]]
 
-  [[   0.     0.    31.6]
-   [   0.     0.     0. ]
-   [  31.6    0.     0. ]]]
-
-
- [[[   0.    31.6    0. ]
-   [  31.6    0.     0. ]
-   [   0.     0.     0. ]]
-
-  [[  61.9    0.     0. ]
-   [   0.   114.3    0. ]
-   [   0.     0.    61.9]]
-
-  [[   0.     0.     0. ]
-   [   0.     0.    31.6]
-   [   0.    31.6    0. ]]]
+  [[  0.    0.   31.6]
+   [  0.    0.    0. ]
+   [ 31.6   0.    0. ]]]
 
 
- [[[   0.     0.    31.6]
-   [   0.     0.     0. ]
-   [  31.6    0.     0. ]]
+ [[[  0.   31.6   0. ]
+   [ 31.6   0.    0. ]
+   [  0.    0.    0. ]]
 
-  [[   0.     0.     0. ]
-   [   0.     0.    31.6]
-   [   0.    31.6    0. ]]
+  [[ 61.9   0.    0. ]
+   [  0.  114.3   0. ]
+   [  0.    0.   61.9]]
 
-  [[  61.9    0.     0. ]
-   [   0.    61.9    0. ]
-   [   0.     0.   114.3]]]]
+  [[  0.    0.    0. ]
+   [  0.    0.   31.6]
+   [  0.   31.6   0. ]]]
+
+
+ [[[  0.    0.   31.6]
+   [  0.    0.    0. ]
+   [ 31.6   0.    0. ]]
+
+  [[  0.    0.    0. ]
+   [  0.    0.   31.6]
+   [  0.   31.6   0. ]]
+
+  [[ 61.9   0.    0. ]
+   [  0.   61.9   0. ]
+   [  0.    0.  114.3]]]]
 </pre></div></div>
 </div>
 <p><strong>Sij</strong> is the Voigt 6x6 elastic compliances.</p>
@@ -553,12 +557,12 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 0.  0.  0.  0.  0.  0.]
- [ 0.  0.  0.  0.  0.  0.]
- [ 0.  0.  0.  0.  0.  0.]
- [ 0.  0.  0.  0.  0.  0.]
- [ 0.  0.  0.  0.  0.  0.]
- [ 0.  0.  0.  0.  0.  0.]]
+[[0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0.]]
 True
 </pre></div></div>
 </div>
@@ -687,16 +691,16 @@ corresponding to a specific crystal family can be called.</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Cij (GPa) -&gt;
-[[ 144.   74.   67.    0.    0.    0.]
- [  74.  144.   67.    0.    0.    0.]
- [  67.   67.  166.    0.    0.    0.]
- [   0.    0.    0.   33.    0.    0.]
- [   0.    0.    0.    0.   33.    0.]
- [   0.    0.    0.    0.    0.   35.]]
+[[144.  74.  67.   0.   0.   0.]
+ [ 74. 144.  67.   0.   0.   0.]
+ [ 67.  67. 166.   0.   0.   0.]
+ [  0.   0.   0.  33.   0.   0.]
+ [  0.   0.   0.   0.  33.   0.]
+ [  0.   0.   0.   0.   0.  35.]]
 
 Does 2*C66 = C11-C12?
-C11 - C12 (GPa) = 70.0
-2 * C66 (GPa) =   70.0
+C11 - C12 (GPa) = 69.99999999999999
+2 * C66 (GPa) =   69.99999999999999
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -797,20 +801,20 @@ new axes.</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Cij (GPa) -&gt;
-[[ 176.2  124.9  124.9    0.     0.     0. ]
- [ 124.9  176.2  124.9    0.     0.     0. ]
- [ 124.9  124.9  176.2    0.     0.     0. ]
- [   0.     0.     0.    81.8    0.     0. ]
- [   0.     0.     0.     0.    81.8    0. ]
- [   0.     0.     0.     0.     0.    81.8]]
+[[176.2 124.9 124.9   0.    0.    0. ]
+ [124.9 176.2 124.9   0.    0.    0. ]
+ [124.9 124.9 176.2   0.    0.    0. ]
+ [  0.    0.    0.   81.8   0.    0. ]
+ [  0.    0.    0.    0.   81.8   0. ]
+ [  0.    0.    0.    0.    0.   81.8]]
 
 After transforming, Cij (GPa) -&gt;
-[[ 232.35   68.75  124.9     0.      0.      0.  ]
- [  68.75  232.35  124.9     0.      0.      0.  ]
- [ 124.9   124.9   176.2     0.      0.      0.  ]
- [   0.      0.      0.     81.8     0.      0.  ]
- [   0.      0.      0.      0.     81.8     0.  ]
- [   0.      0.      0.      0.      0.     25.65]]
+[[232.35  68.75 124.9    0.     0.     0.  ]
+ [ 68.75 232.35 124.9    0.     0.     0.  ]
+ [124.9  124.9  176.2    0.     0.     0.  ]
+ [  0.     0.     0.    81.8    0.     0.  ]
+ [  0.     0.     0.     0.    81.8    0.  ]
+ [  0.     0.     0.     0.     0.    25.65]]
 </pre></div></div>
 </div>
 </div>
@@ -851,9 +855,9 @@ After transforming, Cij (GPa) -&gt;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Voigt bulk modulus estimate = 142.0 GPa
-Reuss bulk modulus estimate = 142.0 GPa
-Hill bulk modulus estimate =  142.0 GPa
+Voigt bulk modulus estimate = 142.00000000000003 GPa
+Reuss bulk modulus estimate = 142.0000000000001 GPa
+Hill bulk modulus estimate =  142.00000000000006 GPa
 </pre></div></div>
 </div>
 </div>
@@ -894,9 +898,9 @@ Hill bulk modulus estimate =  142.0 GPa
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Voigt shear modulus estimate = 59.34 GPa
-Reuss shear modulus estimate = 43.6119309915 GPa
-Hill shear modulus estimate =  51.4759654957 GPa
+Voigt shear modulus estimate = 59.34000000000001 GPa
+Reuss shear modulus estimate = 43.61193099147787 GPa
+Hill shear modulus estimate =  51.47596549573894 GPa
 </pre></div></div>
 </div>
 </div>
@@ -1006,12 +1010,12 @@ during initialization or using the model() method.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 176.2  124.9  124.9    0.     0.     0. ]
- [ 124.9  176.2  124.9    0.     0.     0. ]
- [ 124.9  124.9  176.2    0.     0.     0. ]
- [   0.     0.     0.    81.8    0.     0. ]
- [   0.     0.     0.     0.    81.8    0. ]
- [   0.     0.     0.     0.     0.    81.8]]
+[[176.2 124.9 124.9   0.    0.    0. ]
+ [124.9 176.2 124.9   0.    0.    0. ]
+ [124.9 124.9 176.2   0.    0.    0. ]
+ [  0.    0.    0.   81.8   0.    0. ]
+ [  0.    0.    0.    0.   81.8   0. ]
+ [  0.    0.    0.    0.    0.   81.8]]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1030,12 +1034,12 @@ during initialization or using the model() method.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 176.2  124.9  124.9    0.     0.     0. ]
- [ 124.9  176.2  124.9    0.     0.     0. ]
- [ 124.9  124.9  176.2    0.     0.     0. ]
- [   0.     0.     0.    81.8    0.     0. ]
- [   0.     0.     0.     0.    81.8    0. ]
- [   0.     0.     0.     0.     0.    81.8]]
+[[176.2 124.9 124.9   0.    0.    0. ]
+ [124.9 176.2 124.9   0.    0.    0. ]
+ [124.9 124.9 176.2   0.    0.    0. ]
+ [  0.    0.    0.   81.8   0.    0. ]
+ [  0.    0.    0.    0.   81.8   0. ]
+ [  0.    0.    0.    0.    0.   81.8]]
 </pre></div></div>
 </div>
 </div>
@@ -1097,7 +1101,7 @@ during initialization or using the model() method.</p>
         <li class="right" >
           <a href="03._Basic_Support_and_Analysis_Tools.html" title="Introduction to atomman: Basic Support and Analysis Tools"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

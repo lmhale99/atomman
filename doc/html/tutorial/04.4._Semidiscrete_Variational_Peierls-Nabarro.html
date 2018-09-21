@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Semidiscrete Variational Peierls-Nabarro &#8212; atomman 1.2.1 documentation</title>
+    <title>Introduction to atomman: Semidiscrete Variational Peierls-Nabarro &#8212; atomman 1.2.3 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.1',
+        VERSION:     '1.2.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="04.3._Dislocation_analysis_tools.html" title="Introduction to atomman: Dislocation analysis tools"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -224,7 +224,6 @@ div.nboutput div.output_area.stderr {
 <p><strong>Lucas M. Hale</strong>,
 <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
 <em>Materials Science and Engineering Division, NIST</em>.</p>
-<p>Notebook last updated: 2018-04-05</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
@@ -247,6 +246,7 @@ this reason, be aware of the atomman version used.</p>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -261,6 +261,9 @@ this reason, be aware of the atomman version used.</p>
 
 <span class="c1"># Show atomman version</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -269,16 +272,24 @@ this reason, be aware of the atomman version used.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.0
+atomman version = 1.2.3
+Notebook executed on 2018-09-21
 </pre></div></div>
 </div>
 <div class="section" id="1.1.-Theory">
 <h3>1.1. Theory<a class="headerlink" href="#1.1.-Theory" title="Permalink to this headline">¶</a></h3>
 <p>The equations and calculations used are based on the original
-semidiscrete variational Peierls-Nabarro by ADD REF, as well as
-additional and alternate terms from ADD REF, ADD REF and ADD REF. The
-discussion here is very brief and it is left to the reader to see the
-referenced papers for more details.</p>
+semidiscrete variational Peierls-Nabarro by Bulatov, et. al
+[<a class="reference external" href="https://doi.org/10.1103/PhysRevLett.78.4221">1</a>,
+<a class="reference external" href="https://doi.org/10.1103/PhysRevB.62.3099">2</a>,
+<a class="reference external" href="https://doi.org/10.1080/09500830050143778">3</a>], as well as
+additional and alternate terms
+[<a class="reference external" href="https://doi.org/10.1016/S0022-5096(98)00057-X">4</a>,
+<a class="reference external" href="https://doi.org/10.1088/1751-8113/42/2/025208">5</a>,
+<a class="reference external" href="https://doi.org/10.1016/j.scriptamat.2016.04.013">6</a>,
+<a class="reference external" href="https://doi.org/10.1016/j.commatsci.2017.01.038">7</a>]. The discussion
+here is very brief and it is left to the reader to see the referenced
+papers for more details.</p>
 <div class="section" id="1.1.1.-Disregistry-and-dislocation-density">
 <h4>1.1.1. Disregistry and dislocation density<a class="headerlink" href="#1.1.1.-Disregistry-and-dislocation-density" title="Permalink to this headline">¶</a></h4>
 <p>The disregistry of a dislocation, <span class="math">\(\delta_i\)</span>, is defined as the
@@ -365,7 +376,7 @@ stress, <span class="math">\(\tau_{ij}\)</span>, interacting with the dislocatio
 forms have been used in SDVPN models: the original full stress form</p>
 <div class="math">
 \[U_{stress} = -\frac{1}{2} \sum_i{ \left[ \left(\xi[i]^2 - \xi[i-1]^2 \right) \rho_l[i] \tau_{2l} \right]},\]</div>
-<p>and a truncated form introduced by ` &lt;&gt;`__</p>
+<p>and a truncated form introduced by ??</p>
 <div class="math">
 \[U_{stress} = -\frac{1}{2} \sum_i{ \left[ \tau_{2l} \left(\delta_l[i] + \delta_l[i+1] \right) \Delta \xi  \right]}.\]</div>
 <p>The two should be equivalent except for a configuration-independent
@@ -373,9 +384,12 @@ constant.</p>
 </div>
 <div class="section" id="1.1.6.-Surface-energy">
 <h4>1.1.6. Surface energy<a class="headerlink" href="#1.1.6.-Surface-energy" title="Permalink to this headline">¶</a></h4>
-<p>The surface energy is a correction term introduced by ADD REF to account
-for the surface effect along the slip plane. The discrete gradient
-formulation by ADD REF is used by atomman</p>
+<p>The surface energy is a correction term introduced by
+[<a class="reference external" href="https://doi.org/10.1088/1751-8113/42/2/025208">5</a>] to account for
+the surface effect along the slip plane. The discrete gradient
+formulation by
+[<a class="reference external" href="https://doi.org/10.1016/j.scriptamat.2016.04.013">6</a>] is used by
+atomman</p>
 <div class="math">
 \[U_{surface} = \sum_{j=1}^3 {\frac{\beta_{lj}}{4} \sum_i {\rho_l[i]^2 \Delta \xi }}\]</div>
 <p>where <span class="math">\(\beta_{lj}\)</span> is a coefficient tensor. Terms in the
@@ -383,8 +397,9 @@ coefficient tensor can be</p>
 </div>
 <div class="section" id="1.1.7.-Nonlocal-energy">
 <h4>1.1.7. Nonlocal energy<a class="headerlink" href="#1.1.7.-Nonlocal-energy" title="Permalink to this headline">¶</a></h4>
-<p>The nonlocal energy is an alternate correction term introduced by ADD
-REF to account for the nonlocal interactions directly. It is of the form</p>
+<p>The nonlocal energy is an alternate correction term introduced by
+[<a class="reference external" href="https://doi.org/10.1016/S0022-5096(98)00057-X">4</a>] to account for
+the nonlocal interactions directly. It is of the form</p>
 <div class="math">
 \[U_{nonlocal} = \sum_m{ \alpha_m \sum_i{ \delta_l[i] \left(\delta_l[i] - \frac{\delta_l[i+m] + \delta_l[i-m]}{2} \right) \Delta \xi }}\]</div>
 <p>where <span class="math">\(\alpha_m\)</span> are correction coefficients corresponding to
@@ -457,7 +472,6 @@ SDVPN model until the dislocation is observed to move.</li>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.0453</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
-<span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
 
 <span class="n">C11</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">105.09</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
 <span class="n">C12</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span> <span class="mf">59.46</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
@@ -510,9 +524,9 @@ SDVPN model are defined with</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 41.18476659   0.           0.        ]
- [  0.          41.61278102  -1.20279982]
- [  0.          -1.20279982  26.51226032]]
+[[41.18476659  0.          0.        ]
+ [ 0.         41.61278102 -1.20279982]
+ [ 0.         -1.20279982 26.51226032]]
 </pre></div></div>
 </div>
 </div>
@@ -545,7 +559,7 @@ defined in model to Cartesian values.</li>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Load pre-calculated stacking fault energy data</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;files&#39;</span><span class="p">,</span> <span class="s1">&#39;2008--Mendelev-M-I--Al--111-GSF.xml&#39;</span><span class="p">)</span>
-<span class="n">gamma</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">GammaSurface</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">)</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">GammaSurface</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -578,7 +592,7 @@ vectors.</li>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-gamma.data.keys() -&gt; Index([&#39;a1&#39;, &#39;a2&#39;, &#39;E_gsf&#39;, &#39;delta&#39;], dtype=&#39;object&#39;)
+gamma.data.keys() -&gt; Index([&#39;a1&#39;, &#39;a2&#39;, &#39;E_gsf&#39;], dtype=&#39;object&#39;)
 gamma.a1vect -&gt; [ 0.5 -0.5  0. ]
 gamma.a2vect -&gt; [ 0.5  0.5 -1. ]
 gamma.box -&gt;
@@ -619,7 +633,7 @@ the plotting x-axis. If None (default), this is taken as a1vect.</li>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">a2</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;mJ/m^2&#39;</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">a2</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;mJ/m^2&#39;</span><span class="p">))</span>\
+<span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">a2</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;mJ/m^2&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -628,8 +642,8 @@ the plotting x-axis. If None (default), this is taken as a1vect.</li>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-5.00279993994e-13
-356.244552911
+5.002799939937684e-13
+356.2445529110717
 </pre></div></div>
 </div>
 <p><strong>E_gsf_line_plot()</strong> Generates a line plot for the interpolated
@@ -789,7 +803,7 @@ with the SDVPN model.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Transformed Burgers vector = [ 2.86045906  0.          0.        ]
+Transformed Burgers vector = [2.86045906 0.         0.        ]
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -899,6 +913,7 @@ multiple times in a row (minimizer may get stuck).</p>
 <span class="n">min_options</span><span class="p">[</span><span class="s1">&#39;disp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># will display convergence info</span>
 <span class="n">min_options</span><span class="p">[</span><span class="s1">&#39;xtol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-6</span> <span class="c1"># smaller convergence tolerance than default</span>
 <span class="n">min_options</span><span class="p">[</span><span class="s1">&#39;ftol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-6</span> <span class="c1"># smaller convergence tolerance than default</span>
+<span class="c1">#min_options[&#39;maxiter&#39;] = 2 # for testing purposes</span>
 <span class="n">pnsolution</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">SDVPN</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="n">disreg</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span>
                              <span class="n">axes</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">y_axis</span><span class="p">,</span> <span class="n">z_axis</span><span class="p">]),</span> <span class="n">K_tensor</span><span class="o">=</span><span class="n">K_tensor</span><span class="p">,</span>
                              <span class="n">min_options</span><span class="o">=</span><span class="n">min_options</span><span class="p">)</span>
@@ -950,13 +965,13 @@ disregistry plotted.</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Dislocation energy terms in eV/angstrom:
-Misfit energy =     0.158701437913
-Elastic energy =    -0.256296052407
+Misfit energy =     0.15870143791319788
+Elastic energy =    -0.256296052407427
 Long-range energy = 0.0
 Stress energy =     -0.0
 Surface energy =    0.0
 Nonlocal energy =   0.0
-Total energy =      -0.0975946144942
+Total energy =      -0.0975946144942291
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1059,13 +1074,13 @@ Optimization terminated successfully.
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Dislocation energy terms in eV/angstrom:
-Misfit energy =     0.158731391551
-Elastic energy =    -0.256326075981
+Misfit energy =     0.15873139155117424
+Elastic energy =    -0.2563260759813774
 Long-range energy = 0.0
 Stress energy =     -0.0
 Surface energy =    0.0
 Nonlocal energy =   0.0
-Total energy =      -0.0975946844302
+Total energy =      -0.09759468443020317
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1094,7 +1109,7 @@ Total energy =      -0.0975946844302
 </pre></div>
 </div>
 <div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>[&lt;matplotlib.lines.Line2D at 0x2d676198&gt;]
+<span></span>[&lt;matplotlib.lines.Line2D at 0x1c64d198&gt;]
 </pre></div>
 </div>
 </div>
@@ -1173,7 +1188,7 @@ Total energy =      -0.0975946844302
         <li class="right" >
           <a href="04.3._Dislocation_analysis_tools.html" title="Introduction to atomman: Dislocation analysis tools"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

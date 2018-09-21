@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Load and Dump &#8212; atomman 1.2.1 documentation</title>
+    <title>Introduction to atomman: Load and Dump &#8212; atomman 1.2.3 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.1',
+        VERSION:     '1.2.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="01.3._System_class.html" title="Introduction to atomman: System Class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -224,7 +224,6 @@ div.nboutput div.output_area.stderr {
 <p><strong>Lucas M. Hale</strong>,
 <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
 <em>Materials Science and Engineering Division, NIST</em>.</p>
-<p>Notebook last updated: 2018-05-29</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
@@ -262,7 +261,7 @@ formats. The dump() function takes style, system and kwargs as
 parameters, while the dump_style() functions take system and kwargs.
 The underlying code is found in the atomman/dump directory.</p>
 <p><strong>Library Imports</strong></p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [1]:
 </pre></div>
@@ -271,14 +270,30 @@ The underlying code is found in the atomman/dump directory.</p>
 <span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">atomman</span> <span class="k">as</span> <span class="nn">am</span>
 <span class="kn">import</span> <span class="nn">atomman.unitconvert</span> <span class="k">as</span> <span class="nn">uc</span>
+
+<span class="c1"># Show atomman version</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+atomman version = 1.2.3
+Notebook executed on 2018-09-21
+</pre></div></div>
 </div>
 <p>Generate test system information (CsCl)</p>
 <div class="nbinput docutils container">
@@ -1255,9 +1270,9 @@ pbc = [ True  True  True]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 0.  0.  0.]
- [ 0.  0.  0.]
- [ 0.  0.  0.]]
+[[0. 0. 0.]
+ [0. 0. 0.]
+ [0. 0. 0.]]
 </pre></div></div>
 </div>
 </div>
@@ -1775,13 +1790,13 @@ to include.</li>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Atoms(symbols=&#39;CsCl&#39;, pbc=True, cell=[3.2, 3.2, 3.2])
-{&#39;charge&#39;: array([ 1., -1.]), &#39;stress&#39;: array([[[ 0.,  0.,  0.],
-        [ 0.,  0.,  0.],
-        [ 0.,  0.,  0.]],
+{&#39;charge&#39;: array([ 1., -1.]), &#39;stress&#39;: array([[[0., 0., 0.],
+        [0., 0., 0.],
+        [0., 0., 0.]],
 
-       [[ 0.,  0.,  0.],
-        [ 0.,  0.,  0.],
-        [ 0.,  0.,  0.]]])}
+       [[0., 0., 0.],
+        [0., 0., 0.],
+        [0., 0., 0.]]])}
 </pre></div></div>
 </div>
 </div>
@@ -1973,13 +1988,13 @@ abc   :   3.200000   3.200000   3.200000
 angles:  90.000000  90.000000  90.000000
 Sites (2)
   #  SP      a    b    c    charge  stress
----  ----  ---  ---  ---  --------  ---------------
-  0  Cs    0    0    0           1  [[ 0.  0.  0.]
-                                     [ 0.  0.  0.]
-                                     [ 0.  0.  0.]]
-  1  Cl    0.5  0.5  0.5        -1  [[ 0.  0.  0.]
-                                     [ 0.  0.  0.]
-                                     [ 0.  0.  0.]]
+---  ----  ---  ---  ---  --------  ------------
+  0  Cs    0    0    0           1  [[0. 0. 0.]
+                                     [0. 0. 0.]
+                                     [0. 0. 0.]]
+  1  Cl    0.5  0.5  0.5        -1  [[0. 0. 0.]
+                                     [0. 0. 0.]
+                                     [0. 0. 0.]]
 </pre></div></div>
 </div>
 </div>
@@ -2148,12 +2163,12 @@ position.</li>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 lattice:
-[[ 3.2  0.   0. ]
- [ 0.   3.2  0. ]
- [ 0.   0.   3.2]]
+[[3.2 0.  0. ]
+ [0.  3.2 0. ]
+ [0.  0.  3.2]]
 scaled_positions:
-[[ 0.   0.   0. ]
- [ 0.5  0.5  0.5]]
+[[0.  0.  0. ]
+ [0.5 0.5 0.5]]
 numbers:
 [2 1]
 </pre></div></div>
@@ -2188,12 +2203,12 @@ associated unit cell.</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 lattice:
-[[ 3.2  0.   0. ]
- [ 0.   3.2  0. ]
- [ 0.   0.   3.2]]
+[[3.2 0.  0. ]
+ [0.  3.2 0. ]
+ [0.  0.  3.2]]
 scaled_positions:
-[[ 0.   0.   0. ]
- [ 0.5  0.5  0.5]]
+[[0.  0.  0. ]
+ [0.5 0.5 0.5]]
 numbers:
 [2 1]
 </pre></div></div>
@@ -2295,6 +2310,14 @@ pbc = [ True  True  True]
 </div></div>
 </div>
 </div>
+<div class="section" id="10.-phonopy_Atoms">
+<h3>10. phonopy_Atoms<a class="headerlink" href="#10.-phonopy_Atoms" title="Permalink to this headline">¶</a></h3>
+<p>These conversions allow for interactions with
+<a class="reference external" href="https://atztogo.github.io/phonopy/">phonopy</a>. As the phonopy.Atoms
+is based on the ase.Atoms class, the load/dump functions of this style
+are nearly identical to the ase_Atoms style. The only difference being
+which package’s Atoms class is returned by dump.</p>
+</div>
 </div>
 </div>
 
@@ -2354,6 +2377,7 @@ pbc = [ True  True  True]
 <li><a class="reference internal" href="#10.-spglib_cell-style">10. spglib_cell style</a><ul>
 <li><a class="reference internal" href="#10.1.-dump('spglib_cell')">10.1. dump(‘spglib_cell’)</a></li>
 <li><a class="reference internal" href="#9.2.-load('spglib_cell')">9.2. load(‘spglib_cell’)</a></li>
+<li><a class="reference internal" href="#10.-phonopy_Atoms">10. phonopy_Atoms</a></li>
 </ul>
 </li>
 </ul>
@@ -2385,7 +2409,7 @@ pbc = [ True  True  True]
         <li class="right" >
           <a href="01.3._System_class.html" title="Introduction to atomman: System Class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

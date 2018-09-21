@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Box Class &#8212; atomman 1.2.1 documentation</title>
+    <title>Introduction to atomman: Box Class &#8212; atomman 1.2.3 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.1',
+        VERSION:     '1.2.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="01._Defining_Atomic_Systems.html" title="Introduction to atomman: Defining Atomic Systems"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -224,7 +224,6 @@ div.nboutput div.output_area.stderr {
 <p><strong>Lucas M. Hale</strong>,
 <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
 <em>Materials Science and Engineering Division, NIST</em>.</p>
-<p>Notebook last updated: 2018-04-05</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
@@ -253,6 +252,7 @@ of avect, bvect and cvect to the origin.</li>
 <span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -263,6 +263,9 @@ of avect, bvect and cvect to the origin.</li>
 
 <span class="c1"># Show atomman version</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -271,7 +274,8 @@ of avect, bvect and cvect to the origin.</li>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.0
+atomman version = 1.2.3
+Notebook executed on 2018-09-21
 </pre></div></div>
 </div>
 <p>Create a default box with vects that are normal unit vectors.</p>
@@ -368,16 +372,16 @@ bvect, cvect, respectively).</li>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-box.avect -&gt; [ 1.  0.  0.]
-box.bvect -&gt; [ 0.  1.  0.]
-box.cvect -&gt; [ 0.  0.  1.]
+box.avect -&gt; [1. 0. 0.]
+box.bvect -&gt; [0. 1. 0.]
+box.cvect -&gt; [0. 0. 1.]
 
-box.origin -&gt; [ 0.  0.  0.]
+box.origin -&gt; [0. 0. 0.]
 
 box.vects -&gt;
-[[ 1.  0.  0.]
- [ 0.  1.  0.]
- [ 0.  0.  1.]]
+[[1. 0. 0.]
+ [0. 1. 0.]
+ [0. 0. 1.]]
 
 box.a -&gt; 1.0
 box.b -&gt; 1.0
@@ -430,10 +434,10 @@ defining the box.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 1.804,  2.741,  3.762]
-bvect =  [ 1.649,  3.685,  0.893]
-cvect =  [ 3.749,  2.448,  3.415]
-origin = [ 0.686,  0.163,  0.449]
+avect =  [ 3.595,  3.549,  0.976]
+bvect =  [ 3.441,  1.863,  0.652]
+cvect =  [ 1.924,  2.451,  0.636]
+origin = [ 0.254,  0.934,  0.423]
 </pre></div></div>
 </div>
 </div>
@@ -763,7 +767,7 @@ AssertionError: Box is not normalized for LAMMPS style parameters
         <li class="right" >
           <a href="01._Defining_Atomic_Systems.html" title="Introduction to atomman: Defining Atomic Systems"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

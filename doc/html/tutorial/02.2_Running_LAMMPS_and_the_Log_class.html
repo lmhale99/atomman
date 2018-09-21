@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Running LAMMPS and the Log class &#8212; atomman 1.2.1 documentation</title>
+    <title>Introduction to atomman: Running LAMMPS and the Log class &#8212; atomman 1.2.3 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.1',
+        VERSION:     '1.2.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="02.1_Potential_class.html" title="Introduction to atomman: Potential class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -224,7 +224,6 @@ div.nboutput div.output_area.stderr {
 <p><strong>Lucas M. Hale</strong>,
 <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
 <em>Materials Science and Engineering Division, NIST</em>.</p>
-<p>Notebook last updated: 2018-04-05</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
@@ -243,6 +242,7 @@ the atomman.lammps.run() function.</p>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://matplotlib.org/</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -255,6 +255,9 @@ the atomman.lammps.run() function.</p>
 
 <span class="c1"># Show atomman version</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -263,7 +266,8 @@ the atomman.lammps.run() function.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.0
+atomman version = 1.2.3
+Notebook executed on 2018-09-21
 </pre></div></div>
 </div>
 </div>
@@ -370,7 +374,7 @@ file.</li>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Serial simulation took 40.85033369064331 seconds.
+Serial simulation took 37.04599976539612 seconds.
 </pre></div></div>
 </div>
 <p>Run in parallel on 4 processors</p>
@@ -384,7 +388,7 @@ Serial simulation took 40.85033369064331 seconds.
 <span class="n">lammps_command</span> <span class="o">=</span> <span class="s1">&#39;lmp_mpi&#39;</span>
 
 <span class="c1"># Define mpi command to use (unique to your computer!)</span>
-<span class="n">mpi_command</span> <span class="o">=</span> <span class="s1">&#39;mpiexec -localonly 4&#39;</span>
+<span class="n">mpi_command</span> <span class="o">=</span> <span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">Program Files</span><span class="se">\\</span><span class="s1">MPICH2</span><span class="se">\\</span><span class="s1">bin</span><span class="se">\\</span><span class="s1">mpiexec.exe -localonly 4&#39;</span>
 
 <span class="c1"># Run and measure execution time</span>
 <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -401,7 +405,7 @@ Serial simulation took 40.85033369064331 seconds.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Parallel simulation took 18.813522338867188 seconds.
+Parallel simulation took 14.055000066757202 seconds.
 </pre></div></div>
 </div>
 </div>
@@ -718,7 +722,7 @@ flatten the data after reading it in.</p>
         <li class="right" >
           <a href="02.1_Potential_class.html" title="Introduction to atomman: Potential class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

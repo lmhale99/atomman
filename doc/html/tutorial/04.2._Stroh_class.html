@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Stroh class &#8212; atomman 1.2.1 documentation</title>
+    <title>Introduction to atomman: Stroh class &#8212; atomman 1.2.3 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.1',
+        VERSION:     '1.2.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="04.1._Point_defects.html" title="Introduction to atomman: Point defect generation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -224,7 +224,6 @@ div.nboutput div.output_area.stderr {
 <p><strong>Lucas M. Hale</strong>,
 <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
 <em>Materials Science and Engineering Division, NIST</em>.</p>
-<p>Notebook last updated: 2018-04-05</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
@@ -232,7 +231,7 @@ div.nboutput div.output_area.stderr {
 that computes elastic solutions for the Eshelby anisotropic straight
 dislocation or crack using the Stroh method.</p>
 <p><strong>Library Imports</strong></p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [1]:
 </pre></div>
@@ -242,6 +241,7 @@ dislocation or crack using the Stroh method.</p>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -252,8 +252,23 @@ dislocation or crack using the Stroh method.</p>
 <span class="c1"># https://github.com/usnistgov/atomman</span>
 <span class="kn">import</span> <span class="nn">atomman</span> <span class="k">as</span> <span class="nn">am</span>
 <span class="kn">import</span> <span class="nn">atomman.unitconvert</span> <span class="k">as</span> <span class="nn">uc</span>
+
+<span class="c1"># Show atomman version</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+atomman version = 1.2.3
+Notebook executed on 2018-09-21
+</pre></div></div>
 </div>
 </div>
 <div class="section" id="2.-Underlying-theory-of-Stroh-method">
@@ -289,6 +304,12 @@ each root.</p>
 <p>Stroh’s method is then to write the problem as an eigenvector problem,
 which solving gives values for <span class="math">\(p_{\alpha}\)</span>, <span class="math">\(A_{i \alpha}\)</span>,
 and <span class="math">\(L_{i \alpha}\)</span>.</p>
+<p><strong>NOTE FOR ISOTROPIC SYSTEMS</strong>: A solution <em>is not obtainable</em> if the
+elastic constant tensor is for an isotropic material as the eigenvector
+problem cannot be solved. If you want a solution for an isotropic
+material, you can create a cubic elastic tensor that is nearly, but not
+exactly isotropic, i.e. <span class="math">\(C_{11} - C_{12} = 2 C_{44} \pm \delta\)</span>
+where <span class="math">\(\delta\)</span> is small relative to the constants.</p>
 </div>
 <div class="section" id="3.-Initialize/solve">
 <h2>3. Initialize/solve<a class="headerlink" href="#3.-Initialize/solve" title="Permalink to this headline">¶</a></h2>
@@ -381,51 +402,51 @@ more general cases.</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 stroh.p -&gt;
-[ -1.35127492e-17+0.72418397j  -1.35127492e-17-0.72418397j
-  -4.44089210e-16+1.22646367j  -4.44089210e-16-1.22646367j
-   6.66133815e-16+1.14839554j   6.66133815e-16-1.14839554j]
+[-1.35127492e-17+0.72418397j -1.35127492e-17-0.72418397j
+ -4.44089210e-16+1.22646367j -4.44089210e-16-1.22646367j
+  6.66133815e-16+1.14839554j  6.66133815e-16-1.14839554j]
 
 stroh.A -&gt;
-[[ -2.16172806e-18 -4.59984801e-01j   7.87367005e-01 +0.00000000e+00j
-    2.44796357e-01 +3.11522467e-16j]
- [ -2.16172806e-18 +4.59984801e-01j   7.87367005e-01 -0.00000000e+00j
-    2.44796357e-01 -3.11522467e-16j]
- [  6.86766687e-01 +0.00000000e+00j   3.40411524e-16 +4.77037014e-01j
-   -1.30061712e-15 -4.46713376e-01j]
- [  6.86766687e-01 -0.00000000e+00j   3.40411524e-16 -4.77037014e-01j
-   -1.30061712e-15 +4.46713376e-01j]
- [  2.51360646e-15 +5.72170071e-01j  -4.40891319e-01 +1.61962265e-15j
-    6.26880680e-01 +0.00000000e+00j]
- [  2.51360646e-15 -5.72170071e-01j  -4.40891319e-01 -1.61962265e-15j
-    6.26880680e-01 -0.00000000e+00j]]
+[[-2.16172806e-18-4.59984801e-01j  7.87367005e-01+0.00000000e+00j
+   2.44796357e-01+3.11522467e-16j]
+ [-2.16172806e-18+4.59984801e-01j  7.87367005e-01-0.00000000e+00j
+   2.44796357e-01-3.11522467e-16j]
+ [ 6.86766687e-01+0.00000000e+00j  3.40411524e-16+4.77037014e-01j
+  -1.30061712e-15-4.46713376e-01j]
+ [ 6.86766687e-01-0.00000000e+00j  3.40411524e-16-4.77037014e-01j
+  -1.30061712e-15+4.46713376e-01j]
+ [ 2.51360646e-15+5.72170071e-01j -4.40891319e-01+1.61962265e-15j
+   6.26880680e-01+0.00000000e+00j]
+ [ 2.51360646e-15-5.72170071e-01j -4.40891319e-01-1.61962265e-15j
+   6.26880680e-01-0.00000000e+00j]]
 
 stroh.L -&gt;
-[[ -1.91928332e-01 +4.22033318e-18j  -1.16080832e-18 -2.65027039e-01j
-    2.34534900e-17 -3.82898052e-02j]
- [ -1.91928332e-01 -4.22033318e-18j  -1.16080832e-18 +2.65027039e-01j
-    2.34534900e-17 +3.82898052e-02j]
- [ -3.20744370e-17 -2.37666851e-01j   1.93782219e-01 -1.28412070e-16j
-   -8.48368030e-02 +2.64500969e-16j]
- [ -3.20744370e-17 +2.37666851e-01j   1.93782219e-01 +1.28412070e-16j
-   -8.48368030e-02 -2.64500969e-16j]
- [  2.01843586e-01 -8.57243408e-16j   6.86502310e-16 +1.75761380e-01j
-   -4.96322904e-17 -1.16721769e-01j]
- [  2.01843586e-01 +8.57243408e-16j   6.86502310e-16 -1.75761380e-01j
-   -4.96322904e-17 +1.16721769e-01j]]
+[[-1.91928332e-01+4.22033318e-18j -1.16080832e-18-2.65027039e-01j
+   2.34534900e-17-3.82898052e-02j]
+ [-1.91928332e-01-4.22033318e-18j -1.16080832e-18+2.65027039e-01j
+   2.34534900e-17+3.82898052e-02j]
+ [-3.20744370e-17-2.37666851e-01j  1.93782219e-01-1.28412070e-16j
+  -8.48368030e-02+2.64500969e-16j]
+ [-3.20744370e-17+2.37666851e-01j  1.93782219e-01+1.28412070e-16j
+  -8.48368030e-02-2.64500969e-16j]
+ [ 2.01843586e-01-8.57243408e-16j  6.86502310e-16+1.75761380e-01j
+  -4.96322904e-17-1.16721769e-01j]
+ [ 2.01843586e-01+8.57243408e-16j  6.86502310e-16-1.75761380e-01j
+  -4.96322904e-17+1.16721769e-01j]]
 
 stroh.k -&gt;
-[[ -1.91928332e-01 +4.22033318e-18j  -1.16080832e-18 -2.65027039e-01j
-    2.34534900e-17 -3.82898052e-02j]
- [ -1.91928332e-01 -4.22033318e-18j  -1.16080832e-18 +2.65027039e-01j
-    2.34534900e-17 +3.82898052e-02j]
- [ -3.20744370e-17 -2.37666851e-01j   1.93782219e-01 -1.28412070e-16j
-   -8.48368030e-02 +2.64500969e-16j]
- [ -3.20744370e-17 +2.37666851e-01j   1.93782219e-01 +1.28412070e-16j
-   -8.48368030e-02 -2.64500969e-16j]
- [  2.01843586e-01 -8.57243408e-16j   6.86502310e-16 +1.75761380e-01j
-   -4.96322904e-17 -1.16721769e-01j]
- [  2.01843586e-01 +8.57243408e-16j   6.86502310e-16 -1.75761380e-01j
-   -4.96322904e-17 +1.16721769e-01j]]
+[[-1.91928332e-01+4.22033318e-18j -1.16080832e-18-2.65027039e-01j
+   2.34534900e-17-3.82898052e-02j]
+ [-1.91928332e-01-4.22033318e-18j -1.16080832e-18+2.65027039e-01j
+   2.34534900e-17+3.82898052e-02j]
+ [-3.20744370e-17-2.37666851e-01j  1.93782219e-01-1.28412070e-16j
+  -8.48368030e-02+2.64500969e-16j]
+ [-3.20744370e-17+2.37666851e-01j  1.93782219e-01+1.28412070e-16j
+  -8.48368030e-02-2.64500969e-16j]
+ [ 2.01843586e-01-8.57243408e-16j  6.86502310e-16+1.75761380e-01j
+  -4.96322904e-17-1.16721769e-01j]
+ [ 2.01843586e-01+8.57243408e-16j  6.86502310e-16-1.75761380e-01j
+  -4.96322904e-17+1.16721769e-01j]]
 
 </pre></div></div>
 </div>
@@ -470,9 +491,9 @@ Poisson’s ratio, <span class="math">\(\nu\)</span>, by</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 stroh.K_tensor (in GPa) -&gt;
-[[ 44.16096695   0.           0.        ]
- [  0.          44.47363325  -0.81698962]
- [  0.          -0.81698962  28.80033839]]
+[[44.16096695  0.          0.        ]
+ [ 0.         44.47363325 -0.81698962]
+ [ 0.         -0.81698962 28.80033839]]
 </pre></div></div>
 </div>
 </div>
@@ -506,7 +527,7 @@ coefficent tensor and burgers vector</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 stroh.K_coeff (in GPa) -&gt;
-44.1609669476
+44.16096694762907
 </pre></div></div>
 </div>
 </div>
@@ -537,7 +558,7 @@ Related to <span class="math">\(K\)</span> and <span class="math">\(K_{ij}\)</sp
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 stroh.preln (in eV/Å) -&gt;
-0.17988642292
+0.1798864229204888
 </pre></div></div>
 </div>
 </div>
@@ -609,12 +630,22 @@ pbc = [ True  True  True]
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 system.natoms -&gt; 864
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+c:\users\lmh1\documents\python-packages\atomman\atomman\lammps\normalize.py:60: FutureWarning: `rcond` parameter will change to the default of machine precision times ``max(M, N)`` where M and N are the input matrix dimensions.
+To use the future default and silence this warning we advise to pass `rcond=None`, to keep using the old, explicitly pass `rcond=-1`.
+  transformation = np.linalg.lstsq(vects, system.box.vects)[0].T
 </pre></div></div>
 </div>
 </div>
@@ -643,8 +674,8 @@ using <span class="math">\(\eta\)</span> coordinates defined as (based on Sectio
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 stroh.eta([1,2,3]) (in Å) -&gt;
-[[ 1.+1.44836793j  1.-1.44836793j  1.+2.45292734j  1.-2.45292734j
-   1.+2.29679109j  1.-2.29679109j]]
+[[1.+1.44836793j 1.-1.44836793j 1.+2.45292734j 1.-2.45292734j
+  1.+2.29679109j 1.-2.29679109j]]
 </pre></div></div>
 </div>
 </div>
@@ -952,15 +983,15 @@ dislocations</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 stroh.K_tensor (in GPa) -&gt;
-[[ 28.80033839   0.          -0.81698962]
- [  0.          44.16096695   0.        ]
- [ -0.81698962   0.          44.47363325]]
+[[28.80033839  0.         -0.81698962]
+ [ 0.         44.16096695  0.        ]
+ [-0.81698962  0.         44.47363325]]
 
 stroh.K_coeff (in GPa) -&gt;
-44.1609669476
+44.160966947634265
 
 stroh.preln (in eV/Å) -&gt;
-0.179886422921
+0.1798864229205099
 </pre></div></div>
 </div>
 <p>Generate an atomic system that is properly rotated as well</p>
@@ -984,12 +1015,22 @@ stroh.preln (in eV/Å) -&gt;
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 system.natoms -&gt; 864
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+c:\users\lmh1\documents\python-packages\atomman\atomman\lammps\normalize.py:60: FutureWarning: `rcond` parameter will change to the default of machine precision times ``max(M, N)`` where M and N are the input matrix dimensions.
+To use the future default and silence this warning we advise to pass `rcond=None`, to keep using the old, explicitly pass `rcond=-1`.
+  transformation = np.linalg.lstsq(vects, system.box.vects)[0].T
 </pre></div></div>
 </div>
 <p>Show that resulting displacements are the same as above, just with
@@ -1100,7 +1141,7 @@ plotting y, z coordinates instead of x, y coordinates.</p>
         <li class="right" >
           <a href="04.1._Point_defects.html" title="Introduction to atomman: Point defect generation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

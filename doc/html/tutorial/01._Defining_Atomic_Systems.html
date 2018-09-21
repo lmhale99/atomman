@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Defining Atomic Systems &#8212; atomman 1.2.1 documentation</title>
+    <title>Introduction to atomman: Defining Atomic Systems &#8212; atomman 1.2.3 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.1',
+        VERSION:     '1.2.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="00._Unit_Conversions.html" title="Introduction to atomman: Unit Conversions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -224,7 +224,6 @@ div.nboutput div.output_area.stderr {
 <p><strong>Lucas M. Hale</strong>,
 <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
 <em>Materials Science and Engineering Division, NIST</em>.</p>
-<p>Notebook last updated: 2018-05-29</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
@@ -242,6 +241,7 @@ atomistic systems using atomman.</p>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -252,6 +252,9 @@ atomistic systems using atomman.</p>
 
 <span class="c1"># Show atomman version</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -260,7 +263,8 @@ atomistic systems using atomman.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.0
+atomman version = 1.2.3
+Notebook executed on 2018-09-21
 </pre></div></div>
 </div>
 </div>
@@ -272,8 +276,8 @@ and System.</p>
 <h3>2.1. Box<a class="headerlink" href="#2.1.-Box" title="Permalink to this headline">¶</a></h3>
 <p>The Box class defines a generic parallelepiped for the system’s
 boundaries.</p>
-<p>See the <a class="reference external" href="01.1.%20Box%20Class.ipynb">01.1. Box Class Jupyter Notebook</a>
-for more detailed information and options.</p>
+<p>See the <a class="reference external" href="01.1._Box_Class.html">01.1. Box Class Jupyter Notebook</a> for
+more detailed information and options.</p>
 <div class="section" id="2.1.1.-Create-Box">
 <h4>2.1.1. Create Box<a class="headerlink" href="#2.1.1.-Create-Box" title="Permalink to this headline">¶</a></h4>
 <p>Boxes can be defined using a variety of formats. Here, we’ll define a
@@ -355,9 +359,8 @@ gamma = 90.0
 <p>The Atoms class collects per-atom properties that can be freely
 assigned. The only limitations are that the number of atoms is constant,
 and that values for the per-atom properties must be given for all atoms.</p>
-<p>See the <a class="reference external" href="01.2.%20Atoms%20Class.ipynb">01.2. Atoms Class Jupyter
-Notebook</a> for more detailed information
-and options.</p>
+<p>See the <a class="reference external" href="01.2._Atoms_Class.html">01.2. Atoms Class Jupyter Notebook</a>
+for more detailed information and options.</p>
 <div class="section" id="2.2.1.-Create-Atoms">
 <h4>2.2.1. Create Atoms<a class="headerlink" href="#2.2.1.-Create-Atoms" title="Permalink to this headline">¶</a></h4>
 <p>When initializing an Atoms object, all keyword arguments (except natoms
@@ -432,7 +435,7 @@ to 1 for all atoms.</li>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 atoms.atype -&gt; [1 1 1 1]
-atoms.pos[2] -&gt; [ 0.5  0.   0.5]
+atoms.pos[2] -&gt; [0.5 0.  0.5]
 </pre></div></div>
 </div>
 <p>The per-atom properties can also be converted into a flat
@@ -517,9 +520,9 @@ pandas.DataFrame with the df() method.</p>
 <p>The System class gives a full representation of an atomic configuration
 by combining an atoms instance, a box instance, periodic boundary
 condition settings, and a list of element symbols.</p>
-<p>See the <a class="reference external" href="01.3.%20System%20Class.ipynb">01.3. System Class Jupyter
-Notebook</a> for more detailed information
-and options.</p>
+<p>See the <a class="reference external" href="01.3._System_Class.html">01.3. System Class Jupyter
+Notebook</a> for more detailed information and
+options.</p>
 <div class="section" id="2.3.1.-Create-system">
 <h4>2.3.1. Create system<a class="headerlink" href="#2.3.1.-Create-system" title="Permalink to this headline">¶</a></h4>
 <p>A System is created by combining its components:</p>
@@ -571,9 +574,8 @@ pbc = [ True False  True]
 <h2>3. Load a System<a class="headerlink" href="#3.-Load-a-System" title="Permalink to this headline">¶</a></h2>
 <p>Systems can also be created by loading in atomic configuration
 information in an alternate format.</p>
-<p>See the <a class="reference external" href="02.%20Load%20And%20Dump.ipynb">02. Load And Dump Jupyter
-Notebook</a> for more detailed
-information on the different styles and options.</p>
+<p>See the <a class="reference external" href="02._Load_And_Dump.html">02. Load And Dump Jupyter Notebook</a>
+for more detailed information on the different styles and options.</p>
 <p>Create content in POSCAR format</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
@@ -640,9 +642,9 @@ pbc = [ True  True  True]
 <p>The System class was defined to make it easy for users to manipulate
 systems and atomic properties. Additionally, there are a few System
 class methods that assist with some common manipulations.</p>
-<p>See the <a class="reference external" href="01.3.%20System%20Class.ipynb">01.3. System Class Jupyter
-Notebook</a> for more detailed information
-and options.</p>
+<p>See the <a class="reference external" href="01.3._System_Class.html">01.3. System Class Jupyter
+Notebook</a> for more detailed information and
+options.</p>
 <div class="section" id="4.1.-System.rotate()">
 <h3>4.1. System.rotate()<a class="headerlink" href="#4.1.-System.rotate()" title="Permalink to this headline">¶</a></h3>
 <p>The rotate() method transforms the system such that the new box vectors
@@ -666,7 +668,7 @@ periodic boundaries.</p>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
@@ -688,6 +690,16 @@ pbc = [ True  True  True]
       5 |       1 |   2.864 |   2.864 |   4.050
       6 |       1 |   4.296 |   1.432 |   2.025
       7 |       1 |   4.296 |   4.296 |   2.025
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+c:\users\lmh1\documents\python-packages\atomman\atomman\lammps\normalize.py:60: FutureWarning: `rcond` parameter will change to the default of machine precision times ``max(M, N)`` where M and N are the input matrix dimensions.
+To use the future default and silence this warning we advise to pass `rcond=None`, to keep using the old, explicitly pass `rcond=-1`.
+  transformation = np.linalg.lstsq(vects, system.box.vects)[0].T
 </pre></div></div>
 </div>
 </div>
@@ -867,7 +879,7 @@ LAMMPS.</li>
         <li class="right" >
           <a href="00._Unit_Conversions.html" title="Introduction to atomman: Unit Conversions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
