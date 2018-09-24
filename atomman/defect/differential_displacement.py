@@ -84,7 +84,11 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
     show : bool, optional
         Flag for showing the figure. Default is True.
     plot_axes : matplotlib.Axes.axes object
-        Existing axes to plot on, allows control of the plot after the plotting
+        Existing axes to plot on, allows to pass existing matplotlib axes
+        have full control of the graph outside the function.
+        Makes possible to plot multiple differential displacement
+        maps using subplots.
+        Default is None, then new graph is created by plt.subplots()
 
     """
     # Transform burgers using axes
