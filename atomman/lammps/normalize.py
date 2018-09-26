@@ -57,7 +57,7 @@ def normalize(system, return_transform=False):
     system.wrap()
     
     # Update the transformation matrix
-    transformation = np.linalg.lstsq(vects, system.box.vects)[0].T
+    transformation = np.linalg.lstsq(vects, system.box.vects, rcond=None)[0].T
     test1 = np.linalg.norm(transformation, axis=1)
     
     assert np.allclose(test1, np.array([1., 1., 1.])), '%f %f %f' % tuple(test1)
