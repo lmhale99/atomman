@@ -336,7 +336,44 @@ class Atoms(object):
                     self.view[key] = deepcopy(value)
                 else:
                     self.view[key][index] = value
+
+    def prop_atype(self, key, value, atype=None):
+        """
+        Allows for per-atom properties to be assigned according to
+        Atoms.atypes.
         
+        Parameters
+        ----------
+        key : str
+            Per-atom property name.
+        value : list, any
+            Property value(s) to assign.  If atype is not given, this should be
+            an object of length Atoms.natypes. Otherwise, should be a single per-atom
+            value.
+        atype : int, optional
+            A specific atype to assign value to.
+        
+        raises
+        ------
+        ValueError
+            If length of value does not match Atoms.natypes or atype is not in
+            Atoms.atypes.
+        """
+
+        if atype is None:
+            if len(value) == self.natypes:
+                for atype, v in zip(self.atypes, value):
+                    self.prop_atype(key, v, atype=atype)
+            else:
+                raise ValueError('length of value does not match natypes')
+        else:
+            if atype in self.atypes:
+                if key not in self.prop():
+                    self.view[key] = np.zeros_like(value)
+                self.view[key][self.atype==atype] = value
+            else:
+                raise ValueError('atype not found')
+
     def df(self):
         """
         Returns a pandas.DataFrame of all atomic properties.  Multi-dimensional
