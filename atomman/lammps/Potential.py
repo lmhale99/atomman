@@ -65,10 +65,12 @@ class Potential(object):
         self.__elements = []
         self.__symbols = []
         self.__masses = []
+        self.__charges = []
         for atom in self.__dm.iteraslist('atom'):
             element = atom.get('element', None)
             symbol = atom.get('symbol', None)
             mass = atom.get('mass', None)
+            charge = float(atom.get('charge', 0.0))
             
             # Check if element is listed
             if element is None:
@@ -93,6 +95,7 @@ class Potential(object):
             self.__elements.append(element)
             self.__symbols.append(symbol)
             self.__masses.append(mass)
+            self.__charges.append(charge)
         
     
     def __str__(self):
@@ -209,7 +212,39 @@ class Potential(object):
             masses.append(self.__masses[i])
         
         return masses
+
+    def charges(self, symbols=None):
+        """
+        Returns a list of atomic charges associated with atom-model symbols.
+        Will have a None value if not assigned.
         
+        Parameters
+        ----------
+        symbols : list of str, optional
+            A list of atom-model symbols.  If None (default), will use all of
+            the potential's symbols.
+        
+        Returns
+        -------
+        list of float
+            The atomic charges corresponding to the atom-model symbols.
+        """
+        # Return all charges if symbols is None
+        if symbols is None:
+            return self.__charges
+        
+        # Convert symbols to a list if needed
+        if not isinstance(symbols, (list, tuple)):
+            symbols = [symbols]
+        
+        # Get all matching charges
+        charges = []
+        for symbol in symbols:
+            i = self.symbols.index(symbol)
+            charges.append(self.__charges[i])
+        
+        return charges
+
     def pair_info(self, symbols=None):
         """
         Generates the LAMMPS input command lines associated with the Potential
