@@ -825,6 +825,102 @@ class ElasticConstants(object):
                              [c15, c25, c35, c45, c55, c56],
                              [c16, c26, c36, c46, c56, c66]])
     
+    def normalized_as(self, crystal_system):
+        """
+        Returns a new ElasticConstants object where values of the current are
+        averaged or zeroed out according to a standard crystal system setting.
+        NOTE: no validation checks are made to evaluate whether such
+        normalizations should be done! That is left up to you (compare values
+        before and after normalization).
+        
+        Parameters
+        ----------
+        crystal_system : str
+            Indicates the crystal system representation to use when building a
+            data model.
+            
+        Returns
+        -------
+        atomman.ElasticConstants
+            The elastic constants normalized according to the crystal system
+            symmetries.
+        """
+        
+        if crystal_system == 'triclinic':
+            return ElasticConstants(Cij = self.Cij)
+        
+        else:
+            c = self.Cij
+            c_dict = {}
+            
+            if crystal_system == 'cubic':
+                c_dict['C11'] = (c[0,0] + c[1,1] + c[2,2]) / 3
+                c_dict['C12'] = (c[0,1] + c[0,2] + c[1,2]) / 3
+                c_dict['C44'] = (c[3,3] + c[4,4] + c[5,5]) / 3
+            
+            elif crystal_system == 'hexagonal':
+                c_dict['C11'] = (c[0,0] + c[1,1]) / 2
+                c_dict['C33'] = c[2,2]
+                c_dict['C12'] = (c[0,1] + (c[0,0] - 2*c[5,5])) / 2
+                c_dict['C13'] = (c[0,2] + c[1,2]) / 2
+                c_dict['C44'] = (c[3,3] + c[4,4]) / 2
+            
+            elif crystal_system == 'tetragonal':
+                c_dict['C11'] = (c[0,0] + c[1,1]) / 2
+                c_dict['C33'] = c[2,2]
+                c_dict['C12'] = c[0,1]
+                c_dict['C13'] = (c[0,2] + c[1,2]) / 2
+                c_dict['C16'] = (c[0,5] - c[1,5]) / 2
+                c_dict['C44'] = (c[3,3] + c[4,4]) / 2
+                c_dict['C66'] = c[5,5]
+            
+            elif crystal_system == 'rhombohedral':
+                c_dict['C11'] = (c[0,0] + c[1,1]) / 2
+                c_dict['C33'] = c[2,2]
+                c_dict['C12'] = (c[0,1] + (c[0,0] - 2*c[5,5])) / 2
+                c_dict['C13'] = (c[0,2] + c[1,2]) / 2
+                c_dict['C14'] = (c[0,3] - c[1,3]) / 2
+                c_dict['C15'] = (c[0,4] - c[1,4] - c[3,5]) / 3
+                c_dict['C44'] = (c[3,3] + c[4,4]) / 2
+            
+            elif crystal_system == 'orthorhombic':
+                c_dict['C11'] = c[0,0]
+                c_dict['C22'] = c[1,1]
+                c_dict['C33'] = c[2,2]
+                c_dict['C12'] = c[0,1]
+                c_dict['C13'] = c[0,2]
+                c_dict['C23'] = c[1,2]
+                c_dict['C44'] = c[3,3]
+                c_dict['C55'] = c[4,4]
+                c_dict['C66'] = c[5,5]
+            else:
+                raise ValueError('Invalid crystal_system: ' + crystal_system)
+            
+            return ElasticConstants(**c_dict)
+    
+    def is_normal(self, crystal_system, atol=1e-4, rtol=1e-4):
+        """
+        Checks if current elastic constants agree with values normalized to
+        a specified crystal family (within tolerances).
+        
+        Parameters
+        ----------
+        crystal_system : str
+            Indicates the crystal system representation to use when building a
+            data model.
+        atol : float, optional
+            Absolute tolerance to use.  Default value is 1e-4.
+        rtol : float, optional
+            Relative tolerance to use.  Default value is 1e-4.
+        
+        Returns
+        -------
+        bool
+            True if all Cij match within the tolerances, false otherwise.
+        """
+        return np.allclose(self.Cij, self.normalized_as(crystal_system).Cij,
+                           atol=atol, rtol=rtol)
+    
     def model(self, model=None, unit=None, crystal_system='triclinic'):
         """
         Return or set DataModelDict representation of the elastic constants.
@@ -838,8 +934,8 @@ class ElasticConstants(object):
             Units or pressure to save values in when building a data model.
             Default value is None (no conversion).
         crystal_system : str, optional
-            Indicates the crystal system representation to use when building a
-            data model. Default value is 'triclinic' (save all values in Cij).
+            Indicates the crystal system representation to normalize by.
+            Default value is 'triclinic', i.e. no normalization.
         
         Returns
         -------
@@ -854,96 +950,24 @@ class ElasticConstants(object):
             model = DM(model).find('elastic-constants')
             
             # Read in values
-            c_dict = {}
-            for C in model['C']:
-                key = 'C' + C['ij'][0] + C['ij'][2]
-                c_dict[key] = uc.value_unit(C['stiffness'])
-            self.Cij = ElasticConstants(**c_dict).Cij 
+            try:
+                # New format
+                self.Cij = uc.value_unit(model['Cij'])
+            except:
+                # Old format
+                c_dict = {}
+                for C in model['C']:
+                    key = 'C' + C['ij'][0] + C['ij'][2]
+                    c_dict[key] = uc.value_unit(C['stiffness'])
+                self.Cij = ElasticConstants(**c_dict).Cij 
         
         # Return DataModelDict if model not given
         else:
-            
-            # Start creating data model
+            normCij = self.normalized_as(crystal_system).Cij
             model = DM()
             model['elastic-constants'] = DM()
-            model['elastic-constants']['C'] = C = []
+            model['elastic-constants']['Cij'] = uc.model(normCij, unit)
             
-            # Get values in the specified unit
-            c = self.Cij
-            c_dict = DM()
-            
-            if crystal_system == 'cubic':
-                c_dict['1 1'] = (c[0,0] + c[1,1] + c[2,2]) / 3
-                c_dict['1 2'] = (c[0,1] + c[0,2] + c[1,2]) / 3
-                c_dict['4 4'] = (c[3,3] + c[4,4] + c[5,5]) / 3
-            
-            elif crystal_system == 'hexagonal':
-                c_dict['1 1'] = (c[0,0] + c[1,1]) / 2
-                c_dict['3 3'] = c[2,2]
-                c_dict['1 2'] = (c[0,1] + (c[0,0] - 2*c[5,5])) / 2
-                c_dict['1 3'] = (c[0,2] + c[1,2]) / 2
-                c_dict['4 4'] = (c[3,3] + c[4,4]) / 2
-            
-            elif crystal_system == 'tetragonal':
-                c_dict['1 1'] = (c[0,0] + c[1,1]) / 2
-                c_dict['3 3'] = c[2,2]
-                c_dict['1 2'] = c[0,1]
-                c_dict['1 3'] = (c[0,2] + c[1,2]) / 2
-                c_dict['1 6'] = (c[0,5] - c[1,5]) / 2
-                c_dict['4 4'] = (c[3,3] + c[4,4]) / 2
-                c_dict['6 6'] = c[5,5]
-            
-            elif crystal_system == 'rhombohedral':
-                c_dict['1 1'] = (c[0,0] + c[1,1]) / 2
-                c_dict['3 3'] = c[2,2]
-                c_dict['1 2'] = (c[0,1] + (c[0,0] - 2*c[5,5])) / 2
-                c_dict['1 3'] = (c[0,2] + c[1,2]) / 2
-                c_dict['1 4'] = (c[0,3] - c[1,3]) / 2
-                c_dict['1 5'] = (c[0,4] - c[1,4] - c[3,5]) / 3
-                c_dict['4 4'] = (c[3,3] + c[4,4]) / 2
-            
-            elif crystal_system == 'orthorhombic':
-                c_dict['1 1'] = c[0,0]
-                c_dict['2 2'] = c[1,1]
-                c_dict['3 3'] = c[2,2]
-                c_dict['1 2'] = c[0,1]
-                c_dict['1 3'] = c[0,2]
-                c_dict['2 3'] = c[1,2]
-                c_dict['4 4'] = c[3,3]
-                c_dict['5 5'] = c[4,4]
-                c_dict['6 6'] = c[5,5]
-            
-            elif crystal_system == 'triclinic':
-                c_dict['1 1'] = c[0,0]
-                c_dict['1 2'] = c[0,1]
-                c_dict['1 3'] = c[0,2]
-                c_dict['1 4'] = c[0,3]
-                c_dict['1 5'] = c[0,4]
-                c_dict['1 6'] = c[0,5]
-                c_dict['2 2'] = c[1,1]
-                c_dict['2 3'] = c[1,2]
-                c_dict['2 4'] = c[1,3]
-                c_dict['2 5'] = c[1,4]
-                c_dict['2 6'] = c[1,5]
-                c_dict['3 3'] = c[2,2]
-                c_dict['3 4'] = c[2,3]
-                c_dict['3 5'] = c[2,4]
-                c_dict['3 6'] = c[2,5]
-                c_dict['4 4'] = c[3,3]
-                c_dict['4 5'] = c[3,4]
-                c_dict['4 6'] = c[3,5]
-                c_dict['5 5'] = c[4,4]
-                c_dict['5 6'] = c[4,5]
-                c_dict['6 6'] = c[5,5]
-            
-            else:
-                raise ValueError('Invalid crystal_system: ' + crystal_system)
-            
-            for ij, value in iteritems(c_dict):
-                cij = DM()
-                cij['stiffness'] = uc.model(value, unit)
-                cij['ij'] = ij
-                C.append(cij)
             return model
     
     def bulk(self, style='Hill'):
