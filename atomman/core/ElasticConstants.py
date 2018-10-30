@@ -853,7 +853,11 @@ class ElasticConstants(object):
             c = self.Cij
             c_dict = {}
             
-            if crystal_system == 'cubic':
+            if crystal_system == 'isotropic':
+                c_dict['mu'] = self.shear()
+                c_dict['K'] = self.bulk()
+            
+            elif crystal_system == 'cubic':
                 c_dict['C11'] = (c[0,0] + c[1,1] + c[2,2]) / 3
                 c_dict['C12'] = (c[0,1] + c[0,2] + c[1,2]) / 3
                 c_dict['C44'] = (c[3,3] + c[4,4] + c[5,5]) / 3
