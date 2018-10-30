@@ -8,43 +8,15 @@ from copy import deepcopy
 import numpy as np
 
 # atomman imports
+from . import VolterraDislocation
 from ..tools import axes_check
 
-class Stroh(object):
+class Stroh(VolterraDislocation):
     """
     Class for solving the Eshelby anisotropic solution for a straight
     dislocation or crack using the Stroh method.
     """
     
-    def __init__(self, C, burgers, axes=None, m=[1,0,0], n=[0,1,0], tol=1e-8):
-        """
-        Initialize an instance of the Stroh class and computes the Stroh
-        solution.
-        
-        Parameters
-        ----------
-        C : atomman.ElasticConstants
-            The medium's elastic constants.
-        burgers : array-like object
-            The dislocation's Cartesian Burgers vector.
-        axes : array-like object, optional
-            3x3 set of rotational axes for the system. If given, C and burgers
-            will be transformed using axes.
-        m : array-like object, optional
-            The m unit vector for the solution.  m, n, and u (dislocation
-            line) should be right-hand orthogonal.  Default value is [1,0,0]
-            (x-axis).
-        n : array-like object, optional
-            The n unit vector for the solution.  m, n, and u (dislocation
-            line) should be right-hand orthogonal.  Default value is [0,1,0]
-            (y-axis).
-        tol : float
-            Tolerance parameter used to round off near-zero values.  Default
-            value is 1e-8.
-        """
-        
-        self.solve(C, burgers, axes=axes, m=m, n=n, tol=tol)
-
     def solve(self, C, burgers, axes=None, m=[1,0,0], n=[0,1,0], tol=1e-8):
         """
         Computes the Stroh solution.
@@ -70,25 +42,16 @@ class Stroh(object):
             Tolerance parameter used to round off near-zero values.  Default
             value is 1e-8.
         """
-        # Convert burgers, m, n to numpy arrays if needed
-        burgers = np.asarray(burgers, dtype='float64')
-        m = np.asarray(m, dtype='float64')
-        n = np.asarray(n, dtype='float64')
-        
-        # Transform burgers and C
-        if axes is not None:
-            T = axes_check(axes)
-            burgers = T.dot(burgers)
-            C = C.transform(axes)
-        
+        VolterraDislocation.solve(self, C, burgers, axes=axes, m=m, n=n, tol=tol)
+
         # Pull out full 3x3x3x3 elastic constants matrix
-        Cijkl = C.Cijkl
+        Cijkl = self.C.Cijkl
         
         # Matrices of Cijkl constants used to construct N
-        mm = np.einsum('i,ijkl,l', m, Cijkl, m)
-        mn = np.einsum('i,ijkl,l', m, Cijkl, n)
-        nm = np.einsum('i,ijkl,l', n, Cijkl, m)
-        nn = np.einsum('i,ijkl,l', n, Cijkl, n)
+        mm = np.einsum('i,ijkl,l', self.m, Cijkl, self.m)
+        mn = np.einsum('i,ijkl,l', self.m, Cijkl, self.n)
+        nm = np.einsum('i,ijkl,l', self.n, Cijkl, self.m)
+        nn = np.einsum('i,ijkl,l', self.n, Cijkl, self.n)
         
         # The four 3x3 matrices that represent the quadrants of N
         NB = -np.linalg.inv(nn)
@@ -123,15 +86,11 @@ class Stroh(object):
             raise ValueError('Stroh checks failed!')
         
         # Assign property values
-        self.__burgers = burgers
         self.__Cijkl = Cijkl
-        self.__tol = tol
         self.__p = p
         self.__A = A
         self.__L = L
         self.__k = k
-        self.__m = m
-        self.__n = n
     
     @property
     def p(self):
@@ -158,8 +117,8 @@ class Stroh(object):
         """float : The energy coefficient"""
         
         # K = b_i K_ij b_j / (b_k b_k)
-        return (self.__burgers.dot(self.K_tensor.dot(self.__burgers)) 
-                / self.__burgers.dot(self.__burgers))
+        return (self.burgers.dot(self.K_tensor.dot(self.burgers))
+                / self.burgers.dot(self.burgers))
     
     @property
     def K_tensor(self):
@@ -175,25 +134,16 @@ class Stroh(object):
         K = ii * np.einsum('s,s,si,sj->ij', updn, self.k, self.L, self.L)
         
         # Round away near-zero terms
-        K = np.real_if_close(K, tol=self.__tol)
-        K[np.isclose(K / K.max(), 0.0, atol=self.__tol)] = 0.0
+        K = np.real_if_close(K, tol=self.tol)
+        K[np.isclose(K / K.max(), 0.0, atol=self.tol)] = 0.0
         
         return K
     
     @property
     def preln(self):
         """float : The pre-ln strain energy factor"""
-        
         # a = b_i K_ij b_j / (4 π)
-        return self.__burgers.dot(self.K_tensor.dot(self.__burgers)) / (4 * np.pi)
-    
-    @property
-    def m(self):
-        return self.__m
-        
-    @property
-    def n(self):
-        return self.__n
+        return self.burgers.dot(self.K_tensor.dot(self.burgers)) / (4 * np.pi)
     
     def displacement(self, pos):
         """
@@ -223,11 +173,11 @@ class Stroh(object):
         # Compute the displacements
         disp = 1 / (2 * np.pi * ii) * np.einsum('a,a,ai,a,na->ni',
                                                 updn, self.k, self.A,
-                                                self.L.dot(self.__burgers),
+                                                self.L.dot(self.burgers),
                                                 np.log(eta))
         
         # Round away near-zero terms
-        disp = np.real_if_close(disp, tol=self.__tol)
+        disp = np.real_if_close(disp, tol=self.tol)
         
         # Reduce single-value solutions
         if np.asarray(pos).ndim == 1:
@@ -261,17 +211,17 @@ class Stroh(object):
         eta = self.eta(pos)
         
         # Compute mpn factor
-        mpn = self.__m + np.outer(self.p, self.__n)
+        mpn = self.m + np.outer(self.p, self.n)
         
         # Compute the stresses
         stress = 1 / (2 * np.pi * ii) * np.einsum('a,a,ijkl,al,ak,a,na->nij',
-                                                  updn, self.k, self.__Cijkl,
+                                                  updn, self.k, self.C.Cijkl,
                                                   mpn, self.A,
-                                                  self.L.dot(self.__burgers),
+                                                  self.L.dot(self.burgers),
                                                   1/eta)
         
         # Round away near-zero terms
-        stress = np.real_if_close(stress, tol=self.__tol)
+        stress = np.real_if_close(stress, tol=self.tol)
         
         if np.asarray(pos).ndim == 1:
             return stress[0]
@@ -296,7 +246,7 @@ class Stroh(object):
             The computed eta factor at all given points.
         """
         
-        x = np.dot(pos, self.__m)
-        y = np.dot(pos, self.__n)
+        x = np.dot(pos, self.m)
+        y = np.dot(pos, self.n)
         
         return (x + np.outer(self.p, y)).T
