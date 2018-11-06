@@ -3500,6 +3500,8 @@ def atomic_symbol(number):
     int
         The corresponding atomic symbol.
     """
+    if number <= 0:
+        raise IndexError('Zero/negative atomic numbers not allowed')
     return atomic_symbols[number-1]
 
 def atomic_mass(term):
