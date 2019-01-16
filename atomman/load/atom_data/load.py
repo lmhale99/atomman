@@ -96,7 +96,7 @@ def load(data, pbc=(True, True, True), symbols=None, atom_style='atomic', units=
                 
                 # Identify starting line number for Velocity data
                 elif len(terms) == 1 and terms[0] == 'Velocities' \
-                    or len(terms) == 1 and terms[0] == 'Velocities' and terms[1][0] == '#':
+                    or len(terms) >= 1 and terms[0] == 'Velocities' and terms[1][0] == '#':
                     velocitiesstart = i + 1
     
     # Create system
