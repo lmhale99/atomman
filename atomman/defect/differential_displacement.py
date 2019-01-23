@@ -172,7 +172,7 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
             ax1.add_patch(mpatches.Circle(pos_1[i, :2], atom_circle_radius, fc=color, ec='k'))
         else : 
             # Plot a circle for atom i in system 0
-            color = cm.hsv((pos_0[i, 2] - zlim[0]) / (zlim[1] - zlim[0]))
+            color = cm.binary((pos_0[i, 2] - zlim[0]) / (zlim[1] - zlim[0]))
             ax1.add_patch(mpatches.Circle(pos_0[i, :2], atom_circle_radius, fc=color, ec='k'))
 
         # Compute distance vectors between atom i and its neighbors for both systems
