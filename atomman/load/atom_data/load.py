@@ -61,42 +61,42 @@ def load(data, pbc=(True, True, True), symbols=None, atom_style='atomic', units=
                 
                 # Read number of atoms 
                 if len(terms) == 2 and terms[1] == 'atoms' \
-                    or len(terms) >= 2 and terms[1] == 'atoms' and terms[2][0] == '#':
+                    or len(terms) > 2 and terms[1] == 'atoms' and terms[2][0] == '#':
                     natoms = int(terms[0])
                 
                 # Read number of atom types
                 elif len(terms) == 3 and terms[1] == 'atom' and terms[2] == 'types' \
-                    or len(terms) >= 3 and terms[1] == 'atom' and terms[2] == 'types' and terms[3][0] == '#': 
+                    or len(terms) > 3 and terms[1] == 'atom' and terms[2] == 'types' and terms[3][0] == '#': 
                     #natypes = int(terms[0])
                     pass
                 
                 # Read boundary info
                 elif len(terms) == 4 and terms[2] == 'xlo' and terms[3] == 'xhi' \
-                    or len(terms) >= 4 and terms[2] == 'xlo' and terms[3] == 'xhi' and terms[4][0] == '#':
+                    or len(terms) > 4 and terms[2] == 'xlo' and terms[3] == 'xhi' and terms[4][0] == '#':
                     xlo = uc.set_in_units(float(terms[0]), units_dict['length'])
                     xhi = uc.set_in_units(float(terms[1]), units_dict['length'])
                 elif len(terms) == 4 and terms[2] == 'ylo' and terms[3] == 'yhi' \
-                    or len(terms) >= 4 and terms[2] == 'ylo' and terms[3] == 'yhi' and terms[4][0] == '#':
+                    or len(terms) > 4 and terms[2] == 'ylo' and terms[3] == 'yhi' and terms[4][0] == '#':
                     ylo = uc.set_in_units(float(terms[0]), units_dict['length'])
                     yhi = uc.set_in_units(float(terms[1]), units_dict['length'])
                 elif len(terms) == 4 and terms[2] == 'zlo' and terms[3] == 'zhi' \
-                    or len(terms) >= 4 and terms[2] == 'zlo' and terms[3] == 'zhi' and terms[4][0] == '#':
+                    or len(terms) > 4 and terms[2] == 'zlo' and terms[3] == 'zhi' and terms[4][0] == '#':
                     zlo = uc.set_in_units(float(terms[0]), units_dict['length'])
                     zhi = uc.set_in_units(float(terms[1]), units_dict['length'])
                 elif len(terms) == 6 and terms[3] == 'xy' and terms[4] == 'xz' and terms[5] == 'yz' \
-                    or len(terms)>= 6 and terms[3] == 'xy' and terms[4] == 'xz' and terms[5] == 'yz' and terms[6][0] == '#':
+                    or len(terms) > 6 and terms[3] == 'xy' and terms[4] == 'xz' and terms[5] == 'yz' and terms[6][0] == '#':
                     xy = uc.set_in_units(float(terms[0]), units_dict['length'])
                     xz = uc.set_in_units(float(terms[1]), units_dict['length'])
                     yz = uc.set_in_units(float(terms[2]), units_dict['length'])
                 
                 # Identify starting line number for Atoms data
                 elif len(terms) == 1 and terms[0] == 'Atoms' \
-                    or len(terms) >= 1 and terms[0] == 'Atoms' and terms[1][0] == '#':
+                    or len(terms) > 1 and terms[0] == 'Atoms' and terms[1][0] == '#':
                     atomsstart = i + 1
                 
                 # Identify starting line number for Velocity data
                 elif len(terms) == 1 and terms[0] == 'Velocities' \
-                    or len(terms) == 1 and terms[0] == 'Velocities' and terms[1][0] == '#':
+                    or len(terms) > 1 and terms[0] == 'Velocities' and terms[1][0] == '#':
                     velocitiesstart = i + 1
     
     # Create system
