@@ -16,7 +16,7 @@ from ...tools import uber_open_rmode
 
 def load(table, box, symbols=None, system=None, prop_name=None, table_name=None,
          shape=None, unit=None, dtype=None, prop_info=None, skiprows=None,
-         nrows=None):
+         nrows=None, comment=None):
     """
     Reads in tabular data into atomic properties.
     
@@ -55,10 +55,14 @@ def load(table, box, symbols=None, system=None, prop_name=None, table_name=None,
         dictionary in the list corresponds to a single atoms property.  Each
         dictionary must have a 'prop_name' field, and can optionally have
         'table_name', 'shape', 'unit', and 'dtype' fields.
-    skiprows : int
+    skiprows : int, optional
         Number of rows to skip before reading the data.
-    nrows : int
+    nrows : int, optional
         Number of rows of data to read.
+    comment : str, optional
+        Specifies a character which indicates all text on a given line after
+        is to be considered to be a comment and ignored by parser. This is
+        often '#'.
         
     Returns
     -------
@@ -76,7 +80,8 @@ def load(table, box, symbols=None, system=None, prop_name=None, table_name=None,
     
     # Read in table to dataframe
     with uber_open_rmode(table) as f:
-        df = pd.read_csv(f, delim_whitespace=True, names=table_name, skiprows=skiprows, nrows=nrows)
+        df = pd.read_csv(f, delim_whitespace=True, names=table_name, skiprows=skiprows,
+                         nrows=nrows, comment=comment)
     if 'id' in df:
         df = df.sort_values('id')
     
