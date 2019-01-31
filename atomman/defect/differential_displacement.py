@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib import cm
-from ipdb import set_trace as st
+
 # atomman imports
 from ..tools import axes_check
 from .. import NeighborList
@@ -19,8 +19,8 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
                               plotyaxis='y', xlim=None, ylim=None, zlim=None,
                               neighbors=None, cutoff=None,
                               component='standard', axes=None,
-                              plot_scale=1, save_file=None, show=True,
-                              display_atype2=False, display_system1_atoms=False):
+                              plot_scale=1, atom_color=None, atom_cmap=None,
+                              display_final_pos=False, return_data=False):
     """
     Generates a differential displacement plot for characterizing dislocations.
     
@@ -73,22 +73,42 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
         direction.  'xy' plots the differential displacements within the xy
         plotting plane.  This is useful for screw dislocations with localized
         non-screw components.
-    axes : arraly-like object, optional
+    axes : array-like object, optional
         3x3 transformation array to apply to the Burgers vector to make it
         correspond to the system's orientation.
     plot_scale : float, optional
         Scalar for multiplying the magnitude of the differential displacement
         arrows.  Default value is 1 (no scaling).
-    save_file : str, optional
-        If given then the plot will be saved to a file with this name.
-    show : bool, optional
-        Flag for showing the figure. Default is True.
-    display_atype2 : bool, optional
-        Flag for showing solute elements, eg C in a Fe dislocation core. Default is False.
-    display_system1_atoms : bool, optional
-        Flag for draw the circles at the final position of the atoms, instead of the perfect
-        crystal atoms positions. Default is False.
-    
+    atom_color : str or list, optional
+        Matplotlib color name(s) to use to display the atoms.  If str, that
+        color will be assigned to all atypes.  If list, must give a color value
+        or None for each atype.  Default value (None) will use cmap instead.
+        Note: atom_color and atom_cmap can be used together as long as exactly
+        one color or cmap is given for each unique atype.
+    atom_cmap : str or list, optional
+        Matplotlib colormap name(s) to use to display the atoms.  Atoms will
+        be colored based on their initial positions and scaled using zlim. If
+        str, that cmap will be assigned to all atypes.  If list, must give a 
+        cmap value or None for each atype.  Default value (None) will use 'hsv'
+        cmap.  Note: atom_color and atom_cmap can be used together as long as
+        exactly one color or cmap is given for each unique atype.
+    display_final_pos : bool, optional
+        Flag to display positions of atoms and arrows relative to final
+        configuration (system_1) rather than initial configuration (system_0).
+        Note that this does not affect the atom's cmap color as the initial
+        plotzaxis is always used.
+    return_data : bool, optional
+        If True, will return a dict containing the differential displacement
+        vectors and vector positions.  Default is False.  Note: returned values
+        are oriented relative to the plotting axes.
+
+    Returns
+    -------
+    matplotlib.figure
+        The generated figure
+    dict
+        Contains differential displacement vectors and arrow plotting information.
+        Returned if return_data is True.
     """
     # Transform burgers using axes
     if axes is not None:
@@ -129,6 +149,14 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
     pos_0 = np.inner(system_0.atoms.pos, T)
     pos_1 = np.inner(system_1.atoms.pos, T)
     
+    #  Select initial or final reference configurations
+    if display_final_pos:
+        pos_ref = pos_1
+        system_ref = system_1
+    else:
+        pos_ref = pos_0
+        system_ref = system_0
+
     # Transform burgers using plot axes and separate magnitude and direction
     burgers = T.dot(burgers)
     burgers_mag = np.linalg.norm(burgers)
@@ -136,17 +164,17 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
     
     # Set plot limits
     if xlim is None:
-        xlim = (pos_0[:, 0].min(), pos_0[:, 0].max())
+        xlim = (pos_ref[:, 0].min(), pos_ref[:, 0].max())
     if ylim is None:
-        ylim = (pos_0[:, 1].min(), pos_0[:, 1].max())
+        ylim = (pos_ref[:, 1].min(), pos_ref[:, 1].max())
     if zlim is None:
         zlim = (pos_0[:, 2].min(), pos_0[:, 2].max())
     
     # Identify only atoms in xlim, ylim, zlim
-    in_bounds = ((pos_0[:,0] > xlim[0] - 5.) &
-                 (pos_0[:,0] < xlim[1] + 5.) &
-                 (pos_0[:,1] > ylim[0] - 5.) &
-                 (pos_0[:,1] < ylim[1] + 5.) &
+    in_bounds = ((pos_ref[:,0] > xlim[0] - 5.) &
+                 (pos_ref[:,0] < xlim[1] + 5.) &
+                 (pos_ref[:,1] > ylim[0] - 5.) &
+                 (pos_ref[:,1] < ylim[1] + 5.) &
                  (pos_0[:,2] > zlim[0]) &
                  (pos_0[:,2] < zlim[1]))
 
@@ -156,24 +184,55 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
     atom_circle_radius = burgers_mag / 10
     arrow_width_scale = 1. / 200.
     
-    if display_atype2 :
-        # Display atoms of atype2 (e.g. solutes), in final position
-        df = system_1.atoms.df()[system_1.atoms.df()["atype"]==2]
-        pos_C = np.array([df["pos[0]"].values, df["pos[1]"].values, df["pos[2]"].values ])
-        for atom_x, atom_y, atom_z in pos_C.T:
-            ax1.add_patch(mpatches.Circle((atom_x, atom_y, atom_z), atom_circle_radius, fc="red", ec='k'))
+    # Set default atom_cmap
+    if atom_color is None and atom_cmap is None:
+        atom_cmap = 'hsv'
+    
+    # Transform single color/cmap values to lists
+    if isinstance(atom_cmap, str):
+        if atom_color is not None:
+            raise TypeError('atom_cmap and atom_color cannot be str if both are given')
+        atom_cmap = [atom_cmap for i in range(system_ref.natypes)]
+        atom_color = [None for i in range(system_ref.natypes)]
+    elif isinstance(atom_color, str):
+        if atom_cmap is not None:
+            raise TypeError('atom_cmap and atom_color cannot be str if both are given')
+        atom_color = [atom_color for i in range(system_ref.natypes)]
+        atom_cmap = [None for i in range(system_ref.natypes)]
+    else:
+        atom_color = list(atom_color)
+        atom_cmap = list(atom_cmap)
+    
+    # Check atom_color, atom_cmap list compatibility
+    if len(atom_cmap) != system_ref.natypes:
+        raise ValueError('Invalid number of atom_cmap values')
+    if len(atom_color) != system_ref.natypes:
+        raise ValueError('Invalid number of atom_color values')
+    for ic in range(len(atom_cmap)):
+        if atom_cmap[ic] is not None:
+            if atom_color[ic] is not None:
+                raise ValueError('atom_cmap and atom_color cannot both be given for same atype')
+            atom_cmap[ic] = cm.get_cmap(atom_cmap[ic])
+
+    data = {}
+    data['centers'] = []
+    data['vectors'] = []
 
     # Loop over all atoms i in plot range
-    for i in np.arange(system_0.natoms)[in_bounds]:
+    for i in np.arange(system_ref.natoms)[in_bounds]:
         
-        if display_system1_atoms:
-            # Plot a circle for atom i in system 1
-            color = cm.hsv((pos_1[i, 2] - zlim[0]) / (zlim[1] - zlim[0]))
-            ax1.add_patch(mpatches.Circle(pos_1[i, :2], atom_circle_radius, fc=color, ec='k'))
-        else : 
-            # Plot a circle for atom i in system 0
-            color = cm.binary((pos_0[i, 2] - zlim[0]) / (zlim[1] - zlim[0]))
-            ax1.add_patch(mpatches.Circle(pos_0[i, :2], atom_circle_radius, fc=color, ec='k'))
+        atype = system_ref.atoms.atype[i]
+        atype_index = system_ref.atypes.index(atype)
+        
+        # Plot a circle for atom i
+        if atom_cmap[atype_index] is not None:
+            color = atom_cmap[atype_index]((pos_0[i, 2] - zlim[0]) / (zlim[1] - zlim[0]))
+        elif atom_color[atype_index] is not None:
+            color = atom_color[atype_index]
+        else:
+            color = None
+        if color is not None:
+            ax1.add_patch(mpatches.Circle(pos_ref[i, :2], atom_circle_radius, fc=color, ec='k'))
 
         # Compute distance vectors between atom i and its neighbors for both systems
         dvectors_0 = np.inner(system_0.dvect(int(i), neighbors[i]), T)
@@ -182,11 +241,16 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
         # Compute differential displacement vectors
         dd_vectors = dvectors_1 - dvectors_0
         
-        if display_system1_atoms:
+        if display_final_pos:
             # Compute center point positions for the vectors
             arrow_centers = pos_1[i] + dvectors_1 / 2
         else :
             arrow_centers = pos_0[i] + dvectors_0 / 2
+        
+        if return_data:
+            data['vectors'].append(dd_vectors)
+            data['centers'].append(arrow_centers)
+
         # Plot standard differential displacement component
         if component == 'standard':
             # Compute unit distance vectors
@@ -200,7 +264,7 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
             # Scale arrow lengths and vectors
             arrow_lengths = uvectors_0 * dd_components[:,np.newaxis] * plot_scale
             arrow_widths = arrow_width_scale * dd_components * plot_scale
-        
+            
             # Plot the arrows
             for center, length, width in zip(arrow_centers, arrow_lengths,
                                              arrow_widths):
@@ -224,8 +288,9 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
                     ax1.quiver(center[0], center[1], length[0], length[1], width=width,
                                pivot='middle', angles='xy', scale_units='xy', scale=1)
     
-    if save_file is not None:
-        plt.savefig(save_file, dpi=800)
-    if show == False:
-        plt.close(fig)
-    plt.show()
+    if return_data:
+        data['centers'] = np.concatenate(data['centers'])
+        data['vectors'] = np.concatenate(data['vectors'])
+        return fig, data
+    else:
+        return fig
