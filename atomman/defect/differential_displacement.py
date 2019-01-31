@@ -254,7 +254,10 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
         # Plot standard differential displacement component
         if component == 'standard':
             # Compute unit distance vectors
-            uvectors_0 = dvectors_0 / np.linalg.norm(dvectors_0, axis=1)[:,np.newaxis]
+            if display_final_pos:
+                uvectors = dvectors_1 / np.linalg.norm(dvectors_1, axis=1)[:,np.newaxis]
+            else:
+                uvectors = dvectors_0 / np.linalg.norm(dvectors_0, axis=1)[:,np.newaxis]
             
             # Compute component of the dd_vector parallel to the burgers vector
             dd_components = dd_vectors.dot(burgers_uvect)
@@ -262,7 +265,7 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
             dd_components[dd_components < -burgers_mag / 2] += burgers_mag
             
             # Scale arrow lengths and vectors
-            arrow_lengths = uvectors_0 * dd_components[:,np.newaxis] * plot_scale
+            arrow_lengths = uvectors * dd_components[:,np.newaxis] * plot_scale
             arrow_widths = arrow_width_scale * dd_components * plot_scale
             
             # Plot the arrows
