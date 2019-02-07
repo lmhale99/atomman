@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Dislocation analysis tools &#8212; atomman 1.2.3 documentation</title>
+    <title>Introduction to atomman: Dislocation analysis tools &#8212; atomman 1.2.4 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.3',
+        VERSION:     '1.2.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="04.2._Stroh_class.html" title="Introduction to atomman: Stroh class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -266,8 +266,8 @@ for finding and characterizing dislocations.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.3
-Notebook executed on 2018-09-21
+atomman version = 1.2.4
+Notebook executed on 2019-02-06
 </pre></div></div>
 </div>
 </div>
@@ -288,7 +288,7 @@ reference system in order to identify the defects in the final systems.
 The system constructed in step #2 serves this purpose.</p>
 <p><strong>Note #2</strong>: The final defect systems presented here are for
 demonstration purposes only as no atomic relaxations are performed.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [2]:
 </pre></div>
@@ -332,16 +332,6 @@ demonstration purposes only as no atomic relaxations are performed.</p>
 <span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-c:\users\lmh1\documents\python-packages\atomman\atomman\lammps\normalize.py:60: FutureWarning: `rcond` parameter will change to the default of machine precision times ``max(M, N)`` where M and N are the input matrix dimensions.
-To use the future default and silence this warning we advise to pass `rcond=None`, to keep using the old, explicitly pass `rcond=-1`.
-  transformation = np.linalg.lstsq(vects, system.box.vects)[0].T
-</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
@@ -461,7 +451,7 @@ given, or system_0 have a neighbors attribute.</li>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-burgers ≈ 2.864338399262064 Å
+burgers ≈ 2.864338399262307 Å
 </pre></div></div>
 </div>
 </div>
@@ -1015,7 +1005,7 @@ atomic relaxations.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Integration summation estimate of Burgers vector = [2.986842, 0.005223, -0.000769]
+Integration summation estimate of Burgers vector = [3.007814, 0.003353, -0.000538]
 </pre></div></div>
 </div>
 </div>
@@ -1103,9 +1093,34 @@ orientation.</li>
 <li><strong>plot_scale</strong> (<em>float, optional</em>) Scalar for multiplying the
 magnitude of the differential displacement arrows. Default value is 1
 (no scaling).</li>
-<li><strong>save_file</strong> (<em>str, optional</em>) If given then the plot will be saved
-to a file with this name.</li>
-<li><strong>show</strong> (*Boolean flag for showing the figure. Default is True.</li>
+<li><strong>atom_color</strong> (<em>str or list, optional</em>) Matplotlib color name(s) to
+use to display the atoms. If str, that color will be assigned to all
+atypes. If list, must give a color value or None for each atype.
+Default value (None) will use cmap instead. Note: atom_color and
+atom_cmap can be used together as long as exactly one color or cmap
+is given for each unique atype.</li>
+<li><strong>atom_cmap</strong> (<em>str or list, optional</em>) Matplotlib colormap name(s)
+to use to display the atoms. Atoms will be colored based on their
+initial positions and scaled using zlim. If str, that cmap will be
+assigned to all atypes. If list, must give a cmap value or None for
+each atype. Default value (None) will use ‘hsv’ cmap. Note:
+atom_color and atom_cmap can be used together as long as exactly
+one color or cmap is given for each unique atype.</li>
+<li><strong>display_final_pos</strong> (<em>bool, optional</em>) Flag to display positions
+of atoms and arrows relative to final configuration (system_1)
+rather than initial configuration (system_0). Note that this does
+not affect the atom’s cmap color as the initial plotzaxis is always
+used.</li>
+<li><strong>return_data</strong> (<em>bool, optional</em>) If True, will return a dict
+containing the differential displacement vectors and vector
+positions. Default is False. Note: returned values are oriented
+relative to the plotting axes.</li>
+</ul>
+<p>Returns</p>
+<ul class="simple">
+<li><strong>fig</strong> (<em>matplotlib.figure</em>) The generated figure.</li>
+<li><strong>data</strong> (<em>dict</em>) Contains differential displacement vectors and
+arrow plotting information. Returned if return_data is True.</li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
@@ -1122,8 +1137,9 @@ to a file with this name.</li>
 
 <span class="c1"># zlim should encompass a single periodic z section</span>
 <span class="n">zlim</span><span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">alat</span> <span class="o">*</span> <span class="mi">6</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">)</span>
-<span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">differential_displacement</span><span class="p">(</span><span class="n">fcc_system</span><span class="p">,</span> <span class="n">fcc_disl_system</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span><span class="n">zaxis</span><span class="p">],</span>
-                                    <span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">xlim</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="n">ylim</span><span class="p">,</span> <span class="n">zlim</span><span class="o">=</span><span class="n">zlim</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">differential_displacement</span><span class="p">(</span><span class="n">fcc_system</span><span class="p">,</span> <span class="n">fcc_disl_system</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span><span class="n">zaxis</span><span class="p">],</span>
+                                          <span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">xlim</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="n">ylim</span><span class="p">,</span> <span class="n">zlim</span><span class="o">=</span><span class="n">zlim</span><span class="p">,</span>
+                                          <span class="n">return_data</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1140,8 +1156,51 @@ to a file with this name.</li>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">differential_displacement</span><span class="p">(</span><span class="n">fcc_system</span><span class="p">,</span> <span class="n">fcc_disl_system</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span><span class="n">zaxis</span><span class="p">],</span>
-                                    <span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">xlim</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="n">ylim</span><span class="p">,</span> <span class="n">zlim</span><span class="o">=</span><span class="n">zlim</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">)</span>
+<span></span><span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[15]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>{&#39;centers&#39;: array([[-12.17107547, -14.02961154,   1.65340558],
+        [-12.88702109, -14.02961154,   2.89345976],
+        [-11.45512986, -14.02961154,   2.89345976],
+        ...,
+        [ 11.45512986,  14.02961154,   2.89345976],
+        [ 12.88702109,  14.02961154,   2.89345976],
+        [ 12.17107547,  14.02961154,   4.13351394]]),
+ &#39;vectors&#39;: array([[ 3.25526312e-02,  1.59160356e-02, -8.04003278e-04],
+        [ 1.14509606e-02, -6.91577561e-03, -1.13217377e-05],
+        [ 5.35091799e-02,  3.99477258e-02, -1.35336464e-03],
+        ...,
+        [ 5.35091799e-02,  3.99477258e-02, -1.35336464e-03],
+        [ 1.14509606e-02, -6.91577561e-03, -1.13217377e-05],
+        [ 3.25526312e-02,  1.59160356e-02, -8.04003278e-04]])}
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Make boundaries match defect system to avoid large differential displacements</span>
+<span class="n">fcc_system</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Specify plot limits</span>
+<span class="n">xlim</span><span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">ylim</span><span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># zlim should encompass a single periodic z section</span>
+<span class="n">zlim</span><span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">alat</span> <span class="o">*</span> <span class="mi">6</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">differential_displacement</span><span class="p">(</span><span class="n">fcc_system</span><span class="p">,</span> <span class="n">fcc_disl_system</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span><span class="n">zaxis</span><span class="p">],</span>
+                                          <span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">xlim</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="n">ylim</span><span class="p">,</span> <span class="n">zlim</span><span class="o">=</span><span class="n">zlim</span><span class="p">,</span>
+                                          <span class="n">atom_color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">display_final_pos</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1149,7 +1208,26 @@ to a file with this name.</li>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_32_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_32_0.png" />
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_33_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_33_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">differential_displacement</span><span class="p">(</span><span class="n">fcc_system</span><span class="p">,</span> <span class="n">fcc_disl_system</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span><span class="n">zaxis</span><span class="p">],</span>
+                                          <span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">xlim</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="n">ylim</span><span class="p">,</span> <span class="n">zlim</span><span class="o">=</span><span class="n">zlim</span><span class="p">,</span>
+                                          <span class="n">atom_cmap</span><span class="o">=</span><span class="s1">&#39;binary&#39;</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_34_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_34_0.png" />
 </div>
 </div>
 </div>
@@ -1215,7 +1293,7 @@ to a file with this name.</li>
         <li class="right" >
           <a href="04.2._Stroh_class.html" title="Introduction to atomman: Stroh class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

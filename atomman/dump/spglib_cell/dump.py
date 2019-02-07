@@ -14,7 +14,8 @@ def dump(system):
     Returns
     -------
     tuple
-        (lattice, positions, and numbers) used as inputs for spglib.
+        (lattice, positions, and numbers) used as inputs for spglib
+        functions.
     """
     
     # Get lattice information

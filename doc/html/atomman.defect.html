@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>defect &#8212; atomman 1.2.3 documentation</title>
+    <title>defect &#8212; atomman 1.2.4 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.3',
+        VERSION:     '1.2.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="atomman.lammps.Log.html" title="Log"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" accesskey="U">atomman package</a> &#187;</li> 
       </ul>
     </div>  
@@ -69,13 +69,13 @@
 <span id="functions-and-attributes"></span><h2>Functions and attributes<a class="headerlink" href="#module-atomman.defect" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="atomman.defect.differential_displacement">
-<code class="descclassname">atomman.defect.</code><code class="descname">differential_displacement</code><span class="sig-paren">(</span><em>system_0</em>, <em>system_1</em>, <em>burgers</em>, <em>plotxaxis='x'</em>, <em>plotyaxis='y'</em>, <em>xlim=None</em>, <em>ylim=None</em>, <em>zlim=None</em>, <em>neighbors=None</em>, <em>cutoff=None</em>, <em>component='standard'</em>, <em>axes=None</em>, <em>plot_scale=1</em>, <em>save_file=None</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.differential_displacement" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">atomman.defect.</code><code class="descname">differential_displacement</code><span class="sig-paren">(</span><em>system_0</em>, <em>system_1</em>, <em>burgers</em>, <em>plotxaxis='x'</em>, <em>plotyaxis='y'</em>, <em>xlim=None</em>, <em>ylim=None</em>, <em>zlim=None</em>, <em>neighbors=None</em>, <em>cutoff=None</em>, <em>component='standard'</em>, <em>axes=None</em>, <em>plot_scale=1</em>, <em>atom_color=None</em>, <em>atom_cmap=None</em>, <em>display_final_pos=False</em>, <em>return_data=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.differential_displacement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a differential displacement plot for characterizing dislocations.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>system_0</strong> (<em>atomman.system</em>) – The base/reference system to use.</li>
 <li><strong>system_1</strong> (<em>atomman.system</em>) – The defect/current system to use.</li>
 <li><strong>burgers</strong> (<em>array-like object</em>) – The dislocation’s Burgers vector.</li>
@@ -112,13 +112,37 @@ plots the differential displacements between atoms in the Burgers
 direction.  ‘xy’ plots the differential displacements within the xy
 plotting plane.  This is useful for screw dislocations with localized
 non-screw components.</li>
-<li><strong>axes</strong> (<em>arraly-like object</em><em>, </em><em>optional</em>) – 3x3 transformation array to apply to the Burgers vector to make it
+<li><strong>axes</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – 3x3 transformation array to apply to the Burgers vector to make it
 correspond to the system’s orientation.</li>
 <li><strong>plot_scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – Scalar for multiplying the magnitude of the differential displacement
 arrows.  Default value is 1 (no scaling).</li>
-<li><strong>save_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – If given then the plot will be saved to a file with this name.</li>
-<li><strong>show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag for showing the figure. Default is True.</li>
+<li><strong>atom_color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em>) – Matplotlib color name(s) to use to display the atoms.  If str, that
+color will be assigned to all atypes.  If list, must give a color value
+or None for each atype.  Default value (None) will use cmap instead.
+Note: atom_color and atom_cmap can be used together as long as exactly
+one color or cmap is given for each unique atype.</li>
+<li><strong>atom_cmap</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em>) – Matplotlib colormap name(s) to use to display the atoms.  Atoms will
+be colored based on their initial positions and scaled using zlim. If
+str, that cmap will be assigned to all atypes.  If list, must give a
+cmap value or None for each atype.  Default value (None) will use ‘hsv’
+cmap.  Note: atom_color and atom_cmap can be used together as long as
+exactly one color or cmap is given for each unique atype.</li>
+<li><strong>display_final_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag to display positions of atoms and arrows relative to final
+configuration (system_1) rather than initial configuration (system_0).
+Note that this does not affect the atom’s cmap color as the initial
+plotzaxis is always used.</li>
+<li><strong>return_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, will return a dict containing the differential displacement
+vectors and vector positions.  Default is False.  Note: returned values
+are oriented relative to the plotting axes.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>fig</strong> (<em>matplotlib.figure</em>) – The generated figure.</li>
+<li><strong>data</strong> (<em>dict</em>) – Contains differential displacement vectors and arrow plotting information.
+Returned if return_data is True.</li>
+</ul>
+</p>
 </td>
 </tr>
 </tbody>
@@ -173,9 +197,8 @@ end of the Atoms list.
 2. Displaces the dumbbell atoms position’s by +-db_vect.
 3. Adds per-atom property old_id if it doesn’t exist corresponding to the
 atom ids in the original system.
-4. Sets any of the new atom’s per-atom properties to values given as</p>
-<blockquote>
-<div>kwargs.  Any undefined properties are left unchanged.</div></blockquote>
+4. Sets any of the new atom’s per-atom properties to values given as
+kwargs.  Any undefined properties are left unchanged.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -549,7 +572,7 @@ angstroms.</li>
         <li class="right" >
           <a href="atomman.lammps.Log.html" title="Log"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li> 
       </ul>
     </div>

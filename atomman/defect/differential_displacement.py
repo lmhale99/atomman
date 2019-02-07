@@ -104,9 +104,9 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
 
     Returns
     -------
-    matplotlib.figure
-        The generated figure
-    dict
+    fig : matplotlib.figure
+        The generated figure.
+    data : dict
         Contains differential displacement vectors and arrow plotting information.
         Returned if return_data is True.
     """

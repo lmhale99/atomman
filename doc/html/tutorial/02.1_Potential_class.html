@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Potential class &#8212; atomman 1.2.3 documentation</title>
+    <title>Introduction to atomman: Potential class &#8212; atomman 1.2.4 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.3',
+        VERSION:     '1.2.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="02._LAMMPS_Functionality.html" title="Introduction to atomman: LAMMPS functionality"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -272,8 +272,8 @@ github</a>.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.3
-Notebook executed on 2018-09-21
+atomman version = 1.2.4
+Notebook executed on 2019-02-06
 </pre></div></div>
 </div>
 </div>
@@ -500,19 +500,24 @@ potential.pot_dir -&gt;  new_potential_folder
 </div>
 </div>
 </div>
-<div class="section" id="3.-Elements-and-Masses">
-<h2>3. Elements and Masses<a class="headerlink" href="#3.-Elements-and-Masses" title="Permalink to this headline">¶</a></h2>
-<p>Information about the elements and masses associated with each
-atom-model symbol can also be retrieved using the elements() and
-masses() methods. Both methods have the same parameters.</p>
-<p><strong>NOTE:</strong> The Potential class makes a distinction between symbols and
-elements. The symbols are the tags used by LAMMPS to identify which
-atom-model listed in a parameter file to use. These typically coincide
-with the elements the models represent, but this is not always the case
-as some potential styles allow multiple interaction models to be defined
-for the same elements. Differentiating between symbols and elements
-allows for the Potential class to handle these types of potentials as
-well.</p>
+<div class="section" id="3.-Elements,-Charges-and-Masses">
+<h2>3. Elements, Charges and Masses<a class="headerlink" href="#3.-Elements,-Charges-and-Masses" title="Permalink to this headline">¶</a></h2>
+<p>Information about the elements, charges and masses associated with each
+atom-model symbol can also be retrieved using the elements(), charges()
+and masses() methods. All three methods have the same parameters.</p>
+<p><strong>SYMBOLS VS ELEMENTS NOTE:</strong> The Potential class makes a distinction
+between symbols and elements. The symbols are the tags used by LAMMPS to
+identify which atom-model listed in a parameter file to use. These
+typically coincide with the elements the models represent, but this is
+not always the case as some potential styles allow multiple interaction
+models to be defined for the same elements. Differentiating between
+symbols and elements allows for the Potential class to handle these
+types of potentials as well.</p>
+<p><strong>CHARGES NOTE:</strong> The default charge is 0. Charges only need to be
+defined for potentials with formats (pair_styles) where the ionic
+charge is constant for each atom model, e.g. Coulombic potentials.
+Potentials with variable charges, e.g. ReaxFF and COMB, compute the
+charges on a per-atom basis during simulations.</p>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>symbols</strong> (<em>str or list, optional</em>) a list of the potential’s
@@ -529,6 +534,7 @@ Potential.symbols is used.</li>
 <span></span><span class="c1"># Calling methods without parameters uses all symbols</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.symbols -&gt;   &quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.elements() -&gt;&quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">elements</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.charges() -&gt;  &quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">charges</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.masses() -&gt;  &quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">masses</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -540,6 +546,7 @@ Potential.symbols is used.</li>
 <div class="highlight"><pre>
 potential.symbols -&gt;    [&#39;Ni&#39;, &#39;Al&#39;, &#39;Co&#39;]
 potential.elements() -&gt; [&#39;Ni&#39;, &#39;Al&#39;, &#39;Co&#39;]
+potential.charges() -&gt;   [0.0, 0.0, 0.0]
 potential.masses() -&gt;   [58.6934, 26.981539, 58.9332]
 </pre></div></div>
 </div>
@@ -552,10 +559,12 @@ potential.masses() -&gt;   [58.6934, 26.981539, 58.9332]
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Calling methods with symbols uses that particular set</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.elements(&#39;Ni&#39;) -&gt;&quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">elements</span><span class="p">(</span><span class="s1">&#39;Ni&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.charges(&#39;Ni&#39;) -&gt;&quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">charges</span><span class="p">(</span><span class="s1">&#39;Ni&#39;</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.masses(&#39;Ni&#39;) -&gt;&quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">masses</span><span class="p">(</span><span class="s1">&#39;Ni&#39;</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.elements([&#39;Al&#39;, &#39;Al&#39;, &#39;Co&#39;, &#39;Al&#39;]) -&gt;&quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">elements</span><span class="p">([</span><span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="s1">&#39;Co&#39;</span><span class="p">,</span> <span class="s1">&#39;Al&#39;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.charges([&#39;Al&#39;, &#39;Al&#39;, &#39;Co&#39;, &#39;Al&#39;]) -&gt;&quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">charges</span><span class="p">([</span><span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="s1">&#39;Co&#39;</span><span class="p">,</span> <span class="s1">&#39;Al&#39;</span><span class="p">]))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.masses([&#39;Al&#39;, &#39;Al&#39;, &#39;Co&#39;, &#39;Al&#39;]) -&gt;  &quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">masses</span><span class="p">([</span><span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="s1">&#39;Co&#39;</span><span class="p">,</span> <span class="s1">&#39;Al&#39;</span><span class="p">]))</span>
 <span class="nb">print</span><span class="p">()</span>
 </pre></div>
@@ -567,9 +576,11 @@ potential.masses() -&gt;   [58.6934, 26.981539, 58.9332]
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 potential.elements(&#39;Ni&#39;) -&gt; [&#39;Ni&#39;]
+potential.charges(&#39;Ni&#39;) -&gt; [0.0]
 potential.masses(&#39;Ni&#39;) -&gt; [58.6934]
 
 potential.elements([&#39;Al&#39;, &#39;Al&#39;, &#39;Co&#39;, &#39;Al&#39;]) -&gt; [&#39;Al&#39;, &#39;Al&#39;, &#39;Co&#39;, &#39;Al&#39;]
+potential.charges([&#39;Al&#39;, &#39;Al&#39;, &#39;Co&#39;, &#39;Al&#39;]) -&gt; [0.0, 0.0, 0.0, 0.0]
 potential.masses([&#39;Al&#39;, &#39;Al&#39;, &#39;Co&#39;, &#39;Al&#39;]) -&gt;   [26.981539, 26.981539, 58.9332, 26.981539]
 
 </pre></div></div>
@@ -754,6 +765,10 @@ given, it is set equal to the <strong>“element”</strong> value.</li>
 <li><strong>“mass”</strong>: element mass associated with the element/atom-model. If
 not given, it is set equal to the standard atomic mass value
 associated with the element given by <strong>“element”</strong>.</li>
+<li><strong>“charge”</strong>: ionic charge associated with the atom-model. If not
+given, it is set to 0.0. Only needs to be defined for pair_styles
+where the ionic charge is constant for a given atom-model e.g.
+Columbic potentials.</li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
@@ -766,7 +781,8 @@ associated with the element given by <strong>“element”</strong>.</li>
 <span class="s2">    &quot;atom&quot;: {</span>
 <span class="s2">        &quot;element&quot;: &lt;element-tag&gt;,</span>
 <span class="s2">        &quot;symbol&quot;: &lt;atom-model-name&gt;,</span>
-<span class="s2">        &quot;mass&quot;: &lt;element-mass&gt;</span>
+<span class="s2">        &quot;mass&quot;: &lt;element-mass&gt;,</span>
+<span class="s2">        &quot;charge&quot;: &lt;ionic-charge&gt;</span>
 <span class="s2">    }</span>
 <span class="s2">}&quot;&quot;&quot;</span><span class="p">)</span>
 </pre></div>
@@ -781,7 +797,8 @@ associated with the element given by <strong>“element”</strong>.</li>
     &#34;atom&#34;: {
         &#34;element&#34;: &lt;element-tag&gt;,
         &#34;symbol&#34;: &lt;atom-model-name&gt;,
-        &#34;mass&#34;: &lt;element-mass&gt;
+        &#34;mass&#34;: &lt;element-mass&gt;,
+        &#34;charge&#34;: &lt;ionic-charge&gt;
     }
 }
 </pre></div></div>
@@ -798,12 +815,14 @@ associated with the element given by <strong>“element”</strong>.</li>
 <span class="s2">        {</span>
 <span class="s2">            &quot;element&quot;: &lt;element-tag&gt;,</span>
 <span class="s2">            &quot;symbol&quot;: &lt;atom-model-name&gt;,</span>
-<span class="s2">            &quot;mass&quot;: &lt;element-mass&gt;</span>
+<span class="s2">            &quot;mass&quot;: &lt;element-mass&gt;,</span>
+<span class="s2">            &quot;charge&quot;: &lt;ionic-charge&gt;</span>
 <span class="s2">        },</span>
 <span class="s2">        {</span>
 <span class="s2">            &quot;element&quot;: &lt;element-tag&gt;,</span>
 <span class="s2">            &quot;symbol&quot;: &lt;atom-model-name&gt;,</span>
-<span class="s2">            &quot;mass&quot;: &lt;element-mass&gt;</span>
+<span class="s2">            &quot;mass&quot;: &lt;element-mass&gt;,</span>
+<span class="s2">            &quot;charge&quot;: &lt;ionic-charge&gt;</span>
 <span class="s2">        }</span>
 <span class="s2">    ]</span>
 <span class="s2">}&quot;&quot;&quot;</span><span class="p">)</span>
@@ -820,12 +839,14 @@ associated with the element given by <strong>“element”</strong>.</li>
         {
             &#34;element&#34;: &lt;element-tag&gt;,
             &#34;symbol&#34;: &lt;atom-model-name&gt;,
-            &#34;mass&#34;: &lt;element-mass&gt;
+            &#34;mass&#34;: &lt;element-mass&gt;,
+            &#34;charge&#34;: &lt;ionic-charge&gt;
         },
         {
             &#34;element&#34;: &lt;element-tag&gt;,
             &#34;symbol&#34;: &lt;atom-model-name&gt;,
-            &#34;mass&#34;: &lt;element-mass&gt;
+            &#34;mass&#34;: &lt;element-mass&gt;,
+            &#34;charge&#34;: &lt;ionic-charge&gt;
         }
     ]
 }
@@ -2006,6 +2027,87 @@ provide a demonstration for different potential styles.</p>
 </div>
 </div>
 </div>
+<div class="section" id="5.2.7-Columbic-pair_style">
+<h3>5.2.7 Columbic pair_style<a class="headerlink" href="#5.2.7-Columbic-pair_style" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;{</span>
+<span class="s2">    &quot;potential-LAMMPS&quot;: {</span>
+<span class="s2">        &quot;key&quot;: &quot;7f013ca0-0358-4721-ba72-790a074b0fd8&quot;,</span>
+<span class="s2">        &quot;id&quot;: &quot;coul_long-demo--LAMMPS--v1&quot;,</span>
+<span class="s2">        &quot;potential&quot;: {</span>
+<span class="s2">            &quot;key&quot;: &quot;3b326a65-5cbe-4a6c-862a-aa7203660b27&quot;,</span>
+<span class="s2">            &quot;id&quot;: &quot;coul_long-demo&quot;</span>
+<span class="s2">        },</span>
+<span class="s2">        &quot;units&quot;: &quot;metal&quot;,</span>
+<span class="s2">        &quot;atom_style&quot;: &quot;charge&quot;,</span>
+<span class="s2">        &quot;atom&quot;: [</span>
+<span class="s2">            {</span>
+<span class="s2">                &quot;element&quot;: &quot;Na&quot;,</span>
+<span class="s2">                &quot;charge&quot;: 1</span>
+<span class="s2">            },</span>
+<span class="s2">            {</span>
+<span class="s2">                &quot;element&quot;: &quot;Cl&quot;,</span>
+<span class="s2">                &quot;charge&quot;: -1</span>
+<span class="s2">            }</span>
+<span class="s2">        ],</span>
+<span class="s2">        &quot;pair_style&quot;: {</span>
+<span class="s2">            &quot;type&quot;: &quot;coul/long&quot;,</span>
+<span class="s2">            &quot;term&quot;: {</span>
+<span class="s2">                &quot;parameter&quot;: 10.0</span>
+<span class="s2">            }</span>
+<span class="s2">        },</span>
+<span class="s2">        &quot;pair_coeff&quot;: {</span>
+<span class="s2">            &quot;term&quot;: []</span>
+<span class="s2">        }</span>
+<span class="s2">    }</span>
+<span class="s2">}&quot;&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{
+    &#34;potential-LAMMPS&#34;: {
+        &#34;key&#34;: &#34;7f013ca0-0358-4721-ba72-790a074b0fd8&#34;,
+        &#34;id&#34;: &#34;coul_long-demo--LAMMPS--v1&#34;,
+        &#34;potential&#34;: {
+            &#34;key&#34;: &#34;3b326a65-5cbe-4a6c-862a-aa7203660b27&#34;,
+            &#34;id&#34;: &#34;coul_long-demo&#34;
+        },
+        &#34;units&#34;: &#34;metal&#34;,
+        &#34;atom_style&#34;: &#34;charge&#34;,
+        &#34;atom&#34;: [
+            {
+                &#34;element&#34;: &#34;Na&#34;,
+                &#34;charge&#34;: 1
+            },
+            {
+                &#34;element&#34;: &#34;Cl&#34;,
+                &#34;charge&#34;: -1
+            }
+        ],
+        &#34;pair_style&#34;: {
+            &#34;type&#34;: &#34;coul/long&#34;,
+            &#34;term&#34;: {
+                &#34;parameter&#34;: 10.0
+            }
+        },
+        &#34;pair_coeff&#34;: {
+            &#34;term&#34;: []
+        }
+    }
+}
+</pre></div></div>
+</div>
+</div>
 </div>
 </div>
 
@@ -2026,7 +2128,7 @@ provide a demonstration for different potential styles.</p>
 <li><a class="reference internal" href="#2.4.-Other-attributes">2.4. Other attributes</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#3.-Elements-and-Masses">3. Elements and Masses</a></li>
+<li><a class="reference internal" href="#3.-Elements,-Charges-and-Masses">3. Elements, Charges and Masses</a></li>
 <li><a class="reference internal" href="#4.-Generate-LAMMPS-commands">4. Generate LAMMPS commands</a></li>
 <li><a class="reference internal" href="#5.-potential_LAMMPS-Data-Model">5. potential_LAMMPS Data Model</a><ul>
 <li><a class="reference internal" href="#5.1.-potential_LAMMPS-data-model-schema">5.1. potential_LAMMPS data model schema</a><ul>
@@ -2046,6 +2148,7 @@ provide a demonstration for different potential styles.</p>
 <li><a class="reference internal" href="#5.2.6.-Original-eam-pair_style">5.2.6. Original eam pair_style</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#5.2.7-Columbic-pair_style">5.2.7 Columbic pair_style</a></li>
 </ul>
 </li>
 </ul>
@@ -2077,7 +2180,7 @@ provide a demonstration for different potential styles.</p>
         <li class="right" >
           <a href="02._LAMMPS_Functionality.html" title="Introduction to atomman: LAMMPS functionality"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

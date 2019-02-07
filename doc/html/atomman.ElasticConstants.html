@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>ElasticConstants &#8212; atomman 1.2.3 documentation</title>
+    <title>ElasticConstants &#8212; atomman 1.2.4 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.3',
+        VERSION:     '1.2.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="atomman.System.html" title="System"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" accesskey="U">atomman package</a> &#187;</li> 
       </ul>
     </div>  
@@ -150,6 +150,33 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="atomman.ElasticConstants.is_normal">
+<code class="descname">is_normal</code><span class="sig-paren">(</span><em>crystal_system</em>, <em>atol=0.0001</em>, <em>rtol=0.0001</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.ElasticConstants.is_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if current elastic constants agree with values normalized to
+a specified crystal family (within tolerances).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>crystal_system</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Indicates the crystal system representation to use when building a
+data model.</li>
+<li><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – Absolute tolerance to use.  Default value is 1e-4.</li>
+<li><strong>rtol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – Relative tolerance to use.  Default value is 1e-4.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if all Cij match within the tolerances, false otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="atomman.ElasticConstants.isotropic">
 <code class="descname">isotropic</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.ElasticConstants.isotropic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set values with two independent isotropic moduli.</p>
@@ -187,8 +214,8 @@
 read.</li>
 <li><strong>unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Units or pressure to save values in when building a data model.
 Default value is None (no conversion).</li>
-<li><strong>crystal_system</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Indicates the crystal system representation to use when building a
-data model. Default value is ‘triclinic’ (save all values in Cij).</li>
+<li><strong>crystal_system</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Indicates the crystal system representation to normalize by.
+Default value is ‘triclinic’, i.e. no normalization.</li>
 </ul>
 </td>
 </tr>
@@ -226,6 +253,30 @@ data model. Default value is ‘triclinic’ (save all values in Cij).</li>
 <li><strong>C66</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – C66 component of Cij.</li>
 </ul>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.ElasticConstants.normalized_as">
+<code class="descname">normalized_as</code><span class="sig-paren">(</span><em>crystal_system</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.ElasticConstants.normalized_as" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new ElasticConstants object where values of the current are
+averaged or zeroed out according to a standard crystal system setting.
+NOTE: no validation checks are made to evaluate whether such
+normalizations should be done! That is left up to you (compare values
+before and after normalization).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>crystal_system</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Indicates the crystal system representation to use when building a
+data model.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The elastic constants normalized according to the crystal system
+symmetries.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#atomman.ElasticConstants" title="atomman.ElasticConstants">atomman.ElasticConstants</a></td>
 </tr>
 </tbody>
 </table>
@@ -418,7 +469,7 @@ for transforming.</li>
         <li class="right" >
           <a href="atomman.System.html" title="System"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li> 
       </ul>
     </div>

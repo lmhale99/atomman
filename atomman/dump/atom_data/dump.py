@@ -38,8 +38,10 @@ def dump(system, f=None, atom_style='atomic', units='metal',
     
     Returns
     -------
-    str
-        The LAMMPS input command lines to read the created data file in.
+    content : str
+        The data file contents (returned if f is not given).
+    read_info : str
+        The LAMMPS input command lines to read the created data file in (returned if return_info is True).
     """
     # Wrap atoms because LAMMPS hates atoms out of bounds in atom data files
     system.wrap()

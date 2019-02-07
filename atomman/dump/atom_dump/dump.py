@@ -67,8 +67,12 @@ def dump(system, f=None, lammps_units='metal', scale=False, prop_name=None,
         
     Returns
     -------
+    content : str
+        The generated atom_data content.  Only returned if f is None.
+    
     prop_info : list of dict
-        The filled-in prop_info structure (if return_prop_info is True).
+        The filled-in prop_info structure. Only returned if
+        return_prop_info is True.
     """
     lammps_unit = style.unit(lammps_units)
     

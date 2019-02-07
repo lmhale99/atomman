@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>atomman package &#8212; atomman 1.2.3 documentation</title>
+    <title>atomman package &#8212; atomman 1.2.4 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.3',
+        VERSION:     '1.2.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="tutorial/04.4._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.4 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -198,10 +198,11 @@ file are to be returned as a str.  Default value is True.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The LAMMPS input command lines to read the created data file in.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>content</strong> (<em>str</em>) – The data file contents (returned if f is not given).</li>
+<li><strong>read_info</strong> (<em>str</em>) – The LAMMPS input command lines to read the created data file in (returned if return_info is True).</li>
+</ul>
+</p>
 </td>
 </tr>
 </tbody>
@@ -253,10 +254,12 @@ this allows for 1:1 load/dump conversions.  Default value is False
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>prop_info</strong> – The filled-in prop_info structure (if return_prop_info is True).</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list of dict</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>content</strong> (<em>str</em>) – The generated atom_data content.  Only returned if f is None.</li>
+<li><strong>prop_info</strong> (<em>list of dict</em>) – The filled-in prop_info structure. Only returned if
+return_prop_info is True.</li>
+</ul>
+</p>
 </td>
 </tr>
 </tbody>
@@ -339,9 +342,12 @@ will be included.</li>
 <li><strong>system</strong> (<a class="reference internal" href="atomman.System.html#atomman.System" title="atomman.System"><em>atomman.System</em></a>) – The system to generate the data model for.</li>
 <li><strong>f</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>file-like object</em><em>, </em><em>optional</em>) – File path or file-like object to write the content to.  If not given,
 then the content is returned as a DataModelDict.</li>
-<li><strong>format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – File format ‘xml’ or ‘json’ to save if f is given.  If not given, will
-be inferred from f if f is a filename, or taken as ‘json’.</li>
-<li><strong>indent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Indentation option to use for XML/JSON content if f is given.</li>
+<li><strong>format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – File format ‘xml’ or ‘json’ to save the content as if f is given.  If
+f is a filename, then the format will be automatically inferred from
+f’s extension.  If format is not given and cannot be inferred, then it
+will be set to ‘json’.</li>
+<li><strong>indent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em>, </em><em>optional</em>) – Indentation option to use for XML/JSON content if f is given.  A value
+of None (default) will add no line separatations or indentations.</li>
 <li><strong>box_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Length unit to use for the box. Default value is ‘angstrom’.</li>
 <li><strong>symbols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em>) – list of atom-model symbols corresponding to the atom types.  If not
 given, will use system.symbols.</li>
@@ -683,7 +689,7 @@ to access.  Default value is 0 (first, or only entry).</li>
 
 <dl class="function">
 <dt id="atomman.load_table">
-<code class="descclassname">atomman.</code><code class="descname">load_table</code><span class="sig-paren">(</span><em>table</em>, <em>box</em>, <em>symbols=None</em>, <em>system=None</em>, <em>prop_name=None</em>, <em>table_name=None</em>, <em>shape=None</em>, <em>unit=None</em>, <em>dtype=None</em>, <em>prop_info=None</em>, <em>skiprows=None</em>, <em>nrows=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.load_table" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">atomman.</code><code class="descname">load_table</code><span class="sig-paren">(</span><em>table</em>, <em>box</em>, <em>symbols=None</em>, <em>system=None</em>, <em>prop_name=None</em>, <em>table_name=None</em>, <em>shape=None</em>, <em>unit=None</em>, <em>dtype=None</em>, <em>prop_info=None</em>, <em>skiprows=None</em>, <em>nrows=None</em>, <em>comment=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.load_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads in tabular data into atomic properties.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -713,8 +719,11 @@ property values.  If not given, all values will be None.</li>
 dictionary in the list corresponds to a single atoms property.  Each
 dictionary must have a ‘prop_name’ field, and can optionally have
 ‘table_name’, ‘shape’, ‘unit’, and ‘dtype’ fields.</li>
-<li><strong>skiprows</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – Number of rows to skip before reading the data.</li>
-<li><strong>nrows</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – Number of rows of data to read.</li>
+<li><strong>skiprows</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Number of rows to skip before reading the data.</li>
+<li><strong>nrows</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Number of rows of data to read.</li>
+<li><strong>comment</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Specifies a character which indicates all text on a given line after
+is to be considered to be a comment and ignored by parser. This is
+often ‘#’.</li>
 </ul>
 </td>
 </tr>
@@ -811,7 +820,7 @@ are the list of neighboring atoms (by index).</p>
         <li class="right" >
           <a href="tutorial/04.4._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.4 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -149,7 +149,7 @@ def interpolate_contour(system, name, property=None, index=None, magnitude=False
             index = list(index)
         for i in index:
             name += '[' + str(i+1) + ']'
-        property = property[[Ellipsis] + index]
+        property = property[tuple([Ellipsis] + index)]
     
     # Handle magnitude
     elif magnitude is True:

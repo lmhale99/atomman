@@ -23,10 +23,13 @@ def dump(system, **kwargs):
         File path or file-like object to write the content to.  If not given,
         then the content is returned as a DataModelDict.
     format : str, optional
-        File format 'xml' or 'json' to save if f is given.  If not given, will
-        be inferred from f if f is a filename, or taken as 'json'.
-    indent : int, optional
-        Indentation option to use for XML/JSON content if f is given.
+        File format 'xml' or 'json' to save the content as if f is given.  If
+        f is a filename, then the format will be automatically inferred from
+        f's extension.  If format is not given and cannot be inferred, then it
+        will be set to 'json'.
+    indent : int or None, optional
+        Indentation option to use for XML/JSON content if f is given.  A value
+        of None (default) will add no line separatations or indentations.
     box_unit : str, optional
         Length unit to use for the box. Default value is 'angstrom'.
     symbols : list, optional
