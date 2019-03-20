@@ -79,12 +79,12 @@ def dump(system, f=None, lammps_units='metal', scale=False, prop_name=None,
     # Set default values
     if prop_info is None:
         if prop_name is None:
-            prop_name = ['a_id'] + system.atoms_prop()
+            prop_name = ['atom_id'] + system.atoms_prop()
         
         if shape is None and table_name is None:
             shape = []
             for name in prop_name:
-                if name == 'a_id':
+                if name == 'atom_id':
                     shape.append(())
                 elif name in ['spos', 'upos', 'supos']:
                     shape.append((3,))
@@ -96,7 +96,7 @@ def dump(system, f=None, lammps_units='metal', scale=False, prop_name=None,
                                   shape=shape, unit=unit, dtype=dtype,
                                   prop_info=prop_info,
                                   lammps_units=lammps_units)
-    
+    print(prop_info)
     # Write timestep info
     content = 'ITEM: TIMESTEP\n'
     try:
@@ -231,7 +231,8 @@ def table_dump(system, f=None, prop_info=None, float_format ='%.13f'):
     df = system.atoms_df(scale)
     
     # Add a_id values
-    df['a_id'] = range(1, natoms+1)
+    if 'atom_id' not in df:
+        df['atom_id'] = range(1, natoms+1)
     
     # Add alternate pos terms
     if 'upos' in altpos:

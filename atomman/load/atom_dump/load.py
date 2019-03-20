@@ -196,7 +196,10 @@ def load(data, symbols=None, lammps_units='metal', prop_name=None,
                         prop_info=short_prop_info, skiprows=atomsstart,
                         nrows=natoms)
     
-    return system
+    if return_prop_info:
+        return system, short_prop_info
+    else:
+        return system
     
 def matchprops(items):
     """

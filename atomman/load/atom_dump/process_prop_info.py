@@ -125,7 +125,7 @@ def standard_conversions(lammps_units='metal'):
     
     lammps_unit = style.unit(lammps_units)
     
-    return [{"prop_name": "a_id",
+    return [{"prop_name": "atom_id",
              "table_name": "id"},
             
             {"prop_name": "m_id",
