@@ -79,7 +79,12 @@ def dump(system, f=None, lammps_units='metal', scale=False, prop_name=None,
     # Set default values
     if prop_info is None:
         if prop_name is None:
-            prop_name = ['atom_id'] + system.atoms_prop()
+            atoms_props = system.atoms_prop()
+            try:
+                atoms_props.pop(atoms_props.index('atom_id'))
+            except:
+                pass
+            prop_name = ['atom_id'] + atoms_props
         
         if shape is None and table_name is None:
             shape = []
@@ -96,7 +101,7 @@ def dump(system, f=None, lammps_units='metal', scale=False, prop_name=None,
                                   shape=shape, unit=unit, dtype=dtype,
                                   prop_info=prop_info,
                                   lammps_units=lammps_units)
-    print(prop_info)
+    
     # Write timestep info
     content = 'ITEM: TIMESTEP\n'
     try:
@@ -230,9 +235,10 @@ def table_dump(system, f=None, prop_info=None, float_format ='%.13f'):
     # Transform to dataframe
     df = system.atoms_df(scale)
     
-    # Add a_id values
+    # Check atom_id values
     if 'atom_id' not in df:
         df['atom_id'] = range(1, natoms+1)
+    assert len(df.atom_id) == len(set(df.atom_id)), 'atom_id is not unique for all atoms'    
     
     # Add alternate pos terms
     if 'upos' in altpos:
