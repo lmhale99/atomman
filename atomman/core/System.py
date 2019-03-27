@@ -23,6 +23,33 @@ class System(object):
     adds methods and attributes involving both.
     """
     
+    class _AtomsIndexer(object):
+        """Internal class for setitem / getitem acting on atoms"""
+        def __init__(self, host):
+            self.__host = host
+            
+        def __getitem__(self, index):
+            """Index getting of Atoms that operates on System."""
+            host = self.__host
+            return System(atoms=host.atoms[index], box=host.box, pbc=host.pbc,
+                          symbols=host.symbols)
+            
+        def __setitem__(self, index, value):
+            """Index setting of Atoms that operates on System."""
+            host = self.__host
+            if isinstance(value, Atoms):
+                host.atoms[index] = value
+            elif isinstance(value, System):
+                try:
+                    assert np.allclose(host.box.vects, value.box.vects)
+                    assert np.all(host.pbc == value.pbc)
+                    assert np.all(host.symbols == value.symbols)
+                except:
+                    raise ValueError('System properties not compatible')
+                host.atoms[index] = value.atoms
+            else:
+                raise ValueError('Can only set using Atoms or System objects')
+
     def __init__(self, atoms=Atoms(), box=Box(), pbc=(True, True, True),
                  scale=False, symbols=()):
         """
@@ -68,6 +95,9 @@ class System(object):
         # Scale pos if needed
         if scale is True:
             self.atoms_prop('pos', value=atoms.pos, scale=True)
+
+        # Set atoms indexer
+        self.__atoms_ix = System._AtomsIndexer(self)
     
     def __str__(self):
         """str : The string representation of a system."""
@@ -117,6 +147,10 @@ class System(object):
         assert pbc.shape == (3,), 'invalid pbc entry' 
         self.__pbc = pbc
     
+    @property
+    def atoms_ix(self):
+        return self.__atoms_ix
+
     @property
     def symbols(self):
         """tuple : The element model symbols associated with each atype."""
