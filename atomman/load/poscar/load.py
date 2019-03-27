@@ -84,10 +84,10 @@ def load(poscar, symbols=None, prop={}):
     natoms = np.sum(typenums)
     pos = np.empty((natoms, 3), dtype='float64')
     count = 0
-    for i in range(start_i, len(lines)):
-        terms = lines[i].split()
+    for i in range(natoms):
+        terms = lines[i+start_i].split()
         if len(terms) > 0:
-            pos[count,:] = np.array(terms, dtype='float64')
+            pos[count,:] = np.array(terms[:3], dtype='float64')
         count += 1
     
     # Add atype, pos to prop dictionary
