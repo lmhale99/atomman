@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Load and Dump &#8212; atomman 1.2.4 documentation</title>
+    <title>Introduction to atomman: Load and Dump &#8212; atomman 1.2.5 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.4',
+        VERSION:     '1.2.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="01.3._System_class.html" title="Introduction to atomman: System Class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -291,8 +291,8 @@ The underlying code is found in the atomman/dump directory.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.4
-Notebook executed on 2019-02-06
+atomman version = 1.2.5
+Notebook executed on 2019-03-25
 </pre></div></div>
 </div>
 <p>Generate test system information (CsCl)</p>
@@ -1490,6 +1490,16 @@ pbc = [ True  True  True]
 <h2>7. atom_dump style<a class="headerlink" href="#7.-atom_dump-style" title="Permalink to this headline">¶</a></h2>
 <p>The atom_dump format is the LAMMPS dump files containing atomic
 coordinates and other per-atom properties.</p>
+<p><em>Updated version 1.2.5:</em> To support dump files that are partial lists of
+atoms, this style assigns/recognizes a per-atom property ‘atom_id’ that
+corresponds to the atom’s LAMMPS ID.</p>
+<ul class="simple">
+<li>For dump, the LAMMPS IDs in the LAMMPS dump file will be set to
+atom_id if the property exists. Otherwise, the LAMMPS IDs will be
+the index of the Atoms arrays plus one.</li>
+<li>For load, the atom_id property will be automatically assigned using
+the LAMMPS ID values.</li>
+</ul>
 <div class="section" id="7.1-dump('atom_dump')">
 <h3>7.1 dump(‘atom_dump’)<a class="headerlink" href="#7.1-dump('atom_dump')" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
@@ -1589,7 +1599,7 @@ ITEM: ATOMS id type x y z q stress[0][0] stress[0][1] stress[0][2] stress[1][0] 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;prop_name&#39;: &#39;a_id&#39;, &#39;table_name&#39;: [&#39;id&#39;], &#39;shape&#39;: (), &#39;unit&#39;: None, &#39;dtype&#39;: None}
+{&#39;prop_name&#39;: &#39;atom_id&#39;, &#39;table_name&#39;: [&#39;id&#39;], &#39;shape&#39;: (), &#39;unit&#39;: None, &#39;dtype&#39;: None}
 {&#39;prop_name&#39;: &#39;atype&#39;, &#39;table_name&#39;: [&#39;type&#39;], &#39;shape&#39;: (), &#39;unit&#39;: None, &#39;dtype&#39;: None}
 {&#39;prop_name&#39;: &#39;pos&#39;, &#39;table_name&#39;: [&#39;x&#39;, &#39;y&#39;, &#39;z&#39;], &#39;shape&#39;: (3,), &#39;unit&#39;: &#39;angstrom&#39;, &#39;dtype&#39;: None}
 {&#39;prop_name&#39;: &#39;charge&#39;, &#39;table_name&#39;: [&#39;q&#39;], &#39;shape&#39;: (), &#39;unit&#39;: &#39;e&#39;, &#39;dtype&#39;: None}
@@ -1599,6 +1609,8 @@ ITEM: ATOMS id type x y z q stress[0][0] stress[0][1] stress[0][2] stress[1][0] 
 </div>
 <div class="section" id="7.2-load('atom_dump')">
 <h3>7.2 load(‘atom_dump’)<a class="headerlink" href="#7.2-load('atom_dump')" title="Permalink to this headline">¶</a></h3>
+<p><em>Updated version 1.2.5:</em> Note that property atom_id is added that
+corresponds to the LAMMPS atom ID.</p>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>data</strong> (<em>str or file-like object</em>) The content, file path or
@@ -1698,6 +1710,7 @@ pbc = [ True  True  True]
       <th>pos[0]</th>
       <th>pos[1]</th>
       <th>pos[2]</th>
+      <th>atom_id</th>
       <th>charge</th>
       <th>stress[0][0]</th>
       <th>stress[0][1]</th>
@@ -1717,6 +1730,7 @@ pbc = [ True  True  True]
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
+      <td>1</td>
       <td>1.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1734,6 +1748,7 @@ pbc = [ True  True  True]
       <td>1.6</td>
       <td>1.6</td>
       <td>1.6</td>
+      <td>2</td>
       <td>-1.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -2100,6 +2115,7 @@ pbc = [ True  True  True]
       <th>pos[0]</th>
       <th>pos[1]</th>
       <th>pos[2]</th>
+      <th>charge</th>
       <th>stress[0][0]</th>
       <th>stress[0][1]</th>
       <th>stress[0][2]</th>
@@ -2109,7 +2125,6 @@ pbc = [ True  True  True]
       <th>stress[2][0]</th>
       <th>stress[2][1]</th>
       <th>stress[2][2]</th>
-      <th>charge</th>
     </tr>
   </thead>
   <tbody>
@@ -2119,16 +2134,16 @@ pbc = [ True  True  True]
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
@@ -2136,16 +2151,16 @@ pbc = [ True  True  True]
       <td>1.6</td>
       <td>1.6</td>
       <td>1.6</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>-1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -2437,7 +2452,7 @@ which package’s Atoms class is returned by dump.</p>
         <li class="right" >
           <a href="01.3._System_class.html" title="Introduction to atomman: System Class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

@@ -20,4 +20,5 @@ Tutorials
    04.1. Point defects <04.1._Point_defects>
    04.2. Stroh class <04.2._Stroh_class>
    04.3. Dislocation analysis tools <04.3._Dislocation_analysis_tools>
-   04.4. Semidiscrete Variational Peierls-Nabarro <04.4._Semidiscrete_Variational_Peierls-Nabarro>
+   04.4. Gamma Surface Plotting <04.4._Gamma_Surface_Plotting>
+   04.5. Semidiscrete Variational Peierls-Nabarro <04.5._Semidiscrete_Variational_Peierls-Nabarro>

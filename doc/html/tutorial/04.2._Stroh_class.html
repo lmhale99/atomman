@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Stroh class &#8212; atomman 1.2.4 documentation</title>
+    <title>Introduction to atomman: Stroh class &#8212; atomman 1.2.5 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.4',
+        VERSION:     '1.2.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="04.1._Point_defects.html" title="Introduction to atomman: Point defect generation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -266,8 +266,8 @@ dislocation or crack using the Stroh method.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.4
-Notebook executed on 2019-02-06
+atomman version = 1.2.5
+Notebook executed on 2019-03-25
 </pre></div></div>
 </div>
 </div>
@@ -304,18 +304,21 @@ each root.</p>
 <p>Stroh’s method is then to write the problem as an eigenvector problem,
 which solving gives values for <span class="math">\(p_{\alpha}\)</span>, <span class="math">\(A_{i \alpha}\)</span>,
 and <span class="math">\(L_{i \alpha}\)</span>.</p>
-<p><strong>NOTE FOR ISOTROPIC SYSTEMS</strong>: A solution <em>is not obtainable</em> if the
+<p><strong>NOTE FOR ISOTROPIC SYSTEMS</strong>: The Stroh method will fail if the
 elastic constant tensor is for an isotropic material as the eigenvector
 problem cannot be solved. If you want a solution for an isotropic
-material, you can create a cubic elastic tensor that is nearly, but not
-exactly isotropic, i.e. <span class="math">\(C_{11} - C_{12} = 2 C_{44} \pm \delta\)</span>
-where <span class="math">\(\delta\)</span> is small relative to the constants.</p>
+material, either use the IsotropicVolterraSolution class or adjust the
+elastic constants to not be exactly isotropic. The
+atomman.defect.solve_volterra_dislocation() function will return
+either a Stroh object or an IsotropicVolterraSolution object based on
+the nature of the supplied elastic constants.</p>
 </div>
 <div class="section" id="3.-Initialize/solve">
 <h2>3. Initialize/solve<a class="headerlink" href="#3.-Initialize/solve" title="Permalink to this headline">¶</a></h2>
 <p>A solution is found using the Stroh method when either an instance of
 the object is initialized or when the solve() method is called. The same
 parameters are taken in both cases.</p>
+<p>Note that you can either initialize the Stroh class</p>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>C</strong> (<em>atomman.ElasticConstants</em>) The medium’s elastic constants.</li>
@@ -1121,7 +1124,7 @@ plotting y, z coordinates instead of x, y coordinates.</p>
         <li class="right" >
           <a href="04.1._Point_defects.html" title="Introduction to atomman: Point defect generation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Defect Creation and Analysis &#8212; atomman 1.2.4 documentation</title>
+    <title>Introduction to atomman: Defect Creation and Analysis &#8212; atomman 1.2.5 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.4',
+        VERSION:     '1.2.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="03.2._NeighborList_class.html" title="Introduction to atomman: NeighborList class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -268,8 +268,8 @@ defect capabilities in atomman.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.4
-Notebook executed on 2019-02-06
+atomman version = 1.2.5
+Notebook executed on 2019-03-25
 </pre></div></div>
 </div>
 </div>
@@ -382,14 +382,15 @@ searching. Default is 1e-3 angstroms.</li>
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="3.-Stroh-method-for-dislocations">
-<h2>3. Stroh method for dislocations<a class="headerlink" href="#3.-Stroh-method-for-dislocations" title="Permalink to this headline">¶</a></h2>
-<p>The atomman.Stroh class obtains a solution for the Eshelby anisotropic
-elasticity model of a perfectly straight dislocation using the Stroh
-method.</p>
-<p>See the <a class="reference external" href="04.2._Stroh_class.html">04.2. Stroh class Jupyter Notebook</a>
-for more details on the methods and theory.</p>
-<p>Parameters to initialize Stroh object</p>
+<div class="section" id="3.-Volterra-dislocation-solutions">
+<h2>3. Volterra dislocation solutions<a class="headerlink" href="#3.-Volterra-dislocation-solutions" title="Permalink to this headline">¶</a></h2>
+<p><em>Updated version 1.2.5:</em> Ability to solve isotropic solutions added.</p>
+<p>The atomman.defect.solve_volterra_dislocation() function generates an
+elasticity solution for a perfectly straight dislocation. The function
+returns a VolterraDislocation object which has methods for obtaining
+position-based displacements and stress states, as well as
+energy-related parameters.</p>
+<p>Parameters:</p>
 <ul class="simple">
 <li><strong>C</strong> (<em>atomman.ElasticConstants</em>) The medium’s elastic constants.</li>
 <li><strong>burgers</strong> (<em>array-like object</em>) The dislocation’s Cartesian Burgers
@@ -403,11 +404,24 @@ orthogonal. Default value is [1,0,0] (x-axis).</li>
 <li><strong>n</strong> (<em>array-like object, optional</em>) The n unit vector for the
 solution. m, n, and u (dislocation line) should be right-hand
 orthogonal. Default value is [0,1,0] (y-axis).</li>
-<li><strong>tol</strong> (<em>float</em>) Tolerance parameter used to round off near-zero
-values. Default value is 1e-8.</li>
+<li><strong>tol</strong> (<em>float, optional</em>) Tolerance parameter used to round off
+near-zero values. Default value is 1e-8.</li>
+<li><strong>style</strong> (<em>str, optional</em>) Indicates whether to use the ‘isotropic’
+or ‘anisotropic’ solution. If not given, then the method used will
+depend on if the supplied elastic constants are isotropic or not.</li>
 </ul>
-<div class="section" id="3.1.-Solve-Stroh-method-for-bcc-iron-a/2&lt;111&gt;{-101}-edge-dislocation.">
-<h3>3.1. Solve Stroh method for bcc iron a/2&lt;111&gt;{-101} edge dislocation.<a class="headerlink" href="#3.1.-Solve-Stroh-method-for-bcc-iron-a/2<111>{-101}-edge-dislocation." title="Permalink to this headline">¶</a></h3>
+<p>Depending on the style used, the function will return one of the two
+subclasses of VolterraDislocation:</p>
+<ul class="simple">
+<li><strong>IsotropicVolterraDislocation</strong> provides the classic isotropic
+elasticity solution.</li>
+<li><strong>Stroh</strong> provides the Eshelby/Stroh (eigenvalue-based) anisotropic
+elasticity solution. See the <a class="reference external" href="04.2._Stroh_class.html">04.2. Stroh class Jupyter
+Notebook</a> for more details on the methods
+and theory.</li>
+</ul>
+<div class="section" id="3.1.-Solve-for-bcc-iron-a/2&lt;111&gt;{-101}-edge-dislocation.">
+<h3>3.1. Solve for bcc iron a/2&lt;111&gt;{-101} edge dislocation.<a class="headerlink" href="#3.1.-Solve-for-bcc-iron-a/2<111>{-101}-edge-dislocation." title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [4]:
@@ -429,8 +443,8 @@ values. Default value is 1e-8.</li>
 <span class="n">z_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="c1"># parallel to line direction</span>
 <span class="n">axes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">y_axis</span><span class="p">,</span> <span class="n">z_axis</span><span class="p">])</span>
 
-<span class="c1"># Get Stroh solution</span>
-<span class="n">stroh</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">Stroh</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">burgers</span><span class="o">=</span><span class="n">burgers</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">)</span>
+<span class="c1"># Get dislocation solution</span>
+<span class="n">disl</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">solve_volterra_dislocation</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">burgers</span><span class="o">=</span><span class="n">burgers</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -448,8 +462,8 @@ values. Default value is 1e-8.</li>
 <span class="n">disl_system</span> <span class="o">=</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">supersize</span><span class="p">((</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.00</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">])</span> <span class="c1"># shift pos so no y=0 coordinates</span>
 
-<span class="c1"># Displace atomic positions by Stroh.displacement()</span>
-<span class="n">displacement</span> <span class="o">=</span> <span class="n">stroh</span><span class="o">.</span><span class="n">displacement</span><span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+<span class="c1"># Displace atomic positions</span>
+<span class="n">displacement</span> <span class="o">=</span> <span class="n">disl</span><span class="o">.</span><span class="n">displacement</span><span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
 <span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="n">displacement</span>
 
 <span class="c1"># Plot x and y atomic coordinates to show dislocation</span>
@@ -497,13 +511,28 @@ perfect crystal configuration.</li>
 Notebook</a> for the underlying
 theory and examples of the tools being used.</p>
 </div>
-<div class="section" id="5.-Semidiscrete-variational-Peierls-Nabarro-dislocations">
-<h2>5. Semidiscrete variational Peierls-Nabarro dislocations<a class="headerlink" href="#5.-Semidiscrete-variational-Peierls-Nabarro-dislocations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="5.-Generalized-stacking-fault-/-gamma-surface-plotting">
+<h2>5. Generalized stacking fault / gamma surface plotting<a class="headerlink" href="#5.-Generalized-stacking-fault-/-gamma-surface-plotting" title="Permalink to this headline">¶</a></h2>
+<p>The atomman.defect.GammaSurface class provides convenient methods for
+plotting and interpolating generalized stacking fault (<span class="math">\(\gamma\)</span>
+surface) data.</p>
+<p>See the <a class="reference external" href="04.04_Gamma_Surface_Plotting.html">04.4. Gamma Surface Plotting Jupyter
+Notebook</a> for a description of the
+class and examples.</p>
+</div>
+<div class="section" id="6.-Semidiscrete-variational-Peierls-Nabarro-dislocations">
+<h2>6. Semidiscrete variational Peierls-Nabarro dislocations<a class="headerlink" href="#6.-Semidiscrete-variational-Peierls-Nabarro-dislocations" title="Permalink to this headline">¶</a></h2>
 <p>Classes and functions are included that allow for semidiscrete
 variational Peierls-Nabarro models of dislocations to be solved.</p>
-<p>See the <a class="reference external" href="04.04_Semidiscrete_Variational_Peierls-Nabarro.html">04.4. Semidiscrete Variational Peierls-Nabarro Jupyter
+<p>See the <a class="reference external" href="04.05_Semidiscrete_Variational_Peierls-Nabarro.html">04.5. Semidiscrete Variational Peierls-Nabarro Jupyter
 Notebook</a> for a
 description of the method and examples.</p>
+</div>
+<div class="section" id="7.-Periodic-array-of-dislocations">
+<h2>7. Periodic array of dislocations<a class="headerlink" href="#7.-Periodic-array-of-dislocations" title="Permalink to this headline">¶</a></h2>
+<p>The atomman.defect.dislocation_array() function helps generate a
+periodic array of dislocations atomic configuration. Documentation to
+come as the method is tested and refined…</p>
 </div>
 </div>
 
@@ -518,13 +547,15 @@ description of the method and examples.</p>
 <li><a class="reference internal" href="#">Introduction to atomman: Defect Creation and Analysis</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
 <li><a class="reference internal" href="#2.-Point-defects">2. Point defects</a></li>
-<li><a class="reference internal" href="#3.-Stroh-method-for-dislocations">3. Stroh method for dislocations</a><ul>
-<li><a class="reference internal" href="#3.1.-Solve-Stroh-method-for-bcc-iron-a/2&lt;111&gt;{-101}-edge-dislocation.">3.1. Solve Stroh method for bcc iron a/2&lt;111&gt;{-101} edge dislocation.</a></li>
+<li><a class="reference internal" href="#3.-Volterra-dislocation-solutions">3. Volterra dislocation solutions</a><ul>
+<li><a class="reference internal" href="#3.1.-Solve-for-bcc-iron-a/2&lt;111&gt;{-101}-edge-dislocation.">3.1. Solve for bcc iron a/2&lt;111&gt;{-101} edge dislocation.</a></li>
 <li><a class="reference internal" href="#3.2.-Use-Stroh-solution-to-insert-dislocation-into-atomic-system.">3.2. Use Stroh solution to insert dislocation into atomic system.</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#4.-Dislocation-anaylsis-tools">4. Dislocation anaylsis tools</a></li>
-<li><a class="reference internal" href="#5.-Semidiscrete-variational-Peierls-Nabarro-dislocations">5. Semidiscrete variational Peierls-Nabarro dislocations</a></li>
+<li><a class="reference internal" href="#5.-Generalized-stacking-fault-/-gamma-surface-plotting">5. Generalized stacking fault / gamma surface plotting</a></li>
+<li><a class="reference internal" href="#6.-Semidiscrete-variational-Peierls-Nabarro-dislocations">6. Semidiscrete variational Peierls-Nabarro dislocations</a></li>
+<li><a class="reference internal" href="#7.-Periodic-array-of-dislocations">7. Periodic array of dislocations</a></li>
 </ul>
 </li>
 </ul>
@@ -554,7 +585,7 @@ description of the method and examples.</p>
         <li class="right" >
           <a href="03.2._NeighborList_class.html" title="Introduction to atomman: NeighborList class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

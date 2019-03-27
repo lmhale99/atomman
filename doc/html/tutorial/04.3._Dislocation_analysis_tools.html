@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Dislocation analysis tools &#8212; atomman 1.2.4 documentation</title>
+    <title>Introduction to atomman: Dislocation analysis tools &#8212; atomman 1.2.5 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.4',
+        VERSION:     '1.2.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro" href="04.4._Semidiscrete_Variational_Peierls-Nabarro.html" />
+    <link rel="next" title="Introduction to atomman: Gamma Surface Plotting" href="04.4._Gamma_Surface_Plotting.html" />
     <link rel="prev" title="Introduction to atomman: Stroh class" href="04.2._Stroh_class.html" /> 
   </head>
   <body>
@@ -38,12 +38,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="04.4._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
+          <a href="04.4._Gamma_Surface_Plotting.html" title="Introduction to atomman: Gamma Surface Plotting"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="04.2._Stroh_class.html" title="Introduction to atomman: Stroh class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -266,8 +266,8 @@ for finding and characterizing dislocations.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.4
-Notebook executed on 2019-02-06
+atomman version = 1.2.5
+Notebook executed on 2019-03-25
 </pre></div></div>
 </div>
 </div>
@@ -323,12 +323,12 @@ demonstration purposes only as no atomic relaxations are performed.</p>
 <span class="c1"># Build ElasticConstants object (standard crystal reference)</span>
 <span class="n">C</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">ElasticConstants</span><span class="p">(</span><span class="n">C11</span><span class="o">=</span><span class="n">C11</span><span class="p">,</span> <span class="n">C12</span><span class="o">=</span><span class="n">C12</span><span class="p">,</span> <span class="n">C44</span><span class="o">=</span><span class="n">C44</span><span class="p">)</span>
 
-<span class="c1"># Solve the elastic problem using the Stroh method</span>
-<span class="n">stroh</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">Stroh</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">])</span>
+<span class="c1"># Solve the elastic problem</span>
+<span class="n">disl</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">solve_volterra_dislocation</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">])</span>
 
 <span class="c1"># Generate dislocation system</span>
 <span class="n">fcc_disl_system</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">fcc_system</span><span class="p">)</span>
-<span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="n">stroh</span><span class="o">.</span><span class="n">displacement</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+<span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="n">disl</span><span class="o">.</span><span class="n">displacement</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
 <span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1272,8 +1272,8 @@ arrow plotting information. Returned if return_data is True.</li>
   <p class="topless"><a href="04.2._Stroh_class.html"
                         title="previous chapter">Introduction to atomman: Stroh class</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="04.4._Semidiscrete_Variational_Peierls-Nabarro.html"
-                        title="next chapter">Introduction to atomman: Semidiscrete Variational Peierls-Nabarro</a></p>
+  <p class="topless"><a href="04.4._Gamma_Surface_Plotting.html"
+                        title="next chapter">Introduction to atomman: Gamma Surface Plotting</a></p>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1288,12 +1288,12 @@ arrow plotting information. Returned if return_data is True.</li>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="04.4._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
+          <a href="04.4._Gamma_Surface_Plotting.html" title="Introduction to atomman: Gamma Surface Plotting"
              >next</a> |</li>
         <li class="right" >
           <a href="04.2._Stroh_class.html" title="Introduction to atomman: Stroh class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

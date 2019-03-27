@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Box &#8212; atomman 1.2.4 documentation</title>
+    <title>Box &#8212; atomman 1.2.5 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.4',
+        VERSION:     '1.2.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="atomman.Atoms.html" title="Atoms"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" accesskey="U">atomman package</a> &#187;</li> 
       </ul>
     </div>  
@@ -102,6 +102,26 @@
 <dd><p><em>float</em> – The c lattice parameter (magnitude of avect).</p>
 </dd></dl>
 
+<dl class="classmethod">
+<dt id="atomman.Box.cubic">
+<em class="property">classmethod </em><code class="descname">cubic</code><span class="sig-paren">(</span><em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Box.cubic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a Box in standard cubic setting using only cubic lattice
+parameters.</p>
+<p>a = b = c, alpha = beta = gamma = 90</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> (<em>-</em>) – The a lattice constant</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#atomman.Box" title="atomman.Box">atomman.Box</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="atomman.Box.cvect">
 <code class="descname">cvect</code><a class="headerlink" href="#atomman.Box.cvect" title="Permalink to this definition">¶</a></dt>
@@ -112,6 +132,32 @@
 <dt id="atomman.Box.gamma">
 <code class="descname">gamma</code><a class="headerlink" href="#atomman.Box.gamma" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>float</em> – The gamma lattice angle in degrees (angle between avect and bvect).</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="atomman.Box.hexagonal">
+<em class="property">classmethod </em><code class="descname">hexagonal</code><span class="sig-paren">(</span><em>a</em>, <em>c</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Box.hexagonal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a Box in standard hexagonal setting using only hexagonal lattice
+parameters.</p>
+<p>a = b != c, alpha = beta = 90, gamma = 120</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a</strong> (<em>-</em>) – The a lattice constant</li>
+<li><strong>c</strong> (<em>-</em>) – The c lattice constant</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#atomman.Box" title="atomman.Box">atomman.Box</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -140,10 +186,65 @@ Note: large box tilt factors not checked.  The LAMMPS command
 <dd><p><em>float</em> – LAMMPS lz box length (cvect[2] for normalized boxes).</p>
 </dd></dl>
 
+<dl class="classmethod">
+<dt id="atomman.Box.monoclinic">
+<em class="property">classmethod </em><code class="descname">monoclinic</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>c</em>, <em>beta</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Box.monoclinic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a Box in standard monoclinic setting using only monoclinic lattice
+parameters.</p>
+<p>a != b != c, alpha = gamma = 90, beta &gt; 90</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a</strong> (<em>-</em>) – The a lattice constant</li>
+<li><strong>b</strong> (<em>-</em>) – The b lattice constant</li>
+<li><strong>c</strong> (<em>-</em>) – The c lattice constant</li>
+<li><strong>beta</strong> (<em>-</em>) – The beta lattice angle in degrees</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#atomman.Box" title="atomman.Box">atomman.Box</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="atomman.Box.origin">
 <code class="descname">origin</code><a class="headerlink" href="#atomman.Box.origin" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>numpy.ndarray</em> – Box origin position where vects are added to define the box.  Can be set directly.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="atomman.Box.orthorhombic">
+<em class="property">classmethod </em><code class="descname">orthorhombic</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>c</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Box.orthorhombic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a Box in standard orthorhombic setting using only orthorhombic lattice
+parameters.</p>
+<p>a != b != c, alpha = beta = gamma = 90</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a</strong> (<em>-</em>) – The a lattice constant</li>
+<li><strong>b</strong> (<em>-</em>) – The b lattice constant</li>
+<li><strong>c</strong> (<em>-</em>) – The c lattice constant</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#atomman.Box" title="atomman.Box">atomman.Box</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -166,7 +267,7 @@ on the allowed parameters.</p>
 
 <dl class="method">
 <dt id="atomman.Box.set_abc">
-<code class="descname">set_abc</code><span class="sig-paren">(</span><em>a, b, c, alpha=90.0, beta=90.0, gamma=90.0, origin=[0.0, 0.0, 0.0]</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Box.set_abc" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_abc</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>c</em>, <em>alpha=90.0</em>, <em>beta=90.0</em>, <em>gamma=90.0</em>, <em>origin=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Box.set_abc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the box using crystal cell lattice parameters and angles.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -221,7 +322,7 @@ Default value is 90.0.</li>
 
 <dl class="method">
 <dt id="atomman.Box.set_lengths">
-<code class="descname">set_lengths</code><span class="sig-paren">(</span><em>lx, ly, lz, xy=0.0, xz=0.0, yz=0.0, origin=[0.0, 0.0, 0.0]</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Box.set_lengths" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_lengths</code><span class="sig-paren">(</span><em>lx</em>, <em>ly</em>, <em>lz</em>, <em>xy=0.0</em>, <em>xz=0.0</em>, <em>yz=0.0</em>, <em>origin=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Box.set_lengths" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the box using LAMMPS box lengths and tilt factors.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -248,7 +349,7 @@ Default value is 90.0.</li>
 
 <dl class="method">
 <dt id="atomman.Box.set_vectors">
-<code class="descname">set_vectors</code><span class="sig-paren">(</span><em>avect, bvect, cvect, origin=[0.0, 0.0, 0.0]</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Box.set_vectors" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_vectors</code><span class="sig-paren">(</span><em>avect</em>, <em>bvect</em>, <em>cvect</em>, <em>origin=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Box.set_vectors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the box using the three box vectors.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -267,10 +368,98 @@ Default value is 90.0.</li>
 </table>
 </dd></dl>
 
+<dl class="classmethod">
+<dt id="atomman.Box.tetragonal">
+<em class="property">classmethod </em><code class="descname">tetragonal</code><span class="sig-paren">(</span><em>a</em>, <em>c</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Box.tetragonal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a Box in standard tetragonal setting using only tetragonal lattice
+parameters.</p>
+<p>a = b != c, alpha = beta = gamma = 90</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a</strong> (<em>-</em>) – The a lattice constant</li>
+<li><strong>c</strong> (<em>-</em>) – The c lattice constant</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#atomman.Box" title="atomman.Box">atomman.Box</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="atomman.Box.triclinic">
+<em class="property">classmethod </em><code class="descname">triclinic</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>c</em>, <em>alpha</em>, <em>beta</em>, <em>gamma</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Box.triclinic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a Box in standard triclinic setting using only triclinic lattice
+parameters.</p>
+<p>a != b != c, alpha != beta != gamma</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a</strong> (<em>-</em>) – The a lattice constant</li>
+<li><strong>b</strong> (<em>-</em>) – The b lattice constant</li>
+<li><strong>c</strong> (<em>-</em>) – The c lattice constant</li>
+<li><strong>alpha</strong> (<em>-</em>) – The alpha lattice angle in degrees</li>
+<li><strong>beta</strong> (<em>-</em>) – The beta lattice angle in degrees</li>
+<li><strong>gamma</strong> (<em>-</em>) – The gamma lattice angle in degrees</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#atomman.Box" title="atomman.Box">atomman.Box</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="atomman.Box.trigonal">
+<em class="property">classmethod </em><code class="descname">trigonal</code><span class="sig-paren">(</span><em>a</em>, <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Box.trigonal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a Box in standard trigonal setting using only trigonal lattice
+parameters.</p>
+<p>a = b = c, alpha = beta = gamma &lt; 120</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a</strong> (<em>-</em>) – The a lattice constant</li>
+<li><strong>alpha</strong> (<em>-</em>) – The alpha lattice angle in degrees</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#atomman.Box" title="atomman.Box">atomman.Box</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="atomman.Box.vects">
 <code class="descname">vects</code><a class="headerlink" href="#atomman.Box.vects" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>numpy.ndarray</em> – Array containing all three box vectors.  Can be set directly.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.Box.volume">
+<code class="descname">volume</code><a class="headerlink" href="#atomman.Box.volume" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>float</em> – The volume of the box.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -362,7 +551,7 @@ Default value is 90.0.</li>
         <li class="right" >
           <a href="atomman.Atoms.html" title="Atoms"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li> 
       </ul>
     </div>
