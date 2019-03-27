@@ -149,6 +149,7 @@ class System(object):
     
     @property
     def atoms_ix(self):
+        """Indexer for index slicing of Systems by per-atom properties."""
         return self.__atoms_ix
 
     @property
