@@ -9,7 +9,7 @@ import numpy as np
 from ..compatibility import int
 
 def pn_arctan_disregistry(xmax=None, xstep=None, xnum=None,
-                          burgers=np.array([1.0, 0.0, 0.0]),
+                          burgers=None, center=0.0,
                           halfwidth=1, normalize=True, shift=True):
     """
     Computes the classic Peierls-Nabarro arctan disregistry for an array of
@@ -30,6 +30,8 @@ def pn_arctan_disregistry(xmax=None, xstep=None, xnum=None,
         be not None.  Default value is None.
     burgers : numpy.ndarray, optional
         The Burgers vector for the dislocation. Default value is [1, 0, 0].
+    center : float
+        The x coordinate to center the dislocation at. Default value is 0.0.
     halfwidth : float, optional
         The dislocation halfwidth to use. Default value is 1.
     normalize : bool, optional
@@ -70,10 +72,12 @@ def pn_arctan_disregistry(xmax=None, xstep=None, xnum=None,
     if not np.isclose(dx, xstep):
         raise ValueError('Incompatible parameters: xmax = xstep * (xnum - 1) / 2')
     
+    if burgers is None:
+        burgers = np.array([1.0, 0.0, 0.0])
     burgers = np.asarray(burgers)
     
     # δ(x) = b / π * arctan(x / ξ) + b / 2
-    disregistry = np.outer(np.arctan(x / halfwidth), burgers / np.pi) + burgers / 2
+    disregistry = np.outer(np.arctan((x - center) / halfwidth), burgers / np.pi) + burgers / 2
     
     if normalize is True:
         disregistry = disregistry - disregistry[0]
