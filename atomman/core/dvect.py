@@ -15,7 +15,7 @@ else:
     
 from ..compatibility import range
     
-def dvect(pos_0, pos_1, box, pbc, code=None):
+def dvect(pos_0, pos_1, box, pbc, code=None, option=1):
     """
     Computes the shortest distance between pos_0 and pos_1 using box 
     dimensions and accounting for periodic boundaries.
@@ -40,13 +40,13 @@ def dvect(pos_0, pos_1, box, pbc, code=None):
     
     if code is None:
         if cython_imported is True:
-            return dvect_cython(pos_0, pos_1, box, pbc)
+            return dvect_cython(pos_0, pos_1, box, pbc, option=option)
         elif cython_imported is False:
             return dvect_python(pos_0, pos_1, box, pbc)
     
     elif code == 'cython':
         if cython_imported is True:
-            return dvect_cython(pos_0, pos_1, box, pbc)
+            return dvect_cython(pos_0, pos_1, box, pbc, option=option)
         else:
             raise ValueError('cython version of dvect not loaded')
     
