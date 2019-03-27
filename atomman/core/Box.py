@@ -437,7 +437,7 @@ class Box(object):
         else:
             raise TypeError('Invalid arguments')
     
-    def set_vectors(self, avect, bvect, cvect, origin=[0.0, 0.0, 0.0]):
+    def set_vectors(self, avect, bvect, cvect, origin=None):
         """
         Set the box using the three box vectors.
         
@@ -453,11 +453,15 @@ class Box(object):
             The 3D vector for the box origin position.  Default value is
             (0,0,0).
         """
+        # Set default origin
+        if origin is None:
+            origin = [0.0, 0.0, 0.0]
+        
         # Combine avect, bvect and cvect into vects and set directly
         self.vects = [avect, bvect, cvect]
         self.origin = origin
         
-    def set_abc(self, a, b, c, alpha=90.0, beta=90.0, gamma=90.0, origin=[0.0, 0.0, 0.0]):
+    def set_abc(self, a, b, c, alpha=90.0, beta=90.0, gamma=90.0, origin=None):
         """
         Set the box using crystal cell lattice parameters and angles.
         
@@ -497,7 +501,7 @@ class Box(object):
         # Call set_lengths
         self.set_lengths(lx=lx, ly=ly, lz=lz, xy=xy, xz=xz, yz=yz, origin=origin)
         
-    def set_lengths(self, lx, ly, lz, xy=0.0, xz=0.0, yz=0.0, origin=[0.0, 0.0, 0.0]):
+    def set_lengths(self, lx, ly, lz, xy=0.0, xz=0.0, yz=0.0, origin=None):
         """
         Set the box using LAMMPS box lengths and tilt factors.
         
@@ -525,6 +529,10 @@ class Box(object):
         
         assert lx > 0 and ly > 0 and lz > 0, 'box lengths must be positive'
         
+        # Set default origin
+        if origin is None:
+            origin = [0.0, 0.0, 0.0]
+
         # Construct vects array
         self.vects = [[lx, 0.0, 0.0],
                       [xy, ly,  0.0],
