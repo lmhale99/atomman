@@ -139,8 +139,8 @@ def dislocation_array(system, dislsol=None, m=None, n=None, burgers=None, bwidth
     expected = len(pos[(pos[:, motionindex] >= 0.0) & (pos[:, motionindex] <= np.abs(burgers[motionindex]))]) // 2
     actual = system.natoms - newsystem.natoms
     if expected != actual:
-        warnings.warn('%i deleted atoms expected but %i atoms deleted' %(expected, actual), Warning)
-    
+        #warnings.warn('%i deleted atoms expected but %i atoms deleted' %(expected, actual), Warning)
+        raise ValueError('Deleted atom mismatch: expected %i, actual %i. Adjust system dimensions and/or cutoff' %(expected, actual))
     if dislsol is None:
         # Use only linear displacements
         disp = linear_displacement(newsystem.atoms.pos, burgers, length, m, n)
