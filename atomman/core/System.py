@@ -14,7 +14,7 @@ import pandas as pd
 from . import Atoms, Box, dvect, NeighborList
 from ..lammps import normalize as lmp_normalize
 from ..compatibility import iteritems, range, inttype, stringtype
-from ..tools import indexstr, miller
+from ..tools import indexstr, miller, ishexagonal
 from .. import dump
 
 class System(object):
@@ -622,10 +622,10 @@ class System(object):
         
         Parameters
         ----------
-        uvws : numpy.ndarray of int
+        uvws : numpy.ndarray
             A (3, 3) array of the Miller crystal vectors or a (3, 4) array of
             Miller-Bravais hexagonal crystal vectors to use in transforming the
-            system.
+            system.  Values must be integers.
         tol : float, optional
             Tolerance parameter used in rounding atomic positions near the
             boundaries to the boundary values.  In box-relative coordinates, any
@@ -645,23 +645,29 @@ class System(object):
             Returned if return_transform is True.
         """
         
-        # Check parameters
-        try:
-            uvws = np.asarray(uvws, dtype='int64')
-           
-            if uvws.shape == (3, 4):
+        # Convert uvws from Miller-Bravais to Miller indices if needed
+        if uvws.shape == (3, 4):
+            if ishexagonal(self.box):
                 uvws = miller.vector4to3(uvws)
-            assert uvws.shape == (3, 3)
-        except:
-            raise ValueError('Invalid uvws crystal indices')
+            else:
+                raise ValueError('hexagonal indices only work on hexagonal systems')
+        
+        # Check uvws shape and values
+        if uvws.shape != (3, 3):
+            raise ValueError('Invalid uvws crystal indices shape')
+
+        int_uvws = np.asarray(np.rint(uvws), dtype='int64')
+        if np.allclose(uvws, int_uvws):
+            uvws = int_uvws
+        else:
+            raise ValueError('Rotation uvws must be integer values')
         
         # Get natoms and volume of system
         natoms = self.natoms
-        volume = np.abs(self.box.avect.dot(np.cross(self.box.bvect,
-                                                    self.box.cvect)))
+        volume = self.box.volume
         
         # Convert uvws to Cartesian units and compute new volume and natoms
-        newvects = miller.vectortocartesian(uvws, box=self.box)
+        newvects = miller.vector_crystal_to_cartesian(uvws, box=self.box)
         newvolume = np.abs(newvects[0].dot(np.cross(newvects[1], newvects[2])))
         newnatoms = int(round(newvolume / volume) * natoms)
         
