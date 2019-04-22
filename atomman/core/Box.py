@@ -365,7 +365,7 @@ class Box(object):
     @property
     def volume(self):
         """float : The volume of the box."""
-        return np.dot(self.avect, np.cross(self.bvect, self.cvect))
+        return np.abs(np.dot(self.avect, np.cross(self.bvect, self.cvect)))
 
     def __str__(self):
         """
