@@ -15,6 +15,7 @@ from .solve_volterra_dislocation import solve_volterra_dislocation
 from .dislocation_array import dislocation_array
 
 from .GammaSurface import GammaSurface
+from .StackingFault import StackingFault
 from .pn_arctan_disregistry import pn_arctan_disregistry
 from .SDVPN import SDVPN
 
