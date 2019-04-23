@@ -1,12 +1,20 @@
+# coding: utf-8
+
+# Standard Python libraries
+from __future__ import (absolute_import, print_function,
+                        division, unicode_literals)
 import os
+
+# https://docs.pytest.org/en/latest/
 import pytest
+
+# http://www.numpy.org/
+import numpy as np
 
 import atomman as am
 
 def test_rootdir():
     assert os.path.isdir(am.rootdir)
-    testrootdir = os.path.abspath(os.path.join(__file__, '..', '..', 'atomman'))
-    assert os.path.samefile(am.rootdir, testrootdir)
 
 def test_version():
     assert os.path.isfile(os.path.join(os.path.join(am.rootdir, 'VERSION')))

@@ -1,29 +1,37 @@
+# coding: utf-8
+
+# Standard Python libraries
+from __future__ import (absolute_import, print_function,
+                        division, unicode_literals)
+
+# https://docs.pytest.org/en/latest/
 import pytest
-import atomman as am
+
+from atomman.tools import atomic_mass, atomic_symbol, atomic_number
 
 class Test_atomic_info:
     def test_atomic_symbol(self):
-        assert am.tools.atomic_symbol(74) == 'W'
+        assert atomic_symbol(74) == 'W'
         
         with pytest.raises(IndexError):
-            am.tools.atomic_symbol(0)
+            atomic_symbol(0)
         
         with pytest.raises(IndexError):
-            am.tools.atomic_symbol(119)
+            atomic_symbol(119)
 
     def test_atomic_number(self):
-        assert am.tools.atomic_number('Fe') == 26
+        assert atomic_number('Fe') == 26
         
         with pytest.raises(ValueError):
-            am.tools.atomic_number('Nt')
+            atomic_number('Nt')
         
     def test_atomic_mass(self):
-        assert am.tools.atomic_mass(77) == 192.217
+        assert atomic_mass(77) == 192.217
 
-        assert am.tools.atomic_mass('He-9') == 9.043946
+        assert atomic_mass('He-9') == 9.043946
 
         with pytest.raises(ValueError):
-            am.tools.atomic_mass(118)
+            atomic_mass(118)
 
         with pytest.raises(IndexError):
-            am.tools.atomic_mass(119)
+            atomic_mass(119)

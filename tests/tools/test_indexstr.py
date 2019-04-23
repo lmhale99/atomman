@@ -1,10 +1,18 @@
+# coding: utf-8
+
+# Standard Python libraries
+from __future__ import (absolute_import, print_function,
+                        division, unicode_literals)
+
+# https://docs.pytest.org/en/latest/
 import pytest
-import atomman as am 
+
+from atomman.tools import indexstr
 
 def compile_indices(shape):
     alli = []
     allistr = []
-    for i, istr in am.tools.indexstr(shape):
+    for i, istr in indexstr(shape):
         alli.append(i)
         allistr.append(istr)
     return alli, allistr

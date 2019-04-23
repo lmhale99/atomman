@@ -1,5 +1,13 @@
+# coding: utf-8
+
+# Standard Python libraries
+from __future__ import (absolute_import, print_function,
+                        division, unicode_literals)
+
+# https://docs.pytest.org/en/latest/
 import pytest
-import atomman as am
+
+from atomman.tools import filltemplate
 
 def test_filltemplate():
     template1 = 'this is my {val} to test'
@@ -8,11 +16,11 @@ def test_filltemplate():
 
     var = {'val': 'template', 'notused':'STEVE!'}
 
-    assert (am.tools.filltemplate(template1, var, '{', '}')
+    assert (filltemplate(template1, var, '{', '}')
             == 'this is my template to test')
 
-    assert (am.tools.filltemplate(template2, var, '<', '>')
+    assert (filltemplate(template2, var, '<', '>')
             == 'another template to test')
 
-    assert (am.tools.filltemplate(template3, var, '!@#$', '?@')
+    assert (filltemplate(template3, var, '!@#$', '?@')
             == 'yet another template to test')

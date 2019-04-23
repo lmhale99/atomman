@@ -1,6 +1,13 @@
-from __future__ import (print_function, division, unicode_literals)
+# coding: utf-8
+
+# Standard Python libraries
+from __future__ import (absolute_import, print_function,
+                        division, unicode_literals)
 import os
+
+# https://docs.pytest.org/en/latest/
 import pytest
+
 from atomman.tools import uber_open_rmode
 
 class Test_uber_open_rmode(object):
@@ -15,7 +22,7 @@ class Test_uber_open_rmode(object):
         assert content.decode('UTF-8') == self.content
 
     def test_fileread(self, tmpdir):
-        contentfile = os.path.join(tmpdir, 'content.txt')
+        contentfile = os.path.join(str(tmpdir), 'content.txt')
         with open(contentfile, 'w') as f:
             f.write(self.content)
         
@@ -24,7 +31,7 @@ class Test_uber_open_rmode(object):
         assert content.decode('UTF-8') == self.content
 
     def test_objectread(self, tmpdir):
-        contentfile = os.path.join(tmpdir, 'content.txt')
+        contentfile = os.path.join(str(tmpdir), 'content.txt')
         with open(contentfile, 'w') as f:
             f.write(self.content)
 
