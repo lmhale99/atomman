@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 
 # atomman imports
-from . import Atoms, Box, dvect, NeighborList
+from . import Atoms, Box, dvect, dmag, NeighborList
 from ..lammps import normalize as lmp_normalize
 from ..compatibility import iteritems, range, inttype, stringtype
 from ..tools import indexstr, miller, ishexagonal
@@ -402,7 +402,45 @@ class System(object):
         cvect = self.box.cvect * (maxs[2] - mins[2])
         self.box_set(avect=avect, bvect=bvect, cvect=cvect, origin=origin)
     
-    def dvect(self, pos_0, pos_1, code=None):
+    def dvect(self, pos_0, pos_1):
+        """
+        Computes the shortest vector between pos_0 and pos_1 using box 
+        dimensions and accounting for periodic boundaries.
+        
+        Parameters
+        ----------
+        pos_0 : numpy.ndarray or index
+            Absolute Cartesian vector position(s) to use as reference point(s).
+            If the value can be used as an index, then self.atoms.pos[pos_0]
+            is taken.
+        pos_1 : numpy.ndarray or index
+            Absolute Cartesian vector position(s) to find relative to pos_0.
+            If the value can be used as an index, then self.atoms.pos[pos_1]
+            is taken.
+
+        Returns
+        -------
+        numpy.ndarray
+            The shortest vectors from each pos_0 to pos_1 positions.
+        """
+        # Test if pos_0 and pos_1 can be used as numpy array indices
+        try:
+            pos_0 = self.atoms.pos[pos_0]
+        except:
+            pos_0 = np.asarray(pos_0)
+        try:
+            pos_1 = self.atoms.pos[pos_1]
+        except:
+            pos_1 = np.asarray(pos_1)
+        
+        # Call dvect using self's box and pbc
+        vects = dvect(pos_0, pos_1, self.box, self.pbc)
+        if len(vects) == 1:
+            return vects[0]
+        else:
+            return vects
+
+    def dmag(self, pos_0, pos_1):
         """
         Computes the shortest distance between pos_0 and pos_1 using box 
         dimensions and accounting for periodic boundaries.
@@ -417,11 +455,11 @@ class System(object):
             Absolute Cartesian vector position(s) to find relative to pos_0.
             If the value can be used as an index, then self.atoms.pos[pos_1]
             is taken.
-        code: str, optional
-            Option for specifying which underlying code function to use:
-            - 'cython' uses the version of the function built in cython (faster).
-            - 'python' uses the purely python version.
-            Default is 'cython' if the code can be imported, otherwise 'python'.
+        
+        Returns
+        -------
+        numpy.ndarray
+            The shortest vector magnitude from each pos_0 to pos_1 positions.
         """
         # Test if pos_0 and pos_1 can be used as numpy array indices
         try:
@@ -434,7 +472,7 @@ class System(object):
             pos_1 = np.asarray(pos_1)
         
         # Call dvect using self's box and pbc
-        vects = dvect(pos_0, pos_1, self.box, self.pbc, code=code)
+        vects = dmag(pos_0, pos_1, self.box, self.pbc)
         if len(vects) == 1:
             return vects[0]
         else:
@@ -453,14 +491,6 @@ class System(object):
         model : str or file-like object, optional
             Gives the file path or content to load.  If given, no other
             parameters are allowed.
-        cmult : int, optional
-            Parameter associated with the binning routine.  Default value is most
-            likely the fastest.
-        code: str, optional
-            Option for specifying which underlying code function of nlist to use:
-            - 'cython' uses the version of the function built in cython (faster).
-            - 'python' uses the purely python version.
-            Default is 'cython' if the code can be imported, otherwise 'python'.
         initialsize : int, optional
             The number of neighbor positions to initially assign to each atom.
             Default value is 20.

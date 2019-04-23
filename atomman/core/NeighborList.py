@@ -1,7 +1,6 @@
 # Standard Python libraries
 from __future__ import (absolute_import, print_function,
                         division, unicode_literals)
-from copy import deepcopy
 
 # http://www.numpy.org/
 import numpy as np
@@ -30,14 +29,6 @@ class NeighborList(object):
         model : str or file-like object, optional
             Gives the file path or content to load.  If given, no other
             parameters are allowed.
-        cmult : int, optional
-            Parameter associated with the binning routine.  Default value is most
-            likely the fastest.
-        code: str, optional
-            Option for specifying which underlying code function of nlist to use:
-            - 'cython' uses the version of the function built in cython (faster).
-            - 'python' uses the purely python version.
-            Default is 'cython' if the code can be imported, otherwise 'python'.
         initialsize : int, optional
             The number of neighbor positions to initially assign to each atom.
             Default value is 20.
@@ -57,7 +48,12 @@ class NeighborList(object):
     @property
     def coord(self):
         """The atomic coordination numbers"""
-        return deepcopy(self.__coord)
+        return self.__coord
+    
+    @property
+    def nlist(self):
+        """numpy.ndarray: The underlying numpy array of coord + neighbor ids"""
+        return self.__nlist
     
     def __len__(self):
         """len returns the number of atoms"""
@@ -67,8 +63,7 @@ class NeighborList(object):
         """Get returns the list of neighbors for the specified atom."""
         return self.__neighbors[key, :self.coord[key]]
     
-    def build(self, system, cutoff, cmult=1, code=None, initialsize=20,
-              deltasize=10):
+    def build(self, system, cutoff, initialsize=20, deltasize=10):
         """
         Builds the neighbor list for a system.
         
@@ -78,14 +73,6 @@ class NeighborList(object):
             The system to calculate the neighbor list for.
         cutoff : float
             Radial cutoff distance for identifying neighbors.
-        cmult : int, optional
-            Parameter associated with the binning routine. Default value is most
-            likely the fastest.
-        code: str, optional
-            Option for specifying which underlying code function of nlist to use:
-            - 'cython' uses the version of the function built in cython (faster).
-            - 'python' uses the purely python version.
-            Default is 'cython' if the code can be imported, otherwise 'python'.
         initialsize : int, optional
             The number of neighbor positions to initially assign to each atom.
             Default value is 20.
@@ -95,12 +82,12 @@ class NeighborList(object):
             Default value is 10.
         """
         # Call nlist
-        neighbors = nlist(system, cutoff, cmult=cmult, code=code,
-                          initialsize=initialsize, deltasize=deltasize)
+        self.__nlist = nlist(system, cutoff, initialsize=initialsize, 
+                             deltasize=deltasize)
         
         # Split coord and neighbors
-        self.__coord = neighbors[:, 0]
-        self.__neighbors = neighbors[:, 1:]
+        self.__coord = self.__nlist[:, 0]
+        self.__neighbors = self.__nlist[:, 1:]
         
     def load(self, model):
         """
@@ -124,10 +111,12 @@ class NeighborList(object):
                     if n_n > nterms:
                         nterms = n_n
             
-            self.__coord = np.zeros(natoms, dtype=int)
-            self.__neighbors = np.empty((natoms, nterms), dtype=int)
+            self.__nlist = np.empty((natoms, nterms+1), dtype=int)
+            self.__coord = self.__nlist[:, 0]
+            self.__neighbors = self.__nlist[:, 1:]
             
             # Second pass gets values
+            self.__coord[:] = 0
             fin.seek(0)
             for line in fin:
                 line = line.decode('UTF-8')
