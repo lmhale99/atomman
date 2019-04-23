@@ -3,22 +3,19 @@ from setuptools import setup, find_packages
 from setuptools.extension import Extension
 
 try:
-    import numpy
-except:
-    raise ImportError('Install numpy first!')
-
-try:
     from Cython.Build import cythonize
 except:
-    # List cython extensions
-    extensions = [Extension("atomman.core.cythonized",
-                           ["atomman/core/cythonized.c"],
-                           include_dirs=[numpy.get_include()])]
+    USE_CYTHON = False
+    ext = '.c'
 else:
-    # List cython extensions
-    extensions = [Extension("atomman.core.cythonized",
-                           ["atomman/core/cythonized.pyx"],
-                           include_dirs=[numpy.get_include()])]
+    USE_CYTHON = True
+    ext = '.pyx'
+
+extensions = [Extension("*", ["atomman/core/*" + ext]),
+              Extension("*", ["atomman/defect/*" + ext])]
+
+if USE_CYTHON:
+    
     extensions = cythonize(extensions)
 
 def getversion():
