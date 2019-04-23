@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: NeighborList class &#8212; atomman 1.2.5 documentation</title>
+    <title>Introduction to atomman: NeighborList class &#8212; atomman 1.2.6 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.5',
+        VERSION:     '1.2.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="03.1._ElasticConstants_class.html" title="Introduction to atomman: ElasticConstants class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -235,30 +235,21 @@ accessing each atom’s coordination number and list of neighbor atoms.</p>
 <p>The NeighborList class uses the nlist() function in
 atomman/core/nlist.py to built the list of neighbor atoms. First, the
 routine defines an orthogonal super-box that fully encompasses the
-system. The super-box is then divided into cubic bins with dimensions of
-cutoff/cmult, where cmult is an integer (default value is 1). Each bin
-is given a list of atom ids corresponding to both the real atoms in the
-system as well as ghost atoms from periodic replicas of the system that
-fall inside the bin’s boundaries.</p>
+system. The super-box is then divided into cubic bins of dimensions of
+cutoff. Each bin is given a list of atom ids corresponding to both the
+real atoms in the system as well as ghost atoms from periodic replicas
+of the system that fall inside the bin’s boundaries.</p>
 <p>For all bins containing at least one real atom, the shortest vector
 distance between the atoms within that bin and nearby bins are
 calculated using dvect(). The ids of atoms separated by less than the
 cutoff distance are added to each other’s neighbors list, as long as the
 ids are not the same or already in the list.</p>
-<p><strong>NOTE 1:</strong> This routine does not differentiate between the different
+<p><strong>NOTE:</strong> This routine does not differentiate between the different
 periodic replicas of the atoms. As such, the system’s dimensions should
 be larger than the cutoff distance used to ensure that atoms are not
 neighbors of themselves, or periodic replicas of the same atom.</p>
-<p><strong>NOTE 2:</strong> The cmult parameter adjusts the bin size as well as the
-number of nearby bins that are included in the neighbor search. A larger
-cmult reduces the total space that needs to be explored, but increases
-the number of programming loops. As such, optimum values can depend on
-how the routine is implemented. Here, 1 seems to be the most
-computationally efficent.</p>
-<p><strong>NOTE 3:</strong> A new Cython version of the nlist() function is included in
-atomman version 1.2 that results in considerable speedups over the pure
-Python implementation. Even so, the routine is likely not fully
-implemented and could potentially benefit from further improvement.</p>
+<p><em>Updated version 1.2.6:</em> cmult and code options removed as underlying
+cython code is better integrated and now considerably faster.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
@@ -291,8 +282,8 @@ implemented and could potentially benefit from further improvement.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.5
-Notebook executed on 2019-03-25
+atomman version = 1.2.6
+Notebook executed on 2019-04-23
 </pre></div></div>
 </div>
 <p>Construct a 10x10x10 bcc supercell system.</p>
@@ -336,16 +327,6 @@ neighbor list for. Must be given if model is not given.</li>
 neighbors. Must be given if model is not given.</li>
 <li><strong>model</strong> (<em>str or file-like object, optional</em>) Gives the file path
 or content to load. No other parameters are allowed.</li>
-<li><strong>cmult</strong> (<em>int, optional</em>) Parameter associated with the binning
-routine. Default value is most likely the fastest.</li>
-<li><strong>code</strong> (<em>str, optional</em>) Option for specifying which underlying
-code function of nlist to use. Default is ‘cython’ if the code can be
-imported, otherwise ‘python’.<ul>
-<li>‘cython’ uses the version of the function built in cython
-(faster).</li>
-<li>‘python’ uses the purely python version.</li>
-</ul>
-</li>
 <li><strong>initialsize</strong> (<em>int, optional</em>) The number of neighbor positions to
 initially assign to each atom. Default value is 20.</li>
 <li><strong>deltasize</strong> (<em>int, optional</em>) Specifies the number of extra
@@ -444,16 +425,6 @@ neighbors for a new system and cutoff.</p>
 list for. Must be given if model is not given.</li>
 <li><strong>cutoff</strong> (<em>float</em>) Radial cutoff distance for identifying
 neighbors. Must be given if model is not given.</li>
-<li><strong>cmult</strong> (<em>int, optional</em>) Parameter associated with the binning
-routine. Default value is most likely the fastest.</li>
-<li><strong>code</strong> (<em>str, optional</em>) Option for specifying which underlying
-code function of nlist to use. Default is ‘cython’ if the code can be
-imported, otherwise ‘python’.<ul>
-<li>‘cython’ uses the version of the function built in cython
-(faster).</li>
-<li>‘python’ uses the purely python version.</li>
-</ul>
-</li>
 <li><strong>initialsize</strong> (<em>int, optional</em>) The number of neighbor positions to
 initially assign to each atom. Default value is 20.</li>
 <li><strong>deltasize</strong> (<em>int, optional</em>) Specifies the number of extra
@@ -2639,7 +2610,7 @@ Average number of neighbors = 14.0
         <li class="right" >
           <a href="03.1._ElasticConstants_class.html" title="Introduction to atomman: ElasticConstants class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

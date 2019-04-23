@@ -1,0 +1,181 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>plot &#8212; atomman 1.2.6 documentation</title>
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Atoms" href="atomman.Atoms.html" />
+    <link rel="prev" title="VolterraDislocation" href="atomman.defect.VolterraDislocation.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atomman.Atoms.html" title="Atoms"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="atomman.defect.VolterraDislocation.html" title="VolterraDislocation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="atomman.html" accesskey="U">atomman package</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="plot">
+<h1>plot<a class="headerlink" href="#plot" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-atomman.plot">
+<span id="functions-and-attributes"></span><h2>Functions and attributes<a class="headerlink" href="#module-atomman.plot" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="atomman.plot.interpolate_contour">
+<code class="descclassname">atomman.plot.</code><code class="descname">interpolate_contour</code><span class="sig-paren">(</span><em>system</em>, <em>name</em>, <em>property=None</em>, <em>index=None</em>, <em>magnitude=False</em>, <em>plotxaxis='x'</em>, <em>plotyaxis='y'</em>, <em>xlim=None</em>, <em>ylim=None</em>, <em>zlim=None</em>, <em>xbins=200</em>, <em>ybins=200</em>, <em>dots=True</em>, <em>czero=True</em>, <em>save=False</em>, <em>show=True</em>, <em>length_unit='angstrom'</em>, <em>property_unit=None</em>, <em>cmap='jet'</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.plot.interpolate_contour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a contour plot of a system’s per-atom properties by interpolating
+properties between atoms.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>system</strong> (<a class="reference internal" href="atomman.System.html#atomman.System" title="atomman.System"><em>atomman.System</em></a>) – The system with the per-atom property that you want to plot.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name of the per-atom property that you want to plot.</li>
+<li><strong>property</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – Values for the per-atom property to plot.  If not given, values will
+be taken as the “name” property of system.</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a><em>, </em><em>optional</em>) – Specifies which component of a multidimensional property to plot.  Not
+needed if the property is scalar.</li>
+<li><strong>magnitude</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, plots the per-atom magnitude of a vector property.  Cannot be
+combined with index.  Default value is False.</li>
+<li><strong>plotxaxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>array-like object</em><em>, </em><em>optional</em>) – Indicates the Cartesian direction associated with the system’s atomic
+coordinates to align with the plotting x-axis.  Values are either 3D
+unit vectors, or strings ‘x’, ‘y’, or ‘z’ for the Cartesian axes
+directions.  plotxaxis and plotyaxis must be orthogonal.  Default value
+is ‘x’ = [1, 0, 0].</li>
+<li><strong>plotyaxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>array-like object</em><em>, </em><em>optional</em>) – Indicates the Cartesian direction associated with the system’s atomic
+coordinates to align with the plotting y-axis.  Values are either 3D
+unit vectors, or strings ‘x’, ‘y’, or ‘z’ for the Cartesian axes
+directions.  plotxaxis and plotyaxis must be orthogonal.  Default value
+is ‘y’ = [0, 1, 0].</li>
+<li><strong>xlim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a><em>, </em><em>optional</em>) – The minimum and maximum coordinates along the plotting x-axis to
+include in the fit.  Values are taken in the specified length_unit.
+If not given, then the limits are set based on min and max atomic
+coordinates along the plotting axis.</li>
+<li><strong>ylim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a><em>, </em><em>optional</em>) – The minimum and maximum coordinates along the plotting y-axis to
+include in the fit.  Values are taken in the specified length_unit.
+If not given, then the limits are set based on min and max atomic
+coordinates along the plotting axis.</li>
+<li><strong>zlim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a><em>, </em><em>optional</em>) – The minimum and maximum coordinates normal to the plotting axes
+(i.e. plotxaxis X plotyaxis) to include in the fit.  Values are taken
+in the specified length_unit.  If not given, then the limits are set
+based on min and max atomic coordinates along the axis.</li>
+<li><strong>xbins</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Specifies the number of interpolation bins to use along the plotting
+x-axis.  Default value is 200.</li>
+<li><strong>ybins</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Specifies the number of interpolation bins to use along the plotting
+y-axis.  Default value is 200.</li>
+<li><strong>dots</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, then the positions of the atoms are shown as circles.
+Default value is True.</li>
+<li><strong>czero</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, the range of property values will be centered around zero,
+i.e. cmax = -cmin.  If False, cmax and cmin will be independently
+selected using the property values.  Default value is True.</li>
+<li><strong>save</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, the generated plot will be saved to “name.png”.  Default
+value is False.</li>
+<li><strong>show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, matplotlib.pyplot.show() is called.  Default value is True.</li>
+<li><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – The units of length to use for the plotting x- and y-axes.  Default
+value is ‘angstrom’.</li>
+<li><strong>property_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em>, </em><em>optional</em>) – The units to use for the property value being plotted.  Default value
+is None, in which no unit conversion is applied.</li>
+<li><strong>cmap</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – The name of the matplotlib colormap to use.  Default value is ‘jet’.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>intsum</strong> (<em>float</em>) – The area integrated sum of the property over the plotted region.</li>
+<li><strong>avsum</strong> (<em>float</em>) – The average property value taken across all plotting bins.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">plot</a><ul>
+<li><a class="reference internal" href="#module-atomman.plot">Functions and attributes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="atomman.defect.VolterraDislocation.html"
+                        title="previous chapter">VolterraDislocation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="atomman.Atoms.html"
+                        title="next chapter">Atoms</a></p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atomman.Atoms.html" title="Atoms"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="atomman.defect.VolterraDislocation.html" title="VolterraDislocation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>

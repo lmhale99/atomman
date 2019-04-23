@@ -1,0 +1,1529 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Introduction to atomman: Gamma Surface Plotting &#8212; atomman 1.2.6 documentation</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.2.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro" href="04.6._Semidiscrete_Variational_Peierls-Nabarro.html" />
+    <link rel="prev" title="Introduction to atomman: Stacking Fault Generation" href="04.4._Stacking_Fault_Generation.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="04.6._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="04.4._Stacking_Fault_Generation.html" title="Introduction to atomman: Stacking Fault Generation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 9ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+</style>
+<div class="section" id="Introduction-to-atomman:-Gamma-Surface-Plotting">
+<h1>Introduction to atomman: Gamma Surface Plotting<a class="headerlink" href="#Introduction-to-atomman:-Gamma-Surface-Plotting" title="Permalink to this headline">¶</a></h1>
+<p><strong>Lucas M. Hale</strong>,
+<a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
+<em>Materials Science and Engineering Division, NIST</em>.</p>
+<p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
+<div class="section" id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<p>This Notebook outlines the GammaSurface class and the various stacking
+fault plots that it can generate. See the <a class="reference external" href="04.4._Stacking_Fault_Generation.html">04.4 Stacking Fault
+Generation Notebook</a> for
+generating systems containing stacking faults.</p>
+<p><strong>Library Imports</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Standard Python libraries</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
+                        <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="c1"># http://www.numpy.org/</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># https://github.com/usnistgov/atomman</span>
+<span class="kn">import</span> <span class="nn">atomman</span> <span class="k">as</span> <span class="nn">am</span>
+<span class="kn">import</span> <span class="nn">atomman.unitconvert</span> <span class="k">as</span> <span class="nn">uc</span>
+
+<span class="c1"># https://matplotlib.org/</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="c1"># Show atomman version</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+atomman version = 1.2.6
+Notebook executed on 2019-04-23
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="2.-Underlying-theory">
+<h2>2. Underlying theory<a class="headerlink" href="#2.-Underlying-theory" title="Permalink to this headline">¶</a></h2>
+<p>Generalized stacking fault energy maps (<span class="math">\(\gamma\)</span>-surfaces) provide
+2D maps of the stacking fault energy associated with arbitrary shifts
+along a crystallographic fault plane. Typically, the fault plane
+corresponds to one of the crystal’s slip planes and the stacking fault
+energies and pathways influence dislocation structures and dislocation
+slip.</p>
+<p>A <span class="math">\(\gamma\)</span>-surface is defined by the crystal and the fault plane.
+Starting in an unfaulted configuration, the atoms on one side of the
+fault plane are shifted by a vector <span class="math">\(\mathbf{d}\)</span> which is within
+the fault plane. The generalized stacking fault energy for a given
+shift, <span class="math">\(\gamma_{gsf}(\mathbf{d})\)</span>, is computed as the difference
+in potential energy, <span class="math">\(U\)</span> of the shifted configuration relative to
+the corresponding unshifted configuration
+(<span class="math">\(\mathbf{d}=\mathbf{0}\)</span>) divided by the fault plane area,
+<span class="math">\(A_{fault}\)</span></p>
+<div class="math">
+\[\gamma_{gsf}(\mathbf{d}) = \frac{U(\mathbf{d}) - U(\mathbf{0})}{A_{fault}}\]</div>
+<p>The measured <span class="math">\(\gamma_{gsf}\)</span> values may be “unrelaxed”, in which
+case no atomic relaxations are allowed, or “relaxed”, in which atoms are
+allowed to move only in the direction normal to the slip plane to lower
+the system’s energy. For relaxed <span class="math">\(\gamma\)</span>-surfaces, the relaxation
+distance, <span class="math">\(\delta_{\bot}\)</span>, can be evaluated using the centers of
+mass of the atoms on the two sides of the fault plane,
+<span class="math">\(\mathbf{R}^+\)</span> and <span class="math">\(\mathbf{R}^-\)</span>, and measuring how the
+plane normal component <span class="math">\(\bot\)</span> changes relative to the unshifted
+state</p>
+<div class="math">
+\[\mathbf{R} = \frac{\sum_{i=1}^{n}m_i\mathbf{r_i}}{\sum_{i=1}^{n}m_i}\]</div>
+<div class="math">
+\[\delta_{\bot} = \left(R_{\bot}^+(\mathbf{d}) - R_{\bot}^-(\mathbf{d})\right) - \left(R_{\bot}^+(\mathbf{0}) - R_{\bot}^-(\mathbf{0})\right)\]</div>
+<p>As a <span class="math">\(\gamma\)</span>-surface is a 2D map, the applied shift,
+<span class="math">\(\mathbf{d}\)</span>, can be expressed using two non-parallel vectors
+within the fault plane, <span class="math">\(\mathbf{a_1}\)</span> and <span class="math">\(\mathbf{a_2}\)</span>.
+Taking <span class="math">\(\mathbf{a_1}\)</span> and <span class="math">\(\mathbf{a_2}\)</span> as lattice vectors
+(i.e. vectors between two symetrically identical lattice sites) will
+define a 2D cell encompassing all possible unique stacking fault shifts
+for the fault plane. <span class="math">\(\mathbf{d}\)</span> can then be represented using
+fractional coordinates, <span class="math">\(a_1\)</span> and <span class="math">\(a_2\)</span>, relative to
+<span class="math">\(\mathbf{a_1}\)</span> and <span class="math">\(\mathbf{a_2}\)</span></p>
+<div class="math">
+\[\mathbf{d} = a_1 \mathbf{a_1} + a_2 \mathbf{a_2}\]</div>
+<p>The <span class="math">\(\gamma_{gsf}\)</span> (and <span class="math">\(\delta_{\bot}\)</span>) data is fit to
+interpolation models to provide continuous values between the measured
+points. Two interpolation models are fit to the data</p>
+<ul class="simple">
+<li>A multiquadric radial basis function interpolation.</li>
+<li>A nearest-value interpolation.</li>
+</ul>
+<p>To perform the fits, the data is replicated across the periodic bounds
+by shifting the <span class="math">\(a_1\)</span> and <span class="math">\(a_2\)</span> values by <span class="math">\(\pm 1\)</span>. The
+unique <span class="math">\(a_1\)</span> and <span class="math">\(a_2\)</span> values less than and closest to 0 and
+greater than and closest to 1 are identified, and all measured points
+between these two limits are fed into the fitting models to ensure
+smooth representation across the bounds. Any arbitrary shift values
+<span class="math">\(\mathbf{d}\)</span> are converted into <span class="math">\(a_1\)</span> and <span class="math">\(a_2\)</span> values
+between 0 and 1 for use in retrieving values from the fitted models.</p>
+</div>
+<div class="section" id="3.-Defining-gamma-surface-data">
+<h2>3. Defining gamma surface data<a class="headerlink" href="#3.-Defining-gamma-surface-data" title="Permalink to this headline">¶</a></h2>
+<p>The atomman.defect.GammaSurface class offers interpolation and plotting
+options for generalized stacking fault data.</p>
+<div class="section" id="3.1.-Setting-values">
+<h3>3.1. Setting values<a class="headerlink" href="#3.1.-Setting-values" title="Permalink to this headline">¶</a></h3>
+<p>The stacking fault data can be set directly either during class
+initialization or by using the GammaSurface.set() method.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><strong>a1vect</strong> (<em>array-like object of length 3</em>) The a1 shifting vector.
+If box is given, a1vect is taken as a crystal lattice vector,
+otherwise as a Cartesian vector.</li>
+<li><strong>a2vect</strong> (<em>array-like object of length 3</em>) The a2 shifting vector.
+If box is given, a1vect is taken as a crystal lattice vector,
+otherwise as a Cartesian vector.</li>
+<li><strong>a1</strong> (<em>array-like object of length N</em>) List of fractional
+coordinates along a1vect corresponding to the E_gsf (and delta)
+values.</li>
+<li><strong>a2</strong> (<em>array-like object of length N</em>) List of fractional
+coordinates along a2vect corresponding to the E_gsf (and delta)
+values.</li>
+<li><strong>E_gsf</strong> (<em>array-like object of length N</em>) List of generalized
+stacking fault energies for the positions associated with the
+corresponding (a1, a2) fractional coordinates.</li>
+<li><strong>box</strong> (<em>atomman.Box, optional</em>) Defines unit cell box dimensions
+for conversion between crystal lattice and Cartesian vectors. If not
+given, will be set as a square unit box, thus no conversion will
+occur (i.e. a1vect, a2vect will be Cartesian).</li>
+<li><strong>delta</strong> (<em>array-like object of length N, optional</em>) List of change
+in displacements normal to the fault plane for the positions
+associated with the corresponding (a1, a2) fractional coordinates.</li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Parameters for an Al fcc 111 stacking fault</span>
+<span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">cubic</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">4.05</span><span class="p">)</span>
+<span class="n">a1vect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+<span class="n">a2vect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+
+<span class="c1"># Measured 10x10 grid of generalized stacking fault data</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
+<span class="n">a2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
+<span class="n">E_gsf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0029058939813610372</span><span class="p">,</span> <span class="mf">0.009967527110804493</span><span class="p">,</span> <span class="mf">0.017519738232042618</span><span class="p">,</span> <span class="mf">0.02326877602347241</span><span class="p">,</span> <span class="mf">0.024857238534160123</span><span class="p">,</span> <span class="mf">0.023268775651632455</span><span class="p">,</span> <span class="mf">0.017519736773543945</span><span class="p">,</span> <span class="mf">0.009967524907496488</span><span class="p">,</span> <span class="mf">0.0029058924810454892</span><span class="p">,</span> <span class="mf">0.002905902826409026</span><span class="p">,</span> <span class="mf">0.010170484991190503</span><span class="p">,</span> <span class="mf">0.020395839765219238</span><span class="p">,</span> <span class="mf">0.02857152118868265</span><span class="p">,</span> <span class="mf">0.03178495629206124</span><span class="p">,</span> <span class="mf">0.031784956450315115</span><span class="p">,</span> <span class="mf">0.028571520168478783</span><span class="p">,</span> <span class="mf">0.02039583762836736</span><span class="p">,</span> <span class="mf">0.010170482478274855</span><span class="p">,</span> <span class="mf">0.002905901841404914</span><span class="p">,</span> <span class="mf">0.009967530192814976</span><span class="p">,</span> <span class="mf">0.020395832461598103</span><span class="p">,</span> <span class="mf">0.030039341624311384</span><span class="p">,</span> <span class="mf">0.03499075121321049</span><span class="p">,</span> <span class="mf">0.035623194600430674</span><span class="p">,</span> <span class="mf">0.034990751326409684</span><span class="p">,</span> <span class="mf">0.030039340246909744</span><span class="p">,</span> <span class="mf">0.020395829767056402</span><span class="p">,</span> <span class="mf">0.00996752813917364</span><span class="p">,</span> <span class="mf">0.005442627660468005</span><span class="p">,</span> <span class="mf">0.017519724199952073</span><span class="p">,</span> <span class="mf">0.02857150343353976</span><span class="p">,</span> <span class="mf">0.034990743348520224</span><span class="p">,</span> <span class="mf">0.03592784212518266</span><span class="p">,</span> <span class="mf">0.03592784215629818</span><span class="p">,</span> <span class="mf">0.03499074279491336</span><span class="p">,</span> <span class="mf">0.02857150121277434</span><span class="p">,</span> <span class="mf">0.017519721775032932</span><span class="p">,</span> <span class="mf">0.009514898671668064</span><span class="p">,</span> <span class="mf">0.009514899593174062</span><span class="p">,</span> <span class="mf">0.0232687483392972</span><span class="p">,</span> <span class="mf">0.03178492693594086</span><span class="p">,</span> <span class="mf">0.0356231854288785</span><span class="p">,</span> <span class="mf">0.03592784183810076</span><span class="p">,</span> <span class="mf">0.0356231847471479</span><span class="p">,</span> <span class="mf">0.03178492514910748</span><span class="p">,</span> <span class="mf">0.023268746230323666</span><span class="p">,</span> <span class="mf">0.013824846424357776</span><span class="p">,</span> <span class="mf">0.009977732476889075</span><span class="p">,</span> <span class="mf">0.013824847592818454</span><span class="p">,</span> <span class="mf">0.02485720345681911</span><span class="p">,</span> <span class="mf">0.03178492745336388</span><span class="p">,</span> <span class="mf">0.03499074046179261</span><span class="p">,</span> <span class="mf">0.034990739796816425</span><span class="p">,</span> <span class="mf">0.03178492550813512</span><span class="p">,</span> <span class="mf">0.024857201334750913</span><span class="p">,</span> <span class="mf">0.01676686928265928</span><span class="p">,</span> <span class="mf">0.011212312575301371</span><span class="p">,</span> <span class="mf">0.011212312851260616</span><span class="p">,</span> <span class="mf">0.01676687052602372</span><span class="p">,</span> <span class="mf">0.023268735121708652</span><span class="p">,</span> <span class="mf">0.028571479533944916</span><span class="p">,</span> <span class="mf">0.030039311395541578</span><span class="p">,</span> <span class="mf">0.028571478332115</span><span class="p">,</span> <span class="mf">0.023268733384575076</span><span class="p">,</span> <span class="mf">0.01676686336038317</span><span class="p">,</span> <span class="mf">0.011665394999032198</span><span class="p">,</span> <span class="mf">0.009542001938907512</span><span class="p">,</span> <span class="mf">0.011665395298503193</span><span class="p">,</span> <span class="mf">0.016766864450984627</span><span class="p">,</span> <span class="mf">0.01751969265854646</span><span class="p">,</span> <span class="mf">0.020395789107882645</span><span class="p">,</span> <span class="mf">0.02039578854962875</span><span class="p">,</span> <span class="mf">0.01751969169198577</span><span class="p">,</span> <span class="mf">0.0138248287503132</span><span class="p">,</span> <span class="mf">0.011212304552217006</span><span class="p">,</span> <span class="mf">0.009542003199448295</span><span class="p">,</span> <span class="mf">0.009542003267030008</span><span class="p">,</span> <span class="mf">0.01121230456531103</span><span class="p">,</span> <span class="mf">0.013824829275760646</span><span class="p">,</span> <span class="mf">0.009967489607699194</span><span class="p">,</span> <span class="mf">0.010170438602488702</span><span class="p">,</span> <span class="mf">0.009967489756660933</span><span class="p">,</span> <span class="mf">0.009514877089284066</span><span class="p">,</span> <span class="mf">0.00997772373884573</span><span class="p">,</span> <span class="mf">0.01121231277790565</span><span class="p">,</span> <span class="mf">0.011665403430422714</span><span class="p">,</span> <span class="mf">0.011212312514477638</span><span class="p">,</span> <span class="mf">0.009977723519908976</span><span class="p">,</span> <span class="mf">0.009514877022546862</span><span class="p">,</span> <span class="mf">0.002905875619952831</span><span class="p">,</span> <span class="mf">0.002905876133856328</span><span class="p">,</span> <span class="mf">0.00544260634615841</span><span class="p">,</span> <span class="mf">0.009514894878640063</span><span class="p">,</span> <span class="mf">0.013824855189574535</span><span class="p">,</span> <span class="mf">0.016766890288627673</span><span class="p">,</span> <span class="mf">0.016766890134175035</span><span class="p">,</span> <span class="mf">0.013824854547407091</span><span class="p">,</span> <span class="mf">0.009514893889552352</span><span class="p">,</span> <span class="mf">0.005442605088996296</span><span class="p">])</span>
+<span class="n">delta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.011894941077718713</span><span class="p">,</span> <span class="mf">0.06191865285371456</span><span class="p">,</span> <span class="mf">0.1415766284579707</span><span class="p">,</span> <span class="mf">0.22842358541125485</span><span class="p">,</span> <span class="mf">0.282206219272064</span><span class="p">,</span> <span class="mf">0.2284235544133164</span><span class="p">,</span> <span class="mf">0.1415765987454929</span><span class="p">,</span> <span class="mf">0.06191862427468031</span><span class="p">,</span> <span class="mf">0.01189493683759757</span><span class="p">,</span> <span class="mf">0.011894848438886996</span><span class="p">,</span> <span class="mf">0.0629409280849682</span><span class="p">,</span> <span class="mf">0.14840372088448817</span><span class="p">,</span> <span class="mf">0.25452232688216725</span><span class="p">,</span> <span class="mf">0.3621481241787716</span><span class="p">,</span> <span class="mf">0.36214800587557683</span><span class="p">,</span> <span class="mf">0.2545222871757584</span><span class="p">,</span> <span class="mf">0.1484036888707525</span><span class="p">,</span> <span class="mf">0.06294091666707047</span><span class="p">,</span> <span class="mf">0.011894840085245661</span><span class="p">,</span> <span class="mf">0.06191878798732198</span><span class="p">,</span> <span class="mf">0.1484038170673294</span><span class="p">,</span> <span class="mf">0.2881199279026969</span><span class="p">,</span> <span class="mf">0.48249932654951344</span><span class="p">,</span> <span class="mf">0.5413359543921441</span><span class="p">,</span> <span class="mf">0.48249927131236525</span><span class="p">,</span> <span class="mf">0.28811989133388316</span><span class="p">,</span> <span class="mf">0.1484037932659099</span><span class="p">,</span> <span class="mf">0.061918771265423445</span><span class="p">,</span> <span class="mf">0.009835687819675698</span><span class="p">,</span> <span class="mf">0.14157693518040482</span><span class="p">,</span> <span class="mf">0.254522319051242</span><span class="p">,</span> <span class="mf">0.4824990362601138</span><span class="p">,</span> <span class="mf">0.6302827111959264</span><span class="p">,</span> <span class="mf">0.6302826961369146</span><span class="p">,</span> <span class="mf">0.48249900006798185</span><span class="p">,</span> <span class="mf">0.25452228247809927</span><span class="p">,</span> <span class="mf">0.14157692680593925</span><span class="p">,</span> <span class="mf">0.07923441797991693</span><span class="p">,</span> <span class="mf">0.0792368011160356</span><span class="p">,</span> <span class="mf">0.22842386790467195</span><span class="p">,</span> <span class="mf">0.36214809791403013</span><span class="p">,</span> <span class="mf">0.5413352450450137</span><span class="p">,</span> <span class="mf">0.6302824324643996</span><span class="p">,</span> <span class="mf">0.5413352033689005</span><span class="p">,</span> <span class="mf">0.36214805943961714</span><span class="p">,</span> <span class="mf">0.22842385961280165</span><span class="p">,</span> <span class="mf">0.1538922572144994</span><span class="p">,</span> <span class="mf">0.1255452665080643</span><span class="p">,</span> <span class="mf">0.15389225701323284</span><span class="p">,</span> <span class="mf">0.2822053601370609</span><span class="p">,</span> <span class="mf">0.3621476945807043</span><span class="p">,</span> <span class="mf">0.48249839619324497</span><span class="p">,</span> <span class="mf">0.48249841821976425</span><span class="p">,</span> <span class="mf">0.3621475014569544</span><span class="p">,</span> <span class="mf">0.282206042554197</span><span class="p">,</span> <span class="mf">0.20976312214005155</span><span class="p">,</span> <span class="mf">0.16126457970799457</span><span class="p">,</span> <span class="mf">0.161264573029003</span><span class="p">,</span> <span class="mf">0.2097631029839686</span><span class="p">,</span> <span class="mf">0.22842329159117902</span><span class="p">,</span> <span class="mf">0.2545216032901987</span><span class="p">,</span> <span class="mf">0.2881192172332252</span><span class="p">,</span> <span class="mf">0.25452160642329424</span><span class="p">,</span> <span class="mf">0.22842331429657214</span><span class="p">,</span> <span class="mf">0.20976291263960256</span><span class="p">,</span> <span class="mf">0.16924653271973433</span><span class="p">,</span> <span class="mf">0.1339344003648133</span><span class="p">,</span> <span class="mf">0.16924653200388384</span><span class="p">,</span> <span class="mf">0.20976288146158595</span><span class="p">,</span> <span class="mf">0.14157641838617963</span><span class="p">,</span> <span class="mf">0.1484032606714738</span><span class="p">,</span> <span class="mf">0.14840326888439748</span><span class="p">,</span> <span class="mf">0.14157643972432687</span><span class="p">,</span> <span class="mf">0.1538917694437707</span><span class="p">,</span> <span class="mf">0.16126429037130663</span><span class="p">,</span> <span class="mf">0.1339344251377188</span><span class="p">,</span> <span class="mf">0.13393442185462412</span><span class="p">,</span> <span class="mf">0.16126426357866386</span><span class="p">,</span> <span class="mf">0.15389174152796237</span><span class="p">,</span> <span class="mf">0.06191832083556825</span><span class="p">,</span> <span class="mf">0.06294072780150906</span><span class="p">,</span> <span class="mf">0.06191833269256186</span><span class="p">,</span> <span class="mf">0.07923620173687063</span><span class="p">,</span> <span class="mf">0.12554476892559663</span><span class="p">,</span> <span class="mf">0.16126426421697637</span><span class="p">,</span> <span class="mf">0.1692468825130593</span><span class="p">,</span> <span class="mf">0.1612642441036236</span><span class="p">,</span> <span class="mf">0.12554474048878994</span><span class="p">,</span> <span class="mf">0.0792361769983625</span><span class="p">,</span> <span class="mf">0.01189479365989321</span><span class="p">,</span> <span class="mf">0.01189478954671408</span><span class="p">,</span> <span class="mf">0.009834223780478268</span><span class="p">,</span> <span class="mf">0.07923639077706035</span><span class="p">,</span> <span class="mf">0.1538918423263027</span><span class="p">,</span> <span class="mf">0.20976273646788535</span><span class="p">,</span> <span class="mf">0.20976272444614175</span><span class="p">,</span> <span class="mf">0.15389181461142165</span><span class="p">,</span> <span class="mf">0.07923635694905862</span><span class="p">,</span> <span class="mf">0.009834209898977875</span><span class="p">])</span>
+
+<span class="n">gamma</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">GammaSurface</span><span class="p">(</span><span class="n">a1vect</span><span class="o">=</span><span class="n">a1vect</span><span class="p">,</span> <span class="n">a2vect</span><span class="o">=</span><span class="n">a2vect</span><span class="p">,</span> <span class="n">a1</span><span class="o">=</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="o">=</span><span class="n">a2</span><span class="p">,</span>
+                               <span class="n">E_gsf</span><span class="o">=</span><span class="n">E_gsf</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="3.2.-Class-attributes">
+<h3>3.2. Class attributes<a class="headerlink" href="#3.2.-Class-attributes" title="Permalink to this headline">¶</a></h3>
+<p>The GammaSurface class has the following attributes for the data</p>
+<ul class="simple">
+<li><strong>a1vect, a2vect</strong> the two shifting vectors as given.</li>
+<li><strong>box</strong> the unit cell box as given.</li>
+<li><strong>planenormal</strong> a Cartesian vector normal to the fault plane.</li>
+<li><strong>data</strong> a pandas.DataFrame tabulating the measured stacking fault
+data. The data columns are<ul>
+<li><strong>a1</strong> fractional coordinates along the a1vect.</li>
+<li><strong>a2</strong> fractional coordinates along the a2vect.</li>
+<li><strong>E_gsf</strong> generalized stacking fault energies measured for each
+(a1, a2) fault shift.</li>
+<li><strong>delta</strong> (optional) relaxation distances measured for each (a1,
+a2) fault shift.</li>
+</ul>
+</li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;gamma.a1vect -&gt;&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">.</span><span class="n">a1vect</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;gamma.a2vect -&gt;&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">.</span><span class="n">a2vect</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;gamma.planenormal -&gt;&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">.</span><span class="n">planenormal</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;gamma.box -&gt;&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gamma</span><span class="o">.</span><span class="n">box</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+gamma.a1vect -&gt; [ 0.  -0.5  0.5]
+gamma.a2vect -&gt; [-0.5  0.   0.5]
+gamma.planenormal -&gt; [-4.100625 -4.100625 -4.100625]
+gamma.box -&gt;
+avect =  [ 4.050,  0.000,  0.000]
+bvect =  [ 0.000,  4.050,  0.000]
+cvect =  [ 0.000,  0.000,  4.050]
+origin = [ 0.000,  0.000,  0.000]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">gamma</span><span class="o">.</span><span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a1</th>
+      <th>a2</th>
+      <th>E_gsf</th>
+      <th>delta</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.1</td>
+      <td>0.0</td>
+      <td>0.002906</td>
+      <td>0.011895</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.2</td>
+      <td>0.0</td>
+      <td>0.009968</td>
+      <td>0.061919</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.3</td>
+      <td>0.0</td>
+      <td>0.017520</td>
+      <td>0.141577</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.4</td>
+      <td>0.0</td>
+      <td>0.023269</td>
+      <td>0.228424</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.5</td>
+      <td>0.0</td>
+      <td>0.024857</td>
+      <td>0.282206</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.6</td>
+      <td>0.0</td>
+      <td>0.023269</td>
+      <td>0.228424</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.7</td>
+      <td>0.0</td>
+      <td>0.017520</td>
+      <td>0.141577</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.8</td>
+      <td>0.0</td>
+      <td>0.009968</td>
+      <td>0.061919</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.9</td>
+      <td>0.0</td>
+      <td>0.002906</td>
+      <td>0.011895</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>0.0</td>
+      <td>0.1</td>
+      <td>0.002906</td>
+      <td>0.011895</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.010170</td>
+      <td>0.062941</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>0.2</td>
+      <td>0.1</td>
+      <td>0.020396</td>
+      <td>0.148404</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>0.3</td>
+      <td>0.1</td>
+      <td>0.028572</td>
+      <td>0.254522</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>0.4</td>
+      <td>0.1</td>
+      <td>0.031785</td>
+      <td>0.362148</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>0.5</td>
+      <td>0.1</td>
+      <td>0.031785</td>
+      <td>0.362148</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.6</td>
+      <td>0.1</td>
+      <td>0.028572</td>
+      <td>0.254522</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>0.7</td>
+      <td>0.1</td>
+      <td>0.020396</td>
+      <td>0.148404</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>0.8</td>
+      <td>0.1</td>
+      <td>0.010170</td>
+      <td>0.062941</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>0.9</td>
+      <td>0.1</td>
+      <td>0.002906</td>
+      <td>0.011895</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>0.0</td>
+      <td>0.2</td>
+      <td>0.009968</td>
+      <td>0.061919</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>0.1</td>
+      <td>0.2</td>
+      <td>0.020396</td>
+      <td>0.148404</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>0.2</td>
+      <td>0.2</td>
+      <td>0.030039</td>
+      <td>0.288120</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>0.3</td>
+      <td>0.2</td>
+      <td>0.034991</td>
+      <td>0.482499</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>0.4</td>
+      <td>0.2</td>
+      <td>0.035623</td>
+      <td>0.541336</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>0.5</td>
+      <td>0.2</td>
+      <td>0.034991</td>
+      <td>0.482499</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>0.6</td>
+      <td>0.2</td>
+      <td>0.030039</td>
+      <td>0.288120</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>0.7</td>
+      <td>0.2</td>
+      <td>0.020396</td>
+      <td>0.148404</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>0.8</td>
+      <td>0.2</td>
+      <td>0.009968</td>
+      <td>0.061919</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>0.9</td>
+      <td>0.2</td>
+      <td>0.005443</td>
+      <td>0.009836</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>70</th>
+      <td>0.0</td>
+      <td>0.7</td>
+      <td>0.017520</td>
+      <td>0.141576</td>
+    </tr>
+    <tr>
+      <th>71</th>
+      <td>0.1</td>
+      <td>0.7</td>
+      <td>0.020396</td>
+      <td>0.148403</td>
+    </tr>
+    <tr>
+      <th>72</th>
+      <td>0.2</td>
+      <td>0.7</td>
+      <td>0.020396</td>
+      <td>0.148403</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>0.3</td>
+      <td>0.7</td>
+      <td>0.017520</td>
+      <td>0.141576</td>
+    </tr>
+    <tr>
+      <th>74</th>
+      <td>0.4</td>
+      <td>0.7</td>
+      <td>0.013825</td>
+      <td>0.153892</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>0.5</td>
+      <td>0.7</td>
+      <td>0.011212</td>
+      <td>0.161264</td>
+    </tr>
+    <tr>
+      <th>76</th>
+      <td>0.6</td>
+      <td>0.7</td>
+      <td>0.009542</td>
+      <td>0.133934</td>
+    </tr>
+    <tr>
+      <th>77</th>
+      <td>0.7</td>
+      <td>0.7</td>
+      <td>0.009542</td>
+      <td>0.133934</td>
+    </tr>
+    <tr>
+      <th>78</th>
+      <td>0.8</td>
+      <td>0.7</td>
+      <td>0.011212</td>
+      <td>0.161264</td>
+    </tr>
+    <tr>
+      <th>79</th>
+      <td>0.9</td>
+      <td>0.7</td>
+      <td>0.013825</td>
+      <td>0.153892</td>
+    </tr>
+    <tr>
+      <th>80</th>
+      <td>0.0</td>
+      <td>0.8</td>
+      <td>0.009967</td>
+      <td>0.061918</td>
+    </tr>
+    <tr>
+      <th>81</th>
+      <td>0.1</td>
+      <td>0.8</td>
+      <td>0.010170</td>
+      <td>0.062941</td>
+    </tr>
+    <tr>
+      <th>82</th>
+      <td>0.2</td>
+      <td>0.8</td>
+      <td>0.009967</td>
+      <td>0.061918</td>
+    </tr>
+    <tr>
+      <th>83</th>
+      <td>0.3</td>
+      <td>0.8</td>
+      <td>0.009515</td>
+      <td>0.079236</td>
+    </tr>
+    <tr>
+      <th>84</th>
+      <td>0.4</td>
+      <td>0.8</td>
+      <td>0.009978</td>
+      <td>0.125545</td>
+    </tr>
+    <tr>
+      <th>85</th>
+      <td>0.5</td>
+      <td>0.8</td>
+      <td>0.011212</td>
+      <td>0.161264</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>0.6</td>
+      <td>0.8</td>
+      <td>0.011665</td>
+      <td>0.169247</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>0.7</td>
+      <td>0.8</td>
+      <td>0.011212</td>
+      <td>0.161264</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>0.8</td>
+      <td>0.8</td>
+      <td>0.009978</td>
+      <td>0.125545</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>0.9</td>
+      <td>0.8</td>
+      <td>0.009515</td>
+      <td>0.079236</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>0.0</td>
+      <td>0.9</td>
+      <td>0.002906</td>
+      <td>0.011895</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>0.1</td>
+      <td>0.9</td>
+      <td>0.002906</td>
+      <td>0.011895</td>
+    </tr>
+    <tr>
+      <th>92</th>
+      <td>0.2</td>
+      <td>0.9</td>
+      <td>0.005443</td>
+      <td>0.009834</td>
+    </tr>
+    <tr>
+      <th>93</th>
+      <td>0.3</td>
+      <td>0.9</td>
+      <td>0.009515</td>
+      <td>0.079236</td>
+    </tr>
+    <tr>
+      <th>94</th>
+      <td>0.4</td>
+      <td>0.9</td>
+      <td>0.013825</td>
+      <td>0.153892</td>
+    </tr>
+    <tr>
+      <th>95</th>
+      <td>0.5</td>
+      <td>0.9</td>
+      <td>0.016767</td>
+      <td>0.209763</td>
+    </tr>
+    <tr>
+      <th>96</th>
+      <td>0.6</td>
+      <td>0.9</td>
+      <td>0.016767</td>
+      <td>0.209763</td>
+    </tr>
+    <tr>
+      <th>97</th>
+      <td>0.7</td>
+      <td>0.9</td>
+      <td>0.013825</td>
+      <td>0.153892</td>
+    </tr>
+    <tr>
+      <th>98</th>
+      <td>0.8</td>
+      <td>0.9</td>
+      <td>0.009515</td>
+      <td>0.079236</td>
+    </tr>
+    <tr>
+      <th>99</th>
+      <td>0.9</td>
+      <td>0.9</td>
+      <td>0.005443</td>
+      <td>0.009834</td>
+    </tr>
+  </tbody>
+</table>
+<p>100 rows × 4 columns</p>
+</div></div>
+</div>
+</div>
+<div class="section" id="3.3.-Saving-and-loading-data-model">
+<h3>3.3. Saving and loading data model<a class="headerlink" href="#3.3.-Saving-and-loading-data-model" title="Permalink to this headline">¶</a></h3>
+<p>The GammaSurface.model() method allows for the saving and loading of a
+GammaSurface object’s data as a JSON/XML data model.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><strong>model</strong> (<em>str, file-like object or DataModelDict, optional</em>)
+XML/JSON content to extract gamma surface energy from. If not given,
+model content will be generated.</li>
+<li><strong>length_unit</strong> (<em>str, optional</em>) Units to report delta displacement
+values in when a new model is generated. Default value is ‘angstrom’.</li>
+<li><strong>energyperarea_unit</strong> (<em>str, optional</em>) Units to report fault
+energy values in when a new model is generated. Default value is
+‘mJ/m^2’.</li>
+</ul>
+<p>Returns</p>
+<p>(<em>DataModelDict</em>) A data model containing the stacking fault data of the
+GammaSurface object. Returned if model is not given.</p>
+<div class="section" id="3.3.1.-Save-data-model">
+<h4>3.3.1. Save data model<a class="headerlink" href="#3.3.1.-Save-data-model" title="Permalink to this headline">¶</a></h4>
+<p>Calling GammaSurface.model() without supplying the ‘model’ parameter
+will return a data model of the content.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#34;stacking-fault-map&#34;: {&#34;box&#34;: {&#34;avect&#34;: [4.05, 0.0, 0.0], &#34;bvect&#34;: [0.0, 4.05, 0.0], &#34;cvect&#34;: [0.0, 0.0, 4.05]}, &#34;shift-vector-1&#34;: [0.0, -0.5, 0.5], &#34;shift-vector-2&#34;: [-0.5, 0.0, 0.5], &#34;stacking-fault-relation&#34;: {&#34;shift-vector-1-fraction&#34;: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], &#34;shift-vector-2-fraction&#34;: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9], &#34;energy&#34;: {&#34;value&#34;: [0.0, 0.0029058939813610372, 0.009967527110804493, 0.017519738232042618, 0.02326877602347241, 0.024857238534160123, 0.023268775651632455, 0.017519736773543945, 0.009967524907496488, 0.0029058924810454892, 0.002905902826409026, 0.010170484991190503, 0.020395839765219238, 0.02857152118868265, 0.03178495629206124, 0.031784956450315115, 0.028571520168478783, 0.02039583762836736, 0.010170482478274855, 0.002905901841404914, 0.009967530192814976, 0.020395832461598103, 0.030039341624311384, 0.03499075121321049, 0.035623194600430674, 0.034990751326409684, 0.030039340246909744, 0.020395829767056402, 0.00996752813917364, 0.005442627660468005, 0.017519724199952073, 0.02857150343353976, 0.034990743348520224, 0.03592784212518266, 0.03592784215629818, 0.03499074279491336, 0.02857150121277434, 0.017519721775032932, 0.009514898671668064, 0.009514899593174062, 0.0232687483392972, 0.03178492693594086, 0.0356231854288785, 0.03592784183810076, 0.0356231847471479, 0.03178492514910748, 0.023268746230323666, 0.013824846424357776, 0.009977732476889075, 0.013824847592818454, 0.02485720345681911, 0.03178492745336388, 0.03499074046179261, 0.034990739796816425, 0.03178492550813512, 0.024857201334750913, 0.01676686928265928, 0.011212312575301371, 0.011212312851260616, 0.01676687052602372, 0.023268735121708652, 0.028571479533944916, 0.030039311395541578, 0.028571478332115, 0.023268733384575076, 0.01676686336038317, 0.011665394999032198, 0.009542001938907512, 0.011665395298503193, 0.016766864450984627, 0.01751969265854646, 0.020395789107882645, 0.02039578854962875, 0.01751969169198577, 0.0138248287503132, 0.011212304552217006, 0.009542003199448295, 0.009542003267030008, 0.01121230456531103, 0.013824829275760646, 0.009967489607699194, 0.010170438602488702, 0.009967489756660933, 0.009514877089284066, 0.00997772373884573, 0.01121231277790565, 0.011665403430422714, 0.011212312514477638, 0.009977723519908976, 0.009514877022546862, 0.002905875619952831, 0.002905876133856328, 0.00544260634615841, 0.009514894878640063, 0.013824855189574535, 0.016766890288627673, 0.016766890134175035, 0.013824854547407091, 0.009514893889552352, 0.005442605088996296], &#34;unit&#34;: &#34;eV/angstrom^2&#34;}, &#34;plane-separation&#34;: {&#34;value&#34;: [0.0, 0.011894941077718713, 0.06191865285371456, 0.1415766284579707, 0.22842358541125485, 0.282206219272064, 0.2284235544133164, 0.1415765987454929, 0.06191862427468031, 0.01189493683759757, 0.011894848438886996, 0.0629409280849682, 0.14840372088448817, 0.25452232688216725, 0.3621481241787716, 0.36214800587557683, 0.2545222871757584, 0.1484036888707525, 0.06294091666707047, 0.011894840085245661, 0.06191878798732198, 0.1484038170673294, 0.2881199279026969, 0.48249932654951344, 0.5413359543921441, 0.48249927131236525, 0.28811989133388316, 0.1484037932659099, 0.061918771265423445, 0.009835687819675698, 0.14157693518040482, 0.254522319051242, 0.4824990362601138, 0.6302827111959264, 0.6302826961369146, 0.48249900006798185, 0.25452228247809927, 0.14157692680593925, 0.07923441797991693, 0.0792368011160356, 0.22842386790467195, 0.36214809791403013, 0.5413352450450137, 0.6302824324643996, 0.5413352033689005, 0.36214805943961714, 0.22842385961280165, 0.1538922572144994, 0.1255452665080643, 0.15389225701323284, 0.2822053601370609, 0.3621476945807043, 0.48249839619324497, 0.48249841821976425, 0.3621475014569544, 0.282206042554197, 0.20976312214005155, 0.16126457970799457, 0.161264573029003, 0.2097631029839686, 0.22842329159117902, 0.2545216032901987, 0.2881192172332252, 0.25452160642329424, 0.22842331429657214, 0.20976291263960256, 0.16924653271973433, 0.1339344003648133, 0.16924653200388384, 0.20976288146158595, 0.14157641838617963, 0.1484032606714738, 0.14840326888439748, 0.14157643972432687, 0.1538917694437707, 0.16126429037130663, 0.1339344251377188, 0.13393442185462412, 0.16126426357866386, 0.15389174152796237, 0.06191832083556825, 0.06294072780150906, 0.06191833269256186, 0.07923620173687063, 0.12554476892559663, 0.16126426421697637, 0.1692468825130593, 0.1612642441036236, 0.12554474048878994, 0.0792361769983625, 0.01189479365989321, 0.01189478954671408, 0.009834223780478268, 0.07923639077706035, 0.1538918423263027, 0.20976273646788535, 0.20976272444614175, 0.15389181461142165, 0.07923635694905862, 0.009834209898977875], &#34;unit&#34;: &#34;angstrom&#34;}}}}
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="3.3.2.-Load-data-model">
+<h4>3.3.2. Load data model<a class="headerlink" href="#3.3.2.-Load-data-model" title="Permalink to this headline">¶</a></h4>
+<p>The saved data can then be loaded by using the ‘model’ parameter when
+initializing a GammaSurface, or with the GammaSurface.model() method.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">gamma</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">GammaSurface</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="4.-Plotting-methods">
+<h2>4. Plotting methods<a class="headerlink" href="#4.-Plotting-methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="4.1.-E_gsf_line_plot()">
+<h3>4.1. <strong>E_gsf_line_plot()</strong><a class="headerlink" href="#4.1.-E_gsf_line_plot()" title="Permalink to this headline">¶</a></h3>
+<p>Generates a line plot for the interpolated generalized stacking fault
+energy along a specified vector in the (a1, a2) plane.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><strong>vect</strong> (<em>numpy.array, optional</em>) Vector to plot the gsf along. If
+box is set, this vect will be a lattice vector, otherwise it will be
+a Cartesian vector. Must be in the plane defined by the GammaSurface
+object’s a1vect and a2vect vectors. Default value will use the set
+a1vect.</li>
+<li><strong>num</strong> (<em>int, optional</em>) The number of points to evaluate the
+generalized stacking fault energy for. Default value is 100 if smooth
+is True, otherwise is number of unique a1 values from 0 to 1.</li>
+<li><strong>smooth</strong> (<em>bool, optional</em>) If True (default), then plot shows
+smooth interpolated values. If False, plot shows nearest raw data
+values.</li>
+<li><strong>length_unit</strong> (<em>str, optional</em>) The unit of length to display the
+x-axis coordinates in. Default value is ‘angstrom’.</li>
+<li><strong>energyperarea_unit</strong> (<em>str, optional</em>) The unit of energy per area
+to display the stacking fault energies in. Default value is
+‘eV/angstrom^2’.</li>
+<li><strong>figsize</strong> (<em>tuple, optional</em>) The x,y size of the figure to return.
+Default value is (10, 6).</li>
+<li><strong>fig</strong> (<em>matplotlib.figure, optional</em>) An existing figure object to
+add the new plot to. If not given, a new figure is generated.</li>
+<li><strong>**kwargs</strong> (<em>dict, optional</em>) Additional keywords are passed into
+the underlying matplotlib.pyplot.plot(). This allows control of such
+things like line color, style, etc.</li>
+</ul>
+<p>Returns</p>
+<p>(<em>matplotlib.figure</em>)</p>
+<p>If vect is not given, will use a1vect</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Generate RBF interpolated plot</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf_line_plot</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;RBF&#39;</span><span class="p">)</span>
+
+<span class="c1"># Generate measured (nearest) plot and append to above</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf_line_plot</span><span class="p">(</span><span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;k:o&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;measured&#39;</span><span class="p">)</span>
+
+<span class="c1"># Additional plot manipulations</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;x-large&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.5._Gamma_Surface_Plotting_19_0.png" src="../_images/tutorial_04.5._Gamma_Surface_Plotting_19_0.png" />
+</div>
+</div>
+<p>The important direction for fcc {111} stacking faults is a/2&lt;112&gt;, and
+energy values in mJ/m^2</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Generate RBF interpolated plot</span>
+<span class="n">vect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf_line_plot</span><span class="p">(</span><span class="n">vect</span><span class="o">=</span><span class="n">vect</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">energyperarea_unit</span><span class="o">=</span><span class="s1">&#39;mJ/m^2&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;RBF&#39;</span><span class="p">)</span>
+
+<span class="c1"># Generate measured (nearest) plot and append to above</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf_line_plot</span><span class="p">(</span><span class="n">vect</span><span class="o">=</span><span class="n">vect</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;k:o&#39;</span><span class="p">,</span>
+                            <span class="n">energyperarea_unit</span><span class="o">=</span><span class="s1">&#39;mJ/m^2&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;measured&#39;</span><span class="p">)</span>
+
+<span class="c1"># Additional plot manipulations</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;x-large&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.5._Gamma_Surface_Plotting_21_0.png" src="../_images/tutorial_04.5._Gamma_Surface_Plotting_21_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="4.2.-delta_line_plot()">
+<h3>4.2. <strong>delta_line_plot()</strong><a class="headerlink" href="#4.2.-delta_line_plot()" title="Permalink to this headline">¶</a></h3>
+<p>Generates a line plot for the interpolated relaxation distances along a
+specified vector in the (a1, a2) plane.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><strong>vect</strong> (<em>numpy.array, optional</em>) Vector to plot the gsf along. If
+box is set, this vect will be a lattice vector, otherwise it will be
+a Cartesian vector. Must be in the plane defined by the GammaSurface
+object’s a1vect and a2vect vectors. Default value will use the set
+a1vect.</li>
+<li><strong>num</strong> (<em>int, optional</em>) The number of points to evaluate the
+generalized stacking fault energy for. Default value is 100 if smooth
+is True, otherwise is number of unique a1 values from 0 to 1.</li>
+<li><strong>smooth</strong> (<em>bool, optional</em>) If True (default), then plot shows
+smooth interpolated values. If False, plot shows nearest raw data
+values.</li>
+<li><strong>length_unit</strong> (<em>str, optional</em>) The unit of length to display the
+x-axis coordinates in. Default value is ‘angstrom’.</li>
+<li><strong>figsize</strong> (<em>tuple, optional</em>) The x,y size of the figure to return.
+Default value is (10, 6).</li>
+<li><strong>fig</strong> (<em>matplotlib.figure, optional</em>) An existing figure object to
+add the new plot to. If not given, a new figure is generated.</li>
+<li><strong>**kwargs</strong> (<em>dict, optional</em>) Additional keywords are passed into
+the underlying matplotlib.pyplot.plot(). This allows control of such
+things like line color, style, etc.</li>
+</ul>
+<p>Returns</p>
+<p>(<em>matplotlib.figure</em>)</p>
+<p>If vect is not given, will use a1vect</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Generate RBF interpolated plot</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">delta_line_plot</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;RBF&#39;</span><span class="p">)</span>
+
+<span class="c1"># Generate measured (nearest) plot and append to above</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">delta_line_plot</span><span class="p">(</span><span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;k:o&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;measured&#39;</span><span class="p">)</span>
+
+<span class="c1"># Additional plot manipulations</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;x-large&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.5._Gamma_Surface_Plotting_24_0.png" src="../_images/tutorial_04.5._Gamma_Surface_Plotting_24_0.png" />
+</div>
+</div>
+<p>The important direction for fcc {111} stacking faults is a/2&lt;112&gt;</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Generate RBF interpolated plot</span>
+<span class="n">vect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">delta_line_plot</span><span class="p">(</span><span class="n">vect</span><span class="o">=</span><span class="n">vect</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;RBF&#39;</span><span class="p">)</span>
+
+<span class="c1"># Generate measured (nearest) plot and append to above</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">delta_line_plot</span><span class="p">(</span><span class="n">vect</span><span class="o">=</span><span class="n">vect</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;k:o&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;measured&#39;</span><span class="p">)</span>
+
+<span class="c1"># Additional plot manipulations</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;x-large&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.5._Gamma_Surface_Plotting_26_0.png" src="../_images/tutorial_04.5._Gamma_Surface_Plotting_26_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="4.3.-E_gsf_surface_plot()">
+<h3>4.3. <strong>E_gsf_surface_plot()</strong><a class="headerlink" href="#4.3.-E_gsf_surface_plot()" title="Permalink to this headline">¶</a></h3>
+<p>Creates a 2D surface plot from the stacking fault energy values.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><strong>normalize</strong> (<em>bool, optional</em>) Flag indicating if axes are
+Cartesian (False, default) or normalized by a1, a2 vectors (True).</li>
+<li><strong>smooth</strong> (<em>bool, optional</em>) If True (default), then plot shows
+smooth interpolated values. If False, plot shows nearest raw data
+values.</li>
+<li><strong>a1vect</strong> (<em>np.array, optional</em>) Crystal vector for the a1 vector to
+use for plotting. Default value of None uses the saved a1vect.</li>
+<li><strong>a2vect</strong> (<em>np.array, optional</em>) Crystal vector for the a2 vector to
+use for plotting. Default value of None uses the saved a2vect.</li>
+<li><strong>xvect</strong> (<em>numpy.array, optional</em>) Crystal vector to align with the
+plotting x-axis for non-normalized plots. If not given, this is taken
+as the Cartesian of a1vect.</li>
+<li><strong>length_unit</strong> (<em>str, optional</em>) The unit of length to display
+non-normalized axes values in. Default value is ‘angstrom’.</li>
+<li><strong>energyperarea_unit</strong> (<em>str, optional</em>) The unit of energy per area
+to display the stacking fault energies in. Default value is
+‘eV/angstrom^2’.</li>
+<li><strong>numx</strong> (<em>int, optional</em>) The number of plotting points to use along
+the x-axis. Default value is 100.</li>
+<li><strong>numy</strong> (<em>int, optional</em>) The number of plotting points to use along
+the y-axis. Default value is 100.</li>
+<li><strong>figsize</strong> (<em>tuple or None, optional</em>) The figure’s x,y dimensions.
+If None (default), the values are scaled such that the x,y spacings
+are approximately equal, and the larger of the two values is set to
+10.</li>
+<li><strong>**kwargs</strong> (<em>dict, optional</em>) Additional keywords are passed into
+the underlying matplotlib.pyplot.pcolormesh(). This allows control of
+such things like the colormap (cmap).</li>
+</ul>
+<p>Returns</p>
+<p>(<em>matplotlib.figure</em>)</p>
+<p>Default setting</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf_surface_plot</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.5._Gamma_Surface_Plotting_29_0.png" src="../_images/tutorial_04.5._Gamma_Surface_Plotting_29_0.png" />
+</div>
+</div>
+<p>Plotting actual measured values</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf_surface_plot</span><span class="p">(</span><span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.5._Gamma_Surface_Plotting_31_0.png" src="../_images/tutorial_04.5._Gamma_Surface_Plotting_31_0.png" />
+</div>
+</div>
+<p>Specifying a different a1vect and a2vect to use for plotting</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plot_a1vect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="n">plot_a2vect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf_surface_plot</span><span class="p">(</span><span class="n">a1vect</span><span class="o">=</span><span class="n">plot_a1vect</span><span class="p">,</span> <span class="n">a2vect</span><span class="o">=</span><span class="n">plot_a2vect</span><span class="p">,</span> <span class="n">energyperarea_unit</span><span class="o">=</span><span class="s1">&#39;mJ/m^2&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.5._Gamma_Surface_Plotting_33_0.png" src="../_images/tutorial_04.5._Gamma_Surface_Plotting_33_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="4.3.-delta_surface_plot()">
+<h3>4.3. <strong>delta_surface_plot()</strong><a class="headerlink" href="#4.3.-delta_surface_plot()" title="Permalink to this headline">¶</a></h3>
+<p>Creates a 2D surface plot from the relaxation distance values.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><strong>normalize</strong> (<em>bool, optional</em>) Flag indicating if axes are
+Cartesian (False, default) or normalized by a1, a2 vectors (True).</li>
+<li><strong>smooth</strong> (<em>bool, optional</em>) If True (default), then plot shows
+smooth interpolated values. If False, plot shows nearest raw data
+values.</li>
+<li><strong>a1vect</strong> (<em>np.array, optional</em>) Crystal vector for the a1 vector to
+use for plotting. Default value of None uses the saved a1vect.</li>
+<li><strong>a2vect</strong> (<em>np.array, optional</em>) Crystal vector for the a2 vector to
+use for plotting. Default value of None uses the saved a2vect.</li>
+<li><strong>xvect</strong> (<em>numpy.array, optional</em>) Crystal vector to align with the
+plotting x-axis for non-normalized plots. If not given, this is taken
+as the Cartesian of a1vect.</li>
+<li><strong>length_unit</strong> (<em>str, optional</em>) The unit of length to display
+non-normalized axes values in. Default value is ‘angstrom’.</li>
+<li><strong>numx</strong> (<em>int, optional</em>) The number of plotting points to use along
+the x-axis. Default value is 100.</li>
+<li><strong>numy</strong> (<em>int, optional</em>) The number of plotting points to use along
+the y-axis. Default value is 100.</li>
+<li><strong>figsize</strong> (<em>tuple or None, optional</em>) The figure’s x,y dimensions.
+If None (default), the values are scaled such that the x,y spacings
+are approximately equal, and the larger of the two values is set to
+10.</li>
+<li><strong>**kwargs</strong> (<em>dict, optional</em>) Additional keywords are passed into
+the underlying matplotlib.pyplot.pcolormesh(). This allows control of
+such things like the colormap (cmap).</li>
+</ul>
+<p>Returns</p>
+<p>(<em>matplotlib.figure</em>)</p>
+<p>Default setting</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">delta_surface_plot</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.5._Gamma_Surface_Plotting_36_0.png" src="../_images/tutorial_04.5._Gamma_Surface_Plotting_36_0.png" />
+</div>
+</div>
+<p>Plotting actual measured values</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">delta_surface_plot</span><span class="p">(</span><span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.5._Gamma_Surface_Plotting_38_0.png" src="../_images/tutorial_04.5._Gamma_Surface_Plotting_38_0.png" />
+</div>
+</div>
+<p>Specifying a different a1vect and a2vect to use for plotting</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plot_a1vect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="n">plot_a2vect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">delta_surface_plot</span><span class="p">(</span><span class="n">a1vect</span><span class="o">=</span><span class="n">plot_a1vect</span><span class="p">,</span> <span class="n">a2vect</span><span class="o">=</span><span class="n">plot_a2vect</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.5._Gamma_Surface_Plotting_40_0.png" src="../_images/tutorial_04.5._Gamma_Surface_Plotting_40_0.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="5.-Utility-methods">
+<h2>5. Utility methods<a class="headerlink" href="#5.-Utility-methods" title="Permalink to this headline">¶</a></h2>
+<p>The remaining class methods are utility methods for generating the
+plots. Many are focused on transforming between different coordinate
+systems:</p>
+<ol class="arabic simple">
+<li>(a1, a2) : fractional coordinates along a1vect and a2vect.</li>
+<li>pos : Cartesian position coordinates.</li>
+<li>(x, y) : plotting coordinates.</li>
+</ol>
+<p>Transforming from (a1, a2) to pos requires a1vect, a2vect, and
+optionally the box. Transforming from pos to (x, y) requires specifying
+which Cartesian vector to align with the x-axis of the plot.</p>
+<div class="section" id="5.1-E_gsf()">
+<h3>5.1 E_gsf()<a class="headerlink" href="#5.1-E_gsf()" title="Permalink to this headline">¶</a></h3>
+<p>Returns values for generalized stacking fault energy interpolated from
+the raw data. Values can be obtained relative to a1, a2 fractional
+coordinates, x, y plotting coordinates, or pos Cartesian coordinates.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><strong>a1</strong> (<em>float(s), optional</em>) Fractional coordinate(s) along a1vect.</li>
+<li><strong>a2</strong> (<em>float(s), optional</em>) Fractional coordinate(s) along a2vect.</li>
+<li><strong>pos</strong> (<em>np.array, optional</em>) 3D Cartesian position vector(s).</li>
+<li><strong>x</strong> (<em>float(s), optional</em>) Plotting x coordinate(s).</li>
+<li><strong>y</strong> (<em>float(s), optional</em>) Plotting y coordinate(s).</li>
+<li><strong>a1vect</strong> (<em>np.array, optional</em>) Vector for the a1 fractional
+coordinates. Default value of None uses the saved a1vect.</li>
+<li><strong>a2vect</strong> (<em>np.array, optional</em>) Vector for the a2 fractional
+coordinates. Default value of None uses the saved a2vect.</li>
+<li><strong>xvect</strong> (<em>np.array, optional</em>) Cartesian vector corresponding to
+the plotting x-axis. If None (default), this is taken as the
+Cartesian of a1vect.</li>
+<li><strong>smooth</strong> (<em>bool, optional</em>) If True (default) the returned values
+are smoothed using a RBF fit. If False, the closest measured values
+are returned.</li>
+</ul>
+<p>Returns</p>
+<ul class="simple">
+<li>(<em>float or numpy.ndarray</em>) the energy values.</li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">closetostable</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">a2</span><span class="o">=</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">closetostable</span><span class="p">,</span> <span class="s1">&#39;mJ/m^2&#39;</span><span class="p">),</span> <span class="s1">&#39;mJ/m^2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+146.97820949525268 mJ/m^2
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="5.2-delta()">
+<h3>5.2 delta()<a class="headerlink" href="#5.2-delta()" title="Permalink to this headline">¶</a></h3>
+<p>Returns values for the relaxation distance interpolated from the raw
+data. Values can be obtained relative to a1, a2 fractional coordinates,
+x, y plotting coordinates, or pos Cartesian coordinates.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><strong>a1</strong> (<em>float(s), optional</em>) Fractional coordinate(s) along a1vect.</li>
+<li><strong>a2</strong> (<em>float(s), optional</em>) Fractional coordinate(s) along a2vect.</li>
+<li><strong>pos</strong> (<em>np.array, optional</em>) 3D Cartesian position vector(s).</li>
+<li><strong>x</strong> (<em>float(s), optional</em>) Plotting x coordinate(s).</li>
+<li><strong>y</strong> (<em>float(s), optional</em>) Plotting y coordinate(s).</li>
+<li><strong>a1vect</strong> (<em>np.array, optional</em>) Vector for the a1 fractional
+coordinates. Default value of None uses the saved a1vect.</li>
+<li><strong>a2vect</strong> (<em>np.array, optional</em>) Vector for the a2 fractional
+coordinates. Default value of None uses the saved a2vect.</li>
+<li><strong>xvect</strong> (<em>np.array, optional</em>) Cartesian vector corresponding to
+the plotting x-axis. If None (default), this is taken as the
+Cartesian of a1vect.</li>
+<li><strong>smooth</strong> (<em>bool, optional</em>) If True (default) the returned values
+are smoothed using a RBF fit. If False, the closest measured values
+are returned.</li>
+</ul>
+<p>Returns</p>
+<ul class="simple">
+<li>(<em>float or numpy.ndarray</em>) the relaxation distance values.</li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">closetostable</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">delta</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">a2</span><span class="o">=</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">closetostable</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">),</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.12560157787390214 angstrom
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="5.3-Conversion-methods">
+<h3>5.3 Conversion methods<a class="headerlink" href="#5.3-Conversion-methods" title="Permalink to this headline">¶</a></h3>
+<p>Parameters as defined above</p>
+<ul class="simple">
+<li><strong>a12_to_pos(a1, a2, a1vect=None, a2vect=None)</strong></li>
+<li><strong>pos_to_xy(pos, xvect=None)</strong></li>
+<li><strong>a12_to_xy(a1, a2, a1vect=None, a2vect=None, xvect=None)</strong></li>
+<li><strong>pos_to_a12(pos, a1vect=None, a2vect=None)</strong></li>
+<li><strong>xy_to_pos(x, y, xvect=None)</strong></li>
+<li><strong>xy_to_a12(x, y, a1vect=None, a2vect=None, xvect=None)</strong></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction to atomman: Gamma Surface Plotting</a><ul>
+<li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
+<li><a class="reference internal" href="#2.-Underlying-theory">2. Underlying theory</a></li>
+<li><a class="reference internal" href="#3.-Defining-gamma-surface-data">3. Defining gamma surface data</a><ul>
+<li><a class="reference internal" href="#3.1.-Setting-values">3.1. Setting values</a></li>
+<li><a class="reference internal" href="#3.2.-Class-attributes">3.2. Class attributes</a></li>
+<li><a class="reference internal" href="#3.3.-Saving-and-loading-data-model">3.3. Saving and loading data model</a><ul>
+<li><a class="reference internal" href="#3.3.1.-Save-data-model">3.3.1. Save data model</a></li>
+<li><a class="reference internal" href="#3.3.2.-Load-data-model">3.3.2. Load data model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#4.-Plotting-methods">4. Plotting methods</a><ul>
+<li><a class="reference internal" href="#4.1.-E_gsf_line_plot()">4.1. <strong>E_gsf_line_plot()</strong></a></li>
+<li><a class="reference internal" href="#4.2.-delta_line_plot()">4.2. <strong>delta_line_plot()</strong></a></li>
+<li><a class="reference internal" href="#4.3.-E_gsf_surface_plot()">4.3. <strong>E_gsf_surface_plot()</strong></a></li>
+<li><a class="reference internal" href="#4.3.-delta_surface_plot()">4.3. <strong>delta_surface_plot()</strong></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#5.-Utility-methods">5. Utility methods</a><ul>
+<li><a class="reference internal" href="#5.1-E_gsf()">5.1 E_gsf()</a></li>
+<li><a class="reference internal" href="#5.2-delta()">5.2 delta()</a></li>
+<li><a class="reference internal" href="#5.3-Conversion-methods">5.3 Conversion methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="04.4._Stacking_Fault_Generation.html"
+                        title="previous chapter">Introduction to atomman: Stacking Fault Generation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="04.6._Semidiscrete_Variational_Peierls-Nabarro.html"
+                        title="next chapter">Introduction to atomman: Semidiscrete Variational Peierls-Nabarro</a></p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="04.6._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="04.4._Stacking_Fault_Generation.html" title="Introduction to atomman: Stacking Fault Generation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>

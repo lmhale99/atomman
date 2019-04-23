@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>atomman: Atomistic Manipulation Toolkit &#8212; atomman 1.2.5 documentation</title>
+    <title>atomman: Atomistic Manipulation Toolkit &#8212; atomman 1.2.6 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.5',
+        VERSION:     '1.2.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="tutorial/index.html" title="Tutorials"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">atomman 1.2.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">atomman 1.2.6 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -52,7 +52,8 @@
 <h1>atomman: Atomistic Manipulation Toolkit<a class="headerlink" href="#atomman-atomistic-manipulation-toolkit" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
-<p>atomman is a Python library for creating, representing, manipulating, and analyzing large-scale atomic
+<p>AtomMan: the Atomistic Manipulation Toolkit is a Python library for
+creating, representing, manipulating, and analyzing large-scale atomic
 systems of atoms. The focus of the package is to facilitate the rapid design
 and development of simulations that are fully documented and easily adaptable
 to new potentials, configurations, etc.  The code has no requirements that
@@ -60,32 +61,38 @@ limit which systems it can be used on, i.e. it should work on Linux, Mac and
 Windows computers.</p>
 <p>Features:</p>
 <ol class="arabic simple">
-<li>Allows for efficient and fast calculations on millions of atoms, each with many freely defined per-atom properties.</li>
-<li>Create dislocation monopoles and evaluate them with differential displacement and Nye tensor plots.</li>
-<li>Generate point defects.</li>
-<li>Call LAMMPS directly from Python and instantly retrieve the resulting data or LAMMPS error statement.</li>
-<li>Easily convert systems to/from the other Python atomic environments of ASE and PyMatGen.</li>
-<li>Can create systems based on CIF crystal structure files, and LAMMPS atom and dump files.</li>
+<li>Allows for efficient and fast calculations on millions of atoms, each with
+many freely defined per-atom properties.</li>
+<li>Built-in tools for generating and analyzing crystalline defects, such as
+point defects, stacking faults, and dislocations.</li>
+</ol>
+<ol class="arabic simple" start="4">
+<li>Call LAMMPS directly from Python and instantly retrieve the resulting data
+or LAMMPS error statement.</li>
+<li>Easily convert systems to/from the other Python atomic representations, such
+as ase.Atoms and pymatgen.Structure.</li>
+<li>Can read and dump crystal structure information from a number of formats,
+such as LAMMPS data and dump files, and POSCAR.</li>
 <li>Built-in unit conversions.</li>
 </ol>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>As of version 1.2, the atomman package is Python 2/3 compatible. It makes heavy use of numpy, so
-it’s easiest to download a Python environment like Anaconda.</p>
+<p>As of version 1.2, the atomman package is Python 2/3 compatible.</p>
 <p>The latest release can be installed using pip:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">atomman</span>
 </pre></div>
 </div>
-<p>This pip command should install atomman and any other required packages, but
-occasionally a requirement may have to be installed separately. The list of required packages are given below.</p>
+<p>For Windows users, it is recommended to use an Anaconda distribution and use
+conda to install numpy, scipy, matplotlib, pandas and cython prior to
+installing atomman.</p>
 <p>Alternatively, all code and documentation can be downloaded from GitHub.</p>
-<blockquote>
-<div><ul class="simple">
-<li>The stable releases are available at <a class="reference external" href="https://github.com/usnistgov/atomman">https://github.com/usnistgov/atomman</a>.</li>
-<li>The working development versions are at <a class="reference external" href="https://github.com/lmhale99/atomman">https://github.com/lmhale99/atomman</a>.</li>
+<ul class="simple">
+<li>The stable releases are available at
+<a class="reference external" href="https://github.com/usnistgov/atomman">https://github.com/usnistgov/atomman</a>.</li>
+<li>The working development versions are at
+<a class="reference external" href="https://github.com/lmhale99/atomman">https://github.com/lmhale99/atomman</a>.</li>
 </ul>
-</div></blockquote>
 </div>
 <div class="section" id="tutorials">
 <h2>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h2>
@@ -108,8 +115,9 @@ occasionally a requirement may have to be installed separately. The list of requ
 <li class="toctree-l2"><a class="reference internal" href="tutorial/04.1._Point_defects.html">04.1. Point defects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial/04.2._Stroh_class.html">04.2. Stroh class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial/04.3._Dislocation_analysis_tools.html">04.3. Dislocation analysis tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/04.4._Gamma_Surface_Plotting.html">04.4. Gamma Surface Plotting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/04.5._Semidiscrete_Variational_Peierls-Nabarro.html">04.5. Semidiscrete Variational Peierls-Nabarro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/04.4._Stacking_Fault_Generation.html">04.4. Stacking Fault Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/04.5._Gamma_Surface_Plotting.html">04.5. Gamma Surface Plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/04.6._Semidiscrete_Variational_Peierls-Nabarro.html">04.6. Semidiscrete Variational Peierls-Nabarro</a></li>
 </ul>
 </li>
 </ul>
@@ -125,6 +133,7 @@ occasionally a requirement may have to be installed separately. The list of requ
 <li class="toctree-l3"><a class="reference internal" href="atomman.tools.html">tools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="atomman.lammps.html">lammps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="atomman.defect.html">defect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="atomman.plot.html">plot</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="atomman.html#classes">Classes</a><ul>
@@ -187,7 +196,7 @@ occasionally a requirement may have to be installed separately. The list of requ
         <li class="right" >
           <a href="tutorial/index.html" title="Tutorials"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">atomman 1.2.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">atomman 1.2.6 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

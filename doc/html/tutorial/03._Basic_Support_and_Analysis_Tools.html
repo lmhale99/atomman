@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Basic Support and Analysis Tools &#8212; atomman 1.2.5 documentation</title>
+    <title>Introduction to atomman: Basic Support and Analysis Tools &#8212; atomman 1.2.6 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.5',
+        VERSION:     '1.2.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="02.2_Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -264,8 +264,8 @@ basic support features and simple analysis of the atomistic systems.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.5
-Notebook executed on 2019-03-25
+atomman version = 1.2.6
+Notebook executed on 2019-04-23
 </pre></div></div>
 </div>
 <p>Construct a demonstration 2x2x2 diamond cubic silicon system</p>
@@ -364,10 +364,6 @@ an index, then self.atoms.pos[pos_0] is taken.</li>
 <li><strong>pos_1</strong> (<em>numpy.ndarray or index</em>) Absolute Cartesian vector
 position(s) to find relative to pos_0. If the value can be used as
 an index, then self.atoms.pos[pos_1] is taken.</li>
-<li><strong>code</strong> (<em>str, optional</em>) Option for specifying which underlying
-code function to use. ‘cython’ uses the version of the function built
-in cython (faster). ‘python’ uses the purely python version. Default
-is ‘cython’ if the code can be imported, otherwise ‘python’.</li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
@@ -441,8 +437,6 @@ conditions to use.<ul>
 without accounting for periodic boundaries.</li>
 </ul>
 </li>
-<li><strong>code</strong> (<em>str, optional</em>) Option for specifying which code version
-of dvect to use (see dvect’s documentation for details).</li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
@@ -465,70 +459,70 @@ of dvect to use (see dvect’s documentation for details).</li>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[2.67245499 2.10094216 1.32261161]
- [1.03650191 0.25888624 2.6912534 ]
- [0.33087782 1.53066712 1.52474972]
- [2.24268468 1.41581227 0.5599612 ]
- [1.6562776  1.86031448 2.16732036]
- [2.76725267 0.9846509  0.25362214]
- [0.67430582 0.10870598 1.04719595]
- [1.3472467  0.32823359 1.26159794]
- [1.18672828 1.89225838 0.89208241]
- [1.94756885 1.66767232 1.48906525]
- [0.45930832 1.92754899 1.45190523]
- [0.79818618 0.03417054 0.46657692]
- [0.14119193 1.65732572 1.85913894]
- [1.16151236 0.15970024 2.31334339]
- [2.77314065 1.28723941 1.55620243]
- [1.49923949 0.09810011 2.80863829]
- [2.38773067 0.98979479 2.07787812]
- [0.41580822 2.80579026 0.78376334]
- [2.46711461 2.21887818 0.42231979]
- [2.91241307 0.48078801 2.10863824]
- [2.89116764 2.68929713 2.85640568]
- [2.81118627 1.51501249 2.55742009]
- [0.19704597 2.21568286 1.52673259]
- [1.24276318 1.36932797 0.8188291 ]
- [1.55144934 0.91927246 2.80144204]
- [2.99399803 2.58520456 2.26671881]
- [1.85211191 0.24108933 1.41667606]
- [2.15336911 2.74384657 1.16316611]
- [2.46075867 2.53707453 2.27639402]
- [0.79531599 0.66626952 2.67154656]
- [0.28752963 0.86744243 2.32229298]
- [2.77797487 0.10922407 2.14519684]
- [2.73979378 1.87908518 2.67417688]
- [1.17290839 2.23866516 0.77686093]
- [2.67487301 1.49367785 2.43567952]
- [1.02714458 0.71457219 2.96991812]
- [2.104838   1.15216482 1.13493195]
- [2.70831545 1.53642732 1.05225129]
- [0.38576869 0.10992543 0.02324481]
- [0.67922256 2.22564656 1.09442603]
- [2.77830229 2.72206123 1.76258236]
- [0.07504146 1.08973267 0.37061539]
- [2.54875664 2.39682615 2.316342  ]
- [0.72602065 1.64125573 1.65742422]
- [2.31690766 0.6959869  2.41502472]
- [2.88132883 1.63482802 0.44352421]
- [0.59612296 1.12981112 1.66173823]
- [1.96412448 0.44029628 1.8276613 ]
- [1.72163167 1.83069208 0.6453729 ]
- [2.15984716 1.63859765 0.08831685]
- [1.27295833 2.01436463 0.19682392]
- [2.97733553 0.02732699 0.53699384]
- [1.7825974  0.2817036  2.64649956]
- [0.79825229 1.83043701 2.04843966]
- [2.30416648 1.2746228  0.62612327]
- [2.35938915 0.16034473 1.87461647]
- [2.58449187 0.77643733 0.00734332]
- [0.6985783  1.09195318 0.03907918]
- [1.83182618 2.99601834 2.09602515]
- [2.01308532 2.66996951 1.58390364]
- [2.250538   2.61810877 0.7492095 ]
- [2.95340871 0.25042336 1.91966356]
- [0.43520243 2.33917812 1.68916796]
- [1.87613979 1.83959877 2.97981821]]
+[[1.07549541 0.14987845 2.85117275]
+ [1.21653395 0.0104792  0.02150719]
+ [2.69017058 1.57545241 1.2759487 ]
+ [2.54179473 2.93451392 0.64551485]
+ [2.95926178 0.52746042 0.32494849]
+ [0.72743327 0.34153545 0.37645032]
+ [1.31496956 0.83501781 0.88777877]
+ [0.73683122 2.53517251 0.90014746]
+ [1.72533929 2.11725463 0.05184001]
+ [0.55854095 0.50510188 0.15221612]
+ [2.30160677 2.5758766  0.37339193]
+ [2.30781075 0.71140044 0.05784585]
+ [1.62360972 2.23303081 0.13497595]
+ [0.2099103  2.31923774 0.79410813]
+ [0.00438615 2.67082848 0.87643552]
+ [0.93068492 1.62170521 2.34905578]
+ [2.21251247 2.87036665 0.37267471]
+ [1.94461283 0.90968326 2.6737444 ]
+ [2.24874903 1.09742514 0.39906405]
+ [2.68838889 1.10400054 1.68929301]
+ [1.16905748 1.27341705 0.9893129 ]
+ [1.30153684 0.69256463 1.95889714]
+ [0.2019804  1.54593883 2.87387066]
+ [2.30632488 2.95431058 2.6661016 ]
+ [0.39150956 0.78582253 2.7870552 ]
+ [0.78093895 1.9840793  0.28912233]
+ [1.98582379 1.18595822 0.1329193 ]
+ [0.6777549  2.43435622 0.82684269]
+ [2.31801068 2.9748406  2.47635745]
+ [2.08918448 2.08826963 1.85173416]
+ [2.70356246 2.84865673 0.40824066]
+ [0.52511381 2.12603876 1.34191627]
+ [2.03298335 2.21137703 2.01881941]
+ [1.778477   1.91661908 2.76267847]
+ [1.16018488 2.65077673 0.50871317]
+ [1.6654772  0.29993043 0.49168278]
+ [2.55689328 2.11001122 1.97676631]
+ [0.32796658 1.25949557 2.03771535]
+ [0.90654862 1.60664585 1.76048782]
+ [0.0471796  2.26749375 1.13381021]
+ [2.41432868 0.300558   1.43827676]
+ [0.248652   2.54240466 2.2951411 ]
+ [1.81436347 2.44989001 1.55494837]
+ [0.25770817 1.75793485 0.34668637]
+ [0.06318447 1.89024163 2.4873305 ]
+ [0.78285218 1.15258035 2.01285988]
+ [0.46537074 2.01336178 1.75180707]
+ [1.272477   1.93793967 0.20731828]
+ [1.94070635 1.1338218  1.86463352]
+ [0.49166687 1.81186057 1.57719195]
+ [1.16834877 1.31179582 0.59451065]
+ [0.27326823 1.4858482  0.87065467]
+ [0.42639479 2.9842415  2.88047276]
+ [1.79741791 1.10239062 1.88109215]
+ [2.5381692  0.18218557 1.73900903]
+ [0.61060903 1.46098436 0.6713592 ]
+ [1.53471984 1.78162515 2.78975974]
+ [2.84089588 0.46541134 2.77127716]
+ [2.25273865 0.97771013 1.63611813]
+ [1.95481647 2.48608264 1.57622757]
+ [1.68505087 1.83354901 1.20602221]
+ [1.53726861 2.96970546 0.88826077]
+ [2.82459638 2.13622083 0.38550329]
+ [0.1385676  1.19926946 0.41747931]]
 </pre></div></div>
 </div>
 </div>
@@ -546,12 +540,6 @@ list is calculated and can be used.</p>
 neighbors. Must be given if model is not given.</li>
 <li><strong>model</strong> (<em>str or file-like object, optional</em>) Gives the file path
 or content to load. If given, no other parameters are allowed.</li>
-<li><strong>cmult</strong> (<em>int, optional</em>) Parameter associated with the binning
-routine. Default value is most likely the fastest.</li>
-<li><strong>code</strong> (<em>str, optional</em>) Option for specifying which underlying
-code function to use. ‘cython’ uses the version of the function built
-in cython (faster). ‘python’ uses the purely python version. Default
-is ‘cython’ if the code can be imported, otherwise ‘python’.</li>
 <li><strong>initialsize</strong> (<em>int, optional</em>) The number of neighbor positions to
 initially assign to each atom. Default value is 20.</li>
 <li><strong>deltasize</strong> (<em>int, optional</em>) Specifies the number of extra
@@ -849,26 +837,21 @@ b&#39;Here I am, read me!&#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Angle between [-0.22902121  0.05143593 -0.22954422] and [-0.2738805   0.34579282  0.79694321] =
-110.02893770062644 degrees
-1.9203672353476504 radians
+Angle between [-0.78537183 -0.19734091  0.80958695] and [-0.08555706 -0.8370818   0.16187624] =
+68.25913353498937 degrees
+1.1913466247440405 radians
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="4.7.-Miller-index-conversions">
 <h3>4.7. Miller index conversions<a class="headerlink" href="#4.7.-Miller-index-conversions" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li><strong>atomman.tools.miller.vector3to4(indices)</strong> converts three-term
-Miller indices to four-term Miller-Bravais for hexagonal systems.</li>
-<li><strong>atomman.tools.miller.vector4to3(indices)</strong> converts four-term
-Miller-Bravais to three-term Miller indices.</li>
-<li><strong>atomman.tools.miller.vectortocartesian(indices, box)</strong> converts
-Miller and Miller-Bravais indices to Cartesian vectors based on a
-supplied box.</li>
-</ul>
-<p><strong>Note</strong>: The returned indices will be the smallest integer
-representations possible, i.e. direction is retained but magnitude may
-be different.</p>
+<p><strong>atomman.tools.miller.vector3to4(indices)</strong> converts three-term Miller
+indices to four-term Miller-Bravais for hexagonal systems.</p>
+<p><strong>atomman.tools.miller.vector4to3(indices)</strong> converts four-term
+Miller-Bravais to three-term Miller indices.</p>
+<p><em>Updated version 1.2.6</em>: vector3to4 and vector4to3 now return absolute
+vectors instead of rescaling to the smallest integer representations. As
+such, both functions return floats instead of integers.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [18]:
@@ -886,8 +869,8 @@ be different.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[ 1  1 -2  3]
-[1 1 0]
+[ 1.  1. -2.  3.]
+[3. 3. 0.]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -906,7 +889,7 @@ be different.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
 
-<span class="c1"># Convert back to uvw&#39;s</span>
+<span class="c1"># Convert back to uvw&#39;s and see that values are recovered</span>
 <span class="n">indices</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector4to3</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
 </pre></div>
@@ -917,19 +900,24 @@ be different.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[-1 -4  4]
- [ 3 -5  3]
- [ 5 -5  1]]
+[[ 5 -3 -3]
+ [ 0  5  2]
+ [ 4  0  4]]
 
-[[  2  -7   5  12]
- [ 11 -13   2   9]
- [  5  -5   0   1]]
+[[ 4.33333333 -3.66666667 -0.66666667 -3.        ]
+ [-1.66666667  3.33333333 -1.66666667  2.        ]
+ [ 2.66666667 -1.33333333 -1.33333333  4.        ]]
 
-[[-1 -4  4]
- [ 3 -5  3]
- [ 5 -5  1]]
+[[ 5. -3. -3.]
+ [ 0.  5.  2.]
+ [ 4.  0.  4.]]
 </pre></div></div>
 </div>
+<p><strong>atomman.tools.miller.vector_crystal_to_cartesian(indices, box)</strong>
+converts Miller and Miller-Bravais indices to Cartesian vectors based on
+a supplied box.</p>
+<p><em>Updated version 1.2.6</em> vectortocartesian is renamed
+vector_crystal_to_cartesian for consistency.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [20]:
@@ -945,14 +933,14 @@ be different.</p>
 <span class="n">indices</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
            <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
            <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]]</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vectortocartesian</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">box</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector_crystal_to_cartesian</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">box</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">()</span>
 
 <span class="c1"># Pass equivalent Miller-Bravais indices</span>
-<span class="n">indices</span> <span class="o">=</span> <span class="p">[[</span> <span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-           <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-           <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vectortocartesian</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">box</span><span class="p">))</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="p">[[</span> <span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+           <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+           <span class="p">[</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector_crystal_to_cartesian</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">box</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -968,6 +956,109 @@ be different.</p>
 [[ 2.51        0.          0.        ]
  [-1.255       2.17372376  0.        ]
  [ 0.          0.          4.07      ]]
+</pre></div></div>
+</div>
+<p><em>Added version 1.2.6</em></p>
+<p><strong>atomman.tools.miller.vector_primitive_to_conventional(indices,
+setting)</strong> converts vectors relative to a primitive unit cell to a
+conventional unit cell in the given setting (p, a, b, c, i or f).</p>
+<p><strong>atomman.tools.miller.vector_conventional_to_primitive(indices,
+setting)</strong> converts vectors relative to a conventional unit cell in the
+given setting (p, a, b, c, i or f) to a primitive unit cell.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Define a primitive bcc unit cell box</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">2.86</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span class="n">p_box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">trigonal</span><span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="mi">3</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">109.466666667</span><span class="p">)</span>
+<span class="n">p_ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">box</span><span class="o">=</span><span class="n">p_box</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p_ucell</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 2.477,  0.000,  0.000]
+bvect =  [-0.825,  2.335,  0.000]
+cvect =  [-0.825, -1.167,  2.023]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 1
+natypes = 1
+symbols = (None,)
+pbc = [ True  True  True]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   0.000 |   0.000 |   0.000
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Convert conventional box vectors to primitive vectors</span>
+<span class="n">a_uvw</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector_conventional_to_primitive</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s1">&#39;i&#39;</span><span class="p">)</span>
+<span class="n">b_uvw</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector_conventional_to_primitive</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s1">&#39;i&#39;</span><span class="p">)</span>
+<span class="n">c_uvw</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector_conventional_to_primitive</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s1">&#39;i&#39;</span><span class="p">)</span>
+<span class="n">p_uvws</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a_uvw</span><span class="p">,</span> <span class="n">b_uvw</span><span class="p">,</span> <span class="n">c_uvw</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;primitive uvws:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p_uvws</span><span class="p">)</span>
+
+<span class="c1"># Convert back to conventional just for consistency</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;conventional uvws:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector_primitive_to_conventional</span><span class="p">(</span><span class="n">p_uvws</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s1">&#39;i&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+primitive uvws:
+[[ 0. -1. -1.]
+ [ 1.  1.  0.]
+ [ 1.  0.  1.]]
+conventional uvws:
+[[1. 0. 0.]
+ [0. 1. 0.]
+ [0. 0. 1.]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># rotate system using p_uvws to get conventional unit cell</span>
+<span class="n">c_ucell</span> <span class="o">=</span> <span class="n">p_ucell</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">p_uvws</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c_ucell</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 2.860,  0.000,  0.000]
+bvect =  [-0.000,  2.860,  0.000]
+cvect =  [-0.000,  0.000,  2.860]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 2
+natypes = 1
+symbols = (None,)
+pbc = [ True  True  True]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   0.000 |   0.000 |   0.000
+      1 |       1 |   1.430 |   1.430 |   1.430
 </pre></div></div>
 </div>
 </div>
@@ -1037,7 +1128,7 @@ criteria:</p>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [21]:
+<span></span>In [24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1075,7 +1166,7 @@ istriclinic =    False
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [22]:
+<span></span>In [25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1096,7 +1187,7 @@ identifyfamily = None
 <p><strong>File Cleanup</strong></p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [23]:
+<span></span>In [26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1165,7 +1256,7 @@ identifyfamily = None
         <li class="right" >
           <a href="02.2_Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

@@ -19,6 +19,8 @@ import atomman.unitconvert as uc
 from ..tools import axes_check, vect_angle
 from ..compatibility import inttype
 
+__all__ = ['interpolate_contour']
+
 def interpolate_contour(system, name, property=None, index=None, magnitude=False,
                         plotxaxis='x', plotyaxis='y', xlim=None, ylim=None,
                         zlim=None, xbins=200, ybins=200, dots=True, czero=True,

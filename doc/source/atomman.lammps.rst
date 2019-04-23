@@ -9,11 +9,17 @@ Classes
    
    atomman.lammps.Potential
    atomman.lammps.Log
+   atomman.lammps.NEBLog
 
 Functions and attributes
 ------------------------
 
 .. automodule:: atomman.lammps
-    :members: style, run, normalize
+    :members: checkversion, run, normalize
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: atomman.lammps.style
+    :members:
     :undoc-members:
     :show-inheritance:

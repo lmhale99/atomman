@@ -1,0 +1,195 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>NEBLog &#8212; atomman 1.2.6 documentation</title>
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="defect" href="atomman.defect.html" />
+    <link rel="prev" title="Log" href="atomman.lammps.Log.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atomman.defect.html" title="defect"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="atomman.lammps.Log.html" title="Log"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="atomman.lammps.html" accesskey="U">lammps</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="neblog">
+<h1>NEBLog<a class="headerlink" href="#neblog" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="atomman.lammps.NEBLog">
+<em class="property">class </em><code class="descclassname">atomman.lammps.</code><code class="descname">NEBLog</code><span class="sig-paren">(</span><em>neblog='log.lammps'</em>, <em>replicalogs='log.lammps.*'</em>, <em>rootdir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.lammps.NEBLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="atomman.lammps.NEBLog.climbrun">
+<code class="descname">climbrun</code><a class="headerlink" href="#atomman.lammps.NEBLog.climbrun" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>pandas.DataFrame</em> – The NEB log data for the barrier climb steps.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.lammps.NEBLog.get_barrier">
+<code class="descname">get_barrier</code><span class="sig-paren">(</span><em>reverse=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.lammps.NEBLog.get_barrier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the barrier energy calculated from the final NEB simulation step.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reverse</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the energy barrier returned is the forward barrier
+relative to the first replica (False, default), or is the reverse
+barrier relative to the last replica (True).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The energy barrier relative to one of the endpoint replicas.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.lammps.NEBLog.get_neb_path">
+<code class="descname">get_neb_path</code><span class="sig-paren">(</span><em>step</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.lammps.NEBLog.get_neb_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the reaction coordinates and corresponding potential
+energies for a given simulation step.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>step</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The run step to retrieve values for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><strong>reaction_coordinates</strong> (<em>numpy.ndarray</em>) – The reaction coordinates</li>
+<li><strong>potential_energies</strong> (<em>numpy.ndarray</em>) – The potential energies</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.lammps.NEBLog.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>neblog='log.lammps'</em>, <em>replicalogs='log.lammps.*'</em>, <em>rootdir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.lammps.NEBLog.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads LAMMPS NEB calculation log file data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>neblog</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – The filename for the primary LAMMPS NEB log file. Default value is
+‘log.lammps’.</li>
+<li><strong>replicalogs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – The filename with wildcard for the LAMMPS NEB replica log files.
+Default value is ‘log.lammps.*’</li>
+<li><strong>rootdir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – The root directory to use with respect to the neblog and
+replicalogs parameters.  Default value is None, which will assume
+the current working directory for relative paths.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.lammps.NEBLog.logs">
+<code class="descname">logs</code><a class="headerlink" href="#atomman.lammps.NEBLog.logs" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list of atomman.lammps.log</em> – The LAMMPS log files for each replica.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.lammps.NEBLog.minrun">
+<code class="descname">minrun</code><a class="headerlink" href="#atomman.lammps.NEBLog.minrun" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>pandas.DataFrame</em> – The NEB log data for the minimization steps.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.lammps.NEBLog.nreplicas">
+<code class="descname">nreplicas</code><a class="headerlink" href="#atomman.lammps.NEBLog.nreplicas" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> – The number of replicas</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="atomman.lammps.Log.html"
+                        title="previous chapter">Log</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="atomman.defect.html"
+                        title="next chapter">defect</a></p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atomman.defect.html" title="defect"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="atomman.lammps.Log.html" title="Log"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="atomman.lammps.html" >lammps</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>

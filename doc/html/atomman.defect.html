@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>defect &#8212; atomman 1.2.5 documentation</title>
+    <title>defect &#8212; atomman 1.2.6 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.5',
+        VERSION:     '1.2.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="GammaSurface" href="atomman.defect.GammaSurface.html" />
-    <link rel="prev" title="Log" href="atomman.lammps.Log.html" /> 
+    <link rel="prev" title="NEBLog" href="atomman.lammps.NEBLog.html" /> 
   </head>
   <body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -41,9 +41,9 @@
           <a href="atomman.defect.GammaSurface.html" title="GammaSurface"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="atomman.lammps.Log.html" title="Log"
+          <a href="atomman.lammps.NEBLog.html" title="NEBLog"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" accesskey="U">atomman package</a> &#187;</li> 
       </ul>
     </div>  
@@ -60,14 +60,17 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="atomman.defect.GammaSurface.html">GammaSurface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atomman.defect.IsotropicVolterraDislocation.html">IsotropicVolterraDislocation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atomman.defect.SDVPN.html">SDVPN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atomman.defect.StackingFault.html">StackingFault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atomman.defect.Stroh.html">Stroh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atomman.defect.VolterraDislocation.html">VolterraDislocation</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="module-atomman.defect">
-<span id="functions-and-attributes"></span><h2>Functions and attributes<a class="headerlink" href="#module-atomman.defect" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<div class="section" id="functions-and-attributes">
+<h2>Functions and attributes<a class="headerlink" href="#functions-and-attributes" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-atomman.defect"></span><dl class="function">
 <dt id="atomman.defect.differential_displacement">
 <code class="descclassname">atomman.defect.</code><code class="descname">differential_displacement</code><span class="sig-paren">(</span><em>system_0</em>, <em>system_1</em>, <em>burgers</em>, <em>plotxaxis='x'</em>, <em>plotyaxis='y'</em>, <em>xlim=None</em>, <em>ylim=None</em>, <em>zlim=None</em>, <em>neighbors=None</em>, <em>cutoff=None</em>, <em>component='standard'</em>, <em>axes=None</em>, <em>plot_scale=1</em>, <em>atom_color=None</em>, <em>atom_cmap=None</em>, <em>display_final_pos=False</em>, <em>return_data=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.differential_displacement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a differential displacement plot for characterizing dislocations.</p>
@@ -423,7 +426,7 @@ new atom (‘i’, ‘s’, ‘db’ styles).</li>
 
 <dl class="function">
 <dt id="atomman.defect.slip_vector">
-<code class="descclassname">atomman.defect.</code><code class="descname">slip_vector</code><span class="sig-paren">(</span><em>system_0</em>, <em>system_1</em>, <em>neighbors=None</em>, <em>cutoff=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.slip_vector" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">atomman.defect.</code><code class="descname">slip_vector</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.slip_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the slip vectors for all atoms.  Note that this differs from the
 original formulation in that it is not normalized by number of slipped
 neighbors.</p>
@@ -450,6 +453,40 @@ attribute.</li>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="atomman.defect.solve_volterra_dislocation">
+<code class="descclassname">atomman.defect.</code><code class="descname">solve_volterra_dislocation</code><span class="sig-paren">(</span><em>C, burgers, axes=None, m=[1, 0, 0], n=[0, 1, 0], tol=1e-08, style=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.solve_volterra_dislocation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper function for generating VolterraDislocation children classes
+that provide linear elastic solutions for straight dislocations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>C</strong> (<a class="reference internal" href="atomman.ElasticConstants.html#atomman.ElasticConstants" title="atomman.ElasticConstants"><em>atomman.ElasticConstants</em></a>) – The medium’s elastic constants.  Must be isotropic.</li>
+<li><strong>burgers</strong> (<em>array-like object</em>) – The dislocation’s Cartesian Burgers vector.</li>
+<li><strong>axes</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – 3x3 set of rotational axes for the system. If given, C and burgers
+will be transformed using axes.</li>
+<li><strong>m</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – The m unit vector for the solution.  m, n, and u (dislocation
+line) should be right-hand orthogonal.  Default value is [1,0,0]
+(x-axis).</li>
+<li><strong>n</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – The n unit vector for the solution.  m, n, and u (dislocation
+line) should be right-hand orthogonal.  Default value is [0,1,0]
+(y-axis). n is normal to the dislocation slip plane.</li>
+<li><strong>tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – Tolerance parameter used to check for compatibility of the other
+parameters.  Default value is 1e-8.</li>
+<li><strong>style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em>, </em><em>optional</em>) – Indicates which dislocation solution style to use.  Accepted values are
+‘isotropic’, ‘anisotropic’, or None.  If None (default), will select
+isotropic or anisotropic based on the supplied elastic constants.</li>
+<li><strong>Returns</strong> – </li>
+<li><strong>atomman.defect.VolterraDislocation</strong> – The dislocation solution of the appropriate type.</li>
+</ul>
 </td>
 </tr>
 </tbody>
@@ -543,14 +580,14 @@ angstroms.</li>
   <ul>
 <li><a class="reference internal" href="#">defect</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a></li>
-<li><a class="reference internal" href="#module-atomman.defect">Functions and attributes</a></li>
+<li><a class="reference internal" href="#functions-and-attributes">Functions and attributes</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="atomman.lammps.Log.html"
-                        title="previous chapter">Log</a></p>
+  <p class="topless"><a href="atomman.lammps.NEBLog.html"
+                        title="previous chapter">NEBLog</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="atomman.defect.GammaSurface.html"
                         title="next chapter">GammaSurface</a></p>
@@ -571,9 +608,9 @@ angstroms.</li>
           <a href="atomman.defect.GammaSurface.html" title="GammaSurface"
              >next</a> |</li>
         <li class="right" >
-          <a href="atomman.lammps.Log.html" title="Log"
+          <a href="atomman.lammps.NEBLog.html" title="NEBLog"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li> 
       </ul>
     </div>

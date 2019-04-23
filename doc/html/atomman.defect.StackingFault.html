@@ -1,0 +1,287 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>StackingFault &#8212; atomman 1.2.6 documentation</title>
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Stroh" href="atomman.defect.Stroh.html" />
+    <link rel="prev" title="SDVPN" href="atomman.defect.SDVPN.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atomman.defect.Stroh.html" title="Stroh"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="atomman.defect.SDVPN.html" title="SDVPN"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="atomman.defect.html" accesskey="U">defect</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="stackingfault">
+<h1>StackingFault<a class="headerlink" href="#stackingfault" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="atomman.defect.StackingFault">
+<em class="property">class </em><code class="descclassname">atomman.defect.</code><code class="descname">StackingFault</code><span class="sig-paren">(</span><em>system</em>, <em>a1vect=None</em>, <em>a2vect=None</em>, <em>ucellbox=None</em>, <em>transform=None</em>, <em>cutboxvector='c'</em>, <em>faultposrel=None</em>, <em>faultposcart=None</em>, <em>vacuumwidth=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.StackingFault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="atomman.defect.StackingFault.a1vect">
+<code class="descname">a1vect</code><a class="headerlink" href="#atomman.defect.StackingFault.a1vect" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>numpy.ndarray</em> – One of the two shift vectors as given.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.defect.StackingFault.a1vectcart">
+<code class="descname">a1vectcart</code><a class="headerlink" href="#atomman.defect.StackingFault.a1vectcart" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>numpy.ndarray</em> – One of the two shift vectors in Cartesian relative to system.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.defect.StackingFault.a2vect">
+<code class="descname">a2vect</code><a class="headerlink" href="#atomman.defect.StackingFault.a2vect" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>numpy.ndarray</em> – One of the two shift vectors as given.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.defect.StackingFault.a2vectcart">
+<code class="descname">a2vectcart</code><a class="headerlink" href="#atomman.defect.StackingFault.a2vectcart" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>numpy.ndarray</em> – One of the two shift vectors in Cartesian relative to system.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.defect.StackingFault.abovefault">
+<code class="descname">abovefault</code><a class="headerlink" href="#atomman.defect.StackingFault.abovefault" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list</em> – Indices of all atoms in System above the slip plane.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.defect.StackingFault.cutboxvector">
+<code class="descname">cutboxvector</code><a class="headerlink" href="#atomman.defect.StackingFault.cutboxvector" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – The box vector that is cut to add vacuum and slip plane.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.defect.StackingFault.cutindex">
+<code class="descname">cutindex</code><a class="headerlink" href="#atomman.defect.StackingFault.cutindex" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> – The Cartesian index for the cut direction.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.defect.StackingFault.fault">
+<code class="descname">fault</code><span class="sig-paren">(</span><em>a1=None</em>, <em>a2=None</em>, <em>outofplane=None</em>, <em>faultshift=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.StackingFault.fault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a fault configuration by displacing all atoms above the slip
+plane.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – The fractional coordinate of a1vect to shift by.
+Default value is 0.0.</li>
+<li><strong>a2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – The fractional coordinate of a2vect to shift by.
+Default value is 0.0.</li>
+<li><strong>outofplane</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – An out-of-plane shift, given in absolute units.
+Default value is 0.0.</li>
+<li><strong>faultshift</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – The full shifting vector to displace the atoms above the slip
+plane by.  Cannot be given with a1, a2, or outofplane.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The atomic configuration with stacking fault shift</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="atomman.System.html#atomman.System" title="atomman.System">atomman.System</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.defect.StackingFault.faultarea">
+<code class="descname">faultarea</code><a class="headerlink" href="#atomman.defect.StackingFault.faultarea" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>float</em> – The area of the slip plane.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.defect.StackingFault.faultposcart">
+<code class="descname">faultposcart</code><a class="headerlink" href="#atomman.defect.StackingFault.faultposcart" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>float</em> – The Cartesian position of the slip plane.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.defect.StackingFault.iterfaultmap">
+<code class="descname">iterfaultmap</code><span class="sig-paren">(</span><em>num_a1=None</em>, <em>num_a2=None</em>, <em>outofplane=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.StackingFault.iterfaultmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterates over generalized stacking fault configurations associated
+with a 2D map of equally spaced a1, a2 coordinates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>num_a1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of a1 values to generate systems for.
+Default value is 1 (only generate for a1=0.0).</li>
+<li><strong>num_a2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of a2 values to generate systems for.
+Default value is 1 (only generate for a2=0.0).</li>
+<li><strong>outofplane</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – An out-of-plane shift, given in absolute units.
+Default value is 0.0.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Yields:</th><td class="field-body"><ul class="first last simple">
+<li><strong>a1</strong> (<em>float</em>) – The a1 fractional coordinate of a1vect.</li>
+<li><strong>a2</strong> (<em>float</em>) – The a2 fractional coordinate of a2vect.</li>
+<li><em>atomman.System</em> – The fault configuration associated with the a1, a2 shift.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.defect.StackingFault.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>system</em>, <em>a1vect=None</em>, <em>a2vect=None</em>, <em>ucellbox=None</em>, <em>transform=None</em>, <em>cutboxvector='c'</em>, <em>faultposrel=None</em>, <em>faultposcart=None</em>, <em>vacuumwidth=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.StackingFault.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets generation parameters associated with a stacking fault.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>system</strong> (<a class="reference internal" href="atomman.System.html#atomman.System" title="atomman.System"><em>atomman.System</em></a>) – The atomic system to generate stacking fault configurations from.
+The system should be oriented such that the stacking fault plane
+is parallel to either the xy-plane, the xz-plane or the yz-plane.</li>
+<li><strong>a1vect</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – A slip vector within the slip plane.  Depending on if ucellbox and
+transform are given, this can be either a Miller crystal vector or
+a Cartesian vector relative to the supplied system.  If a1vect is
+not given and a2vect is, then a1vect is set to [0,0,0].</li>
+<li><strong>a2vect</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – A slip vector within the slip plane.  Depending on if ucellbox and
+transform are given, this can be either a Miller crystal vector or
+a Cartesian vector relative to the supplied system.  If a2vect is
+not given and a1vect is, then a2vect is set to [0,0,0].</li>
+<li><strong>ucellbox</strong> (<a class="reference internal" href="atomman.Box.html#atomman.Box" title="atomman.Box"><em>atomman.Box</em></a><em>, </em><em>optional</em>) – If ucellbox is given, then the a1vect and a2vect slip vectors are
+taken as Miller crystal vectors relative to ucellbox.  If ucellbox
+is a standard hexagonal cell, the slip vectors can alternatively be
+given as Miller-Bravais crystal vectors. If not given, then the
+slip vectors are taken as Cartesian vectors.</li>
+<li><strong>transform</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – A transformation tensor to apply to the a1vect and a2vect slip
+vectors.  This is needed if system is oriented differently than
+ucellbox, i.e. system is rotated.</li>
+<li><strong>cutboxvector</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Defines which of the three box vectors gets cut so that the slip
+plane can be added.  ‘a’ indicates the slip plane is parallel to
+the yz-plane, ‘b’ the xz-plane and ‘c’ the xy-plane.  Note that
+the specified cutboxvector is the only box vector allowed to have a
+component out of the slip plane.</li>
+<li><strong>faultposrel</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – The position to place the slip plane within the system given as a
+relative coordinate along the out-of-plane direction.  faultposrel
+and faultposcart cannot both be given.  Default value is 0.5 if
+faultposcart is also not given.</li>
+<li><strong>faultposcart</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – The position to place the slip plane within the system given as a
+Cartesian coordinate along the out-of-plane direction.  faultposrel
+and faultposcart cannot both be given.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.defect.StackingFault.system">
+<code class="descname">system</code><a class="headerlink" href="#atomman.defect.StackingFault.system" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>atomman.System</em> – The unshifted configuration.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.defect.StackingFault.transform">
+<code class="descname">transform</code><a class="headerlink" href="#atomman.defect.StackingFault.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>numpy.ndarray or None</em> – The supplied transformation matrix.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.defect.StackingFault.ucellbox">
+<code class="descname">ucellbox</code><a class="headerlink" href="#atomman.defect.StackingFault.ucellbox" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>atomman.Box or None</em> – The supplied reference cell box.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="atomman.defect.SDVPN.html"
+                        title="previous chapter">SDVPN</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="atomman.defect.Stroh.html"
+                        title="next chapter">Stroh</a></p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atomman.defect.Stroh.html" title="Stroh"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="atomman.defect.SDVPN.html" title="SDVPN"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="atomman.defect.html" >defect</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>

@@ -38,18 +38,22 @@ class NEBLog(object):
 
     @property
     def nreplicas(self):
+        """int: The number of replicas"""
         return self.__nreplicas
     
     @property
     def minrun(self):
+        """pandas.DataFrame: The NEB log data for the minimization steps."""
         return self.__minrun
     
     @property
     def climbrun(self):
+        """pandas.DataFrame: The NEB log data for the barrier climb steps."""
         return self.__climbrun
     
     @property
     def logs(self):
+        """list of atomman.lammps.log: The LAMMPS log files for each replica."""
         return self.__logs
     
     def load(self, neblog='log.lammps', replicalogs='log.lammps.*',
@@ -104,7 +108,22 @@ class NEBLog(object):
             self.__logs.append(Log(replicalogs % (i) ))
        
     def get_neb_path(self, step):
-    
+        """
+        Retrieves the reaction coordinates and corresponding potential
+        energies for a given simulation step.
+        
+        Parameters
+        ----------
+        step : int
+            The run step to retrieve values for.
+            
+        Returns
+        -------
+        reaction_coordinates : numpy.ndarray
+            The reaction coordinates
+        potential_energies : numpy.ndarray
+            The potential energies
+        """
         reaction_coordinate = []
         potential_energy = []
         joined = pd.concat([self.minrun, self.climbrun])
@@ -136,6 +155,21 @@ class NEBLog(object):
         return reaction_coordinates, potential_energies
 
     def get_barrier(self, reverse=False):
+        """
+        Returns the barrier energy calculated from the final NEB simulation step.
+        
+        Parameters
+        ----------
+        reverse : bool, optional
+            Indicates if the energy barrier returned is the forward barrier
+            relative to the first replica (False, default), or is the reverse
+            barrier relative to the last replica (True).
+            
+        Returns
+        -------
+        float
+            The energy barrier relative to one of the endpoint replicas.
+        """
         potential_energies = self.get_neb_path(self.climbrun.Step.values[-1])[1]
         
         if reverse is False:

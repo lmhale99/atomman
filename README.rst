@@ -16,35 +16,32 @@ Features:
 1. Allows for efficient and fast calculations on millions of atoms, each with
    many freely defined per-atom properties.
 
-2. Create dislocation monopoles and evaluate them with differential
-   displacement and Nye tensor plots.
-
-3. Generate point defects.
+2. Built-in tools for generating and analyzing crystalline defects, such as
+   point defects, stacking faults, and dislocations.
 
 4. Call LAMMPS directly from Python and instantly retrieve the resulting data
    or LAMMPS error statement.
 
-5. Easily convert systems to/from the other Python atomic environments of ASE
-   and PyMatGen.
+5. Easily convert systems to/from the other Python atomic representations, such
+   as ase.Atoms and pymatgen.Structure.
 
-6. Can create systems based on CIF crystal structure files, and LAMMPS atom and
-   dump files.
+6. Can read and dump crystal structure information from a number of formats,
+   such as LAMMPS data and dump files, and POSCAR.
 
 7. Built-in unit conversions.
 
 Installation
 ------------
 
-As of version 1.2, the atomman package is Python 2/3 compatible. It makes heavy
-use of numpy, so it's easiest to download a Python environment like Anaconda.
+As of version 1.2, the atomman package is Python 2/3 compatible.
 
 The latest release can be installed using pip::
 
     pip install atomman
 
-This pip command should install atomman and any other required packages, but
-occasionally a requirement may have to be installed separately. The list of
-required packages are given below.
+For Windows users, it is recommended to use an Anaconda distribution and use
+conda to install numpy, scipy, matplotlib, pandas and cython prior to
+installing atomman.
 
 Alternatively, all code and documentation can be downloaded from GitHub.
 
@@ -106,15 +103,12 @@ This is a list of the required Python packages
 
 - `matplotlib <http://matplotlib.org/>`__
 
+- `cython <http://cython.org/>`__
+
 Optional packages
 -----------------
 
 This is a list of additional Python packages that can add functionality
-
-- `cython <http://cython.org/>`__:
-  Allows for construction of c/Python hybrid code for faster calculations.
-  Alternate cython versions of some of the calculation heavy
-  functions can be built if cython is installed.
 
 - `diffpy.Structure <http://www.diffpy.org/diffpy.Structure/>`__:
   CIF reader. Required for loading systems from CIF files.

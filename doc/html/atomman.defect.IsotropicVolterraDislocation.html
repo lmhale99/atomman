@@ -1,0 +1,205 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>IsotropicVolterraDislocation &#8212; atomman 1.2.6 documentation</title>
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SDVPN" href="atomman.defect.SDVPN.html" />
+    <link rel="prev" title="GammaSurface" href="atomman.defect.GammaSurface.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atomman.defect.SDVPN.html" title="SDVPN"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="atomman.defect.GammaSurface.html" title="GammaSurface"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="atomman.defect.html" accesskey="U">defect</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="isotropicvolterradislocation">
+<h1>IsotropicVolterraDislocation<a class="headerlink" href="#isotropicvolterradislocation" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="atomman.defect.IsotropicVolterraDislocation">
+<em class="property">class </em><code class="descclassname">atomman.defect.</code><code class="descname">IsotropicVolterraDislocation</code><span class="sig-paren">(</span><em>C, burgers, axes=None, m=[1, 0, 0], n=[0, 1, 0], tol=1e-08</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.IsotropicVolterraDislocation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">atomman.defect.VolterraDislocation.VolterraDislocation</span></code></p>
+<p>Class for representing the isotropic Volterra solution for a straight dislocation.</p>
+<dl class="attribute">
+<dt id="atomman.defect.IsotropicVolterraDislocation.K_tensor">
+<code class="descname">K_tensor</code><a class="headerlink" href="#atomman.defect.IsotropicVolterraDislocation.K_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomman.defect.IsotropicVolterraDislocation.displacement">
+<code class="descname">displacement</code><span class="sig-paren">(</span><em>pos</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.IsotropicVolterraDislocation.displacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the position-dependent isotropic displacements.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pos</strong> (<em>array-like object</em>) – 3D vector position(s).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The computed 3D vector displacements at all given points.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.defect.IsotropicVolterraDislocation.mu">
+<code class="descname">mu</code><a class="headerlink" href="#atomman.defect.IsotropicVolterraDislocation.mu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="atomman.defect.IsotropicVolterraDislocation.nu">
+<code class="descname">nu</code><a class="headerlink" href="#atomman.defect.IsotropicVolterraDislocation.nu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomman.defect.IsotropicVolterraDislocation.solve">
+<code class="descname">solve</code><span class="sig-paren">(</span><em>C, burgers, axes=None, m=[1, 0, 0], n=[0, 1, 0], tol=1e-08</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.IsotropicVolterraDislocation.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the parameters for the solution to use.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>C</strong> (<a class="reference internal" href="atomman.ElasticConstants.html#atomman.ElasticConstants" title="atomman.ElasticConstants"><em>atomman.ElasticConstants</em></a>) – The medium’s elastic constants.  Must be isotropic.</li>
+<li><strong>burgers</strong> (<em>array-like object</em>) – The dislocation’s Cartesian Burgers vector.</li>
+<li><strong>axes</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – 3x3 set of rotational axes for the system. If given, C and burgers
+will be transformed using axes.</li>
+<li><strong>m</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – The m unit vector for the solution.  m, n, and u (dislocation
+line) should be right-hand orthogonal.  Default value is [1,0,0]
+(x-axis).</li>
+<li><strong>n</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – The n unit vector for the solution.  m, n, and u (dislocation
+line) should be right-hand orthogonal.  Default value is [0,1,0]
+(y-axis). n is normal to the dislocation slip plane.</li>
+<li><strong>tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – Tolerance parameter used to check for compatibility of the other
+parameters.  Default value is 1e-8.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.defect.IsotropicVolterraDislocation.stress">
+<code class="descname">stress</code><span class="sig-paren">(</span><em>pos</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.IsotropicVolterraDislocation.stress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the position-dependent isotropic stresses.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pos</strong> (<em>array-like object</em>) – 3D vector position(s).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The computed 3x3 stress states at all given points.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.defect.IsotropicVolterraDislocation.theta">
+<code class="descname">theta</code><span class="sig-paren">(</span><em>pos</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.IsotropicVolterraDislocation.theta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes arctan(y / x) ranging from 0 to 2*pi.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pos</strong> (<em>array-like object</em>) – 3D vector position(s).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The theta angles for each 3D position.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="atomman.defect.GammaSurface.html"
+                        title="previous chapter">GammaSurface</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="atomman.defect.SDVPN.html"
+                        title="next chapter">SDVPN</a></p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atomman.defect.SDVPN.html" title="SDVPN"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="atomman.defect.GammaSurface.html" title="GammaSurface"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="atomman.defect.html" >defect</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>

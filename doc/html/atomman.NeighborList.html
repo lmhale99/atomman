@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>NeighborList &#8212; atomman 1.2.5 documentation</title>
+    <title>NeighborList &#8212; atomman 1.2.6 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.5',
+        VERSION:     '1.2.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="atomman.ElasticConstants.html" title="ElasticConstants"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" accesskey="U">atomman package</a> &#187;</li> 
       </ul>
     </div>  
@@ -58,7 +58,7 @@
 <p>Class that finds and stores the neighbor atoms for a system.</p>
 <dl class="method">
 <dt id="atomman.NeighborList.build">
-<code class="descname">build</code><span class="sig-paren">(</span><em>system</em>, <em>cutoff</em>, <em>cmult=1</em>, <em>code=None</em>, <em>initialsize=20</em>, <em>deltasize=10</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.NeighborList.build" title="Permalink to this definition">¶</a></dt>
+<code class="descname">build</code><span class="sig-paren">(</span><em>system</em>, <em>cutoff</em>, <em>initialsize=20</em>, <em>deltasize=10</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.NeighborList.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds the neighbor list for a system.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -67,12 +67,6 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>system</strong> (<a class="reference internal" href="atomman.System.html#atomman.System" title="atomman.System"><em>atomman.System</em></a>) – The system to calculate the neighbor list for.</li>
 <li><strong>cutoff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – Radial cutoff distance for identifying neighbors.</li>
-<li><strong>cmult</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Parameter associated with the binning routine. Default value is most
-likely the fastest.</li>
-<li><strong>code</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Option for specifying which underlying code function of nlist to use:
-- ‘cython’ uses the version of the function built in cython (faster).
-- ‘python’ uses the purely python version.
-Default is ‘cython’ if the code can be imported, otherwise ‘python’.</li>
 <li><strong>initialsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – The number of neighbor positions to initially assign to each atom.
 Default value is 20.</li>
 <li><strong>deltasize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Specifies the number of extra neighbor positions to allow each atom
@@ -119,6 +113,12 @@ Default value is 10.</li>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="atomman.NeighborList.nlist">
+<code class="descname">nlist</code><a class="headerlink" href="#atomman.NeighborList.nlist" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>numpy.ndarray</em> – The underlying numpy array of coord + neighbor ids</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -148,7 +148,7 @@ Default value is 10.</li>
         <li class="right" >
           <a href="atomman.ElasticConstants.html" title="ElasticConstants"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li> 
       </ul>
     </div>

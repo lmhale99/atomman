@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>atomman package &#8212; atomman 1.2.5 documentation</title>
+    <title>atomman package &#8212; atomman 1.2.6 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.5',
+        VERSION:     '1.2.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="unitconvert" href="atomman.unitconvert.html" />
-    <link rel="prev" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro" href="tutorial/04.5._Semidiscrete_Variational_Peierls-Nabarro.html" /> 
+    <link rel="prev" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro" href="tutorial/04.6._Semidiscrete_Variational_Peierls-Nabarro.html" /> 
   </head>
   <body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -41,9 +41,9 @@
           <a href="atomman.unitconvert.html" title="unitconvert"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="tutorial/04.5._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
+          <a href="tutorial/04.6._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -62,6 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="atomman.tools.html">tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atomman.lammps.html">lammps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atomman.defect.html">defect</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atomman.plot.html">plot</a></li>
 </ul>
 </div>
 </div>
@@ -88,7 +89,7 @@ contained data files.</p>
 
 <dl class="function">
 <dt id="atomman.displacement">
-<code class="descclassname">atomman.</code><code class="descname">displacement</code><span class="sig-paren">(</span><em>system_0</em>, <em>system_1</em>, <em>box_reference='final'</em>, <em>code=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.displacement" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">atomman.</code><code class="descname">displacement</code><span class="sig-paren">(</span><em>system_0</em>, <em>system_1</em>, <em>box_reference='final'</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.displacement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the displacement vectors between all matching atoms for two systems.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -101,8 +102,6 @@ contained data files.</p>
 system_0’s box and pbc.  ‘final’ uses system_1’s box and pbc (Default)
 None computes the straight difference between the positions without
 accounting for periodic boundaries.</li>
-<li><strong>code</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Option for specifying which code version of dvect to use (see dvect’s
-documentation for values).</li>
 </ul>
 </td>
 </tr>
@@ -421,25 +420,55 @@ this allows for 1:1 load/dump conversions.  Default value is False
 </dd></dl>
 
 <dl class="function">
-<dt id="atomman.dvect">
-<code class="descclassname">atomman.</code><code class="descname">dvect</code><span class="sig-paren">(</span><em>pos_0</em>, <em>pos_1</em>, <em>box</em>, <em>pbc</em>, <em>code=None</em>, <em>option=1</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.dvect" title="Permalink to this definition">¶</a></dt>
+<dt id="atomman.dmag">
+<code class="descclassname">atomman.</code><code class="descname">dmag</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomman.dmag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the shortest distance between pos_0 and pos_1 using box
 dimensions and accounting for periodic boundaries.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pos_0</strong> (<em>numpy.ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – Absolute Cartesian vector position(s) to use as reference point(s).</li>
 <li><strong>pos_1</strong> (<em>numpy.ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – Absolute Cartesian vector position(s) to find relative to pos_0.</li>
 <li><strong>box</strong> (<a class="reference internal" href="atomman.Box.html#atomman.Box" title="atomman.Box"><em>atomman.Box</em></a>) – Defines the system/box dimensions</li>
 <li><strong>pbc</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a><em>, or </em><em>numpy.ndarray of bool.</em>) – Three Boolean values indicating which of the three box vectors are
 periodic (True means periodic).</li>
-<li><strong>code</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Option for specifying which underlying code function to use:
-- ‘cython’ uses the version of the function built in cython (faster).
-- ‘python’ uses the purely python version.
-Default is ‘cython’ if the code can be imported, otherwise ‘python’.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The shortest vector magnitude from each pos_0 to pos_1 positions.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="atomman.dvect">
+<code class="descclassname">atomman.</code><code class="descname">dvect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomman.dvect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the shortest vector between pos_0 and pos_1 using box
+dimensions and accounting for periodic boundaries.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pos_0</strong> (<em>numpy.ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – Absolute Cartesian vector position(s) to use as reference point(s).</li>
+<li><strong>pos_1</strong> (<em>numpy.ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – Absolute Cartesian vector position(s) to find relative to pos_0.</li>
+<li><strong>box</strong> (<a class="reference internal" href="atomman.Box.html#atomman.Box" title="atomman.Box"><em>atomman.Box</em></a>) – Defines the system/box dimensions</li>
+<li><strong>pbc</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a><em>, or </em><em>numpy.ndarray of bool.</em>) – Three Boolean values indicating which of the three box vectors are
+periodic (True means periodic).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The shortest vectors from each pos_0 to pos_1 positions.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
 </td>
 </tr>
 </tbody>
@@ -739,7 +768,7 @@ often ‘#’.</li>
 
 <dl class="function">
 <dt id="atomman.nlist">
-<code class="descclassname">atomman.</code><code class="descname">nlist</code><span class="sig-paren">(</span><em>system</em>, <em>cutoff</em>, <em>cmult=1</em>, <em>code=None</em>, <em>initialsize=20</em>, <em>deltasize=10</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.nlist" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">atomman.</code><code class="descname">nlist</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomman.nlist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates a neighbor list for all atoms in a System taking periodic
 boundaries into account.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -749,12 +778,6 @@ boundaries into account.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>system</strong> (<a class="reference internal" href="atomman.System.html#atomman.System" title="atomman.System"><em>atomman.System</em></a>) – The system to calculate the neighbor list for.</li>
 <li><strong>cutoff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – Radial cutoff distance for identifying neighbors.</li>
-<li><strong>cmult</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Parameter associated with the binning routine. Default value is most
-likely the fastest.</li>
-<li><strong>code</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Option for specifying which underlying code function to use:
-- ‘cython’ uses the version of the function built in cython (faster).
-- ‘python’ uses the purely python version.
-Default is ‘cython’ if the code can be imported, otherwise ‘python’.</li>
 <li><strong>initialsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – The number of neighbor positions to initially assign to each atom.
 Default value is 20.</li>
 <li><strong>deltasize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Specifies the number of extra neighbor positions to allow each atom
@@ -763,13 +786,12 @@ Default value is 10.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Two dimensional array where the first dimension corresponds to each
-atom.  In each row (second dimension), the first term is the atom’s
-coordination number, and the following terms from 1 to coordination+1
-are the list of neighboring atoms (by index).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Array listing number of neighbors and neighbor ids for each atom in
+System.  First term in each row is the atom’s coordination number, c.
+The next c values are the atom’s neighbor ids.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray of int</p>
 </td>
 </tr>
 </tbody>
@@ -796,7 +818,7 @@ are the list of neighboring atoms (by index).</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="tutorial/04.5._Semidiscrete_Variational_Peierls-Nabarro.html"
+  <p class="topless"><a href="tutorial/04.6._Semidiscrete_Variational_Peierls-Nabarro.html"
                         title="previous chapter">Introduction to atomman: Semidiscrete Variational Peierls-Nabarro</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="atomman.unitconvert.html"
@@ -818,9 +840,9 @@ are the list of neighboring atoms (by index).</p>
           <a href="atomman.unitconvert.html" title="unitconvert"
              >next</a> |</li>
         <li class="right" >
-          <a href="tutorial/04.5._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
+          <a href="tutorial/04.6._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

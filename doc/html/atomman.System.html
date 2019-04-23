@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>System &#8212; atomman 1.2.5 documentation</title>
+    <title>System &#8212; atomman 1.2.6 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.5',
+        VERSION:     '1.2.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="atomman.Box.html" title="Box"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" accesskey="U">atomman package</a> &#187;</li> 
       </ul>
     </div>  
@@ -91,7 +91,7 @@ providing a list of the property names to scale.</td>
 <dl class="attribute">
 <dt id="atomman.System.atoms_ix">
 <code class="descname">atoms_ix</code><a class="headerlink" href="#atomman.System.atoms_ix" title="Permalink to this definition">¶</a></dt>
-<dd><p>_AtomsIndexer for index slicing of Systems by per-atom properties.</p>
+<dd><p>Indexer for index slicing of Systems by per-atom properties.</p>
 </dd></dl>
 
 <dl class="method">
@@ -150,6 +150,35 @@ Default value is False (absolute positions unchanged).</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="atomman.System.dmag">
+<code class="descname">dmag</code><span class="sig-paren">(</span><em>pos_0</em>, <em>pos_1</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.System.dmag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the shortest distance between pos_0 and pos_1 using box
+dimensions and accounting for periodic boundaries.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pos_0</strong> (<em>numpy.ndarray</em><em> or </em><em>index</em>) – Absolute Cartesian vector position(s) to use as reference point(s).
+If the value can be used as an index, then self.atoms.pos[pos_0]
+is taken.</li>
+<li><strong>pos_1</strong> (<em>numpy.ndarray</em><em> or </em><em>index</em>) – Absolute Cartesian vector position(s) to find relative to pos_0.
+If the value can be used as an index, then self.atoms.pos[pos_1]
+is taken.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The shortest vector magnitude from each pos_0 to pos_1 positions.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="atomman.System.dump">
 <code class="descname">dump</code><span class="sig-paren">(</span><em>style</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.System.dump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a System to another format.</p>
@@ -175,25 +204,27 @@ Default value is False (absolute positions unchanged).</li>
 
 <dl class="method">
 <dt id="atomman.System.dvect">
-<code class="descname">dvect</code><span class="sig-paren">(</span><em>pos_0</em>, <em>pos_1</em>, <em>code=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.System.dvect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the shortest distance between pos_0 and pos_1 using box
+<code class="descname">dvect</code><span class="sig-paren">(</span><em>pos_0</em>, <em>pos_1</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.System.dvect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the shortest vector between pos_0 and pos_1 using box
 dimensions and accounting for periodic boundaries.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pos_0</strong> (<em>numpy.ndarray</em><em> or </em><em>index</em>) – Absolute Cartesian vector position(s) to use as reference point(s).
 If the value can be used as an index, then self.atoms.pos[pos_0]
 is taken.</li>
 <li><strong>pos_1</strong> (<em>numpy.ndarray</em><em> or </em><em>index</em>) – Absolute Cartesian vector position(s) to find relative to pos_0.
 If the value can be used as an index, then self.atoms.pos[pos_1]
 is taken.</li>
-<li><strong>code</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Option for specifying which underlying code function to use:
-- ‘cython’ uses the version of the function built in cython (faster).
-- ‘python’ uses the purely python version.
-Default is ‘cython’ if the code can be imported, otherwise ‘python’.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The shortest vectors from each pos_0 to pos_1 positions.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
 </td>
 </tr>
 </tbody>
@@ -226,12 +257,6 @@ object is saved to the object as attribute ‘neighbors’.</p>
 model is not given.</li>
 <li><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>file-like object</em><em>, </em><em>optional</em>) – Gives the file path or content to load.  If given, no other
 parameters are allowed.</li>
-<li><strong>cmult</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Parameter associated with the binning routine.  Default value is most
-likely the fastest.</li>
-<li><strong>code</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Option for specifying which underlying code function of nlist to use:
-- ‘cython’ uses the version of the function built in cython (faster).
-- ‘python’ uses the purely python version.
-Default is ‘cython’ if the code can be imported, otherwise ‘python’.</li>
 <li><strong>initialsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – The number of neighbor positions to initially assign to each atom.
 Default value is 20.</li>
 <li><strong>deltasize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Specifies the number of extra neighbor positions to allow each atom
@@ -297,9 +322,9 @@ representation.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>uvws</strong> (<em>numpy.ndarray of int</em>) – A (3, 3) array of the Miller crystal vectors or a (3, 4) array of
+<li><strong>uvws</strong> (<em>numpy.ndarray</em>) – A (3, 3) array of the Miller crystal vectors or a (3, 4) array of
 Miller-Bravais hexagonal crystal vectors to use in transforming the
-system.</li>
+system.  Values must be integers.</li>
 <li><strong>tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – Tolerance parameter used in rounding atomic positions near the
 boundaries to the boundary values.  In box-relative coordinates, any
 atomic positions within tol of 0 or 1 will be rounded to 0 or 1,
@@ -435,7 +460,7 @@ boundaries such that all atoms are within the box.</p>
         <li class="right" >
           <a href="atomman.Box.html" title="Box"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li> 
       </ul>
     </div>

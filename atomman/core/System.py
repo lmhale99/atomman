@@ -675,6 +675,8 @@ class System(object):
             Returned if return_transform is True.
         """
         
+        uvws = np.asarray(uvws)
+
         # Convert uvws from Miller-Bravais to Miller indices if needed
         if uvws.shape == (3, 4):
             if ishexagonal(self.box):
