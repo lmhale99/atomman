@@ -14,7 +14,7 @@ import pandas as pd
 from . import Atoms, Box, dvect, dmag, NeighborList
 from ..lammps import normalize as lmp_normalize
 from ..compatibility import iteritems, range, inttype, stringtype
-from ..tools import indexstr, miller, ishexagonal
+from ..tools import indexstr, miller, ishexagonal, compositionstr
 from .. import dump
 
 class System(object):
@@ -171,6 +171,15 @@ class System(object):
             value = (value,)
         assert len(value) == self.natypes, 'length of symbols does not match natypes'
         self.__symbols = tuple(value)
+    
+    @property
+    def composition(self):
+        """str: The system's composition."""
+        if self.symbols[0] is not None:
+            counts = np.unique(self.atoms.atype, return_counts=True)[1]
+            return compositionstr(self.symbols, counts)
+        else:
+            return None
     
     def atoms_prop(self, key=None, index=None, value=None, a_id=None, scale=False):
         """
