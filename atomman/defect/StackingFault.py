@@ -164,7 +164,7 @@ class StackingFault(object):
             if vacuumwidth < 0:
                 raise ValueError('vacuumwidth must be positive')
             newvects = system.box.vects
-            newvects[cutindex, cutindex] += vacuumwidth / 2
+            newvects[cutindex, cutindex] += vacuumwidth
             neworigin = system.box.origin - ovect * vacuumwidth / 2 
             system.box_set(vects=newvects, origin=neworigin)
 
@@ -279,7 +279,7 @@ class StackingFault(object):
         """numpy.ndarray or None : The supplied transformation matrix."""
         return self.__transform
     
-    def fault(self, a1=None, a2=None, outofplane=None, faultshift=None):       
+    def fault(self, a1=None, a2=None, outofplane=None, faultshift=None, minimum_r=None):
         """
         Generates a fault configuration by displacing all atoms above the slip
         plane.
@@ -298,6 +298,11 @@ class StackingFault(object):
         faultshift : array-like object, optional
             The full shifting vector to displace the atoms above the slip
             plane by.  Cannot be given with a1, a2, or outofplane.
+        minimum_r : float, optional
+            Specifies the minimum allowed interatomic spacing across the slip
+            plane.  If any sets of atoms are closer than this value then the
+            outofplane shift is increased.  Default value is None, which
+            performs no adjustment.
 
         Returns
         -------
@@ -307,7 +312,13 @@ class StackingFault(object):
         # Define out of plane unit vector 
         ovect = np.zeros(3)
         ovect[self.cutindex] = 1.0
-
+        
+        # Identify the two non-cut indices
+        inindex = []
+        for i in range(3):
+            if i != self.cutindex:
+                inindex.append(i)
+        
         # Calculate faultshift
         if a1 is not None or a2 is not None or outofplane is not None:
             if faultshift is not None:
@@ -328,10 +339,39 @@ class StackingFault(object):
         sfsystem = deepcopy(self.system)
         sfsystem.atoms.pos[self.abovefault] += faultshift
         sfsystem.wrap()
-    
+        
+        # Add additional outofplane shift if necessary
+        if minimum_r is not None:
+            # Get all atoms within minimum_r of fault position
+            top_pos = sfsystem.atoms.pos[self.abovefault]
+            top_pos = top_pos[top_pos[:, self.cutindex] <= self.faultposcart + minimum_r] 
+            bot_pos = sfsystem.atoms.pos[~self.abovefault]
+            bot_pos = bot_pos[bot_pos[:, self.cutindex] >= self.faultposcart - minimum_r]
+            if top_pos.shape[0] > 0 and bot_pos.shape[0] > 0:
+                dmag_min = minimum_r
+                dvect_min = None
+                
+                for i in range(top_pos.shape[0]):
+                    dvect = sfsystem.dvect(bot_pos, top_pos[i])
+                    if dvect.shape == (3,):
+                        dvect = dvect.reshape(1,3)
+                    dmag = np.linalg.norm(dvect, axis=1)
+                    i = np.argmin(dmag)
+                    if dmag[i] < dmag_min:
+                        dmag_min = dmag[i]
+                        dvect_min = dvect[i]
+                
+                if dvect_min is not None:
+                    
+                    new = (minimum_r**2 - dvect_min[inindex[0]]**2 - dvect_min[inindex[1]]**2)**0.5
+                    outofplane = new - dvect_min[self.cutindex]
+                    faultshift = outofplane * ovect
+                    sfsystem.atoms.pos[self.abovefault] += faultshift
+                    sfsystem.wrap()
+        
         return sfsystem
-
-    def iterfaultmap(self, num_a1=None, num_a2=None, outofplane=None):
+    
+    def iterfaultmap(self, num_a1=None, num_a2=None, outofplane=None, minimum_r=None):
         """
         Iterates over generalized stacking fault configurations associated
         with a 2D map of equally spaced a1, a2 coordinates.
@@ -347,7 +387,12 @@ class StackingFault(object):
         outofplane : float, optional
             An out-of-plane shift, given in absolute units.
             Default value is 0.0.
-
+        minimum_r : float, optional
+            Specifies the minimum allowed interatomic spacing across the slip
+            plane.  If any sets of atoms are closer than this value then the
+            outofplane shift is increased.  Default value is None, which
+            performs no adjustment.
+        
         Yields
         ------
         a1 : float
@@ -367,4 +412,5 @@ class StackingFault(object):
                                np.linspace(0, 1, num_a2, endpoint=False))
 
         for a1, a2 in zip(a1s.flat, a2s.flat):
-            yield a1, a2, self.fault(a1=a1, a2=a2, outofplane=outofplane)
+            yield a1, a2, self.fault(a1=a1, a2=a2, outofplane=outofplane,
+                                     minimum_r=minimum_r)
