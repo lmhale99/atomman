@@ -896,6 +896,7 @@ class GammaSurface(object):
         # Create plot
         xmax = x.max()
         emin = E.min()
+        emax = E.max()
         if fig is None:
             if figsize is None:
                 figsize = (10, 6)
@@ -903,10 +904,13 @@ class GammaSurface(object):
         else:
             old_xmax = fig.axes[0].get_xlim()[-1]
             old_emin = fig.axes[0].get_ylim()[0]
+            old_emax = fig.axes[0].get_ylim()[-1]
             if old_xmax > xmax:
                 xmax = old_xmax
             if old_emin < emin:
                 emin = old_emin
+            if old_emax > emax:
+                emax = old_emax
         if 'fmt' in kwargs:
             fmt = kwargs.pop('fmt')      
             plt.plot(x, E, fmt, **kwargs)
@@ -916,11 +920,11 @@ class GammaSurface(object):
         if vect is None:
             vect = self.a1vect
 
-        plt.xlabel('$x$ along ' + str(vect) + ' (' + length_unit + ')',
+        plt.xlabel('$x$ along ' + str(vect) + ' (' + str(length_unit) + ')',
                    fontsize='x-large')
-        plt.ylabel('$E_{gsf}$ (' + energyperarea_unit + ')', fontsize='x-large')
+        plt.ylabel('$E_{gsf}$ (' + str(energyperarea_unit) + ')', fontsize='x-large')
         plt.xlim(0, xmax)
-        plt.ylim(emin, None)
+        plt.ylim(emin, emax)
         
         return fig
     
