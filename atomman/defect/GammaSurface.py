@@ -1091,37 +1091,41 @@ class GammaSurface(object):
         a2 = np.zeros(num)
         pos = self.a12_to_pos(a1, a2, a1vect=vect)
         
-        # Evaluate interpolated energy and distance along x
-        E = uc.get_in_units(self.delta(pos=pos, smooth=smooth), length_unit)
+        # Evaluate interpolated distance along x
+        d = uc.get_in_units(self.delta(pos=pos, smooth=smooth), length_unit)
         x = uc.get_in_units(np.linalg.norm(pos, axis=1), length_unit)
         
         # Create plot
         xmax = x.max()
-        emin = E.min()
+        dmin = d.min()
+        dmax = d.max()
         if fig is None:
             if figsize is None:
                 figsize = (10, 6)
             fig = plt.figure(figsize=figsize)
         else:
             old_xmax = fig.axes[0].get_xlim()[-1]
-            old_emin = fig.axes[0].get_ylim()[0]
+            old_dmin = fig.axes[0].get_ylim()[0]
+            old_dmax = fig.axes[0].get_ylim()[-1]
             if old_xmax > xmax:
                 xmax = old_xmax
-            if old_emin < emin:
-                emin = old_emin
+            if old_dmin < dmin:
+                dmin = old_dmin
+            if old_dmax > dmax:
++                dmax = old_dmax
         if 'fmt' in kwargs:
             fmt = kwargs.pop('fmt')      
-            plt.plot(x, E, fmt, **kwargs)
+            plt.plot(x, d, fmt, **kwargs)
         else:
-            plt.plot(x, E, **kwargs)
+            plt.plot(x, d, **kwargs)
         
         if vect is None:
             vect = self.a1vect
 
-        plt.xlabel('$x$ along ' + str(vect) + ' (' + length_unit + ')',
+        plt.xlabel('$x$ along ' + str(vect) + ' (' + str(length_unit) + ')',
                    fontsize='x-large')
-        plt.ylabel('$\delta_{gsf}$ (' + length_unit + ')', fontsize='x-large')
+        plt.ylabel('$\delta_{gsf}$ (' + str(length_unit) + ')', fontsize='x-large')
         plt.xlim(0, xmax)
-        plt.ylim(emin, None)
+        plt.ylim(dmin, dmax)
         
         return fig
