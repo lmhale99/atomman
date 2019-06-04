@@ -7,13 +7,83 @@ import numpy as np
 
 from .crystalsystem import ishexagonal
 
-__all__ = ['vector3to4', 'vector4to3', 'vector_crystal_to_cartesian',
+__all__ = ['plane3to4', 'plane4to3', 'vector3to4', 'vector4to3',
+           'vector_crystal_to_cartesian',
            'vector_primitive_to_conventional', 
            'vector_conventional_to_primitive']
 
+def plane3to4(indices):
+    """
+    Converts 3-term Miller (hkl) plane indices to 4-term hexagonal (hkil)
+    Miller-Bravias indices.
+    
+    Parameters
+    ----------
+    indices : np.ndarray
+        (..., 3) array of Miller crystallographic indices.
+   
+    Returns
+    -------
+    np.ndarray
+        (..., 4) array of Miller-Bravais crystallographic indices.
+    
+    Raises
+    ------
+    ValueError
+        If indices dimensions are not (..., 3).
+    """
+    
+    # Verify compatible indices
+    indices = np.asarray(indices)
+    if indices.shape[-1] != 3:
+        raise ValueError('Invalid index dimensions')
+    
+    newindices = np.empty(indices.shape[:-1] + (4,))
+    newindices[..., 0] = indices[..., 0]
+    newindices[..., 1] = indices[..., 1]
+    newindices[..., 2] = -(newindices[..., 0] + newindices[..., 1])
+    newindices[..., 3] = indices[..., 2]
+    
+    return newindices
+
+def plane4to3(indices):
+    """
+    Converts 4-term hexagonal Miller-Bravias (hkil) plane indices to 3-term 
+    Miller (hkl) indices.
+    
+    Parameters
+    ----------
+    indices : np.ndarray of int
+        (..., 4) array of Miller-Bravais crystallographic indices.
+   
+    Returns
+    -------
+    np.ndarray of int
+        (..., 3) array of Miller crystallographic indices.
+   
+    Raises
+    ------    
+    ValueError
+        If indices dimensions are not (..., 4), or if h+k+i != 0.
+    """
+    
+    # Verify compatible indices
+    indices = np.asarray(indices)
+    if indices.shape[-1] != 4:
+        raise ValueError('Invalid index dimensions')
+    if not np.allclose(indices[...,:3].sum(axis=-1), 0.0):
+        raise ValueError('Invalid indices: h+k+i != 0')
+    
+    newindices = np.empty(indices.shape[:-1] + (3,))
+    newindices[..., 0] = indices[..., 0]
+    newindices[..., 1] = indices[..., 1]
+    newindices[..., 2] = indices[..., 3]
+    
+    return newindices
+
 def vector3to4(indices):
     """
-    Converts 3-term Miller [uvw] indices to 4-term hexagonal [uvtw]
+    Converts 3-term Miller [uvw] vector indices to 4-term hexagonal [uvtw]
     Miller-Bravias indices. 
     
     Parameters
@@ -47,9 +117,8 @@ def vector3to4(indices):
     
 def vector4to3(indices):
     """
-    Converts 4-term hexagonal Miller-Bravias [uvtw] indices to 3-term 
-    Miller [uvw] indices. Note that vectors will be normalized to 
-    smallest integer representations.
+    Converts 4-term hexagonal Miller-Bravias [uvtw] vector indices to 3-term 
+    Miller [uvw] indices.
     
     Parameters
     ----------
@@ -64,14 +133,14 @@ def vector4to3(indices):
     Raises
     ------    
     ValueError
-        If indices dimensions are not (..., 4), or if h+k+i != 0.
+        If indices dimensions are not (..., 4), or if u+v+t != 0.
     """
     # Verify compatible indices
     indices = np.asarray(indices)
     if indices.shape[-1] != 4:
         raise ValueError('Invalid index dimensions')
     if not np.allclose(indices[...,:3].sum(axis=-1), 0.0):
-        raise ValueError('Invalid indices: h+k+i != 0')
+        raise ValueError('Invalid indices: u+v+t != 0')
     
     # Transform
     newindices = np.empty(indices.shape[:-1] + (3,))
