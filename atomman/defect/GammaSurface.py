@@ -1112,7 +1112,7 @@ class GammaSurface(object):
             if old_dmin < dmin:
                 dmin = old_dmin
             if old_dmax > dmax:
-+                dmax = old_dmax
+                dmax = old_dmax
         if 'fmt' in kwargs:
             fmt = kwargs.pop('fmt')      
             plt.plot(x, d, fmt, **kwargs)
