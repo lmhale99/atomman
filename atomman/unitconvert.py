@@ -213,7 +213,10 @@ def value_unit(term):
     
     """
     unit = term.get('unit', None)
-    value = set_in_units(term['value'], unit)
+    if unit is None:
+        value = np.asarray(term['value'])
+    else:
+        value = set_in_units(term['value'], unit)
     
     if 'shape' in term:
         shape = tuple(term['shape'])
@@ -238,7 +241,10 @@ def error_unit(term):
     
     """
     unit = term.get('unit', None)
-    error = set_in_units(term['error'], unit)
+    if unit is None:
+        error = np.asarray(term['error'])
+    else:
+        error = set_in_units(term['error'], unit)
     
     if 'shape' in term:
         shape = tuple(term['shape'])
@@ -246,7 +252,7 @@ def error_unit(term):
     
     return error
     
-def model(value, units, error=None):
+def model(value, units=None, error=None):
     """
     Generates DataModelDict representation of data.
     
@@ -268,7 +274,9 @@ def model(value, units, error=None):
     
     datamodel = DM()
     
-    value = get_in_units(value, units)
+    if units is not None:
+        value = get_in_units(value, units)
+    
     if error is not None:
         error = get_in_units(error, units)
     
@@ -280,19 +288,20 @@ def model(value, units, error=None):
     
     # 1D array
     elif value.ndim == 1:
-        datamodel['value'] = list(value)
+        datamodel['value'] = value.tolist()
         if error is not None:
-            datamodel['error'] = list(error)
+            datamodel['error'] = error.tolist()
             
     # Higher-order array requires shape
     else:
         shape = value.shape
-        datamodel['value'] = list(value.flatten())
+        datamodel['value'] = value.flatten().tolist()
         if error is not None:
-            datamodel['error'] = list(error.flatten())
+            datamodel['error'] = error.flatten().tolist()
         datamodel['shape'] = list(shape)
     
-    datamodel['unit'] = units
+    if units is not None:
+        datamodel['unit'] = units
     return datamodel
 
 def parse(units):

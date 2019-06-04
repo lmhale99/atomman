@@ -10,7 +10,11 @@ import numpy as np
 # https://pandas.pydata.org/
 import pandas as pd
 
+# https://github.com/usnistgov/DataModelDict
+from DataModelDict import DataModelDict as DM
+
 # atomman imports
+import atomman.unitconvert as uc
 from . import Atoms, Box, dvect, dmag, NeighborList
 from ..lammps import normalize as lmp_normalize
 from ..compatibility import iteritems, range, inttype, stringtype
@@ -50,8 +54,8 @@ class System(object):
             else:
                 raise ValueError('Can only set using Atoms or System objects')
 
-    def __init__(self, atoms=Atoms(), box=Box(), pbc=(True, True, True),
-                 scale=False, symbols=()):
+    def __init__(self, atoms=None, box=None, pbc=None,
+                 scale=False, symbols=None, model=None):
         """
         Initialize a System by joining an am.Atoms and am.Box instance.
         
@@ -71,15 +75,48 @@ class System(object):
             A list of the element symbols for each atom atype.  If len(symbols)
             is less than natypes, then missing values will be set to None.
             Default value is (,), i.e. all values set to None.
+        model : str or DataModelDict, optional
+            File path or content of a JSON/XML data model containing all
+            system information.  Cannot be given with atoms, box or scale.
         """
-        
-        # Check data types
-        if not isinstance(atoms, Atoms):
-            raise TypeError('Invalid atoms type')
-        if not isinstance(box, Box):
-            raise TypeError('Invalid box type')
-        if not isinstance(scale, bool):
-            raise TypeError('Invalid scale type')
+        # Check for model
+        if model is not None:
+            try:
+                assert atoms is None
+                assert box is None
+                assert scale is False
+            except:
+                raise ValueError('model cannot be given with atoms, box or scale parameters')
+            
+            # Load data model
+            model = DM(model).find('atomic-system')
+
+            # Extract values from model
+            box = Box(model=model)
+            atoms = Atoms(model=model)
+            if pbc is None:
+                pbc = model['periodic-boundary-condition']
+            if symbols is None:
+                symbols = model['atom-type-symbol']
+
+        else:
+            # Set default values
+            if atoms is None:
+                atoms = Atoms()
+            if box is None:
+                box = Box()
+            if pbc is None:
+                pbc= (True, True, True)
+            if symbols is None:
+                symbols=()
+
+            # Check data types
+            if not isinstance(atoms, Atoms):
+                raise TypeError('Invalid atoms type')
+            if not isinstance(box, Box):
+                raise TypeError('Invalid box type')
+            if not isinstance(scale, bool):
+                raise TypeError('Invalid scale type')
         
         # Set properties
         self.__atoms = atoms
@@ -95,6 +132,12 @@ class System(object):
         # Scale pos if needed
         if scale is True:
             self.atoms_prop('pos', value=atoms.pos, scale=True)
+
+        # Scale model properties if needed
+        if model is not None:
+            for prop in model['atoms'].aslist('property'):
+                if prop['data'].get('unit', None) == 'scaled':
+                    self.atoms.view[prop['name']] = self.unscale(self.atoms.view[prop['name']]) 
 
         # Set atoms indexer
         self.__atoms_ix = System._AtomsIndexer(self)
@@ -798,3 +841,68 @@ class System(object):
             Any content returned by the underlying dump methods.
         """
         return dump(style, self, **kwargs)
+
+    def model(self, box_unit=None, symbols=None, prop_name=None, 
+              unit=None, prop_unit=None):
+        """
+        Generates a data model for the System object.
+
+        Parameters
+        ----------
+        box_unit : str, optional
+            Length unit to use for the box. Default value is 'angstrom'.
+        symbols : list, optional
+            list of atom-model symbols corresponding to the atom types.  If not
+            given, will use system.symbols.
+        prop_name : list, optional
+            The Atoms properties to include.  If neither prop_name nor prop_unit
+            are given, all system properties will be included.
+        unit : list, optional
+            Lists the units for each prop_name as stored in the table.  For a
+            value of None, no conversion will be performed for that property.  For
+            a value of 'scaled', the corresponding table values will be taken in
+            box-scaled units.  If neither unit nor prop_units given, pos will be
+            given in Angstroms and all other values will not be converted.
+        prop_unit : dict, optional
+            dictionary where the keys are the property keys to include, and
+            the values are units to use. If neither unit nor prop_units given, 
+            pos will be given in Angstroms and all other values will not be
+            converted.
+
+        Returns
+        -------
+        DataModelDict.DataModelDict
+            A JSON/XML data model for the current System object. 
+        """
+
+        # Initialize DataModelDict
+        model = DM()
+        model['atomic-system'] = DM()
+
+        # Add box
+        model['atomic-system']['box'] = self.box.model(length_unit=box_unit)['box']
+        
+        # Add pbc
+        model['atomic-system']['periodic-boundary-condition'] = self.pbc.tolist()
+        
+        # Add symbols
+        if symbols is None:
+            symbols = self.symbols
+        else:
+            if isinstance(symbols, stringtype):
+                symbols = (symbols,)
+            assert len(symbols) == self.natypes, 'length of symbols does not match natypes'
+        for symbol in symbols:
+            model['atomic-system'].append('atom-type-symbol', symbol)
+        
+        # Add atoms
+        model['atomic-system']['atoms'] = amodel = self.atoms.model(prop_name=prop_name,
+                                                                    unit=unit, 
+                                                                    prop_unit=prop_unit)['atoms']
+        
+        # Scale properties if needed
+        for prop in amodel.aslist('property'):
+            if prop['data'].get('unit', None) == 'scaled':
+                prop['data'] = uc.model(self.scale(uc.value_unit(prop['data'])), units='scaled') 
+        
+        return model

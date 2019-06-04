@@ -6,7 +6,11 @@ from copy import deepcopy
 # http://www.numpy.org/
 import numpy as np
 
+# https://github.com/usnistgov/DataModelDict
+from DataModelDict import DataModelDict as DM
+
 # atomman imports
+import atomman.unitconvert as uc
 from ..tools import vect_angle
 
 class Box(object):
@@ -32,6 +36,8 @@ class Box(object):
         - lx, ly, lz, (xy, xz, yz, and origin).
         
         - xlo, xhi, ylo, yhi, zlo, zhi, (xy, xz, and yz).
+
+        - model
         
         See the description of class methods and attributes for more details
         on the allowed parameters.
@@ -41,7 +47,12 @@ class Box(object):
         self.__origin = np.zeros(3, dtype='float64')
         
         if len(kwargs) > 0:
-            self.set(**kwargs)
+            if 'model' in kwargs:
+                if len(kwargs) > 1:
+                    raise ValueError('model cannot be given with other parameters')
+                self.model(kwargs['model'])
+            else:
+                self.set(**kwargs)
     
     @classmethod
     def cubic(cls, a):
@@ -376,6 +387,47 @@ class Box(object):
                           'cvect =  [%6.3f, %6.3f, %6.3f]' % (self.__vects[2,0], self.__vects[2,1], self.__vects[2,2]),
                           'origin = [%6.3f, %6.3f, %6.3f]' % (self.__origin[0],  self.__origin[1],  self.__origin[2])])
     
+    def model(self, model=None, length_unit='angstrom'):
+        """
+        Reads or generates a data model for the box.
+
+        Parameters
+        ----------
+        model : str or DataModelDict, optional
+            JSON/XML formatted data, or path to file containing said data.  If
+            not given, then a model for the current box will be returned.
+        length_unit : str, optional
+            Unit of length to save box values in if data model is to be
+            generated.  Default value is 'angstrom'.
+
+        Returns
+        -------
+        DataModelDict.DataModelDict
+            A JSON/XML equivalent data model for the box.  Returned if model
+            is not given
+        """
+        # Set values if model given
+        if model is not None:
+            
+            # Find box element
+            model = DM(model).find('box')
+            avect = uc.value_unit(model['avect'])
+            bvect = uc.value_unit(model['bvect'])
+            cvect = uc.value_unit(model['cvect'])
+            origin = uc.value_unit(model['origin'])
+            self.set(avect=avect, bvect=bvect, cvect=cvect, origin=origin)
+        
+        # Return DataModelDict if model not given
+        else:
+            model = DM()
+            model['box'] = DM()
+            model['box']['avect'] = uc.model(self.avect, length_unit)
+            model['box']['bvect'] = uc.model(self.bvect, length_unit)
+            model['box']['cvect'] = uc.model(self.cvect, length_unit)
+            model['box']['origin']= uc.model(self.origin, length_unit)
+
+            return model
+
     def set(self, **kwargs):
         """
         Sets a Box's dimensions.  If parameters besides origin are given they

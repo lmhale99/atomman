@@ -10,7 +10,11 @@ import numpy as np
 # https://pandas.pydata.org/
 import pandas as pd
 
+# https://github.com/usnistgov/DataModelDict
+from DataModelDict import DataModelDict as DM
+
 # atomman imports
+import atomman.unitconvert as uc
 from ..compatibility import iteritems, int, inttype, range
 from ..tools import indexstr
 
@@ -76,19 +80,25 @@ class Atoms(object):
                 except:
                     pass
     
-    def __init__(self, natoms=None, atype=None, pos=None, prop=None, **kwargs):
+    def __init__(self, natoms=None, atype=None, pos=None, prop=None, model=None, **kwargs):
         """
         Class initializer.
         
         Parameters
         ==========
-        natoms : int
-            The number of atoms.
-        atype : int or list/ndarray of int
-            The integer atomic types to assign to all atoms.
-        pos : list/ndarray of float
-            The atomic positions to assign to all atoms.
-        prop : dict
+        natoms : int, optional
+            The number of atoms.  If not given, will be inferred from other
+            parameters if possible, or set to 1 if not possible.
+        atype : int or list/ndarray of int, optional
+            The integer atomic types to assign to all atoms.  Default is to
+            set all atypes to 1.
+        pos : list/ndarray of float, optional
+            The atomic positions to assign to all atoms.  Default is to set
+            each atom's position to [0,0,0].
+        model : str or DataModelDict, optional
+            File path or content of a JSON/XML data model containing all
+            atom information.  Cannot be given with any other parameters.
+        prop : dict, optional
             Dictionary containing all per-atom properties.  Can be used
             instead of atype, pos, and kwargs.  This is for backwards
             compatibility support with atomman version 1.
@@ -101,7 +111,25 @@ class Atoms(object):
             The Atoms object.
         """
         
-        # Check for prop in kwargs (for backwards compatibility)
+        # Check for model
+        if model is not None:
+            try:
+                assert natoms is None
+                assert atype is None
+                assert pos is None
+                assert prop is None
+                assert len(kwargs) == 0
+            except:
+                raise ValueError('model cannot be given with any other parameters')
+            
+            # Extract natoms and properties from data model
+            model = DM(model).find('atoms')
+            natoms = model['natoms']
+            prop = OrderedDict()
+            for propmodel in model.aslist('property'):
+                prop[propmodel['name']] = uc.value_unit(propmodel['data'])
+
+        # Check for prop dictionary
         if prop is not None:
             if atype is not None and pos is not None and len(kwargs) > 0:
                 raise ValueError('prop dict cannot be given with keyword properties')
@@ -182,11 +210,71 @@ class Atoms(object):
         for key, value in iteritems(kwargs):
             self.view[key] = value
     
+    def model(self, prop_name=None, unit=None, prop_unit=None):
+        """
+        Generates a data model for the Atoms object.
+
+        Parameters
+        ----------
+        prop_name : list, optional
+            The Atoms properties to include.  If neither prop_name nor prop_unit
+            are given, all system properties will be included.
+        unit : list, optional
+            Lists the units for each prop_name as stored in the table.  For a
+            value of None, no conversion will be performed for that property.  
+            If neither unit nor prop_units given, pos will be
+            given in Angstroms and all other values will not be converted.
+        prop_unit : dict, optional
+            dictionary where the keys are the property keys to include, and
+            the values are units to use. If neither unit nor prop_units given, 
+            pos will be given in Angstroms and all other values will not be
+            converted.
+
+        Returns
+        -------
+        DataModelDict.DataModelDict
+            A JSON/XML data model for the current Atoms object.  
+        """
+        
+        # Set prop_unit if needed
+        if prop_unit is None:
+            if prop_name is None:
+                prop_name = self.prop()
+            if unit is None:
+                unit = [None for i in range(len(prop_name))]
+            
+            if len(unit) != len(prop_name):
+                raise ValueError('')
+            prop_unit = {}
+            for p, u  in zip(prop_name, unit):
+                prop_unit[p] = u
+
+        elif prop_name is not None or unit is not None:
+            raise ValueError('prop_unit cannot be given with prop_name or unit')
+
+        # Set default pos unit
+        if 'pos' in prop_unit and prop_unit['pos'] is None:
+            prop_unit['pos'] = 'angstrom'
+        
+        # Generate DataModelDict
+        model = DM()
+        model['atoms'] = DM()
+        model['atoms']['natoms'] = self.natoms
+        for prop in prop_unit:
+            unit = prop_unit.get(prop, None)
+            propmodel = DM()
+            propmodel['name'] = prop
+            propmodel['data'] = uc.model(self.prop(prop), unit)
+            model['atoms'].append('property', propmodel)
+        
+        return model
+
     def __str__(self):
         """string output of Atoms data"""
         atype = self.atype
         pos = self.pos
-        lines = ['     id |   atype |  pos[0] |  pos[1] |  pos[2]']
+        lines = ['per-atom properties = ' + str(self.prop())]
+        lines.append('     id |   atype |  pos[0] |  pos[1] |  pos[2]')
         for i in range(self.natoms):
             lines.append('%7i | %7i | %7.3f | %7.3f | %7.3f' % (i, atype[i], pos[i,0], pos[i,1], pos[i,2]))
         
