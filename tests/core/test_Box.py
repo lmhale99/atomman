@@ -11,6 +11,7 @@ import pytest
 import numpy as np
 
 import atomman as am
+import atomman.unitconvert as uc
 
 class Test_Box:
     def test_default(self):
@@ -264,3 +265,15 @@ class Test_Box:
         vects = np.array([[123, 0, 0], [4, 142, 0], [7, -9, -145]])
         box = am.Box(vects=vects)
         assert not box.is_lammps_norm()
+
+    def test_model(self):
+        box = am.Box.cubic(5.42)
+        model = box.model()
+        assert np.allclose(uc.value_unit(model['box']['avect']), np.array([5.42, 0.0, 0.0]))
+        assert np.allclose(uc.value_unit(model['box']['bvect']), np.array([0.0, 5.42, 0.0]))
+        assert np.allclose(uc.value_unit(model['box']['cvect']), np.array([0.0, 0.0, 5.42]))
+        assert np.allclose(uc.value_unit(model['box']['origin']), np.array([0.0, 0.0, 0.0]))
+        box = am.Box(model=model)
+        assert np.allclose(box.vects, np.array([[5.42, 0.0, 0.0],
+                                                [0.0, 5.42, 0.0], 
+                                                [0.0, 0.0, 5.42]]))
