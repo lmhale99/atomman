@@ -235,9 +235,18 @@ def nlist(system, double cutoff, Py_ssize_t initialsize=20, Py_ssize_t deltasize
         for dz in range(-1, 2):
             for dy in range(-1, 2):
                 for dx in range(-1, 2):
+                    
+                    # Stop when reach center bin
                     if dx == 0 and dy == 0 and dz == 0:
                         end = True
                         break
+                    
+                    # Skip non-existant neighbor bins
+                    if (x + dx < 0 or x + dx == numxbins or
+                        y + dy < 0 or y + dy == numybins or
+                        z + dz < 0 or z + dz == numzbins):
+                        continue
+                    
                     dc = xyzbins[x + dx, y + dy, z + dz, 0]
                     for j in range(dc):
                         superlonglist[c+j] = xyzbins[x + dx, y + dy, z + dz, j+1]
