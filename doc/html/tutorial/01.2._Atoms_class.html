@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Atoms class &#8212; atomman 1.2.6 documentation</title>
+    <title>Introduction to atomman: Atoms class &#8212; atomman 1.2.7 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.6',
+        VERSION:     '1.2.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="01.1._Box_Class.html" title="Introduction to atomman: Box Class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -273,8 +273,8 @@ guarantee of complete backwards compatibility.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.6
-Notebook executed on 2019-04-23
+atomman version = 1.2.7
+Notebook executed on 2019-06-05
 </pre></div></div>
 </div>
 </div>
@@ -316,17 +316,18 @@ defining extra per-atom properties.</li>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.267 |   3.198 |   0.634
-      1 |       1 |   0.348 |   3.076 |   3.912
-      2 |       1 |   0.762 |   2.614 |   3.698
-      3 |       1 |   0.989 |   2.446 |   0.834
-      4 |       1 |   3.046 |   0.737 |   1.415
-      5 |       1 |   3.817 |   3.746 |   0.774
-      6 |       1 |   3.205 |   0.633 |   3.137
-      7 |       1 |   1.012 |   1.390 |   2.718
-      8 |       1 |   2.851 |   2.390 |   3.816
-      9 |       1 |   1.179 |   3.083 |   2.862
+      0 |       1 |   0.419 |   3.231 |   1.267
+      1 |       1 |   3.371 |   1.244 |   0.065
+      2 |       1 |   3.021 |   1.825 |   1.813
+      3 |       1 |   2.231 |   1.536 |   0.124
+      4 |       1 |   3.170 |   3.639 |   1.507
+      5 |       1 |   0.414 |   3.791 |   2.666
+      6 |       1 |   3.185 |   0.610 |   3.850
+      7 |       1 |   1.973 |   1.845 |   1.070
+      8 |       1 |   2.988 |   0.663 |   1.702
+      9 |       1 |   3.388 |   0.697 |   1.900
 </pre></div></div>
 </div>
 </div>
@@ -507,17 +508,16 @@ atoms.stress[0] -&gt;
 </div>
 <div class="section" id="3.5-Viewing-per-atom-properties">
 <h3>3.5 Viewing per-atom properties<a class="headerlink" href="#3.5-Viewing-per-atom-properties" title="Permalink to this headline">¶</a></h3>
-<p>The atoms object can be converted into a pandas.DataFrame with the
-Atoms.df() method. This is convenient for viewing and analyzing the
-per-atom property values.</p>
+<p><em>Updated version 1.2.7</em></p>
+<p>The string representation of atoms lists all assigned per-atom
+properties and shows id, atype and pos values.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="c1"># String representation of atoms only shows id, atype and pos</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -526,27 +526,31 @@ per-atom property values.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.267 |   3.198 |   0.634
-      1 |       1 |   0.348 |   3.076 |   3.912
-      2 |       2 |   0.762 |   2.614 |   3.698
-      3 |       1 |   0.989 |   2.446 |   0.834
-      4 |       1 |   3.046 |   0.737 |   1.415
-      5 |       2 |   3.817 |   3.746 |   0.774
-      6 |       1 |   3.205 |   0.633 |   3.137
-      7 |       1 |   1.012 |   1.390 |   2.718
-      8 |       1 |   2.851 |   2.390 |   3.816
-      9 |       1 |   1.179 |   3.083 |   2.862
+      0 |       1 |   0.419 |   3.231 |   1.267
+      1 |       1 |   3.371 |   1.244 |   0.065
+      2 |       2 |   3.021 |   1.825 |   1.813
+      3 |       1 |   2.231 |   1.536 |   0.124
+      4 |       1 |   3.170 |   3.639 |   1.507
+      5 |       2 |   0.414 |   3.791 |   2.666
+      6 |       1 |   3.185 |   0.610 |   3.850
+      7 |       1 |   1.973 |   1.845 |   1.070
+      8 |       1 |   2.988 |   0.663 |   1.702
+      9 |       1 |   3.388 |   0.697 |   1.900
 </pre></div></div>
 </div>
+<p>Alternatively, the atoms object can be copied into a pandas.DataFrame
+with the Atoms.df() method. This is convenient for viewing and analyzing
+all per-atom property values at once.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="c1"># Atoms.df() generates DataFrame of all per-atom properties in tabular form</span>
-<span class="n">atoms</span><span class="o">.</span><span class="n">df</span><span class="p">()</span>
+<span></span><span class="n">df</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">df</span><span class="p">()</span>
+<span class="n">df</span>
 </pre></div>
 </div>
 </div>
@@ -593,9 +597,9 @@ per-atom property values.</p>
     <tr>
       <th>0</th>
       <td>1</td>
-      <td>3.267248</td>
-      <td>3.197664</td>
-      <td>0.633529</td>
+      <td>0.418806</td>
+      <td>3.230771</td>
+      <td>1.267045</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -609,9 +613,9 @@ per-atom property values.</p>
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>0.348357</td>
-      <td>3.075724</td>
-      <td>3.912278</td>
+      <td>3.370784</td>
+      <td>1.243663</td>
+      <td>0.064947</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -625,9 +629,9 @@ per-atom property values.</p>
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>0.762251</td>
-      <td>2.613582</td>
-      <td>3.697545</td>
+      <td>3.021444</td>
+      <td>1.824580</td>
+      <td>1.813336</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -641,9 +645,9 @@ per-atom property values.</p>
     <tr>
       <th>3</th>
       <td>1</td>
-      <td>0.988650</td>
-      <td>2.445728</td>
-      <td>0.834319</td>
+      <td>2.231155</td>
+      <td>1.535640</td>
+      <td>0.124231</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -657,9 +661,9 @@ per-atom property values.</p>
     <tr>
       <th>4</th>
       <td>1</td>
-      <td>3.046012</td>
-      <td>0.736644</td>
-      <td>1.415042</td>
+      <td>3.169799</td>
+      <td>3.638902</td>
+      <td>1.507022</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -673,9 +677,9 @@ per-atom property values.</p>
     <tr>
       <th>5</th>
       <td>2</td>
-      <td>3.817333</td>
-      <td>3.746118</td>
-      <td>0.773940</td>
+      <td>0.413638</td>
+      <td>3.790924</td>
+      <td>2.665996</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -689,9 +693,9 @@ per-atom property values.</p>
     <tr>
       <th>6</th>
       <td>1</td>
-      <td>3.205200</td>
-      <td>0.632672</td>
-      <td>3.136968</td>
+      <td>3.184964</td>
+      <td>0.610386</td>
+      <td>3.849844</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -705,9 +709,9 @@ per-atom property values.</p>
     <tr>
       <th>7</th>
       <td>1</td>
-      <td>1.012424</td>
-      <td>1.390324</td>
-      <td>2.717650</td>
+      <td>1.973105</td>
+      <td>1.845034</td>
+      <td>1.069925</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -721,9 +725,9 @@ per-atom property values.</p>
     <tr>
       <th>8</th>
       <td>1</td>
-      <td>2.850599</td>
-      <td>2.389581</td>
-      <td>3.816463</td>
+      <td>2.987784</td>
+      <td>0.662662</td>
+      <td>1.702266</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -737,9 +741,9 @@ per-atom property values.</p>
     <tr>
       <th>9</th>
       <td>1</td>
-      <td>1.179393</td>
-      <td>3.082641</td>
-      <td>2.861686</td>
+      <td>3.387882</td>
+      <td>0.696646</td>
+      <td>1.900081</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -753,6 +757,29 @@ per-atom property values.</p>
   </tbody>
 </table>
 </div></div>
+</div>
+<p><strong>Note</strong> that the values in the DataFrame are copies: calling Atoms.df()
+doubles the memory usage and changed values are not retained.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;atype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">atype</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">atype</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[3 1 2 1 1 2 1 1 1 1]
+[1 1 2 1 1 2 1 1 1 1]
+</pre></div></div>
 </div>
 </div>
 </div>
@@ -771,7 +798,7 @@ Atoms instance containing only the selected atom(s). Useful for
 generating subsets.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [10]:
+<span></span>In [11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -786,11 +813,13 @@ generating subsets.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.267 |   3.198 |   0.634
-      1 |       1 |   3.046 |   0.737 |   1.415
-      2 |       2 |   3.817 |   3.746 |   0.774
-      3 |       1 |   3.205 |   0.633 |   3.137
+      0 |       1 |   3.371 |   1.244 |   0.065
+      1 |       2 |   3.021 |   1.825 |   1.813
+      2 |       1 |   3.170 |   3.639 |   1.507
+      3 |       1 |   3.185 |   0.610 |   3.850
+      4 |       1 |   3.388 |   0.697 |   1.900
 </pre></div></div>
 </div>
 </div>
@@ -802,7 +831,7 @@ compatible size and same per-atom properties as the Atoms instance it is
 being assigned to.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [11]:
+<span></span>In [12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -817,16 +846,18 @@ being assigned to.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.267 |   3.198 |   0.634
-      1 |       1 |   3.046 |   0.737 |   1.415
-      2 |       2 |   3.817 |   3.746 |   0.774
-      3 |       1 |   3.267 |   3.198 |   0.634
+      0 |       1 |   3.371 |   1.244 |   0.065
+      1 |       2 |   3.021 |   1.825 |   1.813
+      2 |       1 |   3.170 |   3.639 |   1.507
+      3 |       1 |   3.185 |   0.610 |   3.850
+      4 |       1 |   0.419 |   3.231 |   1.267
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [12]:
+<span></span>In [13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -845,29 +876,31 @@ being assigned to.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.267 |   3.198 |   0.634
-      1 |       1 |   0.348 |   3.076 |   3.912
-      2 |       2 |   0.762 |   2.614 |   3.698
-      3 |       1 |   0.989 |   2.446 |   0.834
-      4 |       1 |   3.046 |   0.737 |   1.415
-      5 |       2 |   3.817 |   3.746 |   0.774
-      6 |       1 |   3.205 |   0.633 |   3.137
-      7 |       1 |   1.012 |   1.390 |   2.718
-      8 |       1 |   2.851 |   2.390 |   3.816
-      9 |       1 |   1.179 |   3.083 |   2.862
+      0 |       1 |   0.419 |   3.231 |   1.267
+      1 |       1 |   3.371 |   1.244 |   0.065
+      2 |       2 |   3.021 |   1.825 |   1.813
+      3 |       1 |   2.231 |   1.536 |   0.124
+      4 |       1 |   3.170 |   3.639 |   1.507
+      5 |       2 |   0.414 |   3.791 |   2.666
+      6 |       1 |   3.185 |   0.610 |   3.850
+      7 |       1 |   1.973 |   1.845 |   1.070
+      8 |       1 |   2.988 |   0.663 |   1.702
+      9 |       1 |   3.388 |   0.697 |   1.900
 
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.348 |   3.076 |   3.912
-      1 |       1 |   3.267 |   3.198 |   0.634
-      2 |       2 |   0.762 |   2.614 |   3.698
-      3 |       1 |   0.989 |   2.446 |   0.834
-      4 |       1 |   3.046 |   0.737 |   1.415
-      5 |       2 |   3.817 |   3.746 |   0.774
-      6 |       1 |   3.205 |   0.633 |   3.137
-      7 |       1 |   1.012 |   1.390 |   2.718
-      8 |       1 |   2.851 |   2.390 |   3.816
-      9 |       1 |   1.179 |   3.083 |   2.862
+      0 |       1 |   3.371 |   1.244 |   0.065
+      1 |       1 |   0.419 |   3.231 |   1.267
+      2 |       2 |   3.021 |   1.825 |   1.813
+      3 |       1 |   2.231 |   1.536 |   0.124
+      4 |       1 |   3.170 |   3.639 |   1.507
+      5 |       2 |   0.414 |   3.791 |   2.666
+      6 |       1 |   3.185 |   0.610 |   3.850
+      7 |       1 |   1.973 |   1.845 |   1.070
+      8 |       1 |   2.988 |   0.663 |   1.702
+      9 |       1 |   3.388 |   0.697 |   1.900
 </pre></div></div>
 </div>
 </div>
@@ -893,7 +926,7 @@ backwards compatibility.</li>
 properties.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [13]:
+<span></span>In [14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -913,7 +946,7 @@ properties.</p>
 value associated with the key, index combination.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [14]:
+<span></span>In [15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -940,21 +973,22 @@ value associated with the key, index combination.</p>
 atoms.prop(&#39;atype&#39;) -&gt; [1 1 2 1 1 2 1 1 1 1]
 
 atoms.prop(index=slice(1,5)) -&gt;
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.267 |   3.198 |   0.634
-      1 |       2 |   0.762 |   2.614 |   3.698
-      2 |       1 |   0.989 |   2.446 |   0.834
-      3 |       1 |   3.046 |   0.737 |   1.415
+      0 |       1 |   0.419 |   3.231 |   1.267
+      1 |       2 |   3.021 |   1.825 |   1.813
+      2 |       1 |   2.231 |   1.536 |   0.124
+      3 |       1 |   3.170 |   3.639 |   1.507
 
 atoms.prop(key=&#39;pos&#39;, index=0) -&gt;
-[0.34835664 3.07572377 3.91227805]
+[3.37078429 1.24366284 0.06494719]
 </pre></div></div>
 </div>
 <p>Values can be set to Atoms using the value parameter. Any values set are
 copied to the Atoms instance as opposed to assigned by reference.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [15]:
+<span></span>In [16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -987,7 +1021,7 @@ atoms.prop(&#39;atype&#39;) -&gt; [7 7 7 7 1 7 7 7 7 7]
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [16]:
+<span></span>In [17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1004,23 +1038,24 @@ atoms.prop(&#39;atype&#39;) -&gt; [7 7 7 7 1 7 7 7 7 7]
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 calling: atoms.prop(index=9, value=atoms.prop(index=0))
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       7 |   0.348 |   3.076 |   3.912
-      1 |       7 |   3.267 |   3.198 |   0.634
-      2 |       7 |   0.762 |   2.614 |   3.698
-      3 |       7 |   0.989 |   2.446 |   0.834
-      4 |       1 |   3.046 |   0.737 |   1.415
-      5 |       7 |   3.817 |   3.746 |   0.774
-      6 |       7 |   3.205 |   0.633 |   3.137
-      7 |       7 |   1.012 |   1.390 |   2.718
-      8 |       7 |   2.851 |   2.390 |   3.816
-      9 |       7 |   0.348 |   3.076 |   3.912
+      0 |       7 |   3.371 |   1.244 |   0.065
+      1 |       7 |   0.419 |   3.231 |   1.267
+      2 |       7 |   3.021 |   1.825 |   1.813
+      3 |       7 |   2.231 |   1.536 |   0.124
+      4 |       1 |   3.170 |   3.639 |   1.507
+      5 |       7 |   0.414 |   3.791 |   2.666
+      6 |       7 |   3.185 |   0.610 |   3.850
+      7 |       7 |   1.973 |   1.845 |   1.070
+      8 |       7 |   2.988 |   0.663 |   1.702
+      9 |       7 |   3.371 |   1.244 |   0.065
 </pre></div></div>
 </div>
 <p>Demonstrate safe copy of prop() using only value parameter.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [17]:
+<span></span>In [18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1037,6 +1072,7 @@ calling: atoms.prop(index=9, value=atoms.prop(index=0))
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 atoms1 -&gt;
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
       1 |       1 |   0.000 |   0.000 |   0.000
@@ -1045,7 +1081,7 @@ atoms1 -&gt;
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [18]:
+<span></span>In [19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1070,6 +1106,7 @@ atoms1 -&gt;
 setting atoms2 = atoms1
 setting: atoms2.atype = 2
 atoms1 -&gt;
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       2 |   0.000 |   0.000 |   0.000
       1 |       2 |   0.000 |   0.000 |   0.000
@@ -1078,7 +1115,7 @@ atoms1 -&gt;
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [19]:
+<span></span>In [20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1108,21 +1145,105 @@ atoms1 -&gt;
 setting: atoms3 = am.Atoms(natoms=3)
 calling: atoms3.prop(value=atoms1)
 atoms3 -&gt;
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       2 |   0.000 |   0.000 |   0.000
       1 |       2 |   0.000 |   0.000 |   0.000
       2 |       2 |   0.000 |   0.000 |   0.000
 setting: atoms3.atype = 3
 atoms1 -&gt;
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       2 |   0.000 |   0.000 |   0.000
       1 |       2 |   0.000 |   0.000 |   0.000
       2 |       2 |   0.000 |   0.000 |   0.000
 atoms3 -&gt;
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       3 |   0.000 |   0.000 |   0.000
       1 |       3 |   0.000 |   0.000 |   0.000
       2 |       3 |   0.000 |   0.000 |   0.000
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="6.-Atoms.model()">
+<h2>6. Atoms.model()<a class="headerlink" href="#6.-Atoms.model()" title="Permalink to this headline">¶</a></h2>
+<p><em>Added version 1.2.7</em></p>
+<p>A JSON/XML equivalent data model representation of the Atoms object can
+be generated using the model() method.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><strong>prop_name</strong> (<em>list, optional</em>) The Atoms properties to include. If
+neither prop_name nor prop_unit are given, all system properties
+will be included.</li>
+<li><strong>unit</strong> (<em>list, optional</em>) Lists the units for each prop_name as
+stored in the table. For a value of None, no conversion will be
+performed for that property. If neither unit nor prop_units given,
+pos will be given in Angstroms and all other values will not be
+converted.</li>
+<li><strong>prop_unit</strong> (<em>dict, optional</em>) Dictionary where the keys are the
+property keys to include, and the values are units to use. If neither
+unit nor prop_units given, pos will be given in Angstroms and all
+other values will not be converted.</li>
+</ul>
+<p>Returns</p>
+<ul class="simple">
+<li>(<em>DataModelDict.DataModelDict</em>) A JSON/XML data model for the current
+Atoms object.</li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">xml</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#34;atoms&#34;: {&#34;natoms&#34;: 10, &#34;property&#34;: [{&#34;name&#34;: &#34;atype&#34;, &#34;data&#34;: {&#34;value&#34;: [7, 7, 7, 7, 1, 7, 7, 7, 7, 7]}}, {&#34;name&#34;: &#34;pos&#34;, &#34;data&#34;: {&#34;value&#34;: [3.3707842921421767, 1.2436628391037323, 0.06494718736656635, 0.41880642180538485, 3.23077110097549, 1.2670445413501081, 3.021444246194456, 1.824579835848787, 1.813335938933915, 2.231154873368977, 1.5356401778189799, 0.12423052669513845, 3.1697992836336106, 3.638901625692032, 1.5070215391578472, 0.4136383231618468, 3.790924040312281, 2.6659960699545544, 3.18496391706898, 0.6103861271015769, 3.849844352537164, 1.973105452259471, 1.8450338189292745, 1.0699251300970452, 2.98778380852367, 0.6626623869009163, 1.7022656657135329, 3.3707842921421767, 1.2436628391037323, 0.06494718736656635], &#34;shape&#34;: [10, 3], &#34;unit&#34;: &#34;angstrom&#34;}}, {&#34;name&#34;: &#34;stress&#34;, &#34;data&#34;: {&#34;value&#34;: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], &#34;shape&#34;: [10, 3, 3]}}]}}
+
+&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
+&lt;atoms&gt;&lt;natoms&gt;10&lt;/natoms&gt;&lt;property&gt;&lt;name&gt;atype&lt;/name&gt;&lt;data&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;1&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;/data&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;pos&lt;/name&gt;&lt;data&gt;&lt;value&gt;3.3707842921421767&lt;/value&gt;&lt;value&gt;1.2436628391037323&lt;/value&gt;&lt;value&gt;0.06494718736656635&lt;/value&gt;&lt;value&gt;0.41880642180538485&lt;/value&gt;&lt;value&gt;3.23077110097549&lt;/value&gt;&lt;value&gt;1.2670445413501081&lt;/value&gt;&lt;value&gt;3.021444246194456&lt;/value&gt;&lt;value&gt;1.824579835848787&lt;/value&gt;&lt;value&gt;1.813335938933915&lt;/value&gt;&lt;value&gt;2.231154873368977&lt;/value&gt;&lt;value&gt;1.5356401778189799&lt;/value&gt;&lt;value&gt;0.12423052669513845&lt;/value&gt;&lt;value&gt;3.1697992836336106&lt;/value&gt;&lt;value&gt;3.638901625692032&lt;/value&gt;&lt;value&gt;1.5070215391578472&lt;/value&gt;&lt;value&gt;0.4136383231618468&lt;/value&gt;&lt;value&gt;3.790924040312281&lt;/value&gt;&lt;value&gt;2.6659960699545544&lt;/value&gt;&lt;value&gt;3.18496391706898&lt;/value&gt;&lt;value&gt;0.6103861271015769&lt;/value&gt;&lt;value&gt;3.849844352537164&lt;/value&gt;&lt;value&gt;1.973105452259471&lt;/value&gt;&lt;value&gt;1.8450338189292745&lt;/value&gt;&lt;value&gt;1.0699251300970452&lt;/value&gt;&lt;value&gt;2.98778380852367&lt;/value&gt;&lt;value&gt;0.6626623869009163&lt;/value&gt;&lt;value&gt;1.7022656657135329&lt;/value&gt;&lt;value&gt;3.3707842921421767&lt;/value&gt;&lt;value&gt;1.2436628391037323&lt;/value&gt;&lt;value&gt;0.06494718736656635&lt;/value&gt;&lt;shape&gt;10&lt;/shape&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/data&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;stress&lt;/name&gt;&lt;data&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;shape&gt;10&lt;/shape&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;/data&gt;&lt;/property&gt;&lt;/atoms&gt;
+</pre></div></div>
+</div>
+<p>Any stored model information can then be reloaded in as a new Atoms
+object by passing the ‘model’ parameter to the class initializer.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       7 |   3.371 |   1.244 |   0.065
+      1 |       7 |   0.419 |   3.231 |   1.267
+      2 |       7 |   3.021 |   1.825 |   1.813
+      3 |       7 |   2.231 |   1.536 |   0.124
+      4 |       1 |   3.170 |   3.639 |   1.507
+      5 |       7 |   0.414 |   3.791 |   2.666
+      6 |       7 |   3.185 |   0.610 |   3.850
+      7 |       7 |   1.973 |   1.845 |   1.070
+      8 |       7 |   2.988 |   0.663 |   1.702
+      9 |       7 |   3.371 |   1.244 |   0.065
 </pre></div></div>
 </div>
 </div>
@@ -1157,6 +1278,7 @@ atoms3 -&gt;
 </ul>
 </li>
 <li><a class="reference internal" href="#5.-Atoms.prop()">5. Atoms.prop()</a></li>
+<li><a class="reference internal" href="#6.-Atoms.model()">6. Atoms.model()</a></li>
 </ul>
 </li>
 </ul>
@@ -1186,7 +1308,7 @@ atoms3 -&gt;
         <li class="right" >
           <a href="01.1._Box_Class.html" title="Introduction to atomman: Box Class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

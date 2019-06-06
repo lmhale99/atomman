@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>atomman package &#8212; atomman 1.2.6 documentation</title>
+    <title>atomman package &#8212; atomman 1.2.7 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.6',
+        VERSION:     '1.2.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="unitconvert" href="atomman.unitconvert.html" />
-    <link rel="prev" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro" href="tutorial/04.6._Semidiscrete_Variational_Peierls-Nabarro.html" /> 
+    <link rel="prev" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro" href="tutorial/04.7._Semidiscrete_Variational_Peierls-Nabarro.html" /> 
   </head>
   <body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -41,9 +41,9 @@
           <a href="atomman.unitconvert.html" title="unitconvert"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="tutorial/04.6._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
+          <a href="tutorial/04.7._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.7 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -331,8 +331,8 @@ will be included.</li>
 
 <dl class="function">
 <dt id="atomman.dump_system_model">
-<code class="descclassname">atomman.</code><code class="descname">dump_system_model</code><span class="sig-paren">(</span><em>system</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.dump_system_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a DataModelDict ‘cell’ representation of the system.</p>
+<code class="descclassname">atomman.</code><code class="descname">dump_system_model</code><span class="sig-paren">(</span><em>system</em>, <em>f=None</em>, <em>box_unit=None</em>, <em>prop_name=None</em>, <em>unit=None</em>, <em>prop_unit=None</em>, <em>format=None</em>, <em>indent=None</em>, <em>symbols=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.dump_system_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dumps a JSON/XML System.model() representation of the system.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -341,29 +341,33 @@ will be included.</li>
 <li><strong>system</strong> (<a class="reference internal" href="atomman.System.html#atomman.System" title="atomman.System"><em>atomman.System</em></a>) – The system to generate the data model for.</li>
 <li><strong>f</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>file-like object</em><em>, </em><em>optional</em>) – File path or file-like object to write the content to.  If not given,
 then the content is returned as a DataModelDict.</li>
+<li><strong>box_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Length unit to use for the box. Default value is ‘angstrom’.</li>
+<li><strong>prop_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em>) – The Atoms properties to include.  If neither prop_name nor prop_unit
+are given, all system properties will be included.</li>
+<li><strong>unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em>) – Lists the units for each prop_name as stored in the table.  For a
+value of None, no conversion will be performed for that property.  For
+a value of ‘scaled’, the corresponding table values will be taken in
+box-scaled units.  If neither unit nor prop_units given, pos will be
+given in Angstroms and all other values will not be converted.</li>
+<li><strong>prop_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – dictionary where the keys are the property keys to include, and
+the values are units to use. If neither unit nor prop_units given,
+pos will be given in Angstroms and all other values will not be
+converted.</li>
 <li><strong>format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – File format ‘xml’ or ‘json’ to save the content as if f is given.  If
 f is a filename, then the format will be automatically inferred from
 f’s extension.  If format is not given and cannot be inferred, then it
 will be set to ‘json’.</li>
 <li><strong>indent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em>, </em><em>optional</em>) – Indentation option to use for XML/JSON content if f is given.  A value
 of None (default) will add no line separatations or indentations.</li>
-<li><strong>box_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Length unit to use for the box. Default value is ‘angstrom’.</li>
 <li><strong>symbols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em>) – list of atom-model symbols corresponding to the atom types.  If not
 given, will use system.symbols.</li>
-<li><strong>elements</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em>) – list of element tags corresponding to the atom types.</li>
-<li><strong>prop_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – dictionary where the keys are the property keys to include, and
-the values are units to use. If not given, only the positions in
-scaled units are included.</li>
-<li><strong>a_std</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – Standard deviation of a lattice constant to include if available.</li>
-<li><strong>b_std</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – Standard deviation of b lattice constant to include if available.</li>
-<li><strong>c_std</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – Standard deviation of c lattice constant to include if available.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A ‘cell’ data model of the system.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>model</strong> – A JSON/XML data model for the current System object.  Returned if f is not given.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">DataModelDict</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">DataModelDict.DataModelDict or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
 </td>
 </tr>
 </tbody>
@@ -818,7 +822,7 @@ The next c values are the atom’s neighbor ids.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="tutorial/04.6._Semidiscrete_Variational_Peierls-Nabarro.html"
+  <p class="topless"><a href="tutorial/04.7._Semidiscrete_Variational_Peierls-Nabarro.html"
                         title="previous chapter">Introduction to atomman: Semidiscrete Variational Peierls-Nabarro</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="atomman.unitconvert.html"
@@ -840,9 +844,9 @@ The next c values are the atom’s neighbor ids.</p>
           <a href="atomman.unitconvert.html" title="unitconvert"
              >next</a> |</li>
         <li class="right" >
-          <a href="tutorial/04.6._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
+          <a href="tutorial/04.7._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.7 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

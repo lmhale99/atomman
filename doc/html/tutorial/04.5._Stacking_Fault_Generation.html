@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Stacking Fault Generation &#8212; atomman 1.2.6 documentation</title>
+    <title>Introduction to atomman: Stacking Fault Generation &#8212; atomman 1.2.7 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.6',
+        VERSION:     '1.2.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction to atomman: Gamma Surface Plotting" href="04.5._Gamma_Surface_Plotting.html" />
-    <link rel="prev" title="Introduction to atomman: Dislocation analysis tools" href="04.3._Dislocation_analysis_tools.html" /> 
+    <link rel="next" title="Introduction to atomman: Gamma Surface Plotting" href="04.6._Gamma_Surface_Plotting.html" />
+    <link rel="prev" title="Introduction to atomman: Free Surface Rotation Basis" href="04.4._Free_Surface_Rotation_Basis.html" /> 
   </head>
   <body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,12 +38,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="04.5._Gamma_Surface_Plotting.html" title="Introduction to atomman: Gamma Surface Plotting"
+          <a href="04.6._Gamma_Surface_Plotting.html" title="Introduction to atomman: Gamma Surface Plotting"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="04.3._Dislocation_analysis_tools.html" title="Introduction to atomman: Dislocation analysis tools"
+          <a href="04.4._Free_Surface_Rotation_Basis.html" title="Introduction to atomman: Free Surface Rotation Basis"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -229,7 +229,7 @@ div.nboutput div.output_area.stderr {
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
 <p>This Notebook outlines the StackingFault class which generates atomic
 systems that can be used to evaluate stacking fault energies. See the
-<a class="reference external" href="04.5._Gamma_Surface_Plotting.html">04.5 Gamma Surface Plotting
+<a class="reference external" href="04.6._Gamma_Surface_Plotting.html">04.6 Gamma Surface Plotting
 Notebook</a> for analysis and
 plotting of computed stacking fault energies.</p>
 <p><em>New as of version 1.2.6</em></p>
@@ -265,8 +265,8 @@ plotting of computed stacking fault energies.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.6
-Notebook executed on 2019-04-23
+atomman version = 1.2.7
+Notebook executed on 2019-06-05
 </pre></div></div>
 </div>
 </div>
@@ -280,7 +280,10 @@ Notebook executed on 2019-04-23
 <li>Generating a new supercell system by rotating the unit cell such that
 the slip plane being investigated is perpendicular to one of the
 three Cartesian vectors, and only one box vector of the rotated
-system has a component out of the slip plane.</li>
+system has a component out of the slip plane. See the <a class="reference external" href="04.4._Free_Surface_Rotation_Basis.html">04.4. Free
+Surface Rotation Basis
+Notebook</a> for one way to
+identify an appropriate set of rotation vectors.</li>
 <li>The boundary conditions are kept periodic along the two box vectors
 within the slip plane and made non-periodic along the box vector with
 the out-of-plane component.</li>
@@ -440,6 +443,10 @@ absolute units. Default value is 0.0.</li>
 <li><strong>faultshift</strong> (<em>array-like object, optional</em>) The full shifting
 vector to displace the atoms above the slip plane by. Cannot be given
 with a1, a2, or outofplane.</li>
+<li><strong>minimum_r</strong> (<em>float, optional</em>) <em>Added version 1.2.7</em> Specifies
+the minimum allowed interatomic spacing across the slip plane. If any
+sets of atoms are closer than this value then the outofplane shift is
+increased. Default value is None, which performs no adjustment.</li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
@@ -458,6 +465,10 @@ Default value is 1 (only generate for a1=0.0).</li>
 Default value is 1 (only generate for a2=0.0).</li>
 <li><strong>outofplane</strong> (<em>float, optional</em>) An out-of-plane shift, given in
 absolute units. Default value is 0.0.</li>
+<li><strong>minimum_r</strong> (<em>float, optional</em>) <em>Added version 1.2.7</em> Specifies
+the minimum allowed interatomic spacing across the slip plane. If any
+sets of atoms are closer than this value then the outofplane shift is
+increased. Default value is None, which performs no adjustment.</li>
 </ul>
 <p>Yields</p>
 <ul class="simple">
@@ -496,11 +507,8 @@ shift.</li>
 <span></span><span class="c1"># Specify cutboxvector option</span>
 <span class="n">cutboxvector</span> <span class="o">=</span> <span class="s1">&#39;c&#39;</span>
 
-<span class="c1"># Rotate ucell such that the new box vectors correspond to these Miller indices</span>
-<span class="n">a_uvw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
-<span class="n">b_uvw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
-<span class="n">c_uvw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
-<span class="n">uvws</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a_uvw</span><span class="p">,</span> <span class="n">b_uvw</span><span class="p">,</span> <span class="n">c_uvw</span><span class="p">])</span>
+<span class="c1"># Specify the slip plane in Miller indices relative to ucell</span>
+<span class="n">slipplane</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
 
 <span class="c1"># Specify a small shift to avoid atoms exactly at non-periodic boundary and fault plane</span>
 <span class="n">shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">])</span>
@@ -510,11 +518,33 @@ shift.</li>
 </pre></div>
 </div>
 </div>
+<p>Use free_surface_basis() to identify rotation uvws</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">uvws</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">free_surface_basis</span><span class="p">(</span><span class="n">slipplane</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">ucell</span><span class="o">.</span><span class="n">box</span><span class="p">,</span> <span class="n">cutboxvector</span><span class="o">=</span><span class="n">cutboxvector</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">uvws</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[-1.  1.  0.]
+ [-1.  0.  1.]
+ [ 1.  1.  1.]]
+</pre></div></div>
+</div>
 <p>Rotate system, shift and supersize. Note that rotate returns
 transformation matrix relative to ucell.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [4]:
+<span></span>In [5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -529,7 +559,7 @@ transformation matrix relative to ucell.</p>
 <p>Initialize the StackingFault object and check parameters</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [5]:
+<span></span>In [6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -558,14 +588,14 @@ Fault plane is at z = 14.029611541307906
 Fault system&#39;s pbc is [ True  True False]
 
 a1vect as given: [ 0.5  0.5 -1. ]
-Cartesian a1vect: [-4.29567370e+00 -2.48010836e+00  5.84243286e-17]
+Cartesian a1vect: [ 2.39320926e-15 -4.96021673e+00  3.91215996e-16]
 </pre></div></div>
 </div>
 <p>Generate a single stacking fault configuration with
 StackingFault.fault()</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [6]:
+<span></span>In [7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -581,54 +611,54 @@ StackingFault.fault()</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 atoms in faultsystem are displaced by:
-[[ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [ 0.          0.          0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]
- [-2.14783685 -1.24005418  0.        ]]
+[[ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 2.66453526e-15  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 2.66453526e-15  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00 -2.48010836e+00  0.00000000e+00]
+ [ 8.88178420e-16 -2.48010836e+00  0.00000000e+00]
+ [ 0.00000000e+00 -2.48010836e+00  0.00000000e+00]
+ [ 1.77635684e-15 -2.48010836e+00  0.00000000e+00]
+ [ 1.33226763e-15 -2.48010836e+00  0.00000000e+00]
+ [ 1.77635684e-15 -2.48010836e+00  0.00000000e+00]
+ [ 1.77635684e-15 -2.48010836e+00  0.00000000e+00]
+ [ 1.77635684e-15 -2.48010836e+00  0.00000000e+00]
+ [ 2.66453526e-15 -2.48010836e+00  0.00000000e+00]
+ [ 1.77635684e-15 -2.48010836e+00  0.00000000e+00]
+ [ 1.77635684e-15 -2.48010836e+00  0.00000000e+00]
+ [ 1.77635684e-15 -2.48010836e+00  0.00000000e+00]
+ [ 0.00000000e+00 -2.48010836e+00  0.00000000e+00]
+ [ 8.88178420e-16 -2.48010836e+00  0.00000000e+00]
+ [ 0.00000000e+00 -2.48010836e+00  0.00000000e+00]
+ [ 1.77635684e-15 -2.48010836e+00  0.00000000e+00]
+ [ 1.33226763e-15 -2.48010836e+00  0.00000000e+00]
+ [ 1.77635684e-15 -2.48010836e+00  0.00000000e+00]
+ [ 1.77635684e-15 -2.48010836e+00  0.00000000e+00]
+ [ 1.77635684e-15 -2.48010836e+00  0.00000000e+00]
+ [ 2.66453526e-15 -2.48010836e+00  0.00000000e+00]
+ [ 1.77635684e-15 -2.48010836e+00  0.00000000e+00]
+ [ 1.77635684e-15 -2.48010836e+00  0.00000000e+00]
+ [ 1.77635684e-15 -2.48010836e+00  0.00000000e+00]]
 </pre></div></div>
 </div>
 <p>Generate configurations along the slip line with
@@ -636,7 +666,7 @@ StackingFault.iterfaultmap(). Note that the displacements may wrap due
 to periodic boundaries.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [7]:
+<span></span>In [8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -652,15 +682,15 @@ to periodic boundaries.</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 a1 = 0.0, d = [ 0.0000  0.0000  0.0000]
-a1 = 0.1, d = [-0.4296 -0.2480  0.0000]
-a1 = 0.2, d = [-0.8591 -0.4960  0.0000]
-a1 = 0.3, d = [-1.2887 -0.7440  0.0000]
-a1 = 0.4, d = [-1.7183 -0.9920  0.0000]
-a1 = 0.5, d = [-2.1478 -1.2401  0.0000]
-a1 = 0.6, d = [-2.5774 -1.4881  0.0000]
-a1 = 0.7, d = [-0.1432  3.2241  0.0000]
-a1 = 0.8, d = [-0.5728  2.9761  0.0000]
-a1 = 0.9, d = [-1.0023  2.7281  0.0000]
+a1 = 0.1, d = [ 0.0000 -0.4960  0.0000]
+a1 = 0.2, d = [ 0.0000 -0.9920  0.0000]
+a1 = 0.3, d = [ 0.0000 -1.4881  0.0000]
+a1 = 0.4, d = [ 0.0000 -1.9841  0.0000]
+a1 = 0.5, d = [ 0.0000 -2.4801  0.0000]
+a1 = 0.6, d = [ 0.0000 -2.9761  0.0000]
+a1 = 0.7, d = [-2.8638  1.4881  0.0000]
+a1 = 0.8, d = [-2.8638  0.9920  0.0000]
+a1 = 0.9, d = [-2.8638  0.4960  0.0000]
 </pre></div></div>
 </div>
 </div>
@@ -672,24 +702,21 @@ specifying both a1vect and a2vect as non-parallel vectors.</p>
 two shortest non-parallel Miller vectors in the slip plane.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [8]:
+<span></span>In [9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Specify cutboxvector option</span>
 <span class="n">cutboxvector</span> <span class="o">=</span> <span class="s1">&#39;c&#39;</span>
 
-<span class="c1"># Rotate ucell such that the new box vectors correspond to these Miller indices</span>
-<span class="n">a_uvw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
-<span class="n">b_uvw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
-<span class="n">c_uvw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
-<span class="n">uvws</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a_uvw</span><span class="p">,</span> <span class="n">b_uvw</span><span class="p">,</span> <span class="n">c_uvw</span><span class="p">])</span>
+<span class="c1"># Specify the slip plane in Miller indices relative to ucell</span>
+<span class="n">slipplane</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
 
 <span class="c1"># Specify a small shift to avoid atoms exactly at non-periodic boundary and fault plane</span>
 <span class="n">shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">])</span>
 
 <span class="c1"># Define shift vectors in Miller indices relative to ucell</span>
-<span class="n">a1vect</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
+<span class="n">a1vect</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">])</span>
 <span class="n">a2vect</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -698,11 +725,12 @@ two shortest non-parallel Miller vectors in the slip plane.</p>
 transformation matrix relative to ucell.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [9]:
+<span></span>In [10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">system</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="n">ucell</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">uvws</span><span class="p">,</span> <span class="n">return_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span></span><span class="n">uvws</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">free_surface_basis</span><span class="p">(</span><span class="n">slipplane</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">ucell</span><span class="o">.</span><span class="n">box</span><span class="p">,</span> <span class="n">cutboxvector</span><span class="o">=</span><span class="n">cutboxvector</span><span class="p">)</span>
+<span class="n">system</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="n">ucell</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">uvws</span><span class="p">,</span> <span class="n">return_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">shift</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">vects</span><span class="p">)</span>
 <span class="n">system</span><span class="o">.</span><span class="n">wrap</span><span class="p">()</span>
 
@@ -713,7 +741,7 @@ transformation matrix relative to ucell.</p>
 <p>Initialize the StackingFault object and check parameters</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [10]:
+<span></span>In [11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -744,18 +772,18 @@ Fault plane is at z = 14.029611541307906
 
 Fault system&#39;s pbc is [ True  True False]
 
-a1vect as given: [ 0.  -0.5  0.5]
-Cartesian a1vect: [ 2.86378246e+00  1.62192634e-16 -2.51256769e-16]
+a1vect as given: [-0.5  0.5  0. ]
+Cartesian a1vect: [ 2.86378246e+00 -2.75990494e-16 -4.17652603e-16]
 
 a2vect as given: [-0.5  0.   0.5]
-Cartesian a2vect: [ 1.43189123e+00  2.48010836e+00 -2.92121643e-17]
+Cartesian a2vect: [ 1.43189123e+00  2.48010836e+00 -4.17652603e-16]
 </pre></div></div>
 </div>
 <p>Now, StackingFault.iterfaultmap() can generate a 2D map. Note that the
 &lt;<span class="math">\(\bar{1}\bar{1}2\)</span>&gt; path corresponds to the points where a1 = a2</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [11]:
+<span></span>In [12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -773,8 +801,8 @@ Cartesian a2vect: [ 1.43189123e+00  2.48010836e+00 -2.92121643e-17]
 a1 = 0.0, a2 = 0.0, d = [ 0.0000  0.0000  0.0000]
 a1 = 0.2, a2 = 0.0, d = [ 0.5728  0.0000  0.0000]
 a1 = 0.4, a2 = 0.0, d = [ 1.1455  0.0000  0.0000]
-a1 = 0.6, a2 = 0.0, d = [ 1.7183  0.0000  0.0000]
-a1 = 0.8, a2 = 0.0, d = [ 2.2910  0.0000  0.0000]
+a1 = 0.6, a2 = 0.0, d = [ 1.7183 -0.0000  0.0000]
+a1 = 0.8, a2 = 0.0, d = [ 2.2910 -0.0000  0.0000]
 a1 = 0.0, a2 = 0.2, d = [ 0.2864  0.4960  0.0000]
 a1 = 0.2, a2 = 0.2, d = [ 0.8591  0.4960  0.0000]
 a1 = 0.4, a2 = 0.2, d = [ 1.4319  0.4960  0.0000]
@@ -792,9 +820,9 @@ a1 = 0.6, a2 = 0.6, d = [ 2.5774  1.4881  0.0000]
 a1 = 0.8, a2 = 0.6, d = [-2.5774  1.4881  0.0000]
 a1 = 0.0, a2 = 0.8, d = [ 1.1455  1.9841  0.0000]
 a1 = 0.2, a2 = 0.8, d = [ 1.7183  1.9841  0.0000]
-a1 = 0.4, a2 = 0.8, d = [-0.5728 -2.9761  0.0000]
-a1 = 0.6, a2 = 0.8, d = [-0.0000 -2.9761  0.0000]
-a1 = 0.8, a2 = 0.8, d = [-2.2910  1.9841  0.0000]
+a1 = 0.4, a2 = 0.8, d = [ 2.2910  1.9841  0.0000]
+a1 = 0.6, a2 = 0.8, d = [ 0.0000 -2.9761  0.0000]
+a1 = 0.8, a2 = 0.8, d = [ 0.5728 -2.9761  0.0000]
 </pre></div></div>
 </div>
 </div>
@@ -805,12 +833,12 @@ configurations from the primitive unit cells rather than the
 conventional ones as the primitive cells have fewer atoms. The challenge
 with doing so is that the Miller vectors used for rotating and defining
 the shift vectors need to be relative to the <em>primitive</em> cell rather
-than the conventional one. This can easily be handled in atomman with
-the atomman.tools.miller.vector_conventional_to_primitive() function.</p>
+than the conventional one. This conversion can automatically be handled
+in free_surface_basis() by specifying the conventional cell setting.</p>
 <p>Generate primitive fcc unit cell</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [12]:
+<span></span>In [13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -823,44 +851,32 @@ the atomman.tools.miller.vector_conventional_to_primitive() function.</p>
 <p>Define parameters for the system relative to the conventional cell.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [13]:
+<span></span>In [14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Specify cutboxvector option</span>
 <span class="n">cutboxvector</span> <span class="o">=</span> <span class="s1">&#39;c&#39;</span>
 
-<span class="c1"># Rotate ucell such that the new box vectors correspond to these Miller indices</span>
-<span class="n">a_uvw</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
-<span class="n">b_uvw</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
-<span class="n">c_uvw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
-<span class="n">uvws</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a_uvw</span><span class="p">,</span> <span class="n">b_uvw</span><span class="p">,</span> <span class="n">c_uvw</span><span class="p">])</span>
+<span class="c1"># Specify the slip plane in Miller indices and the associated conventional cell setting</span>
+<span class="n">slipplane</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
+<span class="n">conventional_setting</span> <span class="o">=</span> <span class="s1">&#39;f&#39;</span>
 
 <span class="c1"># Specify a small shift to avoid atoms exactly at non-periodic boundary and fault plane</span>
 <span class="n">shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">])</span>
-
-<span class="c1"># Define shift vectors in Miller indices relative to ucell</span>
-<span class="n">a1vect</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
-<span class="n">a2vect</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
-<p>Convert uvws, a1vect and a2vect to primitive Miller indices</p>
+<p>Use free_surface_basis() to identify rotation uvws</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [14]:
+<span></span>In [15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">uvws_primitive</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector_conventional_to_primitive</span><span class="p">(</span><span class="n">uvws</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;primitive uvws =&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">uvws_primitive</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">()</span>
-
-<span class="n">a1vect_primitive</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector_conventional_to_primitive</span><span class="p">(</span><span class="n">a1vect</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
-<span class="n">a2vect_primitive</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector_conventional_to_primitive</span><span class="p">(</span><span class="n">a2vect</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;primitive a1vect =&#39;</span><span class="p">,</span> <span class="n">a1vect_primitive</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;primitive a2vect =&#39;</span><span class="p">,</span> <span class="n">a2vect_primitive</span><span class="p">)</span>
+<span></span><span class="n">uvws</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">free_surface_basis</span><span class="p">(</span><span class="n">slipplane</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">ucell</span><span class="o">.</span><span class="n">box</span><span class="p">,</span> <span class="n">cutboxvector</span><span class="o">=</span><span class="n">cutboxvector</span><span class="p">,</span>
+                                    <span class="n">conventional_setting</span><span class="o">=</span><span class="n">conventional_setting</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">uvws</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -869,24 +885,49 @@ the atomman.tools.miller.vector_conventional_to_primitive() function.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-primitive uvws =
 [[-1.  1.  0.]
- [-1.  0.  1.]
- [ 1.  1.  1.]]
+ [ 0.  1. -1.]
+ [-1. -1. -1.]]
+</pre></div></div>
+</div>
+<p>Since free_surface_basis always returns the two shortest in-plane
+lattice vectors, we can use those for a1vect and a2vect.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Note indices are wrong if cutboxvect != &#39;c&#39;</span>
+<span class="n">a1vect</span> <span class="o">=</span> <span class="n">uvws</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">a2vect</span> <span class="o">=</span> <span class="n">uvws</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-primitive a1vect = [-1.  1.  0.]
-primitive a2vect = [-1.  0.  1.]
+<span class="c1"># Show a1vect and a2vect relative to conventional unit cell</span>
+<span class="n">a1vect_conventional</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector_primitive_to_conventional</span><span class="p">(</span><span class="n">a1vect</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
+<span class="n">a2vect_conventional</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector_primitive_to_conventional</span><span class="p">(</span><span class="n">a2vect</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;conventional a1vect =&#39;</span><span class="p">,</span> <span class="n">a1vect_conventional</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;conventional a2vect =&#39;</span><span class="p">,</span> <span class="n">a2vect_conventional</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+conventional a1vect = [ 0.  -0.5  0.5]
+conventional a2vect = [ 0.5 -0.5  0. ]
 </pre></div></div>
 </div>
 <p>Rotate system, shift and supersize. Note that rotate returns
 transformation matrix relative to ucell.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [15]:
+<span></span>In [17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">system</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="n">ucell</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">uvws_primitive</span><span class="p">,</span> <span class="n">return_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span></span><span class="n">system</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="n">ucell</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">uvws</span><span class="p">,</span> <span class="n">return_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">shift</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">vects</span><span class="p">)</span>
 <span class="n">system</span><span class="o">.</span><span class="n">wrap</span><span class="p">()</span>
 
@@ -897,11 +938,11 @@ transformation matrix relative to ucell.</p>
 <p>Initialize the StackingFault object and check parameters</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [16]:
+<span></span>In [18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">sf</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">StackingFault</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">a1vect</span><span class="o">=</span><span class="n">a1vect_primitive</span><span class="p">,</span> <span class="n">a2vect</span><span class="o">=</span><span class="n">a2vect_primitive</span><span class="p">,</span>
+<span></span><span class="n">sf</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">StackingFault</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">a1vect</span><span class="o">=</span><span class="n">a1vect</span><span class="p">,</span> <span class="n">a2vect</span><span class="o">=</span><span class="n">a2vect</span><span class="p">,</span>
                              <span class="n">ucellbox</span><span class="o">=</span><span class="n">ucell</span><span class="o">.</span><span class="n">box</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fault system has&#39;</span><span class="p">,</span> <span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="p">,</span> <span class="s1">&#39;total atoms.&#39;</span><span class="p">)</span>
@@ -930,10 +971,10 @@ Fault plane is at z = 14.029611541307904
 Fault system&#39;s pbc is [ True  True False]
 
 a1vect as given: [-1.  1.  0.]
-Cartesian a1vect: [2.86378246e+00 3.10932627e-17 9.57795207e-16]
+Cartesian a1vect: [ 2.86378246e+00  2.44254078e-16 -1.85055920e-16]
 
-a2vect as given: [-1.  0.  1.]
-Cartesian a2vect: [1.43189123e+00 2.48010836e+00 1.41222587e-16]
+a2vect as given: [ 0.  1. -1.]
+Cartesian a2vect: [ 1.43189123e+00  2.48010836e+00 -1.54288963e-16]
 </pre></div></div>
 </div>
 <p>This system has the same fault plane position and Cartesian shift
@@ -946,7 +987,7 @@ Miller-Bravais indices if the reference unit cell is hexagonal.</p>
 <p>Generate hcp unit cell</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [17]:
+<span></span>In [19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -960,18 +1001,15 @@ Miller-Bravais indices if the reference unit cell is hexagonal.</p>
 <p>Define parameters for the system</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [18]:
+<span></span>In [20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Specify cutboxvector option</span>
 <span class="n">cutboxvector</span> <span class="o">=</span> <span class="s1">&#39;c&#39;</span>
 
-<span class="c1"># Rotate ucell such that the new box vectors correspond to these Miller indices</span>
-<span class="n">a_uvw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mi">3</span>
-<span class="n">b_uvw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mi">3</span>
-<span class="n">c_uvw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
-<span class="n">uvws</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a_uvw</span><span class="p">,</span> <span class="n">b_uvw</span><span class="p">,</span> <span class="n">c_uvw</span><span class="p">])</span>
+<span class="c1"># Specify the slip plane</span>
+<span class="n">slipplane</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">])</span>
 
 <span class="c1"># Specify a small shift to avoid atoms exactly at non-periodic boundary and fault plane</span>
 <span class="n">shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">])</span>
@@ -986,11 +1024,12 @@ Miller-Bravais indices if the reference unit cell is hexagonal.</p>
 transformation matrix relative to ucell.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [19]:
+<span></span>In [21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">system</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="n">ucell</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">uvws</span><span class="p">,</span> <span class="n">return_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span></span><span class="n">uvws</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">free_surface_basis</span><span class="p">(</span><span class="n">slipplane</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">ucell</span><span class="o">.</span><span class="n">box</span><span class="p">,</span> <span class="n">cutboxvector</span><span class="o">=</span><span class="n">cutboxvector</span><span class="p">)</span>
+<span class="n">system</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="n">ucell</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">uvws</span><span class="p">,</span> <span class="n">return_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">shift</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">vects</span><span class="p">)</span>
 <span class="n">system</span><span class="o">.</span><span class="n">wrap</span><span class="p">()</span>
 
@@ -1001,7 +1040,7 @@ transformation matrix relative to ucell.</p>
 <p>Initialize the StackingFault object and check parameters</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [20]:
+<span></span>In [22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1033,7 +1072,7 @@ Fault plane is at z = 10.34
 Fault system&#39;s pbc is [ True  True False]
 
 a1vect as given: [ 0.66666667 -0.33333333 -0.33333333  0.        ]
-Cartesian a1vect: [3.18000000e+00 2.73153518e-16 0.00000000e+00]
+Cartesian a1vect: [ 3.18000000e+00 -2.73153518e-16  0.00000000e+00]
 
 a2vect as given: [ 0.33333333  0.33333333 -0.66666667  0.        ]
 Cartesian a2vect: [1.59       2.75396078 0.        ]
@@ -1043,7 +1082,7 @@ Cartesian a2vect: [1.59       2.75396078 0.        ]
 StackingFault.fault()</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [21]:
+<span></span>In [23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1067,6 +1106,99 @@ atoms in faultsystem are displaced by:
  [4.77000000e-01 2.75396078e-01 1.77635684e-15]
  [4.77000000e-01 2.75396078e-01 0.00000000e+00]
  [4.77000000e-01 2.75396078e-01 3.55271368e-15]]
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="4.5-DFT-support-parameters:-vacuumwidth-and-minimum_r">
+<h3>4.5 DFT support parameters: vacuumwidth and minimum_r<a class="headerlink" href="#4.5-DFT-support-parameters:-vacuumwidth-and-minimum_r" title="Permalink to this headline">¶</a></h3>
+<p>DFT calculations of stacking fault calculations differ from classical
+atomistics calculatoins in that free surfaces are usually generated by
+inserting a region of vacuum rather than change boundary conditions, and
+extensive configuration relaxations are incredibly costly. The
+vacuumwidth and minimum_r parameters were designed to support these
+differences.</p>
+<p>Generate a new StackingFault object using the above parameters plus
+vacuumwidth</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">sf</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">StackingFault</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">a1vect</span><span class="o">=</span><span class="n">a1vect</span><span class="p">,</span> <span class="n">a2vect</span><span class="o">=</span><span class="n">a2vect</span><span class="p">,</span> <span class="n">ucellbox</span><span class="o">=</span><span class="n">ucell</span><span class="o">.</span><span class="n">box</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span> <span class="n">vacuumwidth</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Original system box:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">box</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fault system box:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">box</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Original system box:
+avect =  [ 3.180,  0.000,  0.000]
+bvect =  [ 1.590,  2.754,  0.000]
+cvect =  [ 0.000,  0.000, 20.680]
+origin = [ 0.000,  0.000,  0.000]
+
+Fault system box:
+avect =  [ 3.180,  0.000,  0.000]
+bvect =  [ 1.590,  2.754,  0.000]
+cvect =  [ 0.000,  0.000, 30.680]
+origin = [ 0.000,  0.000, -5.000]
+
+</pre></div></div>
+</div>
+<p>Generating configurations with minimum_r will adjust the out-of-plane
+shift component to ensure pairs of atoms across the fault plane are not
+positioned too close together.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">for</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">faultsystem</span> <span class="ow">in</span> <span class="n">sf</span><span class="o">.</span><span class="n">iterfaultmap</span><span class="p">(</span><span class="n">num_a1</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">num_a2</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">minimum_r</span><span class="o">=</span><span class="n">a</span><span class="o">*</span><span class="mf">0.90</span><span class="p">):</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">displacement</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">faultsystem</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;a1 = </span><span class="si">%.1f</span><span class="s1">, a2 = </span><span class="si">%.1f</span><span class="s1">, d = [</span><span class="si">%7.4f</span><span class="s1"> </span><span class="si">%7.4f</span><span class="s1"> </span><span class="si">%7.4f</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+a1 = 0.0, a2 = 0.0, d = [ 0.0000  0.0000  0.0000]
+a1 = 0.2, a2 = 0.0, d = [ 0.6360  0.0000  0.0000]
+a1 = 0.4, a2 = 0.0, d = [ 1.2720  0.0000  0.1071]
+a1 = 0.6, a2 = 0.0, d = [-1.2720 -0.0000  0.1071]
+a1 = 0.8, a2 = 0.0, d = [-0.6360 -0.0000  0.0000]
+a1 = 0.0, a2 = 0.2, d = [ 0.3180  0.5508  0.0000]
+a1 = 0.2, a2 = 0.2, d = [ 0.9540  0.5508  0.0000]
+a1 = 0.4, a2 = 0.2, d = [-1.5900  0.5508  0.0000]
+a1 = 0.6, a2 = 0.2, d = [-0.9540  0.5508  0.0000]
+a1 = 0.8, a2 = 0.2, d = [-0.3180  0.5508  0.0000]
+a1 = 0.0, a2 = 0.4, d = [ 0.6360  1.1016  0.1071]
+a1 = 0.2, a2 = 0.4, d = [-0.3180 -1.6524  0.0000]
+a1 = 0.4, a2 = 0.4, d = [ 0.3180 -1.6524  0.0000]
+a1 = 0.6, a2 = 0.4, d = [-0.6360  1.1016  0.1071]
+a1 = 0.8, a2 = 0.4, d = [-0.0000  1.1016  0.1812]
+a1 = 0.0, a2 = 0.6, d = [-0.6360 -1.1016  0.1071]
+a1 = 0.2, a2 = 0.6, d = [-0.0000 -1.1016  0.0000]
+a1 = 0.4, a2 = 0.6, d = [ 0.6360 -1.1016  0.1071]
+a1 = 0.6, a2 = 0.6, d = [ 1.2720 -1.1016  0.2533]
+a1 = 0.8, a2 = 0.6, d = [ 0.3180  1.6524  0.2533]
+a1 = 0.0, a2 = 0.8, d = [-0.3180 -0.5508  0.0000]
+a1 = 0.2, a2 = 0.8, d = [ 0.3180 -0.5508  0.0000]
+a1 = 0.4, a2 = 0.8, d = [ 0.9540 -0.5508  0.1812]
+a1 = 0.6, a2 = 0.8, d = [ 1.5900 -0.5508  0.2533]
+a1 = 0.8, a2 = 0.8, d = [-0.9540 -0.5508  0.1812]
 </pre></div></div>
 </div>
 </div>
@@ -1100,6 +1232,7 @@ atoms in faultsystem are displaced by:
 <li><a class="reference internal" href="#4.2-fcc-{111}-slip-plane-2D-map">4.2 fcc {111} slip plane 2D map</a></li>
 <li><a class="reference internal" href="#4.3-fcc-{111}-slip-plane-using-primitive-cell">4.3 fcc {111} slip plane using primitive cell</a></li>
 <li><a class="reference internal" href="#4.4-hcp-{0001}-slip-plane">4.4 hcp {0001} slip plane</a></li>
+<li><a class="reference internal" href="#4.5-DFT-support-parameters:-vacuumwidth-and-minimum_r">4.5 DFT support parameters: vacuumwidth and minimum_r</a></li>
 </ul>
 </li>
 </ul>
@@ -1107,10 +1240,10 @@ atoms in faultsystem are displaced by:
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="04.3._Dislocation_analysis_tools.html"
-                        title="previous chapter">Introduction to atomman: Dislocation analysis tools</a></p>
+  <p class="topless"><a href="04.4._Free_Surface_Rotation_Basis.html"
+                        title="previous chapter">Introduction to atomman: Free Surface Rotation Basis</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="04.5._Gamma_Surface_Plotting.html"
+  <p class="topless"><a href="04.6._Gamma_Surface_Plotting.html"
                         title="next chapter">Introduction to atomman: Gamma Surface Plotting</a></p>
         </div>
       </div>
@@ -1126,12 +1259,12 @@ atoms in faultsystem are displaced by:
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="04.5._Gamma_Surface_Plotting.html" title="Introduction to atomman: Gamma Surface Plotting"
+          <a href="04.6._Gamma_Surface_Plotting.html" title="Introduction to atomman: Gamma Surface Plotting"
              >next</a> |</li>
         <li class="right" >
-          <a href="04.3._Dislocation_analysis_tools.html" title="Introduction to atomman: Dislocation analysis tools"
+          <a href="04.4._Free_Surface_Rotation_Basis.html" title="Introduction to atomman: Free Surface Rotation Basis"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

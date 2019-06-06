@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Box Class &#8212; atomman 1.2.6 documentation</title>
+    <title>Introduction to atomman: Box Class &#8212; atomman 1.2.7 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.6',
+        VERSION:     '1.2.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="01._Defining_Atomic_Systems.html" title="Introduction to atomman: Defining Atomic Systems"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -274,8 +274,8 @@ of avect, bvect and cvect to the origin.</li>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.6
-Notebook executed on 2019-04-23
+atomman version = 1.2.7
+Notebook executed on 2019-06-05
 </pre></div></div>
 </div>
 <p>Create a default box with vects that are normal unit vectors.</p>
@@ -439,10 +439,10 @@ defining the box.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 2.662,  1.192,  2.547]
-bvect =  [ 0.172,  0.347,  3.228]
-cvect =  [ 0.736,  0.424,  0.145]
-origin = [ 0.707,  0.507,  0.960]
+avect =  [ 3.143,  2.814,  2.471]
+bvect =  [ 3.004,  2.547,  2.103]
+cvect =  [ 1.755,  0.308,  3.104]
+origin = [ 0.350,  0.234,  0.629]
 </pre></div></div>
 </div>
 </div>
@@ -806,6 +806,103 @@ AssertionError: Box is not normalized for LAMMPS style parameters
 </div>
 </div>
 </div>
+<div class="section" id="5.-Box-model">
+<h2>5. Box model<a class="headerlink" href="#5.-Box-model" title="Permalink to this headline">¶</a></h2>
+<p><em>Added version 1.2.7</em></p>
+<p>A JSON/XML equivalent data model representation of the Box object can be
+generated using the model() method.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">xml</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#34;box&#34;: {&#34;avect&#34;: {&#34;value&#34;: [10.0, 0.1, 0.0], &#34;unit&#34;: &#34;angstrom&#34;}, &#34;bvect&#34;: {&#34;value&#34;: [0.2, 9.0, 0.0], &#34;unit&#34;: &#34;angstrom&#34;}, &#34;cvect&#34;: {&#34;value&#34;: [-0.2, 0.5, 14.0], &#34;unit&#34;: &#34;angstrom&#34;}, &#34;origin&#34;: {&#34;value&#34;: [0.0, 0.0, 0.0], &#34;unit&#34;: &#34;angstrom&#34;}}}
+
+&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
+&lt;box&gt;&lt;avect&gt;&lt;value&gt;10.0&lt;/value&gt;&lt;value&gt;0.1&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/avect&gt;&lt;bvect&gt;&lt;value&gt;0.2&lt;/value&gt;&lt;value&gt;9.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/bvect&gt;&lt;cvect&gt;&lt;value&gt;-0.2&lt;/value&gt;&lt;value&gt;0.5&lt;/value&gt;&lt;value&gt;14.0&lt;/value&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/cvect&gt;&lt;origin&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/origin&gt;&lt;/box&gt;
+</pre></div></div>
+</div>
+<p>The units of length used in the model can be set using the
+‘length_unit’ parameter.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">length_unit</span><span class="o">=</span><span class="s1">&#39;nm&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#34;box&#34;: {&#34;avect&#34;: {&#34;value&#34;: [1.0, 0.01, 0.0], &#34;unit&#34;: &#34;nm&#34;}, &#34;bvect&#34;: {&#34;value&#34;: [0.02, 0.9, 0.0], &#34;unit&#34;: &#34;nm&#34;}, &#34;cvect&#34;: {&#34;value&#34;: [-0.02, 0.05, 1.4], &#34;unit&#34;: &#34;nm&#34;}, &#34;origin&#34;: {&#34;value&#34;: [0.0, 0.0, 0.0], &#34;unit&#34;: &#34;nm&#34;}}}
+</pre></div></div>
+</div>
+<p>Any stored model information can then be reloaded in as a Box object by
+passing the ‘model’ parameter to either the class initializer or the
+model() method.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [10.000,  0.100,  0.000]
+bvect =  [ 0.200,  9.000,  0.000]
+cvect =  [-0.200,  0.500, 14.000]
+origin = [ 0.000,  0.000,  0.000]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">box</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [10.000,  0.100,  0.000]
+bvect =  [ 0.200,  9.000,  0.000]
+cvect =  [-0.200,  0.500, 14.000]
+origin = [ 0.000,  0.000,  0.000]
+</pre></div></div>
+</div>
+</div>
 </div>
 
 
@@ -829,6 +926,7 @@ AssertionError: Box is not normalized for LAMMPS style parameters
 <li><a class="reference internal" href="#4.1-Box.is_lammps_norm()">4.1 Box.is_lammps_norm()</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#5.-Box-model">5. Box model</a></li>
 </ul>
 </li>
 </ul>
@@ -858,7 +956,7 @@ AssertionError: Box is not normalized for LAMMPS style parameters
         <li class="right" >
           <a href="01._Defining_Atomic_Systems.html" title="Introduction to atomman: Defining Atomic Systems"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>tools &#8212; atomman 1.2.6 documentation</title>
+    <title>tools &#8212; atomman 1.2.7 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.6',
+        VERSION:     '1.2.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="atomman.unitconvert.html" title="unitconvert"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" accesskey="U">atomman package</a> &#187;</li> 
       </ul>
     </div>  
@@ -138,6 +138,30 @@ Default value is 1e-8.</li>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – If axes are not orthogonal or right-handed.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="atomman.tools.compositionstr">
+<code class="descclassname">atomman.tools.</code><code class="descname">compositionstr</code><span class="sig-paren">(</span><em>symbols</em>, <em>counts</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.tools.compositionstr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a reduced composition string based on symbols and counts.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>symbols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – The model symbol for a site.</li>
+<li><strong>count</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – How many sites are occupied by each symbol.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The reduced composition string.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
 </td>
 </tr>
 </tbody>
@@ -457,9 +481,51 @@ is ‘degree’.</li>
 </dd></dl>
 
 <span class="target" id="module-atomman.tools.miller"></span><dl class="function">
+<dt id="atomman.tools.miller.plane3to4">
+<code class="descclassname">atomman.tools.miller.</code><code class="descname">plane3to4</code><span class="sig-paren">(</span><em>indices</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.tools.miller.plane3to4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts 3-term Miller (hkl) plane indices to 4-term hexagonal (hkil)
+Miller-Bravias indices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>indices</strong> (<em>np.ndarray</em>) – (…, 3) array of Miller crystallographic indices.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(…, 4) array of Miller-Bravais crystallographic indices.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – If indices dimensions are not (…, 3).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="atomman.tools.miller.plane4to3">
+<code class="descclassname">atomman.tools.miller.</code><code class="descname">plane4to3</code><span class="sig-paren">(</span><em>indices</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.tools.miller.plane4to3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts 4-term hexagonal Miller-Bravias (hkil) plane indices to 3-term
+Miller (hkl) indices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>indices</strong> (<em>np.ndarray of int</em>) – (…, 4) array of Miller-Bravais crystallographic indices.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(…, 3) array of Miller crystallographic indices.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray of int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – If indices dimensions are not (…, 4), or if h+k+i != 0.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="atomman.tools.miller.vector3to4">
 <code class="descclassname">atomman.tools.miller.</code><code class="descname">vector3to4</code><span class="sig-paren">(</span><em>indices</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.tools.miller.vector3to4" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts 3-term Miller [uvw] indices to 4-term hexagonal [uvtw]
+<dd><p>Converts 3-term Miller [uvw] vector indices to 4-term hexagonal [uvtw]
 Miller-Bravias indices.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -480,9 +546,8 @@ Miller-Bravias indices.</p>
 <dl class="function">
 <dt id="atomman.tools.miller.vector4to3">
 <code class="descclassname">atomman.tools.miller.</code><code class="descname">vector4to3</code><span class="sig-paren">(</span><em>indices</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.tools.miller.vector4to3" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts 4-term hexagonal Miller-Bravias [uvtw] indices to 3-term
-Miller [uvw] indices. Note that vectors will be normalized to
-smallest integer representations.</p>
+<dd><p>Converts 4-term hexagonal Miller-Bravias [uvtw] vector indices to 3-term
+Miller [uvw] indices.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -493,7 +558,7 @@ smallest integer representations.</p>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray of int</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – If indices dimensions are not (…, 4), or if h+k+i != 0.</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – If indices dimensions are not (…, 4), or if u+v+t != 0.</td>
 </tr>
 </tbody>
 </table>
@@ -637,7 +702,7 @@ value is given.</p>
         <li class="right" >
           <a href="atomman.unitconvert.html" title="unitconvert"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li> 
       </ul>
     </div>

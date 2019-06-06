@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Atoms &#8212; atomman 1.2.6 documentation</title>
+    <title>Atoms &#8212; atomman 1.2.7 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.6',
+        VERSION:     '1.2.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Box" href="atomman.Box.html" />
-    <link rel="prev" title="Stroh" href="atomman.defect.VolterraDislocation.html" /> 
+    <link rel="prev" title="plot" href="atomman.plot.html" /> 
   </head>
   <body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -41,9 +41,9 @@
           <a href="atomman.Box.html" title="Box"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="atomman.defect.VolterraDislocation.html" title="Stroh"
+          <a href="atomman.plot.html" title="plot"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" accesskey="U">atomman package</a> &#187;</li> 
       </ul>
     </div>  
@@ -57,7 +57,7 @@
 <h1>Atoms<a class="headerlink" href="#atoms" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="atomman.Atoms">
-<em class="property">class </em><code class="descclassname">atomman.</code><code class="descname">Atoms</code><span class="sig-paren">(</span><em>natoms=None</em>, <em>atype=None</em>, <em>pos=None</em>, <em>prop=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">atomman.</code><code class="descname">Atoms</code><span class="sig-paren">(</span><em>natoms=None</em>, <em>atype=None</em>, <em>pos=None</em>, <em>prop=None</em>, <em>model=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>Class for representing a collection of atoms.</p>
 <dl class="class">
@@ -78,6 +78,38 @@
 <code class="descname">df</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms.df" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a pandas.DataFrame of all atomic properties.  Multi-dimensional
 per-atom data will be converted into multiple table columns.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.Atoms.model">
+<code class="descname">model</code><span class="sig-paren">(</span><em>prop_name=None</em>, <em>unit=None</em>, <em>prop_unit=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a data model for the Atoms object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>prop_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em>) – The Atoms properties to include.  If neither prop_name nor prop_unit
+are given, all system properties will be included.</li>
+<li><strong>unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em>) – Lists the units for each prop_name as stored in the table.  For a
+value of None, no conversion will be performed for that property.
+If neither unit nor prop_units given, pos will be
+given in Angstroms and all other values will not be converted.</li>
+<li><strong>prop_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – dictionary where the keys are the property keys to include, and
+the values are units to use. If neither unit nor prop_units given,
+pos will be given in Angstroms and all other values will not be
+converted.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A JSON/XML data model for the current Atoms object.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">DataModelDict.DataModelDict</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
@@ -171,8 +203,8 @@ Atoms.atypes.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="atomman.defect.VolterraDislocation.html"
-                        title="previous chapter">Stroh</a></p>
+  <p class="topless"><a href="atomman.plot.html"
+                        title="previous chapter">plot</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="atomman.Box.html"
                         title="next chapter">Box</a></p>
@@ -193,9 +225,9 @@ Atoms.atypes.</p>
           <a href="atomman.Box.html" title="Box"
              >next</a> |</li>
         <li class="right" >
-          <a href="atomman.defect.VolterraDislocation.html" title="Stroh"
+          <a href="atomman.plot.html" title="plot"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li> 
       </ul>
     </div>

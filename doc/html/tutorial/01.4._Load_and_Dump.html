@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Load and Dump &#8212; atomman 1.2.6 documentation</title>
+    <title>Introduction to atomman: Load and Dump &#8212; atomman 1.2.7 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.6',
+        VERSION:     '1.2.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="01.3._System_class.html" title="Introduction to atomman: System Class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -291,8 +291,8 @@ The underlying code is found in the atomman/dump directory.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.6
-Notebook executed on 2019-04-23
+atomman version = 1.2.7
+Notebook executed on 2019-06-05
 </pre></div></div>
 </div>
 <p>Generate test system information (CsCl)</p>
@@ -335,6 +335,7 @@ natoms = 2
 natypes = 2
 symbols = (&#39;Cs&#39;, &#39;Cl&#39;)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;charge&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
       1 |       2 |   1.600 |   1.600 |   1.600
@@ -424,17 +425,33 @@ pbc = [ True  True  True]
 <div class="section" id="2.-system_model-style">
 <h2>2. system_model style<a class="headerlink" href="#2.-system_model-style" title="Permalink to this headline">¶</a></h2>
 <p>The system_model style provides a complete structured record of all
-values with proper units that is compatible with JSON or XML databases.
-The downside is that the representation is not as efficient or
-convenient as tabular formats for large numbers of atoms and atomic
-properties.</p>
+values with proper units that is compatible with JSON or XML databases.</p>
+<p><em>Updated version 1.2.7</em> The system_model format uses the new
+System.model() representation, which now caputures all class
+information.</p>
 <div class="section" id="2.1.-dump('system_model')">
 <h3>2.1. dump(‘system_model’)<a class="headerlink" href="#2.1.-dump('system_model')" title="Permalink to this headline">¶</a></h3>
-<p>Keyword Parameters</p>
+<p><em>Updated version 1.2.7</em></p>
+<p>Parameters</p>
 <ul class="simple">
 <li><strong>f</strong> (<em>str or file-like object, optional</em>) File path or file-like
 object to write the content to. If not given, then the content is
 returned as a DataModelDict.</li>
+<li><strong>box_unit</strong> (<em>str, optional</em>) Length unit to use for the box.
+Default value is ‘angstrom’.</li>
+<li><strong>prop_name</strong> (<em>list, optional</em>) The Atoms properties to include. If
+neither prop_name nor prop_unit are given, all system properties
+will be included.</li>
+<li><strong>unit</strong> (<em>list, optional</em>) Lists the units for each prop_name as
+stored in the table. For a value of None, no conversion will be
+performed for that property. For a value of ‘scaled’, the
+corresponding table values will be taken in box-scaled units. If
+neither unit nor prop_units given, pos will be given in Angstroms
+and all other values will not be converted.</li>
+<li><strong>prop_unit</strong> (<em>dict, optional</em>) dictionary where the keys are the
+property keys to include, and the values are units to use. If neither
+unit nor prop_units given, pos will be given in Angstroms and all
+other values will not be converted.</li>
 <li><strong>format</strong> (<em>str, optional</em>) File format ‘xml’ or ‘json’ to save the
 content as if f is given. If f is a filename, then the format will be
 automatically inferred from f’s extension. If format is not given and
@@ -442,27 +459,14 @@ cannot be inferred, then it will be set to ‘json’.</li>
 <li><strong>indent</strong> (<em>int or None, optional</em>) Indentation option to use for
 XML/JSON content if f is given. A value of None (default) will add no
 line separatations or indentations.</li>
-<li><strong>box_unit</strong> (<em>str, optional</em>) Length unit to use for the box.
-Default value is ‘angstrom’.</li>
 <li><strong>symbols</strong> (<em>list, optional</em>) list of atom-model symbols
-corresponding to the atom types. Will use system.symbols if not
-given.</li>
-<li><strong>elements</strong> (<em>list, optional</em>) list of element tags corresponding to
-the atom types.</li>
-<li><strong>prop_units</strong> (<em>dict, optional</em>) dictionary where the keys are the
-property keys to include, and the values are units to use. If not
-given, only the positions in scaled units are included.</li>
-<li><strong>a_std</strong> (<em>float, optional</em>) Standard deviation of a lattice
-constant to include if available.</li>
-<li><strong>b_std</strong> (<em>float, optional</em>) Standard deviation of b lattice
-constant to include if available.</li>
-<li><strong>c_std</strong> (<em>float, optional</em>) Standard deviation of c lattice
-constant to include if available.</li>
+corresponding to the atom types. If not given, will use
+system.symbols.</li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li><strong>model</strong> (<em>DataModelDict</em>) A data model of the system. Returned if f
-is not given.</li>
+<li><strong>model</strong> (<em>DataModelDict.DataModelDict or str</em>) A JSON/XML data
+model for the current System object. Returned if f is not given.</li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
@@ -470,7 +474,7 @@ is not given.</li>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;system_model&#39;</span><span class="p">,</span>  <span class="n">box_unit</span><span class="o">=</span><span class="s1">&#39;angstrom&#39;</span><span class="p">,</span> <span class="n">prop_units</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;charge&#39;</span><span class="p">:</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;stress&#39;</span><span class="p">:</span> <span class="s1">&#39;GPa&#39;</span><span class="p">})</span>
+<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;system_model&#39;</span><span class="p">,</span> <span class="n">prop_unit</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;atype&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;pos&#39;</span><span class="p">:</span><span class="s1">&#39;scaled&#39;</span><span class="p">,</span> <span class="s1">&#39;charge&#39;</span><span class="p">:</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;stress&#39;</span><span class="p">:</span> <span class="s1">&#39;GPa&#39;</span><span class="p">})</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;JSON system model:&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
@@ -486,16 +490,18 @@ is not given.</li>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 JSON system model:
-{&#34;atomic-system&#34;: {&#34;cell&#34;: {&#34;cubic&#34;: {&#34;a&#34;: {&#34;value&#34;: 3.2000000000000006, &#34;unit&#34;: &#34;angstrom&#34;}}}, &#34;atom&#34;: [{&#34;component&#34;: 1, &#34;symbol&#34;: &#34;Cs&#34;, &#34;position&#34;: {&#34;value&#34;: [0.0, 0.0, 0.0], &#34;unit&#34;: &#34;scaled&#34;}, &#34;property&#34;: [{&#34;name&#34;: &#34;charge&#34;, &#34;value&#34;: 1.0, &#34;unit&#34;: &#34;e&#34;}, {&#34;name&#34;: &#34;stress&#34;, &#34;value&#34;: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], &#34;shape&#34;: [3, 3], &#34;unit&#34;: &#34;GPa&#34;}]}, {&#34;component&#34;: 2, &#34;symbol&#34;: &#34;Cl&#34;, &#34;position&#34;: {&#34;value&#34;: [0.5, 0.5, 0.5], &#34;unit&#34;: &#34;scaled&#34;}, &#34;property&#34;: [{&#34;name&#34;: &#34;charge&#34;, &#34;value&#34;: -1.0, &#34;unit&#34;: &#34;e&#34;}, {&#34;name&#34;: &#34;stress&#34;, &#34;value&#34;: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], &#34;shape&#34;: [3, 3], &#34;unit&#34;: &#34;GPa&#34;}]}]}}
+{&#34;atomic-system&#34;: {&#34;box&#34;: {&#34;avect&#34;: {&#34;value&#34;: [3.2, 0.0, 0.0]}, &#34;bvect&#34;: {&#34;value&#34;: [0.0, 3.2, 0.0]}, &#34;cvect&#34;: {&#34;value&#34;: [0.0, 0.0, 3.2]}, &#34;origin&#34;: {&#34;value&#34;: [0.0, 0.0, 0.0]}}, &#34;periodic-boundary-condition&#34;: [true, true, true], &#34;atom-type-symbol&#34;: [&#34;Cs&#34;, &#34;Cl&#34;], &#34;atoms&#34;: {&#34;natoms&#34;: 2, &#34;property&#34;: [{&#34;name&#34;: &#34;atype&#34;, &#34;data&#34;: {&#34;value&#34;: [1, 2]}}, {&#34;name&#34;: &#34;pos&#34;, &#34;data&#34;: {&#34;value&#34;: [0.0, 0.0, 0.0, 0.5, 0.5, 0.5], &#34;shape&#34;: [2, 3], &#34;unit&#34;: &#34;scaled&#34;}}, {&#34;name&#34;: &#34;charge&#34;, &#34;data&#34;: {&#34;value&#34;: [1.0, -1.0], &#34;unit&#34;: &#34;e&#34;}}, {&#34;name&#34;: &#34;stress&#34;, &#34;data&#34;: {&#34;value&#34;: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], &#34;shape&#34;: [2, 3, 3], &#34;unit&#34;: &#34;GPa&#34;}}]}}}
 
 XML system model:
 &lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
-&lt;atomic-system&gt;&lt;cell&gt;&lt;cubic&gt;&lt;a&gt;&lt;value&gt;3.2000000000000006&lt;/value&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/a&gt;&lt;/cubic&gt;&lt;/cell&gt;&lt;atom&gt;&lt;component&gt;1&lt;/component&gt;&lt;symbol&gt;Cs&lt;/symbol&gt;&lt;position&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;unit&gt;scaled&lt;/unit&gt;&lt;/position&gt;&lt;property&gt;&lt;name&gt;charge&lt;/name&gt;&lt;value&gt;1.0&lt;/value&gt;&lt;unit&gt;e&lt;/unit&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;stress&lt;/name&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;unit&gt;GPa&lt;/unit&gt;&lt;/property&gt;&lt;/atom&gt;&lt;atom&gt;&lt;component&gt;2&lt;/component&gt;&lt;symbol&gt;Cl&lt;/symbol&gt;&lt;position&gt;&lt;value&gt;0.5&lt;/value&gt;&lt;value&gt;0.5&lt;/value&gt;&lt;value&gt;0.5&lt;/value&gt;&lt;unit&gt;scaled&lt;/unit&gt;&lt;/position&gt;&lt;property&gt;&lt;name&gt;charge&lt;/name&gt;&lt;value&gt;-1.0&lt;/value&gt;&lt;unit&gt;e&lt;/unit&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;stress&lt;/name&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;unit&gt;GPa&lt;/unit&gt;&lt;/property&gt;&lt;/atom&gt;&lt;/atomic-system&gt;
+&lt;atomic-system&gt;&lt;box&gt;&lt;avect&gt;&lt;value&gt;3.2&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;/avect&gt;&lt;bvect&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;3.2&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;/bvect&gt;&lt;cvect&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;3.2&lt;/value&gt;&lt;/cvect&gt;&lt;origin&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;/origin&gt;&lt;/box&gt;&lt;periodic-boundary-condition&gt;True&lt;/periodic-boundary-condition&gt;&lt;periodic-boundary-condition&gt;True&lt;/periodic-boundary-condition&gt;&lt;periodic-boundary-condition&gt;True&lt;/periodic-boundary-condition&gt;&lt;atom-type-symbol&gt;Cs&lt;/atom-type-symbol&gt;&lt;atom-type-symbol&gt;Cl&lt;/atom-type-symbol&gt;&lt;atoms&gt;&lt;natoms&gt;2&lt;/natoms&gt;&lt;property&gt;&lt;name&gt;atype&lt;/name&gt;&lt;data&gt;&lt;value&gt;1&lt;/value&gt;&lt;value&gt;2&lt;/value&gt;&lt;/data&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;pos&lt;/name&gt;&lt;data&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.5&lt;/value&gt;&lt;value&gt;0.5&lt;/value&gt;&lt;value&gt;0.5&lt;/value&gt;&lt;shape&gt;2&lt;/shape&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;unit&gt;scaled&lt;/unit&gt;&lt;/data&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;charge&lt;/name&gt;&lt;data&gt;&lt;value&gt;1.0&lt;/value&gt;&lt;value&gt;-1.0&lt;/value&gt;&lt;unit&gt;e&lt;/unit&gt;&lt;/data&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;stress&lt;/name&gt;&lt;data&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;shape&gt;2&lt;/shape&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;unit&gt;GPa&lt;/unit&gt;&lt;/data&gt;&lt;/property&gt;&lt;/atoms&gt;&lt;/atomic-system&gt;
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="2.2.-load('system_model')">
 <h3>2.2. load(‘system_model’)<a class="headerlink" href="#2.2.-load('system_model')" title="Permalink to this headline">¶</a></h3>
+<p><em>Updated version 1.2.7</em>: Now loads the System.model() format as well as
+the older format.</p>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>model</strong> (<em>str, file-like object or DataModelDict</em>) The data model
@@ -538,6 +544,7 @@ natoms = 2
 natypes = 2
 symbols = (&#39;Cs&#39;, &#39;Cl&#39;)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;charge&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
       1 |       2 |   1.600 |   1.600 |   1.600
@@ -731,6 +738,7 @@ natoms = 2
 natypes = 2
 symbols = (&#39;Cs&#39;, &#39;Cl&#39;)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;charge&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
       1 |       2 |   1.600 |   1.600 |   1.600
@@ -1191,6 +1199,7 @@ natoms = 2
 natypes = 2
 symbols = (&#39;Cs&#39;, &#39;Cl&#39;)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;charge&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
       1 |       2 |   1.600 |   1.600 |   1.600
@@ -1430,6 +1439,7 @@ natoms = 2
 natypes = 2
 symbols = (&#39;Cs&#39;, &#39;Cl&#39;)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
       1 |       2 |   1.600 |   1.600 |   1.600
@@ -1677,6 +1687,7 @@ natoms = 2
 natypes = 2
 symbols = (&#39;Cs&#39;, &#39;Cl&#39;)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;atom_id&#39;, &#39;charge&#39;, &#39;stress[0][0]&#39;, &#39;stress[0][1]&#39;, &#39;stress[0][2]&#39;, &#39;stress[1][0]&#39;, &#39;stress[1][1]&#39;, &#39;stress[1][2]&#39;, &#39;stress[2][0]&#39;, &#39;stress[2][1]&#39;, &#39;stress[2][2]&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
       1 |       2 |   1.600 |   1.600 |   1.600
@@ -1883,6 +1894,7 @@ natoms = 2
 natypes = 2
 symbols = (&#39;Cl&#39;, &#39;Cs&#39;)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;charge&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       2 |   0.000 |   0.000 |   0.000
       1 |       1 |   1.600 |   1.600 |   1.600
@@ -2082,6 +2094,7 @@ natoms = 2
 natypes = 2
 symbols = (&#39;Cl&#39;, &#39;Cs&#39;)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;charge&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       2 |   0.000 |   0.000 |   0.000
       1 |       1 |   1.600 |   1.600 |   1.600
@@ -2115,6 +2128,7 @@ pbc = [ True  True  True]
       <th>pos[0]</th>
       <th>pos[1]</th>
       <th>pos[2]</th>
+      <th>charge</th>
       <th>stress[0][0]</th>
       <th>stress[0][1]</th>
       <th>stress[0][2]</th>
@@ -2124,7 +2138,6 @@ pbc = [ True  True  True]
       <th>stress[2][0]</th>
       <th>stress[2][1]</th>
       <th>stress[2][2]</th>
-      <th>charge</th>
     </tr>
   </thead>
   <tbody>
@@ -2134,16 +2147,16 @@ pbc = [ True  True  True]
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
@@ -2151,16 +2164,16 @@ pbc = [ True  True  True]
       <td>1.6</td>
       <td>1.6</td>
       <td>1.6</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
       <td>-1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -2298,6 +2311,7 @@ natoms = 2
 natypes = 2
 symbols = (&#39;Cl&#39;, &#39;Cs&#39;)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       2 |   0.000 |   0.000 |   0.000
       1 |       1 |   1.600 |   1.600 |   1.600
@@ -2452,7 +2466,7 @@ which package’s Atoms class is returned by dump.</p>
         <li class="right" >
           <a href="01.3._System_class.html" title="Introduction to atomman: System Class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

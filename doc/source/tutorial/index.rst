@@ -20,6 +20,7 @@ Tutorials
    04.1. Point defects <04.1._Point_defects>
    04.2. Stroh class <04.2._Stroh_class>
    04.3. Dislocation analysis tools <04.3._Dislocation_analysis_tools>
-   04.4. Stacking Fault Generation <04.4._Stacking_Fault_Generation>
-   04.5. Gamma Surface Plotting <04.5._Gamma_Surface_Plotting>
-   04.6. Semidiscrete Variational Peierls-Nabarro <04.6._Semidiscrete_Variational_Peierls-Nabarro>
+   04.4. Free Surface Rotation Basis.ipynb <04.4._Free_Surface_Rotation_Basis>
+   04.5. Stacking Fault Generation <04.5._Stacking_Fault_Generation>
+   04.6. Gamma Surface Plotting <04.6._Gamma_Surface_Plotting>
+   04.7. Semidiscrete Variational Peierls-Nabarro <04.7._Semidiscrete_Variational_Peierls-Nabarro>

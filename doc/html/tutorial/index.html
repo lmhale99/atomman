@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Tutorials &#8212; atomman 1.2.6 documentation</title>
+    <title>Tutorials &#8212; atomman 1.2.7 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.6',
+        VERSION:     '1.2.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="../index.html" title="atomman: Atomistic Manipulation Toolkit"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -75,6 +75,7 @@
 <li class="toctree-l2"><a class="reference internal" href="01.1._Box_Class.html#2.-Box-parameters">2. Box parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="01.1._Box_Class.html#3.-Initializing-and-setting-Box-parameters">3. Initializing and setting Box parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="01.1._Box_Class.html#4.-LAMMPS-compatible-Boxes">4. LAMMPS-compatible Boxes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01.1._Box_Class.html#5.-Box-model">5. Box model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="01.2._Atoms_class.html">01.2. Atoms class</a><ul>
@@ -83,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="01.2._Atoms_class.html#3.-Per-atom-properties">3. Per-atom properties</a></li>
 <li class="toctree-l2"><a class="reference internal" href="01.2._Atoms_class.html#4.-Atoms-by-index">4. Atoms by index</a></li>
 <li class="toctree-l2"><a class="reference internal" href="01.2._Atoms_class.html#5.-Atoms.prop()">5. Atoms.prop()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01.2._Atoms_class.html#6.-Atoms.model()">6. Atoms.model()</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="01.3._System_class.html">01.3. System class</a><ul>
@@ -92,7 +94,7 @@
 <li class="toctree-l2"><a class="reference internal" href="01.3._System_class.html#4.-Scaling-Additions">4. Scaling Additions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="01.3._System_class.html#5.-Built-in-manipulations">5. Built-in manipulations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="01.3._System_class.html#6.-Built-in-analysis-tools">6. Built-in analysis tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="01.3._System_class.html#7.-dump()">7. dump()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01.3._System_class.html#7.-model()-and-dump()">7. model() and dump()</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="01.4._Load_and_Dump.html">01.4. Load and Dump</a><ul>
@@ -163,9 +165,10 @@
 <li class="toctree-l2"><a class="reference internal" href="04._Defect_Creation_and_Analysis.html#2.-Point-defects">2. Point defects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04._Defect_Creation_and_Analysis.html#3.-Volterra-dislocation-solutions">3. Volterra dislocation solutions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04._Defect_Creation_and_Analysis.html#4.-Dislocation-anaylsis-tools">4. Dislocation anaylsis tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="04._Defect_Creation_and_Analysis.html#5.-Generalized-stacking-fault-/-gamma-surface-tools">5. Generalized stacking fault / gamma surface tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="04._Defect_Creation_and_Analysis.html#6.-Semidiscrete-variational-Peierls-Nabarro-dislocations">6. Semidiscrete variational Peierls-Nabarro dislocations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="04._Defect_Creation_and_Analysis.html#7.-Periodic-array-of-dislocations">7. Periodic array of dislocations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04._Defect_Creation_and_Analysis.html#5.-Free-surface-tools">5. Free surface tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04._Defect_Creation_and_Analysis.html#6.-Generalized-stacking-fault-/-gamma-surface-tools">6. Generalized stacking fault / gamma surface tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04._Defect_Creation_and_Analysis.html#7.-Semidiscrete-variational-Peierls-Nabarro-dislocations">7. Semidiscrete variational Peierls-Nabarro dislocations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04._Defect_Creation_and_Analysis.html#8.-Periodic-array-of-dislocations">8. Periodic array of dislocations</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="04.1._Point_defects.html">04.1. Point defects</a><ul>
@@ -195,26 +198,33 @@
 <li class="toctree-l2"><a class="reference internal" href="04.3._Dislocation_analysis_tools.html#4.-Differential-displacement-plot">4. Differential displacement plot</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="04.4._Stacking_Fault_Generation.html">04.4. Stacking Fault Generation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="04.4._Stacking_Fault_Generation.html#1.-Introduction">1. Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="04.4._Stacking_Fault_Generation.html#2.-Underlying-theory">2. Underlying theory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="04.4._Stacking_Fault_Generation.html#3.-Class-methods">3. Class methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="04.4._Stacking_Fault_Generation.html#4.-Examples">4. Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04.4._Free_Surface_Rotation_Basis.html">04.4. Free Surface Rotation Basis.ipynb</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04.4._Free_Surface_Rotation_Basis.html#1.-Introduction">1. Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.4._Free_Surface_Rotation_Basis.html#2.-Theory">2. Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.4._Free_Surface_Rotation_Basis.html#3.-Function-Documentation">3. Function Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.4._Free_Surface_Rotation_Basis.html#4.-Examples">4. Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="04.5._Gamma_Surface_Plotting.html">04.5. Gamma Surface Plotting</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="04.5._Gamma_Surface_Plotting.html#1.-Introduction">1. Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="04.5._Gamma_Surface_Plotting.html#2.-Underlying-theory">2. Underlying theory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="04.5._Gamma_Surface_Plotting.html#3.-Defining-gamma-surface-data">3. Defining gamma surface data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="04.5._Gamma_Surface_Plotting.html#4.-Plotting-methods">4. Plotting methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="04.5._Gamma_Surface_Plotting.html#5.-Utility-methods">5. Utility methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04.5._Stacking_Fault_Generation.html">04.5. Stacking Fault Generation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04.5._Stacking_Fault_Generation.html#1.-Introduction">1. Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.5._Stacking_Fault_Generation.html#2.-Underlying-theory">2. Underlying theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.5._Stacking_Fault_Generation.html#3.-Class-methods">3. Class methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.5._Stacking_Fault_Generation.html#4.-Examples">4. Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="04.6._Semidiscrete_Variational_Peierls-Nabarro.html">04.6. Semidiscrete Variational Peierls-Nabarro</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="04.6._Semidiscrete_Variational_Peierls-Nabarro.html#1.-Introduction">1. Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="04.6._Semidiscrete_Variational_Peierls-Nabarro.html#2.-Dependent-parameters">2. Dependent parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="04.6._Semidiscrete_Variational_Peierls-Nabarro.html#3.-Generate-initial-disregistry">3. Generate initial disregistry</a></li>
-<li class="toctree-l2"><a class="reference internal" href="04.6._Semidiscrete_Variational_Peierls-Nabarro.html#4.-Solve-SDVPN-model">4. Solve SDVPN model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04.6._Gamma_Surface_Plotting.html">04.6. Gamma Surface Plotting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04.6._Gamma_Surface_Plotting.html#1.-Introduction">1. Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.6._Gamma_Surface_Plotting.html#2.-Underlying-theory">2. Underlying theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.6._Gamma_Surface_Plotting.html#3.-Defining-gamma-surface-data">3. Defining gamma surface data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.6._Gamma_Surface_Plotting.html#4.-Plotting-methods">4. Plotting methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.6._Gamma_Surface_Plotting.html#5.-Utility-methods">5. Utility methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="04.7._Semidiscrete_Variational_Peierls-Nabarro.html">04.7. Semidiscrete Variational Peierls-Nabarro</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04.7._Semidiscrete_Variational_Peierls-Nabarro.html#1.-Introduction">1. Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.7._Semidiscrete_Variational_Peierls-Nabarro.html#2.-Dependent-parameters">2. Dependent parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.7._Semidiscrete_Variational_Peierls-Nabarro.html#3.-Generate-initial-disregistry">3. Generate initial disregistry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04.7._Semidiscrete_Variational_Peierls-Nabarro.html#4.-Solve-SDVPN-model">4. Solve SDVPN model</a></li>
 </ul>
 </li>
 </ul>
@@ -252,7 +262,7 @@
         <li class="right" >
           <a href="../index.html" title="atomman: Atomistic Manipulation Toolkit"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

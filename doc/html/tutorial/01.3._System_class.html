@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: System Class &#8212; atomman 1.2.6 documentation</title>
+    <title>Introduction to atomman: System Class &#8212; atomman 1.2.7 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.6',
+        VERSION:     '1.2.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="01.2._Atoms_class.html" title="Introduction to atomman: Atoms class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -266,8 +266,8 @@ System class to reflect this.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.6
-Notebook executed on 2019-04-23
+atomman version = 1.2.7
+Notebook executed on 2019-06-06
 </pre></div></div>
 </div>
 </div>
@@ -326,6 +326,7 @@ natoms = 1
 natypes = 1
 symbols = (None,)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
 </pre></div></div>
@@ -371,6 +372,7 @@ natoms = 8
 natypes = 1
 symbols = (&#39;Si&#39;,)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
       1 |       1 |   2.716 |   2.716 |   0.000
@@ -402,6 +404,8 @@ object.</li>
 <li><strong>pbc</strong> (<em>numpy.ndarray of bool</em>) three Boolean values indicating
 which box directions are periodic.</li>
 <li><strong>symbols</strong> (<em>tuple</em>) the element symbols associated with each atype.</li>
+<li><strong>composition</strong> (<em>str</em>) <em>Added version 1.2.7</em> composition description
+of elements and numbers.</li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
@@ -413,6 +417,7 @@ which box directions are periodic.</li>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;system.atypes -&gt;&#39;</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">atypes</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;system.natypes -&gt;&#39;</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">natypes</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;system.symbols -&gt;&#39;</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;system.composition -&gt;&#39;</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">composition</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;system.pbc -&gt;&#39;</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">pbc</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -426,6 +431,7 @@ system.natoms -&gt; 8
 system.atypes -&gt; (1,)
 system.natypes -&gt; 1
 system.symbols -&gt; (&#39;Si&#39;,)
+system.composition -&gt; Si
 system.pbc -&gt; [ True  True  True]
 </pre></div></div>
 </div>
@@ -505,6 +511,7 @@ system.symbols -&gt; (&#39;Ge&#39;,)
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 system.atoms -&gt;
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
       1 |       1 |   2.716 |   2.716 |   0.000
@@ -1006,6 +1013,7 @@ natoms = 8
 natypes = 1
 symbols = (&#39;Ge&#39;,)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
       1 |       1 |   2.716 |   2.716 |   0.000
@@ -1060,6 +1068,7 @@ natoms = 8
 natypes = 1
 symbols = (&#39;Ge&#39;,)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
       1 |       1 |   2.829 |   2.829 |   0.000
@@ -1122,17 +1131,18 @@ natoms = 10
 natypes = 1
 symbols = (None,)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   6.092 |   8.212 |   3.215
-      1 |       1 |   4.189 |   6.591 |   7.546
-      2 |       1 |   4.658 |   7.145 |   9.628
-      3 |       1 |   6.441 |   6.145 |   5.219
-      4 |       1 |   0.295 |   4.158 |   0.001
-      5 |       1 |   4.054 |   3.905 |   0.482
-      6 |       1 |   0.216 |   7.108 |   4.146
-      7 |       1 |   5.544 |   0.343 |   9.786
-      8 |       1 |   0.427 |   2.224 |   5.207
-      9 |       1 |   4.499 |   1.997 |   1.826
+      0 |       1 |   1.139 |   2.193 |   2.632
+      1 |       1 |   4.691 |   2.187 |   6.854
+      2 |       1 |   4.819 |   8.690 |   2.016
+      3 |       1 |   9.006 |   1.627 |   2.895
+      4 |       1 |   3.976 |   2.616 |   8.201
+      5 |       1 |   1.674 |   4.223 |   5.069
+      6 |       1 |   7.562 |   5.022 |   3.963
+      7 |       1 |   3.745 |   6.335 |   6.665
+      8 |       1 |   5.385 |   3.988 |   4.023
+      9 |       1 |   4.552 |   8.518 |   5.504
 </pre></div></div>
 </div>
 <p>Atoms are wrapped around periodic boundaries, and non-periodic
@@ -1156,24 +1166,25 @@ boundaries are extended to encompass all atoms.</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 avect =  [ 1.000,  0.000,  0.000]
-bvect =  [ 0.000,  8.213,  0.000]
+bvect =  [ 0.000,  8.691,  0.000]
 cvect =  [ 0.000,  0.000,  1.000]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 10
 natypes = 1
 symbols = (None,)
 pbc = [ True False  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.092 |   8.212 |   0.215
-      1 |       1 |   0.189 |   6.591 |   0.546
-      2 |       1 |   0.658 |   7.145 |   0.628
-      3 |       1 |   0.441 |   6.145 |   0.219
-      4 |       1 |   0.295 |   4.158 |   0.001
-      5 |       1 |   0.054 |   3.905 |   0.482
-      6 |       1 |   0.216 |   7.108 |   0.146
-      7 |       1 |   0.544 |   0.343 |   0.786
-      8 |       1 |   0.427 |   2.224 |   0.207
-      9 |       1 |   0.499 |   1.997 |   0.826
+      0 |       1 |   0.139 |   2.193 |   0.632
+      1 |       1 |   0.691 |   2.187 |   0.854
+      2 |       1 |   0.819 |   8.690 |   0.016
+      3 |       1 |   0.006 |   1.627 |   0.895
+      4 |       1 |   0.976 |   2.616 |   0.201
+      5 |       1 |   0.674 |   4.223 |   0.069
+      6 |       1 |   0.562 |   5.022 |   0.963
+      7 |       1 |   0.745 |   6.335 |   0.665
+      8 |       1 |   0.385 |   3.988 |   0.023
+      9 |       1 |   0.552 |   8.518 |   0.504
 </pre></div></div>
 </div>
 </div>
@@ -1226,23 +1237,24 @@ such, the LAMMPS command ‘box tilt large’ may be needed.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 0.460,  0.855,  0.859]
-bvect =  [ 0.867,  0.695,  0.092]
-cvect =  [ 0.766,  0.829,  0.214]
+avect =  [ 0.992,  0.431,  0.503]
+bvect =  [ 0.289,  0.384,  0.952]
+cvect =  [ 0.791,  0.717,  0.692]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 2
 natypes = 1
 symbols = (None,)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
-      1 |       1 |   1.046 |   1.190 |   0.583
-a = 1.2964904139543656
-b = 1.114761729260879
-c = 1.1488907309147527
-alpha = 10.376060409783033
-beta = 33.29408323818737
-gamma = 42.13301482917765
+      1 |       1 |   1.036 |   0.767 |   1.074
+a = 1.1932781149825238
+b = 1.066864723773684
+c = 1.2724221226317909
+alpha = 31.033161715159746
+beta = 18.186027393695426
+gamma = 42.958094635143986
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1270,26 +1282,27 @@ gamma = 42.13301482917765
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 1.296,  0.000,  0.000]
-bvect =  [ 0.827,  0.748,  0.000]
-cvect =  [ 0.960,  0.623,  0.098]
+avect =  [ 1.193,  0.000,  0.000]
+bvect =  [ 0.781,  0.727,  0.000]
+cvect =  [-1.209, -0.302,  0.258]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 2
 natypes = 1
 symbols = (None,)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.000 |   0.000 |   0.000
-      1 |       1 |   1.542 |   0.685 |   0.049
-a = 1.2964904139543656
-b = 1.114761729260879
-c = 1.1488907309147527
-alpha = 10.37606040978307
-beta = 33.29408323818737
-gamma = 42.13301482917765
+      0 |       1 |  -0.016 |  -0.302 |   0.258
+      1 |       1 |   0.383 |   0.213 |   0.129
+a = 1.1932781149825238
+b = 1.066864723773684
+c = 1.2724221226317909
+alpha = 148.96683828484026
+beta = 161.81397260630456
+gamma = 42.958094635143986
 Box relative positions:
-[[0.  0.  0. ]
- [0.5 0.5 0.5]]
+[[1.00000000e+00 5.55111512e-17 1.00000000e+00]
+ [5.00000000e-01 5.00000000e-01 5.00000000e-01]]
 </pre></div></div>
 </div>
 </div>
@@ -1349,6 +1362,7 @@ natoms = 2
 natypes = 1
 symbols = (&#39;V&#39;,)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
       1 |       1 |   1.515 |   1.515 |   1.515
@@ -1389,6 +1403,7 @@ natoms = 12
 natypes = 1
 symbols = (&#39;V&#39;,)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   6.185 |   0.875 |   2.143
       1 |       1 |   2.474 |   0.875 |   4.285
@@ -1467,6 +1482,7 @@ natoms = 96
 natypes = 1
 symbols = (&#39;V&#39;,)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   6.185 |  -9.622 |  -2.143
       1 |       1 |   2.474 |  -9.622 |  -0.000
@@ -1590,6 +1606,7 @@ of the atoms to be easily generated.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   2.474 |  -9.622 |  -0.000
       1 |       1 |   3.711 | -10.496 |  -2.143
@@ -1622,6 +1639,7 @@ natoms = 4
 natypes = 1
 symbols = (&#39;V&#39;,)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   2.474 |  -9.622 |  -0.000
       1 |       1 |   3.711 | -10.496 |  -2.143
@@ -1660,6 +1678,7 @@ natoms = 4
 natypes = 1
 symbols = (&#39;V&#39;,)
 pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   2.474 |  -9.622 |  -0.000
       1 |       1 |   2.474 |  -9.622 |  -0.000
@@ -1851,15 +1870,188 @@ np.linalg.norm(system.dvect(4, neighbors[4]), axis=1) -&gt;
 </div>
 </div>
 </div>
-<div class="section" id="7.-dump()">
-<h2>7. dump()<a class="headerlink" href="#7.-dump()" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="7.-model()-and-dump()">
+<h2>7. model() and dump()<a class="headerlink" href="#7.-model()-and-dump()" title="Permalink to this headline">¶</a></h2>
+<p><em>Added version 1.2.7</em></p>
+<p>A JSON/XML equivalent data model representation of the Systems object
+can be generated using the model() method.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><strong>box_unit</strong> (<em>str, optional</em>) Length unit to use for the box.
+Default value is ‘angstrom’.</li>
+<li><strong>symbols</strong> (<em>list, optional</em>) List of atom-model symbols
+corresponding to the atom types. If not given, will use
+system.symbols.</li>
+<li><strong>prop_name</strong> (<em>list, optional</em>) The Atoms properties to include. If
+neither prop_name nor prop_unit are given, all system properties
+will be included.</li>
+<li><strong>unit</strong> (<em>list, optional</em>) Lists the units for each prop_name as
+stored in the table. For a value of None, no conversion will be
+performed for that property. For a value of ‘scaled’, the
+corresponding table values will be taken in box-scaled units. If
+neither unit nor prop_units given, pos will be given in Angstroms
+and all other values will not be converted.</li>
+<li><strong>prop_unit</strong> (<em>dict, optional</em>) Dictionary where the keys are the
+property keys to include, and the values are units to use. If neither
+unit nor prop_units given, pos will be given in Angstroms and all
+other values will not be converted.</li>
+</ul>
+<p>Returns</p>
+<ul class="simple">
+<li>(<em>DataModelDict.DataModelDict</em>) A JSON/XML data model for the current
+Systems object.</li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#34;atomic-system&#34;: {&#34;box&#34;: {&#34;avect&#34;: {&#34;value&#34;: [14.843907841266057, 0.0, 0.0]}, &#34;bvect&#34;: {&#34;value&#34;: [0.0, 10.496227893867395, 0.0]}, &#34;cvect&#34;: {&#34;value&#34;: [0.0, 0.0, 8.570134187980956]}, &#34;origin&#34;: {&#34;value&#34;: [0.0, -10.496227893867395, -4.285067093990478]}}, &#34;periodic-boundary-condition&#34;: [true, true, true], &#34;atom-type-symbol&#34;: &#34;V&#34;, &#34;atoms&#34;: {&#34;natoms&#34;: 96, &#34;property&#34;: [{&#34;name&#34;: &#34;atype&#34;, &#34;data&#34;: {&#34;value&#34;: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}}, {&#34;name&#34;: &#34;pos&#34;, &#34;data&#34;: {&#34;value&#34;: [6.184961600527525, -9.621542236045112, -2.1425335469952396, 2.473984640211009, -9.621542236045114, -8.881784197001252e-16, 3.7109769603165144, -10.496227893867395, -2.1425335469952396, 3.7109769603165144, -7.872170920400547, -2.142533546995239, 4.947969280422018, -8.746856578222829, -8.881784197001252e-16, 4.9479692804220194, -6.12279960475598, -8.881784197001252e-16, 6.184961600527524, -6.9974852625782615, -2.142533546995239, 0.0, -10.496227893867395, -4.285067093990478, 7.421953920633027, -7.872170920400547, -8.881784197001252e-16, 1.2369923201055044, -8.746856578222829, -2.1425335469952396, 1.2369923201055035, -6.12279960475598, -2.142533546995239, 2.473984640211009, -6.997485262578263, 0.0, 13.606915521160554, -9.621542236045112, -2.1425335469952396, 9.895938560844037, -9.621542236045114, -8.881784197001252e-16, 11.132930880949543, -10.496227893867395, -2.1425335469952396, 11.132930880949543, -7.872170920400547, -2.142533546995239, 12.369923201055046, -8.746856578222829, -8.881784197001252e-16, 12.369923201055048, -6.12279960475598, -8.881784197001252e-16, 13.606915521160554, -6.9974852625782615, -2.142533546995239, 7.421953920633029, -10.496227893867395, -4.285067093990478, 14.843907841266056, -7.872170920400547, -8.881784197001252e-16, 8.658946240738532, -8.746856578222829, -2.1425335469952396, 8.658946240738532, -6.12279960475598, -2.142533546995239, 9.895938560844037, -6.997485262578263, 0.0, 6.184961600527525, -4.373428289111415, -2.1425335469952396, 2.473984640211009, -4.373428289111415, -8.881784197001252e-16, 3.7109769603165144, -5.248113946933698, -2.1425335469952396, 3.7109769603165144, -2.624056973466849, -2.142533546995239, 4.947969280422018, -3.498742631289132, -8.881784197001252e-16, 4.9479692804220194, -0.8746856578222815, -8.881784197001252e-16, 6.184961600527524, -1.7493713156445647, -2.142533546995239, 0.0, -5.248113946933698, -4.285067093990478, 7.421953920633027, -2.624056973466849, -8.881784197001252e-16, 1.2369923201055044, -3.498742631289131, -2.1425335469952396, 1.2369923201055035, -0.8746856578222815, -2.142533546995239, 2.473984640211009, -1.7493713156445647, 0.0, 13.606915521160554, -4.373428289111415, -2.1425335469952396, 9.895938560844037, -4.373428289111415, -8.881784197001252e-16, 11.132930880949543, -5.248113946933698, -2.1425335469952396, 11.132930880949543, -2.624056973466849, -2.142533546995239, 12.369923201055046, -3.498742631289132, -8.881784197001252e-16, 12.369923201055048, -0.8746856578222815, -8.881784197001252e-16, 13.606915521160554, -1.7493713156445647, -2.142533546995239, 7.421953920633029, -5.248113946933698, -4.285067093990478, 14.843907841266056, -2.624056973466849, -8.881784197001252e-16, 8.658946240738532, -3.498742631289131, -2.1425335469952396, 8.658946240738532, -0.8746856578222815, -2.142533546995239, 9.895938560844037, -1.7493713156445647, 0.0, 6.184961600527525, -9.621542236045112, 2.1425335469952396, 2.473984640211009, -9.621542236045114, 4.2850670939904765, 3.7109769603165144, -10.496227893867395, 2.1425335469952396, 3.7109769603165144, -7.872170920400547, 2.1425335469952396, 4.947969280422018, -8.746856578222829, 4.2850670939904765, 4.9479692804220194, -6.12279960475598, 4.2850670939904765, 6.184961600527524, -6.9974852625782615, 2.1425335469952396, 0.0, -10.496227893867395, 0.0, 7.421953920633027, -7.872170920400547, 4.2850670939904765, 1.2369923201055044, -8.746856578222829, 2.1425335469952396, 1.2369923201055035, -6.12279960475598, 2.1425335469952396, 2.473984640211009, -6.997485262578263, 4.285067093990478, 13.606915521160554, -9.621542236045112, 2.1425335469952396, 9.895938560844037, -9.621542236045114, 4.2850670939904765, 11.132930880949543, -10.496227893867395, 2.1425335469952396, 11.132930880949543, -7.872170920400547, 2.1425335469952396, 12.369923201055046, -8.746856578222829, 4.2850670939904765, 12.369923201055048, -6.12279960475598, 4.2850670939904765, 13.606915521160554, -6.9974852625782615, 2.1425335469952396, 7.421953920633029, -10.496227893867395, 0.0, 14.843907841266056, -7.872170920400547, 4.2850670939904765, 8.658946240738532, -8.746856578222829, 2.1425335469952396, 8.658946240738532, -6.12279960475598, 2.1425335469952396, 9.895938560844037, -6.997485262578263, 4.285067093990478, 6.184961600527525, -4.373428289111415, 2.1425335469952396, 2.473984640211009, -4.373428289111415, 4.2850670939904765, 3.7109769603165144, -5.248113946933698, 2.1425335469952396, 3.7109769603165144, -2.624056973466849, 2.1425335469952396, 4.947969280422018, -3.498742631289132, 4.2850670939904765, 4.9479692804220194, -0.8746856578222815, 4.2850670939904765, 6.184961600527524, -1.7493713156445647, 2.1425335469952396, 0.0, -5.248113946933698, 0.0, 7.421953920633027, -2.624056973466849, 4.2850670939904765, 1.2369923201055044, -3.498742631289131, 2.1425335469952396, 1.2369923201055035, -0.8746856578222815, 2.1425335469952396, 2.473984640211009, -1.7493713156445647, 4.285067093990478, 13.606915521160554, -4.373428289111415, 2.1425335469952396, 9.895938560844037, -4.373428289111415, 4.2850670939904765, 11.132930880949543, -5.248113946933698, 2.1425335469952396, 11.132930880949543, -2.624056973466849, 2.1425335469952396, 12.369923201055046, -3.498742631289132, 4.2850670939904765, 12.369923201055048, -0.8746856578222815, 4.2850670939904765, 13.606915521160554, -1.7493713156445647, 2.1425335469952396, 7.421953920633029, -5.248113946933698, 0.0, 14.843907841266056, -2.624056973466849, 4.2850670939904765, 8.658946240738532, -3.498742631289131, 2.1425335469952396, 8.658946240738532, -0.8746856578222815, 2.1425335469952396, 9.895938560844037, -1.7493713156445647, 4.285067093990478], &#34;shape&#34;: [96, 3], &#34;unit&#34;: &#34;angstrom&#34;}}]}}}
+</pre></div></div>
+</div>
+<p>Any stored model information can then be reloaded in as a new System
+object by passing the ‘model’ parameter to the class initializer.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [14.844,  0.000,  0.000]
+bvect =  [ 0.000, 10.496,  0.000]
+cvect =  [ 0.000,  0.000,  8.570]
+origin = [ 0.000, -10.496, -4.285]
+natoms = 96
+natypes = 1
+symbols = (&#39;V&#39;,)
+pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   6.185 |  -9.622 |  -2.143
+      1 |       1 |   2.474 |  -9.622 |  -0.000
+      2 |       1 |   3.711 | -10.496 |  -2.143
+      3 |       1 |   3.711 |  -7.872 |  -2.143
+      4 |       1 |   4.948 |  -8.747 |  -0.000
+      5 |       1 |   4.948 |  -6.123 |  -0.000
+      6 |       1 |   6.185 |  -6.997 |  -2.143
+      7 |       1 |   0.000 | -10.496 |  -4.285
+      8 |       1 |   7.422 |  -7.872 |  -0.000
+      9 |       1 |   1.237 |  -8.747 |  -2.143
+     10 |       1 |   1.237 |  -6.123 |  -2.143
+     11 |       1 |   2.474 |  -6.997 |   0.000
+     12 |       1 |  13.607 |  -9.622 |  -2.143
+     13 |       1 |   9.896 |  -9.622 |  -0.000
+     14 |       1 |  11.133 | -10.496 |  -2.143
+     15 |       1 |  11.133 |  -7.872 |  -2.143
+     16 |       1 |  12.370 |  -8.747 |  -0.000
+     17 |       1 |  12.370 |  -6.123 |  -0.000
+     18 |       1 |  13.607 |  -6.997 |  -2.143
+     19 |       1 |   7.422 | -10.496 |  -4.285
+     20 |       1 |  14.844 |  -7.872 |  -0.000
+     21 |       1 |   8.659 |  -8.747 |  -2.143
+     22 |       1 |   8.659 |  -6.123 |  -2.143
+     23 |       1 |   9.896 |  -6.997 |   0.000
+     24 |       1 |   6.185 |  -4.373 |  -2.143
+     25 |       1 |   2.474 |  -4.373 |  -0.000
+     26 |       1 |   3.711 |  -5.248 |  -2.143
+     27 |       1 |   3.711 |  -2.624 |  -2.143
+     28 |       1 |   4.948 |  -3.499 |  -0.000
+     29 |       1 |   4.948 |  -0.875 |  -0.000
+     30 |       1 |   6.185 |  -1.749 |  -2.143
+     31 |       1 |   0.000 |  -5.248 |  -4.285
+     32 |       1 |   7.422 |  -2.624 |  -0.000
+     33 |       1 |   1.237 |  -3.499 |  -2.143
+     34 |       1 |   1.237 |  -0.875 |  -2.143
+     35 |       1 |   2.474 |  -1.749 |   0.000
+     36 |       1 |  13.607 |  -4.373 |  -2.143
+     37 |       1 |   9.896 |  -4.373 |  -0.000
+     38 |       1 |  11.133 |  -5.248 |  -2.143
+     39 |       1 |  11.133 |  -2.624 |  -2.143
+     40 |       1 |  12.370 |  -3.499 |  -0.000
+     41 |       1 |  12.370 |  -0.875 |  -0.000
+     42 |       1 |  13.607 |  -1.749 |  -2.143
+     43 |       1 |   7.422 |  -5.248 |  -4.285
+     44 |       1 |  14.844 |  -2.624 |  -0.000
+     45 |       1 |   8.659 |  -3.499 |  -2.143
+     46 |       1 |   8.659 |  -0.875 |  -2.143
+     47 |       1 |   9.896 |  -1.749 |   0.000
+     48 |       1 |   6.185 |  -9.622 |   2.143
+     49 |       1 |   2.474 |  -9.622 |   4.285
+     50 |       1 |   3.711 | -10.496 |   2.143
+     51 |       1 |   3.711 |  -7.872 |   2.143
+     52 |       1 |   4.948 |  -8.747 |   4.285
+     53 |       1 |   4.948 |  -6.123 |   4.285
+     54 |       1 |   6.185 |  -6.997 |   2.143
+     55 |       1 |   0.000 | -10.496 |   0.000
+     56 |       1 |   7.422 |  -7.872 |   4.285
+     57 |       1 |   1.237 |  -8.747 |   2.143
+     58 |       1 |   1.237 |  -6.123 |   2.143
+     59 |       1 |   2.474 |  -6.997 |   4.285
+     60 |       1 |  13.607 |  -9.622 |   2.143
+     61 |       1 |   9.896 |  -9.622 |   4.285
+     62 |       1 |  11.133 | -10.496 |   2.143
+     63 |       1 |  11.133 |  -7.872 |   2.143
+     64 |       1 |  12.370 |  -8.747 |   4.285
+     65 |       1 |  12.370 |  -6.123 |   4.285
+     66 |       1 |  13.607 |  -6.997 |   2.143
+     67 |       1 |   7.422 | -10.496 |   0.000
+     68 |       1 |  14.844 |  -7.872 |   4.285
+     69 |       1 |   8.659 |  -8.747 |   2.143
+     70 |       1 |   8.659 |  -6.123 |   2.143
+     71 |       1 |   9.896 |  -6.997 |   4.285
+     72 |       1 |   6.185 |  -4.373 |   2.143
+     73 |       1 |   2.474 |  -4.373 |   4.285
+     74 |       1 |   3.711 |  -5.248 |   2.143
+     75 |       1 |   3.711 |  -2.624 |   2.143
+     76 |       1 |   4.948 |  -3.499 |   4.285
+     77 |       1 |   4.948 |  -0.875 |   4.285
+     78 |       1 |   6.185 |  -1.749 |   2.143
+     79 |       1 |   0.000 |  -5.248 |   0.000
+     80 |       1 |   7.422 |  -2.624 |   4.285
+     81 |       1 |   1.237 |  -3.499 |   2.143
+     82 |       1 |   1.237 |  -0.875 |   2.143
+     83 |       1 |   2.474 |  -1.749 |   4.285
+     84 |       1 |  13.607 |  -4.373 |   2.143
+     85 |       1 |   9.896 |  -4.373 |   4.285
+     86 |       1 |  11.133 |  -5.248 |   2.143
+     87 |       1 |  11.133 |  -2.624 |   2.143
+     88 |       1 |  12.370 |  -3.499 |   4.285
+     89 |       1 |  12.370 |  -0.875 |   4.285
+     90 |       1 |  13.607 |  -1.749 |   2.143
+     91 |       1 |   7.422 |  -5.248 |   0.000
+     92 |       1 |  14.844 |  -2.624 |   4.285
+     93 |       1 |   8.659 |  -3.499 |   2.143
+     94 |       1 |   8.659 |  -0.875 |   2.143
+     95 |       1 |   9.896 |  -1.749 |   4.285
+</pre></div></div>
+</div>
 <p>The system can also be exported to a number of other formats using the
 dump() method.</p>
 <p>See the <a class="reference external" href="02._Load_And_Dump.html">02. Load And Dump Jupyter Notebook</a>
 for more detailed information on the different styles and options.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [31]:
+<span></span>In [33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -2020,7 +2212,7 @@ direct
 <li><a class="reference internal" href="#6.2-neighborlist()">6.2 neighborlist()</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#7.-dump()">7. dump()</a></li>
+<li><a class="reference internal" href="#7.-model()-and-dump()">7. model() and dump()</a></li>
 </ul>
 </li>
 </ul>
@@ -2050,7 +2242,7 @@ direct
         <li class="right" >
           <a href="01.2._Atoms_class.html" title="Introduction to atomman: Atoms class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
