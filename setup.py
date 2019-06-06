@@ -55,7 +55,7 @@ setup(name = 'atomman',
       install_requires = [
         'xmltodict',
         'DataModelDict',
-        'numpy', 
+        'numpy>=1.15', 
         'matplotlib',
         'scipy',
         'pandas',
