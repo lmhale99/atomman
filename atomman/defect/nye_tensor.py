@@ -143,7 +143,7 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbors=None,
             G[i] = np.identity(3)
             warnings.warn('An atom lacks pair sets. Check neighbor list')
         else:
-            G[i], resid, rank, s = np.linalg.lstsq(Q[:c], P[:c])
+            G[i], resid, rank, s = np.linalg.lstsq(Q[:c], P[:c], rcond=None)
         
         # Compute strain properties from G
         strain[i] = ((np.identity(3) - G[i]) + (np.identity(3) - G[i]).T) / 2.
@@ -163,7 +163,7 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbors=None,
             Q = np.array([Q])
         dG = G[neighbors[i]] - G[i]
         for x in range(3):
-            gradG[x,:] = np.linalg.lstsq(Q, dG[:,x,:])[0].T
+            gradG[x,:] = np.linalg.lstsq(Q, dG[:,x,:], rcond=None)[0].T
         
         # Use gradG to calculate the nye tensor
         nye[i] = -np.einsum('ijm,ikm->jk', eps, gradG)

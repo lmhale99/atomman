@@ -53,12 +53,8 @@ def dump(system, f=None, box_unit=None, prop_name=None, unit=None,
 
     Returns
     -------
-    DataModelDict.DataModelDict
-        A JSON/XML data model for the current System object.  Returned if
-        f, format and indent are all not given.
-    str
-        A JSON/XML string data model for the current System object. Returned
-        if format is given and f is not.
+    model : DataModelDict.DataModelDict or str
+        A JSON/XML data model for the current System object.  Returned if f is not given.
     """
         
     # Generate model for system

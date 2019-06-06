@@ -97,7 +97,7 @@ class System(object):
             if pbc is None:
                 pbc = model['periodic-boundary-condition']
             if symbols is None:
-                symbols = model['atom-type-symbol']
+                symbols = tuple(model.aslist('atom-type-symbol'))
 
         else:
             # Set default values
