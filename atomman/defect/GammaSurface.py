@@ -23,6 +23,7 @@ from DataModelDict import DataModelDict as DM
 from .. import Box
 from .. import unitconvert as uc
 from ..compatibility import stringtype
+from ..tools import miller
 
 class GammaSurface(object):
     """
@@ -177,7 +178,9 @@ class GammaSurface(object):
         if isinstance(a1vect, stringtype):
             a1vect = a1vect.split()
         a1vect = np.asarray(a1vect, dtype=float)
-        if a1vect.shape != (3,):
+        if a1vect.shape == (4,):
+            a1vect = miller.vector4to3(a1vect)
+        elif a1vect.shape != (3,):
             raise ValueError('a1vect must be a 3D vector')
         self.__a1vect = a1vect
 
@@ -185,7 +188,9 @@ class GammaSurface(object):
         if isinstance(a2vect, stringtype):
             a2vect = a2vect.split()
         a2vect = np.asarray(a2vect, dtype=float)
-        if a2vect.shape != (3,):
+        if a2vect.shape == (4,):
+            a2vect = miller.vector4to3(a2vect)
+        elif a2vect.shape != (3,):
             raise ValueError('a2vect must be a 3D vector')
         self.__a2vect = a2vect
 
