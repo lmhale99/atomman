@@ -60,7 +60,8 @@ setup(name = 'atomman',
         'scipy',
         'pandas',
         'cython',
-        'numericalunits'
+        'numericalunits',
+        'toolz'
       ],
       include_package_data = True,
       zip_safe = False)
