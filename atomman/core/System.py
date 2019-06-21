@@ -44,16 +44,10 @@ class System(object):
             if isinstance(value, Atoms):
                 host.atoms[index] = value
             elif isinstance(value, System):
-                try:
-                    assert np.allclose(host.box.vects, value.box.vects)
-                    assert np.all(host.pbc == value.pbc)
-                    assert np.all(host.symbols == value.symbols)
-                except:
-                    raise ValueError('System properties not compatible')
                 host.atoms[index] = value.atoms
             else:
                 raise ValueError('Can only set using Atoms or System objects')
-
+    
     def __init__(self, atoms=None, box=None, pbc=None,
                  scale=False, symbols=None, model=None):
         """
@@ -203,7 +197,7 @@ class System(object):
         if len(self.__symbols) != self.natypes:
             symbols = [None for x in range(self.natypes)]
             for i in range(len(self.__symbols)):
-                symbols[i] = self.__symbols
+                symbols[i] = self.__symbols[i]
             self.__symbols = tuple(symbols)
         
         return self.__symbols
