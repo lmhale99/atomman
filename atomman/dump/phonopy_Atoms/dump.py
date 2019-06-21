@@ -7,11 +7,11 @@ import numpy as np
 
 # https://atztogo.github.io/phonopy/
 try:
-    import phonpy
+    import phonopy
     from phonopy.structure.atoms import PhonopyAtoms
-    has_phonpy = True
+    has_phonopy = True
 except:
-    has_phonpy = False
+    has_phonopy = False
 
 def dump(system, symbols=None, return_prop=False):
     """
@@ -37,7 +37,7 @@ def dump(system, symbols=None, return_prop=False):
         Returned if return_prop is True.
     """
     
-    assert has_phonpy, 'phonopy not imported'
+    assert has_phonopy, 'phonopy not imported'
     
     # Get box/cell information
     cell = system.box.vects
@@ -52,7 +52,7 @@ def dump(system, symbols=None, return_prop=False):
     
     # Convert short symbols list to full allsymbols list
     atype = system.atoms.atype
-    allsymbols = symbols[atype-1]
+    allsymbols = symbols[atype-1].tolist()
     
     # Get atomic information
     positions = system.atoms.pos

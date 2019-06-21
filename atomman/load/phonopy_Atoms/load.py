@@ -40,7 +40,7 @@ def load(phonopyatoms, symbols=None, prop={}):
     
     # Get box/cell information
     box = Box(vects = phonopyatoms.get_cell())
-    pbc = phonopyatoms.get_pbc()
+    pbc = (True, True, True)
     
     # Get element information
     all_elements = np.array(phonopyatoms.get_chemical_symbols())
