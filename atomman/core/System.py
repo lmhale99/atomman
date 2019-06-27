@@ -48,8 +48,8 @@ class System(object):
             else:
                 raise ValueError('Can only set using Atoms or System objects')
     
-    def __init__(self, atoms=None, box=None, pbc=None,
-                 scale=False, symbols=None, model=None):
+    def __init__(self, atoms=None, box=None, pbc=None, scale=False,
+                 symbols=None, model=None, safecopy=False):
         """
         Initialize a System by joining an am.Atoms and am.Box instance.
         
@@ -72,6 +72,18 @@ class System(object):
         model : str or DataModelDict, optional
             File path or content of a JSON/XML data model containing all
             system information.  Cannot be given with atoms, box or scale.
+        safecopy : bool, optional
+            Flag indicating if values are to be copied before setting.  For
+            values given as objects, direct setting (False, default) may result
+            in the System pointing to the original object.  Using safecopy=True
+            deep copies the objects before setting to avoid this.  Note that
+            safecopy=True may be considerably slower for large numbers of atoms
+            and/or properties.
+        
+        Returns
+        =======
+        System
+            The System object.
         """
         # Check for model
         if model is not None:
@@ -94,16 +106,20 @@ class System(object):
                 symbols = tuple(model.aslist('atom-type-symbol'))
 
         else:
-            # Set default values
+            # Set default values and handle safecopy
             if atoms is None:
                 atoms = Atoms()
+            elif safecopy:
+                atoms = deepcopy(atoms)
             if box is None:
                 box = Box()
+            elif safecopy:
+                box = deepcopy(box)
             if pbc is None:
-                pbc= (True, True, True)
+                pbc=(True, True, True)
             if symbols is None:
                 symbols=()
-
+            
             # Check data types
             if not isinstance(atoms, Atoms):
                 raise TypeError('Invalid atoms type')
@@ -126,13 +142,13 @@ class System(object):
         # Scale pos if needed
         if scale is True:
             self.atoms_prop('pos', value=atoms.pos, scale=True)
-
+        
         # Scale model properties if needed
         if model is not None:
             for prop in model['atoms'].aslist('property'):
                 if prop['data'].get('unit', None) == 'scaled':
                     self.atoms.view[prop['name']] = self.unscale(self.atoms.view[prop['name']]) 
-
+        
         # Set atoms indexer
         self.__atoms_ix = System._AtomsIndexer(self)
     
@@ -343,6 +359,74 @@ class System(object):
         
         # Return DataFrame
         return pd.DataFrame(values)
+    
+    def atoms_extend(self, value, scale=False, symbols=None, safecopy=False):
+        """
+        Extends Atoms.extend() to the System level by taking/returning System
+        objects, and adding scale and symbols arguments.
+        
+        Parameters
+        ----------
+        value : atomman.Atoms, atomman.System or int
+            An int value will result in the atoms object being extended by
+            that number of atoms, with all per-atom properties having default
+            values (atype = 1, everything else = 0).  For an Atoms value, the
+            current atoms list will be extended by the correct number of atoms
+            and all per-atom properties in value will be copied over.  Any
+            properties defined in one Atoms object and not the other will be
+            set to default values.  For a System value, only the System's Atoms
+            will be used, i.e. value's box, pbc, and symbols will be ignored.
+        scale : bool, optional
+            Flag indicating if position values in a supplied Atoms value are to
+            be taken as absolute Cartesian (False, default) or in scaled box
+            relative units (True).
+        symbols : tuple, list or None, optional
+            Allows for the system's symbols list to be updated.  If not given,
+            will use the current object's symbols.
+        safecopy : bool, optional
+            Flag indicating if values are to be copied before setting.  If 
+            False (default), underlying objects may be shared between the new
+            system and the current system and input parameters.  If True, atoms
+            and box will be deepcopied before setting.
+            Note that safecopy=True may be considerably slower for large
+            numbers of atoms and/or properties.
+        
+        Returns
+        -------
+        atomman.System
+            A new System object with Atoms extended to contain all atoms and
+            properties of the current object plus the additional atoms.  The
+            cuurent System object's box and pbc (and symbols if not specified)
+            will be copied over.
+        """
+        # Copy value if safecopy
+        if safecopy:
+            value = deepcopy(value)
+        
+        # Extract Atoms object from System value
+        if isinstance(value, System):
+            value = value.atoms
+        # Unscale pos from Atoms value if needed
+        elif isinstance(value, Atoms) and scale is True:
+            value.pos = self.unscale(value.pos)
+        elif not isinstance(value, int) and not isinstance(value, Atoms):
+            raise TypeError('can only add System, Atoms or an int # of atoms')
+        
+        # Handle symbols parameter
+        if symbols is None:
+            symbols = self.symbols
+        
+        # Handle box
+        if safecopy:
+            box = deepcopy(self.box)
+        else:
+            box = self.box
+        
+        # Call atoms.extend to generate new atoms
+        atoms = self.atoms.extend(value)
+        
+        # Generate and return new System
+        return System(atoms=atoms, box=box, pbc=self.pbc, symbols=symbols)
     
     def box_set(self, **kwargs):
         """

@@ -58,7 +58,7 @@ class Atoms(object):
             
             # Convert to numpy.ndarray if needed
             value = np.asarray(value)
-
+            
             # Broadcast if needed and allowed
             if value.shape == ():
                 value = np.array(np.broadcast_to(value, (host.natoms,) + value.shape))
@@ -66,7 +66,7 @@ class Atoms(object):
                 value = np.array(np.broadcast_to(value, (host.natoms,) + value.shape[1:]))
             elif value.shape[0] != host.natoms:
                 raise ValueError('First dimension of value must be 1 or natoms')
-
+            
             # If key is already assigned, save value over existing values
             if key in self.keys():
                 self[key][:] = value
@@ -80,7 +80,8 @@ class Atoms(object):
                 except:
                     pass
     
-    def __init__(self, natoms=None, atype=None, pos=None, prop=None, model=None, **kwargs):
+    def __init__(self, natoms=None, atype=None, pos=None, prop=None, model=None, 
+                 safecopy=False, **kwargs):
         """
         Class initializer.
         
@@ -102,9 +103,16 @@ class Atoms(object):
             Dictionary containing all per-atom properties.  Can be used
             instead of atype, pos, and kwargs.  This is for backwards
             compatibility support with atomman version 1.
+        safecopy : bool, optional
+            Flag indicating if values are to be copied before setting.  For
+            property values given as numpy arrays, direct setting (False,
+            default) may result in the Atoms' property pointing to the original
+            numpy array.  Using safecopy=True deep copies the property values
+            before setting to avoid this.  Note that safecopy=True may be
+            considerably slower for large numbers of atoms and/or properties.
         kwargs : any
             All additional key/value pairs are assigned as properties.
-            
+        
         Returns
         =======
         Atoms
@@ -128,7 +136,7 @@ class Atoms(object):
             prop = OrderedDict()
             for propmodel in model.aslist('property'):
                 prop[propmodel['name']] = uc.value_unit(propmodel['data'])
-
+        
         # Check for prop dictionary
         if prop is not None:
             if atype is not None and pos is not None and len(kwargs) > 0:
@@ -202,18 +210,22 @@ class Atoms(object):
         super(Atoms, self).__setattr__('_Atoms__view', Atoms.PropertyDict(self))
         super(Atoms, self).__setattr__('_Atoms__dir', deepcopy(dir(self)))
         
-        # Set mandatory properties
-        self.view['atype'] = atype
-        self.view['pos'] = pos
-        
-        # Set extra properties
-        for key, value in iteritems(kwargs):
-            self.view[key] = value
+        # Set properties
+        if safecopy:
+            self.view['atype'] = deepcopy(atype)
+            self.view['pos'] = deepcopy(pos)
+            for key, value in iteritems(kwargs):
+                self.view[key] = deepcopy(value)
+        else:
+            self.view['atype'] = atype
+            self.view['pos'] = pos
+            for key, value in iteritems(kwargs):
+                self.view[key] = value
     
     def model(self, prop_name=None, unit=None, prop_unit=None):
         """
         Generates a data model for the Atoms object.
-
+        
         Parameters
         ----------
         prop_name : list, optional
@@ -248,10 +260,10 @@ class Atoms(object):
             prop_unit = {}
             for p, u  in zip(prop_name, unit):
                 prop_unit[p] = u
-
+        
         elif prop_name is not None or unit is not None:
             raise ValueError('prop_unit cannot be given with prop_name or unit')
-
+        
         # Set default pos unit
         if 'pos' in prop_unit and prop_unit['pos'] is None:
             prop_unit['pos'] = 'angstrom'
@@ -424,7 +436,7 @@ class Atoms(object):
                     self.view[key] = deepcopy(value)
                 else:
                     self.view[key][index] = value
-
+    
     def prop_atype(self, key, value, atype=None):
         """
         Allows for per-atom properties to be assigned according to
@@ -461,7 +473,7 @@ class Atoms(object):
                 self.view[key][self.atype==atype] = value
             else:
                 raise ValueError('atype not found')
-
+    
     def df(self):
         """
         Returns a pandas.DataFrame of all atomic properties.  Multi-dimensional
@@ -484,3 +496,66 @@ class Atoms(object):
         
         # Return DataFrame
         return pd.DataFrame(values)
+    
+    def extend(self, value, safecopy=False):
+        """
+        Allows additional atoms to be added to the end of the atoms list.
+        
+        Parameters
+        ----------
+        value : atomman.Atoms or int
+            An int value will result in the atoms object being extended by
+            that number of atoms, with all per-atom properties having default
+            values (atype = 1, everything else = 0).  For an Atoms value, the
+            current atoms list will be extended by the correct number of atoms
+            and all per-atom properties in value will be copied over.  Any
+            properties defined in one Atoms object and not the other will be
+            set to default values.
+        safecopy : bool, optional
+            Flag indicating if values are to be copied before setting.  If 
+            False (default) and value is an Atoms object, the set properties
+            of atoms may be changed.  If True, an atoms value object will be
+            deepcopied before setting.
+            Note that safecopy=True may be considerably slower for large
+            numbers of atoms and/or properties.
+        
+        Returns
+        -------
+        atomman.Atoms
+            A new Atoms object containing all atoms and properties of the
+            current object plus the additional atoms.
+        """
+        
+        # Generate empty atoms of len int
+        if isinstance(value, int):
+            natoms = value
+            atoms = Atoms(natoms=natoms)
+        
+        # Extract/copy atoms
+        elif isinstance(value, Atoms):
+            natoms = value.natoms
+            atoms = value
+            if safecopy:
+                atoms = deepcopy(atoms)
+        
+        else:
+            raise TypeError('can only add Atoms or an int # of atoms')
+        
+        # Create empty values for self.props not in atoms
+        for prop in self.prop():
+            if prop not in atoms.prop():
+                atoms.view[prop] = np.zeros((natoms, ) + self.view[prop][0].shape)
+        
+        # Generate newatoms by copying values of self + extra copies to replace
+        index = list(range(self.natoms)) + [0 for i in range(natoms)]
+        newatoms = self[index]
+        
+        # Create empty values for atoms.props not in newatoms (self)
+        for prop in atoms.prop():
+            if prop not in newatoms.prop():
+                newatoms.view[prop] = np.zeros((newatoms.natoms, ) + atoms.view[prop][0].shape)
+        
+        # Copy values in atoms to newatoms
+        newatoms[self.natoms:] = atoms
+        
+        return newatoms
