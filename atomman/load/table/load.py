@@ -16,7 +16,7 @@ from ...tools import uber_open_rmode
 
 def load(table, box, symbols=None, system=None, prop_name=None, table_name=None,
          shape=None, unit=None, dtype=None, prop_info=None, skiprows=None,
-         nrows=None, comment=None):
+         usecols=None, nrows=None, comment=None):
     """
     Reads in tabular data into atomic properties.
     
@@ -57,6 +57,9 @@ def load(table, box, symbols=None, system=None, prop_name=None, table_name=None,
         'table_name', 'shape', 'unit', and 'dtype' fields.
     skiprows : int, optional
         Number of rows to skip before reading the data.
+    usecols : int, optional
+        Which columns are to be used. Will be passed to pandas.read_csv() usecols
+        option.
     nrows : int, optional
         Number of rows of data to read.
     comment : str, optional
@@ -80,7 +83,7 @@ def load(table, box, symbols=None, system=None, prop_name=None, table_name=None,
     
     # Read in table to dataframe
     with uber_open_rmode(table) as f:
-        df = pd.read_csv(f, delim_whitespace=True, names=table_name, skiprows=skiprows,
+        df = pd.read_csv(f, delim_whitespace=True, usecols=usecols, names=table_name, skiprows=skiprows,
                          nrows=nrows, comment=comment)
     if 'id' in df:
         df = df.sort_values('id')
