@@ -497,7 +497,7 @@ class Atoms(object):
         # Return DataFrame
         return pd.DataFrame(values)
     
-    def extend(self, value, safecopy=False):
+    def extend(self, value):
         """
         Allows additional atoms to be added to the end of the atoms list.
         
