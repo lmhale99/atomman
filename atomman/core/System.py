@@ -403,14 +403,16 @@ class System(object):
         if safecopy:
             value = deepcopy(value)
         
+        # scale only makes sense for Atoms values
+        if scale is True and not isinstance(value, Atoms):
+            raise ValueError('scale can only be True for Atoms values')
+
         # Extract Atoms object from System value
         if isinstance(value, System):
             value = value.atoms
-        # Unscale pos from Atoms value if needed
-        elif isinstance(value, Atoms) and scale is True:
-            value.pos = self.unscale(value.pos)
         elif not isinstance(value, int) and not isinstance(value, Atoms):
             raise TypeError('can only add System, Atoms or an int # of atoms')
+        
         
         # Handle symbols parameter
         if symbols is None:
@@ -425,6 +427,10 @@ class System(object):
         # Call atoms.extend to generate new atoms
         atoms = self.atoms.extend(value)
         
+        # Unscale pos from Atoms value if needed
+        if scale:
+            atoms.pos[value.natoms:] = self.unscale(value.pos)
+
         # Generate and return new System
         return System(atoms=atoms, box=box, pbc=self.pbc, symbols=symbols)
     

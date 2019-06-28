@@ -511,13 +511,6 @@ class Atoms(object):
             and all per-atom properties in value will be copied over.  Any
             properties defined in one Atoms object and not the other will be
             set to default values.
-        safecopy : bool, optional
-            Flag indicating if values are to be copied before setting.  If 
-            False (default) and value is an Atoms object, the set properties
-            of atoms may be changed.  If True, an atoms value object will be
-            deepcopied before setting.
-            Note that safecopy=True may be considerably slower for large
-            numbers of atoms and/or properties.
         
         Returns
         -------
@@ -526,36 +519,30 @@ class Atoms(object):
             current object plus the additional atoms.
         """
         
-        # Generate empty atoms of len int
-        if isinstance(value, int):
+        # Handle different value types
+        if isinstance(value, inttype):
             natoms = value
             atoms = Atoms(natoms=natoms)
-        
-        # Extract/copy atoms
         elif isinstance(value, Atoms):
             natoms = value.natoms
-            atoms = value
-            if safecopy:
-                atoms = deepcopy(atoms)
-        
+            atoms = value        
         else:
             raise TypeError('can only add Atoms or an int # of atoms')
         
-        # Create empty values for self.props not in atoms
-        for prop in self.prop():
-            if prop not in atoms.prop():
-                atoms.view[prop] = np.zeros((natoms, ) + self.view[prop][0].shape)
-        
-        # Generate newatoms by copying values of self + extra copies to replace
+        # Generate newatoms by copying values of self + natoms extras
         index = list(range(self.natoms)) + [0 for i in range(natoms)]
         newatoms = self[index]
         
         # Create empty values for atoms.props not in newatoms (self)
         for prop in atoms.prop():
             if prop not in newatoms.prop():
-                newatoms.view[prop] = np.zeros((newatoms.natoms, ) + atoms.view[prop][0].shape)
+                newatoms.view[prop] = np.zeros((newatoms.natoms, ) + atoms.view[prop][0].shape, dtype=atoms.view[prop][0].dtype)
         
-        # Copy values in atoms to newatoms
-        newatoms[self.natoms:] = atoms
+        # Copy values to the extra atoms in newatoms
+        for prop in newatoms.prop():
+            if prop in atoms.prop():
+                newatoms.view[prop][self.natoms:] = atoms.view[prop]
+            else:
+                newatoms.view[prop][self.natoms:] = np.zeros((natoms, ) + self.view[prop][0].shape, dtype=self.view[prop][0].dtype)
         
         return newatoms
