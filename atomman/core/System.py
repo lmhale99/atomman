@@ -3,6 +3,8 @@ from __future__ import (absolute_import, print_function,
                         division, unicode_literals)
 from collections import OrderedDict
 from copy import deepcopy
+import warnings
+
 
 # http://www.numpy.org/
 import numpy as np
@@ -44,6 +46,11 @@ class System(object):
             if isinstance(value, Atoms):
                 host.atoms[index] = value
             elif isinstance(value, System):
+                try:
+                    assert np.allclose(host.box.vects, value.box.vects)
+                    assert np.allclose(host.box.origin, value.box.origin)
+                except:
+                    warnings.warn('Atom assignment between two Systems with different boxes', UserWarning)
                 host.atoms[index] = value.atoms
             else:
                 raise ValueError('Can only set using Atoms or System objects')
