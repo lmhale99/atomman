@@ -362,8 +362,8 @@ class System(object):
     
     def atoms_extend(self, value, scale=False, symbols=None, safecopy=False):
         """
-        Extends Atoms.extend() to the System level by taking/returning System
-        objects, and adding scale and symbols arguments.
+        Extends Atoms.extend() to the System level by adding scale and symbols
+        arguments.
         
         Parameters
         ----------
@@ -374,8 +374,7 @@ class System(object):
             current atoms list will be extended by the correct number of atoms
             and all per-atom properties in value will be copied over.  Any
             properties defined in one Atoms object and not the other will be
-            set to default values.  For a System value, only the System's Atoms
-            will be used, i.e. value's box, pbc, and symbols will be ignored.
+            set to default values.
         scale : bool, optional
             Flag indicating if position values in a supplied Atoms value are to
             be taken as absolute Cartesian (False, default) or in scaled box
@@ -405,14 +404,7 @@ class System(object):
         
         # scale only makes sense for Atoms values
         if scale is True and not isinstance(value, Atoms):
-            raise ValueError('scale can only be True for Atoms values')
-
-        # Extract Atoms object from System value
-        if isinstance(value, System):
-            value = value.atoms
-        elif not isinstance(value, int) and not isinstance(value, Atoms):
-            raise TypeError('can only add System, Atoms or an int # of atoms')
-        
+            raise ValueError('scale can only be True for Atoms values')        
         
         # Handle symbols parameter
         if symbols is None:
