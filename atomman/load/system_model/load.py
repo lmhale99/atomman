@@ -48,7 +48,7 @@ def load(model, symbols=None, key='atomic-system', index=0):
     
     # Load new style model
     if 'box' in a_sys:
-        system = System(model=DM([('atomic-system', a_sys)]))
+        system = System(model=DM([('atomic-system', a_sys)]), symbols=symbols)
 
     # Load old style model
     else:
