@@ -4,30 +4,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: System Class &#8212; atomman 1.2.7 documentation</title>
+    <title>Introduction to atomman: System Class &#8212; atomman 1.2.8 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.2.7',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  false,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Load and Dump" href="01.4._Load_and_Dump.html" />
     <link rel="prev" title="Introduction to atomman: Atoms class" href="01.2._Atoms_class.html" /> 
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -43,7 +36,7 @@
         <li class="right" >
           <a href="01.2._Atoms_class.html" title="Introduction to atomman: Atoms class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -108,18 +101,18 @@ div.nblast {
 
 /* input prompt */
 div.nbinput div.prompt pre {
-    color: #303F9F;
+    color: #307FC1;
 }
 
 /* output prompt */
 div.nboutput div.prompt pre {
-    color: #D84315;
+    color: #BF5B3D;
 }
 
 /* all prompts */
 div.nbinput div.prompt,
 div.nboutput div.prompt {
-    min-width: 9ex;
+    min-width: 7ex;
     padding-top: 0.4em;
     padding-right: 0.4em;
     text-align: right;
@@ -159,9 +152,9 @@ div.nboutput div.output_area {
 
 /* input area */
 div.nbinput div.input_area {
-    border: 1px solid #cfcfcf;
+    border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f7f7f7;
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -169,7 +162,7 @@ div.nboutput div[class*=MathJax] {
     text-align: left !important;
 }
 
-/* override sphinx.ext.pngmath center alignment in output cells */
+/* override sphinx.ext.imgmath center alignment in output cells */
 div.nboutput div.math p {
     text-align: left;
 }
@@ -218,30 +211,55 @@ div.nboutput div.output_area.stderr {
 
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
 </style>
 <div class="section" id="Introduction-to-atomman:-System-Class">
 <h1>Introduction to atomman: System Class<a class="headerlink" href="#Introduction-to-atomman:-System-Class" title="Permalink to this headline">¶</a></h1>
-<p><strong>Lucas M. Hale</strong>,
-<a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
-<em>Materials Science and Engineering Division, NIST</em>.</p>
+<p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
-<p>The System class represents an atomic system configuration by combining
-an <a class="reference external" href="01.2._Atoms_class.html">Atoms</a> object with a
-<a class="reference external" href="01.1._Box_class.html">Box</a> object. Additional System methods and
-attributes deal with boundary conditions and the interaction between the
-underlying Atoms and Box objects.</p>
-<p><strong>NOTE</strong>: The underlying structure of Atoms changed with version 1.2 to
-be more efficient and easier to work with. Changes have been made to the
-System class to reflect this.</p>
+<p>The System class represents an atomic system configuration by combining an <a class="reference external" href="01.2._Atoms_class.html">Atoms</a> object with a <a class="reference external" href="01.1._Box_class.html">Box</a> object. Additional System methods and attributes deal with boundary conditions and the interaction between the underlying Atoms and Box objects.</p>
+<p><strong>NOTE</strong>: The underlying structure of Atoms changed with version 1.2 to be more efficient and easier to work with. Changes have been made to the System class to reflect this.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -266,8 +284,8 @@ System class to reflect this.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.7
-Notebook executed on 2019-06-06
+atomman version = 1.2.8
+Notebook executed on 2019-07-30
 </pre></div></div>
 </div>
 </div>
@@ -278,35 +296,19 @@ Notebook executed on 2019-06-06
 <div class="section" id="Parameters">
 <h4>Parameters<a class="headerlink" href="#Parameters" title="Permalink to this headline">¶</a></h4>
 <ul class="simple">
-<li><strong>atoms</strong> (<em>atomman.Atoms, optional</em>) The Atoms object for
-representing the atomic types, positions and per-atom properties of
-all atoms in the System. The default value is a new Atoms object
-initialized with Atoms() (i.e. single atom).</li>
-<li><strong>box</strong> (<em>atomman.Box, optional</em>) The Box object defining the box
-vectors and dimensions of the atomic System. The default value is a
-new Box object initialized with Box().</li>
-<li><strong>pbc</strong> (<em>numpy.ndarray of bool, optional</em>) Three Boolean values
-indicating which of the three box dimensions have periodic boundary
-conditions. The default value is (True, True, True) (i.e. all
-periodic).</li>
-<li><strong>scale</strong> (<em>bool, optional</em>) Flag for converting atoms.pos from box
-relative to absolute Cartesian vectors. A value of True will unscale
-atoms.pos from box relative to absolute Cartesian. Default value is
-False (no conversion).</li>
-<li><strong>symbols</strong> (<em>str or list, optional</em>) List of element model symbols
-for each unique atype. If not given, values will be set to None.</li>
+<li><strong>atoms</strong> (<em>atomman.Atoms, optional</em>) The Atoms object for representing the atomic types, positions and per-atom properties of all atoms in the System. The default value is a new Atoms object initialized with Atoms() (i.e.&nbsp;single atom).</li>
+<li><strong>box</strong> (<em>atomman.Box, optional</em>) The Box object defining the box vectors and dimensions of the atomic System. The default value is a new Box object initialized with Box().</li>
+<li><strong>pbc</strong> (<em>numpy.ndarray of bool, optional</em>) Three Boolean values indicating which of the three box dimensions have periodic boundary conditions. The default value is (True, True, True) (i.e.&nbsp;all periodic).</li>
+<li><strong>scale</strong> (<em>bool, optional</em>) Flag for converting atoms.pos from box relative to absolute Cartesian vectors. A value of True will unscale atoms.pos from box relative to absolute Cartesian. Default value is False (no conversion).</li>
+<li><strong>symbols</strong> (<em>str or list, optional</em>) List of element model symbols for each unique atype. If not given, values will be set to None.</li>
 </ul>
-<p><strong>Note</strong>: Since the number of atoms associated with an Atoms object is
-constant and a System’s Atoms cannot be reassigned, the number of atoms
-in a System cannot be changed after initialization.</p>
-<p>Initialization without parameters uses the default Atoms() and Box()
-initializers.</p>
+<p><strong>Note</strong>: Since the number of atoms associated with an Atoms object is constant and a System’s Atoms cannot be reassigned, the number of atoms in a System cannot be changed after initialization.</p>
+<p>Initialization without parameters uses the default Atoms() and Box() initializers.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
@@ -331,14 +333,12 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       0 |       1 |   0.000 |   0.000 |   0.000
 </pre></div></div>
 </div>
-<p>This combination of atoms and box lets you define systems for any unit
-cell.</p>
+<p>This combination of atoms and box lets you define systems for any unit cell.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Define a system for dc Si unit cell</span>
 <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.00</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">],</span>
                 <span class="p">[</span><span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">],</span>
@@ -391,28 +391,20 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <h2>3. Built-in Attributes<a class="headerlink" href="#3.-Built-in-Attributes" title="Permalink to this headline">¶</a></h2>
 <p>Each System instance has these built-in attributes:</p>
 <ul class="simple">
-<li><strong>atoms</strong> (<em>atomman.Atoms</em>) the underlying
-<a class="reference external" href="01.2._Atoms_class.html">Atoms</a> object.</li>
-<li><strong>natoms</strong> (<em>int</em>) is the number of atoms (same as
-system.atoms.natoms).</li>
-<li><strong>atypes</strong> (<em>numpy.ndarray of int</em>) lists all unique atype values
-(same as system.atoms.atypes).</li>
-<li><strong>natypes</strong> (<em>int</em>) is the number of unique atype values (same as
-system.atoms.natypes).</li>
-<li><strong>box</strong> (<em>atomman.Box</em>) the underlying <a class="reference external" href="01.1._Box_class.html">Box</a>
-object.</li>
-<li><strong>pbc</strong> (<em>numpy.ndarray of bool</em>) three Boolean values indicating
-which box directions are periodic.</li>
+<li><strong>atoms</strong> (<em>atomman.Atoms</em>) the underlying <a class="reference external" href="01.2._Atoms_class.html">Atoms</a> object.</li>
+<li><strong>natoms</strong> (<em>int</em>) is the number of atoms (same as system.atoms.natoms).</li>
+<li><strong>atypes</strong> (<em>numpy.ndarray of int</em>) lists all unique atype values (same as system.atoms.atypes).</li>
+<li><strong>natypes</strong> (<em>int</em>) is the number of unique atype values (same as system.atoms.natypes).</li>
+<li><strong>box</strong> (<em>atomman.Box</em>) the underlying <a class="reference external" href="01.1._Box_class.html">Box</a> object.</li>
+<li><strong>pbc</strong> (<em>numpy.ndarray of bool</em>) three Boolean values indicating which box directions are periodic.</li>
 <li><strong>symbols</strong> (<em>tuple</em>) the element symbols associated with each atype.</li>
-<li><strong>composition</strong> (<em>str</em>) <em>Added version 1.2.7</em> composition description
-of elements and numbers.</li>
+<li><strong>composition</strong> (<em>str</em>) <em>Added version 1.2.7</em> composition description of elements and numbers.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;system.natoms -&gt;&#39;</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;system.atypes -&gt;&#39;</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">atypes</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;system.natypes -&gt;&#39;</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">natypes</span><span class="p">)</span>
@@ -435,14 +427,12 @@ system.composition -&gt; Si
 system.pbc -&gt; [ True  True  True]
 </pre></div></div>
 </div>
-<p>The pbc values can be set during initialization and changed at any time
-afterwards.</p>
+<p>The pbc values can be set during initialization and changed at any time afterwards.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;setting: system.pbc = [False, True, True]&#39;</span><span class="p">)</span>
 <span class="n">system</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;system.pbc -&gt;&#39;</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">pbc</span><span class="p">)</span>
@@ -466,14 +456,12 @@ setting: system.pbc[0] = True
 system.pbc -&gt; [ True  True  True]
 </pre></div></div>
 </div>
-<p>Symbols can also be updated, as long as a symbol is given for each
-atype.</p>
+<p>Symbols can also be updated, as long as a symbol is given for each atype.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;setting: system.symbols = &#39;Ge&#39;&quot;</span><span class="p">)</span>
 <span class="n">system</span><span class="o">.</span><span class="n">symbols</span> <span class="o">=</span> <span class="s1">&#39;Ge&#39;</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;system.symbols -&gt;&#39;</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span>
@@ -491,11 +479,10 @@ system.symbols -&gt; (&#39;Ge&#39;,)
 </div>
 <p>The underlying Atoms and Box objects can be directly retrieved.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;system.atoms -&gt;&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
@@ -532,24 +519,19 @@ origin = [ 0.000,  0.000,  0.000]
 </div>
 <div class="section" id="4.-Scaling-Additions">
 <h2>4. Scaling Additions<a class="headerlink" href="#4.-Scaling-Additions" title="Permalink to this headline">¶</a></h2>
-<p>Since atomic positions are stored in absolute Cartesian coordinates, the
-system has methods for scaling/unscaling vectors relative to the box and
-which modify methods and attributes of the underlying Atoms and Box
-classes.</p>
+<p>Since atomic positions are stored in absolute Cartesian coordinates, the system has methods for scaling/unscaling vectors relative to the box and which modify methods and attributes of the underlying Atoms and Box classes.</p>
 <div class="section" id="4.1-scale()-and-unscale()">
 <h3>4.1 scale() and unscale()<a class="headerlink" href="#4.1-scale()-and-unscale()" title="Permalink to this headline">¶</a></h3>
-<p>The scale() and unscale() methods will convert any 3D vectors between
-the absolute Cartesian and relative box coordinates.</p>
+<p>The scale() and unscale() methods will convert any 3D vectors between the absolute Cartesian and relative box coordinates.</p>
 <ul class="simple">
 <li>scale() is for absolute Cartesian -&gt; relative box coordinates.</li>
 <li>unscale() is for relative box -&gt; absolute Cartesian coordinates.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Scale the position vectors</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;setting: spos = system.scale(system.atoms.pos)&quot;</span><span class="p">)</span>
 <span class="n">spos</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
@@ -596,23 +578,16 @@ pos -&gt;
 </div>
 <div class="section" id="4.2-atoms_prop()">
 <h3>4.2 atoms_prop()<a class="headerlink" href="#4.2-atoms_prop()" title="Permalink to this headline">¶</a></h3>
-<p>The atoms_prop() method extends the
-<a class="reference external" href="01.2._Atoms_class.html">atoms.prop()</a> method by adding a scale
-parameter option.</p>
+<p>The atoms_prop() method extends the <a class="reference external" href="01.2._Atoms_class.html">atoms.prop()</a> method by adding a scale parameter option.</p>
 <ul class="simple">
-<li>scale=False (default): the property values are returned exactly as
-they are stored, i.e. this is the same as calling
-system.atoms.prop().</li>
-<li>scale=True: the property values are automatically scaled/unscaled
-to/from box relative coordinates. This is convenient as you don’t
-have to remember which scale()/unscale() to use.</li>
+<li>scale=False (default): the property values are returned exactly as they are stored, i.e.&nbsp;this is the same as calling system.atoms.prop().</li>
+<li>scale=True: the property values are automatically scaled/unscaled to/from box relative coordinates. This is convenient as you don’t have to remember which scale()/unscale() to use.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Using atoms_prop() with scale=False is the same as accessing atoms.prop</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Setting: system.atoms_prop(key=&#39;pos&#39;, index=2, value=[3,3,3])&quot;</span><span class="p">)</span>
 <span class="n">system</span><span class="o">.</span><span class="n">atoms_prop</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;pos&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
@@ -651,34 +626,27 @@ system.atoms_prop(&#39;pos&#39;, 2, scale=True) -&gt; [0.5 0.  0.5]
 </div>
 <div class="section" id="4.3-atoms_df()">
 <h3>4.3 atoms_df()<a class="headerlink" href="#4.3-atoms_df()" title="Permalink to this headline">¶</a></h3>
-<p>The atoms_df() method extends the
-<a class="reference external" href="01.2._Atoms_class.html">atoms.df()</a> method with an optional scale
-parameter.</p>
+<p>The atoms_df() method extends the <a class="reference external" href="01.2._Atoms_class.html">atoms.df()</a> method with an optional scale parameter.</p>
 <ul class="simple">
-<li>scale=False (defaut): the property values are returned exactly as
-they are stored, i.e. this is the same as calling system.atoms.df()</li>
-<li>scale=True: the pos values will be scaled to box relative coordinates
-and all other parameters returned exactly as they are stored.</li>
-<li>scale=list of property names: all listed property values will be
-scaled to box relative coordinates.</li>
+<li>scale=False (defaut): the property values are returned exactly as they are stored, i.e.&nbsp;this is the same as calling system.atoms.df()</li>
+<li>scale=True: the pos values will be scaled to box relative coordinates and all other parameters returned exactly as they are stored.</li>
+<li>scale=list of property names: all listed property values will be scaled to box relative coordinates.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># With scale=False</span>
 <span class="n">system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="output_area docutils container">
+<div class="output_area rendered_html docutils container">
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -765,22 +733,20 @@ scaled to box relative coordinates.</li>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># With scale=True</span>
 <span class="n">system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="output_area docutils container">
+<div class="output_area rendered_html docutils container">
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -867,22 +833,20 @@ scaled to box relative coordinates.</li>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># With scale=[&#39;pos&#39;]</span>
 <span class="n">system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="output_area docutils container">
+<div class="output_area rendered_html docutils container">
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -971,23 +935,16 @@ scaled to box relative coordinates.</li>
 </div>
 <div class="section" id="4.4-box_set()">
 <h3>4.4 box_set()<a class="headerlink" href="#4.4-box_set()" title="Permalink to this headline">¶</a></h3>
-<p>The box_set() method extends the <a class="reference external" href="01.1._Box_class.html">box.set()</a>
-method to include an optional scale parameter. This is necessary to
-define how atomic positions are affected by the change in box
-dimensions.</p>
+<p>The box_set() method extends the <a class="reference external" href="01.1._Box_class.html">box.set()</a> method to include an optional scale parameter. This is necessary to define how atomic positions are affected by the change in box dimensions.</p>
 <ul class="simple">
-<li>scale=False (defaut): the absolute Cartesian coordinates of the atoms
-are held fixed as the box is changed. This is equivalent to calling
-box.set() directly.</li>
-<li>scale=True: the relative box coordinates of the atoms are held fixed
-by scaling the Cartesian coordinates as the box is changed.</li>
+<li>scale=False (defaut): the absolute Cartesian coordinates of the atoms are held fixed as the box is changed. This is equivalent to calling box.set() directly.</li>
+<li>scale=True: the relative box coordinates of the atoms are held fixed by scaling the Cartesian coordinates as the box is changed.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># With scale=False, Cartesian coordinates are unchanged,</span>
 <span class="n">newa</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">5.658</span><span class="p">,</span> <span class="s1">&#39;Å&#39;</span><span class="p">)</span>
 <span class="n">system</span><span class="o">.</span><span class="n">box_set</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">newa</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">newa</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">newa</span><span class="p">)</span>
@@ -1036,11 +993,10 @@ system.atoms_prop(&#39;pos&#39;, scale=True) =
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Return to original box</span>
 <span class="n">system</span><span class="o">.</span><span class="n">box_set</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
 
@@ -1096,22 +1052,16 @@ system.atoms_prop(&#39;pos&#39;, scale=True) =
 <h2>5. Built-in manipulations<a class="headerlink" href="#5.-Built-in-manipulations" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="5.1-wrap()">
 <h3>5.1 wrap()<a class="headerlink" href="#5.1-wrap()" title="Permalink to this headline">¶</a></h3>
-<p>The wrap method adjusts the atoms and box to ensure that all atomic
-positions are contained within the box. For atoms with positions beyond
-the box boundaries:</p>
+<p>The wrap method adjusts the atoms and box to ensure that all atomic positions are contained within the box. For atoms with positions beyond the box boundaries:</p>
 <ul class="simple">
-<li>If the boundary condition is periodic (as defined in pbc) then the
-atom’s position is folded to an equivalent position within the
-boundaries for that dimension.</li>
-<li>If the boundary condition is non-periodic, the boundary is adjusted
-to encompass the atom.</li>
+<li>If the boundary condition is periodic (as defined in pbc) then the atom’s position is folded to an equivalent position within the boundaries for that dimension.</li>
+<li>If the boundary condition is non-periodic, the boundary is adjusted to encompass the atom.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Generate ten atom system with atoms between 0 and 10 and box boundaries 0 and 1</span>
 <span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">)))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
@@ -1133,26 +1083,24 @@ symbols = (None,)
 pbc = [ True  True  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   1.139 |   2.193 |   2.632
-      1 |       1 |   4.691 |   2.187 |   6.854
-      2 |       1 |   4.819 |   8.690 |   2.016
-      3 |       1 |   9.006 |   1.627 |   2.895
-      4 |       1 |   3.976 |   2.616 |   8.201
-      5 |       1 |   1.674 |   4.223 |   5.069
-      6 |       1 |   7.562 |   5.022 |   3.963
-      7 |       1 |   3.745 |   6.335 |   6.665
-      8 |       1 |   5.385 |   3.988 |   4.023
-      9 |       1 |   4.552 |   8.518 |   5.504
+      0 |       1 |   1.691 |   2.120 |   6.184
+      1 |       1 |   7.834 |   1.734 |   6.428
+      2 |       1 |   1.471 |   2.307 |   9.600
+      3 |       1 |   3.255 |   3.384 |   2.539
+      4 |       1 |   5.361 |   8.235 |   9.855
+      5 |       1 |   3.213 |   2.222 |   0.978
+      6 |       1 |   9.183 |   0.336 |   1.498
+      7 |       1 |   9.860 |   1.309 |   2.807
+      8 |       1 |   3.501 |   1.415 |   1.992
+      9 |       1 |   4.351 |   0.243 |   3.074
 </pre></div></div>
 </div>
-<p>Atoms are wrapped around periodic boundaries, and non-periodic
-boundaries are extended to encompass all atoms.</p>
+<p>Atoms are wrapped around periodic boundaries, and non-periodic boundaries are extended to encompass all atoms.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Simple example with mixed periodic and non-periodic boundaries</span>
 <span class="n">system</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 <span class="n">system</span><span class="o">.</span><span class="n">wrap</span><span class="p">()</span>
@@ -1166,7 +1114,7 @@ boundaries are extended to encompass all atoms.</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 avect =  [ 1.000,  0.000,  0.000]
-bvect =  [ 0.000,  8.691,  0.000]
+bvect =  [ 0.000,  8.236,  0.000]
 cvect =  [ 0.000,  0.000,  1.000]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 10
@@ -1175,34 +1123,28 @@ symbols = (None,)
 pbc = [ True False  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.139 |   2.193 |   0.632
-      1 |       1 |   0.691 |   2.187 |   0.854
-      2 |       1 |   0.819 |   8.690 |   0.016
-      3 |       1 |   0.006 |   1.627 |   0.895
-      4 |       1 |   0.976 |   2.616 |   0.201
-      5 |       1 |   0.674 |   4.223 |   0.069
-      6 |       1 |   0.562 |   5.022 |   0.963
-      7 |       1 |   0.745 |   6.335 |   0.665
-      8 |       1 |   0.385 |   3.988 |   0.023
-      9 |       1 |   0.552 |   8.518 |   0.504
+      0 |       1 |   0.691 |   2.120 |   0.184
+      1 |       1 |   0.834 |   1.734 |   0.428
+      2 |       1 |   0.471 |   2.307 |   0.600
+      3 |       1 |   0.255 |   3.384 |   0.539
+      4 |       1 |   0.361 |   8.235 |   0.855
+      5 |       1 |   0.213 |   2.222 |   0.978
+      6 |       1 |   0.183 |   0.336 |   0.498
+      7 |       1 |   0.860 |   1.309 |   0.807
+      8 |       1 |   0.501 |   1.415 |   0.992
+      9 |       1 |   0.351 |   0.243 |   0.074
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="5.2-normalize()">
 <h3>5.2 normalize()<a class="headerlink" href="#5.2-normalize()" title="Permalink to this headline">¶</a></h3>
-<p>The box vectors for a system may not be compatible with certain codes,
-such as LAMMPS. The normalize() mehtod helps with this by converting
-incompatible systems to a compatible representation.</p>
+<p>The box vectors for a system may not be compatible with certain codes, such as LAMMPS. The normalize() mehtod helps with this by converting incompatible systems to a compatible representation.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>style</strong> (<em>str, optional</em>) Indicates the normalization style to use.
-Default (and only current option) is ‘lammps’.</li>
-<li><strong>return_transform</strong> (<em>bool, optional</em>) Indicates if the
-transformation matrix associated with the normalization is to be
-returned. Default value is False.</li>
+<li><strong>style</strong> (<em>str, optional</em>) Indicates the normalization style to use. Default (and only current option) is ‘lammps’.</li>
+<li><strong>return_transform</strong> (<em>bool, optional</em>) Indicates if the transformation matrix associated with the normalization is to be returned. Default value is False.</li>
 </ul>
-<p>For style=’lammps’, the system is altered so that the returned system
-has:</p>
+<p>For style=‘lammps’, the system is altered so that the returned system has:</p>
 <ol class="arabic simple">
 <li>Right-handed box vectors.</li>
 <li>avect = [lx, 0.0, 0.0]</li>
@@ -1210,14 +1152,12 @@ has:</p>
 <li>cvect = [xz, yz, lz]</li>
 <li>All atoms initially inside the box dimensions.</li>
 </ol>
-<p><strong>Note</strong>: large box tilt factors are not adjusted with this function. As
-such, the LAMMPS command ‘box tilt large’ may be needed.</p>
+<p><strong>Note</strong>: large box tilt factors are not adjusted with this function. As such, the LAMMPS command ‘box tilt large’ may be needed.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Define a system with random box vectors</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">vects</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 <span class="n">atoms</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]])</span>
@@ -1237,9 +1177,9 @@ such, the LAMMPS command ‘box tilt large’ may be needed.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 0.992,  0.431,  0.503]
-bvect =  [ 0.289,  0.384,  0.952]
-cvect =  [ 0.791,  0.717,  0.692]
+avect =  [ 0.512,  0.878,  0.310]
+bvect =  [ 0.910,  0.183,  0.735]
+cvect =  [ 0.648,  0.355,  0.852]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 2
 natypes = 1
@@ -1248,21 +1188,20 @@ pbc = [ True  True  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
-      1 |       1 |   1.036 |   0.767 |   1.074
-a = 1.1932781149825238
-b = 1.066864723773684
-c = 1.2724221226317909
-alpha = 31.033161715159746
-beta = 18.186027393695426
-gamma = 42.958094635143986
+      1 |       1 |   1.035 |   0.708 |   0.948
+a = 1.0622859389203705
+b = 1.1837000832555646
+c = 1.1275326130384735
+alpha = 16.391382632808682
+beta = 40.741330341754214
+gamma = 47.21223284466084
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Normalize box and show that lattice parameters and box relative positions are unchanged</span>
 <span class="n">system</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
@@ -1282,9 +1221,9 @@ gamma = 42.958094635143986
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 1.193,  0.000,  0.000]
-bvect =  [ 0.781,  0.727,  0.000]
-cvect =  [-1.209, -0.302,  0.258]
+avect =  [ 1.062,  0.000,  0.000]
+bvect =  [ 0.804,  0.869,  0.000]
+cvect =  [-0.854, -0.683,  0.273]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 2
 natypes = 1
@@ -1292,53 +1231,39 @@ symbols = (None,)
 pbc = [ True  True  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |  -0.016 |  -0.302 |   0.258
-      1 |       1 |   0.383 |   0.213 |   0.129
-a = 1.1932781149825238
-b = 1.066864723773684
-c = 1.2724221226317909
-alpha = 148.96683828484026
-beta = 161.81397260630456
-gamma = 42.958094635143986
+      0 |       1 |   1.866 |   0.869 |   0.000
+      1 |       1 |   0.506 |   0.093 |   0.137
+a = 1.0622859389203705
+b = 1.1837000832555646
+c = 1.1275326130384735
+alpha = 163.60861736719136
+beta = 139.2586696582458
+gamma = 47.212232844660846
 Box relative positions:
-[[1.00000000e+00 5.55111512e-17 1.00000000e+00]
+[[1.00000000e+00 1.00000000e+00 2.22044605e-16]
  [5.00000000e-01 5.00000000e-01 5.00000000e-01]]
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="5.3-rotate()">
 <h3>5.3 rotate()<a class="headerlink" href="#5.3-rotate()" title="Permalink to this headline">¶</a></h3>
-<p>The System class also has a built-in rotate() method that can be used to
-rotate the system to a new orientation. The rotated system will be
-expanded to retain periodicity across its boundaries.</p>
+<p>The System class also has a built-in rotate() method that can be used to rotate the system to a new orientation. The rotated system will be expanded to retain periodicity across its boundaries.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>uvws</strong> (<em>array-like object</em>) 3x3 array of three [uvw] Miller
-crystal vectors or 3x4 array of three [uvtw] Miller-Bravais hexagonal
-crystal vectors relative to the original system. These must define
-full Miller vectors, i.e. all u, v, w values be integers. These
-crystal vectors will align with the rotated system’s box vectors.</li>
-<li><strong>tol</strong> (<em>float, optional</em>) Tolerance parameter used in rounding
-atomic positions near the boundaries to the boundary values. In
-box-relative coordinates, any atomic positions within tol of 0 or 1
-will be rounded to 0 or 1, respectively. Default value is 1e-5.</li>
-<li><strong>return_transform</strong> (<em>bool, optional</em>) Indicates if the
-transformation matrix associated with the normalization is to be
-returned. Default value is False.</li>
+<li><strong>uvws</strong> (<em>array-like object</em>) 3x3 array of three [uvw] Miller crystal vectors or 3x4 array of three [uvtw] Miller-Bravais hexagonal crystal vectors relative to the original system. These must define full Miller vectors, i.e.&nbsp;all u, v, w values be integers. These crystal vectors will align with the rotated system’s box vectors.</li>
+<li><strong>tol</strong> (<em>float, optional</em>) Tolerance parameter used in rounding atomic positions near the boundaries to the boundary values. In box-relative coordinates, any atomic positions within tol of 0 or 1 will be rounded to 0 or 1, respectively. Default value is 1e-5.</li>
+<li><strong>return_transform</strong> (<em>bool, optional</em>) Indicates if the transformation matrix associated with the normalization is to be returned. Default value is False.</li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li><strong>newsystem</strong> (<em>atomman.System</em>) a new System based on rotating and
-expanding the original.</li>
-<li><strong>transform</strong> (<em>numpy.ndarray</em>) the transformation matrix associated
-with the rotation. Returned if return_transform is True.</li>
+<li><strong>newsystem</strong> (<em>atomman.System</em>) a new System based on rotating and expanding the original.</li>
+<li><strong>transform</strong> (<em>numpy.ndarray</em>) the transformation matrix associated with the rotation. Returned if return_transform is True.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Define a bcc unit cell for vanadium</span>
 <span class="n">alat</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">3.03</span><span class="p">,</span> <span class="s1">&#39;Å&#39;</span><span class="p">)</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">alat</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">alat</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">alat</span><span class="p">)</span>
@@ -1369,11 +1294,10 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Rotate the system to coincide with the following crystal vectors</span>
 <span class="n">a_uvw</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
 <span class="n">b_uvw</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
@@ -1427,32 +1351,23 @@ Transformation matrix:
 </div>
 <div class="section" id="5.4-supersize()">
 <h3>5.4 supersize()<a class="headerlink" href="#5.4-supersize()" title="Permalink to this headline">¶</a></h3>
-<p>A supercell version of a system can be generated using the supersize()
-method.</p>
+<p>A supercell version of a system can be generated using the supersize() method.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>a_size</strong> (<em>int or tuple of int</em>) size multipliers for the system
-along the a box vector.</li>
-<li><strong>b_size</strong> (<em>int or tuple of int</em>) size multipliers for the system
-along the b box vector.</li>
-<li><strong>c_size</strong> (<em>int or tuple of int</em>) size multipliers for the system
-along the c box vector.</li>
+<li><strong>a_size</strong> (<em>int or tuple of int</em>) size multipliers for the system along the a box vector.</li>
+<li><strong>b_size</strong> (<em>int or tuple of int</em>) size multipliers for the system along the b box vector.</li>
+<li><strong>c_size</strong> (<em>int or tuple of int</em>) size multipliers for the system along the c box vector.</li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li>(<em>atomman.System</em>) a new System constructed by replicating the
-original along its box vectors.</li>
+<li>(<em>atomman.System</em>) a new System constructed by replicating the original along its box vectors.</li>
 </ul>
-<p>All three size terms can be positive or negative integers, or a tuple of
-(negative, positive) integers. Negative values replicate the system
-below the origin and positive values replicate the system above the
-origin.</p>
+<p>All three size terms can be positive or negative integers, or a tuple of (negative, positive) integers. Negative values replicate the system below the origin and positive values replicate the system above the origin.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Create 2x2x2 supercell</span>
 <span class="c1"># new avect will start at the old origin</span>
 <span class="n">a_size</span> <span class="o">=</span> <span class="mi">2</span>
@@ -1586,15 +1501,12 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="section" id="5.5-atoms_ix">
 <h3>5.5 atoms_ix<a class="headerlink" href="#5.5-atoms_ix" title="Permalink to this headline">¶</a></h3>
 <p><em>Added version 1.2.5</em></p>
-<p>The atoms_ix extends the indexing functionality of the Atoms class to
-operate at the System level. This allows for systems containing a subset
-of the atoms to be easily generated.</p>
+<p>The atoms_ix extends the indexing functionality of the Atoms class to operate at the System level. This allows for systems containing a subset of the atoms to be easily generated.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Indexing directly on the system&#39;s atoms returns a new Atoms object</span>
 <span class="n">subatoms</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">]]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">subatoms</span><span class="p">)</span>
@@ -1615,11 +1527,10 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Using atoms_ix will return a new System containing the specified subset of atoms</span>
 <span class="n">subsystem</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms_ix</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">]]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">subsystem</span><span class="p">)</span>
@@ -1647,14 +1558,12 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       3 |       1 |   7.422 |  -7.872 |  -0.000
 </pre></div></div>
 </div>
-<p>Also, atoms_ix can be used to set (i.e. copy) a subset of atoms by
-passing in either a compatible Atoms or System object.</p>
+<p>Also, atoms_ix can be used to set (i.e.&nbsp;copy) a subset of atoms by passing in either a compatible Atoms or System object.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Copy atom 0 to atom 1 by passing a compatible Atoms object</span>
 <span class="n">subsystem</span><span class="o">.</span><span class="n">atoms_ix</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">subsystem</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -1687,28 +1596,99 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </pre></div></div>
 </div>
 </div>
+<div class="section" id="5.6-atoms_extend()">
+<h3>5.6 atoms_extend()<a class="headerlink" href="#5.6-atoms_extend()" title="Permalink to this headline">¶</a></h3>
+<p><em>Added version 1.2.8</em></p>
+<p>The atoms_extend() method allows the extend() method of the Atoms class to operate at the System level. This allows for new Systems to be generated by copying the current System object with additional atoms.</p>
+<p>Parameters - <strong>value</strong> (<em>atomman.Atoms or int</em>) An int value will result in the atoms object being extended by that number of atoms, with all per-atom properties having default values (atype = 1, everything else = 0). For an Atoms value, the current atoms list will be extended by the correct number of atoms and all per-atom properties in value will be copied over. Any properties defined in one Atoms object and not the other will be set to default values. - <strong>scale</strong> (<em>bool, optional</em>) Flag
+indicating if position values in a supplied Atoms value are to be taken as absolute Cartesian (False, default) or in scaled box relative units (True). - <strong>symbols</strong> (<em>tuple, list or None, optional</em>) Allows for the system’s symbols list to be updated. If not given, will use the current object’s symbols. - <strong>safecopy</strong> (<em>bool, optional</em>) Flag indicating if values are to be copied before setting. If False (default), underlying objects may be shared between the new system and the current system and
+input parameters. If True, atoms and box will be deepcopied before setting. Note that safecopy=True may be considerably slower for large numbers of atoms and/or properties.</p>
+<p>Returns - (<em>atomman.System</em>) A new System object with Atoms extended to contain all atoms and properties of the current object plus the additional atoms. The cuurent System object’s box and pbc (and symbols if not specified) will be copied over.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Add two empty atoms to subsystem</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">subsystem</span><span class="o">.</span><span class="n">atoms_extend</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [14.844,  0.000,  0.000]
+bvect =  [ 0.000, 10.496,  0.000]
+cvect =  [ 0.000,  0.000,  8.570]
+origin = [ 0.000, -10.496, -4.285]
+natoms = 6
+natypes = 1
+symbols = (&#39;V&#39;,)
+pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   2.474 |  -9.622 |  -0.000
+      1 |       1 |   2.474 |  -9.622 |  -0.000
+      2 |       1 |   2.474 |  -9.622 |  -0.000
+      3 |       1 |   7.422 |  -7.872 |  -0.000
+      4 |       1 |   0.000 |   0.000 |   0.000
+      5 |       1 |   0.000 |   0.000 |   0.000
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># double the atoms in subsystem by copying them</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">subsystem</span><span class="o">.</span><span class="n">atoms_extend</span><span class="p">(</span><span class="n">subsystem</span><span class="o">.</span><span class="n">atoms</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [14.844,  0.000,  0.000]
+bvect =  [ 0.000, 10.496,  0.000]
+cvect =  [ 0.000,  0.000,  8.570]
+origin = [ 0.000, -10.496, -4.285]
+natoms = 8
+natypes = 1
+symbols = (&#39;V&#39;,)
+pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   2.474 |  -9.622 |  -0.000
+      1 |       1 |   2.474 |  -9.622 |  -0.000
+      2 |       1 |   2.474 |  -9.622 |  -0.000
+      3 |       1 |   7.422 |  -7.872 |  -0.000
+      4 |       1 |   2.474 |  -9.622 |  -0.000
+      5 |       1 |   2.474 |  -9.622 |  -0.000
+      6 |       1 |   2.474 |  -9.622 |  -0.000
+      7 |       1 |   7.422 |  -7.872 |  -0.000
+</pre></div></div>
+</div>
+</div>
 </div>
 <div class="section" id="6.-Built-in-analysis-tools">
 <h2>6. Built-in analysis tools<a class="headerlink" href="#6.-Built-in-analysis-tools" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="6.1-dvect()">
 <h3>6.1 dvect()<a class="headerlink" href="#6.1-dvect()" title="Permalink to this headline">¶</a></h3>
-<p>The dvect method calculates the shortest vector difference between two
-positions, accounting for the system’s periodic boundaries.</p>
+<p>The dvect method calculates the shortest vector difference between two positions, accounting for the system’s periodic boundaries.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>pos_0</strong> (<em>numpy.ndarray or index</em>) Absolute Cartesian vector
-position(s) to use as reference point(s). If the value can be used as
-an index, then self.atoms.pos[pos_0] is taken.</li>
-<li><strong>pos_1</strong> (<em>numpy.ndarray or index</em>) Absolute Cartesian vector
-position(s) to find relative to pos_0. If the value can be used as
-an index, then self.atoms.pos[pos_1] is taken.</li>
+<li><strong>pos_0</strong> (<em>numpy.ndarray or index</em>) Absolute Cartesian vector position(s) to use as reference point(s). If the value can be used as an index, then self.atoms.pos[pos_0] is taken.</li>
+<li><strong>pos_1</strong> (<em>numpy.ndarray or index</em>) Absolute Cartesian vector position(s) to find relative to pos_0. If the value can be used as an index, then self.atoms.pos[pos_1] is taken.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Show simple position difference vector between atoms 7 and 12</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;system.atoms.pos[7] - system.atoms.pos[12] -&gt;&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">-</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">12</span><span class="p">])</span>
@@ -1731,11 +1711,10 @@ system.dvect(12, 7) -&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Compute the shortest periodic distance between atom 34 and all atoms</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;np.linalg.norm(system.dvect(34, system.atoms.pos), axis=1) -&gt;&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">dvect</span><span class="p">(</span><span class="mi">34</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
@@ -1769,24 +1748,18 @@ np.linalg.norm(system.dvect(34, system.atoms.pos), axis=1) -&gt;
 </div>
 <div class="section" id="6.2-neighborlist()">
 <h3>6.2 neighborlist()<a class="headerlink" href="#6.2-neighborlist()" title="Permalink to this headline">¶</a></h3>
-<p>The neighborlist() method returns a
-<a class="reference external" href="03.2._NeighborList_class.html">NeighborList</a> object for the system.</p>
+<p>The neighborlist() method returns a <a class="reference external" href="03.2._NeighborList_class.html">NeighborList</a> object for the system.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>cutoff</strong> (<em>float, optional</em>) Radial cutoff distance for identifying
-neighbors. Must be given if model is not given.</li>
-<li><strong>model</strong> (<em>str or file-like object, optional</em>) Gives the file path
-or content to load. If given, initialsize is the only other allowed
-parameter.</li>
-<li><strong>initialsize</strong> (<em>int, optional</em>) The number of neighbor positions to
-initially assign to each atom. Default value is 20.</li>
+<li><strong>cutoff</strong> (<em>float, optional</em>) Radial cutoff distance for identifying neighbors. Must be given if model is not given.</li>
+<li><strong>model</strong> (<em>str or file-like object, optional</em>) Gives the file path or content to load. If given, initialsize is the only other allowed parameter.</li>
+<li><strong>initialsize</strong> (<em>int, optional</em>) The number of neighbor positions to initially assign to each atom. Default value is 20.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Compute NeighborList for system</span>
 <span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.90</span> <span class="o">*</span><span class="n">alat</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computing neighbor list using cutoff of&#39;</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
@@ -1803,11 +1776,10 @@ Computing neighbor list using cutoff of 2.727 angstrom
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Show each atom&#39;s coordination</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;neighbors.coord -&gt;&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">neighbors</span><span class="o">.</span><span class="n">coord</span><span class="p">)</span>
@@ -1826,11 +1798,10 @@ neighbors.coord -&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Show identified neighbors for atom 4</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;neighbors[4] -&gt;&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">neighbors</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
@@ -1847,11 +1818,10 @@ neighbors[4] -&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Show that all identified neighbors are within the cutoff of atom 4</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;np.linalg.norm(system.dvect(4, neighbors[4]), axis=1) -&gt;&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">dvect</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
@@ -1872,41 +1842,25 @@ np.linalg.norm(system.dvect(4, neighbors[4]), axis=1) -&gt;
 </div>
 <div class="section" id="7.-model()-and-dump()">
 <h2>7. model() and dump()<a class="headerlink" href="#7.-model()-and-dump()" title="Permalink to this headline">¶</a></h2>
-<p><em>Added version 1.2.7</em></p>
-<p>A JSON/XML equivalent data model representation of the Systems object
-can be generated using the model() method.</p>
+<p><em>model() added version 1.2.7</em></p>
+<p>A JSON/XML equivalent data model representation of the Systems object can be generated using the model() method.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>box_unit</strong> (<em>str, optional</em>) Length unit to use for the box.
-Default value is ‘angstrom’.</li>
-<li><strong>symbols</strong> (<em>list, optional</em>) List of atom-model symbols
-corresponding to the atom types. If not given, will use
-system.symbols.</li>
-<li><strong>prop_name</strong> (<em>list, optional</em>) The Atoms properties to include. If
-neither prop_name nor prop_unit are given, all system properties
-will be included.</li>
-<li><strong>unit</strong> (<em>list, optional</em>) Lists the units for each prop_name as
-stored in the table. For a value of None, no conversion will be
-performed for that property. For a value of ‘scaled’, the
-corresponding table values will be taken in box-scaled units. If
-neither unit nor prop_units given, pos will be given in Angstroms
-and all other values will not be converted.</li>
-<li><strong>prop_unit</strong> (<em>dict, optional</em>) Dictionary where the keys are the
-property keys to include, and the values are units to use. If neither
-unit nor prop_units given, pos will be given in Angstroms and all
-other values will not be converted.</li>
+<li><strong>box_unit</strong> (<em>str, optional</em>) Length unit to use for the box. Default value is ‘angstrom’.</li>
+<li><strong>symbols</strong> (<em>list, optional</em>) List of atom-model symbols corresponding to the atom types. If not given, will use system.symbols.</li>
+<li><strong>prop_name</strong> (<em>list, optional</em>) The Atoms properties to include. If neither prop_name nor prop_unit are given, all system properties will be included.</li>
+<li><strong>unit</strong> (<em>list, optional</em>) Lists the units for each prop_name as stored in the table. For a value of None, no conversion will be performed for that property. For a value of ‘scaled’, the corresponding table values will be taken in box-scaled units. If neither unit nor prop_units given, pos will be given in Angstroms and all other values will not be converted.</li>
+<li><strong>prop_unit</strong> (<em>dict, optional</em>) Dictionary where the keys are the property keys to include, and the values are units to use. If neither unit nor prop_units given, pos will be given in Angstroms and all other values will not be converted.</li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li>(<em>DataModelDict.DataModelDict</em>) A JSON/XML data model for the current
-Systems object.</li>
+<li>(<em>DataModelDict.DataModelDict</em>) A JSON/XML data model for the current Systems object.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">model</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
 </pre></div>
@@ -1920,14 +1874,12 @@ Systems object.</li>
 {&#34;atomic-system&#34;: {&#34;box&#34;: {&#34;avect&#34;: {&#34;value&#34;: [14.843907841266057, 0.0, 0.0]}, &#34;bvect&#34;: {&#34;value&#34;: [0.0, 10.496227893867395, 0.0]}, &#34;cvect&#34;: {&#34;value&#34;: [0.0, 0.0, 8.570134187980956]}, &#34;origin&#34;: {&#34;value&#34;: [0.0, -10.496227893867395, -4.285067093990478]}}, &#34;periodic-boundary-condition&#34;: [true, true, true], &#34;atom-type-symbol&#34;: &#34;V&#34;, &#34;atoms&#34;: {&#34;natoms&#34;: 96, &#34;property&#34;: [{&#34;name&#34;: &#34;atype&#34;, &#34;data&#34;: {&#34;value&#34;: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}}, {&#34;name&#34;: &#34;pos&#34;, &#34;data&#34;: {&#34;value&#34;: [6.184961600527525, -9.621542236045112, -2.1425335469952396, 2.473984640211009, -9.621542236045114, -8.881784197001252e-16, 3.7109769603165144, -10.496227893867395, -2.1425335469952396, 3.7109769603165144, -7.872170920400547, -2.142533546995239, 4.947969280422018, -8.746856578222829, -8.881784197001252e-16, 4.9479692804220194, -6.12279960475598, -8.881784197001252e-16, 6.184961600527524, -6.9974852625782615, -2.142533546995239, 0.0, -10.496227893867395, -4.285067093990478, 7.421953920633027, -7.872170920400547, -8.881784197001252e-16, 1.2369923201055044, -8.746856578222829, -2.1425335469952396, 1.2369923201055035, -6.12279960475598, -2.142533546995239, 2.473984640211009, -6.997485262578263, 0.0, 13.606915521160554, -9.621542236045112, -2.1425335469952396, 9.895938560844037, -9.621542236045114, -8.881784197001252e-16, 11.132930880949543, -10.496227893867395, -2.1425335469952396, 11.132930880949543, -7.872170920400547, -2.142533546995239, 12.369923201055046, -8.746856578222829, -8.881784197001252e-16, 12.369923201055048, -6.12279960475598, -8.881784197001252e-16, 13.606915521160554, -6.9974852625782615, -2.142533546995239, 7.421953920633029, -10.496227893867395, -4.285067093990478, 14.843907841266056, -7.872170920400547, -8.881784197001252e-16, 8.658946240738532, -8.746856578222829, -2.1425335469952396, 8.658946240738532, -6.12279960475598, -2.142533546995239, 9.895938560844037, -6.997485262578263, 0.0, 6.184961600527525, -4.373428289111415, -2.1425335469952396, 2.473984640211009, -4.373428289111415, -8.881784197001252e-16, 3.7109769603165144, -5.248113946933698, -2.1425335469952396, 3.7109769603165144, -2.624056973466849, -2.142533546995239, 4.947969280422018, -3.498742631289132, -8.881784197001252e-16, 4.9479692804220194, -0.8746856578222815, -8.881784197001252e-16, 6.184961600527524, -1.7493713156445647, -2.142533546995239, 0.0, -5.248113946933698, -4.285067093990478, 7.421953920633027, -2.624056973466849, -8.881784197001252e-16, 1.2369923201055044, -3.498742631289131, -2.1425335469952396, 1.2369923201055035, -0.8746856578222815, -2.142533546995239, 2.473984640211009, -1.7493713156445647, 0.0, 13.606915521160554, -4.373428289111415, -2.1425335469952396, 9.895938560844037, -4.373428289111415, -8.881784197001252e-16, 11.132930880949543, -5.248113946933698, -2.1425335469952396, 11.132930880949543, -2.624056973466849, -2.142533546995239, 12.369923201055046, -3.498742631289132, -8.881784197001252e-16, 12.369923201055048, -0.8746856578222815, -8.881784197001252e-16, 13.606915521160554, -1.7493713156445647, -2.142533546995239, 7.421953920633029, -5.248113946933698, -4.285067093990478, 14.843907841266056, -2.624056973466849, -8.881784197001252e-16, 8.658946240738532, -3.498742631289131, -2.1425335469952396, 8.658946240738532, -0.8746856578222815, -2.142533546995239, 9.895938560844037, -1.7493713156445647, 0.0, 6.184961600527525, -9.621542236045112, 2.1425335469952396, 2.473984640211009, -9.621542236045114, 4.2850670939904765, 3.7109769603165144, -10.496227893867395, 2.1425335469952396, 3.7109769603165144, -7.872170920400547, 2.1425335469952396, 4.947969280422018, -8.746856578222829, 4.2850670939904765, 4.9479692804220194, -6.12279960475598, 4.2850670939904765, 6.184961600527524, -6.9974852625782615, 2.1425335469952396, 0.0, -10.496227893867395, 0.0, 7.421953920633027, -7.872170920400547, 4.2850670939904765, 1.2369923201055044, -8.746856578222829, 2.1425335469952396, 1.2369923201055035, -6.12279960475598, 2.1425335469952396, 2.473984640211009, -6.997485262578263, 4.285067093990478, 13.606915521160554, -9.621542236045112, 2.1425335469952396, 9.895938560844037, -9.621542236045114, 4.2850670939904765, 11.132930880949543, -10.496227893867395, 2.1425335469952396, 11.132930880949543, -7.872170920400547, 2.1425335469952396, 12.369923201055046, -8.746856578222829, 4.2850670939904765, 12.369923201055048, -6.12279960475598, 4.2850670939904765, 13.606915521160554, -6.9974852625782615, 2.1425335469952396, 7.421953920633029, -10.496227893867395, 0.0, 14.843907841266056, -7.872170920400547, 4.2850670939904765, 8.658946240738532, -8.746856578222829, 2.1425335469952396, 8.658946240738532, -6.12279960475598, 2.1425335469952396, 9.895938560844037, -6.997485262578263, 4.285067093990478, 6.184961600527525, -4.373428289111415, 2.1425335469952396, 2.473984640211009, -4.373428289111415, 4.2850670939904765, 3.7109769603165144, -5.248113946933698, 2.1425335469952396, 3.7109769603165144, -2.624056973466849, 2.1425335469952396, 4.947969280422018, -3.498742631289132, 4.2850670939904765, 4.9479692804220194, -0.8746856578222815, 4.2850670939904765, 6.184961600527524, -1.7493713156445647, 2.1425335469952396, 0.0, -5.248113946933698, 0.0, 7.421953920633027, -2.624056973466849, 4.2850670939904765, 1.2369923201055044, -3.498742631289131, 2.1425335469952396, 1.2369923201055035, -0.8746856578222815, 2.1425335469952396, 2.473984640211009, -1.7493713156445647, 4.285067093990478, 13.606915521160554, -4.373428289111415, 2.1425335469952396, 9.895938560844037, -4.373428289111415, 4.2850670939904765, 11.132930880949543, -5.248113946933698, 2.1425335469952396, 11.132930880949543, -2.624056973466849, 2.1425335469952396, 12.369923201055046, -3.498742631289132, 4.2850670939904765, 12.369923201055048, -0.8746856578222815, 4.2850670939904765, 13.606915521160554, -1.7493713156445647, 2.1425335469952396, 7.421953920633029, -5.248113946933698, 0.0, 14.843907841266056, -2.624056973466849, 4.2850670939904765, 8.658946240738532, -3.498742631289131, 2.1425335469952396, 8.658946240738532, -0.8746856578222815, 2.1425335469952396, 9.895938560844037, -1.7493713156445647, 4.285067093990478], &#34;shape&#34;: [96, 3], &#34;unit&#34;: &#34;angstrom&#34;}}]}}}
 </pre></div></div>
 </div>
-<p>Any stored model information can then be reloaded in as a new System
-object by passing the ‘model’ parameter to the class initializer.</p>
+<p>Any stored model information can then be reloaded in as a new System object by passing the ‘model’ parameter to the class initializer.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -2045,16 +1997,13 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      95 |       1 |   9.896 |  -1.749 |   4.285
 </pre></div></div>
 </div>
-<p>The system can also be exported to a number of other formats using the
-dump() method.</p>
-<p>See the <a class="reference external" href="02._Load_And_Dump.html">02. Load And Dump Jupyter Notebook</a>
-for more detailed information on the different styles and options.</p>
+<p>The system can also be exported to a number of other formats using the dump() method.</p>
+<p>See the <a class="reference external" href="02._Load_And_Dump.html">02. Load And Dump Jupyter Notebook</a> for more detailed information on the different styles and options.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">poscar</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;poscar&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">poscar</span><span class="p">)</span>
 </pre></div>
@@ -2180,7 +2129,7 @@ direct
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Introduction to atomman: System Class</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
@@ -2205,6 +2154,7 @@ direct
 <li><a class="reference internal" href="#5.3-rotate()">5.3 rotate()</a></li>
 <li><a class="reference internal" href="#5.4-supersize()">5.4 supersize()</a></li>
 <li><a class="reference internal" href="#5.5-atoms_ix">5.5 atoms_ix</a></li>
+<li><a class="reference internal" href="#5.6-atoms_extend()">5.6 atoms_extend()</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#6.-Built-in-analysis-tools">6. Built-in analysis tools</a><ul>
@@ -2242,12 +2192,12 @@ direct
         <li class="right" >
           <a href="01.2._Atoms_class.html" title="Introduction to atomman: Atoms class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

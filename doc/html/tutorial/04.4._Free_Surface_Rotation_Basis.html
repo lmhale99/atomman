@@ -4,30 +4,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Free Surface Rotation Basis &#8212; atomman 1.2.7 documentation</title>
+    <title>Introduction to atomman: Free Surface Rotation Basis &#8212; atomman 1.2.8 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.2.7',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  false,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Stacking Fault Generation" href="04.5._Stacking_Fault_Generation.html" />
     <link rel="prev" title="Introduction to atomman: Dislocation analysis tools" href="04.3._Dislocation_analysis_tools.html" /> 
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -43,7 +36,7 @@
         <li class="right" >
           <a href="04.3._Dislocation_analysis_tools.html" title="Introduction to atomman: Dislocation analysis tools"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -108,18 +101,18 @@ div.nblast {
 
 /* input prompt */
 div.nbinput div.prompt pre {
-    color: #303F9F;
+    color: #307FC1;
 }
 
 /* output prompt */
 div.nboutput div.prompt pre {
-    color: #D84315;
+    color: #BF5B3D;
 }
 
 /* all prompts */
 div.nbinput div.prompt,
 div.nboutput div.prompt {
-    min-width: 9ex;
+    min-width: 7ex;
     padding-top: 0.4em;
     padding-right: 0.4em;
     text-align: right;
@@ -159,9 +152,9 @@ div.nboutput div.output_area {
 
 /* input area */
 div.nbinput div.input_area {
-    border: 1px solid #cfcfcf;
+    border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f7f7f7;
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -169,7 +162,7 @@ div.nboutput div[class*=MathJax] {
     text-align: left !important;
 }
 
-/* override sphinx.ext.pngmath center alignment in output cells */
+/* override sphinx.ext.imgmath center alignment in output cells */
 div.nboutput div.math p {
     text-align: left;
 }
@@ -218,26 +211,55 @@ div.nboutput div.output_area.stderr {
 
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
 </style>
 <div class="section" id="Introduction-to-atomman:-Free-Surface-Rotation-Basis">
 <h1>Introduction to atomman: Free Surface Rotation Basis<a class="headerlink" href="#Introduction-to-atomman:-Free-Surface-Rotation-Basis" title="Permalink to this headline">¶</a></h1>
-<p><strong>Lucas M. Hale</strong>,
-<a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
-<em>Materials Science and Engineering Division, NIST</em>.</p>
+<p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
-<p>This Notebook outlines the free_surface_basis function which
-determines the appropriate rotational [uvw] Miller vectors for
-generating a free surface configuration.</p>
+<p>This Notebook outlines the free_surface_basis function which determines the appropriate rotational [uvw] Miller vectors for generating a free surface configuration.</p>
 <p><em>Added version 1.2.7</em></p>
 <p><strong>Library imports</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
@@ -263,156 +285,91 @@ generating a free surface configuration.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.7
-Notebook executed on 2019-06-05
+atomman version = 1.2.8
+Notebook executed on 2019-07-30
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="2.-Theory">
 <h2>2. Theory<a class="headerlink" href="#2.-Theory" title="Permalink to this headline">¶</a></h2>
-<p>Atomic simulations of free surfaces are typically evaluated in the
-following way:</p>
+<p>Atomic simulations of free surfaces are typically evaluated in the following way:</p>
 <ol class="arabic simple">
-<li>A bulk atomic system is constructed such that the crystal plane of
-interest coincides with one of the system’s boundaries.</li>
-<li>The cohesive energy of the bulk system is evaluated with all boundary
-conditions periodic.</li>
-<li>The free surface is inserted by either making one of the boundaries
-non-periodic, or greatly expanding said boundary dimension.</li>
+<li>A bulk atomic system is constructed such that the crystal plane of interest coincides with one of the system’s boundaries.</li>
+<li>The cohesive energy of the bulk system is evaluated with all boundary conditions periodic.</li>
+<li>The free surface is inserted by either making one of the boundaries non-periodic, or greatly expanding said boundary dimension.</li>
 </ol>
 <p>Coordinate system vectors:</p>
 <ul class="simple">
-<li><span class="math">\(a_{unit}, b_{unit}, c_{unit}\)</span> refer to the lattice vectors of
-a standard crystal unit cell.</li>
-<li><span class="math">\(a_{box}, b_{box}, c_{box}\)</span> refer to the box vectors of the
-full atomic system.</li>
-<li><span class="math">\([u_a, v_a, w_a], [u_b, v_b, w_b], [u_c, v_c, w_c]\)</span> are the
-crystallographic Miller [uvw] indices coinciding with the three
-system box vectors.</li>
+<li><span class="math notranslate nohighlight">\(a_{unit}, b_{unit}, c_{unit}\)</span> refer to the lattice vectors of a standard crystal unit cell.</li>
+<li><span class="math notranslate nohighlight">\(a_{box}, b_{box}, c_{box}\)</span> refer to the box vectors of the full atomic system.</li>
+<li><span class="math notranslate nohighlight">\([u_a, v_a, w_a], [u_b, v_b, w_b], [u_c, v_c, w_c]\)</span> are the crystallographic Miller [uvw] indices coinciding with the three system box vectors.</li>
 </ul>
 <p>The unit and box vectors can be related using the [uvw] indices as:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[a_{box} = u_a a_{unit} + v_a b_{unit} + w_a c_{unit}\]</div>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[b_{box} = u_b a_{unit} + v_b b_{unit} + w_b c_{unit}\]</div>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[c_{box} = u_c a_{unit} + v_c b_{unit} + w_c c_{unit}\]</div>
-<p>To ensure the generated system is periodic for calculation step #2, the
-box vectors must be full periodic lattice steps. In other words, all the
-hkl’s must be integers.</p>
-<p>Generating the atomic system (step #1) requires that two of the system’s
-box vectors be contained within the slip plane of interest. Note that
-this is <em>not</em> the same as taking one of the box vectors to be
-perpendicular to the slip plane. <a href="#id1"><span class="problematic" id="id2">`Sun and Cedar &lt;&gt;`__</span></a> showed that this
-could be done by identifying three points within the same slip plane,
-and using the distance vectors between pairs of those points to obtain
-the two box vectors. The Miller (hkl) plane indices indicate the
-intercepts of the crystallographic plane relative to the unit cell,
-which can be used to obtain the three points:</p>
+<p>To ensure the generated system is periodic for calculation step #2, the box vectors must be full periodic lattice steps. In other words, all the hkl’s must be integers.</p>
+<p>Generating the atomic system (step #1) requires that two of the system’s box vectors be contained within the slip plane of interest. Note that this is <em>not</em> the same as taking one of the box vectors to be perpendicular to the slip plane. <a href="#id1"><span class="problematic" id="id2">`Sun and Cedar &lt;&gt;`__</span></a> showed that this could be done by identifying three points within the same slip plane, and using the distance vectors between pairs of those points to obtain the two box vectors. The Miller (hkl) plane indices indicate the intercepts of the
+crystallographic plane relative to the unit cell, which can be used to obtain the three points:</p>
 <ul class="simple">
-<li>An (hkl) plane has intercepts at <span class="math">\(\frac{a_{unit}}{h}\)</span>,
-<span class="math">\(\frac{b_{unit}}{k}\)</span> and <span class="math">\(\frac{c_{unit}}{l}\)</span>.</li>
-<li>An (hk0) plane has the intercepts <span class="math">\(\frac{a_{unit}}{h}\)</span> and
-<span class="math">\(\frac{b_{unit}}{k}\)</span>, and a third point can be obtained by
-adding <span class="math">\(c_{unit}\)</span> to either intercept. The (h0l) and (0kl)
-planes can be similarly obtained.</li>
-<li>An (h00) plane has an intercept <span class="math">\(\frac{a_{unit}}{h}\)</span>, and two
-other points can be obtained by adding either <span class="math">\(b_{unit}\)</span> or
-<span class="math">\(c_{unit}\)</span> to the intercept. The (0k0) and (00l) planes can be
-similarly obtained.</li>
+<li>An (hkl) plane has intercepts at <span class="math notranslate nohighlight">\(\frac{a_{unit}}{h}\)</span>, <span class="math notranslate nohighlight">\(\frac{b_{unit}}{k}\)</span> and <span class="math notranslate nohighlight">\(\frac{c_{unit}}{l}\)</span>.</li>
+<li>An (hk0) plane has the intercepts <span class="math notranslate nohighlight">\(\frac{a_{unit}}{h}\)</span> and <span class="math notranslate nohighlight">\(\frac{b_{unit}}{k}\)</span>, and a third point can be obtained by adding <span class="math notranslate nohighlight">\(c_{unit}\)</span> to either intercept. The (h0l) and (0kl) planes can be similarly obtained.</li>
+<li>An (h00) plane has an intercept <span class="math notranslate nohighlight">\(\frac{a_{unit}}{h}\)</span>, and two other points can be obtained by adding either <span class="math notranslate nohighlight">\(b_{unit}\)</span> or <span class="math notranslate nohighlight">\(c_{unit}\)</span> to the intercept. The (0k0) and (00l) planes can be similarly obtained.</li>
 </ul>
-<p>As the two resulting in-plane vectors are in terms of the unit cell
-vectors, they can be written solely in terms of [uvw] indices (and
-therefore system-independent). For simplicity, we’ll take
-<span class="math">\(a_{box}\)</span> and <span class="math">\(b_{box}\)</span> to be the in-plane vectors.</p>
+<p>As the two resulting in-plane vectors are in terms of the unit cell vectors, they can be written solely in terms of [uvw] indices (and therefore system-independent). For simplicity, we’ll take <span class="math notranslate nohighlight">\(a_{box}\)</span> and <span class="math notranslate nohighlight">\(b_{box}\)</span> to be the in-plane vectors.</p>
 <ul class="simple">
 <li>(hkl):<ul>
-<li><span class="math">\([u_a, v_a, w_a] = [\frac{-M}{h}, \frac{M}{k}, 0]\)</span></li>
-<li><span class="math">\([u_b, v_b, w_b] = [\frac{-M}{h}, 0, \frac{M}{l}]\)</span></li>
+<li><span class="math notranslate nohighlight">\([u_a, v_a, w_a] = [\frac{-M}{h}, \frac{M}{k}, 0]\)</span></li>
+<li><span class="math notranslate nohighlight">\([u_b, v_b, w_b] = [\frac{-M}{h}, 0, \frac{M}{l}]\)</span></li>
 </ul>
 </li>
 <li>(hk0):<ul>
-<li><span class="math">\([u_a, v_a, w_a] = [\frac{-M}{h}, \frac{M}{k}, 0]\)</span></li>
-<li><span class="math">\([u_b, v_b, w_b] = [0, 0, 1]\)</span></li>
+<li><span class="math notranslate nohighlight">\([u_a, v_a, w_a] = [\frac{-M}{h}, \frac{M}{k}, 0]\)</span></li>
+<li><span class="math notranslate nohighlight">\([u_b, v_b, w_b] = [0, 0, 1]\)</span></li>
 </ul>
 </li>
 <li>(h00):<ul>
-<li><span class="math">\([u_a, v_a, w_a] = [0, 1, 0]\)</span></li>
-<li><span class="math">\([u_b, v_b, w_b] = [0, 0, 1]\)</span></li>
+<li><span class="math notranslate nohighlight">\([u_a, v_a, w_a] = [0, 1, 0]\)</span></li>
+<li><span class="math notranslate nohighlight">\([u_b, v_b, w_b] = [0, 0, 1]\)</span></li>
 </ul>
 </li>
 </ul>
-<p>where <span class="math">\(M\)</span> is a multiplier to ensure the [uvw]’s are integers.</p>
-<p>The <span class="math">\(c_{box}\)</span> can be any vector not in the slip plane (which it
-can’t be for the system to have volume!). Practically, it should be
-defined such that <span class="math">\([u_c, v_c, w_c]\)</span> are small integers and that
-<span class="math">\(c_{box}\)</span> is close to the slip plane normal.</p>
-<p><strong>Note</strong>: In LAMMPS, the resulting system is transformed to adhere to
-the box vectors limitations:</p>
+<p>where <span class="math notranslate nohighlight">\(M\)</span> is a multiplier to ensure the [uvw]’s are integers.</p>
+<p>The <span class="math notranslate nohighlight">\(c_{box}\)</span> can be any vector not in the slip plane (which it can’t be for the system to have volume!). Practically, it should be defined such that <span class="math notranslate nohighlight">\([u_c, v_c, w_c]\)</span> are small integers and that <span class="math notranslate nohighlight">\(c_{box}\)</span> is close to the slip plane normal.</p>
+<p><strong>Note</strong>: In LAMMPS, the resulting system is transformed to adhere to the box vectors limitations:</p>
 <ul class="simple">
-<li><span class="math">\(a'_{box} = [lx, 0, 0]\)</span></li>
-<li><span class="math">\(b'_{box} = [xy, ly, 0]\)</span></li>
-<li><span class="math">\(c'_{box} = [xz, yz, lz]\)</span></li>
+<li><span class="math notranslate nohighlight">\(a'_{box} = [lx, 0, 0]\)</span></li>
+<li><span class="math notranslate nohighlight">\(b'_{box} = [xy, ly, 0]\)</span></li>
+<li><span class="math notranslate nohighlight">\(c'_{box} = [xz, yz, lz]\)</span></li>
 </ul>
-<p>This transformation results in the free surface plane being normal to
-the Cartesian z-axis as only the <span class="math">\(c'_{box}\)</span> vector has a
-z-component.</p>
+<p>This transformation results in the free surface plane being normal to the Cartesian z-axis as only the <span class="math notranslate nohighlight">\(c'_{box}\)</span> vector has a z-component.</p>
 </div>
 <div class="section" id="3.-Function-Documentation">
 <h2>3. Function Documentation<a class="headerlink" href="#3.-Function-Documentation" title="Permalink to this headline">¶</a></h2>
-<p>Generates the uvw box vector orientations for a free surface atomic
-system. In determining the uvw sets, two sets will be in the specified
-hkl plane and one will be out of the plane. Uses free surface in-plane
-vector determination algorithm by W. Sun and G. Cedar, Surface Science,
-617, 53-59 (2013) to identify two in-plane vectors and the plane normal.
-The shortest in-plane vector is identified, as well as an out-of-plane
-vector close to the plane normal. The second in-plane vector is then
-selected to be a shortest in-plane vector that is not parallel to the
-first.</p>
+<p>Generates the uvw box vector orientations for a free surface atomic system. In determining the uvw sets, two sets will be in the specified hkl plane and one will be out of the plane. Uses free surface in-plane vector determination algorithm by W. Sun and G. Cedar, Surface Science, 617, 53-59 (2013) to identify two in-plane vectors and the plane normal. The shortest in-plane vector is identified, as well as an out-of-plane vector close to the plane normal. The second in-plane vector is then
+selected to be a shortest in-plane vector that is not parallel to the first.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>hkl</strong> (<em>array-like object</em>) The free surface plane to generate
-expressed in either 3 indices Miller (hkl) format or 4 indices
-Miller-Bravais (hkil) format.</li>
-<li><strong>box</strong> (<em>atomman.Box, optional</em>) The box object associated with the
-unit cell. Used to identify the best uvw set for the out-of-plane box
-vector. Default value uses a cubic box.</li>
-<li><strong>cutboxvector</strong> (<em>str, optional</em>) Specifies which of the three box
-vectors corresponds to the out-of-plane vector. Default value is c.</li>
-<li><strong>n</strong> (<em>int, optional</em>) Max uvw index value to use in identifying the
-best uvw set for the out-of-plane vector. If not given, will use the
-largest absolute index between the given hkl and the initial in-plane
-vector guesses.</li>
-<li><strong>return_hexagonal</strong> (<em>bool, optional</em>) Flag for indicating if the
-returned vectors are expressed in Miller [uvw] format (False) or
-Miller-Bravais [uvtw] format (True). The Miller-Bravais format is
-only allowed if box is in the standard hexagonal setting: a=b!=c,
-alpha=beta=90, gamma=120. Default value is False if hkl is given in
-the 3 indices Miller (hkl) format and True if it is given in the 4
-indices Miller-Bravais (hkil) format.</li>
-<li><strong>return_planenormal</strong> (<em>bool, optional</em>) If True, the computed
-Cartesian plane normal will also be returned. Default value is False.</li>
-<li><strong>conventional_setting</strong> (<em>str, optional</em>) Allows for rotations of a
-primitive unit cell box to be determined from (hkl) indices specified
-relative to a conventional unit cell. Allowed settings: ‘p’ for
-primitive (no conversion), ‘f’ for face-centered, ‘i’ for
-body-centered, and ‘a’, ‘b’, or ‘c’ for side-centered. Default
-behavior is to perform no conversion, i.e. take (hkl) relative to the
-given box.</li>
+<li><strong>hkl</strong> (<em>array-like object</em>) The free surface plane to generate expressed in either 3 indices Miller (hkl) format or 4 indices Miller-Bravais (hkil) format.</li>
+<li><strong>box</strong> (<em>atomman.Box, optional</em>) The box object associated with the unit cell. Used to identify the best uvw set for the out-of-plane box vector. Default value uses a cubic box.</li>
+<li><strong>cutboxvector</strong> (<em>str, optional</em>) Specifies which of the three box vectors corresponds to the out-of-plane vector. Default value is c.</li>
+<li><strong>n</strong> (<em>int, optional</em>) Max uvw index value to use in identifying the best uvw set for the out-of-plane vector. If not given, will use the largest absolute index between the given hkl and the initial in-plane vector guesses.</li>
+<li><strong>return_hexagonal</strong> (<em>bool, optional</em>) Flag for indicating if the returned vectors are expressed in Miller [uvw] format (False) or Miller-Bravais [uvtw] format (True). The Miller-Bravais format is only allowed if box is in the standard hexagonal setting: a=b!=c, alpha=beta=90, gamma=120. Default value is False if hkl is given in the 3 indices Miller (hkl) format and True if it is given in the 4 indices Miller-Bravais (hkil) format.</li>
+<li><strong>return_planenormal</strong> (<em>bool, optional</em>) If True, the computed Cartesian plane normal will also be returned. Default value is False.</li>
+<li><strong>conventional_setting</strong> (<em>str, optional</em>) Allows for rotations of a primitive unit cell box to be determined from (hkl) indices specified relative to a conventional unit cell. Allowed settings: ‘p’ for primitive (no conversion), ‘f’ for face-centered, ‘i’ for body-centered, and ‘a’, ‘b’, or ‘c’ for side-centered. Default behavior is to perform no conversion, i.e.&nbsp;take (hkl) relative to the given box.</li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li><strong>uvws</strong> (<em>numpy.ndarray</em>) 3x3 array of Miller [uvw] vectors or 3x4
-array of Miller-Bravais [uvtw] vectors to rotate the unit cell for a
-free surface configuration.</li>
-<li><strong>planenormal</strong> (<em>numpy.ndarray</em>) The Cartesian plane normal vector.
-Only returned if return_planenormal is True.</li>
+<li><strong>uvws</strong> (<em>numpy.ndarray</em>) 3x3 array of Miller [uvw] vectors or 3x4 array of Miller-Bravais [uvtw] vectors to rotate the unit cell for a free surface configuration.</li>
+<li><strong>planenormal</strong> (<em>numpy.ndarray</em>) The Cartesian plane normal vector. Only returned if return_planenormal is True.</li>
 </ul>
 <p>Raises</p>
 <ul class="simple">
 <li>(<em>ValueError</em>) If invalid hkl indices values are given.</li>
-<li>(<em>AssertionError</em>) If the search fails to find any of the three [uvw]
-rotation vectors.</li>
+<li>(<em>AssertionError</em>) If the search fails to find any of the three [uvw] rotation vectors.</li>
 </ul>
 </div>
 <div class="section" id="4.-Examples">
@@ -420,22 +377,20 @@ rotation vectors.</li>
 <div class="section" id="4.1.-Cubic">
 <h3>4.1. Cubic<a class="headerlink" href="#4.1.-Cubic" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">2.8665</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">cubic</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">plane</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 
 <span class="n">uvws</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">free_surface_basis</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">)</span>
@@ -456,11 +411,10 @@ c_uvw = [0. 0. 1.]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">plane</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
 
 <span class="n">uvws</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">free_surface_basis</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">)</span>
@@ -481,11 +435,10 @@ c_uvw = [1. 1. 0.]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">plane</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]</span>
 
 <span class="n">uvws</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">free_surface_basis</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">)</span>
@@ -506,11 +459,10 @@ c_uvw = [-1. -1. -2.]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">plane</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
 
 <span class="n">uvws</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">free_surface_basis</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">)</span>
@@ -534,11 +486,10 @@ c_uvw = [ 1. -2.  3.]
 <div class="section" id="4.2-Hexagonal">
 <h3>4.2 Hexagonal<a class="headerlink" href="#4.2-Hexagonal" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">3.254</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">c</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">5.63</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">hexagonal</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
@@ -546,11 +497,10 @@ c_uvw = [ 1. -2.  3.]
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">plane</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 
 <span class="n">uvtws</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">free_surface_basis</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">)</span>
@@ -581,11 +531,10 @@ c_uvw = [0. 0. 1.]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">plane</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
 
 <span class="n">uvtws</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">free_surface_basis</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">)</span>
@@ -616,11 +565,10 @@ c_uvw = [1. 0. 0.]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">plane</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 
 <span class="n">uvtws</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">free_surface_basis</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">)</span>
@@ -653,20 +601,13 @@ c_uvw = [1. 0. 1.]
 </div>
 <div class="section" id="4.3-Using-primitive-cells">
 <h3>4.3 Using primitive cells<a class="headerlink" href="#4.3-Using-primitive-cells" title="Permalink to this headline">¶</a></h3>
-<p>For DFT calculations, it is useful to use primitive unit cells rather
-than conventional ones to minimize the resulting system size. However,
-this introduces a complication that the Miller (hkl) plane and [uvw]
-vectors specified relative to a conventional unit cell will not work on
-the corresponding primitive without conversions. The
-conventional_setting parameter allows for the (hkl) to be given
-relative to a conventional cell and for the rotations to be computed for
-the corresponding primitive cell.</p>
+<p>For DFT calculations, it is useful to use primitive unit cells rather than conventional ones to minimize the resulting system size. However, this introduces a complication that the Miller (hkl) plane and [uvw] vectors specified relative to a conventional unit cell will not work on the corresponding primitive without conversions. The conventional_setting parameter allows for the (hkl) to be given relative to a conventional cell and for the rotations to be computed for the corresponding primitive
+cell.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Construct a box for a primitive bcc unit cell</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">2.866</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">trigonal</span><span class="p">(</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="mi">3</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">109.47122063449069</span><span class="p">)</span>
@@ -674,11 +615,10 @@ the corresponding primitive cell.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Plane defined relative to conventional bcc cell</span>
 <span class="n">plane</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">setting</span> <span class="o">=</span> <span class="s1">&#39;i&#39;</span>
@@ -723,7 +663,7 @@ c_uvw = [1. 1. 0.]
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Introduction to atomman: Free Surface Rotation Basis</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
@@ -764,12 +704,12 @@ c_uvw = [1. 1. 0.]
         <li class="right" >
           <a href="04.3._Dislocation_analysis_tools.html" title="Introduction to atomman: Dislocation analysis tools"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

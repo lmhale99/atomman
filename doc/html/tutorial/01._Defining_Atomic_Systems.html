@@ -4,30 +4,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Defining Atomic Systems &#8212; atomman 1.2.7 documentation</title>
+    <title>Introduction to atomman: Defining Atomic Systems &#8212; atomman 1.2.8 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.2.7',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  false,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Box Class" href="01.1._Box_Class.html" />
     <link rel="prev" title="Introduction to atomman: Unit Conversions" href="00._Unit_Conversions.html" /> 
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -43,7 +36,7 @@
         <li class="right" >
           <a href="00._Unit_Conversions.html" title="Introduction to atomman: Unit Conversions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -108,18 +101,18 @@ div.nblast {
 
 /* input prompt */
 div.nbinput div.prompt pre {
-    color: #303F9F;
+    color: #307FC1;
 }
 
 /* output prompt */
 div.nboutput div.prompt pre {
-    color: #D84315;
+    color: #BF5B3D;
 }
 
 /* all prompts */
 div.nbinput div.prompt,
 div.nboutput div.prompt {
-    min-width: 9ex;
+    min-width: 7ex;
     padding-top: 0.4em;
     padding-right: 0.4em;
     text-align: right;
@@ -159,9 +152,9 @@ div.nboutput div.output_area {
 
 /* input area */
 div.nbinput div.input_area {
-    border: 1px solid #cfcfcf;
+    border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f7f7f7;
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -169,7 +162,7 @@ div.nboutput div[class*=MathJax] {
     text-align: left !important;
 }
 
-/* override sphinx.ext.pngmath center alignment in output cells */
+/* override sphinx.ext.imgmath center alignment in output cells */
 div.nboutput div.math p {
     text-align: left;
 }
@@ -218,24 +211,54 @@ div.nboutput div.output_area.stderr {
 
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
 </style>
 <div class="section" id="Introduction-to-atomman:-Defining-Atomic-Systems">
 <h1>Introduction to atomman: Defining Atomic Systems<a class="headerlink" href="#Introduction-to-atomman:-Defining-Atomic-Systems" title="Permalink to this headline">¶</a></h1>
-<p><strong>Lucas M. Hale</strong>,
-<a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
-<em>Materials Science and Engineering Division, NIST</em>.</p>
+<p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
-<p>This Notebook provides an introduction to creating and manipulating
-atomistic systems using atomman.</p>
+<p>This Notebook provides an introduction to creating and manipulating atomistic systems using atomman.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
@@ -263,31 +286,26 @@ atomistic systems using atomman.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.7
-Notebook executed on 2019-06-05
+atomman version = 1.2.8
+Notebook executed on 2019-07-30
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="2.-Create-a-System">
 <h2>2. Create a System<a class="headerlink" href="#2.-Create-a-System" title="Permalink to this headline">¶</a></h2>
-<p>Atomic systems are represented with three Python objects: Box, Atoms,
-and System.</p>
+<p>Atomic systems are represented with three Python objects: Box, Atoms, and System.</p>
 <div class="section" id="2.1.-Box">
 <h3>2.1. Box<a class="headerlink" href="#2.1.-Box" title="Permalink to this headline">¶</a></h3>
-<p>The Box class defines a generic parallelepiped for the system’s
-boundaries.</p>
-<p>See the <a class="reference external" href="01.1._Box_Class.html">01.1. Box Class Jupyter Notebook</a> for
-more detailed information and options.</p>
+<p>The Box class defines a generic parallelepiped for the system’s boundaries.</p>
+<p>See the <a class="reference external" href="01.1._Box_Class.html">01.1. Box Class Jupyter Notebook</a> for more detailed information and options.</p>
 <div class="section" id="2.1.1.-Create-Box">
 <h4>2.1.1. Create Box<a class="headerlink" href="#2.1.1.-Create-Box" title="Permalink to this headline">¶</a></h4>
-<p>Boxes can be defined using a variety of formats. Here, we’ll define a
-box using lattice parameters.</p>
+<p>Boxes can be defined using a variety of formats. Here, we’ll define a box using lattice parameters.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># a = 4.05 angstroms (Al fcc lattice constant)</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.05</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 
@@ -299,14 +317,12 @@ box using lattice parameters.</p>
 </div>
 <div class="section" id="2.1.2.-Access-Box-properties">
 <h4>2.1.2. Access Box properties<a class="headerlink" href="#2.1.2.-Access-Box-properties" title="Permalink to this headline">¶</a></h4>
-<p>The string of Box shows four Cartesian vectors: the three box vectors
-(avect, bvect, and cvect) and the origin position.</p>
+<p>The string of Box shows four Cartesian vectors: the three box vectors (avect, bvect, and cvect) and the origin position.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -322,14 +338,12 @@ cvect =  [ 0.000,  0.000,  4.050]
 origin = [ 0.000,  0.000,  0.000]
 </pre></div></div>
 </div>
-<p>The parameters of the Box can also be retrieved in a variety of formats.
-Some examples are shown here.</p>
+<p>The parameters of the Box can also be retrieved in a variety of formats. Some examples are shown here.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;a =&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;b =&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;c =&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
@@ -356,30 +370,21 @@ gamma = 90.0
 </div>
 <div class="section" id="2.2.-Atoms">
 <h3>2.2. Atoms<a class="headerlink" href="#2.2.-Atoms" title="Permalink to this headline">¶</a></h3>
-<p>The Atoms class collects per-atom properties that can be freely
-assigned. The only limitations are that the number of atoms is constant,
-and that values for the per-atom properties must be given for all atoms.</p>
-<p>See the <a class="reference external" href="01.2._Atoms_Class.html">01.2. Atoms Class Jupyter Notebook</a>
-for more detailed information and options.</p>
+<p>The Atoms class collects per-atom properties that can be freely assigned. The only limitations are that the number of atoms is constant, and that values for the per-atom properties must be given for all atoms.</p>
+<p>See the <a class="reference external" href="01.2._Atoms_Class.html">01.2. Atoms Class Jupyter Notebook</a> for more detailed information and options.</p>
 <div class="section" id="2.2.1.-Create-Atoms">
 <h4>2.2.1. Create Atoms<a class="headerlink" href="#2.2.1.-Create-Atoms" title="Permalink to this headline">¶</a></h4>
-<p>When initializing an Atoms object, all keyword arguments (except natoms
-and prop) will be interpreted as property names. Values for each
-property must be given for each atom, or only one value given in which
-case all atoms will be assigned the same value.</p>
+<p>When initializing an Atoms object, all keyword arguments (except natoms and prop) will be interpreted as property names. Values for each property must be given for each atom, or only one value given in which case all atoms will be assigned the same value.</p>
 <p>By default, each Atoms instance has two per-atom properties:</p>
 <ul class="simple">
-<li><strong>atype</strong> is an integer atomic type. If not given, atype will be set
-to 1 for all atoms.</li>
-<li><strong>pos</strong> is the 3D vector position. If not given, pos will be set to
-[0,0,0] for all atoms.</li>
+<li><strong>atype</strong> is an integer atomic type. If not given, atype will be set to 1 for all atoms.</li>
+<li><strong>pos</strong> is the 3D vector position. If not given, pos will be set to [0,0,0] for all atoms.</li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Create Atoms for an fcc unit cell</span>
 <span class="n">atype</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">pos</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
@@ -396,11 +401,10 @@ to 1 for all atoms.</li>
 <h4>2.2.2. Accessing Atoms properties<a class="headerlink" href="#2.2.2.-Accessing-Atoms-properties" title="Permalink to this headline">¶</a></h4>
 <p>The string of Atoms shows id, atype, and pos for all atoms.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -420,11 +424,10 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </div>
 <p>The per-atom properties can be accessed as attributes of the object.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atoms.atype -&gt;&#39;</span><span class="p">,</span> <span class="n">atoms</span><span class="o">.</span><span class="n">atype</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atoms.pos[2] -&gt;&#39;</span><span class="p">,</span> <span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 </pre></div>
@@ -439,24 +442,21 @@ atoms.atype -&gt; [1 1 1 1]
 atoms.pos[2] -&gt; [0.5 0.  0.5]
 </pre></div></div>
 </div>
-<p>The per-atom properties can also be converted into a flat
-pandas.DataFrame with the df() method.</p>
+<p>The per-atom properties can also be converted into a flat pandas.DataFrame with the df() method.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">atoms</span><span class="o">.</span><span class="n">df</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="output_area docutils container">
+<div class="output_area rendered_html docutils container">
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -518,31 +518,23 @@ pandas.DataFrame with the df() method.</p>
 </div>
 <div class="section" id="2.3-System">
 <h3>2.3 System<a class="headerlink" href="#2.3-System" title="Permalink to this headline">¶</a></h3>
-<p>The System class gives a full representation of an atomic configuration
-by combining an atoms instance, a box instance, periodic boundary
-condition settings, and a list of element symbols.</p>
-<p>See the <a class="reference external" href="01.3._System_Class.html">01.3. System Class Jupyter
-Notebook</a> for more detailed information and
-options.</p>
+<p>The System class gives a full representation of an atomic configuration by combining an atoms instance, a box instance, periodic boundary condition settings, and a list of element symbols.</p>
+<p>See the <a class="reference external" href="01.3._System_Class.html">01.3. System Class Jupyter Notebook</a> for more detailed information and options.</p>
 <div class="section" id="2.3.1.-Create-system">
 <h4>2.3.1. Create system<a class="headerlink" href="#2.3.1.-Create-system" title="Permalink to this headline">¶</a></h4>
 <p>A System is created by combining its components:</p>
 <ul class="simple">
 <li><strong>atoms</strong> is an Atoms object.</li>
 <li><strong>box</strong> is a Box object.</li>
-<li><strong>pbc</strong> is a list of three bools, where True indicates the box is
-periodic along the corresponding box vector.</li>
-<li><strong>symbols</strong> is a list of element model symbols for each unique atype
-value.</li>
-<li><strong>scale</strong> is a bool that indicates if atoms.pos are to be scaled
-relative to the box vectors.</li>
+<li><strong>pbc</strong> is a list of three bools, where True indicates the box is periodic along the corresponding box vector.</li>
+<li><strong>symbols</strong> is a list of element model symbols for each unique atype value.</li>
+<li><strong>scale</strong> is a bool that indicates if atoms.pos are to be scaled relative to the box vectors.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">,</span> <span class="n">pbc</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
 </pre></div>
@@ -574,17 +566,14 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </div>
 <div class="section" id="3.-Load-a-System">
 <h2>3. Load a System<a class="headerlink" href="#3.-Load-a-System" title="Permalink to this headline">¶</a></h2>
-<p>Systems can also be created by loading in atomic configuration
-information in an alternate format.</p>
-<p>See the <a class="reference external" href="02._Load_And_Dump.html">02. Load And Dump Jupyter Notebook</a>
-for more detailed information on the different styles and options.</p>
+<p>Systems can also be created by loading in atomic configuration information in an alternate format.</p>
+<p>See the <a class="reference external" href="02._Load_And_Dump.html">02. Load And Dump Jupyter Notebook</a> for more detailed information on the different styles and options.</p>
 <p>Create content in POSCAR format</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">fcc_poscar</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;POSCAR for fcc Al standard unit cell</span>
 <span class="s2">1.0</span>
 <span class="s2">4.05 0.00 0.00</span>
@@ -603,16 +592,14 @@ for more detailed information on the different styles and options.</p>
 <p>Load content. The load() function parameters are:</p>
 <ul class="simple">
 <li><strong>style</strong> (<em>str</em>) indicates the format of the content being loaded.</li>
-<li><strong>content</strong> (<em>any</em>) the content to be loaded. For text formats, can
-be a str of the content, a file path or a file-like object.</li>
+<li><strong>content</strong> (<em>any</em>) the content to be loaded. For text formats, can be a str of the content, a file path or a file-like object.</li>
 <li><strong>**kwargs</strong> (<em>any</em>) any extra style-specific keyword arguments.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">new_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;poscar&#39;</span><span class="p">,</span> <span class="n">fcc_poscar</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">new_system</span><span class="p">)</span>
 </pre></div>
@@ -642,24 +629,16 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </div>
 <div class="section" id="4.-System-Manipulations">
 <h2>4. System Manipulations<a class="headerlink" href="#4.-System-Manipulations" title="Permalink to this headline">¶</a></h2>
-<p>The System class was defined to make it easy for users to manipulate
-systems and atomic properties. Additionally, there are a few System
-class methods that assist with some common manipulations.</p>
-<p>See the <a class="reference external" href="01.3._System_Class.html">01.3. System Class Jupyter
-Notebook</a> for more detailed information and
-options.</p>
+<p>The System class was defined to make it easy for users to manipulate systems and atomic properties. Additionally, there are a few System class methods that assist with some common manipulations.</p>
+<p>See the <a class="reference external" href="01.3._System_Class.html">01.3. System Class Jupyter Notebook</a> for more detailed information and options.</p>
 <div class="section" id="4.1.-System.rotate()">
 <h3>4.1. System.rotate()<a class="headerlink" href="#4.1.-System.rotate()" title="Permalink to this headline">¶</a></h3>
-<p>The rotate() method transforms the system such that the new box vectors
-correspond to three integer [uvw] crystal vectors with respect to the
-current box vectors. This ensures that atomic compatibilities across all
-periodic boundaries.</p>
+<p>The rotate() method transforms the system such that the new box vectors correspond to three integer [uvw] crystal vectors with respect to the current box vectors. This ensures that atomic compatibilities across all periodic boundaries.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Rotate system to crystal vectors [110], [-110], [001]</span>
 <span class="n">uvws</span> <span class="o">=</span> <span class="p">[[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
         <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
@@ -699,14 +678,12 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </div>
 <div class="section" id="4.2.-System.supersize()">
 <h3>4.2. System.supersize()<a class="headerlink" href="#4.2.-System.supersize()" title="Permalink to this headline">¶</a></h3>
-<p>A larger System (i.e. supercell) can be generated using the supersize()
-method</p>
+<p>A larger System (i.e.&nbsp;supercell) can be generated using the supersize() method</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Make system a 2x2x2 supercell of itself</span>
 <span class="n">system</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">supersize</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
@@ -800,12 +777,8 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <h3>4.3 Other Methods<a class="headerlink" href="#4.3-Other-Methods" title="Permalink to this headline">¶</a></h3>
 <p>Other methods include:</p>
 <ul class="simple">
-<li><strong>wrap()</strong> wraps atoms around periodic boundaries and expands
-non-periodic boundaries to ensure all atom positions are within the
-box.</li>
-<li><strong>normalize()</strong> transforms the system such that box vectors and
-atomic positions are compatible with simulation codes, such as
-LAMMPS.</li>
+<li><strong>wrap()</strong> wraps atoms around periodic boundaries and expands non-periodic boundaries to ensure all atom positions are within the box.</li>
+<li><strong>normalize()</strong> transforms the system such that box vectors and atomic positions are compatible with simulation codes, such as LAMMPS.</li>
 </ul>
 </div>
 </div>
@@ -817,7 +790,7 @@ LAMMPS.</li>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Introduction to atomman: Defining Atomic Systems</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
@@ -874,12 +847,12 @@ LAMMPS.</li>
         <li class="right" >
           <a href="00._Unit_Conversions.html" title="Introduction to atomman: Unit Conversions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

@@ -1,6 +1,72 @@
 Updates
 =======
 
+Version 1.2.8
+-------------
+
+- **defect.GammaSurface** support added for setting shift vectors using
+  Miller-Bravais 4-term vectors.
+
+- **tools.duplicates_allclose** added that identifies unique value sets
+  based on absolute tolerances.
+
+- **load('phonopy'), System.dump('phonopy')** bug fixes.
+
+- **System.atoms_ix** compatibility checks changed and reduced from throwing
+  an error to throwing a warning.
+
+- **Atoms.extend and System.atoms_extend** methods added for adding atoms to
+  existing Atoms/System objects.
+
+Version 1.2.7
+-------------
+
+- **Atoms.model and Box.model** added to create/read data model 
+  representations of the objects.
+
+- **System.composition** added that returns string composition.
+
+- **System.model, load('system_model'), System.dump('system_model')**
+  data model format improved to capture all system information.
+
+- **tools.Miller** functions for converting between Miller and Miller-Bravais
+  crystal planes.
+
+- **defect.GammaSurface** combining of multiple plots better supported.
+
+- **defect.StackingFault** minimum r parameter added allowing all atoms to
+  be at least a certain distance apart.
+
+- **defect.free_surface_basis** added for identifying system orientations
+  associated with free surface configurations.
+
+Version 1.2.6
+-------------
+
+- **lammps.NEBLog** added for nudged elastic band calculation log files.
+
+- **tools.Miller** transformations now all take float values and
+  primitive-conventional cell conversions added.
+
+- **Box.volume** bug fix to ensure returned volume is always positive.
+
+- **defect.StackingFault** stacking fault configuration generator added.
+
+- **nlist, dvect, dmag, defect.slip_vector** routines improved using Cython,
+  alternate implementations of routines removed.
+
+Version 1.2.5
+-------------
+
+- **Box.volume** parameter added.  Also, new class methods for initializing boxes
+  based on crystal systems (cubic, hexagonal, etc.).
+
+- **load('poscar')** now supports excess per-atom lines.
+
+- **System.atoms_ix** added for indexing atoms at the system level.
+
+- **defect.GammaSurface** reworked with improved design and features.
+
 Version 1.2.4
 -------------
 

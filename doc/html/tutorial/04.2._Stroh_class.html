@@ -4,30 +4,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Stroh class &#8212; atomman 1.2.7 documentation</title>
+    <title>Introduction to atomman: Stroh class &#8212; atomman 1.2.8 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.2.7',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  false,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Dislocation analysis tools" href="04.3._Dislocation_analysis_tools.html" />
     <link rel="prev" title="Introduction to atomman: Point defect generation" href="04.1._Point_defects.html" /> 
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -43,7 +36,7 @@
         <li class="right" >
           <a href="04.1._Point_defects.html" title="Introduction to atomman: Point defect generation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -108,18 +101,18 @@ div.nblast {
 
 /* input prompt */
 div.nbinput div.prompt pre {
-    color: #303F9F;
+    color: #307FC1;
 }
 
 /* output prompt */
 div.nboutput div.prompt pre {
-    color: #D84315;
+    color: #BF5B3D;
 }
 
 /* all prompts */
 div.nbinput div.prompt,
 div.nboutput div.prompt {
-    min-width: 9ex;
+    min-width: 7ex;
     padding-top: 0.4em;
     padding-right: 0.4em;
     text-align: right;
@@ -159,9 +152,9 @@ div.nboutput div.output_area {
 
 /* input area */
 div.nbinput div.input_area {
-    border: 1px solid #cfcfcf;
+    border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f7f7f7;
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -169,7 +162,7 @@ div.nboutput div[class*=MathJax] {
     text-align: left !important;
 }
 
-/* override sphinx.ext.pngmath center alignment in output cells */
+/* override sphinx.ext.imgmath center alignment in output cells */
 div.nboutput div.math p {
     text-align: left;
 }
@@ -218,25 +211,54 @@ div.nboutput div.output_area.stderr {
 
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
 </style>
 <div class="section" id="Introduction-to-atomman:-Stroh-class">
 <h1>Introduction to atomman: Stroh class<a class="headerlink" href="#Introduction-to-atomman:-Stroh-class" title="Permalink to this headline">¶</a></h1>
-<p><strong>Lucas M. Hale</strong>,
-<a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
-<em>Materials Science and Engineering Division, NIST</em>.</p>
+<p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
-<p>This Notebook provides an introduction to the atomman.defect.Stroh class
-that computes elastic solutions for the Eshelby anisotropic straight
-dislocation or crack using the Stroh method.</p>
+<p>This Notebook provides an introduction to the atomman.defect.Stroh class that computes elastic solutions for the Eshelby anisotropic straight dislocation or crack using the Stroh method.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard libraries</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
@@ -266,88 +288,59 @@ dislocation or crack using the Stroh method.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.7
-Notebook executed on 2019-06-05
+atomman version = 1.2.8
+Notebook executed on 2019-07-30
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="2.-Underlying-theory-of-Stroh-method">
 <h2>2. Underlying theory of Stroh method<a class="headerlink" href="#2.-Underlying-theory-of-Stroh-method" title="Permalink to this headline">¶</a></h2>
 <p>Starting with the fundamental equations of elasticity:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\sigma_{ij} = C_{ijkl} \epsilon_{kl}\]</div>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\epsilon_{ij} = \frac{1}{2} \left(\frac{\partial u_i}{\partial x_j} + \frac{\partial u_j}{\partial x_i}\right)\]</div>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\frac{\partial \sigma_{ij}}{\partial x_j} = 0\]</div>
-<p>Combining these and taking the solution to be independent of <span class="math">\(x_3\)</span>
-generates the partial differential equation:</p>
-<div class="math">
+<p>Combining these and taking the solution to be independent of <span class="math notranslate nohighlight">\(x_3\)</span> generates the partial differential equation:</p>
+<div class="math notranslate nohighlight">
 \[C_{ijkl} \frac{ \partial^2 u_k}{\partial x_j \partial x_l} = 0\]</div>
 <p>Solutions of the partial differential equation are of the form</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[u_k = A_k f(x_1 + p x_2)\]</div>
-<p>Values of <span class="math">\(A_k\)</span> and <span class="math">\(p\)</span> can be found by solving</p>
-<div class="math">
+<p>Values of <span class="math notranslate nohighlight">\(A_k\)</span> and <span class="math notranslate nohighlight">\(p\)</span> can be found by solving</p>
+<div class="math notranslate nohighlight">
 \[\left[C_{i1k1} + \left(C_{i1k2} + C_{i2k1} \right) p + C_{i2k2} p^2 \right] A_k = 0\]</div>
-<p>The determinate expression is a sixth-order polynomial expression
-resulting in six complex roots, <span class="math">\(p_\alpha\)</span> with <span class="math">\(\alpha\)</span>
-ranging 1 to 6. There is also one <span class="math">\(A_{k \alpha}\)</span> corresponding to
-each root.</p>
-<p>With the Stroh method for solving the problem, another vector,
-<span class="math">\(L_i\)</span> is defined for each <span class="math">\(\alpha\)</span> root as</p>
-<div class="math">
+<p>The determinate expression is a sixth-order polynomial expression resulting in six complex roots, <span class="math notranslate nohighlight">\(p_\alpha\)</span> with <span class="math notranslate nohighlight">\(\alpha\)</span> ranging 1 to 6. There is also one <span class="math notranslate nohighlight">\(A_{k \alpha}\)</span> corresponding to each root.</p>
+<p>With the Stroh method for solving the problem, another vector, <span class="math notranslate nohighlight">\(L_i\)</span> is defined for each <span class="math notranslate nohighlight">\(\alpha\)</span> root as</p>
+<div class="math notranslate nohighlight">
 \[L_{i \alpha} = \left(C_{i2k1} + p_{\alpha} C_{i2k2} \right) A_{k \alpha}\]</div>
-<p>and a normalization factor, <span class="math">\(k_{\alpha}\)</span>, as</p>
-<div class="math">
+<p>and a normalization factor, <span class="math notranslate nohighlight">\(k_{\alpha}\)</span>, as</p>
+<div class="math notranslate nohighlight">
 \[k_{\alpha} = \frac{1}{2 A_{j \alpha} L_{j \alpha}}\]</div>
-<p>Stroh’s method is then to write the problem as an eigenvector problem,
-which solving gives values for <span class="math">\(p_{\alpha}\)</span>, <span class="math">\(A_{i \alpha}\)</span>,
-and <span class="math">\(L_{i \alpha}\)</span>.</p>
-<p><strong>NOTE FOR ISOTROPIC SYSTEMS</strong>: The Stroh method will fail if the
-elastic constant tensor is for an isotropic material as the eigenvector
-problem cannot be solved. If you want a solution for an isotropic
-material, either use the IsotropicVolterraSolution class or adjust the
-elastic constants to not be exactly isotropic. The
-atomman.defect.solve_volterra_dislocation() function will return
-either a Stroh object or an IsotropicVolterraSolution object based on
-the nature of the supplied elastic constants.</p>
+<p>Stroh’s method is then to write the problem as an eigenvector problem, which solving gives values for <span class="math notranslate nohighlight">\(p_{\alpha}\)</span>, <span class="math notranslate nohighlight">\(A_{i \alpha}\)</span>, and <span class="math notranslate nohighlight">\(L_{i \alpha}\)</span>.</p>
+<p><strong>NOTE FOR ISOTROPIC SYSTEMS</strong>: The Stroh method will fail if the elastic constant tensor is for an isotropic material as the eigenvector problem cannot be solved. If you want a solution for an isotropic material, either use the IsotropicVolterraSolution class or adjust the elastic constants to not be exactly isotropic. The atomman.defect.solve_volterra_dislocation() function will return either a Stroh object or an IsotropicVolterraSolution object based on the nature of the supplied elastic
+constants.</p>
 </div>
 <div class="section" id="3.-Initialize/solve">
 <h2>3. Initialize/solve<a class="headerlink" href="#3.-Initialize/solve" title="Permalink to this headline">¶</a></h2>
-<p>A solution is found using the Stroh method when either an instance of
-the object is initialized or when the solve() method is called. The same
-parameters are taken in both cases.</p>
+<p>A solution is found using the Stroh method when either an instance of the object is initialized or when the solve() method is called. The same parameters are taken in both cases.</p>
 <p>Note that you can either initialize the Stroh class</p>
 <p>Parameters</p>
 <ul class="simple">
 <li><strong>C</strong> (<em>atomman.ElasticConstants</em>) The medium’s elastic constants.</li>
-<li><strong>burgers</strong> (<em>array-like object</em>) The dislocation’s Cartesian Burgers
-vector.</li>
-<li><strong>axes</strong> (<em>array-like object, optional</em>) 3x3 set of rotational axes
-for the system. If given, C and burgers will be transformed using
-axes.</li>
-<li><strong>m</strong> (<em>array-like object, optional</em>) The m Cartesian unit vector for
-the solution giving the <span class="math">\(x_1\)</span> direction. m, n, and <span class="math">\(\xi\)</span>
-(dislocation line direction) should be right-hand orthogonal. Default
-value is [1,0,0] (Cartesian x-axis).</li>
-<li><strong>n</strong> (<em>array-like object, optional</em>) The n Cartesian unit vector for
-the solution giving the <span class="math">\(x_2\)</span> direction. m, n, and <span class="math">\(\xi\)</span>
-(dislocation line direction) should be right-hand orthogonal. Default
-value is [0,1,0] (Cartesian y-axis).</li>
-<li><strong>tol</strong> (<em>float</em>) Tolerance parameter used to round off near-zero
-values. Default value is 1e-8.</li>
+<li><strong>burgers</strong> (<em>array-like object</em>) The dislocation’s Cartesian Burgers vector.</li>
+<li><strong>axes</strong> (<em>array-like object, optional</em>) 3x3 set of rotational axes for the system. If given, C and burgers will be transformed using axes.</li>
+<li><strong>m</strong> (<em>array-like object, optional</em>) The m Cartesian unit vector for the solution giving the <span class="math notranslate nohighlight">\(x_1\)</span> direction. m, n, and <span class="math notranslate nohighlight">\(\xi\)</span> (dislocation line direction) should be right-hand orthogonal. Default value is [1,0,0] (Cartesian x-axis).</li>
+<li><strong>n</strong> (<em>array-like object, optional</em>) The n Cartesian unit vector for the solution giving the <span class="math notranslate nohighlight">\(x_2\)</span> direction. m, n, and <span class="math notranslate nohighlight">\(\xi\)</span> (dislocation line direction) should be right-hand orthogonal. Default value is [0,1,0] (Cartesian y-axis).</li>
+<li><strong>tol</strong> (<em>float</em>) Tolerance parameter used to round off near-zero values. Default value is 1e-8.</li>
 </ul>
-<p><strong>Notes on orientation:</strong> The default m and n values correspond to the
-theory in Section #2 where the dislocation line is along the z-axis and
-the slip plane is normal to the y-axis. See Section #6 for discussion on
-more general cases.</p>
+<p><strong>Notes on orientation:</strong> The default m and n values correspond to the theory in Section #2 where the dislocation line is along the z-axis and the slip plane is normal to the y-axis. See Section #6 for discussion on more general cases.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># 0 K values for Al</span>
 <span class="n">alat</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.05</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">C11</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">1.143e12</span><span class="p">,</span> <span class="s1">&#39;dyn/cm^2&#39;</span><span class="p">)</span>
@@ -373,14 +366,12 @@ more general cases.</p>
 </pre></div>
 </div>
 </div>
-<p>Values for the solution parameters p, A, L, and k described in Section
-#2 can be checked as attributes of the class instance.</p>
+<p>Values for the solution parameters p, A, L, and k described in Section #2 can be checked as attributes of the class instance.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;stroh.p -&gt;&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">stroh</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
@@ -405,84 +396,75 @@ more general cases.</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 stroh.p -&gt;
-[ 4.45286779e-17+0.72418397j  4.45286779e-17-0.72418397j
- -6.13338041e-17+1.22646367j -6.13338041e-17-1.22646367j
-  2.07647793e-16+1.14839554j  2.07647793e-16-1.14839554j]
+[-1.47519223e-17+0.72418397j -1.47519223e-17-0.72418397j
+ -2.22044605e-16+1.22646367j -2.22044605e-16-1.22646367j
+  2.75388253e-16+1.14839554j  2.75388253e-16-1.14839554j]
 
 stroh.A -&gt;
-[[-4.27649449e-17-4.59984801e-01j  7.87367005e-01+0.00000000e+00j
-   2.44796357e-01+2.55237759e-16j]
- [-4.27649449e-17+4.59984801e-01j  7.87367005e-01-0.00000000e+00j
-   2.44796357e-01-2.55237759e-16j]
- [ 6.86766687e-01+0.00000000e+00j  2.52251738e-17+4.77037014e-01j
-  -4.28671195e-16-4.46713376e-01j]
- [ 6.86766687e-01-0.00000000e+00j  2.52251738e-17-4.77037014e-01j
-  -4.28671195e-16+4.46713376e-01j]
- [ 3.19254996e-16+5.72170071e-01j -4.40891319e-01+9.98633531e-17j
-   6.26880680e-01+0.00000000e+00j]
- [ 3.19254996e-16-5.72170071e-01j -4.40891319e-01-9.98633531e-17j
-   6.26880680e-01-0.00000000e+00j]]
+[[ 1.57469634e-18-4.59984803e-01j  7.87367009e-01+0.00000000e+00j
+   2.44796359e-01+1.06767215e-16j]
+ [ 1.57469634e-18+4.59984803e-01j  7.87367009e-01-0.00000000e+00j
+   2.44796359e-01-1.06767215e-16j]
+ [ 6.86766690e-01+0.00000000e+00j  1.38536102e-16+4.77037016e-01j
+  -4.86316004e-16-4.46713378e-01j]
+ [ 6.86766690e-01-0.00000000e+00j  1.38536102e-16-4.77037016e-01j
+  -4.86316004e-16+4.46713378e-01j]
+ [ 1.26033983e-15+5.72170074e-01j -4.40891320e-01+8.15012080e-16j
+   6.26880682e-01+0.00000000e+00j]
+ [ 1.26033983e-15-5.72170074e-01j -4.40891320e-01-8.15012080e-16j
+   6.26880682e-01-0.00000000e+00j]]
 
 stroh.L -&gt;
-[[-1.91928332e-01+1.30138137e-17j -1.06689432e-18-2.65027039e-01j
-   3.30440123e-17-3.82898052e-02j]
- [-1.91928332e-01-1.30138137e-17j -1.06689432e-18+2.65027039e-01j
-   3.30440123e-17+3.82898052e-02j]
- [-3.88719009e-18-2.37666851e-01j  1.93782219e-01-1.25600740e-17j
-  -8.48368030e-02+8.76433115e-17j]
- [-3.88719009e-18+2.37666851e-01j  1.93782219e-01+1.25600740e-17j
-  -8.48368030e-02-8.76433115e-17j]
- [ 2.01843586e-01-1.02334557e-16j  5.70254956e-17+1.75761380e-01j
-  -1.78762434e-17-1.16721769e-01j]
- [ 2.01843586e-01+1.02334557e-16j  5.70254956e-17-1.75761380e-01j
-  -1.78762434e-17+1.16721769e-01j]]
+[[-1.91928325e-01+2.15673835e-19j -2.35862923e-18-2.65027029e-01j
+  -1.79031351e-17-3.82898037e-02j]
+ [-1.91928325e-01-2.15673835e-19j -2.35862923e-18+2.65027029e-01j
+  -1.79031351e-17+3.82898037e-02j]
+ [-1.38056531e-18-2.37666842e-01j  1.93782212e-01-4.72970113e-17j
+  -8.48367997e-02+1.20307558e-16j]
+ [-1.38056531e-18+2.37666842e-01j  1.93782212e-01+4.72970113e-17j
+  -8.48367997e-02-1.20307558e-16j]
+ [ 2.01843578e-01-4.19283737e-16j  3.35346479e-16+1.75761373e-01j
+  -5.21733447e-17-1.16721764e-01j]
+ [ 2.01843578e-01+4.19283737e-16j  3.35346479e-16-1.75761373e-01j
+  -5.21733447e-17+1.16721764e-01j]]
 
 stroh.k -&gt;
-[[-1.91928332e-01+1.30138137e-17j -1.06689432e-18-2.65027039e-01j
-   3.30440123e-17-3.82898052e-02j]
- [-1.91928332e-01-1.30138137e-17j -1.06689432e-18+2.65027039e-01j
-   3.30440123e-17+3.82898052e-02j]
- [-3.88719009e-18-2.37666851e-01j  1.93782219e-01-1.25600740e-17j
-  -8.48368030e-02+8.76433115e-17j]
- [-3.88719009e-18+2.37666851e-01j  1.93782219e-01+1.25600740e-17j
-  -8.48368030e-02-8.76433115e-17j]
- [ 2.01843586e-01-1.02334557e-16j  5.70254956e-17+1.75761380e-01j
-  -1.78762434e-17-1.16721769e-01j]
- [ 2.01843586e-01+1.02334557e-16j  5.70254956e-17-1.75761380e-01j
-  -1.78762434e-17+1.16721769e-01j]]
+[[-1.91928325e-01+2.15673835e-19j -2.35862923e-18-2.65027029e-01j
+  -1.79031351e-17-3.82898037e-02j]
+ [-1.91928325e-01-2.15673835e-19j -2.35862923e-18+2.65027029e-01j
+  -1.79031351e-17+3.82898037e-02j]
+ [-1.38056531e-18-2.37666842e-01j  1.93782212e-01-4.72970113e-17j
+  -8.48367997e-02+1.20307558e-16j]
+ [-1.38056531e-18+2.37666842e-01j  1.93782212e-01+4.72970113e-17j
+  -8.48367997e-02-1.20307558e-16j]
+ [ 2.01843578e-01-4.19283737e-16j  3.35346479e-16+1.75761373e-01j
+  -5.21733447e-17-1.16721764e-01j]
+ [ 2.01843578e-01+4.19283737e-16j  3.35346479e-16-1.75761373e-01j
+  -5.21733447e-17+1.16721764e-01j]]
 
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="4.-Derived-properties">
 <h2>4. Derived properties<a class="headerlink" href="#4.-Derived-properties" title="Permalink to this headline">¶</a></h2>
-<p>Different properties of the solution can be derived from the solution
-parameters and obtained as other attributes of the class.</p>
+<p>Different properties of the solution can be derived from the solution parameters and obtained as other attributes of the class.</p>
 <div class="section" id="4.1-Energy-coefficient-tensor,-K_tensor">
 <h3>4.1 Energy coefficient tensor, K_tensor<a class="headerlink" href="#4.1-Energy-coefficient-tensor,-K_tensor" title="Permalink to this headline">¶</a></h3>
-<p>The energy coefficient tensor is a property of the solution that is
-useful for dislocation stress and energy calculations. It only depends
-on the elastic constants and the orientation.</p>
+<p>The energy coefficient tensor is a property of the solution that is useful for dislocation stress and energy calculations. It only depends on the elastic constants and the orientation.</p>
 <p>The tensor can be obtained from the solution parameters as</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[K_{jl} = i \sum_{\alpha} \pm k_{\alpha} L_{j \alpha} L_{l \alpha}\]</div>
-<p>where <span class="math">\(i\)</span> is the imaginary unit and the <span class="math">\(\pm\)</span> sense
-alternates for even/odd values of <span class="math">\(\alpha\)</span> (the six partial
-solutions are three pairs of complex conjugates).</p>
-<p><strong>Note</strong> <span class="math">\(K_{ij}\)</span> can vary between different definitions by
-including different multiplicative factors. Here, it is taken such that
-in the isotropic case it relates to the shear modulus, <span class="math">\(\mu\)</span>, and
-Poisson’s ratio, <span class="math">\(\nu\)</span>, by</p>
+<p>where <span class="math notranslate nohighlight">\(i\)</span> is the imaginary unit and the <span class="math notranslate nohighlight">\(\pm\)</span> sense alternates for even/odd values of <span class="math notranslate nohighlight">\(\alpha\)</span> (the six partial solutions are three pairs of complex conjugates).</p>
+<p><strong>Note</strong> <span class="math notranslate nohighlight">\(K_{ij}\)</span> can vary between different definitions by including different multiplicative factors. Here, it is taken such that in the isotropic case it relates to the shear modulus, <span class="math notranslate nohighlight">\(\mu\)</span>, and Poisson’s ratio, <span class="math notranslate nohighlight">\(\nu\)</span>, by</p>
 <ul class="simple">
-<li><span class="math">\(K_{11}^{iso} = K_{22}^{iso} = K_{edge}^{iso} = \frac{\mu}{1 - \nu}\)</span></li>
-<li><span class="math">\(K_{33}^{iso} = K_{screw}^{iso} = \mu\)</span></li>
+<li><span class="math notranslate nohighlight">\(K_{11}^{iso} = K_{22}^{iso} = K_{edge}^{iso} = \frac{\mu}{1 - \nu}\)</span></li>
+<li><span class="math notranslate nohighlight">\(K_{33}^{iso} = K_{screw}^{iso} = \mu\)</span></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;stroh.K_tensor (in GPa) -&gt;&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">stroh</span><span class="o">.</span><span class="n">K_tensor</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">))</span>
 </pre></div>
@@ -502,22 +484,17 @@ stroh.K_tensor (in GPa) -&gt;
 </div>
 <div class="section" id="4.2-Energy-coefficient,-K_coeff">
 <h3>4.2 Energy coefficient, K_coeff<a class="headerlink" href="#4.2-Energy-coefficient,-K_coeff" title="Permalink to this headline">¶</a></h3>
-<p>The energy coefficient, <span class="math">\(K\)</span>, is a dislocation-specific coefficient
-found in expressions for a dislocation’s self-energy</p>
-<div class="math">
+<p>The energy coefficient, <span class="math notranslate nohighlight">\(K\)</span>, is a dislocation-specific coefficient found in expressions for a dislocation’s self-energy</p>
+<div class="math notranslate nohighlight">
 \[\frac{W}{l} = \frac{K b^2}{4 \pi} \ln{ \left( \frac{R}{r_0} \right)},\]</div>
-<p>where <span class="math">\(b\)</span> is the magnitude of <span class="math">\(b_i\)</span>, and <span class="math">\(r_0\)</span> and
-<span class="math">\(R\)</span> are the inner and outer radii of a cylindircal ring around the
-dislocation. The energy coefficient can be computed from the energy
-coefficent tensor and burgers vector</p>
-<div class="math">
+<p>where <span class="math notranslate nohighlight">\(b\)</span> is the magnitude of <span class="math notranslate nohighlight">\(b_i\)</span>, and <span class="math notranslate nohighlight">\(r_0\)</span> and <span class="math notranslate nohighlight">\(R\)</span> are the inner and outer radii of a cylindircal ring around the dislocation. The energy coefficient can be computed from the energy coefficent tensor and burgers vector</p>
+<div class="math notranslate nohighlight">
 \[K = \frac{b_i K_{ij} b_j} {b_k b_k}\]</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Note that K_coeff here is K_11 above as b_i is || to x-axis</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;stroh.K_coeff (in GPa) -&gt;&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">stroh</span><span class="o">.</span><span class="n">K_coeff</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">))</span>
@@ -530,25 +507,23 @@ coefficent tensor and burgers vector</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 stroh.K_coeff (in GPa) -&gt;
-44.16096694763373
+44.16096694763206
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="4.3-Pre-logarithmic-factor,-preln">
 <h3>4.3 Pre-logarithmic factor, preln<a class="headerlink" href="#4.3-Pre-logarithmic-factor,-preln" title="Permalink to this headline">¶</a></h3>
 <p>Alternatively, the self-energy expression can be represented as</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\frac{W}{l} = a \ln{ \left( \frac{R}{r_0} \right)},\]</div>
-<p>where <span class="math">\(a\)</span> is referred to as the pre-logarithmic energy factor.
-Related to <span class="math">\(K\)</span> and <span class="math">\(K_{ij}\)</span>,</p>
-<div class="math">
+<p>where <span class="math notranslate nohighlight">\(a\)</span> is referred to as the pre-logarithmic energy factor. Related to <span class="math notranslate nohighlight">\(K\)</span> and <span class="math notranslate nohighlight">\(K_{ij}\)</span>,</p>
+<div class="math notranslate nohighlight">
 \[a = \frac{b_i K_{ij} b_j}{4 \pi} = \frac{K b^2}{4 \pi}\]</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># preln is considered in units of energy/length</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;stroh.preln (in eV/Å) -&gt;&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">stroh</span><span class="o">.</span><span class="n">preln</span><span class="p">,</span> <span class="s1">&#39;eV/Å&#39;</span><span class="p">))</span>
@@ -561,7 +536,7 @@ Related to <span class="math">\(K\)</span> and <span class="math">\(K_{ij}\)</sp
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 stroh.preln (in eV/Å) -&gt;
-0.17988642292050774
+0.17988641517343804
 </pre></div></div>
 </div>
 </div>
@@ -573,11 +548,10 @@ stroh.preln (in eV/Å) -&gt;
 <div class="section" id="Create-an-fcc-Al-demonstration-unit-cell">
 <h4>Create an fcc Al demonstration unit cell<a class="headerlink" href="#Create-an-fcc-Al-demonstration-unit-cell" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">alat</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.05</span><span class="p">,</span> <span class="s1">&#39;Å&#39;</span><span class="p">)</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">alat</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">alat</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">alat</span><span class="p">)</span>
 
@@ -615,11 +589,10 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="section" id="Use-ucell-to-generate-system">
 <h4>Use ucell to generate system<a class="headerlink" href="#Use-ucell-to-generate-system" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Create system by rotating ucell to coincide with dislocation solution</span>
 <span class="n">system</span> <span class="o">=</span> <span class="n">ucell</span><span class="o">.</span><span class="n">rotate</span><span class="p">([</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">])</span>
 
@@ -646,16 +619,14 @@ system.natoms -&gt; 864
 </div>
 <div class="section" id="5.2-eta-coordinates">
 <h3>5.2 eta coordinates<a class="headerlink" href="#5.2-eta-coordinates" title="Permalink to this headline">¶</a></h3>
-<p>The position-dependence of the displacements and stresses are handled
-using <span class="math">\(\eta\)</span> coordinates defined as (based on Section #2)</p>
-<div class="math">
+<p>The position-dependence of the displacements and stresses are handled using <span class="math notranslate nohighlight">\(\eta\)</span> coordinates defined as (based on Section #2)</p>
+<div class="math notranslate nohighlight">
 \[\eta_{\alpha} = x_1 + p_{\alpha} x_2\]</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Compute eta for test position [1, 2, 3]</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;stroh.eta([1,2,3]) (in Å) -&gt;&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">stroh</span><span class="o">.</span><span class="n">eta</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]),</span> <span class="s1">&#39;Å&#39;</span><span class="p">))</span>
@@ -675,16 +646,14 @@ stroh.eta([1,2,3]) (in Å) -&gt;
 </div>
 <div class="section" id="5.3-displacement">
 <h3>5.3 displacement<a class="headerlink" href="#5.3-displacement" title="Permalink to this headline">¶</a></h3>
-<p>The displacements associated with the elastic solution can be calculated
-as</p>
-<div class="math">
+<p>The displacements associated with the elastic solution can be calculated as</p>
+<div class="math notranslate nohighlight">
 \[u_j = \frac{1}{2 \pi i} \sum_{\alpha}  \pm k_{\alpha} A_{j \alpha} (L_{l \alpha} b_l) \ln{\eta_{\alpha}}\]</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># plot original positions of atoms in system</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -699,11 +668,10 @@ as</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Compute displacements for all positions</span>
 <span class="n">disp</span> <span class="o">=</span> <span class="n">stroh</span><span class="o">.</span><span class="n">displacement</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
 
@@ -727,25 +695,23 @@ as</p>
 <div class="section" id="5.3-stress">
 <h3>5.3 stress<a class="headerlink" href="#5.3-stress" title="Permalink to this headline">¶</a></h3>
 <p>The elastic stress state at a given position can be calculated as</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\sigma_{ij} = \frac{1}{2 \pi i} \sum_{\alpha}  \pm k_{\alpha} C_{ijkl}[m_l + p_{\alpha} n_l] A_{k \alpha} (L_{m \alpha} b_m) \frac{1}{\eta_{\alpha}}\]</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Calculate stress state at each atomic position</span>
 <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">stress</span> <span class="o">=</span> <span class="n">stroh</span><span class="o">.</span><span class="n">stress</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Dirty plots of stress components</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;stress_11:&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">stress</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
@@ -867,72 +833,40 @@ stress_23:
 </div>
 <div class="section" id="6.-General-case-considerations">
 <h2>6. General case considerations<a class="headerlink" href="#6.-General-case-considerations" title="Permalink to this headline">¶</a></h2>
-<p>Properly building atomistic systems with dislocations using the Stroh
-method requires careful considerations regarding the system orientation.
-This is complicated by the need to think in terms of multiple axes
-systems</p>
+<p>Properly building atomistic systems with dislocations using the Stroh method requires careful considerations regarding the system orientation. This is complicated by the need to think in terms of multiple axes systems</p>
 <ul class="simple">
-<li><span class="math">\([hkl]\)</span> crystal vectors are commonly used to define dislocation
-types and slip planes. These vectors are taken relative to the box
-vectors of a unit cell in a standard reference frame.</li>
-<li>The atomistic system’s orientation is defined by specifying
-<span class="math">\([hkl]\)</span> crystal vectors to coincide with the system’s
-<span class="math">\(a_i\)</span>, <span class="math">\(b_i\)</span>, <span class="math">\(c_i\)</span> box vectors.</li>
-<li>The atomic positions within the atomistic system are represented with
-Cartesian <span class="math">\(x'_i\)</span> coordinates.</li>
-<li>The elastic solution is defined for Cartesian <span class="math">\(x_i\)</span>
-coordinates, where <span class="math">\(x_2\)</span> is normal to the slip plane and
-<span class="math">\(x_3\)</span> is parallel to the dislocation line.</li>
+<li><span class="math notranslate nohighlight">\([hkl]\)</span> crystal vectors are commonly used to define dislocation types and slip planes. These vectors are taken relative to the box vectors of a unit cell in a standard reference frame.</li>
+<li>The atomistic system’s orientation is defined by specifying <span class="math notranslate nohighlight">\([hkl]\)</span> crystal vectors to coincide with the system’s <span class="math notranslate nohighlight">\(a_i\)</span>, <span class="math notranslate nohighlight">\(b_i\)</span>, <span class="math notranslate nohighlight">\(c_i\)</span> box vectors.</li>
+<li>The atomic positions within the atomistic system are represented with Cartesian <span class="math notranslate nohighlight">\(x'_i\)</span> coordinates.</li>
+<li>The elastic solution is defined for Cartesian <span class="math notranslate nohighlight">\(x_i\)</span> coordinates, where <span class="math notranslate nohighlight">\(x_2\)</span> is normal to the slip plane and <span class="math notranslate nohighlight">\(x_3\)</span> is parallel to the dislocation line.</li>
 </ul>
-<p>As the latter two are both Cartesian, <span class="math">\(x_i\)</span> values are easily
-obtained from <span class="math">\(x'_i\)</span> using transformation unit vectors <span class="math">\(m_i\)</span>
-and <span class="math">\(n_i\)</span></p>
+<p>As the latter two are both Cartesian, <span class="math notranslate nohighlight">\(x_i\)</span> values are easily obtained from <span class="math notranslate nohighlight">\(x'_i\)</span> using transformation unit vectors <span class="math notranslate nohighlight">\(m_i\)</span> and <span class="math notranslate nohighlight">\(n_i\)</span></p>
 <ul class="simple">
-<li><span class="math">\(x_1 = m_i x'_i\)</span></li>
-<li><span class="math">\(x_2 = n_i x'_i\)</span></li>
-<li><span class="math">\(x_3\)</span> values not needed as the elastic solution is invariant in
-that direction.</li>
+<li><span class="math notranslate nohighlight">\(x_1 = m_i x'_i\)</span></li>
+<li><span class="math notranslate nohighlight">\(x_2 = n_i x'_i\)</span></li>
+<li><span class="math notranslate nohighlight">\(x_3\)</span> values not needed as the elastic solution is invariant in that direction.</li>
 </ul>
-<p>Depending on the crystal structure and dislocation type, it is not
-always possible to construct a system with orthogonal box vectors. This
-means that the <span class="math">\(a_i\)</span>, <span class="math">\(b_i\)</span>, <span class="math">\(c_i\)</span> box vectors will
-not necessarily align with the <span class="math">\(x'_i\)</span> axes. For this general case,
-the following requirements and choices can help with orientation
-decisions</p>
+<p>Depending on the crystal structure and dislocation type, it is not always possible to construct a system with orthogonal box vectors. This means that the <span class="math notranslate nohighlight">\(a_i\)</span>, <span class="math notranslate nohighlight">\(b_i\)</span>, <span class="math notranslate nohighlight">\(c_i\)</span> box vectors will not necessarily align with the <span class="math notranslate nohighlight">\(x'_i\)</span> axes. For this general case, the following requirements and choices can help with orientation decisions</p>
 <ul class="simple">
-<li>The dislocation’s line direction must be parallel to one of the box
-vectors for the dislocation to remain infinitely straight.</li>
-<li>For convenience, each of the elastic solution’s <span class="math">\(x_i\)</span>-axes
-should map to one of the atomic system’s <span class="math">\(x'_i\)</span>-axes. This is
-accomplished if both the dislocation line and the slip plane normal
-are oriented along <span class="math">\(x'_i\)</span>-axes.</li>
+<li>The dislocation’s line direction must be parallel to one of the box vectors for the dislocation to remain infinitely straight.</li>
+<li>For convenience, each of the elastic solution’s <span class="math notranslate nohighlight">\(x_i\)</span>-axes should map to one of the atomic system’s <span class="math notranslate nohighlight">\(x'_i\)</span>-axes. This is accomplished if both the dislocation line and the slip plane normal are oriented along <span class="math notranslate nohighlight">\(x'_i\)</span>-axes.</li>
 </ul>
 <p>With LAMMPS-compatible system boxes</p>
 <ul class="simple">
-<li>The <span class="math">\(a_i\)</span> box vector is always aligned with the
-<span class="math">\(x'_1\)</span>-axis, therefore the dislocation line should be parallel
-to the <span class="math">\(a_i\)</span> vector / <span class="math">\(x'_1\)</span>-axis.</li>
-<li>The <span class="math">\(a_i\)</span> and <span class="math">\(b_i\)</span> box vectors have no component in the
-<span class="math">\(x'_3\)</span> direction, i.e. the plane containing both <span class="math">\(a_i\)</span>
-and <span class="math">\(b_i\)</span> is normal to the <span class="math">\(x'_3\)</span>-axis. The slip plane
-normal can then be taken as parallel to the <span class="math">\(x'_3\)</span>-axis.</li>
-<li>Related to the elastic solution, this makes <span class="math">\(x_1\)</span> parallel to
-the <span class="math">\(x'_2\)</span>-axis, <span class="math">\(x_2\)</span> parallel to the <span class="math">\(x'_3\)</span>-axis,
-and <span class="math">\(x_3\)</span> parallel to the <span class="math">\(x'_1\)</span>-axis. The corresponding
-<span class="math">\(m_i\)</span> and <span class="math">\(n_i\)</span> values are<ul>
-<li><span class="math">\(m_i = [0, 1, 0]\)</span></li>
-<li><span class="math">\(n_i = [0, 0, 1]\)</span></li>
+<li>The <span class="math notranslate nohighlight">\(a_i\)</span> box vector is always aligned with the <span class="math notranslate nohighlight">\(x'_1\)</span>-axis, therefore the dislocation line should be parallel to the <span class="math notranslate nohighlight">\(a_i\)</span> vector / <span class="math notranslate nohighlight">\(x'_1\)</span>-axis.</li>
+<li>The <span class="math notranslate nohighlight">\(a_i\)</span> and <span class="math notranslate nohighlight">\(b_i\)</span> box vectors have no component in the <span class="math notranslate nohighlight">\(x'_3\)</span> direction, i.e.&nbsp;the plane containing both <span class="math notranslate nohighlight">\(a_i\)</span> and <span class="math notranslate nohighlight">\(b_i\)</span> is normal to the <span class="math notranslate nohighlight">\(x'_3\)</span>-axis. The slip plane normal can then be taken as parallel to the <span class="math notranslate nohighlight">\(x'_3\)</span>-axis.</li>
+<li>Related to the elastic solution, this makes <span class="math notranslate nohighlight">\(x_1\)</span> parallel to the <span class="math notranslate nohighlight">\(x'_2\)</span>-axis, <span class="math notranslate nohighlight">\(x_2\)</span> parallel to the <span class="math notranslate nohighlight">\(x'_3\)</span>-axis, and <span class="math notranslate nohighlight">\(x_3\)</span> parallel to the <span class="math notranslate nohighlight">\(x'_1\)</span>-axis. The corresponding <span class="math notranslate nohighlight">\(m_i\)</span> and <span class="math notranslate nohighlight">\(n_i\)</span> values are<ul>
+<li><span class="math notranslate nohighlight">\(m_i = [0, 1, 0]\)</span></li>
+<li><span class="math notranslate nohighlight">\(n_i = [0, 0, 1]\)</span></li>
 </ul>
 </li>
 </ul>
-<p>Redefine earlier problem, but in LAMMPS-preferred setting for general
-dislocations</p>
+<p>Redefine earlier problem, but in LAMMPS-preferred setting for general dislocations</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Use generic LAMMPS m,n vectors</span>
 <span class="n">m</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">n</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
@@ -952,11 +886,10 @@ dislocations</p>
 </div>
 <p>Check that derived values are consistent (K_tensor rotated)</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;stroh.K_tensor (in GPa) -&gt;&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">stroh</span><span class="o">.</span><span class="n">K_tensor</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">()</span>
@@ -982,19 +915,18 @@ stroh.K_tensor (in GPa) -&gt;
  [-0.81698962  0.         44.47363325]]
 
 stroh.K_coeff (in GPa) -&gt;
-44.16096694762205
+44.160966947636894
 
 stroh.preln (in eV/Å) -&gt;
-0.17988642292046014
+0.1798864151734577
 </pre></div></div>
 </div>
 <p>Generate an atomic system that is properly rotated as well</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Create system by rotating ucell to coincide with dislocation solution</span>
 <span class="n">system</span> <span class="o">=</span> <span class="n">ucell</span><span class="o">.</span><span class="n">rotate</span><span class="p">([</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">])</span>
 
@@ -1017,14 +949,12 @@ stroh.preln (in eV/Å) -&gt;
 system.natoms -&gt; 864
 </pre></div></div>
 </div>
-<p>Show that resulting displacements are the same as above, just with
-plotting y, z coordinates instead of x, y coordinates.</p>
+<p>Show that resulting displacements are the same as above, just with plotting y, z coordinates instead of x, y coordinates.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># plot original positions of atoms in system</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1039,11 +969,10 @@ plotting y, z coordinates instead of x, y coordinates.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Compute displacements for all positions</span>
 <span class="n">disp</span> <span class="o">=</span> <span class="n">stroh</span><span class="o">.</span><span class="n">displacement</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
 
@@ -1072,7 +1001,7 @@ plotting y, z coordinates instead of x, y coordinates.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Introduction to atomman: Stroh class</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
@@ -1125,12 +1054,12 @@ plotting y, z coordinates instead of x, y coordinates.</p>
         <li class="right" >
           <a href="04.1._Point_defects.html" title="Introduction to atomman: Point defect generation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

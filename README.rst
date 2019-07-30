@@ -105,6 +105,10 @@ This is a list of the required Python packages
 
 - `cython <http://cython.org/>`__
 
+- `requests <https://2.python-requests.org/en/master/>`__
+
+- `toolz <https://github.com/pytoolz/toolz>`__
+
 Optional packages
 -----------------
 

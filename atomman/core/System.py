@@ -374,7 +374,7 @@ class System(object):
         
         Parameters
         ----------
-        value : atomman.Atoms, atomman.System or int
+        value : atomman.Atoms or int
             An int value will result in the atoms object being extended by
             that number of atoms, with all per-atom properties having default
             values (atype = 1, everything else = 0).  For an Atoms value, the

@@ -4,30 +4,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Basic Support and Analysis Tools &#8212; atomman 1.2.7 documentation</title>
+    <title>Introduction to atomman: Basic Support and Analysis Tools &#8212; atomman 1.2.8 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.2.7',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  false,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: ElasticConstants class" href="03.1._ElasticConstants_class.html" />
     <link rel="prev" title="Introduction to atomman: Running LAMMPS and the Log class" href="02.2_Running_LAMMPS_and_the_Log_class.html" /> 
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -43,7 +36,7 @@
         <li class="right" >
           <a href="02.2_Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -108,18 +101,18 @@ div.nblast {
 
 /* input prompt */
 div.nbinput div.prompt pre {
-    color: #303F9F;
+    color: #307FC1;
 }
 
 /* output prompt */
 div.nboutput div.prompt pre {
-    color: #D84315;
+    color: #BF5B3D;
 }
 
 /* all prompts */
 div.nbinput div.prompt,
 div.nboutput div.prompt {
-    min-width: 9ex;
+    min-width: 7ex;
     padding-top: 0.4em;
     padding-right: 0.4em;
     text-align: right;
@@ -159,9 +152,9 @@ div.nboutput div.output_area {
 
 /* input area */
 div.nbinput div.input_area {
-    border: 1px solid #cfcfcf;
+    border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f7f7f7;
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -169,7 +162,7 @@ div.nboutput div[class*=MathJax] {
     text-align: left !important;
 }
 
-/* override sphinx.ext.pngmath center alignment in output cells */
+/* override sphinx.ext.imgmath center alignment in output cells */
 div.nboutput div.math p {
     text-align: left;
 }
@@ -218,24 +211,54 @@ div.nboutput div.output_area.stderr {
 
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
 </style>
 <div class="section" id="Introduction-to-atomman:-Basic-Support-and-Analysis-Tools">
 <h1>Introduction to atomman: Basic Support and Analysis Tools<a class="headerlink" href="#Introduction-to-atomman:-Basic-Support-and-Analysis-Tools" title="Permalink to this headline">¶</a></h1>
-<p><strong>Lucas M. Hale</strong>,
-<a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>,
-<em>Materials Science and Engineering Division, NIST</em>.</p>
+<p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
-<p>This Notebook outlines some of the other tools in atomman that provide
-basic support features and simple analysis of the atomistic systems.</p>
+<p>This Notebook outlines some of the other tools in atomman that provide basic support features and simple analysis of the atomistic systems.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
                         <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
@@ -246,6 +269,9 @@ basic support features and simple analysis of the atomistic systems.</p>
 
 <span class="c1"># http://www.numpy.org/</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># https://pandas.pydata.org/</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="c1"># https://github.com/usnistgov/atomman</span>
 <span class="kn">import</span> <span class="nn">atomman</span> <span class="k">as</span> <span class="nn">am</span>
@@ -264,17 +290,16 @@ basic support features and simple analysis of the atomistic systems.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.7
-Notebook executed on 2019-06-06
+atomman version = 1.2.8
+Notebook executed on 2019-07-30
 </pre></div></div>
 </div>
 <p>Construct a demonstration 2x2x2 diamond cubic silicon system</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">5.431</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
 <span class="n">pos</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.00</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.00</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.00</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">],</span>
@@ -297,19 +322,13 @@ Notebook executed on 2019-06-06
 </div>
 <div class="section" id="2.-Elastic-constants">
 <h2>2. Elastic constants<a class="headerlink" href="#2.-Elastic-constants" title="Permalink to this headline">¶</a></h2>
-<p>The full elastic constants tensor for a given crystal can be represented
-with the atomman.ElasticConstants class. The values in an
-ElasticConstants object can be set and retrieved in a variety of formats
-and transformed to other Cartesian coordinate systems.</p>
-<p>See the <a class="reference external" href="03.1._ElasticConstants_class.html">03.1. ElasticConstants class Jupyter
-Notebook</a> for more details and a
-full description of all of the class methods.</p>
+<p>The full elastic constants tensor for a given crystal can be represented with the atomman.ElasticConstants class. The values in an ElasticConstants object can be set and retrieved in a variety of formats and transformed to other Cartesian coordinate systems.</p>
+<p>See the <a class="reference external" href="03.1._ElasticConstants_class.html">03.1. ElasticConstants class Jupyter Notebook</a> for more details and a full description of all of the class methods.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Define an ElasticConstants object for diamond cubic silicon</span>
 <span class="c1"># values taken from http://www.ioffe.ru/SVA/NSM/Semicond/Si/mechanic.html</span>
 <span class="n">C11</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">16.60</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="mi">11</span><span class="p">,</span> <span class="s1">&#39;dyn/cm^2&#39;</span><span class="p">)</span>
@@ -321,11 +340,10 @@ full description of all of the class methods.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Get 6x6 Cij Voigt representation of elastic constants in GPa</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cij (GPa) =&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Cij</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">))</span>
@@ -349,28 +367,20 @@ Cij (GPa) =
 </div>
 <div class="section" id="3.-Relative-distances-between-atoms">
 <h2>3. Relative distances between atoms<a class="headerlink" href="#3.-Relative-distances-between-atoms" title="Permalink to this headline">¶</a></h2>
-<p>There are a few built-in tools for investigating the relative positions
-between atoms of the same and different systems.</p>
+<p>There are a few built-in tools for investigating the relative positions between atoms of the same and different systems.</p>
 <div class="section" id="3.1.-System.dvect()">
 <h3>3.1. System.dvect()<a class="headerlink" href="#3.1.-System.dvect()" title="Permalink to this headline">¶</a></h3>
-<p>The System.dvect() method computes the shortest vector(s) between two
-points or list of points within the atomman.System taking into account
-the System’s periodic dimensions.</p>
+<p>The System.dvect() method computes the shortest vector(s) between two points or list of points within the atomman.System taking into account the System’s periodic dimensions.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>pos_0</strong> (<em>numpy.ndarray or index</em>) Absolute Cartesian vector
-position(s) to use as reference point(s). If the value can be used as
-an index, then self.atoms.pos[pos_0] is taken.</li>
-<li><strong>pos_1</strong> (<em>numpy.ndarray or index</em>) Absolute Cartesian vector
-position(s) to find relative to pos_0. If the value can be used as
-an index, then self.atoms.pos[pos_1] is taken.</li>
+<li><strong>pos_0</strong> (<em>numpy.ndarray or index</em>) Absolute Cartesian vector position(s) to use as reference point(s). If the value can be used as an index, then self.atoms.pos[pos_0] is taken.</li>
+<li><strong>pos_1</strong> (<em>numpy.ndarray or index</em>) Absolute Cartesian vector position(s) to find relative to pos_0. If the value can be used as an index, then self.atoms.pos[pos_1] is taken.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Calculate shortest vector between atoms 1 and 60</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">dvect</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">60</span><span class="p">))</span>
 </pre></div>
@@ -385,11 +395,10 @@ an index, then self.atoms.pos[pos_1] is taken.</li>
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Calculate shortest distance between position [5., 5., 5.] and all atoms in system</span>
 <span class="n">pos</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span>
 
@@ -419,31 +428,23 @@ an index, then self.atoms.pos[pos_1] is taken.</li>
 </div>
 <div class="section" id="3.2.-displacement()">
 <h3>3.2. displacement()<a class="headerlink" href="#3.2.-displacement()" title="Permalink to this headline">¶</a></h3>
-<p>The atomman.displacement() function compares two systems with the same
-number of atoms and calculates the vector differences between all atoms
-with the same atomic id’s. The vectors returned are the shortest vectors
-after taking periodic boundaries in consideration, i.e. it uses dvect().</p>
+<p>The atomman.displacement() function compares two systems with the same number of atoms and calculates the vector differences between all atoms with the same atomic id’s. The vectors returned are the shortest vectors after taking periodic boundaries in consideration, i.e.&nbsp;it uses dvect().</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>system_0</strong> (<em>atomman.System</em>) The initial system to calculate
-displacements from.</li>
-<li><strong>system_1</strong> (<em>atomman.System</em>) The final system to calculate
-displacements to.</li>
-<li><strong>box_reference</strong> (<em>str or None</em>) Specifies which system’s boundary
-conditions to use.<ul>
+<li><strong>system_0</strong> (<em>atomman.System</em>) The initial system to calculate displacements from.</li>
+<li><strong>system_1</strong> (<em>atomman.System</em>) The final system to calculate displacements to.</li>
+<li><strong>box_reference</strong> (<em>str or None</em>) Specifies which system’s boundary conditions to use.<ul>
 <li>‘initial’ uses system_0’s box and pbc.</li>
 <li>‘final’ uses system_1’s box and pbc (Default).</li>
-<li>None computes the straight difference between the positions
-without accounting for periodic boundaries.</li>
+<li>None computes the straight difference between the positions without accounting for periodic boundaries.</li>
 </ul>
 </li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Copy system and randomly displace atoms</span>
 <span class="n">system2</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
 <span class="n">system2</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
@@ -459,114 +460,103 @@ without accounting for periodic boundaries.</li>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[0.78637671 0.49313285 1.99382157]
- [1.33554363 1.59587878 1.48392524]
- [1.57781601 2.04759562 2.00087723]
- [1.41459454 1.47240035 2.15459823]
- [1.20881222 0.61437249 0.12251637]
- [0.16422175 0.22478863 1.51132501]
- [0.04265575 0.72329326 1.44214688]
- [2.06224527 2.89455643 0.0137277 ]
- [1.97252155 0.86140046 0.57900628]
- [2.17356364 2.1620873  0.59219669]
- [0.78104204 2.68749565 2.32505882]
- [1.40862754 2.77848466 0.03765527]
- [2.80077575 2.92713237 0.30158277]
- [0.56746445 2.21814034 0.92865659]
- [2.07230559 0.9387545  2.56684827]
- [2.00127358 0.93949391 2.85214215]
- [2.94950905 1.60293952 1.24971698]
- [2.80832856 1.51934853 1.86920314]
- [1.15458166 1.88139404 2.47857099]
- [2.14658743 1.09457087 0.06958847]
- [2.25174808 2.10833796 1.98581778]
- [2.26541289 0.14196606 2.60102104]
- [0.39728613 0.5249623  2.33145618]
- [1.01753589 1.0272005  2.56642128]
- [2.15470641 1.53084359 0.28254337]
- [2.71532373 2.83640327 1.79465728]
- [1.46987205 2.75590335 1.17147318]
- [0.22215139 2.09683851 2.27100283]
- [2.58079903 2.74320828 1.10911144]
- [1.8546721  2.24808096 1.55988871]
- [0.28200656 1.3630684  0.5130776 ]
- [2.57270598 0.42566597 1.40356643]
- [0.2614279  0.13980985 1.04212563]
- [1.3541293  0.57824143 2.27631982]
- [2.86571706 2.56045    2.17721788]
- [2.82743219 0.07107193 0.62867164]
- [2.02798198 1.15034523 0.86497409]
- [2.58766532 0.63083465 2.69669998]
- [1.40250226 2.90382309 2.30590523]
- [2.96109652 2.4159413  1.69078093]
- [2.25014176 2.82229342 0.00858997]
- [2.24723388 2.84770367 1.05864138]
- [1.321808   0.56110731 2.10327313]
- [1.47075796 2.39342218 0.50991093]
- [2.13048077 1.82640677 0.92805072]
- [2.32375513 2.82788189 2.71490018]
- [0.02288202 0.34248618 1.64545159]
- [0.14824103 0.96785229 1.50035523]
- [2.09372436 2.71442383 1.25199548]
- [1.53092161 1.85722952 2.84989183]
- [2.67130569 2.77581233 1.48478589]
- [2.25583543 1.19467108 1.03110956]
- [0.47663289 0.15237412 2.3337517 ]
- [1.47693041 0.3151903  2.09995745]
- [1.28659757 0.93874914 0.93650079]
- [2.22914575 1.13534872 1.02909212]
- [1.37559282 0.123873   2.03696402]
- [2.62189544 1.19189675 1.14239307]
- [0.73550673 1.36526708 2.16765844]
- [2.54651135 2.02246232 2.01994582]
- [0.91489694 2.76009782 2.71917547]
- [0.1469569  1.08868296 2.69675686]
- [1.97438087 0.79864049 1.77815196]
- [1.81813327 1.73548422 2.36388303]]
+[[0.61678938 1.63458248 1.65642332]
+ [0.37999839 1.01624508 2.54299769]
+ [0.1732036  0.4668934  0.668044  ]
+ [0.00590808 0.39870671 2.18722323]
+ [0.55611176 2.53123965 1.33526891]
+ [2.11874632 0.24123416 0.82182171]
+ [0.63473332 2.79036071 1.13020759]
+ [0.33443718 0.66745145 0.6157646 ]
+ [2.46142472 0.4870579  0.524249  ]
+ [2.1634832  1.39016796 1.80641913]
+ [1.3057463  2.01092461 2.30236926]
+ [0.5984325  2.03548106 0.40241686]
+ [0.66915812 0.46739044 0.77203364]
+ [2.14805038 0.23963383 1.08408224]
+ [1.01701571 1.20464728 2.6987158 ]
+ [0.57462591 1.84950259 0.89236796]
+ [0.13960102 0.11312666 0.10819912]
+ [0.21791823 2.68094467 2.76655505]
+ [0.649617   2.65790749 1.76783433]
+ [0.20753316 0.61740365 2.14432737]
+ [2.52638175 0.72724003 1.03775143]
+ [0.46352789 1.06151214 1.12689263]
+ [2.91090428 0.36932977 0.90025638]
+ [1.15566651 0.53560368 0.91444173]
+ [1.35422394 1.49948027 2.77937493]
+ [0.79463458 0.44013597 1.39834135]
+ [2.55675048 0.3405396  2.28598681]
+ [0.12107383 0.41112409 2.33494821]
+ [1.93271828 0.30397496 0.73930535]
+ [0.53221899 2.37699615 0.68248917]
+ [1.43498292 1.1863049  0.12338218]
+ [0.79682786 1.35399802 1.15665333]
+ [2.91078196 1.37165214 0.42649485]
+ [2.89686094 2.13059678 1.01810856]
+ [0.33779418 1.33835306 0.56720663]
+ [0.78890172 0.01980997 0.70301258]
+ [2.75256596 0.91628712 2.98107746]
+ [0.92578799 1.81629023 0.95347538]
+ [2.02639113 2.19418984 2.39954835]
+ [1.79045259 0.73281798 2.86908583]
+ [2.07797619 2.33336968 0.9011527 ]
+ [0.40864379 1.48015015 2.34485576]
+ [0.67509378 0.56761724 1.09522832]
+ [0.87700866 2.54805708 2.37580527]
+ [2.1654451  1.50238186 2.41879947]
+ [2.83459324 0.73996134 1.9604346 ]
+ [0.03770037 0.98008693 2.7949665 ]
+ [0.1912214  2.45060287 0.7026377 ]
+ [2.19213221 2.44505441 1.40014007]
+ [0.4593064  0.32193886 2.1872835 ]
+ [2.20528974 2.12036281 0.47430042]
+ [1.78996933 2.8597438  0.97566949]
+ [2.82276035 2.7159714  2.0510493 ]
+ [0.00672891 1.03383296 2.90413996]
+ [1.90114424 1.39437291 1.26617478]
+ [0.4691288  2.64872639 0.04169027]
+ [2.39583058 1.41147862 1.63698261]
+ [0.0287514  1.66476188 0.05961541]
+ [2.71262892 1.12365207 2.41173607]
+ [0.2261395  1.37223314 2.70393645]
+ [0.7321321  1.3401575  0.71008745]
+ [1.75343195 0.33974195 2.92555184]
+ [1.80459923 1.8834885  2.92937901]
+ [2.9513398  2.19407615 0.98743587]]
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="3.3.-System.neighborlist()">
 <h3>3.3. System.neighborlist()<a class="headerlink" href="#3.3.-System.neighborlist()" title="Permalink to this headline">¶</a></h3>
-<p>A list of neighbor atoms within a cutoff can be constructed using the
-System.neighborlist() method. The list of neighbors is returned as an
-atomman.NeighborList object.</p>
-<p>See the <a class="reference external" href="03.2._NeighborList_class.html">03.2. NeighborList class Jupyter
-Notebook</a> for more details on how the
-list is calculated and can be used.</p>
+<p>A list of neighbor atoms within a cutoff can be constructed using the System.neighborlist() method. The list of neighbors is returned as an atomman.NeighborList object.</p>
+<p>See the <a class="reference external" href="03.2._NeighborList_class.html">03.2. NeighborList class Jupyter Notebook</a> for more details on how the list is calculated and can be used.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>cutoff</strong> (<em>float, optional</em>) Radial cutoff distance for identifying
-neighbors. Must be given if model is not given.</li>
-<li><strong>model</strong> (<em>str or file-like object, optional</em>) Gives the file path
-or content to load. If given, no other parameters are allowed.</li>
-<li><strong>initialsize</strong> (<em>int, optional</em>) The number of neighbor positions to
-initially assign to each atom. Default value is 20.</li>
-<li><strong>deltasize</strong> (<em>int, optional</em>) Specifies the number of extra
-neighbor positions to allow each atom when the number of neighbors
-exceeds the underlying array size. Default value is 10.</li>
+<li><strong>cutoff</strong> (<em>float, optional</em>) Radial cutoff distance for identifying neighbors. Must be given if model is not given.</li>
+<li><strong>model</strong> (<em>str or file-like object, optional</em>) Gives the file path or content to load. If given, no other parameters are allowed.</li>
+<li><strong>initialsize</strong> (<em>int, optional</em>) The number of neighbor positions to initially assign to each atom. Default value is 20.</li>
+<li><strong>deltasize</strong> (<em>int, optional</em>) Specifies the number of extra neighbor positions to allow each atom when the number of neighbors exceeds the underlying array size. Default value is 10.</li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
 <li>(<em>atomman.NeighborList</em>) The compiled list of neighbors.</li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Identify neighbors within 3 angstroms</span>
 <span class="n">neighbors</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">neighborlist</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Show average atomic coordination</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Average coordination =&#39;</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">coord</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 </pre></div>
@@ -581,11 +571,10 @@ Average coordination = 4.0
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># List neighbor atoms of atom 6</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Neighbors of atom 6 =&#39;</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span>
 </pre></div>
@@ -607,20 +596,15 @@ Neighbors of atom 6 = [ 2 11 33 40]
 <div class="section" id="4.1.-Atomic-information">
 <h3>4.1. Atomic information<a class="headerlink" href="#4.1.-Atomic-information" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><strong>atomman.tools.atomic_number()</strong> returns the atomic number
-associated with an element’s atomic symbol.</li>
-<li><strong>atomman.tools.atomic_symbol()</strong> returns the elemental symbol
-associated with an given atomic number.</li>
-<li><strong>atomman.tools.atomic_mass()</strong> returns the atomic mass of an
-element or isotope. The atom can be identified with atomic number or
-atomic/isotope symbol.</li>
+<li><strong>atomman.tools.atomic_number()</strong> returns the atomic number associated with an element’s atomic symbol.</li>
+<li><strong>atomman.tools.atomic_symbol()</strong> returns the elemental symbol associated with an given atomic number.</li>
+<li><strong>atomman.tools.atomic_mass()</strong> returns the atomic mass of an element or isotope. The atom can be identified with atomic number or atomic/isotope symbol.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Get atomic number for an atomic symbol</span>
 <span class="n">num</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">atomic_number</span><span class="p">(</span><span class="s1">&#39;Fe&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
@@ -651,11 +635,10 @@ Fe
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Get atomic mass for an isotope</span>
 <span class="n">mass</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">atomic_mass</span><span class="p">(</span><span class="s1">&#39;Al-26&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">mass</span><span class="p">)</span>
@@ -673,20 +656,16 @@ Fe
 </div>
 <div class="section" id="4.2.-axes_check()">
 <h3>4.2. axes_check()<a class="headerlink" href="#4.2.-axes_check()" title="Permalink to this headline">¶</a></h3>
-<p>The axes_check() function is useful when working in Cartesian systems.
-Given a (3,3) array representing three 3D Cartesian vectors:</p>
+<p>The axes_check() function is useful when working in Cartesian systems. Given a (3,3) array representing three 3D Cartesian vectors:</p>
 <ul class="simple">
-<li>The three vectors are checked that they are orthogonal and
-right-handed.</li>
-<li>The corresponding array of unit vectors are returned. This can then
-be used for crystal transformations.</li>
+<li>The three vectors are checked that they are orthogonal and right-handed.</li>
+<li>The corresponding array of unit vectors are returned. This can then be used for crystal transformations.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">axes</span> <span class="o">=</span> <span class="p">[[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
         <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
         <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
@@ -707,14 +686,12 @@ be used for crystal transformations.</li>
 </div>
 <div class="section" id="4.3.-filltemplate()">
 <h3>4.3. filltemplate()<a class="headerlink" href="#4.3.-filltemplate()" title="Permalink to this headline">¶</a></h3>
-<p>The filltemplate() function takes a template and fills in values for
-delimited template variables.</p>
+<p>The filltemplate() function takes a template and fills in values for delimited template variables.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">madlibs</span> <span class="o">=</span> <span class="s2">&quot;My friend &lt;name&gt; really likes to use templates to &lt;verb&gt;, says that they are &lt;adjective&gt;!&quot;</span>
 <span class="n">s_delimiter</span> <span class="o">=</span> <span class="s1">&#39;&lt;&#39;</span>
 <span class="n">e_delimiter</span> <span class="o">=</span> <span class="s1">&#39;&gt;&#39;</span>
@@ -739,14 +716,12 @@ My friend Charlie really likes to use templates to program, says that they are d
 </div>
 <div class="section" id="4.4.-indexstr()">
 <h3>4.4. indexstr()<a class="headerlink" href="#4.4.-indexstr()" title="Permalink to this headline">¶</a></h3>
-<p>Iterates through all indicies of an array with a given shape, returning
-both the numeric index and a string representation.</p>
+<p>Iterates through all indicies of an array with a given shape, returning both the numeric index and a string representation.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">istr</span> <span class="ow">in</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">indexstr</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;index -&gt;&#39;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">index</span><span class="p">),</span> <span class="s1">&#39;, istr -&gt;&#39;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">istr</span><span class="p">))</span>
 </pre></div>
@@ -768,20 +743,17 @@ index -&gt; (2, 1) , istr -&gt; &#39;[2][1]&#39;
 </div>
 <div class="section" id="4.5.-uber_open_rmode">
 <h3>4.5. uber_open_rmode<a class="headerlink" href="#4.5.-uber_open_rmode" title="Permalink to this headline">¶</a></h3>
-<p>uber_open_rmode is a context manager that allows for similar reading
-of content from a file or from a string variable. It equivalently
-handles:</p>
+<p>uber_open_rmode is a context manager that allows for similar reading of content from a file or from a string variable. It equivalently handles:</p>
 <ul class="simple">
 <li>str path name to a file</li>
 <li>str content</li>
 <li>open file-like object</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Define str and save to file</span>
 <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;Here I am, read me!&#39;</span>
 <span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;text.txt&#39;</span>
@@ -818,11 +790,10 @@ b&#39;Here I am, read me!&#39;
 <h3>4.6. vect_angle()<a class="headerlink" href="#4.6.-vect_angle()" title="Permalink to this headline">¶</a></h3>
 <p>The vect_angle() function returns the angle between two vectors.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">vect1</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
 <span class="n">vect2</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
 
@@ -837,27 +808,149 @@ b&#39;Here I am, read me!&#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Angle between [ 0.81816484 -0.5459433   0.18828515] and [ 0.95695222 -0.0377475  -0.83138536] =
-59.373628138165834 degrees
-1.0362652998657444 radians
+Angle between [-0.7888258  -0.75934729 -0.29477207] and [ 0.45958294  0.81037391 -0.31608287] =
+142.47576379385924 degrees
+2.4866711824965715 radians
 </pre></div></div>
+</div>
+</div>
+<div class="section" id="4.7-duplicates_allclose()">
+<h3>4.7 duplicates_allclose()<a class="headerlink" href="#4.7-duplicates_allclose()" title="Permalink to this headline">¶</a></h3>
+<p>Determine duplicates in dataframe based on tolerances. The implementation first uses pandas.DataFrame.duplicated on the <code class="docutils literal notranslate"><span class="pre">dcols</span></code> argument with <code class="docutils literal notranslate"><span class="pre">keep=False</span></code> to keep all duplicates. The duplicate sub-dataframe is then sorted on both <code class="docutils literal notranslate"><span class="pre">dcols</span></code> and <code class="docutils literal notranslate"><span class="pre">fcols</span></code>. A diff between each row is then done on the sorted duplicates dataframe. The float values are then checked for their tolerances.</p>
+<p>Note: False duplicates may be identified if tolerance ranges overlap. Consider dataframe with rows 1,2,3. If row 2 matches row 1 within the tolerances, and row 3 matches row 2 within the tolerances, both rows 2 and 3 will be labeled as tolerances even if row 3 does not match row 1 within the tolerances.</p>
+<p>Parameters - <strong>dataframe</strong> (<em>pandas.DataFrame</em>) The dataframe to search for duplicates - <strong>dcols</strong> (<em>list</em>) The column names that are tested for exact duplicates. - <strong>fcols</strong> (<em>dict</em>) The column names (keys) that are tested using absolute tolerances (values).</p>
+<p>Returns - (<em>list of bool of length nrows</em>) False for first occurrence of checked values, True for subsequent duplicates.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Generate test DataFrame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:[</span><span class="mf">1.00001</span><span class="p">,</span> <span class="mf">1.00002</span><span class="p">,</span> <span class="mf">3.0000</span><span class="p">,</span> <span class="mf">1.000000</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:[</span><span class="s1">&#39;Same&#39;</span><span class="p">,</span> <span class="s1">&#39;Diff&#39;</span><span class="p">,</span> <span class="s1">&#39;Same&#39;</span><span class="p">,</span> <span class="s1">&#39;Same&#39;</span><span class="p">]})</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.00001</td>
+      <td>Same</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.00002</td>
+      <td>Diff</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3.00000</td>
+      <td>Same</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.00000</td>
+      <td>Same</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Show unique values</span>
+<span class="n">df</span><span class="p">[</span><span class="o">~</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">duplicates_allclose</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">dcols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;B&#39;</span><span class="p">],</span> <span class="n">fcols</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span><span class="mf">1e-4</span><span class="p">})]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>1.00002</td>
+      <td>Diff</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3.00000</td>
+      <td>Same</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.00000</td>
+      <td>Same</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 </div>
 <div class="section" id="4.7.-Miller-index-conversions">
 <h3>4.7. Miller index conversions<a class="headerlink" href="#4.7.-Miller-index-conversions" title="Permalink to this headline">¶</a></h3>
-<p><strong>atomman.tools.miller.vector3to4(indices)</strong> converts three-term Miller
-indices to four-term Miller-Bravais for hexagonal systems.</p>
-<p><strong>atomman.tools.miller.vector4to3(indices)</strong> converts four-term
-Miller-Bravais to three-term Miller indices.</p>
-<p><em>Updated version 1.2.6</em>: vector3to4 and vector4to3 now return absolute
-vectors instead of rescaling to the smallest integer representations. As
-such, both functions return floats instead of integers.</p>
+<p><strong>atomman.tools.miller.vector3to4(indices)</strong> converts vectors from three-term Miller indices to four-term Miller-Bravais indices for hexagonal systems.</p>
+<p><strong>atomman.tools.miller.vector4to3(indices)</strong> converts vectors from four-term Miller-Bravais indices to three-term Miller indices.</p>
+<p><em>Updated version 1.2.6</em>: vector3to4 and vector4to3 now return absolute vectors instead of rescaling to the smallest integer representations. As such, both functions return floats instead of integers.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Test single value case</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector3to4</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">])))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector4to3</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">])))</span>
@@ -874,11 +967,10 @@ such, both functions return floats instead of integers.</p>
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Generate random uvw crystal indices</span>
 <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
@@ -900,30 +992,88 @@ such, both functions return floats instead of integers.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 0 -1  0]
- [-1 -4 -5]
- [ 4  3  5]]
+[[-3  3  0]
+ [-1 -5  5]
+ [-4  4  2]]
 
-[[ 0.33333333 -0.66666667  0.33333333  0.        ]
- [ 0.66666667 -2.33333333  1.66666667 -5.        ]
- [ 1.66666667  0.66666667 -2.33333333  5.        ]]
+[[-3.  3. -0.  0.]
+ [ 1. -3.  2.  5.]
+ [-4.  4. -0.  2.]]
 
-[[ 0. -1.  0.]
- [-1. -4. -5.]
- [ 4.  3.  5.]]
+[[-3.  3.  0.]
+ [-1. -5.  5.]
+ [-4.  4.  2.]]
 </pre></div></div>
 </div>
-<p><strong>atomman.tools.miller.vector_crystal_to_cartesian(indices, box)</strong>
-converts Miller and Miller-Bravais indices to Cartesian vectors based on
-a supplied box.</p>
-<p><em>Updated version 1.2.6</em> vectortocartesian is renamed
-vector_crystal_to_cartesian for consistency.</p>
+<p><strong>atomman.tools.miller.plane3to4(indices)</strong> converts planes from three-term Miller indices to four-term Miller-Bravais indices for hexagonal systems.</p>
+<p><strong>atomman.tools.miller.plane4to3(indices)</strong> converts planes from four-term Miller-Bravais indices to three-term Miller indices.</p>
+<p><em>Added version 1.2.8</em></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Test single value case</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">plane3to4</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">])))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">plane4to3</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">])))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[ 3.  3. -6.  3.]
+[1. 1. 0.]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Generate random hkl crystal indices</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># Convert to hexagonal hkil&#39;s</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">plane3to4</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># Convert back to hkl&#39;s and see that values are recovered</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">plane4to3</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[ 0  3  5]
+ [-3 -5 -1]
+ [ 3  0  0]]
+
+[[ 0.  3. -3.  5.]
+ [-3. -5.  8. -1.]
+ [ 3.  0. -3.  0.]]
+
+[[ 0.  3.  5.]
+ [-3. -5. -1.]
+ [ 3.  0.  0.]]
+</pre></div></div>
+</div>
+<p><strong>atomman.tools.miller.vector_crystal_to_cartesian(indices, box)</strong> converts Miller and Miller-Bravais indices to Cartesian vectors based on a supplied box.</p>
+<p><em>Updated version 1.2.6</em> vectortocartesian is renamed vector_crystal_to_cartesian for consistency.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Define a hexagonal box</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">2.51</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">c</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.07</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
@@ -959,18 +1109,13 @@ vector_crystal_to_cartesian for consistency.</p>
 </pre></div></div>
 </div>
 <p><em>Added version 1.2.6</em></p>
-<p><strong>atomman.tools.miller.vector_primitive_to_conventional(indices,
-setting)</strong> converts vectors relative to a primitive unit cell to a
-conventional unit cell in the given setting (p, a, b, c, i or f).</p>
-<p><strong>atomman.tools.miller.vector_conventional_to_primitive(indices,
-setting)</strong> converts vectors relative to a conventional unit cell in the
-given setting (p, a, b, c, i or f) to a primitive unit cell.</p>
+<p><strong>atomman.tools.miller.vector_primitive_to_conventional(indices, setting)</strong> converts vectors relative to a primitive unit cell to a conventional unit cell in the given setting (p, a, b, c, i or f).</p>
+<p><strong>atomman.tools.miller.vector_conventional_to_primitive(indices, setting)</strong> converts vectors relative to a conventional unit cell in the given setting (p, a, b, c, i or f) to a primitive unit cell.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Define a primitive bcc unit cell box</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">2.86</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">p_box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">trigonal</span><span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="mi">3</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">109.466666667</span><span class="p">)</span>
@@ -998,11 +1143,10 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Convert conventional box vectors to primitive vectors</span>
 <span class="n">a_uvw</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector_conventional_to_primitive</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s1">&#39;i&#39;</span><span class="p">)</span>
 <span class="n">b_uvw</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">vector_conventional_to_primitive</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s1">&#39;i&#39;</span><span class="p">)</span>
@@ -1033,11 +1177,10 @@ conventional uvws:
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># rotate system using p_uvws to get conventional unit cell</span>
 <span class="n">c_ucell</span> <span class="o">=</span> <span class="n">p_ucell</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">p_uvws</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">c_ucell</span><span class="p">)</span>
@@ -1066,74 +1209,62 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </div>
 <div class="section" id="4.8.-Crystal-lattice-identification">
 <h3>4.8. Crystal lattice identification<a class="headerlink" href="#4.8.-Crystal-lattice-identification" title="Permalink to this headline">¶</a></h3>
-<p>There are also a few tests for identifying if a supplied box is
-consistent with a standard representation of a crystal family unit cell.</p>
+<p>There are also a few tests for identifying if a supplied box is consistent with a standard representation of a crystal family unit cell.</p>
 <ul class="simple">
-<li><strong>atomman.tools.identifyfamily(box)</strong> returns str crystal family if
-box corresponds to a standard crystal representation. Otherwise,
-returns None.</li>
-<li><strong>atomman.tools.iscubic(box))</strong> returns bool indicating if box is a
-standard cubic box.</li>
-<li><strong>atomman.tools.ishexagonal(box))</strong> returns bool indicating if box is
-a standard hexagonal box.</li>
-<li><strong>atomman.tools.istetragonal(box))</strong> returns bool indicating if box
-is a standard tetragonal box.</li>
-<li><strong>atomman.tools.isrhombohedral(box))</strong> returns bool indicating if box
-is a standard rhombohedral box.</li>
-<li><strong>atomman.tools.isorthorhombic(box))</strong> returns bool indicating if box
-is a standard orthorhombic box.</li>
-<li><strong>atomman.tools.ismonoclinic(box))</strong> returns bool indicating if box
-is a standard monoclinic box.</li>
-<li><strong>atomman.tools.istriclinic(box))</strong> returns bool indicating if box is
-a standard triclinic box.</li>
+<li><strong>atomman.tools.identifyfamily(box)</strong> returns str crystal family if box corresponds to a standard crystal representation. Otherwise, returns None.</li>
+<li><strong>atomman.tools.iscubic(box))</strong> returns bool indicating if box is a standard cubic box.</li>
+<li><strong>atomman.tools.ishexagonal(box))</strong> returns bool indicating if box is a standard hexagonal box.</li>
+<li><strong>atomman.tools.istetragonal(box))</strong> returns bool indicating if box is a standard tetragonal box.</li>
+<li><strong>atomman.tools.isrhombohedral(box))</strong> returns bool indicating if box is a standard rhombohedral box.</li>
+<li><strong>atomman.tools.isorthorhombic(box))</strong> returns bool indicating if box is a standard orthorhombic box.</li>
+<li><strong>atomman.tools.ismonoclinic(box))</strong> returns bool indicating if box is a standard monoclinic box.</li>
+<li><strong>atomman.tools.istriclinic(box))</strong> returns bool indicating if box is a standard triclinic box.</li>
 </ul>
-<p>All of these functions use the following standard representation
-criteria:</p>
+<p>All of these functions use the following standard representation criteria:</p>
 <ul class="simple">
 <li>cubic:<ul>
-<li><span class="math">\(a = b = c\)</span></li>
-<li><span class="math">\(\alpha = \beta = \gamma = 90\)</span></li>
+<li><span class="math notranslate nohighlight">\(a = b = c\)</span></li>
+<li><span class="math notranslate nohighlight">\(\alpha = \beta = \gamma = 90\)</span></li>
 </ul>
 </li>
 <li>hexagonal:<ul>
-<li><span class="math">\(a = b \ne c\)</span></li>
-<li><span class="math">\(\alpha = \beta = 90\)</span></li>
-<li><span class="math">\(\gamma = 120\)</span></li>
+<li><span class="math notranslate nohighlight">\(a = b \ne c\)</span></li>
+<li><span class="math notranslate nohighlight">\(\alpha = \beta = 90\)</span></li>
+<li><span class="math notranslate nohighlight">\(\gamma = 120\)</span></li>
 </ul>
 </li>
 <li>tetragonal:<ul>
-<li><span class="math">\(a = b \ne c\)</span></li>
-<li><span class="math">\(\alpha = \beta = \gamma = 90\)</span></li>
+<li><span class="math notranslate nohighlight">\(a = b \ne c\)</span></li>
+<li><span class="math notranslate nohighlight">\(\alpha = \beta = \gamma = 90\)</span></li>
 </ul>
 </li>
 <li>rhombohedral:<ul>
-<li><span class="math">\(a = b = c\)</span></li>
-<li><span class="math">\(\alpha = \beta = \gamma \ne 90\)</span></li>
+<li><span class="math notranslate nohighlight">\(a = b = c\)</span></li>
+<li><span class="math notranslate nohighlight">\(\alpha = \beta = \gamma \ne 90\)</span></li>
 </ul>
 </li>
 <li>orthorhombic:<ul>
-<li><span class="math">\(a \ne b \ne c\)</span></li>
-<li><span class="math">\(\alpha = \beta = \gamma = 90\)</span></li>
+<li><span class="math notranslate nohighlight">\(a \ne b \ne c\)</span></li>
+<li><span class="math notranslate nohighlight">\(\alpha = \beta = \gamma = 90\)</span></li>
 </ul>
 </li>
 <li>monoclinic:<ul>
-<li><span class="math">\(a \ne b \ne c\)</span></li>
-<li><span class="math">\(\alpha = \gamma = 90\)</span></li>
-<li><span class="math">\(\beta \ne 90\)</span></li>
+<li><span class="math notranslate nohighlight">\(a \ne b \ne c\)</span></li>
+<li><span class="math notranslate nohighlight">\(\alpha = \gamma = 90\)</span></li>
+<li><span class="math notranslate nohighlight">\(\beta \ne 90\)</span></li>
 </ul>
 </li>
 <li>triclinic:<ul>
-<li><span class="math">\(a \ne b \ne c\)</span></li>
-<li><span class="math">\(\alpha \ne \beta \ne \gamma\)</span></li>
+<li><span class="math notranslate nohighlight">\(a \ne b \ne c\)</span></li>
+<li><span class="math notranslate nohighlight">\(\alpha \ne \beta \ne \gamma\)</span></li>
 </ul>
 </li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Define an orthogonal box</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">2.51</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">b</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">3.13</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
@@ -1167,11 +1298,10 @@ istriclinic =    False
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Define a non-standard tetragonal box with a=c!=b</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;identifyfamily =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">identifyfamily</span><span class="p">(</span><span class="n">box</span><span class="p">))</span>
@@ -1190,14 +1320,12 @@ identifyfamily = None
 <div class="section" id="4.9-compositionstr()">
 <h3>4.9 compositionstr()<a class="headerlink" href="#4.9-compositionstr()" title="Permalink to this headline">¶</a></h3>
 <p><em>Added version 1.2.7</em></p>
-<p>Takes a list of symbols and the counts for each and returns a reduced
-composition string. Used by System.composition.</p>
+<p>Takes a list of symbols and the counts for each and returns a reduced composition string. Used by System.composition.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">symbols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="s1">&#39;Si&#39;</span><span class="p">]</span>
 <span class="n">counts</span> <span class="o">=</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Composition =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">compositionstr</span><span class="p">(</span><span class="n">symbols</span><span class="p">,</span> <span class="n">counts</span><span class="p">))</span>
@@ -1214,11 +1342,10 @@ Composition = Al2Si5
 </div>
 <p><strong>File Cleanup</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;text.txt&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1233,7 +1360,7 @@ Composition = Al2Si5
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Introduction to atomman: Basic Support and Analysis Tools</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
@@ -1251,6 +1378,7 @@ Composition = Al2Si5
 <li><a class="reference internal" href="#4.4.-indexstr()">4.4. indexstr()</a></li>
 <li><a class="reference internal" href="#4.5.-uber_open_rmode">4.5. uber_open_rmode</a></li>
 <li><a class="reference internal" href="#4.6.-vect_angle()">4.6. vect_angle()</a></li>
+<li><a class="reference internal" href="#4.7-duplicates_allclose()">4.7 duplicates_allclose()</a></li>
 <li><a class="reference internal" href="#4.7.-Miller-index-conversions">4.7. Miller index conversions</a></li>
 <li><a class="reference internal" href="#4.8.-Crystal-lattice-identification">4.8. Crystal lattice identification</a></li>
 <li><a class="reference internal" href="#4.9-compositionstr()">4.9 compositionstr()</a></li>
@@ -1285,12 +1413,12 @@ Composition = Al2Si5
         <li class="right" >
           <a href="02.2_Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

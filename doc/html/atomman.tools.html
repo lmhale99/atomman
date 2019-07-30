@@ -4,30 +4,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>tools &#8212; atomman 1.2.7 documentation</title>
+    <title>tools &#8212; atomman 1.2.8 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.2.7',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  false,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="lammps" href="atomman.lammps.html" />
     <link rel="prev" title="unitconvert" href="atomman.unitconvert.html" /> 
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -43,7 +36,7 @@
         <li class="right" >
           <a href="atomman.unitconvert.html" title="unitconvert"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" accesskey="U">atomman package</a> &#187;</li> 
       </ul>
     </div>  
@@ -137,7 +130,7 @@ Default value is 1e-8.</li>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">np.ndarray</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – If axes are not orthogonal or right-handed.</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If axes are not orthogonal or right-handed.</p>
 </td>
 </tr>
 </tbody>
@@ -168,6 +161,43 @@ Default value is 1e-8.</li>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="atomman.tools.duplicates_allclose">
+<code class="descclassname">atomman.tools.</code><code class="descname">duplicates_allclose</code><a class="headerlink" href="#atomman.tools.duplicates_allclose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine duplicates in dataframe based on tolerances.  The implementation
+first uses <cite>pandas.DataFrame.duplicated</cite> on the <cite>dcols</cite> argument with
+<cite>keep=False</cite> to keep all duplicates.  The duplicate sub-dataframe is then
+sorted on both <cite>dcols</cite> and <cite>fcols</cite>.  A diff between each row is then done
+on the sorted duplicates dataframe.  The float values are then checked for
+their tolerances.</p>
+<p>Note: False duplicates may be identified if tolerance ranges overlap.
+Consider dataframe with rows 1,2,3.  If row 2 matches row 1 within the
+tolerances, and row 3 matches row 2 within the tolerances, both rows 2 and
+3 will be labeled as tolerances even if row 3 does not match row 1 within
+the tolerances.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dataframe</strong> (<em>pandas.DataFrame</em>) – The dataframe to search for duplicates</li>
+<li><strong>dcols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – The column names that are tested for exact duplicates.</li>
+<li><strong>fcols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – The column names (keys) that are tested using absolute tolerances
+(values).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">False for first occurrence of checked values, True for subsequent
+duplicates.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list of bool of length nrows</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="function">
 <dt id="atomman.tools.filltemplate">
 <code class="descclassname">atomman.tools.</code><code class="descname">filltemplate</code><span class="sig-paren">(</span><em>template</em>, <em>variable</em>, <em>s_delimiter</em>, <em>e_delimiter</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.tools.filltemplate" title="Permalink to this definition">¶</a></dt>
@@ -177,7 +207,7 @@ Default value is 1e-8.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>template</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.7)"><em>string</em></a><em> or </em><em>file-like object</em>) – The template file or file content to fill in.</li>
+<li><strong>template</strong> (<em>string</em><em> or </em><em>file-like object</em>) – The template file or file content to fill in.</li>
 <li><strong>variable</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – Dictionary with keys defining the delimited template variable terms,
 and values the values to replace the variable terms with.</li>
 <li><strong>s_delimiter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The leading delimiter for identifying the template variable terms.</li>
@@ -193,8 +223,8 @@ corresponding defined values from variable.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">KeyError</span></code></a> – If delimited term found in template that has no value in variable.</li>
-<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – If parsing of s_delimiter, e_delimiter pairs fails.</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code></a> – If delimited term found in template that has no value in variable.</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If parsing of s_delimiter, e_delimiter pairs fails.</li>
 </ul>
 </td>
 </tr>
@@ -225,7 +255,7 @@ of a crystal system cell.</p>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)">None</a></p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – If box is not consistent with a standard cell.</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If box is not consistent with a standard cell.</p>
 </td>
 </tr>
 </tbody>
@@ -449,7 +479,7 @@ gamma != 90</p>
 <dl class="class">
 <dt id="atomman.tools.uber_open_rmode">
 <em class="property">class </em><code class="descclassname">atomman.tools.</code><code class="descname">uber_open_rmode</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.tools.uber_open_rmode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Context manager for reading data from file-like objects, file names,
 and data strings in the same manner.</p>
 </dd></dl>
@@ -495,7 +525,7 @@ Miller-Bravias indices.</p>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – If indices dimensions are not (…, 3).</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If indices dimensions are not (…, 3).</td>
 </tr>
 </tbody>
 </table>
@@ -516,7 +546,7 @@ Miller (hkl) indices.</p>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray of int</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – If indices dimensions are not (…, 4), or if h+k+i != 0.</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If indices dimensions are not (…, 4), or if h+k+i != 0.</td>
 </tr>
 </tbody>
 </table>
@@ -537,7 +567,7 @@ Miller-Bravias indices.</p>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – If indices dimensions are not (…, 3).</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If indices dimensions are not (…, 3).</td>
 </tr>
 </tbody>
 </table>
@@ -558,7 +588,7 @@ Miller [uvw] indices.</p>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray of int</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – If indices dimensions are not (…, 4), or if u+v+t != 0.</td>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If indices dimensions are not (…, 4), or if u+v+t != 0.</td>
 </tr>
 </tbody>
 </table>
@@ -586,7 +616,7 @@ to a given lattice box.</p>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">np.ndarray of float</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> – If indices dimensions are not (…, 3) or (…, 4), or if
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If indices dimensions are not (…, 3) or (…, 4), or if
 hexagonal indices given with non-hexagonal box.</p>
 </td>
 </tr>
@@ -619,7 +649,7 @@ relative to the conventional cell</p>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">np.ndarray of float</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ValuenError</span></code> – If indices dimensions are not (…, 3) or if an unknown setting
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValuenError</span></code> – If indices dimensions are not (…, 3) or if an unknown setting
 value is given.</p>
 </td>
 </tr>
@@ -652,7 +682,7 @@ relative to the primitive cell</p>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">np.ndarray of float</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ValuenError</span></code> – If indices dimensions are not (…, 3) or if an unknown setting
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValuenError</span></code> – If indices dimensions are not (…, 3) or if an unknown setting
 value is given.</p>
 </td>
 </tr>
@@ -669,7 +699,7 @@ value is given.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">tools</a><ul>
 <li><a class="reference internal" href="#module-atomman.tools">Functions and attributes</a></li>
@@ -702,12 +732,12 @@ value is given.</p>
         <li class="right" >
           <a href="atomman.unitconvert.html" title="unitconvert"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>
