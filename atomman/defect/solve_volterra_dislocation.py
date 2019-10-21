@@ -1,3 +1,6 @@
+# coding: utf-8
+
+# atomman imports
 from . import IsotropicVolterraDislocation, Stroh
 
 def solve_volterra_dislocation(C, burgers, axes=None, m=[1,0,0], n=[0,1,0], tol=1e-8, style=None):

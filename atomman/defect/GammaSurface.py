@@ -1,6 +1,5 @@
+# coding: utf-8
 # Standard Python imports
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 from collections import OrderedDict
 import os
 
@@ -1036,7 +1035,7 @@ class GammaSurface(object):
         plt.xlabel(xlabel, fontsize='x-large')
         plt.ylabel(ylabel, fontsize='x-large')
         cbar = plt.colorbar(aspect=40, fraction=0.1)
-        cbar.ax.set_ylabel('$\delta_{gsf}$ (' + length_unit + ')',
+        cbar.ax.set_ylabel(r'$\delta_{gsf}$ (' + length_unit + ')',
                            fontsize='x-large')
         
         return fig
@@ -1129,7 +1128,7 @@ class GammaSurface(object):
 
         plt.xlabel('$x$ along ' + str(vect) + ' (' + str(length_unit) + ')',
                    fontsize='x-large')
-        plt.ylabel('$\delta_{gsf}$ (' + str(length_unit) + ')', fontsize='x-large')
+        plt.ylabel(r'$\delta_{gsf}$ (' + str(length_unit) + ')', fontsize='x-large')
         plt.xlim(0, xmax)
         plt.ylim(dmin, dmax)
         

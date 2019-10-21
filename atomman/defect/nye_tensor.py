@@ -1,7 +1,5 @@
 # coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 import warnings
 
 # http://www.numpy.org/
@@ -9,7 +7,6 @@ import numpy as np
 
 # atomman imports
 from .. import NeighborList
-from ..compatibility import range
 from ..tools import axes_check
 
 def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbors=None,
@@ -115,7 +112,7 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbors=None,
         index_pairing[cos_thetas.max(1) < cos_theta_max] = -1
         
         # Search for duplicate index_pairings
-        u, u_count = np.unique(index_pairing, return_counts=True)
+        #u, u_count = np.unique(index_pairing, return_counts=True)
         
         # Check if the particular p has already been assigned to another q
         for n in range(len(q)):
@@ -143,7 +140,7 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbors=None,
             G[i] = np.identity(3)
             warnings.warn('An atom lacks pair sets. Check neighbor list')
         else:
-            G[i], resid, rank, s = np.linalg.lstsq(Q[:c], P[:c], rcond=None)
+            G[i] = np.linalg.lstsq(Q[:c], P[:c], rcond=None)[0]
         
         # Compute strain properties from G
         strain[i] = ((np.identity(3) - G[i]) + (np.identity(3) - G[i]).T) / 2.
@@ -166,7 +163,7 @@ def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbors=None,
             gradG[x,:] = np.linalg.lstsq(Q, dG[:,x,:], rcond=None)[0].T
         
         # Use gradG to calculate the nye tensor
-        nye[i] = -np.einsum('ijm,ikm->jk', eps, gradG)
+        nye[i] = -1*np.einsum('ijm,ikm->jk', eps, gradG)
     
     return {'strain':strain, 'strain_invariant_1':inv1,
             'strain_invariant_2':inv2, 'strain_invariant_3':inv3,

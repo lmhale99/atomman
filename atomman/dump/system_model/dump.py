@@ -1,15 +1,6 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 import os
-
-# https://github.com/usnistgov/DataModelDict
-from DataModelDict import DataModelDict as DM
-
-# atomman imports
-import atomman.unitconvert as uc
-from ...compatibility import range, iteritems, stringtype
-from ...tools import identifyfamily
 
 def dump(system, f=None, box_unit=None, prop_name=None, unit=None,
          prop_unit=None, format=None, indent=None, symbols=None):

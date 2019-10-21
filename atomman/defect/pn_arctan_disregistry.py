@@ -1,12 +1,7 @@
 # coding: utf-8
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 
 # http://www.numpy.org/
 import numpy as np
-
-# atomman imports
-from ..compatibility import int
 
 def pn_arctan_disregistry(xmax=None, xstep=None, xnum=None,
                           burgers=None, center=0.0,
@@ -68,7 +63,7 @@ def pn_arctan_disregistry(xmax=None, xstep=None, xnum=None,
             raise ValueError('Invalid parameters: xnum or ((2 * xmax) / xstep) not an integer.')
     
     # Generate x and validate
-    x, dx = np.linspace(-xmax, xmax, xnum, retstep=True)
+    x, dx = np.linspace(-1*xmax, xmax, xnum, retstep=True)
     if not np.isclose(dx, xstep):
         raise ValueError('Incompatible parameters: xmax = xstep * (xnum - 1) / 2')
     

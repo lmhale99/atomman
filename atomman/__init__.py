@@ -18,7 +18,6 @@ with open(os.path.join(rootdir, 'VERSION')) as version_file:
     __version__ = version_file.read().strip()
 
 # atomman imports
-from . import compatibility
 from . import unitconvert
 from . import tools
 from . import lammps

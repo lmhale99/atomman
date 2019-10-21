@@ -1,6 +1,5 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 from io import open
 from collections import OrderedDict
 
@@ -8,7 +7,6 @@ from collections import OrderedDict
 import atomman.unitconvert as uc
 from ...lammps import style
 from .process_prop_info import process_prop_info
-from ...compatibility import range, ispython2
 from ...tools import indexstr
 
 def dump(system, f=None, lammps_units='metal', scale=False, prop_name=None,
@@ -261,7 +259,7 @@ def table_dump(system, f=None, prop_info=None, float_format ='%.13f'):
         pname = prop['prop_name']
         
         # loop over all table names and property indexes
-        for tname, (index, istr) in zip(prop['table_name'],
+        for tname, (index, istr) in zip(prop['table_name'], # pylint: disable=unused-variable
                                         indexstr(prop['shape'])):
             
             # Build name change dict
@@ -276,7 +274,5 @@ def table_dump(system, f=None, prop_info=None, float_format ='%.13f'):
   
     # Generate table
     sep = ' '
-    if ispython2:
-        sep = sep.encode('utf-8')
     return df.to_csv(path_or_buf=f, sep=sep, index=None, header=False,
                      float_format=float_format)

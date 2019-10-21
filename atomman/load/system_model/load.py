@@ -1,6 +1,5 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 from collections import OrderedDict
 
 # http://www.numpy.org/
@@ -12,7 +11,6 @@ from DataModelDict import DataModelDict as DM
 # atomman imports
 import atomman.unitconvert as uc
 from ... import Atoms, Box, System
-from ...compatibility import range, iteritems
 
 def load(model, symbols=None, key='atomic-system', index=0):
     """
@@ -130,7 +128,7 @@ def load(model, symbols=None, key='atomic-system', index=0):
                     else:
                         assert sym_dict[atype] == symbol
                 
-                for atype, symbol in iteritems(sym_dict):
+                for atype, symbol in sym_dict.items():
                     lsymbols[atype-1] = symbol
         
         # Use lsymbols if symbols parameter is not given.

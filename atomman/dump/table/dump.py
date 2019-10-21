@@ -1,12 +1,10 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 from collections import OrderedDict
 
 # atomman imports
 import atomman.unitconvert as uc
 from .process_prop_info import process_prop_info
-from ...compatibility import range, ispython2
 from ...tools import indexstr
 
 def dump(system, f=None, prop_name=None, table_name=None, shape=None,
@@ -99,7 +97,7 @@ def dump(system, f=None, prop_name=None, table_name=None, shape=None,
         pname = prop['prop_name']
         
         # loop over all table names and property indexes
-        for tname, (index, istr) in zip(prop['table_name'],
+        for tname, (index, istr) in zip(prop['table_name'], # pylint: disable=unused-variable
                                         indexstr(prop['shape'])):
             
             # Build name change dict
@@ -114,8 +112,6 @@ def dump(system, f=None, prop_name=None, table_name=None, shape=None,
   
     # Generate table
     sep = ' '
-    if ispython2:
-        sep = sep.encode('utf-8')
     table = df.to_csv(path_or_buf=f,
                       sep=sep,
                       index=None,

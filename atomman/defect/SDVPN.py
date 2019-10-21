@@ -1,7 +1,5 @@
 # coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 import os
 from copy import deepcopy
 import warnings
@@ -434,7 +432,7 @@ class SDVPN(object):
         return dx * gamma.E_gsf(pos=pos).sum()
     
     def elastic_energy(self, x=None, disregistry=None):
-        """
+        r"""
         Computes the short-range configuration-dependent elastic energy term
         for the dislocation based on the dislocation density and K_tensor.
         

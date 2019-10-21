@@ -1,6 +1,4 @@
-# Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division)
+# coding: utf-8
 
 from .ase_Atoms import load as load_ase_Atoms
 from .cif import load as load_cif

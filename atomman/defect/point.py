@@ -1,6 +1,5 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 from copy import deepcopy
 
 # http://www.numpy.org/
@@ -329,7 +328,7 @@ def substitutional(system, pos=None, ptd_id=None, atype=1,scale=False,
 
 def dumbbell(system, pos=None, ptd_id=None, db_vect=None, scale=False,
              atol=None, **kwargs):
-    """
+    r"""
     Generates a new system by adding a dumbbell interstitial point defect.
     
     1. Copies the indicated atom and moves both the original and copy to the

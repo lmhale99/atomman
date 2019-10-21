@@ -1,6 +1,5 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 from copy import deepcopy
 import warnings
 
@@ -147,7 +146,6 @@ def dislocation_array(system, dislsol=None, m=None, n=None, burgers=None,
 
     # Compare distances between boundary atoms to identify duplicates
     dup_atom_ids = []
-    mins = []
     for ni, i in enumerate(boundaryatoms.old_id[:-1]):
         js = boundaryatoms.old_id[ni+1:]
         try:

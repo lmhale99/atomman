@@ -1,7 +1,4 @@
 # coding: utf-8
-# Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 
 # http://www.numpy.org/
 import numpy as np
@@ -114,20 +111,20 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', n=None,
         if hkl[1] != 0:
             if hkl[2] != 0:
                 # hkl solution
-                m = np.lcm.reduce([hkl[0], hkl[1], hkl[2]])
+                m = np.lcm.reduce([hkl[0], hkl[1], hkl[2]]) # pylint: disable=no-member
                 s = np.sign(hkl[0] * hkl[1] * hkl[2])
                 a_uvw = np.array([-m / hkl[0], m / hkl[1], 0], dtype=int)
                 b_uvw = np.array([-m / hkl[0], 0, m / hkl[2]], dtype=int)
             else:
                 # hk0 solution
-                m = np.lcm(hkl[0], hkl[1])
+                m = np.lcm(hkl[0], hkl[1]) # pylint: disable=no-member
                 s = np.sign(hkl[0] * hkl[1])
                 a_uvw = np.array([-m / hkl[0], m / hkl[1], 0], dtype=int)
                 b_uvw = np.array([0, 0, 1], dtype=int)
         else:
             if hkl[2] != 0:
                 # h0l solution
-                m = np.lcm(hkl[0], hkl[2])
+                m = np.lcm(hkl[0], hkl[2]) # pylint: disable=no-member
                 s = np.sign(hkl[0] * hkl[2])
                 a_uvw = np.array([m / hkl[0], 0, -m / hkl[2]], dtype=int)
                 b_uvw = np.array([0, 1, 0], dtype=int)
@@ -140,7 +137,7 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', n=None,
     elif hkl[1] != 0:
         if hkl[2] != 0:
             # 0kl solution
-            m = np.lcm(hkl[1], hkl[2])
+            m = np.lcm(hkl[1], hkl[2]) # pylint: disable=no-member
             s = np.sign(hkl[1] * hkl[2])
             a_uvw = np.array([0, -m / hkl[1], m / hkl[2]], dtype=int)
             b_uvw = np.array([1, 0, 0], dtype=int)
@@ -213,7 +210,7 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', n=None,
     assert c_uvw is not None, 'Failed to find vector near slip plane normal'
     
     # Reduce c_uvw if possible
-    c_uvw = c_uvw / np.gcd.reduce(np.asarray(c_uvw, dtype=int))
+    c_uvw = c_uvw / np.gcd.reduce(np.asarray(c_uvw, dtype=int)) # pylint: disable=no-member
     
     # Second search
     a_cart = np.inner(a_uvw, box.vects.T)

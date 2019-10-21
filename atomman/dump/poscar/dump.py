@@ -1,12 +1,7 @@
-# Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
+# coding: utf-8
 
 # http://www.numpy.org/
 import numpy as np
-
-# atomman imports
-from ...compatibility import range
 
 def dump(system, f=None, header='', symbols=None, style='direct',
          box_scale=1.0, float_format='%.13e'):

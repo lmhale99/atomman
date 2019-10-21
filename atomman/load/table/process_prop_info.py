@@ -1,10 +1,8 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 from copy import deepcopy
 
 # atomman imports
-from ...compatibility import stringtype, range
 from ...tools import indexstr
 
 def process_prop_info(prop_name=None, table_name=None, shape=None, unit=None, dtype=None, prop_info=None):
@@ -65,12 +63,12 @@ def process_prop_info(prop_name=None, table_name=None, shape=None, unit=None, dt
         if 'table_name' not in prop:
             prop['shape'] = prop.get('shape', ())
             prop['table_name'] = []
-            for index, istr in indexstr(prop['shape']):
+            for index, istr in indexstr(prop['shape']): # pylint: disable=unused-variable
                 prop['table_name'].append(prop['prop_name'] + istr)
         # Make certain table_name is a list
         else:
             try:
-                assert not isinstance(prop['table_name'], stringtype)
+                assert not isinstance(prop['table_name'], str)
                 prop['table_name'] = list(prop['table_name'])
             except:
                 prop['table_name'] = [prop['table_name']]

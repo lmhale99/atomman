@@ -1,7 +1,7 @@
 # coding: utf-8
-from .dvect import dvect
-from .dmag import dmag
-from .nlist import nlist
+from .dvect import dvect # pylint: disable=no-name-in-module
+from .dmag import dmag # pylint: disable=no-name-in-module
+from .nlist import nlist # pylint: disable=no-name-in-module
 from .NeighborList import NeighborList
 from .Atoms import Atoms
 from .Box import Box

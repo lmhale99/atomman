@@ -1,6 +1,5 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 import os
 
 # http://www.numpy.org/
@@ -8,7 +7,7 @@ import numpy as np
 
 # http://www.diffpy.org/diffpy.structure/
 try:
-    import diffpy.Structure
+    import diffpy.structure
     has_diffpy = True
 except:
     has_diffpy = False

@@ -1,9 +1,10 @@
+# coding: utf-8
 from .point import *
 from .point import __all__ as point_all
 
 from .differential_displacement import differential_displacement
 from .disregistry import disregistry
-from .slip_vector import slip_vector
+from .slip_vector import slip_vector # pylint: disable=no-name-in-module
 from .nye_tensor import nye_tensor
 from .nye_tensor_p import nye_tensor_p
 

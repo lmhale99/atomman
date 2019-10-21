@@ -1,14 +1,10 @@
 # coding: utf-8
-# Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 
 # http://www.numpy.org/
 import numpy as np
 
 # atomman imports
 from .. import NeighborList
-from ..compatibility import range
 
 def nye_tensor_p(system, neighbors=None, cutoff=None):
     """

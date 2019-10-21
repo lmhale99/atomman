@@ -1,6 +1,4 @@
-# Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division)
+# coding: utf-8
 
 from .ase_Atoms import dump as dump_ase_Atoms
 from .pymatgen_Structure import dump as dump_pymatgen_Structure

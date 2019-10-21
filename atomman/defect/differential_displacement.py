@@ -1,7 +1,4 @@
 # coding: utf-8
-# Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 
 # http://www.numpy.org/
 import numpy as np
@@ -168,15 +165,15 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
     if ylim is None:
         ylim = (pos_ref[:, 1].min(), pos_ref[:, 1].max())
     if zlim is None:
-        zlim = (pos_0[:, 2].min(), pos_0[:, 2].max())
+        zlim = (pos_0[:, 2].min(), pos_0[:, 2].max()) # pylint: disable=invalid-sequence-index
     
     # Identify only atoms in xlim, ylim, zlim
     in_bounds = ((pos_ref[:,0] > xlim[0] - 5.) &
                  (pos_ref[:,0] < xlim[1] + 5.) &
                  (pos_ref[:,1] > ylim[0] - 5.) &
                  (pos_ref[:,1] < ylim[1] + 5.) &
-                 (pos_0[:,2] > zlim[0]) &
-                 (pos_0[:,2] < zlim[1]))
+                 (pos_0[:,2] > zlim[0]) & # pylint: disable=invalid-sequence-index
+                 (pos_0[:,2] < zlim[1])) # pylint: disable=invalid-sequence-index
 
     # Initial plot setup and parameters
     fig, ax1, = plt.subplots(1, 1, squeeze=True, figsize=(7,7), dpi=72)
@@ -226,7 +223,7 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
         
         # Plot a circle for atom i
         if atom_cmap[atype_index] is not None:
-            color = atom_cmap[atype_index]((pos_0[i, 2] - zlim[0]) / (zlim[1] - zlim[0]))
+            color = atom_cmap[atype_index]((pos_0[i, 2] - zlim[0]) / (zlim[1] - zlim[0])) # pylint: disable=invalid-sequence-index
         elif atom_color[atype_index] is not None:
             color = atom_color[atype_index]
         else:
