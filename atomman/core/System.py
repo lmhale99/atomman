@@ -183,13 +183,22 @@ class System(object):
     
     @property
     def atypes(self):
-        """tuple : List of unique int atom types."""
-        return self.__atoms.atypes
+        """tuple : List of int atom types."""
+        return tuple(range(1, self.natypes+1))
     
     @property
     def natypes(self):
-        """int : The number of atom types in the Atoms class."""
-        return self.__atoms.natypes
+        """int : The number of atom types/symbols."""
+        
+        # Check if more symbols than atypes
+        try:
+            nsymbols = len(self.symbols)
+        except:
+            nsymbols = 0
+        if nsymbols > self.__atoms.natypes:
+            return len(self.symbols)
+        else:
+            return self.__atoms.natypes
     
     @property
     def box(self):
@@ -216,30 +225,67 @@ class System(object):
     def symbols(self):
         """tuple : The element model symbols associated with each atype."""
         
-        # Check if there are symbols for all atypes
-        if len(self.__symbols) != self.natypes:
-            symbols = [None for x in range(self.natypes)]
-            for i in range(len(self.__symbols)):
-                symbols[i] = self.__symbols[i]
-            self.__symbols = tuple(symbols)
-        
+        # Fill in missing values
+        if len(self.__symbols) < self.__atoms.natypes:
+            self.symbols = self.__symbols
         return self.__symbols
     
     @symbols.setter
     def symbols(self, value):
+        
+        # Change str value to tuple
         if isinstance(value, stringtype):
             value = (value,)
-        assert len(value) == self.natypes, 'length of symbols does not match natypes'
+        
+        # Fill in missing values
+        if len(value) < self.__atoms.natypes:
+            newvalue = [None for x in range(self.__atoms.natypes)]
+            for i in range(len(value)):
+                newvalue[i] = value[i]
+            value = newvalue
+
         self.__symbols = tuple(value)
     
     @property
     def composition(self):
-        """str: The system's composition."""
-        if self.symbols[0] is not None:
-            counts = np.unique(self.atoms.atype, return_counts=True)[1]
-            return compositionstr(self.symbols, counts)
-        else:
-            return None
+        """
+        The system's reduced and sorted symbols composition.
+        
+        Returns
+        -------
+        str or None
+            The system's reduced and sorted symbols composition.
+            Will return None if symbols are missing
+        """
+        
+        # Build total count of each symbol
+        sym_dict = {}
+        for i in range(self.natypes):
+            count = np.sum(self.atoms.atype == i+1)
+            if count > 0:
+                symbol = self.symbols[i]
+                
+                if symbol is None:
+                    return None
+                
+                if symbol in sym_dict:
+                    sym_dict[symbol] += count
+                else:
+                    sym_dict[symbol] = count
+
+        # Find greatest common denominator
+        gcd = np.gcd.reduce(list(sym_dict.values())) # pylint: disable=no-member
+        
+        # Sort symbols and reduce counts
+        composition =''
+        for symbol in sorted(sym_dict):
+            count = sym_dict[symbol] // gcd
+            if sym_dict[symbol] > 0:
+                composition += symbol
+                if count != 1:
+                    composition += str(count)
+        
+        return composition
     
     def atoms_prop(self, key=None, index=None, value=None, a_id=None, scale=False):
         """

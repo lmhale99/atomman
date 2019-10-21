@@ -1,6 +1,5 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 from copy import deepcopy
 from collections import OrderedDict
 
@@ -15,7 +14,6 @@ from DataModelDict import DataModelDict as DM
 
 # atomman imports
 import atomman.unitconvert as uc
-from ..compatibility import iteritems, int, inttype, range
 from ..tools import indexstr
 
 class Atoms(object):
@@ -71,12 +69,16 @@ class Atoms(object):
             if key in self.keys():
                 self[key][:] = value
             
+            # Check that atype values are 1 or greater
+            if key == 'atype' and np.min(value) < 1:
+                raise ValueError('atype values must be >= 1')
+
             # Otherwise, set new item and try assigning attribute to host
             else:
                 super(Atoms.PropertyDict, self).__setitem__(key, value)
                 try:
                     assert key not in dir(host)
-                    super(Atoms, host).__setattr__(key, value)
+                    super(Atoms, host).__setattr__(key, value) # pylint: disable=bad-super-call
                 except:
                     pass
     
@@ -214,12 +216,12 @@ class Atoms(object):
         if safecopy:
             self.view['atype'] = deepcopy(atype)
             self.view['pos'] = deepcopy(pos)
-            for key, value in iteritems(kwargs):
+            for key, value in kwargs.items():
                 self.view[key] = deepcopy(value)
         else:
             self.view['atype'] = atype
             self.view['pos'] = pos
-            for key, value in iteritems(kwargs):
+            for key, value in kwargs.items():
                 self.view[key] = value
     
     def model(self, prop_name=None, unit=None, prop_unit=None):
@@ -283,8 +285,8 @@ class Atoms(object):
 
     def __str__(self):
         """string output of Atoms data"""
-        atype = self.atype
-        pos = self.pos
+        atype = self.atype # pylint: disable=no-member
+        pos = self.pos # pylint: disable=no-member
         lines = ['per-atom properties = ' + str(self.prop())]
         lines.append('     id |   atype |  pos[0] |  pos[1] |  pos[2]')
         for i in range(self.natoms):
@@ -318,7 +320,7 @@ class Atoms(object):
     def __getitem__(self, index):
         """Index getting of Atoms."""
         view = OrderedDict()
-        if isinstance(index, inttype):
+        if isinstance(index, int):
             index = self.__intslice(index)
         for key in self.view.keys():
             view[key] = self.view[key][index]
@@ -332,7 +334,7 @@ class Atoms(object):
         except:
             raise ValueError('Can only set Atoms with matching properties')
         
-        if isinstance(index, inttype):
+        if isinstance(index, int):
             index = self.__intslice(index)
             
         for key in self.view.keys():
@@ -345,22 +347,25 @@ class Atoms(object):
     @property
     def natoms(self):
         """int : The number of atoms in the Atoms class."""
-        return self.__natoms
+        return self.__natoms # pylint: disable=no-member
     
     @property
     def atypes(self):
-        """tuple : List of unique int atom types."""
-        return tuple(np.unique(self.atype))
+        """tuple : List of int atom types."""
+        return tuple(range(1, self.natypes+1))
     
     @property
     def natypes(self):
         """int : The number of atom types in the Atoms class."""
-        return len(self.atypes)
+        if np.min(self.atype) < 1: # pylint: disable=no-member
+            raise ValueError('atype values < 1 not allowed')
+
+        return int(np.max(self.atype)) # pylint: disable=no-member
         
     @property
     def view(self):
         """PropertyDict : All assigned per-atom properties."""
-        return self.__view
+        return self.__view # pylint: disable=no-member
     
     def prop(self, key=None, index=None, value=None, a_id=None):
         """
@@ -470,7 +475,7 @@ class Atoms(object):
             if atype in self.atypes:
                 if key not in self.prop():
                     self.view[key] = np.zeros_like(value)
-                self.view[key][self.atype==atype] = value
+                self.view[key][self.atype==atype] = value # pylint: disable=no-member
             else:
                 raise ValueError('atype not found')
     
@@ -520,7 +525,7 @@ class Atoms(object):
         """
         
         # Handle different value types
-        if isinstance(value, inttype):
+        if isinstance(value, int):
             natoms = value
             atoms = Atoms(natoms=natoms)
         elif isinstance(value, Atoms):
