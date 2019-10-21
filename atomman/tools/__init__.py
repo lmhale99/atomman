@@ -1,3 +1,4 @@
+# coding: utf-8
 # atomman imports
 from .axes_check import axes_check
 from .atomic_info import *

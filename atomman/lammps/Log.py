@@ -1,6 +1,5 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 import datetime
 
 # http://www.numpy.org/
@@ -14,7 +13,6 @@ from DataModelDict import DataModelDict as DM
 
 # atomman imports
 from ..tools import uber_open_rmode
-from ..compatibility import range
 
 class Log(object):
     """Object for representing a LAMMPS log output"""

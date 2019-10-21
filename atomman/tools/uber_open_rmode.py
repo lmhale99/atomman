@@ -1,11 +1,7 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 from io import BytesIO, open
 import os
-
-# atomman imports
-from ..compatibility import unicode
 
 class uber_open_rmode():
     """
@@ -42,12 +38,12 @@ class uber_open_rmode():
             self.open_file = open(self.data, 'rb')
             self.to_close = True
         
-        # If data is not unicode, read using BytesIO
-        elif not isinstance(self.data, unicode):
+        # If data is not str, read using BytesIO
+        elif not isinstance(self.data, str):
             self.open_file = BytesIO(self.data)
             self.to_close = True
             
-        # If data is unicode, encode and read using BytesIO
+        # If data is str, encode and read using BytesIO
         else:
             self.open_file = BytesIO(self.data.encode('utf-8'))
             self.to_close = True

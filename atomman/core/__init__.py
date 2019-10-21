@@ -1,3 +1,4 @@
+# coding: utf-8
 from .dvect import dvect
 from .dmag import dmag
 from .nlist import nlist

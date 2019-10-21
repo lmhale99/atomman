@@ -1,6 +1,4 @@
-# Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
+# coding: utf-8
 
 __all__ = ['atomic_number', 'atomic_symbol', 'atomic_mass']
 

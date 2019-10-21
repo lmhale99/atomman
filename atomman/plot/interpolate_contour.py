@@ -1,7 +1,4 @@
 # coding: utf-8
-# Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 
 # http://www.numpy.org/
 import numpy as np
@@ -17,7 +14,6 @@ from matplotlib import cm
 # atomman imports
 import atomman.unitconvert as uc
 from ..tools import axes_check, vect_angle
-from ..compatibility import inttype
 
 __all__ = ['interpolate_contour']
 
@@ -145,7 +141,7 @@ def interpolate_contour(system, name, property=None, index=None, magnitude=False
     # Handle index
     if index is not None:
         assert magnitude is False, 'index and magnitude cannot be combined'
-        if isinstance(index, inttype):
+        if isinstance(index, (int, np.integer)):
             index = [index]
         else:
             index = list(index)

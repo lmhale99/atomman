@@ -1,11 +1,7 @@
 # coding: utf-8
-# Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 
+# http://www.numpy.org/
 import numpy as np
-
-from ..compatibility import unicode
 
 def compositionstr(symbols, counts):
     """
@@ -32,7 +28,7 @@ def compositionstr(symbols, counts):
         else:
             sym_dict[symbol] = count
     
-    gcd = np.gcd.reduce(list(sym_dict.values()))
+    gcd = np.gcd.reduce(list(sym_dict.values())) # pylint: disable=no-member
     
     composition =''
     for symbol in sorted(sym_dict):
@@ -40,6 +36,6 @@ def compositionstr(symbols, counts):
         if sym_dict[symbol] > 0:
             composition += symbol
             if count != 1:
-                composition += unicode(count)
+                composition += str(count)
     
     return composition

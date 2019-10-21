@@ -1,6 +1,5 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 import ast
 
 # https://pypi.python.org/pypi/numericalunits
@@ -11,9 +10,6 @@ from DataModelDict import DataModelDict as DM
 
 # http://www.numpy.org/
 import numpy as np
-
-# atomman imports
-from .compatibility import iteritems, range, stringtype
 
 def build_unit():
     """
@@ -26,7 +22,7 @@ def build_unit():
     unit = {}
     
     # Copy all float attributes of numericalunits to unit
-    for key, value in iteritems(nu.__dict__):
+    for key, value in nu.__dict__.items():
         try:
             key = key.decode('UTF-8')
         except:
@@ -333,7 +329,7 @@ def parse(units):
         return 1
 
     # Parse string and return number value
-    elif isinstance(units, stringtype):
+    elif isinstance(units, str):
         i = 0
         terms = []
         

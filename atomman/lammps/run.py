@@ -1,6 +1,5 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 import os
 import glob
 import shutil
@@ -8,7 +7,6 @@ import subprocess as sp
 
 # atomman imports
 from .Log import Log
-from ..compatibility import range, stringtype
 
 def run(lammps_command, script_name, mpi_command=None,
         restart_script_name=None, return_style='object', logfile='log.lammps',
@@ -78,13 +76,13 @@ def run(lammps_command, script_name, mpi_command=None,
         lognum = 0
     
     # Convert lammps_command into list of terms
-    if isinstance(lammps_command, stringtype):
+    if isinstance(lammps_command, str):
         lammps_command = lammps_command.split(' ')
     elif not isinstance(lammps_command, list):
         lammps_command = [lammps_command]
     
     # Convert script_name into list of terms
-    if isinstance(script_name, stringtype):
+    if isinstance(script_name, str):
         script_name = script_name.split(' ')
     elif not isinstance(script_name, list):
         script_name = [script_name]
@@ -92,7 +90,7 @@ def run(lammps_command, script_name, mpi_command=None,
     # Convert mpi_command into list of terms
     if mpi_command is None:
         mpi_command = []
-    elif isinstance(mpi_command, stringtype):
+    elif isinstance(mpi_command, str):
         mpi_command = mpi_command.split(' ')
     elif not isinstance(mpi_command, list):
         mpi_command = [mpi_command]

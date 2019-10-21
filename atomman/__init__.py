@@ -8,7 +8,6 @@ rootdir : str
 """
 
 # Standard Python libraries
-from __future__ import absolute_import, print_function, division
 import os
 
 # Define rootdir

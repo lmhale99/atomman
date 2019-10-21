@@ -1,3 +1,4 @@
+# coding: utf-8
 """Provides a `duplicates_allclose` for finding duplicates in a
 DataFrame with tolerances.
 
@@ -180,7 +181,7 @@ def duplicates_allclose(dataframe, dcols, fcols):
         duplicated(subset=dcols, keep=False) if dcols else alltrue,
         lambda x: dataframe[x],
         sort_values(by=dcols + list(fcols.keys())),
-        fduplicates(dcols, fcols),
+        fduplicates(dcols, fcols), # pylint: disable=no-value-for-parameter
         pdapply(func=pdall, axis=1),
     )
 
