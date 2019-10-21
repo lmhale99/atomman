@@ -1,14 +1,11 @@
-# Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
+# coding: utf-8
 
 # http://www.numpy.org/
 import numpy as np
 
 # atomman imports
-from .nlist import nlist
+from .nlist import nlist # pylint: disable=no-name-in-module
 from ..tools import uber_open_rmode
-from ..compatibility import range
 
 class NeighborList(object):
     """Class that finds and stores the neighbor atoms for a system."""

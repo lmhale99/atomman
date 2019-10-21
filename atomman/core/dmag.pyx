@@ -1,8 +1,6 @@
 # coding: utf-8
 # cython: language_level=3
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 from copy import deepcopy
 
 # http://cython.org/

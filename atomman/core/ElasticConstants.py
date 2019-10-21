@@ -1,6 +1,5 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 from copy import deepcopy
 
 # http://www.numpy.org/
@@ -12,7 +11,6 @@ from DataModelDict import DataModelDict as DM
 # atomman imports
 from ..tools import axes_check
 import atomman.unitconvert as uc
-from ..compatibility import iteritems, range
 
 class ElasticConstants(object):
     """Class for storing and converting elastic constant values"""

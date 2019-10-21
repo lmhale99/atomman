@@ -1,10 +1,8 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 from collections import OrderedDict
 from copy import deepcopy
 import warnings
-
 
 # http://www.numpy.org/
 import numpy as np
@@ -19,8 +17,7 @@ from DataModelDict import DataModelDict as DM
 import atomman.unitconvert as uc
 from . import Atoms, Box, dvect, dmag, NeighborList
 from ..lammps import normalize as lmp_normalize
-from ..compatibility import iteritems, range, inttype, stringtype
-from ..tools import indexstr, miller, ishexagonal, compositionstr
+from ..tools import indexstr, miller, ishexagonal
 from .. import dump
 
 class System(object):
@@ -141,7 +138,7 @@ class System(object):
         self.pbc = pbc
         self.__transformation = np.identity(3)
         
-        if isinstance(symbols, stringtype):
+        if isinstance(symbols, str):
             symbols = (symbols,)
         assert len(symbols) <= self.natypes
         self.__symbols = tuple(symbols)
@@ -234,7 +231,7 @@ class System(object):
     def symbols(self, value):
         
         # Change str value to tuple
-        if isinstance(value, stringtype):
+        if isinstance(value, str):
             value = (value,)
         
         # Fill in missing values
@@ -732,7 +729,7 @@ class System(object):
         for i in range(3):
             
             # Change single int to tuple of two int
-            if isinstance(sizes[i], inttype):
+            if isinstance(sizes[i], int):
                 if sizes[i] > 0:
                     sizes[i] = (0, sizes[i])
                 elif sizes[i] < 0:
@@ -741,9 +738,9 @@ class System(object):
             elif isinstance(sizes[i], tuple):
                 if True:
                     assert len(sizes[i]) == 2, str(len(sizes[i]))
-                    assert isinstance(sizes[i][0], inttype), str(sizes[i][0])
+                    assert isinstance(sizes[i][0], int), str(sizes[i][0])
                     assert sizes[i][0] <= 0, str(sizes[i][0])
-                    assert isinstance(sizes[i][1], inttype), str(sizes[i][1])
+                    assert isinstance(sizes[i][1], int), str(sizes[i][1])
                     assert sizes[i][1] >= 0, str(sizes[i][1])
                 else:
                     raise TypeError('Invalid system multipliers')
@@ -1018,7 +1015,7 @@ class System(object):
         if symbols is None:
             symbols = self.symbols
         else:
-            if isinstance(symbols, stringtype):
+            if isinstance(symbols, str):
                 symbols = (symbols,)
             assert len(symbols) == self.natypes, 'length of symbols does not match natypes'
         for symbol in symbols:
