@@ -1,6 +1,5 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 import os
 
 # https://github.com/usnistgov/DataModelDict
@@ -8,7 +7,6 @@ from DataModelDict import DataModelDict as DM
 
 # atomman imports
 from ..tools import atomic_mass, uber_open_rmode
-from ..compatibility import range, iteritems
 
 class Potential(object):
     """
@@ -55,6 +53,14 @@ class Potential(object):
         self.__units = self.__dm['units']
         self.__atom_style = self.__dm['atom_style']
         self.__pair_style = self.__dm['pair_style']['type']
+
+        allsymbols = self.__dm.get('allsymbols', 'False')
+        if allsymbols is True or allsymbols == 'True':
+            self.__allsymbols = True
+        elif allsymbols is False or allsymbols == 'False':
+            self.__allsymbols = False
+        else:
+            raise ValueError('Invalid allsymbols value')
         
         if pot_dir is not None:
             self.pot_dir = pot_dir
@@ -96,8 +102,42 @@ class Potential(object):
             self.__symbols.append(symbol)
             self.__masses.append(mass)
             self.__charges.append(charge)
-        
     
+    def normalize_symbols(self, symbols):
+        """
+        Modifies a given list of symbols to be compatible with the potential.
+        Mostly, this converts symbols to a list if it is not already one, and
+        adds additional symbols if the potential's allsymbols setting is True.
+
+        Parameters
+        ----------
+        symbols : str or list-like object
+            The initial list of symbols
+        
+        Returns
+        -------
+        list
+            The updated list.
+        """
+        
+        # Convert symbols to a list if needed
+        if isinstance(symbols, str):
+            symbols = [symbols]
+        else:
+            symbols = list(symbols)
+        
+        # Check that all symbols are set
+        for symbol in symbols:
+            assert symbol is not None, 'symbols list incomplete: found None value'
+        
+        # Add missing symbols if potential's allsymbols is True
+        if self.allsymbols:
+            for symbol in self.symbols:
+                if symbol not in symbols:
+                    symbols.append(symbol)
+        
+        return symbols
+
     def __str__(self):
         """str: The string of the Potential returns its human-readable id"""
         return self.id
@@ -150,6 +190,11 @@ class Potential(object):
     def pair_style(self):
         return self.__pair_style
     
+    @property
+    def allsymbols(self):
+        """bool : Indicates if all atom-model symbols must be listed by pair_info."""
+        return self.__allsymbols
+
     def elements(self, symbols=None):
         """
         Returns a list of element names associated with atom-model symbols.
@@ -169,9 +214,8 @@ class Potential(object):
         if symbols is None:
             return self.__elements
         
-        # Convert symbols to a list if needed
-        if not isinstance(symbols, (list, tuple)):
-            symbols = [symbols]
+        # Normalize symbols
+        symbols = self.normalize_symbols(symbols)
         
         # Get all matching elements
         elements = []
@@ -201,9 +245,8 @@ class Potential(object):
         if symbols is None:
             return self.__masses
         
-        # Convert symbols to a list if needed
-        if not isinstance(symbols, (list, tuple)):
-            symbols = [symbols]
+        # Normalize symbols
+        symbols = self.normalize_symbols(symbols)
         
         # Get all matching masses
         masses = []
@@ -233,9 +276,8 @@ class Potential(object):
         if symbols is None:
             return self.__charges
         
-        # Convert symbols to a list if needed
-        if not isinstance(symbols, (list, tuple)):
-            symbols = [symbols]
+        # Normalize symbols
+        symbols = self.normalize_symbols(symbols)
         
         # Get all matching charges
         charges = []
@@ -268,9 +310,8 @@ class Potential(object):
             symbols = self.symbols
             masses = self.__masses
         else:
-            # Convert symbols to a list if needed
-            if not isinstance(symbols, (list, tuple)):
-                symbols = [symbols]
+            # Normalize symbols
+            symbols = self.normalize_symbols(symbols)
             masses = self.masses(symbols)
         
         # Generate mass lines
@@ -353,7 +394,7 @@ class Potential(object):
         line = ''
         
         for term in terms:
-            for ttype, tval in iteritems(term):
+            for ttype, tval in term.items():
                 # Print options and parameters as strings
                 if ttype == 'option' or ttype == 'parameter':
                     line += ' ' + str(tval)
