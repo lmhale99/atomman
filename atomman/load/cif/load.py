@@ -38,9 +38,9 @@ def load(cif, symbols=None):
     assert has_diffpy, 'diffpy.Structure not imported'
     
     # Read in cif file to diffpy Structure
-    dps = diffpy.Structure.structure.Structure()
+    dps = diffpy.structure.structure.Structure()
     with uber_open_rmode(cif) as f:
-        dps.readStr(f.read())
+        dps.readStr(f.read().decode('UTF-8'))
     
     all_elements = dps.element
     elements, all_atype = np.unique(all_elements, return_inverse=True)

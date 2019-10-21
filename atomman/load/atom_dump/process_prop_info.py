@@ -4,7 +4,6 @@ from copy import deepcopy
 
 # atomman imports
 from ...lammps import style
-from ...compatibility import stringtype
 from ...tools import indexstr
 
 def process_prop_info(prop_name=None, table_name=None, shape=None, unit=None,

@@ -21,7 +21,6 @@ from DataModelDict import DataModelDict as DM
 # atomman imports
 from .. import Box
 from .. import unitconvert as uc
-from ..compatibility import stringtype
 from ..tools import miller
 
 class GammaSurface(object):
@@ -174,7 +173,7 @@ class GammaSurface(object):
             coordinates.
         """
         # Set a1vect
-        if isinstance(a1vect, stringtype):
+        if isinstance(a1vect, str):
             a1vect = a1vect.split()
         a1vect = np.asarray(a1vect, dtype=float)
         if a1vect.shape == (4,):
@@ -184,7 +183,7 @@ class GammaSurface(object):
         self.__a1vect = a1vect
 
         # Set a2vect
-        if isinstance(a2vect, stringtype):
+        if isinstance(a2vect, str):
             a2vect = a2vect.split()
         a2vect = np.asarray(a2vect, dtype=float)
         if a2vect.shape == (4,):
