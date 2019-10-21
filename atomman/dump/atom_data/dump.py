@@ -1,6 +1,5 @@
+# coding: utf-8
 # Standard Python libraries
-from __future__ import (absolute_import, print_function,
-                        division, unicode_literals)
 from io import open
 
 # atomman imports
@@ -9,10 +8,9 @@ from .atoms_prop_info import atoms_prop_info
 from .velocities_prop_info import velocities_prop_info
 from ...lammps import style
 from .. import dump_table
-from ...compatibility import stringtype, ispython2
 
-def dump(system, f=None, atom_style='atomic', units='metal',
-         float_format='%.13f', return_info=True):
+def dump(system, f=None, atom_style=None, units=None, natypes=None,
+         potential=None, float_format='%.13f', return_info=True):
     """
     Write a LAMMPS-style atom data file from a System.
     
@@ -24,11 +22,19 @@ def dump(system, f=None, atom_style='atomic', units='metal',
         File path or file-like object to write the content to.  If not given,
         then the content is returned as a str.
     atom_style : str, optional
-        The LAMMPS atom_style option associated with the data file.  Default
-        value is 'atomic'.
+        The LAMMPS atom_style option associated with the data file.  If neither
+        atom_style or potential is given, will set atom_style to 'atomic'.
     units : str, optional
-        The LAMMPS units option associated with the data file. Default value
-        is 'metal'.
+        The LAMMPS units option associated with the data file.  If neither
+        units or potential is given, will set units 'metal'.
+    natypes : int, optional
+        Allows the natypes value to be manually changed.  This is needed if
+        natypes needs to be greater than the current number of atypes.  If
+        neither natypes or potential is given, will use system.natypes.
+    potential : atomman.lammps.Potential, optional
+        Potential-specific values of atom_style, units, and natypes can be
+        extracted from a Potential object.  If both potential and any of the
+        individual values are given, the individual values will be used.
     float_format : str, optional
         c-style formatting string for floating point values.  Default value is
         '%.13f'.
@@ -45,13 +51,31 @@ def dump(system, f=None, atom_style='atomic', units='metal',
     """
     # Wrap atoms because LAMMPS hates atoms out of bounds in atom data files
     system.wrap()
+
+    # Extract potential-based parameters
+    if potential is not None:
+        if units is None:
+            units = potential.units
+        if atom_style is None:
+            atom_style = potential.atom_style
+        if natypes is None:
+            natypes = len(potential.normalize_symbols(system.symbols))
     
+    # Set default parameter values
+    else:
+        if units is None:
+            units = 'metal'
+        if atom_style is None:
+            atom_style = 'atomic'
+        if natypes is None:
+            natypes = system.natypes
+
     # Get unit information according to the units style
     units_dict = style.unit(units)
     
     # Generate header info
     content = '\n%i atoms\n' % system.natoms
-    content += '%i atom types\n' % system.natypes
+    content += '%i atom types\n' % natypes
     
     # Extract and convert box values
     xlo = uc.get_in_units(system.box.xlo, units_dict['length'])
@@ -112,7 +136,7 @@ def dump(system, f=None, atom_style='atomic', units='metal',
             else:
                 boundary += 'm '
         
-        if isinstance(f, stringtype):
+        if isinstance(f, str):
             read_data = 'read_data ' + f
         else:
             read_data = ''
