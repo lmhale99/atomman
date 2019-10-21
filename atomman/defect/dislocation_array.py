@@ -13,7 +13,8 @@ import atomman.unitconvert as uc
 
 __all__ = ['dislocation_array']
 
-def dislocation_array(system, dislsol=None, m=None, n=None, burgers=None, bwidth=None, cutoff=None):
+def dislocation_array(system, dislsol=None, m=None, n=None, burgers=None,
+                      bwidth=None, cutoff=None):
     """
     Method that converts a bulk crystal system into a periodic array of
     dislocations.  A single dislocation is inserted using a dislocation
@@ -53,10 +54,16 @@ def dislocation_array(system, dislsol=None, m=None, n=None, burgers=None, bwidth
         positions with other atoms after altering the boundary conditions.
         Default cutoff value is 0.5 Angstrom.
     """
-    # Input parameter setup
+    
+    # ------------------------ Parameter handling --------------------------- #
+    
+    # Input parameter setup for linear gradients only
     if dislsol is None:
         if m is None or n is None:
             raise ValueError('m and n are needed if no dislsol is given')
+        m = np.asarray(m)
+        n = np.asarray(n)
+        burgers = np.asarray(burgers)
         try:
             assert np.isclose(np.linalg.norm(m), 1.0)
             assert np.isclose(np.linalg.norm(n), 1.0)
@@ -65,6 +72,8 @@ def dislocation_array(system, dislsol=None, m=None, n=None, burgers=None, bwidth
             raise ValueError('m and n must be perpendicular unit vectors')
         if bwidth is not None:
             raise ValueError('bwidth not allowed if dislsol is not given')
+
+    # Input parameter setup for dislsol
     else:
         m = dislsol.m
         n = dislsol.n
@@ -79,44 +88,63 @@ def dislocation_array(system, dislsol=None, m=None, n=None, burgers=None, bwidth
     vects = system.box.vects
     spos = system.atoms_prop(key='pos', scale=True)
     
-    # Identify system orientation indices
-    motionindex = None
-    lineindex = None
-    pnormindex = None
-    for i in range(3):
-        if np.isclose(np.abs(vects[i].dot(np.cross(m, n))), np.linalg.norm(vects[i])):
-            lineindex = i
-        elif not np.isclose(vects[i].dot(n), 0.0):
-            if pnormindex is not None:
-                raise ValueError("Multiple box vectors have components normal to dislocation solution's slip plane")
-            pnormindex = i
-    if lineindex is None:
-        raise ValueError("No box vectors found parallel to dislocation solution's line vector")
-    if pnormindex is None:
-        raise ValueError("No box vectors have components normal to dislocation solution's slip plane")
-    motionindex = 3 - (lineindex + pnormindex)
+    # -------------------- Orientation identification ----------------------- #
     
-    # Compute new box vects and pbc
-    newvects = deepcopy(system.box.vects)
-    if burgers[motionindex] > 0:
+    # Find box vector alligned with u = m x n
+    u = np.cross(m,n)
+    line = np.isclose(np.abs(np.dot(u, vects)), np.linalg.norm(vects, axis=1))
+    if np.sum(line) != 1:
+        raise ValueError('box vector aligned with u = m x n not found')
+    lineindex = np.where(line)[0][0]
+
+    # Find out-of-plane box vector
+    out = ~np.isclose(np.dot(n, vects), 0.0)
+    if np.sum(out) > 1:
+        raise ValueError('multiple box vectors have out-of-plane components')
+    pnormindex = np.where(out)[0][0]
+
+    # Set third box vector as edge direction
+    motionindex = 3 - (lineindex + pnormindex)
+
+    # Check for atoms exactly on the slip plane
+    if np.isclose(spos[:, pnormindex], 0.5, rtol=0).sum() > 0:
+        raise ValueError("atom positions found on slip plane: apply a coordinate shift")
+    
+    # ---------------------- Boundary modification -------------------------- #
+    
+    # Modify box vector in the motion direction by +- burgers/2
+    newvects = deepcopy(vects)
+    if burgers.dot(m) > 0:
         newvects[motionindex] -= burgers / 2
     else:
         newvects[motionindex] += burgers / 2
     newbox = Box(vects=newvects, origin=system.box.origin)
+        
+    # Make boundary condition perpendicular to slip plane non-periodic
     newpbc = [True, True, True]
     newpbc[pnormindex] = False
-    
-    # Generate a test system to identify duplicate atoms
+
+    # Get length of system along motionindex 
+    # WHICH IS BEST!?!?!?
     length = np.abs(vects[motionindex].dot(m))
-    testsystem = System(atoms=deepcopy(system.atoms), box=newbox, pbc=newpbc, symbols=system.symbols)
+    #length = np.linalg.norm(newvects[motionindex])
+    
+    # -------------------- duplicate atom identification -------------------- #
+    
+    # Create test system to identify "duplicate" atoms
+    testsystem = System(atoms=deepcopy(system.atoms), box=newbox,
+                           pbc=newpbc, symbols=system.symbols)
+
+    # Apply linear gradient shift to all atoms
     testsystem.atoms.pos += linear_displacement(pos, burgers, length, m, n)
     testsystem.atoms.old_id = range(testsystem.natoms)
-    
-    # Identify boundary atoms to check
+
+    # Identify atoms at the motionindex boundary to include in the duplicate check
     spos = testsystem.atoms_prop(key='pos', scale=True)
     sburgers = 2 * burgers[motionindex] / (length)
-    boundaryatoms = testsystem.atoms[(spos[:, motionindex] < sburgers) | (spos[:, motionindex] > 1.0 - sburgers)]
-    
+    boundaryatoms = testsystem.atoms[  (spos[:, motionindex] < sburgers) 
+                                     | (spos[:, motionindex] > 1.0 - sburgers) ]
+
     # Compare distances between boundary atoms to identify duplicates
     dup_atom_ids = []
     mins = []
@@ -131,16 +159,27 @@ def dislocation_array(system, dislsol=None, m=None, n=None, burgers=None, bwidth
             dup_atom_ids.append(i)
     ii = np.ones(system.natoms, dtype=bool)
     ii[dup_atom_ids] = False
+
+    # Count found duplicate atoms
+    found = system.natoms - ii.sum()
+
+    # Count expected number of duplicates based on volume change
+    expected = system.natoms - (system.natoms * newbox.volume / system.box.volume)
+    if np.isclose(expected, round(expected)):
+        expected = int(round(expected))
+    else:
+        raise ValueError('expected number of atoms to delete not an integer: check burgers vector')
+        
+    # Compare found versus expected number of atoms
+    if found != expected:
+        raise ValueError('Deleted atom mismatch: expected %i, found %i. Adjust system dimensions and/or cutoff' %(expected, found))
+    
+    # ---------------------- Build dislocation system ----------------------- #
     
     # Generate new system with duplicate atoms removed
-    newsystem = System(atoms=system.atoms[ii], box=newbox, pbc=newpbc, symbols=system.symbols)
+    newsystem = System(atoms=system.atoms[ii], box=newbox, pbc=newpbc,
+                       symbols=system.symbols)
     
-    # Check if number of atoms deleted matches expected value
-    expected = len(pos[(pos[:, motionindex] >= 0.0) & (pos[:, motionindex] <= np.abs(burgers[motionindex]))]) // 2
-    actual = system.natoms - newsystem.natoms
-    if expected != actual:
-        #warnings.warn('%i deleted atoms expected but %i atoms deleted' %(expected, actual), Warning)
-        raise ValueError('Deleted atom mismatch: expected %i, actual %i. Adjust system dimensions and/or cutoff' %(expected, actual))
     if dislsol is None:
         # Use only linear displacements
         disp = linear_displacement(newsystem.atoms.pos, burgers, length, m, n)
@@ -157,7 +196,8 @@ def dislocation_array(system, dislsol=None, m=None, n=None, burgers=None, bwidth
         # Use dislsol in middle and linear displacements at boundary
         disp = dislsol.displacement(newsystem.atoms.pos)
         disp[:, pnormindex] -= disp[:, pnormindex].mean()
-        disp[ii] = linear_displacement(newsystem.atoms.pos[ii], burgers, length, m, n)
+        disp[ii] = linear_displacement(newsystem.atoms.pos[ii], burgers,
+                                       length, m, n)
     
     # Displace atoms and wrap
     newsystem.atoms.pos += disp
@@ -185,4 +225,5 @@ def linear_displacement(pos, burgers, length, m, n):
         The dislocation solution n unit vector.  This vector is normal to the 
         slip plane.  Only needed if dislsol is not given.
     """
-    return np.outer(0.5 - np.sign(pos.dot(n)) * ((pos.dot(m) / (2 * length)) + 0.25), burgers)
+    #return np.outer(0.5 - np.sign(pos.dot(n)) * ((pos.dot(m) / (2 * length)) + 0.25), burgers)
+    return np.outer(np.sign(pos.dot(n)) * (0.25 - pos.dot(m) / (2 * length)), burgers)

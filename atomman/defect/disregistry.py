@@ -7,13 +7,10 @@ import numpy as np
 
 from .. import displacement
 
-def disregistry(basesystem, dislsystem, spreadvector=[1.0, 0.0, 0.0],
-                planenormal=[0.0, 1.0, 0.0], planepos=[0.0, 0.0, 0.0]):
+def disregistry(basesystem, dislsystem, m=[1.0, 0.0, 0.0],
+                n=[0.0, 1.0, 0.0], planepos=[0.0, 0.0, 0.0]):
     """
-    Computes the disregistry profile for a dislocation system.  Assumes that
-    the dislocation line is along the z-axis and the slip plane is the y=0
-    plane.  These assumptions match how atomman.defect.Stroh generates
-    dislocations.
+    Computes the disregistry profile for a dislocation system.
     
     Parameters
     ----------
@@ -22,14 +19,14 @@ def disregistry(basesystem, dislsystem, spreadvector=[1.0, 0.0, 0.0],
         in dislsystem.
     dislsystem : atomman.System
         A dislocation-containing system.
-    spreadvector : array-like object, optional
-        Unit vector defining the direction associated with the coord-coordinate
-        spreading along the slip plane.  Default value is [1, 0, 0]
-        (Cartesian coord-coordinates).
-    planenormal : array-like object, optional
-        Unit vector defining the normal to the slip plane.  Must be
-        perpendicular to spreadvector.  Default value is [0, 1, 0] (Cartesian
-        y-axis).
+    m : array-like object, optional
+        The dislocation solution m unit vector.  This vector is in the slip
+        plane and perpendicular to the dislocation line direction.  Default
+        value is [1,0,0] (Cartesian x-axis).
+    n : array-like object, optional
+        The dislocation solution n unit vector.  This vector is normal to the 
+        slip plane.  Only needed if dislsol is not given.  Default
+        value is [0,1,0] (Cartesian y-axis).
     planepos : array-like object, optional
         A position on the slip plane so that the plane can be fully defined.
         The slip plane position should fall between two planes of atoms.
@@ -43,21 +40,21 @@ def disregistry(basesystem, dislsystem, spreadvector=[1.0, 0.0, 0.0],
     disregistry : numpy.ndarray
         A (N, 3) array of the dislocation's disregistry at each coord.
     """
-    # Handle spreadvector, planenormal and planepos
-    spreadvector = np.asarray(spreadvector, dtype=float)
-    planenormal = np.asarray(planenormal, dtype=float)
+    # Handle m, n and planepos
+    m = np.asarray(m, dtype=float)
+    n = np.asarray(n, dtype=float)
     planepos = np.asarray(planepos, dtype=float)
-    if not np.isclose(spreadvector.dot(planepos), 0.0, atol=1e-8, rtol=0.0):
-        raise ValueError('spreadvector and planepos must be perpendicular')
+    #if not np.isclose(m.dot(planepos), 0.0, atol=1e-8, rtol=0.0):
+    #    raise ValueError('m and planepos must be perpendicular')
     
     # Extract pos from basesystem and compute atomic displacements
     basepos = basesystem.atoms.pos
     disp = displacement(basesystem, dislsystem)
     
     # Transform basepos and planepos to calculation coordinates
-    allx = np.dot(basepos, spreadvector)
-    ally = np.dot(basepos, planenormal)
-    midy = np.dot(planepos, planenormal)
+    allx = np.dot(basepos, m)
+    ally = np.dot(basepos, n)
+    midy = np.dot(planepos, n)
     
     # Identify atoms just above and below slip plane
     uniquey = np.unique(ally)
