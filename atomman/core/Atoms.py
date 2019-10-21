@@ -320,7 +320,7 @@ class Atoms(object):
     def __getitem__(self, index):
         """Index getting of Atoms."""
         view = OrderedDict()
-        if isinstance(index, int):
+        if isinstance(index, (int, np.integer)):
             index = self.__intslice(index)
         for key in self.view.keys():
             view[key] = self.view[key][index]
@@ -334,7 +334,7 @@ class Atoms(object):
         except:
             raise ValueError('Can only set Atoms with matching properties')
         
-        if isinstance(index, int):
+        if isinstance(index, (int, np.integer)):
             index = self.__intslice(index)
             
         for key in self.view.keys():
@@ -525,7 +525,7 @@ class Atoms(object):
         """
         
         # Handle different value types
-        if isinstance(value, int):
+        if isinstance(value, (int, np.integer)):
             natoms = value
             atoms = Atoms(natoms=natoms)
         elif isinstance(value, Atoms):

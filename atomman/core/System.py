@@ -729,7 +729,7 @@ class System(object):
         for i in range(3):
             
             # Change single int to tuple of two int
-            if isinstance(sizes[i], int):
+            if isinstance(sizes[i], (int, np.integer)):
                 if sizes[i] > 0:
                     sizes[i] = (0, sizes[i])
                 elif sizes[i] < 0:
@@ -738,9 +738,9 @@ class System(object):
             elif isinstance(sizes[i], tuple):
                 if True:
                     assert len(sizes[i]) == 2, str(len(sizes[i]))
-                    assert isinstance(sizes[i][0], int), str(sizes[i][0])
+                    assert isinstance(sizes[i][0], (int, np.integer)), str(sizes[i][0])
                     assert sizes[i][0] <= 0, str(sizes[i][0])
-                    assert isinstance(sizes[i][1], int), str(sizes[i][1])
+                    assert isinstance(sizes[i][1], (int, np.integer)), str(sizes[i][1])
                     assert sizes[i][1] >= 0, str(sizes[i][1])
                 else:
                     raise TypeError('Invalid system multipliers')
