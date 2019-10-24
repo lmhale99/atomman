@@ -228,7 +228,6 @@ def read_atoms(data, system, atom_style, units, atomsstart, atomscolumns):
         The system with atom properties from the Atoms table assigned.
     """
     
-
     if atomsstart is not None:
         prop_info = atoms_prop_info(atom_style, units)
         ncols = countreadcolumns(prop_info)
@@ -256,7 +255,7 @@ def read_atoms(data, system, atom_style, units, atomsstart, atomscolumns):
         # Check for correct number of columns
         elif ncols != atomscolumns:
             raise FileFormatError('Invalid number of Atoms table columns')
-    
+
     return system
 
 def countreadcolumns(prop_info):
@@ -301,5 +300,6 @@ def read_velocities(data, system, atom_style, units, velocitiesstart):
         system = load_table(data, box=system.box, system=system,
                             prop_info=prop_info, skiprows=velocitiesstart,
                             nrows=system.natoms, comment='#', header=None)
+
 
     return system

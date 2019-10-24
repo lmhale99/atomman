@@ -55,6 +55,9 @@ def load(table, box, symbols=None, system=None, prop_name=None, table_name=None,
         'table_name', 'shape', 'unit', and 'dtype' fields.
     skiprows : int, optional
         Number of rows to skip before reading the data.
+    usecols : int, optional
+        Which columns are to be used. Will be passed to pandas.read_csv() usecols
+        option.
     nrows : int, optional
         Number of rows of data to read.
     comment : str, optional
