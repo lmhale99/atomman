@@ -116,7 +116,8 @@ def load(data, pbc=(True, True, True), symbols=None, atom_style='atomic', units=
     if atomsstart is not None:
         prop_info = atoms_prop_info(atom_style, units)
         system = load_table(data, box=system.box, system=system, symbols=symbols,
-                            prop_info=prop_info, skiprows=atomsstart, nrows=natoms,
+                            prop_info=prop_info, skiprows=atomsstart, usecols=[0,1,2,3,4],
+                            nrows=natoms,
                             comment='#')
     else:
         raise ValueError('No Atoms section found!')
@@ -126,6 +127,7 @@ def load(data, pbc=(True, True, True), symbols=None, atom_style='atomic', units=
         prop_info = velocities_prop_info(atom_style, units)
         system = load_table(data, box=system.box, system=system,
                             prop_info=prop_info,
-                            skiprows=velocitiesstart, nrows=natoms)
+                            skiprows=velocitiesstart, usecols=[0,1,2,3],
+                            nrows=natoms)
     
     return system
