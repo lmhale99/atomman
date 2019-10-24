@@ -2,6 +2,7 @@
 # Standard Python libraries
 from io import open
 from collections import OrderedDict
+from copy import deepcopy
 
 # http://www.numpy.org/
 import numpy as np
@@ -14,7 +15,8 @@ from ...lammps import style
 from .. import dump_table
 
 def dump(system, f=None, atom_style=None, units=None, natypes=None,
-         potential=None, float_format='%.13f', return_info=True):
+         potential=None, float_format='%.13f', return_info=True,
+         safecopy=False):
     """
     Write a LAMMPS-style atom data file from a System.
     
@@ -45,6 +47,10 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
     return_info : bool, optional
         Indicates if the LAMMPS command lines associated with reading in the
         file are to be returned as a str.  Default value is True.
+    safecopy : bool, optional
+        The LAMMPS data format requires all atoms to be inside box bounds, i.e.
+        "wrapped".  If safecopy is True then a copy of the system is made to
+        keep the original unwrapped.  Default value is False.
     
     Returns
     -------
@@ -54,6 +60,8 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
         The LAMMPS input command lines to read the created data file in (returned if return_info is True).
     """
     # Wrap atoms and get imageflags
+    if safecopy:
+        system = deepcopy(system)
     imageflags = system.wrap(return_imageflags=True)
 
     # Extract potential-based parameters
