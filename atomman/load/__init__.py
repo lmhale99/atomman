@@ -1,5 +1,8 @@
 # coding: utf-8
 
+class FileFormatError(Exception):
+    pass
+
 from .ase_Atoms import load as load_ase_Atoms
 from .cif import load as load_cif
 from .pymatgen_Structure import load as load_pymatgen_Structure
@@ -11,8 +14,8 @@ from .atom_dump import load as load_atom_dump
 from .spglib_cell import load as load_spglib_cell
 from .phonopy_Atoms import load as load_phonopy_Atoms
 
-__all__ = ['load', 'load_ase_Atoms', 'load_pymatgen_Structure', 'load_table',
-           'load_system_model', 'load_poscar', 'load_atom_data',
+__all__ = ['FileFormatError', 'load', 'load_ase_Atoms', 'load_pymatgen_Structure',
+           'load_table', 'load_system_model', 'load_poscar', 'load_atom_data',
            'load_atom_dump', 'load_cif', 'load_spglib_cell', 'load_phonopy_Atoms']
 
 def load(style, input, **kwargs):

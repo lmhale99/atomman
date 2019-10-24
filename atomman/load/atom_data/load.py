@@ -9,13 +9,11 @@ from .atoms_prop_info import atoms_prop_info
 from .velocities_prop_info import velocities_prop_info
 from ... import Atoms, Box, System
 from ...lammps import style
-from .. import load_table
+from .. import load_table, FileFormatError
 from ...tools import uber_open_rmode
 
-class FileFormatError(Exception):
-    pass
-
-def load(data, pbc=(True, True, True), symbols=None, atom_style='atomic', units='metal'):
+def load(data, pbc=(True, True, True), symbols=None, atom_style=None,
+         units=None, potential=None):
     """
     Read a LAMMPS-style atom data file.
     
@@ -29,12 +27,16 @@ def load(data, pbc=(True, True, True), symbols=None, atom_style='atomic', units=
         Default value is (True, True, True).
     symbols : tuple, optional
         Allows the list of element symbols to be assigned during loading.
-    atom_style :str
-        The LAMMPS atom_style option associated with the data file.  Default
-        value is 'atomic'.
-    units : str 
-        The LAMMPS units option associated with the data file. Default value
-        is 'metal'.
+    atom_style : str, optional
+        The LAMMPS atom_style option associated with the data file.  If neither
+        atom_style or potential is given, will set atom_style to 'atomic'.
+    units : str, optional
+        The LAMMPS units option associated with the data file.  If neither
+        units or potential is given, will set units 'metal'.
+    potential : atomman.lammps.Potential, optional
+        Potential-specific values of atom_style and units, can be
+        extracted from a Potential object.  If both potential and any of the
+        individual values are given, the individual values will be used.
     
     Returns
     -------
@@ -47,6 +49,20 @@ def load(data, pbc=(True, True, True), symbols=None, atom_style='atomic', units=
     FileFormatError
         If required content fields not found.
     """
+
+    # Extract potential-based parameters
+    if potential is not None:
+        if units is None:
+            units = potential.units
+        if atom_style is None:
+            atom_style = potential.atom_style
+    
+    # Set default parameter values
+    else:
+        if units is None:
+            units = 'metal'
+        if atom_style is None:
+            atom_style = 'atomic'
 
     # First pass over file to generate system and locate content
     system, params = firstpass(data, pbc, symbols, units)
