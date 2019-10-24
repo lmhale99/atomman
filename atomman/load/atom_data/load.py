@@ -1,5 +1,8 @@
 # coding: utf-8
 
+# https://pandas.pydata.org/
+import pandas as pd
+
 # atomman imports
 import atomman.unitconvert as uc
 from .atoms_prop_info import atoms_prop_info
@@ -8,6 +11,9 @@ from ... import Atoms, Box, System
 from ...lammps import style
 from .. import load_table
 from ...tools import uber_open_rmode
+
+class FileFormatError(Exception):
+    pass
 
 def load(data, pbc=(True, True, True), symbols=None, atom_style='atomic', units='metal'):
     """
@@ -35,14 +41,67 @@ def load(data, pbc=(True, True, True), symbols=None, atom_style='atomic', units=
     atomman.System
         The corresponding system.  Note all property values will be
         automatically converted to atomman.unitconvert's set working units.
+
+    Raises
+    ------
+    FileFormatError
+        If required content fields not found.
     """
+
+    # First pass over file to generate system and locate content
+    system, params = firstpass(data, pbc, symbols, units)
     
+    # Read in Atoms info
+    system = read_atoms(data, system, atom_style, units, params['atomsstart'], params['atomscolumns'])
+    
+    # Read in Velocities info
+    system = read_velocities(data, system, atom_style, units, params['velocitiesstart'])
+    
+    return system
+
+def firstpass(data, pbc, symbols, units):
+    """
+    Reads through data to extract natoms and box dimensions to construct a
+    System sans atomic properties.
+
+    Parameters
+    ----------
+    data : str or file-like object
+        The atom data content to read.  Can be str content, path name, or open
+        file-like object.
+    pbc : list of bool
+        Three boolean values indicating which System directions are periodic.
+        Default value is (True, True, True).
+    symbols : tuple, optional
+        Allows the list of element symbols to be assigned during loading.
+    units : str 
+        The LAMMPS units option associated with the data file. Default value
+        is 'metal'.
+    
+    Returns
+    -------
+    system : atomman.System
+        The system with the correct number of atoms and no assigned atom
+        properties.
+    params : dict
+        Line indices and flags indicating how to read in the atom properties
+        from the file on subsequent passes.
+
+    Raises
+    ------
+    FileFormatError
+        If '# atoms' or box boundaries not found.
+    """
     # Get units information
     units_dict = style.unit(units)
     
     # Initialize parameter values
     atomsstart = None
     velocitiesstart = None
+    natoms = None
+    firstatoms = False
+    atomscolumns = 0
+    xlo = xhi = ylo = yhi = zlo = zhi = None
     xy = 0.0
     xz = 0.0
     yz = 0.0
@@ -74,21 +133,19 @@ def load(data, pbc=(True, True, True), symbols=None, atom_style='atomic', units=
                 if len(terms) == 2 and terms[1] == 'atoms':
                     natoms = int(terms[0])
                 
-                # Read number of atom types
-                elif len(terms) == 3 and terms[1] == 'atom' and terms[2] == 'types': 
-                    #natypes = int(terms[0])
-                    pass
-                
                 # Read boundary info
                 elif len(terms) == 4 and terms[2] == 'xlo' and terms[3] == 'xhi':
                     xlo = uc.set_in_units(float(terms[0]), units_dict['length'])
                     xhi = uc.set_in_units(float(terms[1]), units_dict['length'])
+
                 elif len(terms) == 4 and terms[2] == 'ylo' and terms[3] == 'yhi':
                     ylo = uc.set_in_units(float(terms[0]), units_dict['length'])
                     yhi = uc.set_in_units(float(terms[1]), units_dict['length'])
+
                 elif len(terms) == 4 and terms[2] == 'zlo' and terms[3] == 'zhi':
                     zlo = uc.set_in_units(float(terms[0]), units_dict['length'])
                     zhi = uc.set_in_units(float(terms[1]), units_dict['length'])
+
                 elif len(terms) == 6 and terms[3] == 'xy' and terms[4] == 'xz' and terms[5] == 'yz':
                     xy = uc.set_in_units(float(terms[0]), units_dict['length'])
                     xz = uc.set_in_units(float(terms[1]), units_dict['length'])
@@ -97,33 +154,152 @@ def load(data, pbc=(True, True, True), symbols=None, atom_style='atomic', units=
                 # Identify starting line number for Atoms data
                 elif len(terms) == 1 and terms[0] == 'Atoms':
                     atomsstart = i + 1
+                    firstatoms = True
+                
+                # Count number of columns in Atoms table
+                elif firstatoms:
+                    atomscolumns = len(terms)
+                    firstatoms = False
                 
                 # Identify starting line number for Velocity data
                 elif len(terms) == 1 and terms[0] == 'Velocities':
                     velocitiesstart = i + 1
     
-    # Create system
+    if i == 0:
+        raise FileNotFoundError(f'File {data} not found')
+
+    if natoms is None:
+        raise FileFormatError('# atoms not found')
+
+    if xlo is None or xhi is None:
+        raise FileFormatError('xlo, xhi box dimensions missing')
+
+    if ylo is None or yhi is None:
+        raise FileFormatError('ylo, yhi box dimensions missing')
+
+    if zlo is None or zhi is None:
+        raise FileFormatError('zlo, zhi box dimensions missing')
+
+    if atomsstart is None:
+        raise FileFormatError('Atoms section missing')
+
+    # Create system with natoms
     box = Box(xlo=xlo, xhi=xhi,
               ylo=ylo, yhi=yhi,
               zlo=zlo, zhi=zhi,
               xy=xy, xz=xz, yz=yz)
     atoms = Atoms(natoms=natoms)
-    system = System(box=box, atoms=atoms, pbc=pbc)
+    system = System(box=box, atoms=atoms, pbc=pbc, symbols=symbols)
+
+    # Compile dict of params
+    params = {}
+    params['atomsstart'] = atomsstart
+    params['velocitiesstart'] = velocitiesstart
+    params['atomscolumns'] = atomscolumns
+
+    return system, params
+
+def read_atoms(data, system, atom_style, units, atomsstart, atomscolumns):
+    """
+    Reads in an "Atoms" table from data.
+
+    Parameters
+    ----------
+    data : str or file-like object
+        The atom data content to read.  Can be str content, path name, or open
+        file-like object.
+    system : atomman.System
+        The system to add Atoms table info to.
+    atom_style :str
+        The LAMMPS atom_style option associated with the data file.  Default
+        value is 'atomic'.
+    units : str 
+        The LAMMPS units option associated with the data file. Default value
+        is 'metal'.
+    atomsstart : int or None
+        The line of the file where the Atoms table content starts.
+    atomscolumns : int
+        How many columns are in the Atoms table.  Used to determine if wrap
+        flags are included.
+
+    Returns
+    -------
+    atomman.System
+        The system with atom properties from the Atoms table assigned.
+    """
     
-    # Read in Atoms info
+
     if atomsstart is not None:
         prop_info = atoms_prop_info(atom_style, units)
-        system = load_table(data, box=system.box, system=system, symbols=symbols,
-                            prop_info=prop_info, skiprows=atomsstart, nrows=natoms,
-                            comment='#')
-    else:
-        raise ValueError('No Atoms section found!')
+        ncols = countreadcolumns(prop_info)
+        
+        # Read Atoms table
+        system = load_table(data, box=system.box, system=system, 
+                            prop_info=prop_info, skiprows=atomsstart,
+                            nrows=system.natoms, comment='#',
+                            header=None, usecols=range(ncols))
+        
+        # Check if image flags are included
+        if atomscolumns == ncols + 3:
+            
+            # Read image flags
+            with uber_open_rmode(data) as f:
+                imageflags = pd.read_csv(f, delim_whitespace=True, names=['bx', 'by', 'bz'],
+                                        skiprows=atomsstart, nrows=system.natoms, comment='#',
+                                        header=None, usecols=range(ncols, atomscolumns),
+                                        dtype='int64')
+
+            # Wrap atoms to correct images
+            shift = imageflags.values.dot(system.box.vects)
+            system.atoms.pos[:] += shift
+        
+        # Check for correct number of columns
+        elif ncols != atomscolumns:
+            raise FileFormatError('Invalid number of Atoms table columns')
     
-    # Read in Velocities info
+    return system
+
+def countreadcolumns(prop_info):
+        """
+        Counts how many columns are expected from prop info
+        """
+        count = 0
+        for prop in prop_info:
+            if isinstance(prop['table_name'], str):
+                count += 1
+            else:
+                count += len(prop['table_name'])
+        return count
+
+def read_velocities(data, system, atom_style, units, velocitiesstart):
+    """
+    Reads in an "Velocities" table from data.
+
+    Parameters
+    ----------
+    data : str or file-like object
+        The atom data content to read.  Can be str content, path name, or open
+        file-like object.
+    system : atomman.System
+        The system to add Velocities table info to.
+    atom_style :str
+        The LAMMPS atom_style option associated with the data file.  Default
+        value is 'atomic'.
+    units : str 
+        The LAMMPS units option associated with the data file. Default value
+        is 'metal'.
+    velocitiesstart : int or None
+        The line of the file where the Velocities table content starts.
+
+    Returns
+    -------
+    atomman.System
+        The system with atom properties from the Velocities table assigned.
+    """
     if velocitiesstart is not None:
         prop_info = velocities_prop_info(atom_style, units)
         system = load_table(data, box=system.box, system=system,
-                            prop_info=prop_info,
-                            skiprows=velocitiesstart, nrows=natoms)
-    
+                            prop_info=prop_info, skiprows=velocitiesstart,
+                            nrows=system.natoms, comment='#', header=None)
+
     return system

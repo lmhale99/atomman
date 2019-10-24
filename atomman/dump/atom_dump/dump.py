@@ -275,4 +275,4 @@ def table_dump(system, f=None, prop_info=None, float_format ='%.13f'):
     # Generate table
     sep = ' '
     return df.to_csv(path_or_buf=f, sep=sep, index=None, header=False,
-                     float_format=float_format)
+                     float_format=float_format, line_terminator='\n')

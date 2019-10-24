@@ -1,6 +1,10 @@
 # coding: utf-8
 # Standard Python libraries
 from io import open
+from collections import OrderedDict
+
+# http://www.numpy.org/
+import numpy as np
 
 # atomman imports
 import atomman.unitconvert as uc
@@ -49,8 +53,8 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
     read_info : str
         The LAMMPS input command lines to read the created data file in (returned if return_info is True).
     """
-    # Wrap atoms because LAMMPS hates atoms out of bounds in atom data files
-    system.wrap()
+    # Wrap atoms and get imageflags
+    imageflags = system.wrap(return_imageflags=True)
 
     # Extract potential-based parameters
     if potential is not None:
@@ -77,31 +81,11 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
     content = '\n%i atoms\n' % system.natoms
     content += '%i atom types\n' % natypes
     
-    # Extract and convert box values
-    xlo = uc.get_in_units(system.box.xlo, units_dict['length'])
-    xhi = uc.get_in_units(system.box.xhi, units_dict['length'])
-    ylo = uc.get_in_units(system.box.ylo, units_dict['length'])
-    yhi = uc.get_in_units(system.box.yhi, units_dict['length'])
-    zlo = uc.get_in_units(system.box.zlo, units_dict['length'])
-    zhi = uc.get_in_units(system.box.zhi, units_dict['length'])
-    xy = system.box.xy
-    xz = system.box.xz
-    yz = system.box.yz
-    
-    # Write box values
-    xf2 = float_format + ' ' + float_format
-    content += xf2 % (xlo, xhi) +' xlo xhi\n'
-    content += xf2 % (ylo, yhi) +' ylo yhi\n'
-    content += xf2 % (zlo, zhi) +' zlo zhi\n'
-    if xy != 0.0 or xz != 0.0 or yz != 0.0:
-        xf3 = float_format + ' ' + float_format + ' ' + float_format
-        content += xf3 % (xy, xz, yz) + ' xy xz yz\n'
+    # Write box content
+    content += box_content(system, units_dict['length'], float_format)
     
     # Write atom info
-    content += '\nAtoms\n\n'
-    prop_info = atoms_prop_info(atom_style, units)
-    
-    content += dump_table(system, prop_info=prop_info, float_format=float_format)
+    content += atoms_content(system, imageflags, atom_style, units, float_format)
     
     # Handle velocity information if included
     if 'velocity' in system.atoms_prop():
@@ -154,3 +138,63 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
         return returns[0]
     elif len(returns) > 1:
         return tuple(returns)
+
+def box_content(system, length_unit, float_format):
+    """
+    Generates the data file lines associated with box dimensions
+    """
+    # Define line format strings
+    xf2 = float_format + ' ' + float_format
+    xf3 = float_format + ' ' + float_format + ' ' + float_format
+
+    # Extract and convert box values
+    xlo = uc.get_in_units(system.box.xlo, length_unit)
+    xhi = uc.get_in_units(system.box.xhi, length_unit)
+    ylo = uc.get_in_units(system.box.ylo, length_unit)
+    yhi = uc.get_in_units(system.box.yhi, length_unit)
+    zlo = uc.get_in_units(system.box.zlo, length_unit)
+    zhi = uc.get_in_units(system.box.zhi, length_unit)
+    xy = uc.get_in_units(system.box.xy, length_unit)
+    xz = uc.get_in_units(system.box.xz, length_unit)
+    yz = uc.get_in_units(system.box.yz, length_unit)
+    
+    # Write box values
+    content = ''
+    content += xf2 % (xlo, xhi) +' xlo xhi\n'
+    content += xf2 % (ylo, yhi) +' ylo yhi\n'
+    content += xf2 % (zlo, zhi) +' zlo zhi\n'
+    if xy != 0.0 or xz != 0.0 or yz != 0.0:
+        content += xf3 % (xy, xz, yz) + ' xy xz yz\n'
+
+    return content
+
+def atoms_content(system, imageflags, atom_style, units, float_format):
+    
+    content = ''
+    content += '\nAtoms\n\n'
+    prop_info = atoms_prop_info(atom_style, units)
+
+    # Check if imageflags are needed
+    if np.allclose(imageflags, 0):
+        extra = None
+    else:
+        extra = OrderedDict()
+        extra['imageflag_a'] = imageflags[:,0]
+        extra['imageflag_b'] = imageflags[:,1]
+        extra['imageflag_c'] = imageflags[:,2]
+    
+    content += dump_table(system, prop_info=prop_info, float_format=float_format, extra=extra)
+
+    return content
+
+def velocities_content(system, atom_style, units, float_format):
+    
+    content = ''
+
+    if 'velocity' in system.atoms_prop():
+        content += '\nVelocities\n\n'
+        prop_info = velocities_prop_info(atom_style, units)
+        
+        content += dump_table(system, prop_info=prop_info, float_format=float_format)
+
+    return content

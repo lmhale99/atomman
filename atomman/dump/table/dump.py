@@ -9,7 +9,7 @@ from ...tools import indexstr
 
 def dump(system, f=None, prop_name=None, table_name=None, shape=None,
          unit=None, dtype=None, prop_info=None, header=False,
-         float_format ='%.13f', return_prop_info=False):
+         float_format ='%.13f', return_prop_info=False, extra=None):
     """
     Converts a system's atoms' values to a string table.
     
@@ -110,6 +110,11 @@ def dump(system, f=None, prop_name=None, table_name=None, shape=None,
     # Rename and reorganize
     df = df.rename(columns=key_rename)[list(key_rename.values())]
   
+    # Add extra content if given
+    if extra is not None:
+        for key, value in extra.items():
+            df[key] = value
+
     # Generate table
     sep = ' '
     table = df.to_csv(path_or_buf=f,
@@ -117,7 +122,8 @@ def dump(system, f=None, prop_name=None, table_name=None, shape=None,
                       index=None,
                       header=header,
                       float_format=float_format,
-                      encoding='ascii'
+                      encoding='ascii',
+                      line_terminator='\n',
                       )
     
     returns = []
