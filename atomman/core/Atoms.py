@@ -65,14 +65,14 @@ class Atoms(object):
             elif value.shape[0] != host.natoms:
                 raise ValueError('First dimension of value must be 1 or natoms')
             
+            # Check that atype values are 1 or greater
+            if key == 'atype' and len(value) > 0 and np.min(value) < 1:
+                raise ValueError('atype values must be >= 1')
+
             # If key is already assigned, save value over existing values
             if key in self.keys():
                 self[key][:] = value
             
-            # Check that atype values are 1 or greater
-            if key == 'atype' and np.min(value) < 1:
-                raise ValueError('atype values must be >= 1')
-
             # Otherwise, set new item and try assigning attribute to host
             else:
                 super(Atoms.PropertyDict, self).__setitem__(key, value)
