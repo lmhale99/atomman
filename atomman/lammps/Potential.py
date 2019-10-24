@@ -61,6 +61,8 @@ class Potential(object):
             self.__allsymbols = False
         else:
             raise ValueError('Invalid allsymbols value')
+
+        self.__status = self.__dm.get('status', 'active')
         
         if pot_dir is not None:
             self.pot_dir = pot_dir
@@ -194,6 +196,11 @@ class Potential(object):
     def allsymbols(self):
         """bool : Indicates if all atom-model symbols must be listed by pair_info."""
         return self.__allsymbols
+
+    @property
+    def status(self):
+        """str : Indicates the status of the implementation (active, superseded, retracted)"""
+        return self.__status
 
     def elements(self, symbols=None):
         """
