@@ -140,12 +140,11 @@ class System(object):
         
         if isinstance(symbols, str):
             symbols = (symbols,)
-        assert len(symbols) <= self.natypes
         self.__symbols = tuple(symbols)
         
         # Scale pos if needed
         if scale is True:
-            self.atoms_prop('pos', value=atoms.pos, scale=True)
+            self.atoms_prop('pos', value=self.atoms.pos, scale=True)
         
         # Scale model properties if needed
         if model is not None:
@@ -543,10 +542,21 @@ class System(object):
         # Convert
         return value.dot(vects) + origin
         
-    def wrap(self):
+    def wrap(self, return_imageflags=False):
         """
         Wrap atoms around periodic boundaries and extend non-periodic
         boundaries such that all atoms are within the box.
+
+        Parameters
+        ----------
+        return_imageflags : bool, optional
+            If True, an array of which image the atom was originally in is
+            returned.
+
+        Returns
+        -------
+        numpy.NDarray of int
+            The imageflags array
         """
         
         # mins and maxs are box dimensions relative to box vectors, i.e 0 to 1
@@ -555,20 +565,28 @@ class System(object):
         
         # Retrieve scaled pos
         spos = self.atoms_prop('pos', scale=True)
+
+        # Initialize wrapflags
+        imageflags = np.zeros_like(spos, dtype=np.int)
         
         # Loop over three pbc directions
         for i in range(3):
             
-            # Wrap atoms across periodic boundaries
+            # Count wraps across periodic boundaries
             if self.pbc[i]:
-                spos[:, i] -= np.floor(spos[:, i])
+                imageflags[:, i] = np.floor(spos[:, i]) # pylint: disable=unsupported-assignment-operation
             
             # Shift min and max to encompass atoms across non-periodic bounds
             else:
                 min = spos[:, i].min()
                 max = spos[:, i].max()
-                if min <= mins[i]: mins[i] = min - 0.001
-                if max >= maxs[i]: maxs[i] = max + 0.001
+                if min <= mins[i]: 
+                    mins[i] = min - 0.001
+                if max >= maxs[i]: 
+                    maxs[i] = max + 0.001
+            
+        # Wrap atoms across periodic boundaries
+        spos -= imageflags
         
         # Unscale spos and save to pos
         self.atoms_prop('pos', value=spos, scale=True)
@@ -579,6 +597,9 @@ class System(object):
         bvect = self.box.bvect * (maxs[1] - mins[1])
         cvect = self.box.cvect * (maxs[2] - mins[2])
         self.box_set(avect=avect, bvect=bvect, cvect=cvect, origin=origin)
+
+        if return_imageflags:
+            return imageflags
     
     def dvect(self, pos_0, pos_1):
         """
