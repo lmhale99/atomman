@@ -121,6 +121,7 @@ def firstpass(data, pbc, symbols, units):
     xy = 0.0
     xz = 0.0
     yz = 0.0
+    i = 0
     
     # Read str and files in the same way
     with uber_open_rmode(data) as fp:
