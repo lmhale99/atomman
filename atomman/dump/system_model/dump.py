@@ -3,7 +3,7 @@
 import os
 
 def dump(system, f=None, box_unit=None, prop_name=None, unit=None,
-         prop_unit=None, format=None, indent=None, symbols=None):
+         prop_unit=None, format=None, indent=None):
     """
     Dumps a JSON/XML System.model() representation of the system.
     
@@ -38,19 +38,18 @@ def dump(system, f=None, box_unit=None, prop_name=None, unit=None,
     indent : int or None, optional
         Indentation option to use for XML/JSON content if f is given.  A value
         of None (default) will add no line separatations or indentations.
-    symbols : list, optional
-        list of atom-model symbols corresponding to the atom types.  If not
-        given, will use system.symbols.
 
     Returns
     -------
     model : DataModelDict.DataModelDict or str
-        A JSON/XML data model for the current System object.  Returned if f is not given.
+        The generated model representation of the system.  Will be a
+        DataModelDict if format is not specified, and a JSON- or XML-formatted
+        string if format is specified.  Returned if f is not given.
     """
         
     # Generate model for system
-    model = system.model(box_unit=box_unit, symbols=symbols, prop_name=prop_name,
-                         unit=unit, prop_unit=prop_unit)
+    model = system.model(box_unit=box_unit, prop_name=prop_name, unit=unit,
+                         prop_unit=prop_unit)
 
     # Return DataModelDict or str
     if f is None:

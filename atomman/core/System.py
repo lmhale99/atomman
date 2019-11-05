@@ -17,7 +17,7 @@ from DataModelDict import DataModelDict as DM
 import atomman.unitconvert as uc
 from . import Atoms, Box, dvect, dmag, NeighborList
 from ..lammps import normalize as lmp_normalize
-from ..tools import indexstr, miller, ishexagonal
+from ..tools import indexstr, miller, ishexagonal, aslist
 from .. import dump
 
 class System(object):
@@ -53,7 +53,7 @@ class System(object):
                 raise ValueError('Can only set using Atoms or System objects')
     
     def __init__(self, atoms=None, box=None, pbc=None, scale=False,
-                 symbols=None, model=None, safecopy=False):
+                 symbols=None, masses=None, model=None, safecopy=False):
         """
         Initialize a System by joining an am.Atoms and am.Box instance.
         
@@ -72,7 +72,11 @@ class System(object):
         symbols : tuple, optional
             A list of the element symbols for each atom atype.  If len(symbols)
             is less than natypes, then missing values will be set to None.
-            Default value is (,), i.e. all values set to None.
+            Default sets list with all None values.
+        masses : tuple, optional
+            A list of the masses for each atom atype.  If len(symbols) is less
+            than natypes, then missing values will be set to None.  Default
+            sets list with all None values.
         model : str or DataModelDict, optional
             File path or content of a JSON/XML data model containing all
             system information.  Cannot be given with atoms, box or scale.
@@ -108,21 +112,38 @@ class System(object):
                 pbc = model['periodic-boundary-condition']
             if symbols is None:
                 symbols = tuple(model.aslist('atom-type-symbol'))
+            if masses is None:
+                masses = tuple(model.aslist('atom-type-mass'))
 
+        # Interpret given/missing parameters
         else:
-            # Set default values and handle safecopy
+            # Set default atoms or deepcopy
             if atoms is None:
                 atoms = Atoms()
             elif safecopy:
                 atoms = deepcopy(atoms)
+
+            # Set default box or deepcopy
             if box is None:
                 box = Box()
             elif safecopy:
                 box = deepcopy(box)
+            
+            # Set default pbc
             if pbc is None:
-                pbc=(True, True, True)
+                pbc = (True, True, True)
+            
+            # Set default masses
+            if masses is None:
+                masses = []
+            else:
+                masses = aslist(masses)
+            
+            # Set default symbols
             if symbols is None:
-                symbols=()
+                symbols = [None for i in range(len(masses))]
+            else:
+                symbols = aslist(symbols)
             
             # Check data types
             if not isinstance(atoms, Atoms):
@@ -137,10 +158,9 @@ class System(object):
         self.__box = box
         self.pbc = pbc
         self.__transformation = np.identity(3)
-        
-        if isinstance(symbols, str):
-            symbols = (symbols,)
-        self.__symbols = tuple(symbols)
+
+        self.symbols = symbols
+        self.masses = masses
         
         # Scale pos if needed
         if scale is True:
@@ -229,9 +249,8 @@ class System(object):
     @symbols.setter
     def symbols(self, value):
         
-        # Change str value to tuple
-        if isinstance(value, str):
-            value = (value,)
+        # Make value list if needed
+        value = aslist(value)
         
         # Fill in missing values
         if len(value) < self.__atoms.natypes:
@@ -241,6 +260,37 @@ class System(object):
             value = newvalue
 
         self.__symbols = tuple(value)
+
+    @property
+    def masses(self):
+        """tuple : The masses associated with each atype if given."""
+        
+        # Fill in missing values
+        if len(self.__masses) < self.natypes:
+            self.masses = self.__masses
+        return self.__masses
+    
+    @masses.setter
+    def masses(self, value):
+        
+        # Make value list if needed
+        value = aslist(value)
+        
+        # Convert non-None values to float
+        for i in range(len(value)):
+            if value[i] is not None:
+                value[i] = float(value[i])
+
+        # Fill in missing values
+        if len(value) < self.natypes:
+            newvalue = [None for x in range(self.natypes)]
+            for i in range(len(value)):
+                newvalue[i] = value[i]
+            value = newvalue
+        elif len(value) > self.natypes:
+            raise ValueError('More masses than atom types given. Either change atype values or symbols first.')
+
+        self.__masses = tuple(value)
     
     @property
     def composition(self):
@@ -989,8 +1039,7 @@ class System(object):
         """
         return dump(style, self, **kwargs)
 
-    def model(self, box_unit=None, symbols=None, prop_name=None, 
-              unit=None, prop_unit=None):
+    def model(self, box_unit=None, prop_name=None, unit=None, prop_unit=None):
         """
         Generates a data model for the System object.
 
@@ -998,9 +1047,6 @@ class System(object):
         ----------
         box_unit : str, optional
             Length unit to use for the box. Default value is 'angstrom'.
-        symbols : list, optional
-            list of atom-model symbols corresponding to the atom types.  If not
-            given, will use system.symbols.
         prop_name : list, optional
             The Atoms properties to include.  If neither prop_name nor prop_unit
             are given, all system properties will be included.
@@ -1033,14 +1079,18 @@ class System(object):
         model['atomic-system']['periodic-boundary-condition'] = self.pbc.tolist()
         
         # Add symbols
-        if symbols is None:
-            symbols = self.symbols
-        else:
-            if isinstance(symbols, str):
-                symbols = (symbols,)
-            assert len(symbols) == self.natypes, 'length of symbols does not match natypes'
-        for symbol in symbols:
+        for symbol in self.symbols:
             model['atomic-system'].append('atom-type-symbol', symbol)
+
+        # Add masses
+        addmasses = False
+        for mass in self.masses:
+            if mass is not None:
+                addmasses = True
+                break
+        if addmasses:
+            for mass in self.masses:
+                model['atomic-system'].append('atom-type-mass', mass)
         
         # Add atoms
         model['atomic-system']['atoms'] = amodel = self.atoms.model(prop_name=prop_name,

@@ -1,5 +1,6 @@
 # coding: utf-8
 # atomman imports
+from .aslist import aslist, iaslist
 from .axes_check import axes_check
 from .atomic_info import *
 from .atomic_info import __all__ as atomic_info_all
@@ -13,7 +14,9 @@ from .crystalsystem import *
 from .crystalsystem import __all__ as crystalsystem_all
 from . import miller
 
-__all__ = ['axes_check', 'compositionstr', 'duplicates_allclose', 'vect_angle', 'uber_open_rmode', 'indexstr', 'filltemplate', 'miller']
+__all__ = ['axes_check', 'compositionstr', 'duplicates_allclose', 'vect_angle',
+           'uber_open_rmode', 'indexstr', 'filltemplate', 'miller', 'aslist',
+           'iaslist']
 __all__.extend(atomic_info_all)
 __all__.extend(crystalsystem_all)
 __all__.sort()

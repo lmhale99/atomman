@@ -13,7 +13,7 @@ from .. import load_table, FileFormatError
 from ...tools import uber_open_rmode
 
 def load(data, pbc=(True, True, True), symbols=None, atom_style=None,
-         units=None, potential=None):
+         units='metal'):
     """
     Read a LAMMPS-style atom data file.
     
@@ -28,44 +28,48 @@ def load(data, pbc=(True, True, True), symbols=None, atom_style=None,
     symbols : tuple, optional
         Allows the list of element symbols to be assigned during loading.
     atom_style : str, optional
-        The LAMMPS atom_style option associated with the data file.  If neither
-        atom_style or potential is given, will set atom_style to 'atomic'.
+        The LAMMPS atom_style option associated with the data file.  Optional
+        as the data can list this value in a comment in the Atoms section
+        header.  If not given and not found in data, the default value of
+        'atomic' is used.
     units : str, optional
-        The LAMMPS units option associated with the data file.  If neither
-        units or potential is given, will set units 'metal'.
-    potential : atomman.lammps.Potential, optional
-        Potential-specific values of atom_style and units, can be
-        extracted from a Potential object.  If both potential and any of the
-        individual values are given, the individual values will be used.
+        The LAMMPS units option associated with the data file.  Default value
+        is 'metal'.
     
     Returns
     -------
     atomman.System
         The corresponding system.  Note all property values will be
-        automatically converted to atomman.unitconvert's set working units.
+        automatically converted to atomman.unitconvert's working units.
 
     Raises
     ------
+    FileNotFoundError
+        If data is (likely) a file name and no matching file is found.
     FileFormatError
         If required content fields not found.
+    ValueError
+        If atom_style is both given as a parameter and found in data, but are
+        not the same
     """
-
-    # Extract potential-based parameters
-    if potential is not None:
-        if units is None:
-            units = potential.units
-        if atom_style is None:
-            atom_style = potential.atom_style
-    
-    # Set default parameter values
-    else:
-        if units is None:
-            units = 'metal'
-        if atom_style is None:
-            atom_style = 'atomic'
 
     # First pass over file to generate system and locate content
     system, params = firstpass(data, pbc, symbols, units)
+
+    # Set atom_style
+    if atom_style is None:
+        
+        # Use default if no value given/found
+        if params['atom_style'] is None:
+            atom_style = 'atomic'
+        
+        # Use value listed in data
+        else:
+            atom_style = params['atom_style']
+    
+    # Check that atom_style matches the one in data
+    elif params['atom_style'] is not None and atom_style != params['atom_style']:
+        raise ValueError(f'given atom_style of {atom_style} differs from value of {params["atom_style"]} found in data')
     
     # Read in Atoms info
     system = read_atoms(data, system, atom_style, units, params['atomsstart'], params['atomscolumns'])
@@ -115,8 +119,11 @@ def firstpass(data, pbc, symbols, units):
     atomsstart = None
     velocitiesstart = None
     natoms = None
+    natypes = None
     firstatoms = False
     atomscolumns = 0
+    masses = None
+    num_masses_to_read = 0
     xlo = xhi = ylo = yhi = zlo = zhi = None
     xy = 0.0
     xz = 0.0
@@ -127,19 +134,19 @@ def firstpass(data, pbc, symbols, units):
     with uber_open_rmode(data) as fp:
         
         # Loop over all lines in fp
-        for i, line in enumerate(fp):
+        for i, fullline in enumerate(fp):
             try:
-                line = line.decode('UTF-8')
+                fullline = fullline.decode('UTF-8')
             except:
                 pass
             
             # Remove comments after '#'
             try:
-                comment_index = line.index('#')
+                comment_index = fullline.index('#')
             except:
-                pass
+                line = fullline
             else:
-                line = line[:comment_index]
+                line = fullline[:comment_index]
             
             terms = line.split()
 
@@ -149,6 +156,10 @@ def firstpass(data, pbc, symbols, units):
                 # Read number of atoms 
                 if len(terms) == 2 and terms[1] == 'atoms':
                     natoms = int(terms[0])
+
+                # Read number of atom types
+                elif len(terms) == 3 and terms[1] == 'atom' and terms[2] == 'types': 
+                    natypes = int(terms[0])
                 
                 # Read boundary info
                 elif len(terms) == 4 and terms[2] == 'xlo' and terms[3] == 'xhi':
@@ -172,12 +183,32 @@ def firstpass(data, pbc, symbols, units):
                 elif len(terms) == 1 and terms[0] == 'Atoms':
                     atomsstart = i + 1
                     firstatoms = True
+
+                    # Check for atom_style comment
+                    try: 
+                        comment_index = fullline.index('#')
+                    except:
+                        atom_style = None
+                    else:
+                        atom_style = fullline[comment_index + 1:].strip()
                 
                 # Count number of columns in Atoms table
                 elif firstatoms:
                     atomscolumns = len(terms)
                     firstatoms = False
                 
+                # Identify starting line for Masses data
+                elif len(terms) == 1 and terms[0] == 'Masses':
+                    if natypes is None:
+                        raise FileFormatError('# atom types must appear before Masses list')
+                    masses = [None for i in range(natypes)]
+                    num_masses_to_read = natypes
+                
+                # Read masses
+                elif num_masses_to_read > 0:
+                    read_mass(terms, masses)
+                    num_masses_to_read -= 1
+
                 # Identify starting line number for Velocity data
                 elif len(terms) == 1 and terms[0] == 'Velocities':
                     velocitiesstart = i + 1
@@ -206,13 +237,15 @@ def firstpass(data, pbc, symbols, units):
               zlo=zlo, zhi=zhi,
               xy=xy, xz=xz, yz=yz)
     atoms = Atoms(natoms=natoms)
-    system = System(box=box, atoms=atoms, pbc=pbc, symbols=symbols)
+    system = System(box=box, atoms=atoms, pbc=pbc, symbols=symbols,
+                    masses=masses)
 
     # Compile dict of params
     params = {}
     params['atomsstart'] = atomsstart
     params['velocitiesstart'] = velocitiesstart
     params['atomscolumns'] = atomscolumns
+    params['atom_style'] = atom_style
 
     return system, params
 
@@ -271,7 +304,7 @@ def read_atoms(data, system, atom_style, units, atomsstart, atomscolumns):
         
         # Check for correct number of columns
         elif ncols != atomscolumns:
-            raise FileFormatError('Invalid number of Atoms table columns')
+            raise FileFormatError(f'atom_style={atom_style} requires {ncols} or {ncols+3} Atoms table columns but {atomscolumns} found')
 
     return system
 
@@ -286,6 +319,32 @@ def countreadcolumns(prop_info):
             else:
                 count += len(prop['table_name'])
         return count
+
+def read_mass(terms, masses):
+    """
+    Reads in a line in the Masses table.
+
+    Parameters
+    ----------
+    terms : list
+        The space-delimited terms in an input line
+    masses : list
+        The list of already assigned masses
+    """
+    # Check that Masses line is correctly formatted
+    try:
+        assert len(terms) == 2
+        atype = int(terms[0])
+        assert atype > 0 and atype <= len(masses)
+        mass = float(terms[1])
+        assert mass > 0
+    except:
+        raise FileFormatError('Invalid mass term')
+    
+    if masses[atype - 1] is None:
+        masses[atype - 1] = mass
+    else:
+        raise FileFormatError(f'Multiple masses listed for atom type {atype}')
 
 def read_velocities(data, system, atom_style, units, velocitiesstart):
     """

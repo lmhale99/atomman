@@ -53,6 +53,10 @@ def dump(system, f=None, prop_name=None, table_name=None, shape=None,
         Flag indicating if the filled-in prop_info is to be returned.  Having
         this allows for 1:1 load/dump conversions.  Default value is False
         (prop_info is not returned).
+    extra : dict, optional
+        Allows extra per-atom data that is not part of the System to be
+        included in the generated table.  Useful when the per-atom data only
+        has meaning in the tabular format and should not be added to System.
         
     Returns
     -------

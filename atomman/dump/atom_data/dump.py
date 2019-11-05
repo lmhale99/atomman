@@ -16,7 +16,7 @@ from .. import dump_table
 
 def dump(system, f=None, atom_style=None, units=None, natypes=None,
          potential=None, float_format='%.13f', return_info=True,
-         safecopy=False):
+         return_pair_info=False, safecopy=False):
     """
     Write a LAMMPS-style atom data file from a System.
     
@@ -47,6 +47,11 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
     return_info : bool, optional
         Indicates if the LAMMPS command lines associated with reading in the
         file are to be returned as a str.  Default value is True.
+    return_pair_info : bool, optional
+        Indicates if the LAMMPS command lines associated with setting mass,
+        pair_style and pair_coeff are included in the returned info.  If True,
+        potential must be given and return_info must be True.  Default value is
+        False.
     safecopy : bool, optional
         The LAMMPS data format requires all atoms to be inside box bounds, i.e.
         "wrapped".  If safecopy is True then a copy of the system is made to
@@ -55,15 +60,24 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
     Returns
     -------
     content : str
-        The data file contents (returned if f is not given).
+        The data file contents.  Returned if f is not given.
     read_info : str
-        The LAMMPS input command lines to read the created data file in (returned if return_info is True).
+        The LAMMPS input command lines to read the created data file in.
+        Returned if return_info is True.  If return_pair_info is also True and
+        potential is given, the LAMMPS input command lines for the potential
+        are also included.
+
+    Raises
+    ------
+    ValueError
+        If return_pair_info is True and return_info is False or potential is
+        not given.
     """
     # Wrap atoms and get imageflags
     if safecopy:
         system = deepcopy(system)
     imageflags = system.wrap(return_imageflags=True)
-
+    
     # Extract potential-based parameters
     if potential is not None:
         if units is None:
@@ -82,16 +96,13 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
         if natypes is None:
             natypes = system.natypes
 
-    # Get unit information according to the units style
-    units_dict = style.unit(units)
-    
     # Generate header info
     content = '\n%i atoms\n' % system.natoms
     content += '%i atom types\n' % natypes
     
     # Write box content
-    content += box_content(system, units_dict['length'], float_format)
-    
+    content += box_content(system, units, float_format)
+
     # Write atom info
     content += atoms_content(system, imageflags, atom_style, units, float_format)
     
@@ -119,38 +130,36 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
     else:
         returns.append(content)
     
+    # Generate LAMMPS input lines
     if return_info is True:
-        # Return appropriate units, atom_style, boundary, and read_data LAMMPS commands
-        boundary = ''
-        for i in range(3):
-            if system.pbc[i]:
-                boundary += 'p '
-            else:
-                boundary += 'm '
-        
-        if isinstance(f, str):
-            read_data = 'read_data ' + f
-        else:
-            read_data = ''
-        newline = '\n'
-        read_info = newline.join(['# Script and atom data file prepared by atomman package',
-                                  '',
-                                  'units ' + units,
-                                  'atom_style ' + atom_style,
-                                  ''
-                                  'boundary ' + boundary,
-                                  read_data])
+        read_info = info_content(system, f, atom_style=atom_style, units=units,
+                                 potential=potential,
+                                 return_pair_info=return_pair_info)
         returns.append(read_info)
+    elif return_pair_info is True:
+        raise ValueError('return_pair_info = True requires that return_info = True')
     
     if len(returns) == 1:
         return returns[0]
+    
     elif len(returns) > 1:
         return tuple(returns)
 
-def box_content(system, length_unit, float_format):
+def box_content(system, units, float_format):
     """
-    Generates the data file lines associated with box dimensions
+    Generates the data file lines associated with box dimensions.
+
+    Parameters
+    ----------
+    system : atomman.System
+    units : str
+    float_format : str
     """
+
+    # Get unit information according to the units style
+    units_dict = style.unit(units)
+    length_unit = units_dict['length']
+
     # Define line format strings
     xf2 = float_format + ' ' + float_format
     xf3 = float_format + ' ' + float_format + ' ' + float_format
@@ -179,7 +188,7 @@ def box_content(system, length_unit, float_format):
 def atoms_content(system, imageflags, atom_style, units, float_format):
     
     content = ''
-    content += '\nAtoms\n\n'
+    content += f'\nAtoms # {atom_style}\n\n'
     prop_info = atoms_prop_info(atom_style, units)
 
     # Check if imageflags are needed
@@ -206,3 +215,35 @@ def velocities_content(system, atom_style, units, float_format):
         content += dump_table(system, prop_info=prop_info, float_format=float_format)
 
     return content
+
+def info_content(system, f, atom_style=None, units=None, potential=None,
+                 return_pair_info=False):
+    """
+    Return appropriate units, atom_style, boundary, and read_data LAMMPS commands
+    """
+    # Add comment line
+    info = '# Script and atom data file prepared using atomman Python package\n\n'
+
+    # Add units and atom_style values
+    info += f'units {units}\n'
+    info += f'atom_style {atom_style}\n\n'
+
+    # Set boundary flags to p or m based on pbc values
+    bflags = np.array(['m','m','m'])
+    bflags[system.pbc] = 'p'
+    info += f'boundary {bflags[0]} {bflags[1]} {bflags[2]}\n'
+    
+    # Set read_data command 
+    if isinstance(f, str):
+        info += f'read_data {f}\n'
+
+    # Set pair_info
+    if return_pair_info is True:
+        if potential is None:
+            raise ValueError('return_pair_info = True requires that potential be given')
+        
+        info += '\n'
+        info += potential.pair_info(symbols=system.symbols,
+                                    masses=system.masses)
+
+    return info
