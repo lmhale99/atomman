@@ -3,7 +3,7 @@
 # http://www.numpy.org/
 import numpy as np
 
-def dump(system, f=None, header='', symbols=None, style='direct',
+def dump(system, f=None, header='', symbols=None, coordstyle='direct',
          box_scale=1.0, float_format='%.13e'):
     """
     Generates a poscar-style coordination file for the system.
@@ -21,8 +21,9 @@ def dump(system, f=None, header='', symbols=None, style='direct',
         List of the element symbols that correspond to the atom types.  If not
         given, will use system.symbols if set, otherwise no element content
         will be included.
-    style : str, optional 
-        The poscar coordinate style.  Default value is 'direct'.
+    coordstyle : str, optional 
+        The poscar coordinate style to use: 'cartesian' or 'direct' (i.e.
+        box relative).  Default value is 'direct'.  
     box_scale : float, optional
         A universal scaling constant applied to the box vectors. Default value
         is 1.0.
@@ -36,7 +37,7 @@ def dump(system, f=None, header='', symbols=None, style='direct',
         String of the poscar object (only returned if fname is not given).
     """
     assert '\n' not in header, 'header can only be one line'
-    assert '\n' not in style, 'style can only be one line'
+    assert '\n' not in coordstyle, 'coordstyle can only be one line'
     
     threexf = float_format + ' ' + float_format + ' ' + float_format
     
@@ -74,8 +75,8 @@ def dump(system, f=None, header='', symbols=None, style='direct',
         poscar_string += '%i ' % count
         
     # Check which coordinate style to use
-    poscar_string += '\n' + style
-    if style[0] in 'cCkK':
+    poscar_string += '\n' + coordstyle
+    if coordstyle[0] in 'cCkK':
         scale = False
     else:
         scale = True
