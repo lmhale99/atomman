@@ -86,7 +86,7 @@ class VolterraDislocation(object):
         self.__C = C
         self.__m = m
         self.__n = n
-        self.__u = np.cross(m, n)
+        self.__ξ = np.cross(m, n)
         self.__burgers = burgers
         self.__tol = tol
     
@@ -99,8 +99,8 @@ class VolterraDislocation(object):
         return self.__n
     
     @property
-    def u(self):
-        return self.__u
+    def ξ(self):
+        return self.__ξ
     
     @property
     def C(self):
@@ -129,7 +129,7 @@ class VolterraDislocation(object):
         float
             The dislocation character angle.
         """
-        return vect_angle(self.__burgers, self.__u, unit=unit)
+        return vect_angle(self.burgers, self.ξ, unit=unit)
     
     @property
     def K_coeff(self):

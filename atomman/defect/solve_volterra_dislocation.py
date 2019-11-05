@@ -3,7 +3,8 @@
 # atomman imports
 from . import IsotropicVolterraDislocation, Stroh
 
-def solve_volterra_dislocation(C, burgers, axes=None, m=[1,0,0], n=[0,1,0], tol=1e-8, style=None):
+def solve_volterra_dislocation(C, burgers, axes=None, m=[1,0,0], n=[0,1,0],
+                               tol=1e-8):
     """
     Wrapper function for generating VolterraDislocation children classes
     that provide linear elastic solutions for straight dislocations.
@@ -28,6 +29,9 @@ def solve_volterra_dislocation(C, burgers, axes=None, m=[1,0,0], n=[0,1,0], tol=
     tol : float
         Tolerance parameter used to check for compatibility of the other
         parameters.  Default value is 1e-8.
+    iso_atol : float
+        The absolute tolerance to use when evaluating 
+    iso_rtol : float
     style : str or None, optional
         Indicates which dislocation solution style to use.  Accepted values are
         'isotropic', 'anisotropic', or None.  If None (default), will select
@@ -38,16 +42,9 @@ def solve_volterra_dislocation(C, burgers, axes=None, m=[1,0,0], n=[0,1,0], tol=
         The dislocation solution of the appropriate type.
     """
 
-    if style is None:
-        if C.is_normal('isotropic'):
-            style = 'isotropic'
-        else:
-            style = 'anisotropic'
-    if style == 'isotropic':
-        return IsotropicVolterraDislocation(C, burgers, axes=axes, m=m, n=n, tol=tol)
-    elif style == 'anisotropic':
+    try:
         return Stroh(C, burgers, axes=axes, m=m, n=n, tol=tol)
-    else:
-        raise ValueError('Invalid style: must be "isotropic" or "anisotropic"')
-
-    
+    except:
+        return IsotropicVolterraDislocation(C, burgers, axes=axes, m=m, n=n,
+                                            tol=tol)
+                                            
