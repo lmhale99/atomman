@@ -1,0 +1,664 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Introduction to atomman: Region selectors &#8212; atomman 1.3.0 documentation</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction to atomman: Defect creation and analysis" href="04._Defect_creation_and_analysis.html" />
+    <link rel="prev" title="Introduction to atomman: NeighborList class" href="03.2._NeighborList_class.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="04._Defect_creation_and_analysis.html" title="Introduction to atomman: Defect creation and analysis"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="03.2._NeighborList_class.html" title="Introduction to atomman: NeighborList class"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 7ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<div class="section" id="Introduction-to-atomman:-Region-selectors">
+<h1>Introduction to atomman: Region selectors<a class="headerlink" href="#Introduction-to-atomman:-Region-selectors" title="Permalink to this headline">¶</a></h1>
+<p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
+<p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
+<div class="section" id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<p><em>Added version 1.3.0</em></p>
+<p>It can be useful during both system construction and analysis to identify and select atoms within specific regions of space. The atomman.region submodule allows for geometric regions to be defined and have methods for identifying if the points are above/below or inside/outside the shapes.</p>
+<p><strong>Library imports</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Standard Python libraries</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="c1"># http://www.numpy.org/</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># https://github.com/usnistgov/atomman</span>
+<span class="kn">import</span> <span class="nn">atomman</span> <span class="k">as</span> <span class="nn">am</span>
+
+<span class="c1"># https://matplotlib.org/</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="c1"># Show atomman version</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+atomman version = 1.3.0
+Notebook executed on 2019-11-06
+</pre></div></div>
+</div>
+<p>Define function for plotting projection plots of atoms, with positions given by pos and colors by atype.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">projectionplots</span><span class="p">(</span><span class="n">atoms</span><span class="p">):</span>
+    <span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+    <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">atoms</span><span class="o">.</span><span class="n">atype</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+
+    <span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">atoms</span><span class="o">.</span><span class="n">atype</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
+
+    <span class="n">ax3</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">atoms</span><span class="o">.</span><span class="n">atype</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">projectionplots</span><span class="p">(</span><span class="n">atoms</span><span class="p">):</span>
+    <span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+    <span class="c1"># Separate by atype</span>
+    <span class="k">for</span> <span class="n">atype</span> <span class="ow">in</span> <span class="n">atoms</span><span class="o">.</span><span class="n">atypes</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">atoms</span><span class="o">.</span><span class="n">atype</span> <span class="o">==</span> <span class="n">atype</span><span class="p">]</span>
+
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pos</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pos</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pos</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">pos</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Construct a demonstration fcc system</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">cubic</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">3.6</span><span class="p">)</span>
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]])</span>
+<span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">)</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">ucell</span><span class="o">.</span><span class="n">supersize</span><span class="p">((</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+<span class="n">projectionplots</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_03.3._Region_selectors_8_0.png" src="../_images/tutorial_03.3._Region_selectors_8_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="2.-Plane-slicing">
+<h2>2. Plane slicing<a class="headerlink" href="#2.-Plane-slicing" title="Permalink to this headline">¶</a></h2>
+<p>The atomman.region.Plane class allows for a plane to be defined, which can then be used to slice a system. Making a planar slice consists of two steps: defining a Plane, then using it to identify all atoms above/below it.</p>
+<div class="section" id="2.1-Initializing-a-Plane">
+<h3>2.1 Initializing a Plane<a class="headerlink" href="#2.1-Initializing-a-Plane" title="Permalink to this headline">¶</a></h3>
+<p>A plane can be uniquely defined in space using a normal vector and a single point located anywhere in that plane.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><strong>normal</strong> (<em>array-like object</em>) 3D normal vector of the plane.</li>
+<li><strong>point</strong> (<em>array-like object</em>) 3D vector coordinate of any point in the plane.</li>
+</ul>
+</div>
+<div class="section" id="2.2-Plane.above()-and-Plane.below()">
+<h3>2.2 Plane.above() and Plane.below()<a class="headerlink" href="#2.2-Plane.above()-and-Plane.below()" title="Permalink to this headline">¶</a></h3>
+<p>Slices can then be made using the plane’s above() and below() methods. These are defined to be opposite functions: any atoms not “below” are “above”.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><strong>pos</strong> (<em>array-like object</em>) Nx3 array of coordinates.</li>
+<li><strong>inclusive</strong> (<em>bool, optional</em>) Indicates if points in the plane are to be included. Default value is True for below() and False for above().</li>
+</ul>
+<p>Returns</p>
+<ul class="simple">
+<li>(<em>numpy.NDArray</em>) N array of bool values</li>
+</ul>
+</div>
+<div class="section" id="2.3-Examples">
+<h3>2.3 Examples<a class="headerlink" href="#2.3-Examples" title="Permalink to this headline">¶</a></h3>
+<p>Use Plane and System.atoms_ix to remove all atoms with positive y values</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Define a simple plane normal to the y-axis at the origin</span>
+<span class="n">plane</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">Plane</span><span class="p">(</span><span class="n">normal</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">point</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># Identify all atoms below the plane</span>
+<span class="n">isbelow</span> <span class="o">=</span> <span class="n">plane</span><span class="o">.</span><span class="n">below</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+
+<span class="c1"># Use atoms_ix to build new system with only the below atoms</span>
+<span class="n">newsystem</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms_ix</span><span class="p">[</span><span class="n">isbelow</span><span class="p">]</span>
+
+<span class="c1"># Make projectionplots</span>
+<span class="n">projectionplots</span><span class="p">(</span><span class="n">newsystem</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_03.3._Region_selectors_13_0.png" src="../_images/tutorial_03.3._Region_selectors_13_0.png" />
+</div>
+</div>
+<p>Due to atomman’s design, region selections can also be made on per-atom properties themselves allowing for easily modifying or analyzing the properties of atoms in specific regions.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Define a plane with more complicated normal and position</span>
+<span class="n">plane</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">Plane</span><span class="p">(</span><span class="n">normal</span><span class="o">=</span><span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.4</span><span class="p">,</span> <span class="mf">5.2</span><span class="p">],</span> <span class="n">point</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">5.7</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">7.1</span><span class="p">])</span>
+
+<span class="c1"># Change atypes of all atoms above the plane</span>
+<span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">atype</span><span class="p">[</span><span class="n">plane</span><span class="o">.</span><span class="n">above</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="c1"># Make projectionplots</span>
+<span class="n">projectionplots</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
+
+<span class="c1"># Reset all atypes back to 1</span>
+<span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">atype</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_03.3._Region_selectors_15_0.png" src="../_images/tutorial_03.3._Region_selectors_15_0.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="3.-Volume-selection">
+<h2>3. Volume selection<a class="headerlink" href="#3.-Volume-selection" title="Permalink to this headline">¶</a></h2>
+<p>Points inside/outside of volumes can also be selected based on a number of simple geometric shapes. Each shape is defined as a separate subclass of the template Shape class.</p>
+<div class="section" id="3.1-Shape.inside()-and-Shape.outside()">
+<h3>3.1 Shape.inside() and Shape.outside()<a class="headerlink" href="#3.1-Shape.inside()-and-Shape.outside()" title="Permalink to this headline">¶</a></h3>
+<p>Indicates if position(s) are inside/outside the shape. These are defined to be opposite functions: any atoms not “inside” are “outside”.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><strong>pos</strong> (<em>array-like object</em>) Nx3 array of coordinates.</li>
+<li><strong>inclusive</strong> (<em>bool, optional</em>) Indicates if points on the shape’s boundaries are to be included. Default value is True for inside, False for outside.</li>
+</ul>
+<p>Returns</p>
+<ul class="simple">
+<li>(<em>numpy.NDArray</em>) N array of bool values.</li>
+</ul>
+</div>
+<div class="section" id="3.2-Box">
+<h3>3.2 Box<a class="headerlink" href="#3.2-Box" title="Permalink to this headline">¶</a></h3>
+<p>The atomman.Box class used in defining the regions of atomic systems already provides a comprehensive representation of a generic parallelepiped. As such, the class has been extended to be a child of Shape, complete with inside/outside functions.</p>
+<p>Show that all atoms in the system are inside the box, but only a few atoms are inside the original unit cell</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;system has </span><span class="si">{system.natoms}</span><span class="s1"> atoms&#39;</span><span class="p">)</span>
+
+<span class="c1"># count number of system&#39;s atoms inside system&#39;s box</span>
+<span class="n">numinside</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">inside</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{numinside}</span><span class="s2"> atoms are inside system&#39;s box&quot;</span><span class="p">)</span>
+
+<span class="c1"># count number of system&#39;s atoms inside ucell&#39;s box</span>
+<span class="n">numinside</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ucell</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">inside</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{numinside}</span><span class="s2"> atoms are inside ucell&#39;s box&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+system has 32000 atoms
+32000 atoms are inside system&#39;s box
+4 atoms are inside ucell&#39;s box
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="3.3-Sphere">
+<h3>3.3 Sphere<a class="headerlink" href="#3.3-Sphere" title="Permalink to this headline">¶</a></h3>
+<p>Spherical selections can be made using the atomman.region.Sphere class. Spheres are easily defined with just a center point and a radius.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><strong>center</strong> (<em>array-like object</em>) The position of the sphere’s center.</li>
+<li><strong>radius</strong> (<em>float</em>) The sphere’s radius.</li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Define a sphere at the origin with a radius of 30</span>
+<span class="n">sphere</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">Sphere</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="mi">30</span><span class="p">)</span>
+
+<span class="c1"># Slice to create spherical particle system</span>
+<span class="n">newsystem</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms_ix</span><span class="p">[</span><span class="n">sphere</span><span class="o">.</span><span class="n">inside</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)]</span>
+
+<span class="c1"># Make projectionplots</span>
+<span class="n">projectionplots</span><span class="p">(</span><span class="n">newsystem</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_03.3._Region_selectors_22_0.png" src="../_images/tutorial_03.3._Region_selectors_22_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="3.4-Cylinder">
+<h3>3.4 Cylinder<a class="headerlink" href="#3.4-Cylinder" title="Permalink to this headline">¶</a></h3>
+<p>Cylindrical selections can be made using the atomman.region.Cylinder class.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><strong>center1</strong> (<em>array-like object</em>) A point on the cylinder’s axis. If endcaps is True, the point is taken as the center of one of the cylinder’s endcap planes.</li>
+<li><strong>center2</strong> (<em>array-like object</em>) A point on the cylinder’s axis. If endcaps is True, the point is taken as the center of one of the cylinder’s endcap planes.</li>
+<li><strong>radius</strong> (<em>float</em>) The cylinder’s radius.</li>
+<li><strong>endcaps</strong> (<em>bool, optional</em>) Indicates if the cylindrical volume is taken as capped at the two ends. If False, only the radial distances from the axis will be considered. If True, positions are also checked to see if they are above/below the planes defined by the axis and the center points. Default value is True.</li>
+</ul>
+<p>These parameters were selected to provide the most concise representation of a generic cylinder. Note that the cylinder’s axis vector is related to the two center points as</p>
+<div class="math notranslate nohighlight">
+\[axis = \frac{center2 - center1}{|center2 - center1|}\]</div>
+<p>Create a cylindrical particle using cylinder</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Define a cylinder with axis along the z axis</span>
+<span class="n">center1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">]</span>
+<span class="n">center2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">]</span>
+<span class="n">radius</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">cylinder</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">Cylinder</span><span class="p">(</span><span class="n">center1</span><span class="p">,</span> <span class="n">center2</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
+
+<span class="c1"># Slice to create cylindrical particle system</span>
+<span class="n">newsystem</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms_ix</span><span class="p">[</span><span class="n">cylinder</span><span class="o">.</span><span class="n">inside</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)]</span>
+
+<span class="c1"># Make projectionplots</span>
+<span class="n">projectionplots</span><span class="p">(</span><span class="n">newsystem</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_03.3._Region_selectors_25_0.png" src="../_images/tutorial_03.3._Region_selectors_25_0.png" />
+</div>
+</div>
+<p>Change endcaps to false to ignore plane boundaries and create a nanowire system instead</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cylinder</span><span class="o">.</span><span class="n">endcaps</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1"># Slice to create cylindrical particle system</span>
+<span class="n">newsystem</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms_ix</span><span class="p">[</span><span class="n">cylinder</span><span class="o">.</span><span class="n">inside</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)]</span>
+
+<span class="c1"># Make projectionplots</span>
+<span class="n">projectionplots</span><span class="p">(</span><span class="n">newsystem</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_03.3._Region_selectors_27_0.png" src="../_images/tutorial_03.3._Region_selectors_27_0.png" />
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction to atomman: Region selectors</a><ul>
+<li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
+<li><a class="reference internal" href="#2.-Plane-slicing">2. Plane slicing</a><ul>
+<li><a class="reference internal" href="#2.1-Initializing-a-Plane">2.1 Initializing a Plane</a></li>
+<li><a class="reference internal" href="#2.2-Plane.above()-and-Plane.below()">2.2 Plane.above() and Plane.below()</a></li>
+<li><a class="reference internal" href="#2.3-Examples">2.3 Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#3.-Volume-selection">3. Volume selection</a><ul>
+<li><a class="reference internal" href="#3.1-Shape.inside()-and-Shape.outside()">3.1 Shape.inside() and Shape.outside()</a></li>
+<li><a class="reference internal" href="#3.2-Box">3.2 Box</a></li>
+<li><a class="reference internal" href="#3.3-Sphere">3.3 Sphere</a></li>
+<li><a class="reference internal" href="#3.4-Cylinder">3.4 Cylinder</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="03.2._NeighborList_class.html"
+                        title="previous chapter">Introduction to atomman: NeighborList class</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="04._Defect_creation_and_analysis.html"
+                        title="next chapter">Introduction to atomman: Defect creation and analysis</a></p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="04._Defect_creation_and_analysis.html" title="Introduction to atomman: Defect creation and analysis"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="03.2._NeighborList_class.html" title="Introduction to atomman: NeighborList class"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

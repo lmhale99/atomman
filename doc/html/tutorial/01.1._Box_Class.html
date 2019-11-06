@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Box Class &#8212; atomman 1.2.8 documentation</title>
+    <title>Introduction to atomman: Box class &#8212; atomman 1.3.0 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Atoms class" href="01.2._Atoms_class.html" />
-    <link rel="prev" title="Introduction to atomman: Defining Atomic Systems" href="01._Defining_Atomic_Systems.html" /> 
+    <link rel="prev" title="Introduction to atomman: Defining atomic systems" href="01._Defining_atomic_systems.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -34,9 +34,9 @@
           <a href="01.2._Atoms_class.html" title="Introduction to atomman: Atoms class"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="01._Defining_Atomic_Systems.html" title="Introduction to atomman: Defining Atomic Systems"
+          <a href="01._Defining_atomic_systems.html" title="Introduction to atomman: Defining atomic systems"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -246,8 +246,8 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-Box-Class">
-<h1>Introduction to atomman: Box Class<a class="headerlink" href="#Introduction-to-atomman:-Box-Class" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Introduction-to-atomman:-Box-class">
+<h1>Introduction to atomman: Box class<a class="headerlink" href="#Introduction-to-atomman:-Box-class" title="Permalink to this headline">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
@@ -266,8 +266,6 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
-                        <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
@@ -290,8 +288,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.8
-Notebook executed on 2019-07-30
+atomman version = 1.3.0
+Notebook executed on 2019-11-05
 </pre></div></div>
 </div>
 <p>Create a default box with vects that are normal unit vectors.</p>
@@ -423,7 +421,7 @@ box.volume -&gt; 1.0
 </div>
 <div class="section" id="3.-Initializing-and-setting-Box-parameters">
 <h2>3. Initializing and setting Box parameters<a class="headerlink" href="#3.-Initializing-and-setting-Box-parameters" title="Permalink to this headline">¶</a></h2>
-<p>Only a few of the parameters listed in Section #2 can be directly set. This is done as setting some of the parameters independent of others can lead to ambiguous answers. For better control, set() functions are defined that allow for the setting of complete parameter sets for defining the box.</p>
+<p>Only a few of the parameters listed in <a class="reference external" href="#section2">Section #2</a> can be directly set. This is done as setting some of the parameters independent of others can lead to ambiguous answers. For better control, set() functions are defined that allow for the setting of complete parameter sets for defining the box.</p>
 <div class="section" id="3.1-Direct-setting-box-vects-and-origin">
 <h3>3.1 Direct setting box vects and origin<a class="headerlink" href="#3.1-Direct-setting-box-vects-and-origin" title="Permalink to this headline">¶</a></h3>
 <p>Only vects and origin can be directly set.</p>
@@ -444,10 +442,10 @@ box.volume -&gt; 1.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 1.550,  1.648,  1.629]
-bvect =  [ 0.076,  2.412,  1.365]
-cvect =  [ 0.790,  0.840,  0.721]
-origin = [ 0.355,  0.449,  0.598]
+avect =  [ 0.677,  3.704,  1.053]
+bvect =  [ 0.719,  3.005,  1.046]
+cvect =  [ 3.117,  2.680,  0.236]
+origin = [ 0.218,  0.549,  0.330]
 </pre></div></div>
 </div>
 </div>
@@ -598,9 +596,9 @@ box.yz -&gt; 0.0
 <span class="nb">print</span><span class="p">()</span>
 
 <span class="c1"># Show that box definition coincides with parameters set</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.lx -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">xlo</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.ly -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">xhi</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.lz -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">ylo</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.lx -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">lx</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.ly -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">ly</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.lz -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">lz</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.xy -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">xy</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.xz -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">xz</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.yz -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">yz</span><span class="p">)</span>
@@ -617,9 +615,9 @@ bvect =  [ 0.000, 57.000,  0.000]
 cvect =  [15.000,  0.000, 112.000]
 origin = [ 1.000,  2.000,  3.000]
 
-box.lx -&gt; 1.0
-box.ly -&gt; 43.0
-box.lz -&gt; 2.0
+box.lx -&gt; 42.0
+box.ly -&gt; 57.0
+box.lz -&gt; 112.0
 box.xy -&gt; 0.0
 box.xz -&gt; 15.0
 box.yz -&gt; 0.0
@@ -881,7 +879,7 @@ origin = [ 0.000,  0.000,  0.000]
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Introduction to atomman: Box Class</a><ul>
+<li><a class="reference internal" href="#">Introduction to atomman: Box class</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
 <li><a class="reference internal" href="#2.-Box-parameters">2. Box parameters</a></li>
 <li><a class="reference internal" href="#3.-Initializing-and-setting-Box-parameters">3. Initializing and setting Box parameters</a><ul>
@@ -900,8 +898,8 @@ origin = [ 0.000,  0.000,  0.000]
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="01._Defining_Atomic_Systems.html"
-                        title="previous chapter">Introduction to atomman: Defining Atomic Systems</a></p>
+  <p class="topless"><a href="01._Defining_atomic_systems.html"
+                        title="previous chapter">Introduction to atomman: Defining atomic systems</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="01.2._Atoms_class.html"
                         title="next chapter">Introduction to atomman: Atoms class</a></p>
@@ -922,9 +920,9 @@ origin = [ 0.000,  0.000,  0.000]
           <a href="01.2._Atoms_class.html" title="Introduction to atomman: Atoms class"
              >next</a> |</li>
         <li class="right" >
-          <a href="01._Defining_Atomic_Systems.html" title="Introduction to atomman: Defining Atomic Systems"
+          <a href="01._Defining_atomic_systems.html" title="Introduction to atomman: Defining atomic systems"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

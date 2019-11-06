@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>System &#8212; atomman 1.2.8 documentation</title>
+    <title>System &#8212; atomman 1.3.0 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="atomman.Box.html" title="Box"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" accesskey="U">atomman package</a> &#187;</li> 
       </ul>
     </div>  
@@ -50,8 +50,8 @@
 <h1>System<a class="headerlink" href="#system" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="atomman.System">
-<em class="property">class </em><code class="descclassname">atomman.</code><code class="descname">System</code><span class="sig-paren">(</span><em>atoms=None</em>, <em>box=None</em>, <em>pbc=None</em>, <em>scale=False</em>, <em>symbols=None</em>, <em>model=None</em>, <em>safecopy=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.System" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<em class="property">class </em><code class="descclassname">atomman.</code><code class="descname">System</code><span class="sig-paren">(</span><em>atoms=None</em>, <em>box=None</em>, <em>pbc=None</em>, <em>scale=False</em>, <em>symbols=None</em>, <em>masses=None</em>, <em>model=None</em>, <em>safecopy=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.System" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A representation of an atomic system.  This combines Atoms with Box and
 adds methods and attributes involving both.</p>
 <dl class="attribute">
@@ -76,7 +76,7 @@ adds methods and attributes involving both.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em>) – Indicates if/which per-atom properties are to be scaled to box
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><em>optional</em>) – Indicates if/which per-atom properties are to be scaled to box
 relative values.  If False (default), no properties will be scaled.
 If True, pos will be scaled.  Multiple properties can be scaled by
 providing a list of the property names to scale.</td>
@@ -99,19 +99,19 @@ arguments.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>value</strong> (<a class="reference internal" href="atomman.Atoms.html#atomman.Atoms" title="atomman.Atoms"><em>atomman.Atoms</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – An int value will result in the atoms object being extended by
+<li><strong>value</strong> (<a class="reference internal" href="atomman.Atoms.html#atomman.Atoms" title="atomman.Atoms"><em>atomman.Atoms</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – An int value will result in the atoms object being extended by
 that number of atoms, with all per-atom properties having default
 values (atype = 1, everything else = 0).  For an Atoms value, the
 current atoms list will be extended by the correct number of atoms
 and all per-atom properties in value will be copied over.  Any
 properties defined in one Atoms object and not the other will be
 set to default values.</li>
-<li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if position values in a supplied Atoms value are to
+<li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if position values in a supplied Atoms value are to
 be taken as absolute Cartesian (False, default) or in scaled box
 relative units (True).</li>
-<li><strong>symbols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em>, </em><em>optional</em>) – Allows for the system’s symbols list to be updated.  If not given,
+<li><strong>symbols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em>, </em><em>optional</em>) – Allows for the system’s symbols list to be updated.  If not given,
 will use the current object’s symbols.</li>
-<li><strong>safecopy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if values are to be copied before setting.  If
+<li><strong>safecopy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if values are to be copied before setting.  If
 False (default), underlying objects may be shared between the new
 system and the current system and input parameters.  If True, atoms
 and box will be deepcopied before setting.
@@ -148,11 +148,11 @@ will be copied over.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Per-atom property name.</li>
-<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.7)"><em>slice</em></a><em>, </em><em>optional</em>) – Index of atoms.</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Per-atom property name.</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.8)"><em>slice</em></a><em>, </em><em>optional</em>) – Index of atoms.</li>
 <li><strong>value</strong> (<em>any</em><em>, </em><em>optional</em>) – Property values to assign.</li>
-<li><strong>a_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Integer atom index.  Left in for backwards compatibility.</li>
-<li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if values should be scaled/unscaled. If True:
+<li><strong>a_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – Integer atom index.  Left in for backwards compatibility.</li>
+<li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if values should be scaled/unscaled. If True:
 - Values being retrieved are scaled from absolute Cartesian to box relative vectors.
 - Values being set are unscaled from box relative to absolute Cartesian vectors.
 Default value is False.</li>
@@ -166,12 +166,12 @@ Default value is False.</li>
 <dl class="attribute">
 <dt id="atomman.System.atypes">
 <code class="descname">atypes</code><a class="headerlink" href="#atomman.System.atypes" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of unique int atom types.</p>
+<dd><p>List of int atom types.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a></td>
 </tr>
 </tbody>
 </table>
@@ -200,7 +200,7 @@ Default value is False.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – If True, the scaled (box-relative) positions remain unchanged.
+<li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If True, the scaled (box-relative) positions remain unchanged.
 Default value is False (absolute positions unchanged).</li>
 <li><strong>kwargs</strong> (<em>other</em>) – Any other kwargs allowed by box.set().</li>
 </ul>
@@ -213,12 +213,15 @@ Default value is False (absolute positions unchanged).</li>
 <dl class="attribute">
 <dt id="atomman.System.composition">
 <code class="descname">composition</code><a class="headerlink" href="#atomman.System.composition" title="Permalink to this definition">¶</a></dt>
-<dd><p>The system’s composition.</p>
+<dd><p>The system’s reduced and sorted symbols composition.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The system’s reduced and sorted symbols composition.
+Will return None if symbols are missing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></td>
 </tr>
 </tbody>
 </table>
@@ -262,7 +265,7 @@ is taken.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Indicates the format of the content to dump the atomman.System as.</li>
+<li><strong>style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Indicates the format of the content to dump the atomman.System as.</li>
 <li><strong>kwargs</strong> – Any extra keyword arguments to pass to the underlying dump methods.</li>
 </ul>
 </td>
@@ -270,7 +273,7 @@ is taken.</li>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Any content returned by the underlying dump methods.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)">object</a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)">object</a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a></p>
 </td>
 </tr>
 </tbody>
@@ -306,26 +309,38 @@ is taken.</li>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="atomman.System.masses">
+<code class="descname">masses</code><a class="headerlink" href="#atomman.System.masses" title="Permalink to this definition">¶</a></dt>
+<dd><p>The masses associated with each atype if given.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="atomman.System.model">
-<code class="descname">model</code><span class="sig-paren">(</span><em>box_unit=None</em>, <em>symbols=None</em>, <em>prop_name=None</em>, <em>unit=None</em>, <em>prop_unit=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.System.model" title="Permalink to this definition">¶</a></dt>
+<code class="descname">model</code><span class="sig-paren">(</span><em>box_unit=None</em>, <em>prop_name=None</em>, <em>unit=None</em>, <em>prop_unit=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.System.model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a data model for the System object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>box_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Length unit to use for the box. Default value is ‘angstrom’.</li>
-<li><strong>symbols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em>) – list of atom-model symbols corresponding to the atom types.  If not
-given, will use system.symbols.</li>
-<li><strong>prop_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em>) – The Atoms properties to include.  If neither prop_name nor prop_unit
+<li><strong>box_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Length unit to use for the box. Default value is ‘angstrom’.</li>
+<li><strong>prop_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><em>optional</em>) – The Atoms properties to include.  If neither prop_name nor prop_unit
 are given, all system properties will be included.</li>
-<li><strong>unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em>) – Lists the units for each prop_name as stored in the table.  For a
+<li><strong>unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><em>optional</em>) – Lists the units for each prop_name as stored in the table.  For a
 value of None, no conversion will be performed for that property.  For
 a value of ‘scaled’, the corresponding table values will be taken in
 box-scaled units.  If neither unit nor prop_units given, pos will be
 given in Angstroms and all other values will not be converted.</li>
-<li><strong>prop_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – dictionary where the keys are the property keys to include, and
+<li><strong>prop_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – dictionary where the keys are the property keys to include, and
 the values are units to use. If neither unit nor prop_units given,
 pos will be given in Angstroms and all other values will not be
 converted.</li>
@@ -350,7 +365,7 @@ converted.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></td>
 </tr>
 </tbody>
 </table>
@@ -359,12 +374,12 @@ converted.</li>
 <dl class="attribute">
 <dt id="atomman.System.natypes">
 <code class="descname">natypes</code><a class="headerlink" href="#atomman.System.natypes" title="Permalink to this definition">¶</a></dt>
-<dd><p>The number of atom types in the Atoms class.</p>
+<dd><p>The number of atom types/symbols.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></td>
 </tr>
 </tbody>
 </table>
@@ -380,13 +395,13 @@ object is saved to the object as attribute ‘neighbors’.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>cutoff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – Radial cutoff distance for identifying neighbors.  Must be given if
+<li><strong>cutoff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><em>optional</em>) – Radial cutoff distance for identifying neighbors.  Must be given if
 model is not given.</li>
-<li><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>file-like object</em><em>, </em><em>optional</em>) – Gives the file path or content to load.  If given, no other
+<li><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><em>file-like object</em><em>, </em><em>optional</em>) – Gives the file path or content to load.  If given, no other
 parameters are allowed.</li>
-<li><strong>initialsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – The number of neighbor positions to initially assign to each atom.
+<li><strong>initialsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of neighbor positions to initially assign to each atom.
 Default value is 20.</li>
-<li><strong>deltasize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Specifies the number of extra neighbor positions to allow each atom
+<li><strong>deltasize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – Specifies the number of extra neighbor positions to allow each atom
 when the number of neighbors exceeds the underlying array size.
 Default value is 10.</li>
 </ul>
@@ -412,9 +427,9 @@ with simulation codes.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Indicates the normalization style to use.  Default (and only
+<li><strong>style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Indicates the normalization style to use.  Default (and only
 current option) is ‘lammps’.</li>
-<li><strong>return_transform</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the transformation matrix associated with the
+<li><strong>return_transform</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the transformation matrix associated with the
 normalization is returned.  Default value is False.</li>
 </ul>
 </td>
@@ -460,11 +475,11 @@ representation.</p>
 <li><strong>uvws</strong> (<em>numpy.ndarray</em>) – A (3, 3) array of the Miller crystal vectors or a (3, 4) array of
 Miller-Bravais hexagonal crystal vectors to use in transforming the
 system.  Values must be integers.</li>
-<li><strong>tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – Tolerance parameter used in rounding atomic positions near the
+<li><strong>tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><em>optional</em>) – Tolerance parameter used in rounding atomic positions near the
 boundaries to the boundary values.  In box-relative coordinates, any
 atomic positions within tol of 0 or 1 will be rounded to 0 or 1,
 respectively.  Default value is 1e-5.</li>
-<li><strong>return_transform</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the transformation matrix associated with the
+<li><strong>return_transform</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the transformation matrix associated with the
 rotation is returned.  Default value is False.</li>
 </ul>
 </td>
@@ -512,7 +527,7 @@ its sign, and the other value is taken to be 0.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> or </em><em>tuple of int</em>) – Single int or two integers specifying replication along the avect
+<li><strong>a_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> or </em><em>tuple of int</em>) – Single int or two integers specifying replication along the avect
 direction.</li>
 <li><strong>-- int</strong><strong> or </strong><strong>tuple of int</strong> (<em>c_size</em>) – Single int or two integers specifying replication along the bvect
 direction.</li>
@@ -540,7 +555,7 @@ the *_size parameters.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a></td>
 </tr>
 </tbody>
 </table>
@@ -563,9 +578,22 @@ Cartesian coordinates.</p>
 
 <dl class="method">
 <dt id="atomman.System.wrap">
-<code class="descname">wrap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomman.System.wrap" title="Permalink to this definition">¶</a></dt>
+<code class="descname">wrap</code><span class="sig-paren">(</span><em>return_imageflags=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.System.wrap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrap atoms around periodic boundaries and extend non-periodic
 boundaries such that all atoms are within the box.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>return_imageflags</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, an array of which image the atom was originally in is
+returned.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The imageflags array</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy.NDarray of int</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -603,7 +631,7 @@ boundaries such that all atoms are within the box.</p>
         <li class="right" >
           <a href="atomman.Box.html" title="Box"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.2.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li> 
       </ul>
     </div>

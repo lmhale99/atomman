@@ -18,5 +18,5 @@ Functions and attributes
 ------------------------
 
 .. automodule:: atomman.defect
-    :members: differential_displacement,dislocation_array.py, disregistry, dumbbell, interstitial, nye_tensor, nye_tensor_p, pn_arctan_disregistry, point, slip_vector, solve_volterra_dislocation, substitutional, vacancy
+    :members: differential_displacement, dislocation_array, disregistry, dumbbell, free_surface_basis, interstitial, nye_tensor, nye_tensor_p, pn_arctan_disregistry, point, slip_vector, solve_volterra_dislocation, substitutional, vacancy
     :show-inheritance:

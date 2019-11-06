@@ -9,6 +9,7 @@ Submodules
    
    atomman.unitconvert
    atomman.tools
+   atomman.region
    atomman.lammps
    atomman.defect
    atomman.plot

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Gamma Surface Plotting &#8212; atomman 1.2.8 documentation</title>
+    <title>Introduction to atomman: Gamma surface plotting &#8212; atomman 1.3.0 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -18,8 +18,8 @@
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro" href="04.7._Semidiscrete_Variational_Peierls-Nabarro.html" />
-    <link rel="prev" title="Introduction to atomman: Stacking Fault Generation" href="04.5._Stacking_Fault_Generation.html" /> 
+    <link rel="next" title="Introduction to atomman: Semidiscrete variational Peierls-Nabarro model" href="04.7._Semidiscrete_variational_Peierls-Nabarro_model.html" />
+    <link rel="prev" title="Introduction to atomman: Stacking fault configuration generator" href="04.5._Stacking_fault_configuration_generator.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -31,12 +31,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="04.7._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
+          <a href="04.7._Semidiscrete_variational_Peierls-Nabarro_model.html" title="Introduction to atomman: Semidiscrete variational Peierls-Nabarro model"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="04.5._Stacking_Fault_Generation.html" title="Introduction to atomman: Stacking Fault Generation"
+          <a href="04.5._Stacking_fault_configuration_generator.html" title="Introduction to atomman: Stacking fault configuration generator"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -246,13 +246,13 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-Gamma-Surface-Plotting">
-<h1>Introduction to atomman: Gamma Surface Plotting<a class="headerlink" href="#Introduction-to-atomman:-Gamma-Surface-Plotting" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Introduction-to-atomman:-Gamma-surface-plotting">
+<h1>Introduction to atomman: Gamma surface plotting<a class="headerlink" href="#Introduction-to-atomman:-Gamma-surface-plotting" title="Permalink to this headline">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
-<p>This Notebook outlines the GammaSurface class and the various stacking fault plots that it can generate. See the <a class="reference external" href="04.5._Stacking_Fault_Generation.html">04.5 Stacking Fault Generation Notebook</a> for generating systems containing stacking faults.</p>
+<p>This Notebook outlines the GammaSurface class and the various stacking fault plots that it can generate. See the <a class="reference external" href="04.5._Stacking_fault_configuration_generator.html">04.5. Stacking fault configuration generator Notebook</a> for generating systems containing stacking faults.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -260,8 +260,6 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
-                        <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
@@ -289,8 +287,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.8
-Notebook executed on 2019-07-30
+atomman version = 1.3.0
+Notebook executed on 2019-11-05
 </pre></div></div>
 </div>
 </div>
@@ -960,7 +958,7 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.6._Gamma_Surface_Plotting_19_0.png" src="../_images/tutorial_04.6._Gamma_Surface_Plotting_19_0.png" />
+<img alt="../_images/tutorial_04.6._Gamma_surface_plotting_19_0.png" src="../_images/tutorial_04.6._Gamma_surface_plotting_19_0.png" />
 </div>
 </div>
 <p>The important direction for fcc {111} stacking faults is a/2&lt;112&gt;, and energy values in mJ/m^2</p>
@@ -987,7 +985,7 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.6._Gamma_Surface_Plotting_21_0.png" src="../_images/tutorial_04.6._Gamma_Surface_Plotting_21_0.png" />
+<img alt="../_images/tutorial_04.6._Gamma_surface_plotting_21_0.png" src="../_images/tutorial_04.6._Gamma_surface_plotting_21_0.png" />
 </div>
 </div>
 </div>
@@ -1028,7 +1026,7 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.6._Gamma_Surface_Plotting_24_0.png" src="../_images/tutorial_04.6._Gamma_Surface_Plotting_24_0.png" />
+<img alt="../_images/tutorial_04.6._Gamma_surface_plotting_24_0.png" src="../_images/tutorial_04.6._Gamma_surface_plotting_24_0.png" />
 </div>
 </div>
 <p>The important direction for fcc {111} stacking faults is a/2&lt;112&gt;</p>
@@ -1054,7 +1052,7 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.6._Gamma_Surface_Plotting_26_0.png" src="../_images/tutorial_04.6._Gamma_Surface_Plotting_26_0.png" />
+<img alt="../_images/tutorial_04.6._Gamma_surface_plotting_26_0.png" src="../_images/tutorial_04.6._Gamma_surface_plotting_26_0.png" />
 </div>
 </div>
 </div>
@@ -1092,7 +1090,7 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.6._Gamma_Surface_Plotting_29_0.png" src="../_images/tutorial_04.6._Gamma_Surface_Plotting_29_0.png" />
+<img alt="../_images/tutorial_04.6._Gamma_surface_plotting_29_0.png" src="../_images/tutorial_04.6._Gamma_surface_plotting_29_0.png" />
 </div>
 </div>
 <p>Plotting actual measured values</p>
@@ -1110,7 +1108,7 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.6._Gamma_Surface_Plotting_31_0.png" src="../_images/tutorial_04.6._Gamma_Surface_Plotting_31_0.png" />
+<img alt="../_images/tutorial_04.6._Gamma_surface_plotting_31_0.png" src="../_images/tutorial_04.6._Gamma_surface_plotting_31_0.png" />
 </div>
 </div>
 <p>Specifying a different a1vect and a2vect to use for plotting</p>
@@ -1131,7 +1129,7 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.6._Gamma_Surface_Plotting_33_0.png" src="../_images/tutorial_04.6._Gamma_Surface_Plotting_33_0.png" />
+<img alt="../_images/tutorial_04.6._Gamma_surface_plotting_33_0.png" src="../_images/tutorial_04.6._Gamma_surface_plotting_33_0.png" />
 </div>
 </div>
 </div>
@@ -1168,7 +1166,7 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.6._Gamma_Surface_Plotting_36_0.png" src="../_images/tutorial_04.6._Gamma_Surface_Plotting_36_0.png" />
+<img alt="../_images/tutorial_04.6._Gamma_surface_plotting_36_0.png" src="../_images/tutorial_04.6._Gamma_surface_plotting_36_0.png" />
 </div>
 </div>
 <p>Plotting actual measured values</p>
@@ -1186,7 +1184,7 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.6._Gamma_Surface_Plotting_38_0.png" src="../_images/tutorial_04.6._Gamma_Surface_Plotting_38_0.png" />
+<img alt="../_images/tutorial_04.6._Gamma_surface_plotting_38_0.png" src="../_images/tutorial_04.6._Gamma_surface_plotting_38_0.png" />
 </div>
 </div>
 <p>Specifying a different a1vect and a2vect to use for plotting</p>
@@ -1207,7 +1205,7 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.6._Gamma_Surface_Plotting_40_0.png" src="../_images/tutorial_04.6._Gamma_Surface_Plotting_40_0.png" />
+<img alt="../_images/tutorial_04.6._Gamma_surface_plotting_40_0.png" src="../_images/tutorial_04.6._Gamma_surface_plotting_40_0.png" />
 </div>
 </div>
 </div>
@@ -1320,7 +1318,7 @@ origin = [ 0.000,  0.000,  0.000]
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Introduction to atomman: Gamma Surface Plotting</a><ul>
+<li><a class="reference internal" href="#">Introduction to atomman: Gamma surface plotting</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
 <li><a class="reference internal" href="#2.-Underlying-theory">2. Underlying theory</a></li>
 <li><a class="reference internal" href="#3.-Defining-gamma-surface-data">3. Defining gamma surface data</a><ul>
@@ -1351,11 +1349,11 @@ origin = [ 0.000,  0.000,  0.000]
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="04.5._Stacking_Fault_Generation.html"
-                        title="previous chapter">Introduction to atomman: Stacking Fault Generation</a></p>
+  <p class="topless"><a href="04.5._Stacking_fault_configuration_generator.html"
+                        title="previous chapter">Introduction to atomman: Stacking fault configuration generator</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="04.7._Semidiscrete_Variational_Peierls-Nabarro.html"
-                        title="next chapter">Introduction to atomman: Semidiscrete Variational Peierls-Nabarro</a></p>
+  <p class="topless"><a href="04.7._Semidiscrete_variational_Peierls-Nabarro_model.html"
+                        title="next chapter">Introduction to atomman: Semidiscrete variational Peierls-Nabarro model</a></p>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1370,12 +1368,12 @@ origin = [ 0.000,  0.000,  0.000]
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="04.7._Semidiscrete_Variational_Peierls-Nabarro.html" title="Introduction to atomman: Semidiscrete Variational Peierls-Nabarro"
+          <a href="04.7._Semidiscrete_variational_Peierls-Nabarro_model.html" title="Introduction to atomman: Semidiscrete variational Peierls-Nabarro model"
              >next</a> |</li>
         <li class="right" >
-          <a href="04.5._Stacking_Fault_Generation.html" title="Introduction to atomman: Stacking Fault Generation"
+          <a href="04.5._Stacking_fault_configuration_generator.html" title="Introduction to atomman: Stacking fault configuration generator"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

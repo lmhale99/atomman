@@ -10,8 +10,6 @@ import numpy as np
 from ..core import Atoms, Box, System
 import atomman.unitconvert as uc
 
-__all__ = ['dislocation_array']
-
 def dislocation_array(system, dislsol=None, m=None, n=None, burgers=None,
                       bwidth=None, cutoff=None):
     """

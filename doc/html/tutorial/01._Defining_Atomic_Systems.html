@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Defining Atomic Systems &#8212; atomman 1.2.8 documentation</title>
+    <title>Introduction to atomman: Defining atomic systems &#8212; atomman 1.3.0 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -18,8 +18,8 @@
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction to atomman: Box Class" href="01.1._Box_Class.html" />
-    <link rel="prev" title="Introduction to atomman: Unit Conversions" href="00._Unit_Conversions.html" /> 
+    <link rel="next" title="Introduction to atomman: Box class" href="01.1._Box_class.html" />
+    <link rel="prev" title="Introduction to atomman: Unit conversions" href="00._Unit_conversions.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -31,12 +31,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="01.1._Box_Class.html" title="Introduction to atomman: Box Class"
+          <a href="01.1._Box_class.html" title="Introduction to atomman: Box class"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="00._Unit_Conversions.html" title="Introduction to atomman: Unit Conversions"
+          <a href="00._Unit_conversions.html" title="Introduction to atomman: Unit conversions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -246,8 +246,8 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-Defining-Atomic-Systems">
-<h1>Introduction to atomman: Defining Atomic Systems<a class="headerlink" href="#Introduction-to-atomman:-Defining-Atomic-Systems" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Introduction-to-atomman:-Defining-atomic-systems">
+<h1>Introduction to atomman: Defining atomic systems<a class="headerlink" href="#Introduction-to-atomman:-Defining-atomic-systems" title="Permalink to this headline">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
@@ -260,8 +260,6 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
-                        <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
@@ -286,8 +284,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.8
-Notebook executed on 2019-07-30
+atomman version = 1.3.0
+Notebook executed on 2019-11-05
 </pre></div></div>
 </div>
 </div>
@@ -297,7 +295,7 @@ Notebook executed on 2019-07-30
 <div class="section" id="2.1.-Box">
 <h3>2.1. Box<a class="headerlink" href="#2.1.-Box" title="Permalink to this headline">¶</a></h3>
 <p>The Box class defines a generic parallelepiped for the system’s boundaries.</p>
-<p>See the <a class="reference external" href="01.1._Box_Class.html">01.1. Box Class Jupyter Notebook</a> for more detailed information and options.</p>
+<p>See the <a class="reference external" href="01.1._Box_class.html">01.1. Box class Jupyter Notebook</a> for more detailed information and options.</p>
 <div class="section" id="2.1.1.-Create-Box">
 <h4>2.1.1. Create Box<a class="headerlink" href="#2.1.1.-Create-Box" title="Permalink to this headline">¶</a></h4>
 <p>Boxes can be defined using a variety of formats. Here, we’ll define a box using lattice parameters.</p>
@@ -371,7 +369,7 @@ gamma = 90.0
 <div class="section" id="2.2.-Atoms">
 <h3>2.2. Atoms<a class="headerlink" href="#2.2.-Atoms" title="Permalink to this headline">¶</a></h3>
 <p>The Atoms class collects per-atom properties that can be freely assigned. The only limitations are that the number of atoms is constant, and that values for the per-atom properties must be given for all atoms.</p>
-<p>See the <a class="reference external" href="01.2._Atoms_Class.html">01.2. Atoms Class Jupyter Notebook</a> for more detailed information and options.</p>
+<p>See the <a class="reference external" href="01.2._Atoms_class.html">01.2. Atoms class Jupyter Notebook</a> for more detailed information and options.</p>
 <div class="section" id="2.2.1.-Create-Atoms">
 <h4>2.2.1. Create Atoms<a class="headerlink" href="#2.2.1.-Create-Atoms" title="Permalink to this headline">¶</a></h4>
 <p>When initializing an Atoms object, all keyword arguments (except natoms and prop) will be interpreted as property names. Values for each property must be given for each atom, or only one value given in which case all atoms will be assigned the same value.</p>
@@ -519,7 +517,7 @@ atoms.pos[2] -&gt; [0.5 0.  0.5]
 <div class="section" id="2.3-System">
 <h3>2.3 System<a class="headerlink" href="#2.3-System" title="Permalink to this headline">¶</a></h3>
 <p>The System class gives a full representation of an atomic configuration by combining an atoms instance, a box instance, periodic boundary condition settings, and a list of element symbols.</p>
-<p>See the <a class="reference external" href="01.3._System_Class.html">01.3. System Class Jupyter Notebook</a> for more detailed information and options.</p>
+<p>See the <a class="reference external" href="01.3._System_class.html">01.3. System class Jupyter Notebook</a> for more detailed information and options.</p>
 <div class="section" id="2.3.1.-Create-system">
 <h4>2.3.1. Create system<a class="headerlink" href="#2.3.1.-Create-system" title="Permalink to this headline">¶</a></h4>
 <p>A System is created by combining its components:</p>
@@ -567,7 +565,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="section" id="3.-Load-a-System">
 <h2>3. Load a System<a class="headerlink" href="#3.-Load-a-System" title="Permalink to this headline">¶</a></h2>
 <p>Systems can also be created by loading in atomic configuration information in an alternate format.</p>
-<p>See the <a class="reference external" href="02._Load_And_Dump.html">02. Load And Dump Jupyter Notebook</a> for more detailed information on the different styles and options.</p>
+<p>See the <a class="reference external" href="01.4._Load_and_dump_conversions.html">01.4. Load and dump conversions Jupyter Notebook</a> for more detailed information on the different styles and options.</p>
 <p>Create content in POSCAR format</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
@@ -630,7 +628,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="section" id="4.-System-Manipulations">
 <h2>4. System Manipulations<a class="headerlink" href="#4.-System-Manipulations" title="Permalink to this headline">¶</a></h2>
 <p>The System class was defined to make it easy for users to manipulate systems and atomic properties. Additionally, there are a few System class methods that assist with some common manipulations.</p>
-<p>See the <a class="reference external" href="01.3._System_Class.html">01.3. System Class Jupyter Notebook</a> for more detailed information and options.</p>
+<p>See the <a class="reference external" href="01.3._System_class.html">01.3. System class Jupyter Notebook</a> for more detailed information and options.</p>
 <div class="section" id="4.1.-System.rotate()">
 <h3>4.1. System.rotate()<a class="headerlink" href="#4.1.-System.rotate()" title="Permalink to this headline">¶</a></h3>
 <p>The rotate() method transforms the system such that the new box vectors correspond to three integer [uvw] crystal vectors with respect to the current box vectors. This ensures that atomic compatibilities across all periodic boundaries.</p>
@@ -792,7 +790,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Introduction to atomman: Defining Atomic Systems</a><ul>
+<li><a class="reference internal" href="#">Introduction to atomman: Defining atomic systems</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
 <li><a class="reference internal" href="#2.-Create-a-System">2. Create a System</a><ul>
 <li><a class="reference internal" href="#2.1.-Box">2.1. Box</a><ul>
@@ -823,11 +821,11 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="00._Unit_Conversions.html"
-                        title="previous chapter">Introduction to atomman: Unit Conversions</a></p>
+  <p class="topless"><a href="00._Unit_conversions.html"
+                        title="previous chapter">Introduction to atomman: Unit conversions</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="01.1._Box_Class.html"
-                        title="next chapter">Introduction to atomman: Box Class</a></p>
+  <p class="topless"><a href="01.1._Box_class.html"
+                        title="next chapter">Introduction to atomman: Box class</a></p>
         </div>
       </div>
       <div class="clearer"></div>
@@ -842,12 +840,12 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="01.1._Box_Class.html" title="Introduction to atomman: Box Class"
+          <a href="01.1._Box_class.html" title="Introduction to atomman: Box class"
              >next</a> |</li>
         <li class="right" >
-          <a href="00._Unit_Conversions.html" title="Introduction to atomman: Unit Conversions"
+          <a href="00._Unit_conversions.html" title="Introduction to atomman: Unit conversions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

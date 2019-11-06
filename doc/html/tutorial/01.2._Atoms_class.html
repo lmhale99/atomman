@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Atoms class &#8212; atomman 1.2.8 documentation</title>
+    <title>Introduction to atomman: Atoms class &#8212; atomman 1.3.0 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -18,8 +18,8 @@
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction to atomman: System Class" href="01.3._System_class.html" />
-    <link rel="prev" title="Introduction to atomman: Box Class" href="01.1._Box_Class.html" /> 
+    <link rel="next" title="Introduction to atomman: System class" href="01.3._System_class.html" />
+    <link rel="prev" title="Introduction to atomman: Box class" href="01.1._Box_class.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -31,12 +31,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="01.3._System_class.html" title="Introduction to atomman: System Class"
+          <a href="01.3._System_class.html" title="Introduction to atomman: System class"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="01.1._Box_Class.html" title="Introduction to atomman: Box Class"
+          <a href="01.1._Box_class.html" title="Introduction to atomman: Box class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -267,8 +267,6 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
-                        <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
@@ -290,8 +288,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.8
-Notebook executed on 2019-07-30
+atomman version = 1.3.0
+Notebook executed on 2019-11-05
 </pre></div></div>
 </div>
 </div>
@@ -326,16 +324,16 @@ Notebook executed on 2019-07-30
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.437 |   2.024 |   2.174
-      1 |       1 |   3.105 |   1.358 |   3.916
-      2 |       1 |   0.735 |   0.941 |   3.478
-      3 |       1 |   1.715 |   0.328 |   1.481
-      4 |       1 |   0.970 |   3.598 |   1.971
-      5 |       1 |   1.958 |   0.290 |   2.795
-      6 |       1 |   2.486 |   2.321 |   1.966
-      7 |       1 |   1.702 |   1.418 |   2.051
-      8 |       1 |   1.178 |   0.333 |   2.858
-      9 |       1 |   0.191 |   1.918 |   0.628
+      0 |       1 |   2.501 |   1.896 |   3.680
+      1 |       1 |   1.852 |   3.676 |   3.405
+      2 |       1 |   0.649 |   3.679 |   0.600
+      3 |       1 |   3.214 |   0.846 |   0.911
+      4 |       1 |   0.413 |   3.828 |   1.414
+      5 |       1 |   1.498 |   3.700 |   1.566
+      6 |       1 |   0.257 |   1.790 |   0.324
+      7 |       1 |   2.601 |   2.909 |   2.793
+      8 |       1 |   1.528 |   3.945 |   0.919
+      9 |       1 |   1.176 |   2.885 |   3.200
 </pre></div></div>
 </div>
 </div>
@@ -347,6 +345,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <li><strong>atypes</strong> gives a list of all unique atype values.</li>
 <li><strong>natypes</strong> gives the number of unique atype values.</li>
 </ul>
+<p><em>Update version 1.3.0:</em> The way atypes and natypes are handled has changed. Backwards compatibility will be affected if previous Atoms had atype values of 0 or non-sequential atype values. The new method restricts atype values to be ≥ 1 and atypes returns all sequential integers from 1 through natypes=max(atype).</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -378,7 +377,7 @@ atoms.natypes -&gt; 1
 <ul class="simple">
 <li>as attributes of the Atoms instance, i.e.&nbsp;atoms.myprop.</li>
 <li>as items in the Atoms.view dictionary.</li>
-<li>by calling the Atoms.prop() method (see <a class="reference external" href="#section5">Section 5</a>).</li>
+<li>by calling the Atoms.prop() method (see <a class="reference external" href="#section6">Section 6</a>).</li>
 </ul>
 <div class="section" id="3.1-List-assigned-per-atom-properties">
 <h3>3.1 List assigned per-atom properties<a class="headerlink" href="#3.1-List-assigned-per-atom-properties" title="Permalink to this headline">¶</a></h3>
@@ -520,16 +519,16 @@ atoms.stress[0] -&gt;
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.437 |   2.024 |   2.174
-      1 |       1 |   3.105 |   1.358 |   3.916
-      2 |       2 |   0.735 |   0.941 |   3.478
-      3 |       1 |   1.715 |   0.328 |   1.481
-      4 |       1 |   0.970 |   3.598 |   1.971
-      5 |       2 |   1.958 |   0.290 |   2.795
-      6 |       1 |   2.486 |   2.321 |   1.966
-      7 |       1 |   1.702 |   1.418 |   2.051
-      8 |       1 |   1.178 |   0.333 |   2.858
-      9 |       1 |   0.191 |   1.918 |   0.628
+      0 |       1 |   2.501 |   1.896 |   3.680
+      1 |       1 |   1.852 |   3.676 |   3.405
+      2 |       2 |   0.649 |   3.679 |   0.600
+      3 |       1 |   3.214 |   0.846 |   0.911
+      4 |       1 |   0.413 |   3.828 |   1.414
+      5 |       2 |   1.498 |   3.700 |   1.566
+      6 |       1 |   0.257 |   1.790 |   0.324
+      7 |       1 |   2.601 |   2.909 |   2.793
+      8 |       1 |   1.528 |   3.945 |   0.919
+      9 |       1 |   1.176 |   2.885 |   3.200
 </pre></div></div>
 </div>
 <p>Alternatively, the atoms object can be copied into a pandas.DataFrame with the Atoms.df() method. This is convenient for viewing and analyzing all per-atom property values at once.</p>
@@ -585,9 +584,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>0</th>
       <td>1</td>
-      <td>0.437426</td>
-      <td>2.024079</td>
-      <td>2.174227</td>
+      <td>2.500605</td>
+      <td>1.895739</td>
+      <td>3.679546</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -601,9 +600,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>3.105398</td>
-      <td>1.357625</td>
-      <td>3.916400</td>
+      <td>1.851938</td>
+      <td>3.675903</td>
+      <td>3.405043</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -617,9 +616,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>0.735460</td>
-      <td>0.941319</td>
-      <td>3.478024</td>
+      <td>0.649365</td>
+      <td>3.679063</td>
+      <td>0.599538</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -633,9 +632,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>3</th>
       <td>1</td>
-      <td>1.714877</td>
-      <td>0.327915</td>
-      <td>1.481240</td>
+      <td>3.214067</td>
+      <td>0.845712</td>
+      <td>0.911379</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -649,9 +648,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>4</th>
       <td>1</td>
-      <td>0.969845</td>
-      <td>3.598227</td>
-      <td>1.970601</td>
+      <td>0.412933</td>
+      <td>3.828202</td>
+      <td>1.414065</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -665,9 +664,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>5</th>
       <td>2</td>
-      <td>1.957953</td>
-      <td>0.289683</td>
-      <td>2.795364</td>
+      <td>1.498139</td>
+      <td>3.700163</td>
+      <td>1.565563</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -681,9 +680,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>6</th>
       <td>1</td>
-      <td>2.485831</td>
-      <td>2.321241</td>
-      <td>1.966470</td>
+      <td>0.257408</td>
+      <td>1.789983</td>
+      <td>0.324097</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -697,9 +696,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>7</th>
       <td>1</td>
-      <td>1.701626</td>
-      <td>1.418335</td>
-      <td>2.051393</td>
+      <td>2.600763</td>
+      <td>2.909196</td>
+      <td>2.792680</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -713,9 +712,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>8</th>
       <td>1</td>
-      <td>1.178076</td>
-      <td>0.332564</td>
-      <td>2.857698</td>
+      <td>1.528219</td>
+      <td>3.945434</td>
+      <td>0.918572</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -729,9 +728,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>9</th>
       <td>1</td>
-      <td>0.191097</td>
-      <td>1.918464</td>
-      <td>0.628326</td>
+      <td>1.176126</td>
+      <td>2.884830</td>
+      <td>3.200179</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -794,7 +793,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.105 |   1.358 |   3.916
+      0 |       1 |   3.214 |   0.846 |   0.911
 </pre></div></div>
 </div>
 </div>
@@ -819,7 +818,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.437 |   2.024 |   2.174
+      0 |       1 |   2.501 |   1.896 |   3.680
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -844,29 +843,29 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.437 |   2.024 |   2.174
-      1 |       1 |   3.105 |   1.358 |   3.916
-      2 |       2 |   0.735 |   0.941 |   3.478
-      3 |       1 |   1.715 |   0.328 |   1.481
-      4 |       1 |   0.970 |   3.598 |   1.971
-      5 |       2 |   1.958 |   0.290 |   2.795
-      6 |       1 |   2.486 |   2.321 |   1.966
-      7 |       1 |   1.702 |   1.418 |   2.051
-      8 |       1 |   1.178 |   0.333 |   2.858
-      9 |       1 |   0.191 |   1.918 |   0.628
+      0 |       1 |   2.501 |   1.896 |   3.680
+      1 |       1 |   1.852 |   3.676 |   3.405
+      2 |       2 |   0.649 |   3.679 |   0.600
+      3 |       1 |   3.214 |   0.846 |   0.911
+      4 |       1 |   0.413 |   3.828 |   1.414
+      5 |       2 |   1.498 |   3.700 |   1.566
+      6 |       1 |   0.257 |   1.790 |   0.324
+      7 |       1 |   2.601 |   2.909 |   2.793
+      8 |       1 |   1.528 |   3.945 |   0.919
+      9 |       1 |   1.176 |   2.885 |   3.200
 
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.105 |   1.358 |   3.916
-      1 |       1 |   0.437 |   2.024 |   2.174
-      2 |       2 |   0.735 |   0.941 |   3.478
-      3 |       1 |   1.715 |   0.328 |   1.481
-      4 |       1 |   0.970 |   3.598 |   1.971
-      5 |       2 |   1.958 |   0.290 |   2.795
-      6 |       1 |   2.486 |   2.321 |   1.966
-      7 |       1 |   1.702 |   1.418 |   2.051
-      8 |       1 |   1.178 |   0.333 |   2.858
-      9 |       1 |   0.191 |   1.918 |   0.628
+      0 |       1 |   1.852 |   3.676 |   3.405
+      1 |       1 |   2.501 |   1.896 |   3.680
+      2 |       2 |   0.649 |   3.679 |   0.600
+      3 |       1 |   3.214 |   0.846 |   0.911
+      4 |       1 |   0.413 |   3.828 |   1.414
+      5 |       2 |   1.498 |   3.700 |   1.566
+      6 |       1 |   0.257 |   1.790 |   0.324
+      7 |       1 |   2.601 |   2.909 |   2.793
+      8 |       1 |   1.528 |   3.945 |   0.919
+      9 |       1 |   1.176 |   2.885 |   3.200
 </pre></div></div>
 </div>
 </div>
@@ -894,16 +893,16 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.105 |   1.358 |   3.916
-      1 |       1 |   0.437 |   2.024 |   2.174
-      2 |       2 |   0.735 |   0.941 |   3.478
-      3 |       1 |   1.715 |   0.328 |   1.481
-      4 |       1 |   0.970 |   3.598 |   1.971
-      5 |       2 |   1.958 |   0.290 |   2.795
-      6 |       1 |   2.486 |   2.321 |   1.966
-      7 |       1 |   1.702 |   1.418 |   2.051
-      8 |       1 |   1.178 |   0.333 |   2.858
-      9 |       1 |   0.191 |   1.918 |   0.628
+      0 |       1 |   1.852 |   3.676 |   3.405
+      1 |       1 |   2.501 |   1.896 |   3.680
+      2 |       2 |   0.649 |   3.679 |   0.600
+      3 |       1 |   3.214 |   0.846 |   0.911
+      4 |       1 |   0.413 |   3.828 |   1.414
+      5 |       2 |   1.498 |   3.700 |   1.566
+      6 |       1 |   0.257 |   1.790 |   0.324
+      7 |       1 |   2.601 |   2.909 |   2.793
+      8 |       1 |   1.528 |   3.945 |   0.919
+      9 |       1 |   1.176 |   2.885 |   3.200
      10 |       1 |   0.000 |   0.000 |   0.000
      11 |       1 |   0.000 |   0.000 |   0.000
 </pre></div></div>
@@ -926,20 +925,20 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.105 |   1.358 |   3.916
-      1 |       1 |   0.437 |   2.024 |   2.174
-      2 |       2 |   0.735 |   0.941 |   3.478
-      3 |       1 |   1.715 |   0.328 |   1.481
-      4 |       1 |   0.970 |   3.598 |   1.971
-      5 |       2 |   1.958 |   0.290 |   2.795
-      6 |       1 |   2.486 |   2.321 |   1.966
-      7 |       1 |   1.702 |   1.418 |   2.051
-      8 |       1 |   1.178 |   0.333 |   2.858
-      9 |       1 |   0.191 |   1.918 |   0.628
-     10 |       1 |   3.105 |   1.358 |   3.916
-     11 |       1 |   0.437 |   2.024 |   2.174
-     12 |       2 |   0.735 |   0.941 |   3.478
-     13 |       1 |   1.715 |   0.328 |   1.481
+      0 |       1 |   1.852 |   3.676 |   3.405
+      1 |       1 |   2.501 |   1.896 |   3.680
+      2 |       2 |   0.649 |   3.679 |   0.600
+      3 |       1 |   3.214 |   0.846 |   0.911
+      4 |       1 |   0.413 |   3.828 |   1.414
+      5 |       2 |   1.498 |   3.700 |   1.566
+      6 |       1 |   0.257 |   1.790 |   0.324
+      7 |       1 |   2.601 |   2.909 |   2.793
+      8 |       1 |   1.528 |   3.945 |   0.919
+      9 |       1 |   1.176 |   2.885 |   3.200
+     10 |       1 |   1.852 |   3.676 |   3.405
+     11 |       1 |   2.501 |   1.896 |   3.680
+     12 |       2 |   0.649 |   3.679 |   0.600
+     13 |       1 |   3.214 |   0.846 |   0.911
 </pre></div></div>
 </div>
 </div>
@@ -1007,13 +1006,13 @@ atoms.prop(&#39;atype&#39;) -&gt; [1 1 2 1 1 2 1 1 1 1]
 atoms.prop(index=slice(1,5)) -&gt;
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.437 |   2.024 |   2.174
-      1 |       2 |   0.735 |   0.941 |   3.478
-      2 |       1 |   1.715 |   0.328 |   1.481
-      3 |       1 |   0.970 |   3.598 |   1.971
+      0 |       1 |   2.501 |   1.896 |   3.680
+      1 |       2 |   0.649 |   3.679 |   0.600
+      2 |       1 |   3.214 |   0.846 |   0.911
+      3 |       1 |   0.413 |   3.828 |   1.414
 
 atoms.prop(key=&#39;pos&#39;, index=0) -&gt;
-[3.10539759 1.35762547 3.91639993]
+[1.85193794 3.67590279 3.40504315]
 </pre></div></div>
 </div>
 <p>Values can be set to Atoms using the value parameter. Any values set are copied to the Atoms instance as opposed to assigned by reference.</p>
@@ -1069,16 +1068,16 @@ atoms.prop(&#39;atype&#39;) -&gt; [7 7 7 7 1 7 7 7 7 7]
 calling: atoms.prop(index=9, value=atoms.prop(index=0))
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       7 |   3.105 |   1.358 |   3.916
-      1 |       7 |   0.437 |   2.024 |   2.174
-      2 |       7 |   0.735 |   0.941 |   3.478
-      3 |       7 |   1.715 |   0.328 |   1.481
-      4 |       1 |   0.970 |   3.598 |   1.971
-      5 |       7 |   1.958 |   0.290 |   2.795
-      6 |       7 |   2.486 |   2.321 |   1.966
-      7 |       7 |   1.702 |   1.418 |   2.051
-      8 |       7 |   1.178 |   0.333 |   2.858
-      9 |       7 |   3.105 |   1.358 |   3.916
+      0 |       7 |   1.852 |   3.676 |   3.405
+      1 |       7 |   2.501 |   1.896 |   3.680
+      2 |       7 |   0.649 |   3.679 |   0.600
+      3 |       7 |   3.214 |   0.846 |   0.911
+      4 |       1 |   0.413 |   3.828 |   1.414
+      5 |       7 |   1.498 |   3.700 |   1.566
+      6 |       7 |   0.257 |   1.790 |   0.324
+      7 |       7 |   2.601 |   2.909 |   2.793
+      8 |       7 |   1.528 |   3.945 |   0.919
+      9 |       7 |   1.852 |   3.676 |   3.405
 </pre></div></div>
 </div>
 <p>Demonstrate safe copy of prop() using only value parameter.</p>
@@ -1223,10 +1222,10 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#34;atoms&#34;: {&#34;natoms&#34;: 10, &#34;property&#34;: [{&#34;name&#34;: &#34;atype&#34;, &#34;data&#34;: {&#34;value&#34;: [7, 7, 7, 7, 1, 7, 7, 7, 7, 7]}}, {&#34;name&#34;: &#34;pos&#34;, &#34;data&#34;: {&#34;value&#34;: [3.1053975850176325, 1.3576254674410722, 3.9163999327128147, 0.4374263129233431, 2.024079157269597, 2.1742266754422945, 0.7354597993650405, 0.9413193413686707, 3.478024400422295, 1.714877194354366, 0.32791504465452936, 1.4812401019488197, 0.969844506191655, 3.5982272514964215, 1.9706009816945538, 1.9579531381650366, 0.28968336402122263, 2.7953644960694333, 2.48583095329909, 2.321241124966895, 1.9664702894641346, 1.7016258173429066, 1.4183353123920237, 2.0513925940440974, 1.178075547551526, 0.3325637219366553, 2.8576975004019562, 3.1053975850176325, 1.3576254674410722, 3.9163999327128147], &#34;shape&#34;: [10, 3], &#34;unit&#34;: &#34;angstrom&#34;}}, {&#34;name&#34;: &#34;stress&#34;, &#34;data&#34;: {&#34;value&#34;: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], &#34;shape&#34;: [10, 3, 3]}}]}}
+{&#34;atoms&#34;: {&#34;natoms&#34;: 10, &#34;property&#34;: [{&#34;name&#34;: &#34;atype&#34;, &#34;data&#34;: {&#34;value&#34;: [7, 7, 7, 7, 1, 7, 7, 7, 7, 7]}}, {&#34;name&#34;: &#34;pos&#34;, &#34;data&#34;: {&#34;value&#34;: [1.8519379435005785, 3.6759027866263287, 3.4050431477355048, 2.500604905145307, 1.8957389051348321, 3.679546316316944, 0.6493645905803747, 3.6790631202592534, 0.5995380080094148, 3.2140674280642574, 0.8457116414469383, 0.9113793963797319, 0.4129330885954885, 3.8282017083879616, 1.4140652933296889, 1.4981388632662558, 3.700162745568863, 1.5655626753164005, 0.2574082633571604, 1.789982671458254, 0.3240969739096311, 2.600763092616318, 2.9091964221183795, 2.7926801901425904, 1.5282187358381578, 3.9454337766366603, 0.9185719682739748, 1.8519379435005785, 3.6759027866263287, 3.4050431477355048], &#34;shape&#34;: [10, 3], &#34;unit&#34;: &#34;angstrom&#34;}}, {&#34;name&#34;: &#34;stress&#34;, &#34;data&#34;: {&#34;value&#34;: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], &#34;shape&#34;: [10, 3, 3]}}]}}
 
 &lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
-&lt;atoms&gt;&lt;natoms&gt;10&lt;/natoms&gt;&lt;property&gt;&lt;name&gt;atype&lt;/name&gt;&lt;data&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;1&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;/data&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;pos&lt;/name&gt;&lt;data&gt;&lt;value&gt;3.1053975850176325&lt;/value&gt;&lt;value&gt;1.3576254674410722&lt;/value&gt;&lt;value&gt;3.9163999327128147&lt;/value&gt;&lt;value&gt;0.4374263129233431&lt;/value&gt;&lt;value&gt;2.024079157269597&lt;/value&gt;&lt;value&gt;2.1742266754422945&lt;/value&gt;&lt;value&gt;0.7354597993650405&lt;/value&gt;&lt;value&gt;0.9413193413686707&lt;/value&gt;&lt;value&gt;3.478024400422295&lt;/value&gt;&lt;value&gt;1.714877194354366&lt;/value&gt;&lt;value&gt;0.32791504465452936&lt;/value&gt;&lt;value&gt;1.4812401019488197&lt;/value&gt;&lt;value&gt;0.969844506191655&lt;/value&gt;&lt;value&gt;3.5982272514964215&lt;/value&gt;&lt;value&gt;1.9706009816945538&lt;/value&gt;&lt;value&gt;1.9579531381650366&lt;/value&gt;&lt;value&gt;0.28968336402122263&lt;/value&gt;&lt;value&gt;2.7953644960694333&lt;/value&gt;&lt;value&gt;2.48583095329909&lt;/value&gt;&lt;value&gt;2.321241124966895&lt;/value&gt;&lt;value&gt;1.9664702894641346&lt;/value&gt;&lt;value&gt;1.7016258173429066&lt;/value&gt;&lt;value&gt;1.4183353123920237&lt;/value&gt;&lt;value&gt;2.0513925940440974&lt;/value&gt;&lt;value&gt;1.178075547551526&lt;/value&gt;&lt;value&gt;0.3325637219366553&lt;/value&gt;&lt;value&gt;2.8576975004019562&lt;/value&gt;&lt;value&gt;3.1053975850176325&lt;/value&gt;&lt;value&gt;1.3576254674410722&lt;/value&gt;&lt;value&gt;3.9163999327128147&lt;/value&gt;&lt;shape&gt;10&lt;/shape&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/data&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;stress&lt;/name&gt;&lt;data&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;shape&gt;10&lt;/shape&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;/data&gt;&lt;/property&gt;&lt;/atoms&gt;
+&lt;atoms&gt;&lt;natoms&gt;10&lt;/natoms&gt;&lt;property&gt;&lt;name&gt;atype&lt;/name&gt;&lt;data&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;1&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;value&gt;7&lt;/value&gt;&lt;/data&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;pos&lt;/name&gt;&lt;data&gt;&lt;value&gt;1.8519379435005785&lt;/value&gt;&lt;value&gt;3.6759027866263287&lt;/value&gt;&lt;value&gt;3.4050431477355048&lt;/value&gt;&lt;value&gt;2.500604905145307&lt;/value&gt;&lt;value&gt;1.8957389051348321&lt;/value&gt;&lt;value&gt;3.679546316316944&lt;/value&gt;&lt;value&gt;0.6493645905803747&lt;/value&gt;&lt;value&gt;3.6790631202592534&lt;/value&gt;&lt;value&gt;0.5995380080094148&lt;/value&gt;&lt;value&gt;3.2140674280642574&lt;/value&gt;&lt;value&gt;0.8457116414469383&lt;/value&gt;&lt;value&gt;0.9113793963797319&lt;/value&gt;&lt;value&gt;0.4129330885954885&lt;/value&gt;&lt;value&gt;3.8282017083879616&lt;/value&gt;&lt;value&gt;1.4140652933296889&lt;/value&gt;&lt;value&gt;1.4981388632662558&lt;/value&gt;&lt;value&gt;3.700162745568863&lt;/value&gt;&lt;value&gt;1.5655626753164005&lt;/value&gt;&lt;value&gt;0.2574082633571604&lt;/value&gt;&lt;value&gt;1.789982671458254&lt;/value&gt;&lt;value&gt;0.3240969739096311&lt;/value&gt;&lt;value&gt;2.600763092616318&lt;/value&gt;&lt;value&gt;2.9091964221183795&lt;/value&gt;&lt;value&gt;2.7926801901425904&lt;/value&gt;&lt;value&gt;1.5282187358381578&lt;/value&gt;&lt;value&gt;3.9454337766366603&lt;/value&gt;&lt;value&gt;0.9185719682739748&lt;/value&gt;&lt;value&gt;1.8519379435005785&lt;/value&gt;&lt;value&gt;3.6759027866263287&lt;/value&gt;&lt;value&gt;3.4050431477355048&lt;/value&gt;&lt;shape&gt;10&lt;/shape&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/data&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;stress&lt;/name&gt;&lt;data&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;shape&gt;10&lt;/shape&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;/data&gt;&lt;/property&gt;&lt;/atoms&gt;
 </pre></div></div>
 </div>
 <p>Any stored model information can then be reloaded in as a new Atoms object by passing the ‘model’ parameter to the class initializer.</p>
@@ -1246,16 +1245,16 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       7 |   3.105 |   1.358 |   3.916
-      1 |       7 |   0.437 |   2.024 |   2.174
-      2 |       7 |   0.735 |   0.941 |   3.478
-      3 |       7 |   1.715 |   0.328 |   1.481
-      4 |       1 |   0.970 |   3.598 |   1.971
-      5 |       7 |   1.958 |   0.290 |   2.795
-      6 |       7 |   2.486 |   2.321 |   1.966
-      7 |       7 |   1.702 |   1.418 |   2.051
-      8 |       7 |   1.178 |   0.333 |   2.858
-      9 |       7 |   3.105 |   1.358 |   3.916
+      0 |       7 |   1.852 |   3.676 |   3.405
+      1 |       7 |   2.501 |   1.896 |   3.680
+      2 |       7 |   0.649 |   3.679 |   0.600
+      3 |       7 |   3.214 |   0.846 |   0.911
+      4 |       1 |   0.413 |   3.828 |   1.414
+      5 |       7 |   1.498 |   3.700 |   1.566
+      6 |       7 |   0.257 |   1.790 |   0.324
+      7 |       7 |   2.601 |   2.909 |   2.793
+      8 |       7 |   1.528 |   3.945 |   0.919
+      9 |       7 |   1.852 |   3.676 |   3.405
 </pre></div></div>
 </div>
 </div>
@@ -1297,11 +1296,11 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="01.1._Box_Class.html"
-                        title="previous chapter">Introduction to atomman: Box Class</a></p>
+  <p class="topless"><a href="01.1._Box_class.html"
+                        title="previous chapter">Introduction to atomman: Box class</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="01.3._System_class.html"
-                        title="next chapter">Introduction to atomman: System Class</a></p>
+                        title="next chapter">Introduction to atomman: System class</a></p>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1316,12 +1315,12 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="01.3._System_class.html" title="Introduction to atomman: System Class"
+          <a href="01.3._System_class.html" title="Introduction to atomman: System class"
              >next</a> |</li>
         <li class="right" >
-          <a href="01.1._Box_Class.html" title="Introduction to atomman: Box Class"
+          <a href="01.1._Box_class.html" title="Introduction to atomman: Box class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

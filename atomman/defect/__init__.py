@@ -21,8 +21,9 @@ from .StackingFault import StackingFault
 from .pn_arctan_disregistry import pn_arctan_disregistry
 from .SDVPN import SDVPN
 
-__all__ = ['differential_displacement', 'disregistry', 'slip_vector',
-           'nye_tensor', 'nye_tensor_p', 'Stroh', 'GammaSurface',
-           'free_surface_basis', 'pn_arctan_disregistry', 'SDVPN']
+__all__ = ['differential_displacement', 'disregistry', 'dislocation_array',
+           'slip_vector', 'nye_tensor', 'nye_tensor_p', 'Stroh',
+           'GammaSurface', 'free_surface_basis', 'pn_arctan_disregistry',
+           'SDVPN']
 __all__.extend(point_all)
 __all__.sort()

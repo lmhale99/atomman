@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Basic Support and Analysis Tools &#8212; atomman 1.2.8 documentation</title>
+    <title>Introduction to atomman: Basic support and analysis tools &#8212; atomman 1.3.0 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: ElasticConstants class" href="03.1._ElasticConstants_class.html" />
-    <link rel="prev" title="Introduction to atomman: Running LAMMPS and the Log class" href="02.2_Running_LAMMPS_and_the_Log_class.html" /> 
+    <link rel="prev" title="Introduction to atomman: Running LAMMPS and the Log class" href="02.2._Running_LAMMPS_and_the_Log_class.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -34,9 +34,9 @@
           <a href="03.1._ElasticConstants_class.html" title="Introduction to atomman: ElasticConstants class"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="02.2_Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
+          <a href="02.2._Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -246,8 +246,8 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-Basic-Support-and-Analysis-Tools">
-<h1>Introduction to atomman: Basic Support and Analysis Tools<a class="headerlink" href="#Introduction-to-atomman:-Basic-Support-and-Analysis-Tools" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Introduction-to-atomman:-Basic-support-and-analysis-tools">
+<h1>Introduction to atomman: Basic support and analysis tools<a class="headerlink" href="#Introduction-to-atomman:-Basic-support-and-analysis-tools" title="Permalink to this headline">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <div class="section" id="1.-Introduction">
@@ -260,8 +260,6 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span>
-                        <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="nb">open</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
@@ -290,8 +288,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.2.8
-Notebook executed on 2019-07-30
+atomman version = 1.3.0
+Notebook executed on 2019-11-06
 </pre></div></div>
 </div>
 <p>Construct a demonstration 2x2x2 diamond cubic silicon system</p>
@@ -460,70 +458,70 @@ Cij (GPa) =
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[0.61678938 1.63458248 1.65642332]
- [0.37999839 1.01624508 2.54299769]
- [0.1732036  0.4668934  0.668044  ]
- [0.00590808 0.39870671 2.18722323]
- [0.55611176 2.53123965 1.33526891]
- [2.11874632 0.24123416 0.82182171]
- [0.63473332 2.79036071 1.13020759]
- [0.33443718 0.66745145 0.6157646 ]
- [2.46142472 0.4870579  0.524249  ]
- [2.1634832  1.39016796 1.80641913]
- [1.3057463  2.01092461 2.30236926]
- [0.5984325  2.03548106 0.40241686]
- [0.66915812 0.46739044 0.77203364]
- [2.14805038 0.23963383 1.08408224]
- [1.01701571 1.20464728 2.6987158 ]
- [0.57462591 1.84950259 0.89236796]
- [0.13960102 0.11312666 0.10819912]
- [0.21791823 2.68094467 2.76655505]
- [0.649617   2.65790749 1.76783433]
- [0.20753316 0.61740365 2.14432737]
- [2.52638175 0.72724003 1.03775143]
- [0.46352789 1.06151214 1.12689263]
- [2.91090428 0.36932977 0.90025638]
- [1.15566651 0.53560368 0.91444173]
- [1.35422394 1.49948027 2.77937493]
- [0.79463458 0.44013597 1.39834135]
- [2.55675048 0.3405396  2.28598681]
- [0.12107383 0.41112409 2.33494821]
- [1.93271828 0.30397496 0.73930535]
- [0.53221899 2.37699615 0.68248917]
- [1.43498292 1.1863049  0.12338218]
- [0.79682786 1.35399802 1.15665333]
- [2.91078196 1.37165214 0.42649485]
- [2.89686094 2.13059678 1.01810856]
- [0.33779418 1.33835306 0.56720663]
- [0.78890172 0.01980997 0.70301258]
- [2.75256596 0.91628712 2.98107746]
- [0.92578799 1.81629023 0.95347538]
- [2.02639113 2.19418984 2.39954835]
- [1.79045259 0.73281798 2.86908583]
- [2.07797619 2.33336968 0.9011527 ]
- [0.40864379 1.48015015 2.34485576]
- [0.67509378 0.56761724 1.09522832]
- [0.87700866 2.54805708 2.37580527]
- [2.1654451  1.50238186 2.41879947]
- [2.83459324 0.73996134 1.9604346 ]
- [0.03770037 0.98008693 2.7949665 ]
- [0.1912214  2.45060287 0.7026377 ]
- [2.19213221 2.44505441 1.40014007]
- [0.4593064  0.32193886 2.1872835 ]
- [2.20528974 2.12036281 0.47430042]
- [1.78996933 2.8597438  0.97566949]
- [2.82276035 2.7159714  2.0510493 ]
- [0.00672891 1.03383296 2.90413996]
- [1.90114424 1.39437291 1.26617478]
- [0.4691288  2.64872639 0.04169027]
- [2.39583058 1.41147862 1.63698261]
- [0.0287514  1.66476188 0.05961541]
- [2.71262892 1.12365207 2.41173607]
- [0.2261395  1.37223314 2.70393645]
- [0.7321321  1.3401575  0.71008745]
- [1.75343195 0.33974195 2.92555184]
- [1.80459923 1.8834885  2.92937901]
- [2.9513398  2.19407615 0.98743587]]
+[[1.77628039 1.55317973 0.97706175]
+ [0.1381128  2.04598977 2.21839059]
+ [1.99662528 0.45615953 0.76069082]
+ [1.65293211 2.25821975 2.16219312]
+ [2.59619194 0.39584094 0.20704175]
+ [0.32055987 1.07148388 2.66141893]
+ [1.42635371 0.14867084 1.87812736]
+ [2.50855729 1.55881572 1.10225299]
+ [2.80697878 1.57903962 0.97631668]
+ [2.54759589 1.10483773 2.24186845]
+ [2.47461785 1.69458514 1.47879569]
+ [2.08540229 1.94819311 0.26452982]
+ [0.19516584 0.45693182 0.63972043]
+ [1.15680112 1.65481225 1.60156832]
+ [1.00488997 0.27729334 2.98516025]
+ [1.02681856 1.65807995 2.40305866]
+ [1.07629377 0.31066797 1.57612141]
+ [2.53213425 0.26042847 1.93340517]
+ [0.80113993 2.99568035 0.01040669]
+ [2.50501142 2.97719779 1.33098116]
+ [2.60345951 0.07692916 1.69620873]
+ [1.78393496 0.26467154 2.88218084]
+ [2.83321158 0.76708824 2.7765996 ]
+ [1.5247339  2.59909625 1.37912535]
+ [1.50558373 2.36946952 2.34828564]
+ [0.58521044 1.15725704 1.78094029]
+ [2.84571349 2.50009665 0.1641754 ]
+ [2.10845511 0.02127383 0.08833716]
+ [0.96302072 1.44658188 2.27541722]
+ [0.17564797 1.82372289 1.38722662]
+ [1.59584407 0.05466248 1.73089117]
+ [2.79628918 2.51407865 1.29634787]
+ [1.28640898 1.95111165 2.48791193]
+ [0.61415596 0.23064343 2.87025724]
+ [1.64385356 2.82763093 2.58152649]
+ [2.02208838 1.97168425 1.06500036]
+ [1.2913594  2.80076469 2.11864009]
+ [0.54069412 2.15712424 1.43159361]
+ [0.52695827 1.70408694 0.2974368 ]
+ [1.84449257 0.60143874 1.90388558]
+ [1.60321323 1.09162424 1.35239408]
+ [2.7322691  0.67923977 1.25064738]
+ [1.11060616 0.7849485  0.39090946]
+ [2.33766556 1.13950879 2.16153013]
+ [0.57675427 2.18748541 1.2615138 ]
+ [2.32773233 0.09324331 2.31526988]
+ [0.86880599 0.23244618 2.68272458]
+ [2.36603196 0.40687184 2.63143941]
+ [1.278692   2.579082   0.10687462]
+ [2.31748099 2.37945965 2.36288386]
+ [1.88061758 1.42585658 2.06820804]
+ [1.41862194 1.1044902  1.6843085 ]
+ [1.32555169 1.46711909 0.21325859]
+ [2.9705959  1.49391662 0.56245272]
+ [2.14704548 2.47927351 1.63786878]
+ [2.73089931 0.27807938 2.04384503]
+ [0.27841922 0.19341575 0.61010245]
+ [0.53335191 2.83546718 0.98452219]
+ [0.49049945 1.94144469 1.97936273]
+ [1.06783158 2.31946324 2.87120494]
+ [2.71307813 1.89265357 0.37788434]
+ [0.42096147 1.97836669 2.8138075 ]
+ [2.45484726 1.24283997 2.17406822]
+ [0.87244139 1.66035573 2.6329374 ]]
 </pre></div></div>
 </div>
 </div>
@@ -590,18 +588,61 @@ Neighbors of atom 6 = [ 2 11 33 40]
 </div>
 </div>
 </div>
-<div class="section" id="4.-Basic-tools">
-<h2>4. Basic tools<a class="headerlink" href="#4.-Basic-tools" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="4.-Region-selectors">
+<h2>4. Region selectors<a class="headerlink" href="#4.-Region-selectors" title="Permalink to this headline">¶</a></h2>
+<p><em>Added version 1.3.0</em></p>
+<p>A number of geometric shape definitions are available in the atomman.region submodule to help identify regions in space above/below planes or inside/outside of regions. These are useful for constructing systems by slicing away atoms to create nanostructures, or for performing analysis on only select regions.</p>
+<p>See the <a class="reference external" href="03.3._Region_selectors.html">03.3. Region selectors Jupyter Notebook</a> for more details and a list of all available shapes.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Define a plane normal to the y axis and positioned halfway across system</span>
+<span class="n">plane</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">Plane</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">system</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">bvect</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Count number of atoms in system, and above/below plane</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{system.natoms}</span><span class="s1"> atoms in system&#39;</span><span class="p">)</span>
+
+<span class="n">abovecount</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">plane</span><span class="o">.</span><span class="n">above</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{abovecount}</span><span class="s1"> atoms above plane&#39;</span><span class="p">)</span>
+
+<span class="n">belowcount</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">plane</span><span class="o">.</span><span class="n">below</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{belowcount}</span><span class="s1"> atoms below plane&#39;</span><span class="p">)</span>
+
+<span class="c1"># Define a sphere centered at [0,0,0] with radius = 6</span>
+<span class="n">sphere</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">Sphere</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="mi">6</span><span class="p">)</span>
+
+<span class="c1"># Count atoms inside sphere</span>
+<span class="n">insidecount</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">sphere</span><span class="o">.</span><span class="n">inside</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{insidecount}</span><span class="s1"> atoms inside sphere&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+64 atoms in system
+24 atoms above plane
+40 atoms below plane
+11 atoms inside sphere
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="5.-Basic-tools">
+<h2>5. Basic tools<a class="headerlink" href="#5.-Basic-tools" title="Permalink to this headline">¶</a></h2>
 <p>This lists some of the other basic tools and features in atomman.</p>
-<div class="section" id="4.1.-Atomic-information">
-<h3>4.1. Atomic information<a class="headerlink" href="#4.1.-Atomic-information" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="5.1.-Atomic-information">
+<h3>5.1. Atomic information<a class="headerlink" href="#5.1.-Atomic-information" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><strong>atomman.tools.atomic_number()</strong> returns the atomic number associated with an element’s atomic symbol.</li>
 <li><strong>atomman.tools.atomic_symbol()</strong> returns the elemental symbol associated with an given atomic number.</li>
 <li><strong>atomman.tools.atomic_mass()</strong> returns the atomic mass of an element or isotope. The atom can be identified with atomic number or atomic/isotope symbol.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -635,7 +676,7 @@ Fe
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -654,15 +695,15 @@ Fe
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="4.2.-axes_check()">
-<h3>4.2. axes_check()<a class="headerlink" href="#4.2.-axes_check()" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="5.2.-axes_check()">
+<h3>5.2. axes_check()<a class="headerlink" href="#5.2.-axes_check()" title="Permalink to this headline">¶</a></h3>
 <p>The axes_check() function is useful when working in Cartesian systems. Given a (3,3) array representing three 3D Cartesian vectors:</p>
 <ul class="simple">
 <li>The three vectors are checked that they are orthogonal and right-handed.</li>
 <li>The corresponding array of unit vectors are returned. This can then be used for crystal transformations.</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -684,11 +725,11 @@ Fe
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="4.3.-filltemplate()">
-<h3>4.3. filltemplate()<a class="headerlink" href="#4.3.-filltemplate()" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="5.3.-filltemplate()">
+<h3>5.3. filltemplate()<a class="headerlink" href="#5.3.-filltemplate()" title="Permalink to this headline">¶</a></h3>
 <p>The filltemplate() function takes a template and fills in values for delimited template variables.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -714,11 +755,11 @@ My friend Charlie really likes to use templates to program, says that they are d
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="4.4.-indexstr()">
-<h3>4.4. indexstr()<a class="headerlink" href="#4.4.-indexstr()" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="5.4.-indexstr()">
+<h3>5.4. indexstr()<a class="headerlink" href="#5.4.-indexstr()" title="Permalink to this headline">¶</a></h3>
 <p>Iterates through all indicies of an array with a given shape, returning both the numeric index and a string representation.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -741,8 +782,8 @@ index -&gt; (2, 1) , istr -&gt; &#39;[2][1]&#39;
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="4.5.-uber_open_rmode">
-<h3>4.5. uber_open_rmode<a class="headerlink" href="#4.5.-uber_open_rmode" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="5.5.-uber_open_rmode">
+<h3>5.5. uber_open_rmode<a class="headerlink" href="#5.5.-uber_open_rmode" title="Permalink to this headline">¶</a></h3>
 <p>uber_open_rmode is a context manager that allows for similar reading of content from a file or from a string variable. It equivalently handles:</p>
 <ul class="simple">
 <li>str path name to a file</li>
@@ -750,7 +791,7 @@ index -&gt; (2, 1) , istr -&gt; &#39;[2][1]&#39;
 <li>open file-like object</li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -786,11 +827,11 @@ b&#39;Here I am, read me!&#39;
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="4.6.-vect_angle()">
-<h3>4.6. vect_angle()<a class="headerlink" href="#4.6.-vect_angle()" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="5.6.-vect_angle()">
+<h3>5.6. vect_angle()<a class="headerlink" href="#5.6.-vect_angle()" title="Permalink to this headline">¶</a></h3>
 <p>The vect_angle() function returns the angle between two vectors.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -808,20 +849,20 @@ b&#39;Here I am, read me!&#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Angle between [-0.7888258  -0.75934729 -0.29477207] and [ 0.45958294  0.81037391 -0.31608287] =
-142.47576379385924 degrees
-2.4866711824965715 radians
+Angle between [0.85212236 0.80192465 0.43328632] and [-0.5487525   0.27320908  0.05726526] =
+106.9293428642297 degrees
+1.8662690999747122 radians
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="4.7-duplicates_allclose()">
-<h3>4.7 duplicates_allclose()<a class="headerlink" href="#4.7-duplicates_allclose()" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="5.7-duplicates_allclose()">
+<h3>5.7 duplicates_allclose()<a class="headerlink" href="#5.7-duplicates_allclose()" title="Permalink to this headline">¶</a></h3>
 <p>Determine duplicates in dataframe based on tolerances. The implementation first uses pandas.DataFrame.duplicated on the <code class="docutils literal notranslate"><span class="pre">dcols</span></code> argument with <code class="docutils literal notranslate"><span class="pre">keep=False</span></code> to keep all duplicates. The duplicate sub-dataframe is then sorted on both <code class="docutils literal notranslate"><span class="pre">dcols</span></code> and <code class="docutils literal notranslate"><span class="pre">fcols</span></code>. A diff between each row is then done on the sorted duplicates dataframe. The float values are then checked for their tolerances.</p>
 <p>Note: False duplicates may be identified if tolerance ranges overlap. Consider dataframe with rows 1,2,3. If row 2 matches row 1 within the tolerances, and row 3 matches row 2 within the tolerances, both rows 2 and 3 will be labeled as tolerances even if row 3 does not match row 1 within the tolerances.</p>
 <p>Parameters - <strong>dataframe</strong> (<em>pandas.DataFrame</em>) The dataframe to search for duplicates - <strong>dcols</strong> (<em>list</em>) The column names that are tested for exact duplicates. - <strong>fcols</strong> (<em>dict</em>) The column names (keys) that are tested using absolute tolerances (values).</p>
 <p>Returns - (<em>list of bool of length nrows</em>) False for first occurrence of checked values, True for subsequent duplicates.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -832,7 +873,7 @@ Angle between [-0.7888258  -0.75934729 -0.29477207] and [ 0.45958294  0.81037391
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -884,7 +925,7 @@ Angle between [-0.7888258  -0.75934729 -0.29477207] and [ 0.45958294  0.81037391
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -894,7 +935,7 @@ Angle between [-0.7888258  -0.75934729 -0.29477207] and [ 0.45958294  0.81037391
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -941,13 +982,13 @@ Angle between [-0.7888258  -0.75934729 -0.29477207] and [ 0.45958294  0.81037391
 </div></div>
 </div>
 </div>
-<div class="section" id="4.7.-Miller-index-conversions">
-<h3>4.7. Miller index conversions<a class="headerlink" href="#4.7.-Miller-index-conversions" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="5.7.-Miller-index-conversions">
+<h3>5.7. Miller index conversions<a class="headerlink" href="#5.7.-Miller-index-conversions" title="Permalink to this headline">¶</a></h3>
 <p><strong>atomman.tools.miller.vector3to4(indices)</strong> converts vectors from three-term Miller indices to four-term Miller-Bravais indices for hexagonal systems.</p>
 <p><strong>atomman.tools.miller.vector4to3(indices)</strong> converts vectors from four-term Miller-Bravais indices to three-term Miller indices.</p>
 <p><em>Updated version 1.2.6</em>: vector3to4 and vector4to3 now return absolute vectors instead of rescaling to the smallest integer representations. As such, both functions return floats instead of integers.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -967,7 +1008,7 @@ Angle between [-0.7888258  -0.75934729 -0.29477207] and [ 0.45958294  0.81037391
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -992,24 +1033,24 @@ Angle between [-0.7888258  -0.75934729 -0.29477207] and [ 0.45958294  0.81037391
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[-3  3  0]
- [-1 -5  5]
- [-4  4  2]]
+[[ 5  5  5]
+ [-3 -2 -1]
+ [-3  5  4]]
 
-[[-3.  3. -0.  0.]
- [ 1. -3.  2.  5.]
- [-4.  4. -0.  2.]]
+[[ 1.66666667  1.66666667 -3.33333333  5.        ]
+ [-1.33333333 -0.33333333  1.66666667 -1.        ]
+ [-3.66666667  4.33333333 -0.66666667  4.        ]]
 
-[[-3.  3.  0.]
- [-1. -5.  5.]
- [-4.  4.  2.]]
+[[ 5.  5.  5.]
+ [-3. -2. -1.]
+ [-3.  5.  4.]]
 </pre></div></div>
 </div>
 <p><strong>atomman.tools.miller.plane3to4(indices)</strong> converts planes from three-term Miller indices to four-term Miller-Bravais indices for hexagonal systems.</p>
 <p><strong>atomman.tools.miller.plane4to3(indices)</strong> converts planes from four-term Miller-Bravais indices to three-term Miller indices.</p>
 <p><em>Added version 1.2.8</em></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1029,7 +1070,7 @@ Angle between [-0.7888258  -0.75934729 -0.29477207] and [ 0.45958294  0.81037391
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1054,23 +1095,23 @@ Angle between [-0.7888258  -0.75934729 -0.29477207] and [ 0.45958294  0.81037391
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 0  3  5]
- [-3 -5 -1]
- [ 3  0  0]]
+[[3 2 3]
+ [5 4 4]
+ [0 3 5]]
 
-[[ 0.  3. -3.  5.]
- [-3. -5.  8. -1.]
- [ 3.  0. -3.  0.]]
+[[ 3.  2. -5.  3.]
+ [ 5.  4. -9.  4.]
+ [ 0.  3. -3.  5.]]
 
-[[ 0.  3.  5.]
- [-3. -5. -1.]
- [ 3.  0.  0.]]
+[[3. 2. 3.]
+ [5. 4. 4.]
+ [0. 3. 5.]]
 </pre></div></div>
 </div>
 <p><strong>atomman.tools.miller.vector_crystal_to_cartesian(indices, box)</strong> converts Miller and Miller-Bravais indices to Cartesian vectors based on a supplied box.</p>
 <p><em>Updated version 1.2.6</em> vectortocartesian is renamed vector_crystal_to_cartesian for consistency.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1112,7 +1153,7 @@ Angle between [-0.7888258  -0.75934729 -0.29477207] and [ 0.45958294  0.81037391
 <p><strong>atomman.tools.miller.vector_primitive_to_conventional(indices, setting)</strong> converts vectors relative to a primitive unit cell to a conventional unit cell in the given setting (p, a, b, c, i or f).</p>
 <p><strong>atomman.tools.miller.vector_conventional_to_primitive(indices, setting)</strong> converts vectors relative to a conventional unit cell in the given setting (p, a, b, c, i or f) to a primitive unit cell.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1143,7 +1184,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1177,7 +1218,7 @@ conventional uvws:
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1207,8 +1248,8 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="4.8.-Crystal-lattice-identification">
-<h3>4.8. Crystal lattice identification<a class="headerlink" href="#4.8.-Crystal-lattice-identification" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="5.8.-Crystal-lattice-identification">
+<h3>5.8. Crystal lattice identification<a class="headerlink" href="#5.8.-Crystal-lattice-identification" title="Permalink to this headline">¶</a></h3>
 <p>There are also a few tests for identifying if a supplied box is consistent with a standard representation of a crystal family unit cell.</p>
 <ul class="simple">
 <li><strong>atomman.tools.identifyfamily(box)</strong> returns str crystal family if box corresponds to a standard crystal representation. Otherwise, returns None.</li>
@@ -1261,7 +1302,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1298,7 +1339,7 @@ istriclinic =    False
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1317,12 +1358,12 @@ identifyfamily = None
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="4.9-compositionstr()">
-<h3>4.9 compositionstr()<a class="headerlink" href="#4.9-compositionstr()" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="5.9-compositionstr()">
+<h3>5.9 compositionstr()<a class="headerlink" href="#5.9-compositionstr()" title="Permalink to this headline">¶</a></h3>
 <p><em>Added version 1.2.7</em></p>
 <p>Takes a list of symbols and the counts for each and returns a reduced composition string. Used by System.composition.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1342,7 +1383,7 @@ Composition = Al2Si5
 </div>
 <p><strong>File Cleanup</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1362,7 +1403,7 @@ Composition = Al2Si5
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Introduction to atomman: Basic Support and Analysis Tools</a><ul>
+<li><a class="reference internal" href="#">Introduction to atomman: Basic support and analysis tools</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
 <li><a class="reference internal" href="#2.-Elastic-constants">2. Elastic constants</a></li>
 <li><a class="reference internal" href="#3.-Relative-distances-between-atoms">3. Relative distances between atoms</a><ul>
@@ -1371,17 +1412,18 @@ Composition = Al2Si5
 <li><a class="reference internal" href="#3.3.-System.neighborlist()">3.3. System.neighborlist()</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#4.-Basic-tools">4. Basic tools</a><ul>
-<li><a class="reference internal" href="#4.1.-Atomic-information">4.1. Atomic information</a></li>
-<li><a class="reference internal" href="#4.2.-axes_check()">4.2. axes_check()</a></li>
-<li><a class="reference internal" href="#4.3.-filltemplate()">4.3. filltemplate()</a></li>
-<li><a class="reference internal" href="#4.4.-indexstr()">4.4. indexstr()</a></li>
-<li><a class="reference internal" href="#4.5.-uber_open_rmode">4.5. uber_open_rmode</a></li>
-<li><a class="reference internal" href="#4.6.-vect_angle()">4.6. vect_angle()</a></li>
-<li><a class="reference internal" href="#4.7-duplicates_allclose()">4.7 duplicates_allclose()</a></li>
-<li><a class="reference internal" href="#4.7.-Miller-index-conversions">4.7. Miller index conversions</a></li>
-<li><a class="reference internal" href="#4.8.-Crystal-lattice-identification">4.8. Crystal lattice identification</a></li>
-<li><a class="reference internal" href="#4.9-compositionstr()">4.9 compositionstr()</a></li>
+<li><a class="reference internal" href="#4.-Region-selectors">4. Region selectors</a></li>
+<li><a class="reference internal" href="#5.-Basic-tools">5. Basic tools</a><ul>
+<li><a class="reference internal" href="#5.1.-Atomic-information">5.1. Atomic information</a></li>
+<li><a class="reference internal" href="#5.2.-axes_check()">5.2. axes_check()</a></li>
+<li><a class="reference internal" href="#5.3.-filltemplate()">5.3. filltemplate()</a></li>
+<li><a class="reference internal" href="#5.4.-indexstr()">5.4. indexstr()</a></li>
+<li><a class="reference internal" href="#5.5.-uber_open_rmode">5.5. uber_open_rmode</a></li>
+<li><a class="reference internal" href="#5.6.-vect_angle()">5.6. vect_angle()</a></li>
+<li><a class="reference internal" href="#5.7-duplicates_allclose()">5.7 duplicates_allclose()</a></li>
+<li><a class="reference internal" href="#5.7.-Miller-index-conversions">5.7. Miller index conversions</a></li>
+<li><a class="reference internal" href="#5.8.-Crystal-lattice-identification">5.8. Crystal lattice identification</a></li>
+<li><a class="reference internal" href="#5.9-compositionstr()">5.9 compositionstr()</a></li>
 </ul>
 </li>
 </ul>
@@ -1389,7 +1431,7 @@ Composition = Al2Si5
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="02.2_Running_LAMMPS_and_the_Log_class.html"
+  <p class="topless"><a href="02.2._Running_LAMMPS_and_the_Log_class.html"
                         title="previous chapter">Introduction to atomman: Running LAMMPS and the Log class</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="03.1._ElasticConstants_class.html"
@@ -1411,9 +1453,9 @@ Composition = Al2Si5
           <a href="03.1._ElasticConstants_class.html" title="Introduction to atomman: ElasticConstants class"
              >next</a> |</li>
         <li class="right" >
-          <a href="02.2_Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
+          <a href="02.2._Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.2.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
