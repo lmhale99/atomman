@@ -11,8 +11,9 @@ from DataModelDict import DataModelDict as DM
 # atomman imports
 import atomman.unitconvert as uc
 from ..tools import vect_angle
+from ..region import Shape, Plane
 
-class Box(object):
+class Box(Shape, object):
     """
     A representation of a triclinic (parallelepiped) box.
     """
@@ -377,6 +378,16 @@ class Box(object):
         """float : The volume of the box."""
         return np.abs(np.dot(self.avect, np.cross(self.bvect, self.cvect)))
 
+    @property
+    def planes(self):
+        """tuple : The box's planes represented as atomman.region.Plane objects."""
+        return (Plane(np.cross(self.cvect, self.bvect), self.origin),
+                Plane(np.cross(self.bvect, self.avect), self.origin),
+                Plane(np.cross(self.avect, self.cvect), self.origin),
+                Plane(np.cross(self.bvect, self.cvect), self.origin + self.avect),
+                Plane(np.cross(self.cvect, self.avect), self.origin + self.bvect),
+                Plane(np.cross(self.avect, self.bvect), self.origin + self.cvect))
+
     def __str__(self):
         """
         The string representation of the box.  Lists the three vectors and origin.
@@ -640,3 +651,16 @@ class Box(object):
             and self.__vects[0,0] > 0.0
             and self.__vects[1,1] > 0.0
             and self.__vects[2,2] > 0.0)
+
+    def inside(self, pos, inclusive=True):
+        
+        # Retrieve the Box's planes
+        planes = self.planes
+
+        # Find all points below each plane, i.e. inside the box
+        return ( planes[0].below(pos, inclusive=inclusive)
+               & planes[1].below(pos, inclusive=inclusive)
+               & planes[2].below(pos, inclusive=inclusive)
+               & planes[3].below(pos, inclusive=inclusive)
+               & planes[4].below(pos, inclusive=inclusive)
+               & planes[5].below(pos, inclusive=inclusive))

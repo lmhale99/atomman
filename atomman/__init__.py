@@ -20,6 +20,7 @@ with open(os.path.join(rootdir, 'VERSION')) as version_file:
 # atomman imports
 from . import unitconvert
 from . import tools
+from . import region
 from . import lammps
 from .dump import *
 from .dump import __all__ as dump_all
@@ -29,6 +30,7 @@ from .load import *
 from .load import __all__ as load_all
 from . import plot
 from . import defect
+
 
 __all__ = ['__version__', 'rootdir'] + dump_all + core_all + load_all
 __all__.sort()
