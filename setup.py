@@ -35,7 +35,7 @@ setup(name = 'atomman',
       long_description = getreadme(),
       ext_modules = extensions,
       classifiers = [
-        'Development Status :: 5 - Production/Stable Copy',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
         'Natural Language :: English',
         'Programming Language :: Python :: 3.6',

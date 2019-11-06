@@ -1,6 +1,52 @@
 Updates
 =======
 
+Version 1.3.0
+-------------
+
+- **Support for Python < 3.6 removed.**  Python 2 support removed due to its
+  imminent end at the new year.  Minimal version of 3.6 selected to take
+  advantage of f-strings.
+
+- **Atoms and System natype, atypes** behavior changed to allow for unassigned
+  atype values and/or symbols.  Now, atype values must be > 0 and natypes =
+  max(atype).  CAUTION: this could conceivably break backwards compatibility.
+
+- **lammps.Potential** expanded.
+
+    - **allsymbols** property added to support pair_styles that require all
+      symbols to be listed in the pair_coeff lines even if they are not used.
+    - **status** property added that indicates if the potential is known to
+      have been superseded by a newer version or retracted for being invalid.
+    - **pair_info** now supports an optional masses parameter for overriding
+      default mass values.
+
+- **load.atom_data** now recognizes image flags in the Atoms tables, and reads
+  values from the Masses tables.  Parameter checking is performed allowing for
+  more informative errors to be thrown.
+
+- **dump.atom_data** updated to allow Potential objects to be passed directly,
+  and for pair_info to be included in the generated info LAMMPS input lines.
+
+- **System.masses** attribute added.  This is used for saving mass values from
+  load.atom_data, and for overriding default Potential.masses values in
+  dump.atom_data.
+
+- **defect.dislocation_array** debugged, documented, and made consistent with
+  Volterra solutions.
+
+- **defect.IsotropicVolterraDislocation** displacements fixed and adjusted to
+  predict displacements and stresses consistent with values from defect.Stroh.
+
+- **defect.solve_volterra_dislocation** simplified to remove unnecessary 
+  pre-check of elastic constants.
+
+- **region** submodule added that allows for geometries in space to be defined
+  and used to slice systems and per-atom properties.
+
+- **Box** is now a subclass of region.Shape allowing it to be used for 
+  region-based selection as well.
+
 Version 1.2.8
 -------------
 
