@@ -801,8 +801,8 @@ class GammaSurface(object):
         # Set parameters for normalized plots
         if normalize is True:
             yscale = 1
-            xlabel = '$a_1$ = ' + str(a1vect)
-            ylabel = '$a_2$ = ' + str(a2vect)
+            xlabel = f'$a_1$ = {a1vect}'
+            ylabel = f'$a_2$ = {a2vect}'
         
         # Set parameters for absolute plots
         else:
@@ -814,8 +814,8 @@ class GammaSurface(object):
             x_grid = uc.get_in_units(x_grid, length_unit)
             y_grid = uc.get_in_units(y_grid, length_unit)
             yscale = (y_grid.max()-y_grid.min()) / (x_grid.max() - x_grid.min())
-            xlabel = 'x (' + length_unit + ')'
-            ylabel = 'y (' + length_unit + ')'
+            xlabel = f'$x$ along {a1vect} ({length_unit})'
+            ylabel = f'$y$ along {a2vect} ({length_unit})'
         
         # Set default figsize if needed
         if figsize is None:
@@ -898,8 +898,8 @@ class GammaSurface(object):
         
         # Create plot
         xmax = x.max()
-        emin = E.min()
-        emax = E.max()
+        emin = E.min() * 1.05
+        emax = E.max() * 1.05
         if fig is None:
             if figsize is None:
                 figsize = (10, 6)
@@ -1100,8 +1100,8 @@ class GammaSurface(object):
         
         # Create plot
         xmax = x.max()
-        dmin = d.min()
-        dmax = d.max()
+        dmin = d.min() * 1.05
+        dmax = d.max() * 1.05
         if fig is None:
             if figsize is None:
                 figsize = (10, 6)
