@@ -446,7 +446,7 @@ class Atoms(object):
         """
         Allows for per-atom properties to be assigned according to
         Atoms.atypes.
-        
+
         Parameters
         ----------
         key : str
@@ -457,7 +457,7 @@ class Atoms(object):
             value.
         atype : int, optional
             A specific atype to assign value to.
-        
+
         raises
         ------
         ValueError
@@ -465,12 +465,15 @@ class Atoms(object):
             Atoms.atypes.
         """
 
+        # Set values across all atype values
         if atype is None:
-            if len(value) == self.natypes:
-                for atype, v in zip(self.atypes, value):
-                    self.prop_atype(key, v, atype=atype)
+            value = np.asarray(value)
+            if len(value) >= self.natypes:
+                self.view[key] = value[self.atype - 1]
             else:
-                raise ValueError('length of value does not match natypes')
+                raise ValueError('length of value less than natypes')
+        
+        # Set values for only one atype
         else:
             if atype in self.atypes:
                 if key not in self.prop():
