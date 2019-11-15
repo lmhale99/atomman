@@ -1,6 +1,14 @@
 Updates
 =======
 
+Version 1.3.1
+-------------
+
+- **Atoms.prop_atype** updated for new atype handling.
+
+- **defect.GammaSurface** default plotting behavior improved.
+
+
 Version 1.3.0
 -------------
 
