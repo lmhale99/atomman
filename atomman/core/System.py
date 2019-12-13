@@ -1064,8 +1064,7 @@ class System(object):
                 break
         
         if not search_success:
-            raise ValueError('Filtering failed: ' + str(newnatoms) +
-                             ' atoms expected, ' + str(len(aindex[0])) + ' found')
+            raise ValueError(f'Filtering failed: {newnatoms} atoms expected, {len(aindex[0])} found')
         
         # Make newsystem by cutting out all atoms in system2 outside boundaries
         newsystem = System(atoms=system2.atoms[aindex], box=system2.box, symbols=self.symbols)
