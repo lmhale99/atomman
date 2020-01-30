@@ -759,6 +759,69 @@ class System(object):
             kwargs['system'] = self
         return NeighborList(**kwargs)
     
+    def r0(self, neighbors=None):
+        """
+        Identifies the shortest interatomic spacing between atoms in the
+        system by comparing the shortest periodic box vector with the
+        smallest dmags of all neighbor atoms.
+        
+        Parameters
+        ----------
+        neighbors : NeighborList, optional
+            A pre-computed NeighborList for the system.  If not given, a new
+            NeighborList will be computed using a cutoff distance based on the
+            smallest dmag between atom 0 and the rest of the system's atoms.
+        
+        Returns
+        -------
+        float
+            The shortest interatomic spacing identified.
+        """
+        
+        # Find shortest periodic lattice parameter
+        try:
+            box_r0 = np.linalg.norm(self.box.vects, axis=1)[self.pbc].min()
+        except:
+            box_r0 = None
+        
+        # Find shortest interatomic vector
+        if self.natoms > 1:
+            
+            # Compute neighbors if needed
+            if neighbors is None:
+                
+                # Use r0 for atom 0 as cutoff
+                cutoff = self.dmag(0, range(1, self.natoms)).min() * 1.01
+                
+                # Identify all neighbors
+                neighbors = self.neighborlist(cutoff=cutoff)
+            
+            # Find smallest r0 across all neighbor sets
+            atom_r0 = np.inf
+            for i in range(self.natoms):
+                j = neighbors[i]
+                if len(j) > 0:
+                    new_r0 = self.dmag(i, j).min()
+                    if new_r0 < atom_r0:
+                        atom_r0 = new_r0
+
+            if atom_r0 == np.inf:
+                atom_r0 = None
+        else:
+            atom_r0 = None
+
+        if box_r0 is not None and atom_r0 is not None:
+            if atom_r0 < box_r0:
+                return atom_r0
+            else:
+                return box_r0
+        elif box_r0 is not None:
+            return box_r0
+        elif atom_r0 is not None:
+            return atom_r0
+        else:
+            raise ValueError('No atoms to compare or periodic boundaries found!')
+    
     def supersize(self, a_size, b_size, c_size):
         """
         Creates a larger system from a given system by replicating it along the
@@ -892,7 +955,7 @@ class System(object):
         
         return System(box=box, atoms=atoms, scale=True, symbols=self.symbols)
     
-    def rotate(self, uvws, tol=1e-5, return_transform=False):
+    def rotate(self, uvws, tol=None, return_transform=False):
         """
         Transforms a System representing a periodic crystal cell from a standard
         orientation to a specified orientation. Note: if hexagonal indices are
@@ -905,11 +968,11 @@ class System(object):
             A (3, 3) array of the Miller crystal vectors or a (3, 4) array of
             Miller-Bravais hexagonal crystal vectors to use in transforming the
             system.  Values must be integers.
-        tol : float, optional
-            Tolerance parameter used in rounding atomic positions near the
-            boundaries to the boundary values.  In box-relative coordinates, any
-            atomic positions within tol of 0 or 1 will be rounded to 0 or 1,
-            respectively.  Default value is 1e-5.
+        tol : list or float, optional
+            Tolerance parameter used in determining which atoms are inside the
+            box.  Multiple values can be given as the identification may
+            occasionally fail for a given ucell and tol.  Default behavior will
+            try tol values ranging from 1e-4 to 1e-8.
         return_transform : bool, optional
             Indicates if the transformation matrix associated with the
             rotation is returned.  Default value is False.
@@ -924,8 +987,13 @@ class System(object):
             Returned if return_transform is True.
         """
         
+        if tol is None:
+            tol = [1e-4, 1e-5, 1e-6, 1e-7]
+        else:
+            tol = aslist(tol)
+        
         uvws = np.asarray(uvws)
-
+        
         # Convert uvws from Miller-Bravais to Miller indices if needed
         if uvws.shape == (3, 4):
             if ishexagonal(self.box):
@@ -976,18 +1044,27 @@ class System(object):
         # Change system.box.vects to newvects
         system2.box_set(vects=newvects, scale=False)
         
-        # Round atom positions near box boundaries to the boundaries
-        spos = system2.atoms_prop('pos', scale=True)
-        spos[np.isclose(spos, 0.0, atol=tol)] = 0.0
-        spos[np.isclose(spos, 1.0, atol=tol)] = 1.0
+        search_success = False
+        for atol in tol:
+            
+            spos = system2.atoms_prop('pos', scale=True)
+            
+            # Round atom positions near box boundaries to the boundaries
+            spos[np.isclose(spos, 0.0, atol=atol)] = 0.0
+            spos[np.isclose(spos, 1.0, atol=atol)] = 1.0
         
-        # Identify all atoms whose positions are 0 <= x < 1
-        aindex = np.where(((spos[:, 0] >= 0.0) & (spos[:, 0] < 1.0)
-                         & (spos[:, 1] >= 0.0) & (spos[:, 1] < 1.0)
-                         & (spos[:, 2] >= 0.0) & (spos[:, 2] < 1.0)))
-        if len(aindex[0]) != newnatoms:
-            raise ValueError('Filtering failed: ' + str(newnatoms) +
-                             'atoms expected, ' + str(len(aindex[0])) + ' found')
+            # Identify all atoms whose positions are 0 <= x < 1
+            aindex = np.where(((spos[:, 0] >= 0.0) & (spos[:, 0] < 1.0)
+                             & (spos[:, 1] >= 0.0) & (spos[:, 1] < 1.0)
+                             & (spos[:, 2] >= 0.0) & (spos[:, 2] < 1.0)))
+            
+            # Check if number of atoms identified matches the expected number
+            if len(aindex[0]) == newnatoms:
+                search_success = True
+                break
+        
+        if not search_success:
+            raise ValueError(f'Filtering failed: {newnatoms} atoms expected, {len(aindex[0])} found')
         
         # Make newsystem by cutting out all atoms in system2 outside boundaries
         newsystem = System(atoms=system2.atoms[aindex], box=system2.box, symbols=self.symbols)

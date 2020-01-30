@@ -6,7 +6,7 @@ import shutil
 import subprocess as sp
 
 # atomman imports
-from .Log import Log
+from . import Log, LammpsError
 
 def run(lammps_command, script_name, mpi_command=None,
         restart_script_name=None, return_style='object', logfile='log.lammps',
@@ -107,13 +107,9 @@ def run(lammps_command, script_name, mpi_command=None,
     try:
         output = sp.check_output(mpi_command + lammps_command + extra + ['-in'] + script_name)
     
-    # Pass LAMMPS error to a Python error if failed
+    # Convert LAMMPS error to a Python error if failed
     except sp.CalledProcessError as e:
-        if e.output != '':
-            lines = e.output.decode("utf-8").split('\n')
-            raise ValueError('Invalid LAMMPS input: \n%s' % lines[-2])
-        else:
-            raise OSError('Failed to run LAMMPS')
+        raise LammpsError(e.output.decode('UTF-8'))
     
     # Initialize Log object
     log = Log()
