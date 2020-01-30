@@ -1,12 +1,11 @@
 # coding: utf-8
 # Standard Python libraries
-import os
+from pathlib import Path
 
 # https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
 
 # atomman imports
-import atomman.unitconvert as uc
 from ..tools import atomic_mass, aslist, uber_open_rmode
 
 class Potential(object):
@@ -292,6 +291,28 @@ class Potential(object):
         
         return charges
 
+    def asdict(self):
+        d = {}
+        d['id'] = self.id
+        d['key'] = self.key
+        d['potid'] = self.potid
+        d['potkey'] = self.potkey
+        d['id'] = self.id
+        d['key'] = self.key
+        d['potid'] = self.potid
+        d['potkey'] = self.potkey
+        d['units'] = self.units
+        d['atom_style'] = self.atom_style
+        d['allsymbols'] = self.allsymbols
+        d['pair_style'] = self.pair_style
+        d['status'] = self.status
+        d['symbols'] = self.symbols
+        d['elements'] = self.elements()
+        d['masses'] = self.masses()
+        d['charges'] = self.charges()
+
+        return d
+
     def pair_info(self, symbols=None, masses=None):
         """
         Generates the LAMMPS input command lines associated with the Potential
@@ -426,7 +447,7 @@ class Potential(object):
                 
                 # Print files with pot_dir prefixes
                 elif ttype == 'file':
-                    line += ' ' + str(os.path.join(self.pot_dir, tval))
+                    line += ' ' + str(Path(self.pot_dir, tval))
                 
                 # Print all symbols being used for symbolsList
                 elif ttype == 'symbolsList' and (tval is True or tval == 'True'):
