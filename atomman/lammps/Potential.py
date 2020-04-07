@@ -8,7 +8,7 @@ from DataModelDict import DataModelDict as DM
 # atomman imports
 from ..tools import atomic_mass, aslist, uber_open_rmode
 
-class Potential(object):
+class PotentialLAMMPS(object):
     """
     Class for building LAMMPS input lines from a potential-LAMMPS data model.
     """
@@ -55,15 +55,15 @@ class Potential(object):
         self.__pair_style = self.__dm['pair_style']['type']
 
         allsymbols = self.__dm.get('allsymbols', 'False')
-        if allsymbols is True or allsymbols == 'True':
+        if allsymbols is True or allsymbols.lower() == 'true':
             self.__allsymbols = True
-        elif allsymbols is False or allsymbols == 'False':
+        elif allsymbols is False or allsymbols.lower() == 'false':
             self.__allsymbols = False
         else:
-            raise ValueError('Invalid allsymbols value')
-
-        self.__status = self.__dm.get('status', 'active')
+            raise ValueError(f'Invalid allsymbols value "{allsymbols}"')
         
+        self.__status = self.__dm.get('status', 'active')
+
         if pot_dir is not None:
             self.pot_dir = pot_dir
         else:
@@ -104,7 +104,7 @@ class Potential(object):
             self.__symbols.append(symbol)
             self.__masses.append(mass)
             self.__charges.append(charge)
-    
+        
     def normalize_symbols(self, symbols):
         """
         Modifies a given list of symbols to be compatible with the potential.
@@ -136,7 +136,7 @@ class Potential(object):
                     symbols.append(symbol)
         
         return symbols
-
+    
     def __str__(self):
         """str: The string of the Potential returns its human-readable id"""
         return self.id
@@ -191,13 +191,17 @@ class Potential(object):
     
     @property
     def allsymbols(self):
-        """bool : Indicates if all atom-model symbols must be listed by pair_info."""
+        """bool : indicates if all model symbols must be listed."""
         return self.__allsymbols
 
     @property
     def status(self):
         """str : Indicates the status of the implementation (active, superseded, retracted)"""
         return self.__status
+
+    @property
+    def model(self):
+        return self.__dm
 
     def elements(self, symbols=None):
         """
@@ -292,11 +296,8 @@ class Potential(object):
         return charges
 
     def asdict(self):
+        """Returns a flat dict of the metadata fields"""
         d = {}
-        d['id'] = self.id
-        d['key'] = self.key
-        d['potid'] = self.potid
-        d['potkey'] = self.potkey
         d['id'] = self.id
         d['key'] = self.key
         d['potid'] = self.potid
@@ -312,6 +313,9 @@ class Potential(object):
         d['charges'] = self.charges()
 
         return d
+
+    def asmodel(self):
+        return DM([('potential-LAMMPS', self.__dm)])
 
     def pair_info(self, symbols=None, masses=None):
         """
@@ -435,12 +439,18 @@ class Potential(object):
         
         return info
     
-    def __pair_terms(self, terms, system_symbols = [], coeff_symbols = []):
+    def __pair_terms(self, terms, system_symbols=None, coeff_symbols=None):
         """utility function used by self.pair_info() for composing lines from terms"""
+        if system_symbols is None:
+            system_symbols = []
+        if coeff_symbols is None:
+            coeff_symbols = []
+        
         line = ''
         
         for term in terms:
             for ttype, tval in term.items():
+                
                 # Print options and parameters as strings
                 if ttype == 'option' or ttype == 'parameter':
                     line += ' ' + str(tval)
@@ -450,13 +460,13 @@ class Potential(object):
                     line += ' ' + str(Path(self.pot_dir, tval))
                 
                 # Print all symbols being used for symbolsList
-                elif ttype == 'symbolsList' and (tval is True or tval == 'True'):
+                elif ttype == 'symbolsList' and (tval is True or tval.lower() == 'true'):
                     for coeff_symbol in coeff_symbols:
                         if coeff_symbol in system_symbols:
                             line += ' ' + coeff_symbol
                 
                 # Print symbols being used with model in appropriate order for symbols
-                elif ttype == 'symbols' and (tval is True or tval == 'True'):
+                elif ttype == 'symbols' and (tval is True or tval.lower() == 'true'):
                     for system_symbol in system_symbols:
                         if system_symbol in coeff_symbols:
                             line += ' ' + system_symbol
