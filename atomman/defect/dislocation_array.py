@@ -50,6 +50,13 @@ def dislocation_array(system, dislsol=None, m=None, n=None, burgers=None,
         creates an extra half-plane of atoms that will have (nearly) identical
         positions with other atoms after altering the boundary conditions.
         Default cutoff value is 0.5 Angstrom.
+    
+    Returns
+    -------
+    atomman.System
+        The resulting periodic array of dislocations system.  An additional
+        atoms property 'old_id' will be added to map the atoms in the defect
+        system back to the associated atoms in the original system.
     """
     
     # ------------------------ Parameter handling --------------------------- #
@@ -176,6 +183,9 @@ def dislocation_array(system, dislsol=None, m=None, n=None, burgers=None,
     newsystem = System(atoms=system.atoms[ii], box=newbox, pbc=newpbc,
                        symbols=system.symbols)
     
+    # Define old_id so atoms in newsystem can be mapped back to system
+    newsystem.atoms.old_id = np.where(ii)[0]
+
     if dislsol is None:
         # Use only linear displacements
         disp = linear_displacement(newsystem.atoms.pos, burgers, length, m, n)
@@ -221,5 +231,5 @@ def linear_displacement(pos, burgers, length, m, n):
         The dislocation solution n unit vector.  This vector is normal to the 
         slip plane.  Only needed if dislsol is not given.
     """
-    #return np.outer(0.5 - np.sign(pos.dot(n)) * ((pos.dot(m) / (2 * length)) + 0.25), burgers)
+
     return np.outer(np.sign(pos.dot(n)) * (0.25 - pos.dot(m) / (2 * length)), burgers)
