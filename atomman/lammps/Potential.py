@@ -8,7 +8,7 @@ from DataModelDict import DataModelDict as DM
 # atomman imports
 from ..tools import atomic_mass, aslist, uber_open_rmode
 
-class PotentialLAMMPS(object):
+class Potential(object):
     """
     Class for building LAMMPS input lines from a potential-LAMMPS data model.
     """
