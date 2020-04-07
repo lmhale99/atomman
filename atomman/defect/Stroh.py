@@ -15,32 +15,52 @@ class Stroh(VolterraDislocation):
     dislocation or crack using the Stroh method.
     """
     
-    def solve(self, C, burgers, axes=None, m=[1,0,0], n=[0,1,0], tol=1e-8):
+    def solve(self, C, burgers, ξ_uvw=None, slip_hkl=None, transform=None,
+              axes=None, box=None, m=[1,0,0], n=[0,1,0], tol=1e-8):
         """
-        Computes the Stroh solution.
+        Computes the elastic solution for an anisotropic volterra dislocation.
         
         Parameters
         ----------
         C : atomman.ElasticConstants
             The medium's elastic constants.
         burgers : array-like object
-            The dislocation's Cartesian Burgers vector.
+            The dislocation's Burgers vector.
+        ξ_uvw : array-like object
+            The Miller crystal vector associated with the dislocation's line
+            direction.  Must be given with slip_hkl to identify the
+            transformation matrix to use on C and burgers.
+        slip_hkl : array-like object
+            The Miller plane indices associated with the dislocation's slip
+            plane.  Must be given with slip_hkl to identify the
+            transformation matrix to use on C and burgers.
+        transform : array-like object, optional
+            A 3x3 set of orthogonal Cartesian vectors that define the
+            transformation matrix to use on C and burgers to convert from the
+            standard (unit cell) and dislocation orientations.  The 3 vectors
+            will automatically be converted into unit vectors.  Using this is
+            an alternative to using ξ_uvw and slip_hkl.
         axes : array-like object, optional
-            3x3 set of rotational axes for the system. If given, C and burgers
-            will be transformed using axes.
+            Same as transform.  Retained for backwards compatibility.
+        box : atomman.Box, optional
+            The unit cell's box that crystal vectors are taken with respect to.
+            If not given, will use a cubic box with a=1 meaning that burgers,
+            ξ_uvw and slip_hkl will be interpreted as Cartesian vectors.
         m : array-like object, optional
-            The m unit vector for the solution.  m, n, and u (dislocation line)
-            should be right-hand orthogonal.  Default value is [1, 0, 0]
+            The m unit vector for the solution.  m, n, and u (dislocation
+            line) should be right-hand orthogonal.  Default value is [1,0,0]
             (x-axis).
         n : array-like object, optional
-            The n unit vector for the solution.  m, n, and u (dislocation line)
-            should be right-hand orthogonal.  Default value is [0, 1, 0]
-            (y-axis).
+            The n unit vector for the solution.  m, n, and u (dislocation
+            line) should be right-hand orthogonal.  Default value is [0,1,0]
+            (y-axis). n is normal to the dislocation slip plane.
         tol : float
             Tolerance parameter used to round off near-zero values.  Default
             value is 1e-8.
         """
-        VolterraDislocation.solve(self, C, burgers, axes=axes, m=m, n=n, tol=tol)
+        VolterraDislocation.solve(self, C, burgers, ξ_uvw=ξ_uvw, slip_hkl=slip_hkl,
+                                  transform=transform, axes=axes, box=box,
+                                  m=m, n=n, tol=tol)
 
         # Pull out full 3x3x3x3 elastic constants matrix
         Cijkl = self.C.Cijkl
@@ -90,6 +110,10 @@ class Stroh(VolterraDislocation):
         self.__L = L
         self.__k = k
     
+        # Check that K_tensor is real
+        if self.K_tensor.dtype == 'complex128':
+            raise ValueError('Solution not real: check elastic constants')
+
     @property
     def p(self):
         """numpy.ndarray : p eigenvalues"""

@@ -6,14 +6,17 @@ from copy import deepcopy
 import numpy as np
 
 # atomman imports
-from ..tools import axes_check, vect_angle
+from . import dislocation_system_transform
+from .. import Box
+from ..tools import axes_check, vect_angle, miller
 
 class VolterraDislocation(object):
     """
     Generic class for a Volterra solution of a straight dislocation.
     """
     
-    def __init__(self, C, burgers, axes=None, m=[1,0,0], n=[0,1,0], tol=1e-8):
+    def __init__(self, C, burgers, ξ_uvw=None, slip_hkl=None, transform=None,
+                 axes=None, box=None, m=[1,0,0], n=[0,1,0], tol=1e-8):
         """
         Initializes the solution. Calls solve.
         
@@ -22,10 +25,27 @@ class VolterraDislocation(object):
         C : atomman.ElasticConstants
             The medium's elastic constants.
         burgers : array-like object
-            The dislocation's Cartesian Burgers vector.
+            The dislocation's Burgers vector.
+        ξ_uvw : array-like object
+            The Miller crystal vector associated with the dislocation's line
+            direction.  Must be given with slip_hkl to identify the
+            transformation matrix to use on C and burgers.
+        slip_hkl : array-like object
+            The Miller plane indices associated with the dislocation's slip
+            plane.  Must be given with slip_hkl to identify the
+            transformation matrix to use on C and burgers.
+        transform : array-like object, optional
+            A 3x3 set of orthogonal Cartesian vectors that define the
+            transformation matrix to use on C and burgers to convert from the
+            standard (unit cell) and dislocation orientations.  The 3 vectors
+            will automatically be converted into unit vectors.  Using this is
+            an alternative to using ξ_uvw and slip_hkl.
         axes : array-like object, optional
-            3x3 set of rotational axes for the system. If given, burgers
-            will be transformed using axes.
+            Same as transform.  Retained for backwards compatibility.
+        box : atomman.Box, optional
+            The unit cell's box that crystal vectors are taken with respect to.
+            If not given, will use a cubic box with a=1 meaning that burgers,
+            ξ_uvw and slip_hkl will be interpreted as Cartesian vectors.
         m : array-like object, optional
             The m unit vector for the solution.  m, n, and u (dislocation
             line) should be right-hand orthogonal.  Default value is [1,0,0]
@@ -38,22 +58,41 @@ class VolterraDislocation(object):
             Tolerance parameter used to round off near-zero values.  Default
             value is 1e-8.
         """
-        self.solve(C, burgers, axes=axes, m=m, n=n, tol=tol)
+        self.solve(C, burgers, ξ_uvw=ξ_uvw, slip_hkl=slip_hkl, transform=transform,
+                   axes=axes, box=box, m=m, n=n, tol=tol)
         
-    def solve(self, C, burgers, axes=None, m=[1,0,0], n=[0,1,0], tol=1e-8):
+    def solve(self, C, burgers, ξ_uvw=None, slip_hkl=None, transform=None,
+              axes=None, box=None, m=[1,0,0], n=[0,1,0], tol=1e-8):
         """
         Computes parameters for a dislocation solution.
-        !!!!NOT IMPLEMENTED FOR GENERIC CLASS!!!!
+        !!!!GENERIC CLASS ONLY HANDLES INPUT PARAMETERS AND DOES NOT SOLVE!!!!
         
         Parameters
         ----------
         C : atomman.ElasticConstants
             The medium's elastic constants.
         burgers : array-like object
-            The dislocation's Cartesian Burgers vector.
+            The dislocation's Burgers vector.
+        ξ_uvw : array-like object
+            The Miller crystal vector associated with the dislocation's line
+            direction.  Must be given with slip_hkl to identify the
+            transformation matrix to use on C and burgers.
+        slip_hkl : array-like object
+            The Miller plane indices associated with the dislocation's slip
+            plane.  Must be given with slip_hkl to identify the
+            transformation matrix to use on C and burgers.
+        transform : array-like object, optional
+            A 3x3 set of orthogonal Cartesian vectors that define the
+            transformation matrix to use on C and burgers to convert from the
+            standard (unit cell) and dislocation orientations.  The 3 vectors
+            will automatically be converted into unit vectors.  Using this is
+            an alternative to using ξ_uvw and slip_hkl.
         axes : array-like object, optional
-            3x3 set of rotational axes for the system. If given, burgers
-            will be transformed using axes.
+            Same as transform.  Retained for backwards compatibility.
+        box : atomman.Box, optional
+            The unit cell's box that crystal vectors are taken with respect to.
+            If not given, will use a cubic box with a=1 meaning that burgers,
+            ξ_uvw and slip_hkl will be interpreted as Cartesian vectors.
         m : array-like object, optional
             The m unit vector for the solution.  m, n, and u (dislocation
             line) should be right-hand orthogonal.  Default value is [1,0,0]
@@ -67,21 +106,43 @@ class VolterraDislocation(object):
             value is 1e-8.
         """
         # Convert burgers, m, n to numpy arrays if needed
-        burgers = np.asarray(burgers, dtype='float64')
-        m = np.asarray(m, dtype='float64')
-        n = np.asarray(n, dtype='float64')
+        burgers = np.asarray(burgers, dtype=float)
+        m = np.asarray(m, dtype=float)
+        n = np.asarray(n, dtype=float)
         
         # Check m, n values
         assert np.isclose(np.linalg.norm(m), 1.0, atol = tol), "m must be a unit vector"
         assert np.isclose(np.linalg.norm(n), 1.0, atol = tol), "n must be a unit vector"
         assert np.isclose(np.dot(m, n), 0.0, atol = tol), "m and n must be perpendicular"
         
+        # ξ_uvw-based orientation parameters
+        if ξ_uvw is not None or slip_hkl is not None:
+            assert ξ_uvw is not None, 'ξ_uvw and slip_hkl must be given together'
+            assert slip_hkl is not None, 'ξ_uvw and slip_hkl must be given together'
+            assert transform is None, 'transform cannot be given with ξ_uvw, slip_hkl'
+            assert axes is None, 'axes cannot be given with ξ_uvw, slip_hkl'
+            
+            transform = dislocation_system_transform(ξ_uvw, slip_hkl, m=m, n=n, box=box, tol=tol)
+        
+        # transform-based orientation parameters
+        else:
+            if axes is not None:
+                assert transform is None, 'axes and transform cannot both be given'
+                transform = axes
+            if transform is not None:
+                transform = axes_check(transform)
+            else:
+                transform = np.eye(3, dtype=float)
+
+        # Set default box
+        if box is None:
+            box = Box()
+        
         # Transform burgers and C
-        if axes is not None:
-            T = axes_check(axes)
-            burgers = T.dot(burgers)
-            burgers[np.isclose(burgers / burgers.max(), 0.0, atol = tol)] = 0.0
-            C = C.transform(axes)
+        burgers = miller.vector_crystal_to_cartesian(burgers, box)
+        burgers = transform.dot(burgers)
+        burgers[np.isclose(burgers / burgers.max(), 0.0, atol = tol)] = 0.0
+        C = C.transform(transform)
         
         self.__C = C
         self.__m = m
@@ -89,6 +150,7 @@ class VolterraDislocation(object):
         self.__ξ = np.cross(m, n)
         self.__burgers = burgers
         self.__tol = tol
+        self.__transform = transform
     
     @property
     def m(self):
@@ -114,6 +176,10 @@ class VolterraDislocation(object):
     def tol(self):
         return self.__tol
     
+    @property
+    def transform(self):
+        return self.__transform
+
     def characterangle(self, unit='degree'):
         """
         Returns the dislocation's character angle.

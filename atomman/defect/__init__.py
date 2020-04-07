@@ -2,6 +2,8 @@
 from .point import *
 from .point import __all__ as point_all
 
+from .dislocation_system_transform import dislocation_system_transform
+from .dislocation_system_basis import dislocation_system_basis
 from .differential_displacement import differential_displacement
 from .DifferentialDisplacement import DifferentialDisplacement
 from .disregistry import disregistry
