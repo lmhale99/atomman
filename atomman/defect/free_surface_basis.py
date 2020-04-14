@@ -7,7 +7,7 @@ import numpy as np
 from .. import Box, System
 from ..tools import vect_angle, miller, ishexagonal
 
-def free_surface_basis(hkl, box=None, cutboxvector='c', n=None,
+def free_surface_basis(hkl, box=None, cutboxvector='c', maxindex=None,
                        return_hexagonal=None, return_planenormal=False,
                        conventional_setting=None):
     """
@@ -33,7 +33,7 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', n=None,
     cutboxvector : str, optional
         Specifies which of the three box vectors corresponds to the
         out-of-plane vector.  Default value is c.
-    n : int, optional
+    maxindex : int, optional
         Max uvw index value to use in identifying the best uvw set for the
         out-of-plane vector.  If not given, will use the largest absolute
         index between the given hkl and the initial in-plane vector guesses.
@@ -163,8 +163,8 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', n=None,
         box = primitive_box
     
     # Set default n if needed
-    if n is None:
-        n = int(np.max([np.abs(a_uvw), np.abs(b_uvw), np.abs(hkl)]))
+    if maxindex is None:
+        maxindex = int(np.max([np.abs(a_uvw), np.abs(b_uvw), np.abs(hkl)]))
     
     # Compute Cartesian plane normal
     planenormal = s * np.cross(np.inner(a_uvw, box.vects.T),
@@ -186,11 +186,11 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', n=None,
                                 yield np.array([i, j, k], dtype=int)
     
     # First search
-    a_mag = np.linalg.norm(np.inner([n, n, n], box.vects.T))
+    a_mag = np.linalg.norm(np.inner([maxindex, maxindex, maxindex], box.vects.T))
     c_angle = 90
     a_uvw = None
     c_uvw = None
-    for uvw in gen_vector(n):
+    for uvw in gen_vector(maxindex):
         cart = np.inner(uvw, box.vects.T)
         mag = np.linalg.norm(cart)
         angle = vect_angle(cart, planenormal)
@@ -214,10 +214,10 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', n=None,
     
     # Second search
     a_cart = np.inner(a_uvw, box.vects.T)
-    b_mag = np.linalg.norm(np.inner([n, n, n], box.vects.T))
+    b_mag = np.linalg.norm(np.inner([maxindex, maxindex, maxindex], box.vects.T))
     b_uvw = None
     min_angle = 180.0
-    for uvw in gen_vector(n):
+    for uvw in gen_vector(maxindex):
         cart = np.inner(uvw, box.vects.T)
         angle = vect_angle(a_cart, cart)
         
