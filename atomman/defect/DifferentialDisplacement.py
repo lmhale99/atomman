@@ -13,7 +13,7 @@ from ..tools import axes_check
 from .. import Box, NeighborList
 
 class DifferentialDisplacement():
-    def __init__(self, system_0, system_1, neighbors=None, cutoff=None, reference=0):
+    def __init__(self, system_0, system_1, neighbors=None, cutoff=None, reference=1):
         """
         Class initializer.  Calls solve if either neighbors or cutoff are given.
         
@@ -30,9 +30,10 @@ class DifferentialDisplacement():
             will be used to generate the list. If reference = 1, then system_1 will be
             used to generate the list.
         reference : int, optional
-            Indicates which of the two systems should be used for the plotting reference: 0 or 1.
-            If 0 (default), then system_0's atomic positions will be used for the calculation and
-            neighbors should be for system_0.  If 1, then system_1's atomic positions will be used
+            Indicates which of the two systems should be used for the plotting
+            reference: 0 or 1. If 0, then system_0's atomic positions will be
+            used for the calculation and neighbors should be for system_0.  If
+            1 (default), then system_1's atomic positions will be used
             for the calculation and neighbors should be for system_1.   
         """
         
@@ -180,8 +181,9 @@ class DifferentialDisplacement():
         self.__arrowcenters = np.concatenate(all_arrowcenters)
         self.__arrowuvectors = np.concatenate(all_arrowuvectors)
         
-    def plot(self, plotxaxis='x', plotyaxis='y', xlim=None, ylim=None, zlim=None, component=None,
-             arrowscale=1, arrowwidth=0.005, normfactor=None, use0z=False,
+    def plot(self, component, ddmax, plotxaxis='x', plotyaxis='y',
+             xlim=None, ylim=None, zlim=None,
+             arrowscale=1, arrowwidth=0.005,  use0z=False,
              atomcolor=None, atomcmap=None, atomsize=0.5, figsize=10):
 
         """
@@ -191,6 +193,21 @@ class DifferentialDisplacement():
         
         Parameters
         ----------
+        component : str or array-like object
+            Indicates the component(s) of the differential displacement to plot.
+            Values of 'x', 'y', or 'z' will plot the component along that
+            Cartesian direction.  A value of 'projection' will plot the
+            differential displacement vectors as projected onto the plotting
+            plane, thereby showing the two components perpendicular to the line
+            direction.  If a 3D vector is given, then the component parallel to
+            that direction will be used.
+        ddmax : float or None
+            The maximum differential displacement value allowed. Values will be
+            kept between +-ddmax by wrapping values with larger absolute values
+            around by adding/subtracting 2*ddmax. Typically, this is set to be
+            |b|/2, but can be defect-specific. For instance, fcc a/2<110>
+            dislocations and basal hcp dislocations are typically plotted with
+            ddmax=|b|/4.  If set to None, then no wrapping is done.
         plotxaxis : str or array-like object, optional
             Indicates the Cartesian direction associated with the system's atomic
             coordinates to align with the plotting x-axis.  Values are either 3D
@@ -219,27 +236,16 @@ class DifferentialDisplacement():
             in the specified length_unit.  The optimum zlim should encompass only
             a single periodic slice.  If not given, then the limits are set
             based on min and max atomic coordinates along the axis.
-        component : str or array
-            Indicates the component(s) of the differential displacement to plot.
-            The values are taken relative to the plotting coordinate system. Allowed
-            str values are 'x', 'y', 'z' and 'xy'. Note 'xy' will plot the in-plane
-            components and directions.
         arrowscale : float, optional
             Scaling factor for the magnitude of the differential displacement
             arrows.  Default value is 1: no scaling, vectors are in units of length.
             For major components, this is often set such that the max differential
-            displacement compoent after wrapping (see normfactor) is scaled to the
+            displacement compoent after wrapping (see ddmax) is scaled to the
             distance between the atom pairs in the plot.  For minor components, this
             is often set to a large value simply to make the components visible.
         arrowwidth : float, optional
             Scaling factor to use for the width of the plotted arrows. Default value is
             0.005 = 1/200.
-        normfactor : float, optional
-            If given, the differential displacement components plotted will be kept
-            between +-normfactor by wrapping values with larger absolute values around
-            by adding/subtracting 2*normfactor. Typically, this is set to be |b|/2, but
-            can be defect-specific. For instance, fcc a/2<110> dislocations and basal hcp
-            dislocations are typically plotted with normfactor=|b|/4.
         use0z : bool, optional
             If False (default), the z coordinates from the reference system will be
             used for zlim and atomcmap colors. If True, the z coordinates will be
@@ -339,7 +345,7 @@ class DifferentialDisplacement():
         ######################## Arrow setup ##############################
         
         # Build arrows based on component
-        arrowlengths, arrowcenters = self.__buildarrows(T, plotbox, component, normfactor)
+        arrowlengths, arrowcenters = self.__buildarrows(T, plotbox, component, ddmax)
         
         # Scale arrows
         arrowlengths = arrowscale * arrowlengths
@@ -411,7 +417,7 @@ class DifferentialDisplacement():
         
         return atomcolor, atomcmap
     
-    def __buildarrows(self, T, plotbox, component, normfactor):
+    def __buildarrows(self, T, plotbox, component, ddmax):
         """Internal method for building the parameters for plotting the arrows"""
         
         # Manage component
@@ -422,10 +428,11 @@ class DifferentialDisplacement():
                 component = np.array([0.0, 1.0, 0.0])
             elif component == 'z':
                 component = np.array([0.0, 0.0, 1.0])
-            elif component != 'xy':
-                raise ValueError('Invalid component style: must be x, y, z, xy, or numpy array')
+            elif component != 'projection':
+                raise ValueError('Invalid component style: must be x, y, z, projection, or numpy array')
         else:
-            component = np.asarray(component, float)
+            component = np.asarray(component, dtype=float)
+            assert component.shape == (3,), 'Invalid numeric component: must be a 3D vector'
             component = component / np.linalg.norm(component)
             
         # Transform arrow-related vectors
@@ -440,51 +447,48 @@ class DifferentialDisplacement():
         arrowuvectors = arrowuvectors[inbounds]
 
         # Build arrows for the xy component option
-        if isinstance(component, str) and component == 'xy':
+        if isinstance(component, str) and component == 'projection':
             
             # Arrows are in-plane vector components
-            #arrowlengths = ddvectors[:, :2]
             ddcomponents = (ddvectors[:,0]**2 + ddvectors[:,1]**2)**0.5
             arrowuvectors = ddvectors[:, :2] / ddcomponents[:,np.newaxis]
             
             # Scheme for direction uniqueness (not sure what other projects use?)
             arrowuvectors[ddvectors[:, 2] > 0] *= -1
             
-            # Normalize ddcomponents to be between +-normfactor
-            if normfactor is not None and normfactor > 0:
+            # Normalize ddcomponents to be between +-ddmax
+            if ddmax is not None and ddmax > 0:
                 while True:
-                    mask = ddcomponents > normfactor
+                    mask = ddcomponents > ddmax
                     if np.sum(mask) == 0:
                         break
-                    ddcomponents[mask] -= 2 * normfactor
+                    ddcomponents[mask] -= 2 * ddmax
                 while True:
-                    mask = ddcomponents < -normfactor
+                    mask = ddcomponents < -ddmax
                     if np.sum(mask) == 0:
                         break
-                    ddcomponents[mask] += 2 * normfactor
+                    ddcomponents[mask] += 2 * ddmax
 
-            # Arrows have magnitude of ddcomponent and direction of uvectors
+            # Arrows have magnitude of ddcomponent
             arrowlengths = arrowuvectors * ddcomponents[:,np.newaxis]
-            
-            # Scheme for direction uniqueness (not sure what other projects use?)
-            #arrowlengths[ddvectors[:, 2] > 0] *= -1
         
         # Build arrows for vector components
         else:
+            component = T.dot(component)
             ddcomponents = ddvectors.dot(component)
 
-            # Normalize ddcomponents to be between +-normfactor
-            if normfactor is not None and normfactor > 0:
+            # Normalize ddcomponents to be between +-ddmax
+            if ddmax is not None and ddmax > 0:
                 while True:
-                    mask = ddcomponents > normfactor
+                    mask = ddcomponents > ddmax
                     if np.sum(mask) == 0:
                         break
-                    ddcomponents[mask] -= 2 * normfactor
+                    ddcomponents[mask] -= 2 * ddmax
                 while True:
-                    mask = ddcomponents < -normfactor
+                    mask = ddcomponents < -ddmax
                     if np.sum(mask) == 0:
                         break
-                    ddcomponents[mask] += 2 * normfactor
+                    ddcomponents[mask] += 2 * ddmax
 
             # Arrows have magnitude of ddcomponent and direction of uvectors
             arrowlengths = arrowuvectors * ddcomponents[:,np.newaxis]
