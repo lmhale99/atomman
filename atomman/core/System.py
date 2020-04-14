@@ -870,13 +870,13 @@ class System(object):
                     sizes[i] = (sizes[i], 0)
             
             elif isinstance(sizes[i], tuple):
-                if True:
+                try:
                     assert len(sizes[i]) == 2, str(len(sizes[i]))
                     assert isinstance(sizes[i][0], (int, np.integer)), str(sizes[i][0])
                     assert sizes[i][0] <= 0, str(sizes[i][0])
                     assert isinstance(sizes[i][1], (int, np.integer)), str(sizes[i][1])
                     assert sizes[i][1] >= 0, str(sizes[i][1])
-                else:
+                except:
                     raise TypeError('Invalid system multipliers')
             else:
                 raise TypeError('Invalid system multipliers')
@@ -910,7 +910,7 @@ class System(object):
             
             # Reshape new and save to atoms
             new_shape = new.shape
-            new_shape = (new_shape[0] * new_shape[1],) + new_shape[2:]
+            new_shape = (new_shape[0] * new_shape[1],) + new_shape[2:] # pylint: disable=unsubscriptable-object
             atoms.view[key] = np.array(new.reshape(new_shape))
         
         # Expand spos using broadcasting
@@ -919,7 +919,7 @@ class System(object):
         
         # Reshape spos
         new_shape = new_spos.shape
-        new_shape = (new_shape[0]*new_shape[1],) + new_shape[2:]
+        new_shape = (new_shape[0]*new_shape[1],) + new_shape[2:] # pylint: disable=unsubscriptable-object
         new_spos = new_spos.reshape(new_shape)
         
         # Use broadcasting to create arrays to add to spos

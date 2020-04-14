@@ -469,7 +469,7 @@ class Atoms(object):
         if atype is None:
             value = np.asarray(value)
             if len(value) >= self.natypes:
-                self.view[key] = value[self.atype - 1]
+                self.view[key] = value[self.atype - 1] # pylint: disable=no-member
             else:
                 raise ValueError('length of value less than natypes')
         
