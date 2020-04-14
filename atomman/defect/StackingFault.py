@@ -1,284 +1,273 @@
-# coding: utf-8
-# Standard Python imports
-import os
 from copy import deepcopy
 
-# http://www.numpy.org/
 import numpy as np
+from ..tools import miller
+from . import FreeSurface
 
-# https://github.com/usnistgov/DataModelDict
-from DataModelDict import DataModelDict as DM
-
-from ..tools import axes_check, vect_angle, miller
-
-class StackingFault(object):
-    def __init__(self, system, a1vect=None, a2vect=None,
-                 ucellbox=None, transform=None, cutboxvector='c',
-                 faultposrel=None, faultposcart=None, vacuumwidth=None):
+class StackingFault(FreeSurface):
+    """
+    Class for generating stacking fault atomic configurations. 
+    """
+    
+    def __init__(self, hkl, ucell, cutboxvector='c', maxindex=None,
+                 a1vect_uvw=None, a2vect_uvw=None,
+                 conventional_setting='p', tol=1e-8):
         """
-        Initializes an object for generating generalized stacking fault
-        atomic configurations.
-
+        Class initializer.  Identifies the proper rotations for the given hkl plane
+        and cutboxvector, and creates the rotated cell.
+        
         Parameters
         ----------
-        system : atomman.System
-            The atomic system to generate stacking fault configurations from.
-            The system should be oriented such that the stacking fault plane
-            is parallel to either the xy-plane, the xz-plane or the yz-plane.
-        a1vect : array-like object, optional
-            A slip vector within the slip plane.  Depending on if ucellbox and
-            transform are given, this can be either a Miller crystal vector or
-            a Cartesian vector relative to the supplied system.  If a1vect is
-            not given and a2vect is, then a1vect is set to [0,0,0].
-        a2vect : array-like object, optional
-            A slip vector within the slip plane.  Depending on if ucellbox and
-            transform are given, this can be either a Miller crystal vector or
-            a Cartesian vector relative to the supplied system.  If a2vect is
-            not given and a1vect is, then a2vect is set to [0,0,0].
-        ucellbox : atomman.Box, optional
-            If ucellbox is given, then the a1vect and a2vect slip vectors are
-            taken as Miller crystal vectors relative to ucellbox.  If not
-            given, then the slip vectors are taken as Cartesian vectors.
-        transform : array-like object, optional
-            A transformation tensor to apply to the a1vect and a2vect slip
-            vectors.  This is needed if system is oriented differently than
-            ucellbox, i.e. system is rotated.
+        hkl : array-like object
+            The free surface plane to generate expressed in either 3 indices
+            Miller (hkl) format or 4 indices Miller-Bravais (hkil) format.
+        ucell : atomman.System
+            The unit cell to use in generating the system.
         cutboxvector : str, optional
-            Defines which of the three box vectors gets cut so that the slip
-            plane can be added.  'a' indicates the slip plane is parallel to
-            the yz-plane, 'b' the xz-plane and 'c' the xy-plane.  Note that 
-            the specified cutboxvector is the only box vector allowed to have a
-            component out of the slip plane.
-        faultposrel : float, optional
-            The position to place the slip plane within the system given as a
-            relative coordinate along the out-of-plane direction.  faultposrel
-            and faultposcart cannot both be given.  Default value is 0.5 if 
-            faultposcart is also not given.
-        faultposcart : float, optional
-            The position to place the slip plane within the system given as a
-            Cartesian coordinate along the out-of-plane direction.  faultposrel
-            and faultposcart cannot both be given.
-        vacuumwidth : float, optional
-            If given, the out-of-plane dimension of system is increased by this
-            amount to create a vacuum region.  Useful if the generated
-            configurations are to be evaluated with DFT.
+            Specifies which of the three box vectors corresponds to the
+            out-of-plane vector.  Default value is c.
+        maxindex : int, optional
+            Max uvw index value to use in identifying the best uvw set for the
+            out-of-plane vector.  If not given, will use the largest absolute
+            index between the given hkl and the initial in-plane vector guesses.
+        a1vect_uvw : array-like object, optional
+            The crystal vector to use for one of the two shifting vectors.  If
+            not given, will be set to the shortest in-plane lattice vector.
+        a2vect_uvw : array-like object, optional
+            The crystal vector to use for one of the two shifting vectors.  If
+            not given, will be set to the shortest in-plane lattice vector not
+            parallel to a1vect_uvw.
+        conventional_setting : str, optional
+            Allows for rotations of a primitive unit cell to be determined from
+            (hkl) indices specified relative to a conventional unit cell.  Allowed
+            settings: 'p' for primitive (no conversion), 'f' for face-centered,
+            'i' for body-centered, and 'a', 'b', or 'c' for side-centered.  Default
+            behavior is to perform no conversion, i.e. take (hkl) relative to the
+            given ucell.
+        tol : float, optional
+            Tolerance parameter used to round off near-zero values.  Default
+            value is 1e-8.
         """
+
+        super().__init__(hkl, ucell, cutboxvector=cutboxvector, maxindex=maxindex,
+                 conventional_setting=conventional_setting, tol=tol)
         
-        self.set(system, a1vect=a1vect, a2vect=a2vect, ucellbox=ucellbox,
-                    transform=transform, cutboxvector=cutboxvector,
-                    faultposrel=faultposrel, faultposcart=faultposcart,
-                    vacuumwidth=vacuumwidth)
+        # Extract a1vect and a2vect values from uvws and rcell.box
+        if a1vect_uvw is None and a2vect_uvw is None:
+
+            # Set a1index and a2index based on cutboxvector
+            if self.cutboxvector == 'a':
+                a1index, a2index = 1, 2
+            elif self.cutboxvector == 'b':
+                a1index, a2index = 2, 0
+            elif self.cutboxvector == 'c':
+                a1index, a2index = 0, 1
+
+            self.a1vect_uvw = self.uvws[a1index]
+            self.a2vect_uvw = self.uvws[a2index]
         
-
-    def set(self, system, a1vect=None, a2vect=None, ucellbox=None, transform=None,
-            cutboxvector='c', faultposrel=None, faultposcart=None,
-            vacuumwidth=None):
-        """
-        Sets generation parameters associated with a stacking fault.
-
-        Parameters
-        ----------
-        system : atomman.System
-            The atomic system to generate stacking fault configurations from.
-            The system should be oriented such that the stacking fault plane
-            is parallel to either the xy-plane, the xz-plane or the yz-plane.
-        a1vect : array-like object, optional
-            A slip vector within the slip plane.  Depending on if ucellbox and
-            transform are given, this can be either a Miller crystal vector or
-            a Cartesian vector relative to the supplied system.  If a1vect is
-            not given and a2vect is, then a1vect is set to [0,0,0].
-        a2vect : array-like object, optional
-            A slip vector within the slip plane.  Depending on if ucellbox and
-            transform are given, this can be either a Miller crystal vector or
-            a Cartesian vector relative to the supplied system.  If a2vect is
-            not given and a1vect is, then a2vect is set to [0,0,0].
-        ucellbox : atomman.Box, optional
-            If ucellbox is given, then the a1vect and a2vect slip vectors are
-            taken as Miller crystal vectors relative to ucellbox.  If ucellbox
-            is a standard hexagonal cell, the slip vectors can alternatively be
-            given as Miller-Bravais crystal vectors. If not given, then the
-            slip vectors are taken as Cartesian vectors.
-        transform : array-like object, optional
-            A transformation tensor to apply to the a1vect and a2vect slip
-            vectors.  This is needed if system is oriented differently than
-            ucellbox, i.e. system is rotated.
-        cutboxvector : str, optional
-            Defines which of the three box vectors gets cut so that the slip
-            plane can be added.  'a' indicates the slip plane is parallel to
-            the yz-plane, 'b' the xz-plane and 'c' the xy-plane.  Note that 
-            the specified cutboxvector is the only box vector allowed to have a
-            component out of the slip plane.
-        faultposrel : float, optional
-            The position to place the slip plane within the system given as a
-            relative coordinate along the out-of-plane direction.  faultposrel
-            and faultposcart cannot both be given.  Default value is 0.5 if 
-            faultposcart is also not given.
-        faultposcart : float, optional
-            The position to place the slip plane within the system given as a
-            Cartesian coordinate along the out-of-plane direction.  faultposrel
-            and faultposcart cannot both be given.
-        """
-        # Copy system for safe manipulation
-        system = deepcopy(system)
-        system.wrap()
-
-        # Check fault pos values
-        if faultposcart is None and faultposrel is None:
-            faultposrel = 0.5 
-        elif faultposcart is not None and faultposrel is not None:
-            raise ValueError('faultposrel and faultposcart cannot both be given')
-
-        # Set cutindex and faultarea based on cutboxvector
-        if cutboxvector == 'a':
-            if system.box.bvect[0] != 0.0 or system.box.cvect[0] != 0.0:
-                raise ValueError("box bvect and cvect cannot have x component for cutboxvector='a'")
-            cutindex = 0
-            faultarea = np.linalg.norm(np.cross(system.box.bvect, system.box.cvect))
+        # Set given a1vect_uvw and a2vect_uvw values
+        elif a1vect_uvw is not None and a2vect_uvw is not None:
+            self.a1vect_uvw = a1vect_uvw
+            self.a2vect_uvw = a2vect_uvw
         
-        elif cutboxvector == 'b':
-            if system.box.avect[1] != 0.0 or system.box.cvect[1] != 0.0:
-                raise ValueError("box avect and cvect cannot have y component for cutboxvector='b'")
-            cutindex = 1
-            faultarea = np.linalg.norm(np.cross(system.box.avect, system.box.cvect))
-
-        elif cutboxvector == 'c':
-            if system.box.avect[2] != 0.0 or system.box.bvect[2] != 0.0:
-                raise ValueError("box avect and bvect cannot have z component for cutboxvector='c'")
-            cutindex = 2
-            faultarea = np.linalg.norm(np.cross(system.box.avect, system.box.bvect))
-
-        else: 
-            raise ValueError('Invalid cutboxvector')
-
-        # Define out of plane unit vector 
-        ovect = np.zeros(3)
-        ovect[cutindex] = 1.0
-
-        # Set system's pbc
-        system.pbc = [True, True, True]
-        system.pbc[cutindex] = False
-
-        # Add vacuum to non-periodic direction
-        if vacuumwidth is not None:
-            if vacuumwidth < 0:
-                raise ValueError('vacuumwidth must be positive')
-            newvects = system.box.vects
-            newvects[cutindex, cutindex] += vacuumwidth
-            neworigin = system.box.origin - ovect * vacuumwidth / 2 
-            system.box_set(vects=newvects, origin=neworigin)
-
-        # Identify atoms above fault plane position
-        if faultposcart is None:
-            faultposcart = system.box.origin[cutindex] + system.box.vects[cutindex, cutindex] * faultposrel            
-        abovefault = system.atoms.pos[:, cutindex] > (faultposcart)
-
-        # Set default a1vect or a2vect if needed
-        if a1vect is None and a2vect is None:
-            raise ValueError('At least one of a1vect and a2vect must be given')
-        elif a1vect is None:
-            a1vect = np.zeros(3)
-        elif a2vect is None:
-            a2vect = np.zeros(3)
-
-        # Convert crystal vects to Cartesian
-        if ucellbox is not None:
-            a1vectcart = miller.vector_crystal_to_cartesian(a1vect, ucellbox)
-            a2vectcart = miller.vector_crystal_to_cartesian(a2vect, ucellbox)
         else:
-            a1vectcart = a1vect
-            a2vectcart = a2vect
+            raise ValueError('a1vect_uvw and a2vect_uvw either both need to be given or not given')
+    
+    @property
+    def a1vect_uvw(self):
+        """numpy.ndarray : One of the two conventional lattice shift vectors in Miller or Miller-Bravais indices."""
+        return self.__a1vect_uvw
+    
+    @property
+    def a2vect_uvw(self):
+        """numpy.ndarray : One of the two conventional lattice shift vectors in Miller or Miller-Bravais indices."""
+        return self.__a2vect_uvw
+    
+    @a1vect_uvw.setter
+    def a1vect_uvw(self, value):
         
-        # Transform vects to match system
-        if transform is not None:
-            transform = axes_check(transform)
-            a1vectcart = transform.dot(a1vectcart)
-            a2vectcart = transform.dot(a2vectcart)
+        value = np.asarray(value)
 
-        # Check shift vectors values
-        if not np.isclose(a1vectcart[cutindex], 0.0):
-            raise ValueError('a1vect not in slip plane')
-        if not np.isclose(a2vectcart[cutindex], 0.0):
-            raise ValueError('a2vect not in slip plane')
-        if not np.allclose(a1vectcart, np.zeros(3)) and not np.allclose(a2vectcart, np.zeros(3)):
-            angle = vect_angle(a1vectcart, a2vectcart)
-            if np.isclose(angle, 0.0) or np.isclose(angle, 180.0):
-                raise ValueError('a1vect and a2vect cannot be parallel')
-    
-        # Save properties
-        self.__system = system
-        self.__a1vect = a1vect
-        self.__a2vect = a2vect
-        self.__a1vectcart = a1vectcart
-        self.__a2vectcart = a2vectcart
-        self.__cutboxvector = cutboxvector
-        self.__cutindex = cutindex
-        self.__faultposcart = faultposcart
-        self.__abovefault = abovefault
-        self.__faultarea = faultarea
-        self.__ucellbox = ucellbox
-        self.__transform = transform
+        # Check shape and convert [uvtw] to [uvw] if needed
+        if value.shape == (4,):
+            uvw = miller.vector4to3(value)
+        elif value.shape == (3,):
+            uvw = value
+            if self.hkl.shape == (4,):
+                value = miller.vector3to4(value)
+        else:
+            raise ValueError('Invalid uvw shape: must have 3 or 4 values.')
+
+        # Convert to primitive cell
+        uvw = miller.vector_conventional_to_primitive(uvw, self.conventional_setting)
+
+        # Convert to Cartesian wrt rotated system
+        cart = self.transform.dot(miller.vector_crystal_to_cartesian(uvw, self.ucell.box))
+
+        # Check that Cartesian vector is in slip plane
+        if not np.isclose(cart[self.cutindex], 0.0):
+            raise ValueError(f'shift vector {value} not in fault plane {self.hkl}')
+
+        # Save uvw and cart
+        self.__a1vect_uvw = value
+        self.__a1vect_cart = cart
+
+    @a2vect_uvw.setter
+    def a2vect_uvw(self, value):
+        
+        value = np.asarray(value)
+
+        # Check shape and convert [uvtw] to [uvw] if needed
+        if value.shape == (4,):
+            uvw = miller.vector4to3(value)
+        elif value.shape == (3,):
+            uvw = value
+            if self.hkl.shape == (4,):
+                value = miller.vector3to4(value)
+        else:
+            raise ValueError('Invalid uvw shape: must have 3 or 4 values.')
+
+        # Convert to primitive cell
+        uvw = miller.vector_conventional_to_primitive(uvw, self.conventional_setting)
+
+        # Convert to Cartesian wrt rotated system
+        cart = self.transform.dot(miller.vector_crystal_to_cartesian(uvw, self.ucell.box))
+
+        # Check that Cartesian vector is in slip plane
+        if not np.isclose(cart[self.cutindex], 0.0):
+            raise ValueError(f'shift vector {value} not in fault plane {self.hkl}')
+
+        # Save uvw and cart
+        self.__a2vect_uvw = value
+        self.__a2vect_cart = cart
 
     @property
-    def system(self):
-        """atomman.System : The unshifted configuration."""
-        return self.__system
-
-    @property
-    def a1vect(self):
-        """numpy.ndarray : One of the two shift vectors as given."""
-        return self.__a1vect
-
-    @property
-    def a2vect(self):
-        """numpy.ndarray : One of the two shift vectors as given."""
-        return self.__a2vect
-
-    @property
-    def a1vectcart(self):
+    def a1vect_cart(self):
         """numpy.ndarray : One of the two shift vectors in Cartesian relative to system."""
-        return self.__a1vectcart
+        return self.__a1vect_cart
     
     @property
-    def a2vectcart(self):
+    def a2vect_cart(self):
         """numpy.ndarray : One of the two shift vectors in Cartesian relative to system."""
-        return self.__a2vectcart
-
+        return self.__a2vect_cart
+    
     @property
-    def cutboxvector(self):
-        """str : The box vector that is cut to add vacuum and slip plane."""
-        return self.__cutboxvector
-
-    @property
-    def cutindex(self):
-        """int : The Cartesian index for the cut direction."""
-        return self.__cutindex
-
-    @property
-    def faultposcart(self):
+    def faultpos_cart(self):
         """float : The Cartesian position of the slip plane."""
-        return self.__faultposcart
-
+        try:
+            return self.__faultpos_cart
+        except:
+            raise AttributeError('system not yet built. Use build_system() or surface().')
+        
+    @property
+    def faultpos_rel(self):
+        """float : The fractional position of the slip plane."""
+        try:
+            return self.__faultpos_rel
+        except:
+            raise AttributeError('system not yet built. Use build_system() or surface().')
+        
     @property
     def abovefault(self):
-        """list : Indices of all atoms in System above the slip plane."""
-        return self.__abovefault
-    
-    @property
-    def faultarea(self):
-        """float : The area of the slip plane."""
-        return self.__faultarea
+        """list : Indices of all atoms in system above the slip plane."""
+        try:
+            return self.__abovefault
+        except:
+            raise AttributeError('system not yet built. Use build_system() or surface().')
+        
+    @faultpos_cart.setter
+    def faultpos_cart(self, value):
 
-    @property
-    def ucellbox(self):
-        """atomman.Box or None : The supplied reference cell box."""
-        return self.__ucellbox
+        # faultpos_rel = (faultpos_cart - origin) / width (for origin, width || cutindex)
+        faultpos_rel = ((value - self.system.box.origin[self.cutindex])
+                       / self.system.box.vects[self.cutindex, self.cutindex])
+        if faultpos_rel < 0.0 or faultpos_rel > 1.0:
+            raise ValueError('faultpos is outside system')
+        
+        self.__faultpos_rel = faultpos_rel
+        self.__faultpos_cart = value
+        
+        # Identify atoms above fault plane position
+        self.__abovefault = self.system.atoms.pos[:, self.cutindex] > (self.faultpos_cart)
 
-    @property
-    def transform(self):
-        """numpy.ndarray or None : The supplied transformation matrix."""
-        return self.__transform
+    @faultpos_rel.setter
+    def faultpos_rel(self, value):
+        
+        if value < 0.0 or value > 1.0:
+            raise ValueError('faultpos is outside system')
+        
+        self.__faultpos_rel = value
+
+        # faultpos_cart = origin + faultpos_rel * width (for origin, width || cutindex) 
+        self.__faultpos_cart = (self.system.box.origin[self.cutindex] 
+                              + self.faultpos_rel 
+                              * self.system.box.vects[self.cutindex, self.cutindex])
+        
+        # Identify atoms above fault plane position
+        self.__abovefault = self.system.atoms.pos[:, self.cutindex] > (self.faultpos_cart)
+
+    def surface(self, shift=None, vacuumwidth=None, minwidth=None, sizemults=None,
+                even=False, faultpos_rel=None, faultpos_cart=None):
+        """
+        Generates the free surface atomic system, which is used as the basis for generating
+        the stacking fault configuration(s).
+        
+        Parameters
+        ----------
+        shift : array-like object, optional
+            Applies a shift to all atoms. Different values allow for free surfaces with
+            different termination planes to be selected.
+        vacuumwidth : float, optional
+            If given, the free surface is created by modifying the system's box to insert
+            a region of vacuum with this width. This is typically used for DFT calculations
+            where it is computationally preferable to insert a vacuum region and keep all
+            dimensions periodic.
+        sizemults : list or tuple, optional
+            The three System.supersize multipliers [a_mult, b_mult, c_mult] to use on the
+            rotated cell to build the final system. Note that the cutboxvector sizemult
+            must be an integer and not a tuple.  Default value is [1, 1, 1].
+        minwidth : float, optional
+            If given, the sizemult along the cutboxvector will be selected such that the
+            width of the resulting final system in that direction will be at least this
+            value. If both sizemults and minwidth are given, then the larger of the two
+            in the cutboxvector direction will be used. 
+        even : bool, optional
+            A True value means that the sizemult for cutboxvector will be made an even
+            number by adding 1 if it is odd.  Default value is False.
+        faultpos_rel : float, optional
+            The position to place the slip plane within the system given as a
+            relative coordinate along the out-of-plane direction.  faultpos_rel
+            and faultpos_cart cannot both be given.  Default value is 0.5 if 
+            faultpos_cart is also not given.
+        faultpos_cart : float, optional
+            The position to place the slip plane within the system given as a
+            Cartesian coordinate along the out-of-plane direction.  faultpos_rel
+            and faultpos_cart cannot both be given.
+        """
+        
+        super().surface(shift=shift, vacuumwidth=vacuumwidth, minwidth=minwidth,
+                             sizemults=sizemults, even=even)
+        
+        # Set Cartesian fault position
+        if faultpos_cart is not None:
+            if faultpos_rel is not None:
+                raise ValueError('faultpos_rel and faultpos_cart cannot both be given')
+            self.faultpos_cart = faultpos_cart
+        
+        # Set relative fault position
+        elif faultpos_rel is not None:
+            self.faultpos_rel = faultpos_rel
+        
+        # Set default fault position
+        else:
+            self.faultpos_rel = 0.5
+
+        return self.system
     
-    def fault(self, a1=None, a2=None, outofplane=None, faultshift=None, minimum_r=None):
+    def fault(self, a1=None, a2=None, outofplane=None, faultshift=None,
+              minimum_r=None, a1vect_uvw=None, a2vect_uvw=None,
+              faultpos_cart=None, faultpos_rel=None):
         """
         Generates a fault configuration by displacing all atoms above the slip
         plane.
@@ -302,12 +291,42 @@ class StackingFault(object):
             plane.  If any sets of atoms are closer than this value then the
             outofplane shift is increased.  Default value is None, which
             performs no adjustment.
+        a1vect_uvw : array-like object, optional
+            The crystal vector to use for one of the two shifting vectors.
+            Included here for those wishing to override the values set during
+            class initialization.
+        a2vect_uvw : array-like object, optional
+            The crystal vector to use for one of the two shifting vectors.
+            Included here for those wishing to override the values set during
+            class initialization.
+        faultpos_rel : float, optional
+            The position to place the slip plane within the system given as a
+            relative coordinate along the out-of-plane direction.  Included
+            here for those wishing to override the value set when surface()
+            was called.  faultpos_rel and faultpos_cart cannot both be given.
+        faultpos_cart : float, optional
+            The position to place the slip plane within the system given as a
+            Cartesian coordinate along the out-of-plane direction.  Included
+            here for those wishing to override the value set when surface()
+            was called.  faultpos_rel and faultpos_cart cannot both be given.
 
         Returns
         -------
         atomman.System
             The atomic configuration with stacking fault shift
         """
+        # Update uvws and faultpos if given
+        if a1vect_uvw is not None:
+            self.a1vect_uvw = a1vect_uvw
+        if a2vect_uvw is not None:
+            self.a2vect_uvw = a2vect_uvw
+        if faultpos_cart is not None:
+            if faultpos_rel is not None:
+                raise ValueError('faultpos_rel and faultpos_cart cannot both be given')
+            self.faultpos_cart = faultpos_cart
+        elif faultpos_rel is not None:
+            self.faultpos_rel = faultpos_rel
+
         # Define out of plane unit vector 
         ovect = np.zeros(3)
         ovect[self.cutindex] = 1.0
@@ -328,7 +347,7 @@ class StackingFault(object):
                 a2 = 0.0
             if outofplane is None:
                 outofplane = 0.0
-            faultshift = a1 * self.a1vectcart + a2 * self.a2vectcart + outofplane * ovect
+            faultshift = a1 * self.a1vect_cart + a2 * self.a2vect_cart + outofplane * ovect
         
         # Set default faultshift
         elif faultshift is None:
@@ -343,9 +362,9 @@ class StackingFault(object):
         if minimum_r is not None:
             # Get all atoms within minimum_r of fault position
             top_pos = sfsystem.atoms.pos[self.abovefault]
-            top_pos = top_pos[top_pos[:, self.cutindex] <= self.faultposcart + minimum_r] 
-            bot_pos = sfsystem.atoms.pos[~self.abovefault]
-            bot_pos = bot_pos[bot_pos[:, self.cutindex] >= self.faultposcart - minimum_r]
+            top_pos = top_pos[top_pos[:, self.cutindex] <= self.faultpos_cart + minimum_r] 
+            bot_pos = sfsystem.atoms.pos[~self.abovefault] # 
+            bot_pos = bot_pos[bot_pos[:, self.cutindex] >= self.faultpos_cart - minimum_r]
             if top_pos.shape[0] > 0 and bot_pos.shape[0] > 0:
                 dmag_min = minimum_r
                 dvect_min = None
@@ -370,7 +389,9 @@ class StackingFault(object):
         
         return sfsystem
     
-    def iterfaultmap(self, num_a1=None, num_a2=None, outofplane=None, minimum_r=None):
+    def iterfaultmap(self, num_a1=None, num_a2=None, outofplane=None,
+                     minimum_r=None, a1vect_uvw=None, a2vect_uvw=None,
+                     faultpos_cart=None, faultpos_rel=None):
         """
         Iterates over generalized stacking fault configurations associated
         with a 2D map of equally spaced a1, a2 coordinates.
@@ -391,6 +412,24 @@ class StackingFault(object):
             plane.  If any sets of atoms are closer than this value then the
             outofplane shift is increased.  Default value is None, which
             performs no adjustment.
+        a1vect_uvw : array-like object, optional
+            The crystal vector to use for one of the two shifting vectors.
+            Included here for those wishing to override the values set during
+            class initialization.
+        a2vect_uvw : array-like object, optional
+            The crystal vector to use for one of the two shifting vectors.
+            Included here for those wishing to override the values set during
+            class initialization.
+        faultpos_rel : float, optional
+            The position to place the slip plane within the system given as a
+            relative coordinate along the out-of-plane direction.  Included
+            here for those wishing to override the value set when surface()
+            was called.  faultpos_rel and faultpos_cart cannot both be given.
+        faultpos_cart : float, optional
+            The position to place the slip plane within the system given as a
+            Cartesian coordinate along the out-of-plane direction.  Included
+            here for those wishing to override the value set when surface()
+            was called.  faultpos_rel and faultpos_cart cannot both be given.
         
         Yields
         ------
@@ -401,6 +440,18 @@ class StackingFault(object):
         atomman.System
             The fault configuration associated with the a1, a2 shift.
         """
+        # Update uvws and faultpos if given
+        if a1vect_uvw is not None:
+            self.a1vect_uvw = a1vect_uvw
+        if a2vect_uvw is not None:
+            self.a2vect_uvw = a2vect_uvw
+        if faultpos_cart is not None:
+            if faultpos_rel is not None:
+                raise ValueError('faultpos_rel and faultpos_cart cannot both be given')
+            self.faultpos_cart = faultpos_cart
+        elif faultpos_rel is not None:
+            self.faultpos_rel = faultpos_rel
+
         if num_a1 is None:
             num_a1 = 1
         if num_a2 is None:
