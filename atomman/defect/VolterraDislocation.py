@@ -54,7 +54,7 @@ class VolterraDislocation(object):
             The n unit vector for the solution.  m, n, and u (dislocation
             line) should be right-hand orthogonal.  Default value is [0,1,0]
             (y-axis). n is normal to the dislocation slip plane.
-        tol : float
+        tol : float, optional
             Tolerance parameter used to round off near-zero values.  Default
             value is 1e-8.
         """
