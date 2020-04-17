@@ -202,7 +202,8 @@ class GammaSurface(object):
         # Set plane normal
         a1vect = np.dot(a1vect, box.vects)
         a2vect = np.dot(a2vect, box.vects)
-        self.__planenormal = np.cross(a1vect, a2vect)
+        planenormal = np.cross(a1vect, a2vect)
+        self.__planenormal = planenormal / np.linalg.norm(planenormal)
 
         # Set data
         data = OrderedDict()
