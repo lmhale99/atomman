@@ -1,7 +1,5 @@
 # coding: utf-8
 # Standard Python libraries
-import os
-from copy import deepcopy
 import warnings
 
 # http://www.numpy.org/
@@ -9,6 +7,8 @@ import numpy as np
 
 # https://www.scipy.org/
 from scipy.optimize import minimize
+
+import matplotlib.pyplot as plt
 
 # https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
@@ -24,60 +24,26 @@ class SDVPN(object):
     dislocation model.
     """
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, volterra=None, gamma=None, model=None, 
+                 tau=np.zeros((3,3)), alpha=0.0, beta=np.zeros((3,3)),
+                 cutofflongrange=None, fullstress=True, cdiffelastic=False,
+                 cdiffsurface=True, cdiffstress=False, min_method='Powell',
+                 min_options=None):
         """
-        Class initializer. Calls either load() or solve() based on the given
-        parameters.
+        Initializes an SDVPN object.
         
         Parameters
         ----------
-        *args : list 
-            Any unnamed arguments passed on to set().
-        *kwargs : dict 
-            Any named arguments to pass on.  If 'model' is in kwargs, then
-            model() is called.  Else, *args and **kwargs are saved as class
-            properties, and then solve() is called.
-        """
-        
-        # Load solution from existing model
-        if 'model' in kwargs:
-            gamma = kwargs.pop('gamma', None)
-            if len(kwargs) == 1 and len(args) == 0:
-                self.load(kwargs['model'], gamma=gamma)
-            else:
-                raise ValueError('model keyword cannot be given with calculation parameters')
-        
-        # Solve new problem
-        else:
-            # Set default parameters
-            self.__set(*args, **kwargs)
-            
-            # Call solve
-            self.solve()
-    
-    def __set(self, x, disregistry, gamma, axes, K_tensor, **kwargs):
-        """
-        Sets default values for class parameters.
-        
-        Parameters
-        ----------
-        x : numpy.ndarray
-            An array of shape (N) giving the x coordinates corresponding to
-            the disregistry solution.
-        disregistry : numpy.ndarray
-            A (N,3) array giving the initial disregistry vector guess at each
-            x coordinate.
-        gamma : atomman.defect.GammaSurface
-            The gamma surface (stacking fault map) to use for computing the
-            misfit energy.
-        axes : numpy.ndarray
-            A (3,3) array defining the crystal directions of the dislocation
-            system. Used to orient the disregistry vector to the gamma surface
-            in computing the misfit energy.
-        K_tensor : numpy.ndarray
-            A (3,3) array giving the anisotropic elastic energy coefficients
-            corresponding to the dislocation system's orientation.  Can be
-            computed with atomman.defect.Stroh.
+        volterra : atomman.defect.VolterraDislocation, optional
+            The elastic solution for a Volterra dislocation to use as the basis
+            of the model. Either volterra or model are required, and both cannot
+            be given at the same time.
+        gamma : atomman.defect.GammaSurface, optional
+            The gamma surface to use for the solution.  Required unless model
+            is given and the model content contains gamma surface data.
+        model : str or DataModelDict, optional
+            Saved data from previous SDVPN runs to load.  Either volterra or
+            model are required, and both cannot be given at the same time.
         tau : numpy.ndarray, optional
             A (3,3) array giving the stress tensor to apply to the system
             using the stress energy term.  Only the xy, yy, and yz components
@@ -91,10 +57,6 @@ class SDVPN(object):
         cutofflongrange : float, optional
             The cutoff distance to use for computing the long-range energy.
             Default value is 1000 angstroms.
-        burgers : numpy.ndarray, optional
-            The (3,) array of the dislocation's Burgers vector relative to the
-            dislocation system.  Used only by the long-range energy.  Default
-            value is all zeros (long-range energy will be excluded).
         fullstress : bool, optional
             Flag indicating which stress energy algorithm to use.  Default
             value is True.
@@ -119,35 +81,234 @@ class SDVPN(object):
             is {}.
         """
         
-        # Set mandatory parameters
-        self.__x = x
-        self.__disregistry = disregistry
-        self.__gamma = gamma
-        self.__axes = axes
-        self.__K_tensor = K_tensor
+        # Load solution from existing model
+        if model is not None:
+            if volterra is not None:
+                raise ValueError('model cannot be given with volterra')
+            
+            self.load(model, gamma=gamma)
         
-        # Set optional keyword parameters
-        self.__tau = kwargs.get('tau', np.zeros((3,3)))
-        self.__alpha = kwargs.get('alpha', [0.0])
-        if not isinstance(self.__alpha, list):
-            self.__alpha = [self.__alpha]
-        self.__beta = kwargs.get('beta', np.zeros((3,3)))
-        self.__cutofflongrange = kwargs.get('cutofflongrange',
-                                            uc.set_in_units(1000, 'angstrom'))
-        self.__burgers = kwargs.get('burgers', np.zeros(3))
-        self.__fullstress = kwargs.get('fullstress', True)
-        self.__cdiffelastic = kwargs.get('cdiffelastic', False)
-        self.__cdiffsurface = kwargs.get('cdiffsurface', True)
-        self.__cdiffstress = kwargs.get('cdiffstress', False)
-        self.__min_method = kwargs.get('min_method', 'Powell')
-        self.__min_options = kwargs.get('min_options', {})
+        # Extract parameters and check solution compatibility
+        elif volterra is not None:
+            
+            # Check that gamma is given
+            if gamma is None:
+                raise ValueError('gamma is required if volterra is given')
+            
+            # Check that burgers is in the slip plane
+            if not np.isclose(np.dot(volterra.n, volterra.burgers), 0.0):
+                raise ValueError('dislocation burgers vector must be in the slip plane')
+            
+            # Get m, n, ξ, K_tensor, burgers, and transform from volterra
+            m, n, ξ = volterra.m, volterra.n, volterra.ξ
+            K_tensor = volterra.K_tensor
+            burgers = volterra.burgers
+            transform = volterra.transform
+            
+            # Transform K_tensor, burgers and transform to [m,n,ξ] orientation
+            mnξ = np.array([m, n, ξ]) # This is transformation matrix to [m,n,ξ] setting
+            K_tensor = mnξ.dot(K_tensor.dot(mnξ.T))
+            burgers = mnξ.dot(burgers)
+            transform = np.matmul(mnξ, transform)
+            
+            # Check if dislocation system is compatible with gamma surface
+            planenormal = transform.dot(gamma.planenormal)
+            if not np.isclose(planenormal[0], 0.0) or not np.isclose(planenormal[2], 0.0):
+                raise ValueError('different slip planes for gamma and volterra found')
+
+            # Set basic solution definition
+            self.__K_tensor = K_tensor
+            self.__burgers = burgers
+            self.__transform = transform
+            self.__gamma = gamma
+
+            # Set options
+            self.tau = tau
+            self.alpha = alpha
+            self.beta = beta
+            if cutofflongrange is None:
+                self.cutofflongrange = uc.set_in_units(1000, 'angstrom')
+            else:
+                self.cutofflongrange = cutofflongrange
+            self.fullstress = fullstress
+            self.cdiffelastic = cdiffelastic
+            self.cdiffsurface = cdiffsurface
+            self.cdiffstress = cdiffstress
+            self.min_method = min_method
+            if min_options is None:
+                self.__min_options = {}
+            else:
+                self.__min_options = min_options
+
+        else:
+            raise ValueError('either dislsol or model must be given')
     
-    def solve(self, **kwargs):
+    @property
+    def x(self):
+        """numpy.ndarray : The x coordinates."""
+        try:
+            return self.__x
+        except:
+            raise AttributeError('x values not set yet')
+    
+    @x.setter
+    def x(self, value):
+        value = np.asarray(value, dtype=float)
+        assert value.ndim == 1
+        diff = value[1:] - value[:-1]
+        assert np.allclose(diff[0], diff), 'x values must be evenly spaced'
+        assert diff[0] > 0, 'x values must be in increasing order'
+        self.__x = value
+
+    @property
+    def disregistry(self):
+        """numpy.ndarray : The disregistry vector for each x coordinate."""
+        try:
+            return self.__disregistry
+        except:
+            raise AttributeError('disregistry values not set yet')
+
+    @disregistry.setter
+    def disregistry(self, value):
+        value = np.asarray(value)
+        assert value.ndim == 2 and value.shape[1] == 3, 'invalid disregistry dimensions'
+        assert np.allclose(value[:,1], 0.0), 'y (i.e. out-of-plane) component of disregistry not supported'
+        self.__disregistry = value
+
+    @property
+    def K_tensor(self):
+        """numpy.ndarray : Dislocation energy coefficient tensor."""
+        return self.__K_tensor
+
+    @property
+    def burgers(self):
+        """numpy.ndarray : Burgers vector."""
+        return self.__burgers
+        
+    @property
+    def transform(self):
+        """numpy.ndarray : Transformation matrix from standard crystal setting to dislocation solution setting."""
+        return self.__transform
+    
+    @property
+    def gamma(self):
+        """atomman.defect.GammaSurface : The stacking fault map."""
+        return self.__gamma
+    
+    @property
+    def tau(self):
+        """numpy.ndarray : The applied 3x3 stress tensor."""
+        return self.__tau
+
+    @tau.setter
+    def tau(self, value):
+        value = np.asarray(value, dtype=float)
+        assert value.shape == (3,3)
+        self.__tau = value
+    
+    @property
+    def alpha(self):
+        """tuple of float : Coefficients for nonlocal energy correction."""
+        return self.__alpha
+    
+    @alpha.setter
+    def alpha(self, value):
+        try:
+            self.__alpha = tuple(value)
+        except:
+            self.__alpha = (value,)
+
+    @property
+    def beta(self):
+        """numpy.ndarray : 3x3 coefficients for gradient energy correction."""
+        return self.__beta
+    
+    @beta.setter
+    def beta(self, value):
+        value = np.asarray(value, dtype=float)
+        assert value.shape == (3,3)
+        self.__beta = value
+
+    @property
+    def cutofflongrange(self):
+        """float : Cutoff distance for long-range elastic energy."""
+        return self.__cutofflongrange
+    
+    @cutofflongrange.setter
+    def cutofflongrange(self, value):
+        self.__cutofflongrange = float(value)
+
+    @property
+    def fullstress(self):
+        """bool : Flag indicating which stress algorithm was used."""
+        return self.__fullstress
+
+    @fullstress.setter
+    def fullstress(self, value):
+        assert isinstance(value, bool)
+        self.__fullstress = value
+    
+    @property
+    def cdiffelastic(self):
+        """bool : Flag indicating if elastic energy used central difference for computing the dislocation density."""
+        return self.__cdiffelastic
+    
+    @cdiffelastic.setter
+    def cdiffelastic(self, value):
+        assert isinstance(value, bool)
+        self.__cdiffelastic = value
+
+    @property
+    def cdiffsurface(self):
+        """bool : Flag indicating if surface energy used central difference for computing the dislocation density."""
+        return self.__cdiffsurface
+    
+    @cdiffsurface.setter
+    def cdiffsurface(self, value):
+        assert isinstance(value, bool)
+        self.__cdiffsurface = value
+
+    @property
+    def cdiffstress(self):
+        """bool : Flag indicating if stress energy used central difference for computing the dislocation density."""
+        return self.__cdiffstress
+    
+    @cdiffstress.setter
+    def cdiffstress(self, value):
+        assert isinstance(value, bool)
+        self.__cdiffstress = value
+
+    @property
+    def min_method(self):
+        """str : scipy.optimize.minimize method used."""
+        return self.__min_method
+    
+    @min_method.setter
+    def min_method(self, value):
+        self.__min_method = str(value)
+
+    @property
+    def min_options(self):
+        """dict : scipy.optimize.minimize options used."""
+        return self.__min_options
+        
+    @property
+    def res(self):
+        """OptimizeResult : scipy.optimize.minimize result."""
+        try:
+            return self.__res
+        except:
+            return None
+    
+    def solve(self, x=None, disregistry=None, tau=None, alpha=None, beta=None,
+              cutofflongrange=None, fullstress=None, cdiffelastic=None,
+              cdiffsurface=None, cdiffstress=None, min_method=None,
+              min_options=None):
         """
         Solves the semidiscrete variational Peierls-Nabarro dislocation
         disregistry through energy minimization using the set class
         properties.  All parameters are optional keyword arguments that
-        replace the class properties.
+        can be used to change any of the previous settings.
         
         Parameters
         ----------
@@ -157,17 +318,6 @@ class SDVPN(object):
         disregistry : numpy.ndarray, optional
             A (N,3) array giving the initial disregistry vector guess at each
             x coordinate.
-        gamma : atomman.defect.GammaSurface, optional
-            The gamma surface (stacking fault map) to use for computing the
-            misfit energy.
-        axes : numpy.ndarray, optional
-            A (3,3) array defining the crystal directions of the dislocation
-            system. Used to orient the disregistry vector to the gamma surface
-            in computing the misfit energy.
-        K_tensor : numpy.ndarray, optional
-            A (3,3) array giving the anisotropic elastic energy coefficients
-            corresponding to the dislocation system's orientation.  Can be
-            computed with atomman.defect.Stroh.
         tau : numpy.ndarray, optional
             A (3,3) array giving the stress tensor to apply to the system
             using the stress energy term.  Only the xy, yy, and yz components
@@ -179,9 +329,6 @@ class SDVPN(object):
             term.
         cutofflongrange : float, optional
             The cutoff distance to use for computing the long-range energy.
-        burgers : numpy.ndarray, optional
-            The (3,) array of the dislocation's Burgers vector relative to the
-            dislocation system.  Used only by the long-range energy.
         fullstress : bool, optional
             Flag indicating which stress energy algorithm to use.
         cdiffelastic : bool, optional
@@ -201,6 +348,36 @@ class SDVPN(object):
         min_options : dict, optional
             Any options to pass on to scipy.optimize.minimize.
         """
+
+        # Change attribute values if given
+        if x is not None:
+            self.x = x
+        if disregistry is not None:
+            self.disregistry = disregistry
+        if tau is not None:
+            self.tau = tau
+        if alpha is not None:
+            self.alpha = alpha
+        if beta is not None:
+            self.beta = beta
+        if cutofflongrange is not None:
+            self.cutofflongrange = cutofflongrange
+        if fullstress is not None:
+            self.fullstress = fullstress
+        if cdiffelastic is not None:
+            self.cdiffelastic = cdiffelastic
+        if cdiffsurface is not None:
+            self.cdiffsurface = cdiffsurface
+        if cdiffstress is not None:
+            self.cdiffstress = cdiffstress
+        if min_method is not None:
+            self.min_method = min_method
+        if min_options is not None:
+            self.min_options = min_options
+
+        # Check that x and disregistry exist and are of the same length
+        if len(self.x) != len(self.disregistry):
+            raise ValueError('x and disregistry are not of the same length')
         
         # Define subfunctions
         def decompose(d):
@@ -225,119 +402,13 @@ class SDVPN(object):
             disregistry = recompose(d13, first, last)
             return self.total_energy(disregistry=disregistry)
         
-        # Handle parameters
-        self.__x = kwargs.pop('x', self.__x)
-        self.__disregistry = kwargs.pop('disregistry', self.__disregistry)
-        self.__gamma = kwargs.pop('gamma', self.__gamma)
-        self.__axes = kwargs.pop('axes', self.__axes)
-        self.__K_tensor = kwargs.pop('K_tensor', self.__K_tensor)
-        self.__tau = kwargs.pop('tau', self.__tau)
-        self.__alpha = kwargs.pop('alpha', self.__alpha)
-        if not isinstance(self.__alpha, list):
-            self.__alpha = [self.__alpha]
-        self.__beta = kwargs.pop('beta', self.__beta)
-        self.__cutofflongrange = kwargs.pop('cutofflongrange', 
-                                            self.__cutofflongrange)
-        self.__burgers = kwargs.pop('burgers', self.__burgers)
-        self.__fullstress = kwargs.pop('fullstress', self.__fullstress)
-        self.__cdiffelastic = kwargs.pop('cdiffelastic', self.__cdiffelastic)
-        self.__cdiffsurface = kwargs.pop('cdiffsurface', self.__cdiffsurface)
-        self.__cdiffstress = kwargs.pop('cdiffstress', self.__cdiffstress)
-        self.__min_method = kwargs.pop('min_method', self.__min_method)
-        self.__min_options = kwargs.pop('min_options', self.__min_options)
-        
         # Solve disregistry
         d13, first, last = decompose(self.disregistry)
         res = minimize(min_func, d13, args=(first, last),
                        method=self.min_method, options=self.min_options)
-        self.__disregistry = recompose(res.x, first, last)
+        self.disregistry = recompose(res.x, first, last)
         
         self.__res = res
-    
-    @property
-    def x(self):
-        """numpy.ndarray : The x coordinates."""
-        return deepcopy(self.__x)
-    
-    @property
-    def disregistry(self):
-        """numpy.ndarray : The disregistry vector for each x coordinate."""
-        return deepcopy(self.__disregistry)
-    
-    @property
-    def gamma(self):
-        """atomman.defect.GammaSurface : The stacking fault map."""
-        return deepcopy(self.__gamma)
-    
-    @property
-    def axes(self):
-        """numpy.ndarray : Axes for orienting the disregistry to gamma."""
-        return deepcopy(self.__axes)
-    
-    @property
-    def K_tensor(self):
-        """numpy.ndarray : Dislocation energy coefficient tensor for system."""
-        return deepcopy(self.__K_tensor)
-    
-    @property
-    def tau(self):
-        """numpy.ndarray : The applied stress state."""
-        return deepcopy(self.__tau)
-    
-    @property
-    def alpha(self):
-        """list of float : Coefficients for nonlocal energy correction."""
-        return deepcopy(self.__alpha)
-    
-    @property
-    def beta(self):
-        """numpy.ndarray : Coefficients for gradient energy correction."""
-        return deepcopy(self.__beta)
-    
-    @property
-    def cutofflongrange(self):
-        """float : Cutoff distance for long-range elastic energy."""
-        return self.__cutofflongrange
-    
-    @property
-    def burgers(self):
-        """numpy.ndarray : Full Burgers vector for long-range elastic energy."""
-        return deepcopy(self.__burgers)
-    
-    @property
-    def fullstress(self):
-        """bool : Flag indicating which stress algorithm was used."""
-        return self.__fullstress
-    
-    @property
-    def cdiffelastic(self):
-        """bool : Flag indicating if elastic energy used central difference for computing the dislocation density."""
-        return self.__cdiffelastic
-    
-    @property
-    def cdiffsurface(self):
-        """bool : Flag indicating if surface energy used central difference for computing the dislocation density."""
-        return self.__cdiffsurface
-    
-    @property
-    def cdiffstress(self):
-        """bool : Flag indicating if stress energy used central difference for computing the dislocation density."""
-        return self.__cdiffstress
-    
-    @property
-    def min_method(self):
-        """str : scipy.optimize.minimize method used."""
-        return self.__min_method
-    
-    @property
-    def min_options(self):
-        """dict : scipy.optimize.minimize options used."""
-        return self.__min_options
-        
-    @property
-    def res(self):
-        """OptimizeResult : scipy.optimize.minimize result."""
-        return self.__res
     
     def disldensity(self, x=None, disregistry=None, cdiff=False):
         """
@@ -366,30 +437,30 @@ class SDVPN(object):
         """
         # Default values are class properties
         if x is None:
-            x = self.__x
+            x = self.x
         if disregistry is None:
-            disregistry = self.__disregistry
+            disregistry = self.disregistry
         
         # Extract values
-        d = disregistry
+        δ = disregistry
         
         if cdiff is False:
             # ρ[i] = (δ[i] - δ[i-1]) / (x[i] - x[i-1])
-            rho = ((d[1:] - d[:-1]).T / (x[1:] - x[:-1])).T
+            ρ = ((δ[1:] - δ[:-1]).T / (x[1:] - x[:-1])).T
             
             # newx is all x except the first
             newx = x[1:]
         
         elif cdiff is True:
             # ρ[i] = (δ[i+1] - δ[i-1]) / (x[i+1] - x[i-1])
-            rho = ((d[2:] - d[:-2]).T / (x[2:] - x[:-2])).T
+            ρ = ((δ[2:] - δ[:-2]).T / (x[2:] - x[:-2])).T
             
             # newx is all x except the first and last
             newx = x[1:-1]
         else:
             raise TypeError('cdiff must be bool')
             
-        return (newx, rho)
+        return (newx, ρ)
     
     def misfit_energy(self, x=None, disregistry=None):
         """
@@ -413,23 +484,22 @@ class SDVPN(object):
         """
         # Default values are class properties
         if x is None:
-            x = self.__x
+            x = self.x
         if disregistry is None:
-            disregistry = self.__disregistry
+            disregistry = self.disregistry
         
         # Extract values
-        d = disregistry
-        dx = x[1] - x[0]
-        axes = self.__axes
-        gamma = self.__gamma
+        δ = disregistry
+        Δx = x[1] - x[0]
+        transform = self.transform
+        gamma = self.gamma
         
         # Strip out y-component of disregistry and transform for gamma
-        disreg = np.vstack([d[:,0], np.zeros(len(d)), d[:,2]]).T
-        T = axes_check(axes)
-        pos = np.inner(disreg, T.T)
+        disreg = np.vstack([δ[:,0], np.zeros(len(δ)), δ[:,2]]).T
+        pos = np.inner(disreg, transform.T)
         
         # Σ γ(δ)Δx
-        return dx * gamma.E_gsf(pos=pos).sum()
+        return Δx * gamma.E_gsf(pos=pos).sum()
     
     def elastic_energy(self, x=None, disregistry=None):
         r"""
@@ -456,16 +526,16 @@ class SDVPN(object):
             The elastic energy for the dislocation.
         """
         # Define subfunctions
-        def chi(i, j, dx):
+        def χ(i, j, Δx):
             """
             Computes the chi subfunction:
                 χ(i,j,Δx) = (3/2) Δx² + ψ(i-1,j-1,Δx) + ψ(i,j,Δx)
                                       - ψ(i,j-1,Δx) - ψ(j,i-1,Δx)
             """
-            return 3./2. * dx**2 + (psi(i-1, j-1, dx) + psi(i, j, dx)
-                                    - psi(i, j-1, dx) - psi(j, i-1, dx))
+            return 3./2. * Δx**2 + (ψ(i-1, j-1, Δx) + ψ(i, j, Δx)
+                                    - ψ(i, j-1, Δx) - ψ(j, i-1, Δx))
 
-        def psi(i, j, dx):
+        def ψ(i, j, Δx):
             """
             Computes the psi subfunction:
                 ψ(i,j,Δx) = (1/2) (i-j)² Δx² ln(|i-j|Δx)
@@ -475,7 +545,7 @@ class SDVPN(object):
                 warnings.simplefilter("ignore", category=RuntimeWarning)
                 
                 # ψ(i,j,Δx) = (1/2) (i-j)² Δx² ln(|i-j|Δx)
-                p = 0.5 * (i - j)**2 * dx**2 * np.log(np.abs(i - j) * dx)
+                p = 0.5 * (i - j)**2 * Δx**2 * np.log(np.abs(i - j) * Δx)
             
             # Replace NaN values with 0.0
             p[np.isnan(p)] = 0.0
@@ -484,25 +554,25 @@ class SDVPN(object):
         
         # Default values are class properties
         if x is None:
-            x = self.__x
+            x = self.x
         if disregistry is None:
-            disregistry = self.__disregistry
+            disregistry = self.disregistry
         
         # Extract values
-        d = disregistry
-        dx = x[1] - x[0]
+        δ = disregistry
+        Δx = x[1] - x[0]
         cdiff = self.cdiffelastic
-        Kij = self.__K_tensor
+        Kij = self.K_tensor
         
-        rho = self.disldensity(x=x, disregistry=d, cdiff=cdiff)[1]
-        j = np.arange(len(rho), dtype=int)
+        ρ = self.disldensity(x=x, disregistry=δ, cdiff=cdiff)[1]
+        j = np.arange(len(ρ), dtype=int)
         
         energy = 0.0
         
         # Compute elastic energy (looping over i, vectorization over j)
         # 1/(4π) Σ_i Σ_j χ(i,j,Δx) K_lm ρ_l[i] ρ_m[j]
         for i in j:
-            energy += np.sum(chi(i, j, dx) * np.inner(rho[i].dot(Kij), rho)) / (4 * np.pi)
+            energy += np.sum( χ(i, j, Δx) * np.inner(ρ[i].dot(Kij), ρ) ) / (4 * np.pi)
         
         return energy
     
@@ -520,9 +590,9 @@ class SDVPN(object):
             The long-range energy for the dislocation.
         """
         # Extract values
-        Kij = self.__K_tensor
-        b = self.__burgers
-        L = self.__cutofflongrange
+        Kij = self.K_tensor
+        b = self.burgers
+        L = self.cutofflongrange
         
         # Compute long-range energy
         # 1/(2π) K_lm b_l b_m ln(L)
@@ -554,25 +624,25 @@ class SDVPN(object):
         """
         # Default values are class properties
         if x is None:
-            x = self.__x
+            x = self.x
         if disregistry is None:
-            disregistry = self.__disregistry
+            disregistry = self.disregistry
         
         # Extract values
-        d = disregistry
-        dx = x[1] - x[0]
-        tau = self.__tau
+        δ = disregistry
+        Δx = x[1] - x[0]
+        τ = self.tau
         full = self.fullstress
         cdiff = self.cdiffstress
         
         if full is True:
-            rho = self.disldensity(x=x, disregistry=d, cdiff=cdiff)[1]
+            ρ = self.disldensity(x=x, disregistry=δ, cdiff=cdiff)[1]
             # -1/2 Σ_i (x[i]² - x[i-1]²) ρ_l τ_2l
-            return -0.5 * np.sum((x[1:]**2 - x[:-1]**2) * np.inner(rho, tau[1,:]))
+            return -0.5 * np.sum((x[1:]**2 - x[:-1]**2) * np.inner(ρ, τ[1,:]))
             
         else:
             # -1/2 Σ_i τ_2l (δ_l[i] + δ_l[i+1]) Δx
-            return -0.5 * np.sum(np.inner(tau[1,:], (d[:-1] + d[1:]) * dx))
+            return -0.5 * np.sum(np.inner(τ[1,:], (δ[:-1] + δ[1:]) * Δx))
     
     def surface_energy(self, x=None, disregistry=None):
         """
@@ -596,20 +666,20 @@ class SDVPN(object):
         """
         # Default values are class properties
         if x is None:
-            x = self.__x
+            x = self.x
         if disregistry is None:
-            disregistry = self.__disregistry
+            disregistry = self.disregistry
             
         # Extract values
-        d = disregistry
-        dx = x[1] - x[0]
-        beta = self.__beta
-        cdiff = self.__cdiffsurface
+        δ = disregistry
+        Δx = x[1] - x[0]
+        β = self.beta
+        cdiff = self.cdiffsurface
         
-        rho = self.disldensity(x=x, disregistry=d, cdiff=cdiff)[1]
+        ρ = self.disldensity(x=x, disregistry=δ, cdiff=cdiff)[1]
         
         # Σ_j β_lj / 4 Σ_i ρ_l[i]² Δx
-        return np.sum( np.inner(rho**2 * dx, beta) ) / 4
+        return np.sum( np.inner(ρ**2 * Δx, β) ) / 4
     
     def nonlocal_energy(self, x=None, disregistry=None):
         """
@@ -632,22 +702,22 @@ class SDVPN(object):
         """
         # Default values are class properties
         if x is None:
-            x = self.__x
+            x = self.x
         if disregistry is None:
-            disregistry = self.__disregistry
+            disregistry = self.disregistry
             
         # Extract values
-        d = disregistry
-        dx = x[1] - x[0]
-        alpha = self.__alpha
+        δ = disregistry
+        Δx = x[1] - x[0]
+        αs = self.alpha
         
         energy = 0.0
         
         # Σ_m α_m Σ_i δ[i] (δ[i] - (δ[i+m] + δ[i-m]) / 2) Δx
-        for num, a in enumerate(alpha):
+        for num, α in enumerate(αs):
             m = num + 1
-            dd = d[m:-m] - 0.5 * (d[2*m:] + d[:-2*m])
-            energy += a * np.sum(d[m:-m] * dd * dx)
+            dd = δ[m:-m] - 0.5 * (δ[2*m:] + δ[:-2*m])
+            energy += α * np.sum(δ[m:-m] * dd * Δx)
             
         return energy
     
@@ -672,9 +742,9 @@ class SDVPN(object):
         """
         # Default values are class properties
         if x is None:
-            x = self.__x
+            x = self.x
         if disregistry is None:
-            disregistry = self.__disregistry
+            disregistry = self.disregistry
             
         return (self.misfit_energy(x, disregistry)
                 + self.elastic_energy(x, disregistry)
@@ -683,6 +753,231 @@ class SDVPN(object):
                 + self.nonlocal_energy(x, disregistry)
                 + self.surface_energy(x, disregistry))
     
+    def check_energies(self, x=None, disregistry=None, 
+                       energyperlength_unit='eV/angstrom'):
+        """
+        Prints a summary string of all computed energy components.
+
+        Parameters
+        ----------
+        x : numpy.ndarray, optional
+            x-coordinates.  Default value is the stored x-coordinates.
+        disregistry : numpy.ndarray, optional
+            (N, 3) shaped array of disregistry vectors at each x-coordinate.
+            Default value is the stored disregistry values.
+        """
+        hasvals = True
+        # Default values are class properties
+        if x is None:
+            try:
+                x = self.x
+            except:
+                hasvals = False
+        if disregistry is None:
+            try:
+                disregistry = self.disregistry
+            except:
+                hasvals = False
+
+        if hasvals:
+            print(f'Dislocation energy terms in {energyperlength_unit}:')
+            print('Misfit energy =    ', uc.get_in_units(self.misfit_energy(x, disregistry), energyperlength_unit))
+            print('Elastic energy =   ', uc.get_in_units(self.elastic_energy(x, disregistry), energyperlength_unit))
+            print('Long-range energy =', uc.get_in_units(self.longrange_energy(), energyperlength_unit))
+            print('Stress energy =    ', uc.get_in_units(self.stress_energy(x, disregistry), energyperlength_unit))
+            print('Surface energy =   ', uc.get_in_units(self.surface_energy(x, disregistry), energyperlength_unit))
+            print('Nonlocal energy =  ', uc.get_in_units(self.nonlocal_energy(x, disregistry), energyperlength_unit))
+            print('Total energy =     ', uc.get_in_units(self.total_energy(x, disregistry), energyperlength_unit))
+        else:
+            print('x and disregistry must be set/given to check energies')
+    
+    def disregistry_plot(self, x=None, disregistry=None, figsize=None,
+                         length_unit='angstrom'):
+        """
+        Creates a simple matplotlib figure showing the disregistry profiles.
+
+        Parameters
+        ----------
+        x : numpy.ndarray, optional
+            x-coordinates.  Default value is the stored x-coordinates.
+        disregistry : numpy.ndarray, optional
+            (N, 3) shaped array of disregistry vectors at each x-coordinate.
+            Default value is the stored disregistry values.
+        figsize : tuple, optional
+            matplotlib figure figsize parameter.  Default value is (10, 6).
+
+        Returns
+        -------
+        matplotlib.pyplot.figure
+            The generated figure allowing users to perform additional
+            modifications.
+        """
+        hasvals = True
+        # Default values are class properties
+        if x is None:
+            try:
+                x = self.x
+            except:
+                hasvals = False
+        if disregistry is None:
+            try:
+                disregistry = self.disregistry
+            except:
+                hasvals = False
+        if hasvals:
+
+            if figsize is None:
+                figsize = (10, 6)
+
+            fig = plt.figure(figsize=figsize)
+            plt.plot(x, disregistry[:, 0], label='edge disregistry')
+            plt.plot(x, disregistry[:, 1], label='normal disregistry')
+            plt.plot(x, disregistry[:, 2], label='screw disregistry')
+            plt.legend(fontsize='xx-large')
+            plt.xlabel('x (Å)', size='xx-large')
+            plt.ylabel('disregistry (Å)', size='xx-large')
+            return fig
+
+        else:
+            print('x and disregistry must be set/given to plot')
+
+    def E_gsf_surface_plot(self, x=None, disregistry=None, fmt='ro-',
+                           normalize=False, smooth=True, 
+                           a1vect=None, a2vect=None, xvect=None,
+                           length_unit='angstrom', energyperarea_unit='eV/angstrom^2',
+                           numx=100, numy=100, figsize=None, **kwargs):
+        """
+        Extends the GammaSurface.E_gsf_surface_plot() method to plot the
+        disregistry path on top of it.
+        
+        Parameters
+        ----------
+        x : numpy.ndarray, optional
+            x-coordinates.  Default value is the stored x-coordinates. If x
+            or disregistry are not set/given, then the disregistry path will
+            not be added.
+        disregistry : numpy.ndarray, optional
+            (N, 3) shaped array of disregistry vectors at each x-coordinate.
+            Default value is the stored disregistry values.  If x
+            or disregistry are not set/given, then the disregistry path will
+            not be added.
+        fmt : str, optional
+            The matplotlib.pyplot.plot fmt parameter for the disregistry path
+            line, i.e. color, marker and line style options.  Default value is
+            'ro-': red with circle markers and solid line.
+        normalize : bool, optional
+            Flag indicating if axes are Cartesian (False, default) or
+            normalized by a1, a2 vectors (True).
+        smooth : bool, optional
+            If True (default), then plot shows smooth interpolated values.
+            If False, plot shows nearest raw data values.
+        a1vect : np.array, optional
+            Crystal vector for the a1 vector to use for plotting.  Default
+            value of None uses the saved a1vect.
+        a2vect : np.array, optional
+            Crystal vector for the a2 vector to use for plotting.  Default
+            value of None uses the saved a2vect.
+        xvect : numpy.array, optional
+            Crystal vector to align with the plotting x-axis for 
+            non-normalized plots.  If not given, this is taken as the Cartesian
+            of a1vect.
+        length_unit : str, optional
+            The unit of length to display non-normalized axes values in.
+            Default value is 'angstrom'.
+        energyperarea_unit : str, optional
+            The unit of energy per area to display the stacking fault energies
+            in. Default value is 'eV/angstrom^2'.
+        numx : int, optional
+            The number of plotting points to use along the x-axis.  Default
+            value is 100.
+        numy : int, optional
+            The number of plotting points to use along the y-axis.  Default
+            value is 100.       
+        figsize : tuple or None, optional
+            The figure's x,y dimensions.  If None (default), the values are
+            scaled such that the x,y spacings are approximately equal, and the
+            larger of the two values is set to 10.
+        **kwargs : dict, optional
+            Additional keywords are passed into the underlying 
+            matplotlib.pyplot.pcolormesh(). This allows control of such things
+            like the colormap (cmap).
+            
+        Returns
+        -------
+        matplotlib.figure
+        """
+
+        # Generate the surface plot
+        fig = self.gamma.E_gsf_surface_plot(normalize=normalize, smooth=smooth, 
+                                            a1vect=a1vect, a2vect=a2vect, xvect=xvect,
+                                            length_unit=length_unit, energyperarea_unit=energyperarea_unit,
+                                            numx=numx, numy=numy, figsize=figsize, **kwargs)
+        
+        hasvals = True
+        # Default values are class properties
+        if x is None:
+            try:
+                x = self.x
+            except:
+                hasvals = False
+        if disregistry is None:
+            try:
+                disregistry = self.disregistry
+            except:
+                hasvals = False
+        if hasvals:
+
+            # Get xvect direction
+            if xvect is None:
+                if a1vect is None:
+                    a1vect = self.gamma.a1vect
+                xvect = np.dot(a1vect, self.gamma.box.vects)
+
+            # Transform disregistry to gamma surface pos
+            pos = disregistry.dot(self.transform)
+            
+            # Transform to x, y plotting coordinates and plot
+            x, y = self.gamma.pos_to_xy(pos, xvect=xvect)
+            plt.plot(x, y, fmt)
+
+        return fig
+
+    def E_gsf_vs_x_plot(self, x=None, disregistry=None, figsize=None, 
+                        length_unit='angstrom', energyperarea_unit='eV/angstrom^2'):
+        """
+        Generates a plot of the stacking fault energy associated with the
+        disregistry values for each x coordinate.
+        """
+        hasvals = True
+        # Default values are class properties
+        if x is None:
+            try:
+                x = self.x
+            except:
+                hasvals = False
+        if disregistry is None:
+            try:
+                disregistry = self.disregistry
+            except:
+                hasvals = False
+        if hasvals:
+
+            if figsize is None:
+                figsize=(10,6)
+
+            gsf = self.gamma.E_gsf(pos=disregistry.dot(self.transform))
+            
+            fig = plt.figure(figsize=figsize)
+            plt.plot(uc.get_in_units(x, length_unit),
+                     uc.get_in_units(gsf, energyperarea_unit))
+            plt.xlabel(f'x-coordinate ({length_unit})', size='xx-large')
+            plt.ylabel(f'Stacking fault energy ({energyperarea_unit})', size='xx-large')
+            return fig
+        
+        else:
+            print('x and disregistry must be set/given to check stacking fault energies')
+
+
     def load(self, model, gamma=None):
         """
         Load solution from a data model.
@@ -700,22 +995,21 @@ class SDVPN(object):
             sdpn = DM(model).find('semidiscrete-variational-Peierls-Nabarro')
         except:
             sdpn = DM(model).find('semi-discrete-Peierls-Nabarro')
+        
         # Load calculation parameters
         params = sdpn['parameter']
-        self.__axes = uc.value_unit(params['axes'])
+        self.__transform = uc.value_unit(params.get('transform', params['axes']))
         self.__K_tensor = uc.value_unit(params['K_tensor'])
-        self.__tau = uc.value_unit(params['tau'])
-        self.__alpha = uc.value_unit(params['alpha'])
-        if not isinstance(self.__alpha, list):
-            self.__alpha = [self.__alpha]
-        self.__beta = uc.value_unit(params['beta'])
-        self.__cutofflongrange = uc.value_unit(params['cutofflongrange'])
         self.__burgers = uc.value_unit(params['burgers'])
-        self.__fullstress = params['fullstress']
-        self.__cdiffelastic = params['cdiffelastic']
-        self.__cdiffsurface = params['cdiffsurface']
-        self.__cdiffstress = params['cdiffstress']
-        self.__min_method = params['min_method']
+        self.tau = uc.value_unit(params['tau'])
+        self.alpha = uc.value_unit(params['alpha'])
+        self.beta = uc.value_unit(params['beta'])
+        self.cutofflongrange = uc.value_unit(params['cutofflongrange'])
+        self.fullstress = params['fullstress']
+        self.cdiffelastic = params['cdiffelastic']
+        self.cdiffsurface = params['cdiffsurface']
+        self.cdiffstress = params['cdiffstress']
+        self.min_method = params['min_method']
         self.__min_options = params['min_options']
         
         # Load gamma
@@ -730,8 +1024,8 @@ class SDVPN(object):
         
         # Load calculation solution
         solution = sdpn['solution']
-        self.__x = uc.value_unit(solution['x'])
-        self.__disregistry = uc.value_unit(solution['disregistry'])
+        self.x = uc.value_unit(solution['x'])
+        self.disregistry = uc.value_unit(solution['disregistry'])
     
     def model(self, length_unit='angstrom', energy_unit='eV',
               pressure_unit='GPa', include_gamma=False):
@@ -754,29 +1048,29 @@ class SDVPN(object):
         model['semidiscrete-variational-Peierls-Nabarro'] = sdpn = DM()
         
         sdpn['parameter'] = params = DM()
-        params['axes'] = uc.model(self.__axes, None)
-        params['K_tensor'] = uc.model(self.__K_tensor, pressure_unit)
-        params['tau'] = uc.model(self.__tau, pressure_unit)
-        params['alpha'] = uc.model(self.__alpha, pressure_unit+'/'+length_unit)
+        params['transform'] = uc.model(self.transform, None)
+        params['K_tensor'] = uc.model(self.K_tensor, pressure_unit)
+        params['tau'] = uc.model(self.tau, pressure_unit)
+        params['alpha'] = uc.model(self.alpha, pressure_unit+'/'+length_unit)
         
-        params['beta'] = uc.model(self.__beta, pressure_unit+'*'+length_unit)
+        params['beta'] = uc.model(self.beta, pressure_unit+'*'+length_unit)
         params['cdiffelastic'] = self.cdiffelastic
         params['cdiffsurface'] = self.cdiffsurface
         params['cdiffstress'] = self.cdiffstress
-        params['cutofflongrange'] = uc.model(self.__cutofflongrange, length_unit)
-        params['burgers'] = uc.model(self.__burgers, length_unit)
+        params['cutofflongrange'] = uc.model(self.cutofflongrange, length_unit)
+        params['burgers'] = uc.model(self.burgers, length_unit)
         params['fullstress'] = self.fullstress
         params['min_method'] = self.min_method
         params['min_options'] = self.min_options
         
         if include_gamma is True:
-            sdpn['generalized-stacking-fault'] = self.__gamma.model(
+            sdpn['generalized-stacking-fault'] = self.gamma.model(
                                                   length_unit=length_unit,
                                                   energy_unit=energy_unit,
                                                   pressure_unit=pressure_unit)
         
         sdpn['solution'] = solution = DM()
-        solution['x'] = uc.model(self.__x, length_unit)
-        solution['disregistry'] = uc.model(self.__disregistry, length_unit)
+        solution['x'] = uc.model(self.x, length_unit)
+        solution['disregistry'] = uc.model(self.disregistry, length_unit)
         
         return model
