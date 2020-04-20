@@ -1,6 +1,62 @@
 Updates
 =======
 
+Version 1.3.2
+-------------
+
+- **System.r0** added which finds the shortest interatomic spacing.
+
+- **System.rotate** made more robust.
+
+- **atomman.tools.miller.plane_crystal_to_cartesian** added that identifies
+  the Cartesian normal associated with a crystallographic plane.
+
+- **atomman.lammps.Potential** made consistent with
+  potentials.LAMMPSPotential.  Version 1.4 of atomman will have potentials
+  as a requirement eliminating the duplication: (this class will simply be
+  a renaming of the class from potentials).
+
+- **atomman.lammps.LammpsError** error type added.
+
+- **atomman.defect.dislocation_system_basis** and 
+  **atomman.defect.dislocation_system_transform** functions added supporting
+  the identification of dislocation system orientations based on
+  material-specific parameters.  
+  
+- The "n" parameter in **atomman.defect.free_surface_basis** was renamed to
+  maxindex consistency with the new dislocation_system functions.
+
+- **atomman.defect.VolterraDislocation**, **atomman.defect.Stroh**,
+  **atomman.defect.IsotropicVolterraDislocation**, and
+  **atomman.defect.solve_volterra_dislocation** were updated by integrating in
+  the dislocation_system functions. This makes it possible to now easily define
+  dislocaiton solutions based on the slip plane, line direction and Burgers
+  vector alone.
+  
+- **atomman.defect.dislocation_periodic_array** was updated to add an old_id
+  parameter to the returned dislocation system making it easier to map the atoms
+  in the defect system back to the perfect crystal base system used during
+  construction.
+  
+- **atomman.defect.FreeSurface** class for generating free surface
+  configurations from a unit cell and (hkl) plane was added.
+
+- **atomman.defect.StackingFault** class completely rebuilt as a subclass of
+  FreeSurface to make it easier to use, i.e. systems can be generated directly
+  from unit cell, (hkl) and shift values.
+
+- **atomman.defect.DifferentialDisplacement** class created. This class offers
+  more ploting options than the old differential_displacement function while
+  dividing the calculation and plotting into separate steps to make it easier
+  to work with.
+
+- **atomman.defect.SDVPN** class updated to allow for VolterraDislocation
+  objects to be directly used as input parameters.  This makes it easier to
+  work with as the transformations between dislocation orientations and gamma
+  surface orientations can be automatically identified and handled.
+  Additionally, solution summary and plotting tools incorporated into the
+  class for convenience.
+
 Version 1.3.1
 -------------
 
