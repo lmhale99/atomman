@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>region &#8212; atomman 1.3.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>region &#8212; atomman 1.3.2 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -14,6 +12,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="atomman.tools.html" title="tools"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" accesskey="U">atomman package</a> &#187;</li> 
       </ul>
     </div>  
@@ -52,306 +51,255 @@
 <span id="functions-and-attributes"></span><h2>Functions and attributes<a class="headerlink" href="#module-atomman.region" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="atomman.region.Plane">
-<em class="property">class </em><code class="descclassname">atomman.region.</code><code class="descname">Plane</code><span class="sig-paren">(</span><em>normal</em>, <em>point</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Plane" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">atomman.region.</code><code class="sig-name descname">Plane</code><span class="sig-paren">(</span><em class="sig-param">normal</em>, <em class="sig-param">point</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Plane" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class representing a plane in space. Useful for making slices.</p>
 <dl class="method">
 <dt id="atomman.region.Plane.above">
-<code class="descname">above</code><span class="sig-paren">(</span><em>pos</em>, <em>inclusive=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Plane.above" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">above</code><span class="sig-paren">(</span><em class="sig-param">pos</em>, <em class="sig-param">inclusive=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Plane.above" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates if position(s) are above the plane.  Note that identifying
 points as above or below is dependent on the sign of the plane normal.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pos</strong> (<em>array-like object</em>) – Nx3 array of coordinates.</li>
-<li><strong>inclusive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if points in the plane are to be included.
-Default value is False.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> (<em>array-like object</em>) – Nx3 array of coordinates.</p></li>
+<li><p><strong>inclusive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if points in the plane are to be included.
+Default value is False.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">N array of bool values: True if above the plane</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.NDArray</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>N array of bool values: True if above the plane</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.region.Plane.below">
-<code class="descname">below</code><span class="sig-paren">(</span><em>pos</em>, <em>inclusive=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Plane.below" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">below</code><span class="sig-paren">(</span><em class="sig-param">pos</em>, <em class="sig-param">inclusive=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Plane.below" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates if position(s) are below the plane.  Note that identifying
 points as above or below is dependent on the sign of the plane normal.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pos</strong> (<em>array-like object</em>) – Nx3 array of coordinates.</li>
-<li><strong>inclusive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if points in the plane are to be included.
-Default value is True.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> (<em>array-like object</em>) – Nx3 array of coordinates.</p></li>
+<li><p><strong>inclusive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if points in the plane are to be included.
+Default value is True.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">N array of bool values: True if below the plane</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.NDArray</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>N array of bool values: True if below the plane</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.region.Plane.normal">
-<code class="descname">normal</code><a class="headerlink" href="#atomman.region.Plane.normal" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">normal</code><a class="headerlink" href="#atomman.region.Plane.normal" title="Permalink to this definition">¶</a></dt>
 <dd><p>3D normal unit vector of the plane.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.NDArray</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.region.Plane.point">
-<code class="descname">point</code><a class="headerlink" href="#atomman.region.Plane.point" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">point</code><a class="headerlink" href="#atomman.region.Plane.point" title="Permalink to this definition">¶</a></dt>
 <dd><p>a 3D vector position on the plane.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.NDArray</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="atomman.region.Sphere">
-<em class="property">class </em><code class="descclassname">atomman.region.</code><code class="descname">Sphere</code><span class="sig-paren">(</span><em>center</em>, <em>radius</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Sphere" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">atomman.region.</code><code class="sig-name descname">Sphere</code><span class="sig-paren">(</span><em class="sig-param">center</em>, <em class="sig-param">radius</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Sphere" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">atomman.region.Shape.Shape</span></code></p>
 <p>Class representing a sphere in space.</p>
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.region.Sphere.center">
-<code class="descname">center</code><a class="headerlink" href="#atomman.region.Sphere.center" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">center</code><a class="headerlink" href="#atomman.region.Sphere.center" title="Permalink to this definition">¶</a></dt>
 <dd><p>3D vector position of sphere’s center</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.NDArray</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.region.Sphere.inside">
-<code class="descname">inside</code><span class="sig-paren">(</span><em>pos</em>, <em>inclusive=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Sphere.inside" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">inside</code><span class="sig-paren">(</span><em class="sig-param">pos</em>, <em class="sig-param">inclusive=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Sphere.inside" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates if position(s) are inside the shape.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pos</strong> (<em>array-like object</em>) – Nx3 array of coordinates.</li>
-<li><strong>inclusive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if points on the shape’s boundaries are to be included.
-Default value is True.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> (<em>array-like object</em>) – Nx3 array of coordinates.</p></li>
+<li><p><strong>inclusive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if points on the shape’s boundaries are to be included.
+Default value is True.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">N array of bool values: True if inside shape</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.NDArray</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>N array of bool values: True if inside shape</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.region.Sphere.radius">
-<code class="descname">radius</code><a class="headerlink" href="#atomman.region.Sphere.radius" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">radius</code><a class="headerlink" href="#atomman.region.Sphere.radius" title="Permalink to this definition">¶</a></dt>
 <dd><p>the sphere’s radius</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="atomman.region.Cylinder">
-<em class="property">class </em><code class="descclassname">atomman.region.</code><code class="descname">Cylinder</code><span class="sig-paren">(</span><em>center1</em>, <em>center2</em>, <em>radius</em>, <em>endcaps=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Cylinder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">atomman.region.</code><code class="sig-name descname">Cylinder</code><span class="sig-paren">(</span><em class="sig-param">center1</em>, <em class="sig-param">center2</em>, <em class="sig-param">radius</em>, <em class="sig-param">endcaps=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Cylinder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">atomman.region.Shape.Shape</span></code></p>
 <p>Class representing a cylinder in space.</p>
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.region.Cylinder.axis">
-<code class="descname">axis</code><a class="headerlink" href="#atomman.region.Cylinder.axis" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">axis</code><a class="headerlink" href="#atomman.region.Cylinder.axis" title="Permalink to this definition">¶</a></dt>
 <dd><p>3D unit vector parallel to cylinder axis.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.NDArray</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.region.Cylinder.center1">
-<code class="descname">center1</code><a class="headerlink" href="#atomman.region.Cylinder.center1" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">center1</code><a class="headerlink" href="#atomman.region.Cylinder.center1" title="Permalink to this definition">¶</a></dt>
 <dd><p>3D vector position of one cylinder end</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.NDArray</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.region.Cylinder.center2">
-<code class="descname">center2</code><a class="headerlink" href="#atomman.region.Cylinder.center2" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">center2</code><a class="headerlink" href="#atomman.region.Cylinder.center2" title="Permalink to this definition">¶</a></dt>
 <dd><p>3D vector position of one cylinder end</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.NDArray</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.region.Cylinder.endcaps">
-<code class="descname">endcaps</code><a class="headerlink" href="#atomman.region.Cylinder.endcaps" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">endcaps</code><a class="headerlink" href="#atomman.region.Cylinder.endcaps" title="Permalink to this definition">¶</a></dt>
 <dd><p>indicates if the endcaps are included in inside/outside determination</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.region.Cylinder.inside">
-<code class="descname">inside</code><span class="sig-paren">(</span><em>pos</em>, <em>inclusive=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Cylinder.inside" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">inside</code><span class="sig-paren">(</span><em class="sig-param">pos</em>, <em class="sig-param">inclusive=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Cylinder.inside" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates if position(s) are inside the shape.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pos</strong> (<em>array-like object</em>) – Nx3 array of coordinates.</li>
-<li><strong>inclusive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if points on the shape’s boundaries are to be included.
-Default value is True.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> (<em>array-like object</em>) – Nx3 array of coordinates.</p></li>
+<li><p><strong>inclusive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if points on the shape’s boundaries are to be included.
+Default value is True.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">N array of bool values: True if inside shape</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.NDArray</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>N array of bool values: True if inside shape</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.region.Cylinder.radius">
-<code class="descname">radius</code><a class="headerlink" href="#atomman.region.Cylinder.radius" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">radius</code><a class="headerlink" href="#atomman.region.Cylinder.radius" title="Permalink to this definition">¶</a></dt>
 <dd><p>the cylinder’s radius</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="atomman.region.Shape">
-<em class="property">class </em><code class="descclassname">atomman.region.</code><code class="descname">Shape</code><a class="headerlink" href="#atomman.region.Shape" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">atomman.region.</code><code class="sig-name descname">Shape</code><a class="headerlink" href="#atomman.region.Shape" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Template class for defining geometric regions in space.</p>
 <dl class="method">
 <dt id="atomman.region.Shape.inside">
-<code class="descname">inside</code><span class="sig-paren">(</span><em>pos</em>, <em>inclusive=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Shape.inside" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">inside</code><span class="sig-paren">(</span><em class="sig-param">pos</em>, <em class="sig-param">inclusive=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Shape.inside" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates if position(s) are inside the shape.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pos</strong> (<em>array-like object</em>) – Nx3 array of coordinates.</li>
-<li><strong>inclusive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if points on the shape’s boundaries are to be included.
-Default value is True.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> (<em>array-like object</em>) – Nx3 array of coordinates.</p></li>
+<li><p><strong>inclusive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if points on the shape’s boundaries are to be included.
+Default value is True.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">N array of bool values: True if inside shape</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.NDArray</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>N array of bool values: True if inside shape</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.region.Shape.outside">
-<code class="descname">outside</code><span class="sig-paren">(</span><em>pos</em>, <em>inclusive=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Shape.outside" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">outside</code><span class="sig-paren">(</span><em class="sig-param">pos</em>, <em class="sig-param">inclusive=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.region.Shape.outside" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates if position(s) are inside the shape.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pos</strong> (<em>array-like object</em>) – Nx3 array of coordinates.</li>
-<li><strong>inclusive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if points on the shape’s boundaries are to be included.
-Default value is False.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> (<em>array-like object</em>) – Nx3 array of coordinates.</p></li>
+<li><p><strong>inclusive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if points on the shape’s boundaries are to be included.
+Default value is False.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">N array of bool values: True if outside shape</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.NDArray</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>N array of bool values: True if outside shape</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -398,12 +346,12 @@ Default value is False.</li>
         <li class="right" >
           <a href="atomman.tools.html" title="tools"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

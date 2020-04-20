@@ -205,9 +205,9 @@ class DifferentialDisplacement():
             The maximum differential displacement value allowed. Values will be
             kept between +-ddmax by wrapping values with larger absolute values
             around by adding/subtracting 2*ddmax. Typically, this is set to be
-            |b|/2, but can be defect-specific. For instance, fcc a/2<110>
+            \|b\|/2, but can be defect-specific. For instance, fcc a/2<110>
             dislocations and basal hcp dislocations are typically plotted with
-            ddmax=|b|/4.  If set to None, then no wrapping is done.
+            ddmax=\|b\|/4.  If set to None, then no wrapping is done.
         plotxaxis : str or array-like object, optional
             Indicates the Cartesian direction associated with the system's atomic
             coordinates to align with the plotting x-axis.  Values are either 3D

@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: ElasticConstants class &#8212; atomman 1.3.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Introduction to atomman: ElasticConstants class &#8212; atomman 1.3.2 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,6 +12,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="03._Basic_support_and_analysis_tools.html" title="Introduction to atomman: Basic support and analysis tools"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,16 +50,16 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput,
-div.nbinput div.prompt,
-div.nbinput div.input_area,
-div.nbinput div[class*=highlight],
-div.nbinput div[class*=highlight] pre,
-div.nboutput,
-div.nbinput div.prompt,
-div.nbinput div.output_area,
-div.nboutput div[class*=highlight],
-div.nboutput div[class*=highlight] pre {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
     background: none;
     border: none;
     padding: 0 0;
@@ -69,13 +68,13 @@ div.nboutput div[class*=highlight] pre {
 }
 
 /* avoid gaps between output lines */
-div.nboutput div[class*=highlight] pre {
+div.nboutput.container div[class*=highlight] pre {
     line-height: normal;
 }
 
 /* input/output containers */
-div.nbinput,
-div.nboutput {
+div.nbinput.container,
+div.nboutput.container {
     display: -webkit-flex;
     display: flex;
     align-items: flex-start;
@@ -83,92 +82,91 @@ div.nboutput {
     width: 100%;
 }
 @media (max-width: 540px) {
-    div.nbinput,
-    div.nboutput {
+    div.nbinput.container,
+    div.nboutput.container {
         flex-direction: column;
     }
 }
 
 /* input container */
-div.nbinput {
+div.nbinput.container {
     padding-top: 5px;
 }
 
 /* last container */
-div.nblast {
+div.nblast.container {
     padding-bottom: 5px;
 }
 
 /* input prompt */
-div.nbinput div.prompt pre {
+div.nbinput.container div.prompt pre {
     color: #307FC1;
 }
 
 /* output prompt */
-div.nboutput div.prompt pre {
+div.nboutput.container div.prompt pre {
     color: #BF5B3D;
 }
 
 /* all prompts */
-div.nbinput div.prompt,
-div.nboutput div.prompt {
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
     min-width: 7ex;
-    padding-top: 0.4em;
-    padding-right: 0.4em;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
     text-align: right;
     flex: 0;
 }
 @media (max-width: 540px) {
-    div.nbinput div.prompt,
-    div.nboutput div.prompt {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
         text-align: left;
         padding: 0.4em;
     }
-    div.nboutput div.prompt.empty {
+    div.nboutput.container div.prompt.empty {
         padding: 0;
     }
 }
 
 /* disable scrollbars on prompts */
-div.nbinput div.prompt pre,
-div.nboutput div.prompt pre {
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
     overflow: hidden;
 }
 
 /* input/output area */
-div.nbinput div.input_area,
-div.nboutput div.output_area {
-    padding: 0.4em;
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
     -webkit-flex: 1;
     flex: 1;
     overflow: auto;
 }
 @media (max-width: 540px) {
-    div.nbinput div.input_area,
-    div.nboutput div.output_area {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
         width: 100%;
     }
 }
 
 /* input area */
-div.nbinput div.input_area {
+div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
     background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
-div.nboutput div[class*=MathJax] {
+div.nboutput.container div[class*=MathJax] {
     text-align: left !important;
 }
 
 /* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput div.math p {
+div.nboutput.container div.math p {
     text-align: left;
 }
 
 /* standard error */
-div.nboutput div.output_area.stderr {
+div.nboutput.container div.output_area.stderr {
     background: #fdd;
 }
 
@@ -212,6 +210,27 @@ div.nboutput div.output_area.stderr {
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
 
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
 /* Some additional styling taken form the Jupyter notebook CSS */
 div.rendered_html table {
   border: none;
@@ -254,8 +273,8 @@ div.rendered_html tbody tr:hover {
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
 <p>The ElasticConstants class represents the elastic constants of a crystal. The class methods focus on:</p>
 <ul class="simple">
-<li>Allowing values to be set/retrieved in a number of different formats.</li>
-<li>Correctly handling transformations to other Cartesian orientations.</li>
+<li><p>Allowing values to be set/retrieved in a number of different formats.</p></li>
+<li><p>Correctly handling transformations to other Cartesian orientations.</p></li>
 </ul>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
@@ -287,8 +306,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.0
-Notebook executed on 2019-11-05
+atomman version = 1.3.2
+Notebook executed on 2020-04-15
 </pre></div></div>
 </div>
 </div>
@@ -296,11 +315,11 @@ Notebook executed on 2019-11-05
 <h2>2. Elastic constants representations<a class="headerlink" href="#2.-Elastic-constants-representations" title="Permalink to this headline">¶</a></h2>
 <p>The ElasticConstants object allows for various representations of the elastic constants to be retrieved:</p>
 <ul class="simple">
-<li><strong>Cij</strong> (6, 6) array of Voigt representation of elastic stiffness.</li>
-<li><strong>Sij</strong> (6, 6) array of Voigt representation of elastic compliance.</li>
-<li><strong>Cij9</strong> (9, 9) array representation of elastic stiffness.</li>
-<li><strong>Cijkl</strong> (3, 3, 3, 3) array representation of elastic stiffness.</li>
-<li><strong>Sijkl</strong> (3, 3, 3, 3) array representation of elastic compliance.</li>
+<li><p><strong>Cij</strong> (6, 6) array of Voigt representation of elastic stiffness.</p></li>
+<li><p><strong>Sij</strong> (6, 6) array of Voigt representation of elastic compliance.</p></li>
+<li><p><strong>Cij9</strong> (9, 9) array representation of elastic stiffness.</p></li>
+<li><p><strong>Cijkl</strong> (3, 3, 3, 3) array representation of elastic stiffness.</p></li>
+<li><p><strong>Sijkl</strong> (3, 3, 3, 3) array representation of elastic compliance.</p></li>
 </ul>
 <div class="section" id="2.1-Build-demonstration-(see-Section-#3-for-more-setting-options)">
 <h3>2.1 Build demonstration (see Section #3 for more setting options)<a class="headerlink" href="#2.1-Build-demonstration-(see-Section-#3-for-more-setting-options)" title="Permalink to this headline">¶</a></h3>
@@ -519,8 +538,8 @@ Sijkl (1/GPa) -&gt;
 <h3>3.1. Setting using attributes<a class="headerlink" href="#3.1.-Setting-using-attributes" title="Permalink to this headline">¶</a></h3>
 <p>The values of the elastic constants can be initialized or set using any of the above representations.</p>
 <ul class="simple">
-<li>During initialization, pass one of the following as the only parameter: Cij, Sij, Cij9, Cijkl, or Sijkl.</li>
-<li>For an already initialized object, set any of the representations directly.</li>
+<li><p>During initialization, pass one of the following as the only parameter: Cij, Sij, Cij9, Cijkl, or Sijkl.</p></li>
+<li><p>For an already initialized object, set any of the representations directly.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -581,84 +600,92 @@ True
 <h3>3.2. Setting using crystal-specific constants<a class="headerlink" href="#3.2.-Setting-using-crystal-specific-constants" title="Permalink to this headline">¶</a></h3>
 <p>Alternatively, the elastic constants can be defined by supplying a full set of unique constants for a given crystal structure in the standard reference frame. During initialization, the specific form is inferred from the given parameters. After initialization, the functions corresponding to a specific crystal family can be called.</p>
 <ul class="simple">
-<li><strong>isotropic</strong> (two of the following)<ul>
-<li><strong>C11</strong></li>
-<li><strong>C12</strong></li>
-<li><strong>C44</strong> (2*C44 = C11-C12)</li>
-<li><strong>M</strong> P-wave modulus (M = C11)</li>
-<li><strong>lambda</strong> Lame’s first parameter (lambda = C12)</li>
-<li><strong>mu</strong> Shear modulus (mu = C44)</li>
-<li><strong>E</strong> Young’s modulus</li>
-<li><strong>nu</strong> Poisson’s ratio</li>
-<li><strong>K</strong> Bulk modulus</li>
+<li><p><strong>isotropic</strong> (two of the following)</p>
+<ul>
+<li><p><strong>C11</strong></p></li>
+<li><p><strong>C12</strong></p></li>
+<li><p><strong>C44</strong> (2*C44 = C11-C12)</p></li>
+<li><p><strong>M</strong> P-wave modulus (M = C11)</p></li>
+<li><p><strong>lambda</strong> Lame’s first parameter (lambda = C12)</p></li>
+<li><p><strong>mu</strong> Shear modulus (mu = C44)</p></li>
+<li><p><strong>E</strong> Young’s modulus</p></li>
+<li><p><strong>nu</strong> Poisson’s ratio</p></li>
+<li><p><strong>K</strong> Bulk modulus</p></li>
 </ul>
 </li>
-<li><strong>cubic</strong><ul>
-<li><strong>C11</strong></li>
-<li><strong>C12</strong></li>
-<li><strong>C44</strong></li>
+<li><p><strong>cubic</strong></p>
+<ul>
+<li><p><strong>C11</strong></p></li>
+<li><p><strong>C12</strong></p></li>
+<li><p><strong>C44</strong></p></li>
 </ul>
 </li>
-<li><strong>hexagonal</strong> (five of the following)<ul>
-<li><strong>C11</strong></li>
-<li><strong>C12</strong></li>
-<li><strong>C13</strong></li>
-<li><strong>C33</strong></li>
-<li><strong>C44</strong></li>
-<li><strong>C66</strong> (2*C66 = C11-C12)</li>
+<li><p><strong>hexagonal</strong> (five of the following)</p>
+<ul>
+<li><p><strong>C11</strong></p></li>
+<li><p><strong>C12</strong></p></li>
+<li><p><strong>C13</strong></p></li>
+<li><p><strong>C33</strong></p></li>
+<li><p><strong>C44</strong></p></li>
+<li><p><strong>C66</strong> (2*C66 = C11-C12)</p></li>
 </ul>
 </li>
-<li><strong>tetragonal</strong><ul>
-<li><strong>C11</strong></li>
-<li><strong>C12</strong></li>
-<li><strong>C13</strong></li>
-<li><strong>C16</strong> optional (C16=0 for some space groups)</li>
-<li><strong>C33</strong></li>
-<li><strong>C44</strong></li>
-<li><strong>C66</strong></li>
+<li><p><strong>tetragonal</strong></p>
+<ul>
+<li><p><strong>C11</strong></p></li>
+<li><p><strong>C12</strong></p></li>
+<li><p><strong>C13</strong></p></li>
+<li><p><strong>C16</strong> optional (C16=0 for some space groups)</p></li>
+<li><p><strong>C33</strong></p></li>
+<li><p><strong>C44</strong></p></li>
+<li><p><strong>C66</strong></p></li>
 </ul>
 </li>
-<li><strong>rhombohedral</strong> (six or seven of the following)<ul>
-<li><strong>C11</strong></li>
-<li><strong>C12</strong></li>
-<li><strong>C13</strong></li>
-<li><strong>C14</strong></li>
-<li><strong>C15</strong> optional (C15=0 for some space groups)</li>
-<li><strong>C33</strong></li>
-<li><strong>C44</strong></li>
-<li><strong>C66</strong> (2*C66 = C11-C12)</li>
+<li><p><strong>rhombohedral</strong> (six or seven of the following)</p>
+<ul>
+<li><p><strong>C11</strong></p></li>
+<li><p><strong>C12</strong></p></li>
+<li><p><strong>C13</strong></p></li>
+<li><p><strong>C14</strong></p></li>
+<li><p><strong>C15</strong> optional (C15=0 for some space groups)</p></li>
+<li><p><strong>C33</strong></p></li>
+<li><p><strong>C44</strong></p></li>
+<li><p><strong>C66</strong> (2*C66 = C11-C12)</p></li>
 </ul>
 </li>
-<li><strong>orthorhombic</strong><ul>
-<li><strong>C11</strong></li>
-<li><strong>C12</strong></li>
-<li><strong>C13</strong></li>
-<li><strong>C22</strong></li>
-<li><strong>C23</strong></li>
-<li><strong>C33</strong></li>
-<li><strong>C44</strong></li>
-<li><strong>C55</strong></li>
-<li><strong>C66</strong></li>
+<li><p><strong>orthorhombic</strong></p>
+<ul>
+<li><p><strong>C11</strong></p></li>
+<li><p><strong>C12</strong></p></li>
+<li><p><strong>C13</strong></p></li>
+<li><p><strong>C22</strong></p></li>
+<li><p><strong>C23</strong></p></li>
+<li><p><strong>C33</strong></p></li>
+<li><p><strong>C44</strong></p></li>
+<li><p><strong>C55</strong></p></li>
+<li><p><strong>C66</strong></p></li>
 </ul>
 </li>
-<li><strong>monoclinic</strong><ul>
-<li><strong>C11</strong></li>
-<li><strong>C12</strong></li>
-<li><strong>C13</strong></li>
-<li><strong>C15</strong></li>
-<li><strong>C22</strong></li>
-<li><strong>C23</strong></li>
-<li><strong>C25</strong></li>
-<li><strong>C33</strong></li>
-<li><strong>C35</strong></li>
-<li><strong>C44</strong></li>
-<li><strong>C46</strong></li>
-<li><strong>C55</strong></li>
-<li><strong>C66</strong></li>
+<li><p><strong>monoclinic</strong></p>
+<ul>
+<li><p><strong>C11</strong></p></li>
+<li><p><strong>C12</strong></p></li>
+<li><p><strong>C13</strong></p></li>
+<li><p><strong>C15</strong></p></li>
+<li><p><strong>C22</strong></p></li>
+<li><p><strong>C23</strong></p></li>
+<li><p><strong>C25</strong></p></li>
+<li><p><strong>C33</strong></p></li>
+<li><p><strong>C35</strong></p></li>
+<li><p><strong>C44</strong></p></li>
+<li><p><strong>C46</strong></p></li>
+<li><p><strong>C55</strong></p></li>
+<li><p><strong>C66</strong></p></li>
 </ul>
 </li>
-<li><strong>triclinic</strong><ul>
-<li><strong>all 21 Cij where i &lt;= j</strong></li>
+<li><p><strong>triclinic</strong></p>
+<ul>
+<li><p><strong>all 21 Cij where i &lt;= j</strong></p></li>
 </ul>
 </li>
 </ul>
@@ -762,8 +789,8 @@ C11 - C12 (GPa) = 48.170000000000016
 <p>The transform() method is included for convenience allowing for the elastic constants to be transformed to a different set of axes.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>axes</strong> (3, 3) array giving three right-handed orthogonal vectors to use for transforming.</li>
-<li><strong>tol</strong> optional relative tolerance to use in identifying near-zero terms.</li>
+<li><p><strong>axes</strong> (3, 3) array giving three right-handed orthogonal vectors to use for transforming.</p></li>
+<li><p><strong>tol</strong> optional relative tolerance to use in identifying near-zero terms.</p></li>
 </ul>
 <p>Returns a new ElasticConstants object with constants transformed to the new axes.</p>
 <div class="nbinput docutils container">
@@ -823,17 +850,17 @@ After transforming, Cij (GPa) -&gt;
 <h3>5.1. ElasticConstants.bulk()<a class="headerlink" href="#5.1.-ElasticConstants.bulk()" title="Permalink to this headline">¶</a></h3>
 <p>Three style options of estimates are available:</p>
 <ul class="simple">
-<li><strong>‘Voigt’</strong> Voigt estimate.</li>
+<li><p><strong>‘Voigt’</strong> Voigt estimate.</p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[K_{Voigt} = \frac{ \left(C_{11} + C_{22} + C_{33} \right) + 2 \left(C_{12} + C_{13} + C_{23} \right) }{9}\]</div>
 <ul class="simple">
-<li><strong>‘Reuss’</strong> Reuss estimate.</li>
+<li><p><strong>‘Reuss’</strong> Reuss estimate.</p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[K_{Reuss} = \frac{1}{ \left( S_{11} + S_{22} + S_{33} \right) + 2 \left(S_{12} + S_{13} + S_{23} \right) }\]</div>
 <ul class="simple">
-<li><strong>‘Hill’</strong> Hill estimate (default).</li>
+<li><p><strong>‘Hill’</strong> Hill estimate (default).</p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[K_{Hill} = \frac{K_{Reuss} + K_{Voigt}}{2}\]</div>
@@ -863,19 +890,19 @@ Hill bulk modulus estimate =  141.99999999999994 GPa
 <h3>5.2. ElasticConstants.shear()<a class="headerlink" href="#5.2.-ElasticConstants.shear()" title="Permalink to this headline">¶</a></h3>
 <p>Three style options of estimates are available:</p>
 <ul class="simple">
-<li><strong>‘Voigt’</strong> Voigt estimate.</li>
+<li><p><strong>‘Voigt’</strong> Voigt estimate.</p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[\mu_{Voigt} = \frac{ \left( C_{11} + C_{22} + C_{33} \right) - \left( C_{12} + C_{23} + C_{13} \right) +
   3 \left( C_{44} + C_{55} + C_{66} \right) }{15}\]</div>
 <ul class="simple">
-<li><strong>‘Reuss’</strong> Reuss estimate.</li>
+<li><p><strong>‘Reuss’</strong> Reuss estimate.</p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[\mu_{Reuss} = \frac{15}{4 \left( S_{11} + S_{22} + S_{33} \right) - 4 \left( S_{12} + S_{23} + S_{13} \right) +
  3 \left( S_{44} + S_{55} + S_{66} \right)}\]</div>
 <ul class="simple">
-<li><strong>‘Hill’</strong> Hill estimate (default).</li>
+<li><p><strong>‘Hill’</strong> Hill estimate (default).</p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[\mu_{Hill} = \frac{\mu_{Reuss} + \mu_{Voigt}}{2}\]</div>
@@ -911,11 +938,11 @@ Hill shear modulus estimate =  51.47596549573894 GPa
 <p><strong>NOTE:</strong> no validation checks are made to evaluate whether such normalizations should be done! That is left up to you (compare values before and after normalization).</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>crystal_system</strong> (<em>str</em>) Indicates the crystal system representation to use when building a data model.</li>
+<li><p><strong>crystal_system</strong> (<em>str</em>) Indicates the crystal system representation to use when building a data model.</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li>(<em>atomman.ElasticConstants</em>) The elastic constants normalized according to the crystal system symmetries.</li>
+<li><p>(<em>atomman.ElasticConstants</em>) The elastic constants normalized according to the crystal system symmetries.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -947,20 +974,20 @@ Hill shear modulus estimate =  51.47596549573894 GPa
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 C_with_v:
-[[176.1964 124.9026 124.9005  -0.0042  -0.0021  -0.0009]
- [124.9026 176.1969 124.9005   0.0012  -0.0008   0.    ]
- [124.9005 124.9005 176.2048   0.0009   0.0034   0.0025]
- [ -0.0042   0.0012   0.0009  81.797   -0.0013  -0.0003]
- [ -0.0021  -0.0008   0.0034  -0.0013  81.7972  -0.002 ]
- [ -0.0009   0.       0.0025  -0.0003  -0.002   81.7952]]
+[[176.1993 124.9029 124.8995   0.002   -0.0024   0.003 ]
+ [124.9029 176.1981 124.9029  -0.0024   0.0033   0.0009]
+ [124.8995 124.9029 176.1967  -0.0001   0.0012   0.0025]
+ [  0.002   -0.0024  -0.0001  81.7983   0.0014  -0.0004]
+ [ -0.0024   0.0033   0.0012   0.0014  81.8004  -0.0014]
+ [  0.003    0.0009   0.0025  -0.0004  -0.0014  81.8008]]
 
 C_norm
-[[176.1994 124.9012 124.9012   0.       0.       0.    ]
- [124.9012 176.1994 124.9012   0.       0.       0.    ]
- [124.9012 124.9012 176.1994   0.       0.       0.    ]
- [  0.       0.       0.      81.7965   0.       0.    ]
- [  0.       0.       0.       0.      81.7965   0.    ]
- [  0.       0.       0.       0.       0.      81.7965]]
+[[176.198  124.9018 124.9018   0.       0.       0.    ]
+ [124.9018 176.198  124.9018   0.       0.       0.    ]
+ [124.9018 124.9018 176.198    0.       0.       0.    ]
+ [  0.       0.       0.      81.7998   0.       0.    ]
+ [  0.       0.       0.       0.      81.7998   0.    ]
+ [  0.       0.       0.       0.       0.      81.7998]]
 </pre></div></div>
 </div>
 </div>
@@ -969,13 +996,13 @@ C_norm
 <p>Checks if current elastic constants agree with values normalized to a specified crystal family (within tolerances).</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>crystal_system</strong> (<em>str</em>) Indicates the crystal system representation to use when building a data model.</li>
-<li><strong>atol</strong> (<em>float, optional</em>) Absolute tolerance to use. Default value is 1e-4.</li>
-<li><strong>rtol</strong> (<em>float, optional</em>) Relative tolerance to use. Default value is 1e-4.</li>
+<li><p><strong>crystal_system</strong> (<em>str</em>) Indicates the crystal system representation to use when building a data model.</p></li>
+<li><p><strong>atol</strong> (<em>float, optional</em>) Absolute tolerance to use. Default value is 1e-4.</p></li>
+<li><p><strong>rtol</strong> (<em>float, optional</em>) Relative tolerance to use. Default value is 1e-4.</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li>(<em>bool</em>) True if all Cij match within the tolerances, false otherwise.</li>
+<li><p>(<em>bool</em>) True if all Cij match within the tolerances, false otherwise.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
@@ -1014,13 +1041,13 @@ C_norm.is_normal(&#39;hexagonal&#39;) -&gt; False
 <p>The elastic constants can also be saved/retrieved as a JSON/XML data model. This is useful as it captures not only the elastic constant values but also the associated units.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>model</strong> (<em>DataModelDict, string, or file-like object, optional</em>) Data model containing exactly one ‘elastic-constants’ branch to read.</li>
-<li><strong>unit</strong> (<em>str, optional</em>) Units or pressure to save values in when building a data model. Default value is None (no conversion).</li>
-<li><strong>crystal_system</strong> (<em>str, optional</em>) Indicates the crystal system representation to use when building a data model. Default value is ‘triclinic’ (save all values in Cij).</li>
+<li><p><strong>model</strong> (<em>DataModelDict, string, or file-like object, optional</em>) Data model containing exactly one ‘elastic-constants’ branch to read.</p></li>
+<li><p><strong>unit</strong> (<em>str, optional</em>) Units or pressure to save values in when building a data model. Default value is None (no conversion).</p></li>
+<li><p><strong>crystal_system</strong> (<em>str, optional</em>) Indicates the crystal system representation to use when building a data model. Default value is ‘triclinic’ (save all values in Cij).</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li>(<em>DataModelDict</em>) If model is not given as a parameter.</li>
+<li><p>(<em>DataModelDict</em>) If model is not given as a parameter.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
@@ -1221,12 +1248,12 @@ C_norm.is_normal(&#39;hexagonal&#39;) -&gt; False
         <li class="right" >
           <a href="03._Basic_support_and_analysis_tools.html" title="Introduction to atomman: Basic support and analysis tools"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

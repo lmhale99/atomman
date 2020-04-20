@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Potential class &#8212; atomman 1.3.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Introduction to atomman: Potential class &#8212; atomman 1.3.2 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,6 +12,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="02._LAMMPS_functionality.html" title="Introduction to atomman: LAMMPS functionality"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,16 +50,16 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput,
-div.nbinput div.prompt,
-div.nbinput div.input_area,
-div.nbinput div[class*=highlight],
-div.nbinput div[class*=highlight] pre,
-div.nboutput,
-div.nbinput div.prompt,
-div.nbinput div.output_area,
-div.nboutput div[class*=highlight],
-div.nboutput div[class*=highlight] pre {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
     background: none;
     border: none;
     padding: 0 0;
@@ -69,13 +68,13 @@ div.nboutput div[class*=highlight] pre {
 }
 
 /* avoid gaps between output lines */
-div.nboutput div[class*=highlight] pre {
+div.nboutput.container div[class*=highlight] pre {
     line-height: normal;
 }
 
 /* input/output containers */
-div.nbinput,
-div.nboutput {
+div.nbinput.container,
+div.nboutput.container {
     display: -webkit-flex;
     display: flex;
     align-items: flex-start;
@@ -83,92 +82,91 @@ div.nboutput {
     width: 100%;
 }
 @media (max-width: 540px) {
-    div.nbinput,
-    div.nboutput {
+    div.nbinput.container,
+    div.nboutput.container {
         flex-direction: column;
     }
 }
 
 /* input container */
-div.nbinput {
+div.nbinput.container {
     padding-top: 5px;
 }
 
 /* last container */
-div.nblast {
+div.nblast.container {
     padding-bottom: 5px;
 }
 
 /* input prompt */
-div.nbinput div.prompt pre {
+div.nbinput.container div.prompt pre {
     color: #307FC1;
 }
 
 /* output prompt */
-div.nboutput div.prompt pre {
+div.nboutput.container div.prompt pre {
     color: #BF5B3D;
 }
 
 /* all prompts */
-div.nbinput div.prompt,
-div.nboutput div.prompt {
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
     min-width: 7ex;
-    padding-top: 0.4em;
-    padding-right: 0.4em;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
     text-align: right;
     flex: 0;
 }
 @media (max-width: 540px) {
-    div.nbinput div.prompt,
-    div.nboutput div.prompt {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
         text-align: left;
         padding: 0.4em;
     }
-    div.nboutput div.prompt.empty {
+    div.nboutput.container div.prompt.empty {
         padding: 0;
     }
 }
 
 /* disable scrollbars on prompts */
-div.nbinput div.prompt pre,
-div.nboutput div.prompt pre {
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
     overflow: hidden;
 }
 
 /* input/output area */
-div.nbinput div.input_area,
-div.nboutput div.output_area {
-    padding: 0.4em;
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
     -webkit-flex: 1;
     flex: 1;
     overflow: auto;
 }
 @media (max-width: 540px) {
-    div.nbinput div.input_area,
-    div.nboutput div.output_area {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
         width: 100%;
     }
 }
 
 /* input area */
-div.nbinput div.input_area {
+div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
     background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
-div.nboutput div[class*=MathJax] {
+div.nboutput.container div[class*=MathJax] {
     text-align: left !important;
 }
 
 /* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput div.math p {
+div.nboutput.container div.math p {
     text-align: left;
 }
 
 /* standard error */
-div.nboutput div.output_area.stderr {
+div.nboutput.container div.output_area.stderr {
     background: #fdd;
 }
 
@@ -212,6 +210,27 @@ div.nboutput div.output_area.stderr {
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
 
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
 /* Some additional styling taken form the Jupyter notebook CSS */
 div.rendered_html table {
   border: none;
@@ -253,7 +272,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
 <p>The Potential class is a Python interpretation of the potential_LAMMPS data model record format. The potential_LAMMPS data models contain metadata associated with the LAMMPS input command lines associated with properly running a simulation with the indicated potential. Together, the potential_LAMMPS data model and the Potential class make it easy to design simulations that can be easily executed across multiple potentials of any LAMMPS pair style.</p>
-<p>Complete potential_LAMMPS data models in JSON and the associated potential parameter files for many potentials can be <a class="reference external" href="https://github.com/usnistgov/iprPy/tree/master/library/potential_LAMMPS">downloaded from the iprPy github</a>.</p>
+<p>Complete potential_LAMMPS data models in JSON and the associated potential parameter files for all potentials hosted by the NIST Interatomic Potentials Repository can be found at <a class="reference external" href="https://potentials.nist.gov/">https://potentials.nist.gov/</a>.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -285,8 +304,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.0
-Notebook executed on 2019-11-05
+atomman version = 1.3.2
+Notebook executed on 2020-04-15
 </pre></div></div>
 </div>
 </div>
@@ -350,8 +369,8 @@ Notebook executed on 2019-11-05
 <p>A Potential object is initialized by loading a data model.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>model</strong> (<em>DataModelDict, str, or file-like object</em>) The potential_LAMMPS data model content to load.</li>
-<li><strong>pot_dir</strong> (<em>str, optional</em>) directory location for any artifacts (eg. .eam.alloy files) associated with the potential. A value of None (default) indicates to use the working directory where the simulation will be ran.</li>
+<li><p><strong>model</strong> (<em>DataModelDict, str, or file-like object</em>) The potential_LAMMPS data model content to load.</p></li>
+<li><p><strong>pot_dir</strong> (<em>str, optional</em>) directory location for any artifacts (eg. .eam.alloy files) associated with the potential. A value of None (default) indicates to use the working directory where the simulation will be ran.</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -377,10 +396,10 @@ Notebook executed on 2019-11-05
 <h3>2.3. Potential identifiers<a class="headerlink" href="#2.3.-Potential-identifiers" title="Permalink to this headline">¶</a></h3>
 <p>Each potential_LAMMPS record has multiple terms to uniquely identify the potential model and implementation.</p>
 <ul class="simple">
-<li><strong>potkey</strong> (<em>str</em>) uuid4 hash-key for the potential model, i.e.&nbsp;the published mathematical form. This is permanent once assigned.</li>
-<li><strong>potid</strong> (<em>str</em>) human-readable unique identifier for the potential model derived from year, author, element model information. This ideally is permanent, but may change based on updated publication information.</li>
-<li><strong>key</strong> (<em>str</em>) uuid hash-key for the LAMMPS potential implementation, i.e.&nbsp;the specific potential parameter file(s) and/or LAMMPS pair_style/pair_coeff command lines used. This is permament once assigned.</li>
-<li><strong>id</strong> (<em>str</em>) human-readable identifier for the LAMMPS potential implementation derived from the potid, source and version. This may change if potid changes.</li>
+<li><p><strong>potkey</strong> (<em>str</em>) uuid4 hash-key for the potential model, i.e. the published mathematical form. This is permanent once assigned.</p></li>
+<li><p><strong>potid</strong> (<em>str</em>) human-readable unique identifier for the potential model derived from year, author, element model information. This ideally is permanent, but may change based on updated publication information.</p></li>
+<li><p><strong>key</strong> (<em>str</em>) uuid hash-key for the LAMMPS potential implementation, i.e. the specific potential parameter file(s) and/or LAMMPS pair_style/pair_coeff command lines used. This is permament once assigned.</p></li>
+<li><p><strong>id</strong> (<em>str</em>) human-readable identifier for the LAMMPS potential implementation derived from the potid, source and version. This may change if potid changes.</p></li>
 </ul>
 <p>Another way to think about it is that potkey and potid name the potential, while key and id name the version.</p>
 <div class="nbinput docutils container">
@@ -428,16 +447,17 @@ EAM-demo--LAMMPS--v1
 <div class="section" id="2.4.-Other-attributes">
 <h3>2.4. Other attributes<a class="headerlink" href="#2.4.-Other-attributes" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><strong>atom_style</strong> (<em>str</em>) LAMMPS atom_style option for the potential.</li>
-<li><strong>pair_style</strong> (<em>str</em>) LAMMPS pair_style option for the potential.</li>
-<li><strong>pot_dir</strong> (<em>str</em>) the directory containing files associated with the potential.</li>
-<li><strong>symbols</strong> (<em>list</em>) list of all atom-model symbols for the potential.</li>
-<li><strong>units</strong> (<em>str</em>) LAMMPS units option for the potential.</li>
-<li><strong>allsymbols</strong> (<em>bool</em>) flag affecting how pair_coeff lines are generated, is False for most potentials</li>
-<li><strong>status</strong> (<em>str</em>) indicates the current status of the potential implementation<ul>
-<li>‘active’ = any implementation that is not known to be incorrect or superceded by a newer version.</li>
-<li>‘superceded’ = a correctly implemented version that has been replaced by a newer version to address minor issues.</li>
-<li>‘retracted’ = an incorrectly implemented version due to either a poor/wrong parameterization or data model representation resulting in major issues and deviations from the underlying potential model.</li>
+<li><p><strong>atom_style</strong> (<em>str</em>) LAMMPS atom_style option for the potential.</p></li>
+<li><p><strong>pair_style</strong> (<em>str</em>) LAMMPS pair_style option for the potential.</p></li>
+<li><p><strong>pot_dir</strong> (<em>str</em>) the directory containing files associated with the potential.</p></li>
+<li><p><strong>symbols</strong> (<em>list</em>) list of all atom-model symbols for the potential.</p></li>
+<li><p><strong>units</strong> (<em>str</em>) LAMMPS units option for the potential.</p></li>
+<li><p><strong>allsymbols</strong> (<em>bool</em>) flag affecting how pair_coeff lines are generated, is False for most potentials</p></li>
+<li><p><strong>status</strong> (<em>str</em>) indicates the current status of the potential implementation</p>
+<ul>
+<li><p>‘active’ = any implementation that is not known to be incorrect or superceded by a newer version.</p></li>
+<li><p>‘superceded’ = a correctly implemented version that has been replaced by a newer version to address minor issues.</p></li>
+<li><p>‘retracted’ = an incorrectly implemented version due to either a poor/wrong parameterization or data model representation resulting in major issues and deviations from the underlying potential model.</p></li>
 </ul>
 </li>
 </ul>
@@ -497,10 +517,10 @@ potential.pot_dir -&gt;  new_potential_folder
 <p>Information about the elements, charges and masses associated with each atom-model symbol can also be retrieved using the elements(), charges() and masses() methods. All three methods have the same parameters.</p>
 <p><strong>SYMBOLS VS ELEMENTS NOTE:</strong> The Potential class makes a distinction between symbols and elements. The symbols are the tags used by LAMMPS to identify which atom-model listed in a parameter file to use. These typically coincide with the elements the models represent, but this is not always the case as some potential styles allow multiple interaction models to be defined for the same elements. Differentiating between symbols and elements allows for the Potential class to handle these types of
 potentials as well.</p>
-<p><strong>CHARGES NOTE:</strong> The default charge is 0. Charges only need to be defined for potentials with formats (pair_styles) where the ionic charge is constant for each atom model, e.g.&nbsp;Coulombic potentials. Potentials with variable charges, e.g.&nbsp;ReaxFF and COMB, compute the charges on a per-atom basis during simulations.</p>
+<p><strong>CHARGES NOTE:</strong> The default charge is 0. Charges only need to be defined for potentials with formats (pair_styles) where the ionic charge is constant for each atom model, e.g. Coulombic potentials. Potentials with variable charges, e.g. ReaxFF and COMB, compute the charges on a per-atom basis during simulations.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>symbols</strong> (<em>str or list, optional</em>) a list of the potential’s symbol models to retrieve values for. If value is None (default) then Potential.symbols is used.</li>
+<li><p><strong>symbols</strong> (<em>str or list, optional</em>) a list of the potential’s symbol models to retrieve values for. If value is None (default) then Potential.symbols is used.</p></li>
 </ul>
 <p>Calling the methods without parameters uses all symbols.</p>
 <div class="nbinput docutils container">
@@ -568,8 +588,8 @@ potential.masses([&#39;Al&#39;, &#39;Al&#39;, &#39;Co&#39;, &#39;Al&#39;]) -&gt;
 <p><strong>Potential.pair_info()</strong></p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>symbols</strong> (<em>str or list, optional</em>) a list of the potential’s symbol models to associate with integer atom types of a system. If value is None (default) then Potential.symbols is used.</li>
-<li><strong>masses</strong> (<em>list, optional</em>) Can be given to override the default symbol-based masses for each atom type. Must be a list of the same length as symbols. Any values of None in the list indicate that the default value be used for that atom type. <em>Added version 1.3.0</em>.</li>
+<li><p><strong>symbols</strong> (<em>str or list, optional</em>) a list of the potential’s symbol models to associate with integer atom types of a system. If value is None (default) then Potential.symbols is used.</p></li>
+<li><p><strong>masses</strong> (<em>list, optional</em>) Can be given to override the default symbol-based masses for each atom type. Must be a list of the same length as symbols. Any values of None in the list indicate that the default value be used for that atom type. <em>Added version 1.3.0</em>.</p></li>
 </ul>
 <p><strong>NOTE:</strong> For pair_styles hybrid and hybrid/overlay, the list of symbols given as parameters must include all defined atom model interactions.</p>
 <p>Without symbols gives LAMMPS commands for all symbols in the same order as the data model.</p>
@@ -681,25 +701,25 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <p>The potential_LAMMPS data model is consistent with a json/xml structure. The root element of the model is <strong>“potential-LAMMPS”</strong>.</p>
 <p>Elements:</p>
 <ul class="simple">
-<li><strong>“key”</strong> : a uuid hash-key that uniquely identifies the potential implementation. Corresponds to the Potential.key attribute.</li>
-<li><strong>“id”</strong> : a human-readable identifier that uniquely identifies the potential implementation. Corresponds to the Potential.id attribute.</li>
-<li><strong>“potential”</strong> : contains metadata associated with the potential model.</li>
-<li><strong>“units”</strong> : the LAMMPS units option to use with the potential. Corresponds to the Potential.units attribute.</li>
-<li><strong>“atom_style”</strong> : the LAMMPS atom_style option to use with the potential. Corresponds to the Potential.atom_style attribute.</li>
-<li><strong>“allsymbols”</strong> : boolean flag that indicates if all of a potential’s symbols need to be listed in the pair_coeff lines. This is required for certain pair_styles. Assumed to be False if field is missing.</li>
-<li><strong>“status”</strong> : label characterizing the known status of the potential, i.e. “active”, “superceded”, or “retracted”. This makes it possible to separate old/bad implementations from current ones. If field is missing, status is assumed to be “active”.</li>
-<li><strong>“atom”</strong> : provides information relating to the atom-models defined in the potential.</li>
-<li><strong>“pair_style”</strong> : classifies the terms that appear in the LAMMPS pair_style command associated with the potential.</li>
-<li><strong>“pair_coeff”</strong> : classifies the terms that appear in the LAMMPS pair_coeff command associated with the potential.</li>
-<li><strong>“command”</strong> : classifies the terms that appear in any other LAMMPS command associated with the potential.</li>
+<li><p><strong>“key”</strong> : a uuid hash-key that uniquely identifies the potential implementation. Corresponds to the Potential.key attribute.</p></li>
+<li><p><strong>“id”</strong> : a human-readable identifier that uniquely identifies the potential implementation. Corresponds to the Potential.id attribute.</p></li>
+<li><p><strong>“potential”</strong> : contains metadata associated with the potential model.</p></li>
+<li><p><strong>“units”</strong> : the LAMMPS units option to use with the potential. Corresponds to the Potential.units attribute.</p></li>
+<li><p><strong>“atom_style”</strong> : the LAMMPS atom_style option to use with the potential. Corresponds to the Potential.atom_style attribute.</p></li>
+<li><p><strong>“allsymbols”</strong> : boolean flag that indicates if all of a potential’s symbols need to be listed in the pair_coeff lines. This is required for certain pair_styles. Assumed to be False if field is missing.</p></li>
+<li><p><strong>“status”</strong> : label characterizing the known status of the potential, i.e. “active”, “superceded”, or “retracted”. This makes it possible to separate old/bad implementations from current ones. If field is missing, status is assumed to be “active”.</p></li>
+<li><p><strong>“atom”</strong> : provides information relating to the atom-models defined in the potential.</p></li>
+<li><p><strong>“pair_style”</strong> : classifies the terms that appear in the LAMMPS pair_style command associated with the potential.</p></li>
+<li><p><strong>“pair_coeff”</strong> : classifies the terms that appear in the LAMMPS pair_coeff command associated with the potential.</p></li>
+<li><p><strong>“command”</strong> : classifies the terms that appear in any other LAMMPS command associated with the potential.</p></li>
 </ul>
 <div class="section" id="5.1.1.-The-“potential”-branch">
 <h4>5.1.1. The “potential” branch<a class="headerlink" href="#5.1.1.-The-“potential”-branch" title="Permalink to this headline">¶</a></h4>
 <p>The <strong>“potential”</strong> branch gives metadata associated with the potential model that the LAMMPS implementation is based on. The potential model is the concept (mathematical expression) of a potential, and multiple implementations of the same potential model may exist.</p>
 <p>Subelements:</p>
 <ul class="simple">
-<li><strong>“key”</strong> : a uuid hash-key that uniquely identifies the potential model. Corresponds to the Potential.potkey attribute.</li>
-<li><strong>“id”</strong> : a human-readable identifier that uniquely identifies the potential model. Corresponds to the Potential.potid attribute.</li>
+<li><p><strong>“key”</strong> : a uuid hash-key that uniquely identifies the potential model. Corresponds to the Potential.potkey attribute.</p></li>
+<li><p><strong>“id”</strong> : a human-readable identifier that uniquely identifies the potential model. Corresponds to the Potential.potid attribute.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -734,10 +754,10 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <p>The <strong>“atom”</strong> branch of the data model provides a list of the atom-models described by the potential.</p>
 <p>Subelements:</p>
 <ul class="simple">
-<li><strong>“element”</strong>: chemical element tag associated with the atom-model. If not given, it is set equal to the <strong>“symbol”</strong> value.</li>
-<li><strong>“symbol”</strong>: unique symbol associated with the atom-model. If not given, it is set equal to the <strong>“element”</strong> value.</li>
-<li><strong>“mass”</strong>: element mass associated with the element/atom-model. If not given, it is set equal to the standard atomic mass value associated with the element given by <strong>“element”</strong>.</li>
-<li><strong>“charge”</strong>: ionic charge associated with the atom-model. If not given, it is set to 0.0. Only needs to be defined for pair_styles where the ionic charge is constant for a given atom-model e.g.&nbsp;Columbic potentials.</li>
+<li><p><strong>“element”</strong>: chemical element tag associated with the atom-model. If not given, it is set equal to the <strong>“symbol”</strong> value.</p></li>
+<li><p><strong>“symbol”</strong>: unique symbol associated with the atom-model. If not given, it is set equal to the <strong>“element”</strong> value.</p></li>
+<li><p><strong>“mass”</strong>: element mass associated with the element/atom-model. If not given, it is set equal to the standard atomic mass value associated with the element given by <strong>“element”</strong>.</p></li>
+<li><p><strong>“charge”</strong>: ionic charge associated with the atom-model. If not given, it is set to 0.0. Only needs to be defined for pair_styles where the ionic charge is constant for a given atom-model e.g. Columbic potentials.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
@@ -825,8 +845,8 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <p>The <strong>“pair_style”</strong> branch of the data model characterizes the terms that appear in the LAMMPS pair_style command for the potential.</p>
 <p>Subelements:</p>
 <ul class="simple">
-<li><strong>“type”</strong> : the specific LAMMPS pair_style option for the potential. Corresponds to the Potential.pair_style attribute.</li>
-<li><strong>“term”</strong> : a list characterizing any additional terms that appear in the pair_style command line. The available subelements are the same as the ones available in the <strong>“term”</strong> branch of <strong>“pair_coeff”</strong>.</li>
+<li><p><strong>“type”</strong> : the specific LAMMPS pair_style option for the potential. Corresponds to the Potential.pair_style attribute.</p></li>
+<li><p><strong>“term”</strong> : a list characterizing any additional terms that appear in the pair_style command line. The available subelements are the same as the ones available in the <strong>“term”</strong> branch of <strong>“pair_coeff”</strong>.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
@@ -875,24 +895,26 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <p>The <strong>“pair_coeff”</strong> branch of the data model characterizes the terms that appear in the LAMMPS pair_coeff command lines for the potential. Multiple <strong>“pair_coeff”</strong> values can be given.</p>
 <p>Subelements:</p>
 <ul class="simple">
-<li><strong>“interaction”</strong> : an <strong>“interaction”</strong> branch that outlines the atom-model interactions associated with a pair_coeff command line.<ul>
-<li><strong>“symbol”</strong> : a list of the atom-model symbols that the interaction is associated with.</li>
+<li><p><strong>“interaction”</strong> : an <strong>“interaction”</strong> branch that outlines the atom-model interactions associated with a pair_coeff command line.</p>
+<ul>
+<li><p><strong>“symbol”</strong> : a list of the atom-model symbols that the interaction is associated with.</p></li>
 </ul>
 </li>
-<li><strong>“term”</strong> : a <strong>“term”</strong> branch that characterizes all the terms that appear in a pair_coeff command line.<ul>
-<li><strong>“option”</strong> : a string option value.</li>
-<li><strong>“parameter”</strong> : a numerical parameter value.</li>
-<li><strong>“file”</strong> : a file name. Used by potential styles that read parameters from external files, like eam/alloy.</li>
-<li><strong>“symbols”</strong> : Boolean indicating to show a list of the atom-model symbols to use. Used by potential styles that read parameters from external potential files, like eam/alloy.</li>
-<li><strong>“symbolsList”</strong> : Boolean indicating to show a list of the unique atom-model symbols to use. Don’t use!</li>
+<li><p><strong>“term”</strong> : a <strong>“term”</strong> branch that characterizes all the terms that appear in a pair_coeff command line.</p>
+<ul>
+<li><p><strong>“option”</strong> : a string option value.</p></li>
+<li><p><strong>“parameter”</strong> : a numerical parameter value.</p></li>
+<li><p><strong>“file”</strong> : a file name. Used by potential styles that read parameters from external files, like eam/alloy.</p></li>
+<li><p><strong>“symbols”</strong> : Boolean indicating to show a list of the atom-model symbols to use. Used by potential styles that read parameters from external potential files, like eam/alloy.</p></li>
+<li><p><strong>“symbolsList”</strong> : Boolean indicating to show a list of the unique atom-model symbols to use. Don’t use!</p></li>
 </ul>
 </li>
 </ul>
 <p>Different types of pair_styles have slightly different rules with interpreting the <strong>“pair_coeff”</strong> branch.</p>
 <ul class="simple">
-<li>For two-body style potentials, every unique atom-model pair has its own <strong>“pair_coeff”</strong> element. <strong>“interaction”</strong>-<strong>“symbol”</strong> must have two values indicating the atom-model pair, eg. [“Ag”, “Ag”] for the Ag-Ag interaction and [“Ag”, “Cu”] for Ag-Cu and Cu-Ag interactions. <strong>“interaction”</strong> is optional if there is only one pair interaction, i.e.&nbsp;an elemental pair potential.</li>
-<li>For many-body style potentials, <strong>“interaction”</strong> is optional as all atom-model interactions are accessed using the same pair_coeff command line.</li>
-<li>For hybrid style potentials, <strong>“interaction”</strong>-<strong>“symbol”</strong> lists all atom-model symbols associated with the particular sub-style. It will have two values for pair sub-styles, but can be of any length for many-body sub-styles.</li>
+<li><p>For two-body style potentials, every unique atom-model pair has its own <strong>“pair_coeff”</strong> element. <strong>“interaction”</strong>-<strong>“symbol”</strong> must have two values indicating the atom-model pair, eg. [“Ag”, “Ag”] for the Ag-Ag interaction and [“Ag”, “Cu”] for Ag-Cu and Cu-Ag interactions. <strong>“interaction”</strong> is optional if there is only one pair interaction, i.e. an elemental pair potential.</p></li>
+<li><p>For many-body style potentials, <strong>“interaction”</strong> is optional as all atom-model interactions are accessed using the same pair_coeff command line.</p></li>
+<li><p>For hybrid style potentials, <strong>“interaction”</strong>-<strong>“symbol”</strong> lists all atom-model symbols associated with the particular sub-style. It will have two values for pair sub-styles, but can be of any length for many-body sub-styles.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
@@ -1064,12 +1086,13 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <p>The <strong>“command”</strong> branch of the data model characterizes the terms that appear in any other LAMMPS command lines that are required for properly running the potential. This is needed for specifying such things as a fix qeq/comb for COMB potentials.</p>
 <p>Subelements:</p>
 <ul class="simple">
-<li><strong>“term”</strong> : a <strong>“term”</strong> branch that characterizes all the terms that appear in the command line.<ul>
-<li><strong>“option”</strong> : a string option value.</li>
-<li><strong>“parameter”</strong> : a numerical parameter value.</li>
-<li><strong>“file”</strong> : a file name.</li>
-<li><strong>“symbols”</strong> : Boolean indicating to show a list of the atom-model symbols to use.</li>
-<li><strong>“symbolsList”</strong> : Boolean indicating to show a list of the unique atom-model symbols to use.</li>
+<li><p><strong>“term”</strong> : a <strong>“term”</strong> branch that characterizes all the terms that appear in the command line.</p>
+<ul>
+<li><p><strong>“option”</strong> : a string option value.</p></li>
+<li><p><strong>“parameter”</strong> : a numerical parameter value.</p></li>
+<li><p><strong>“file”</strong> : a file name.</p></li>
+<li><p><strong>“symbols”</strong> : Boolean indicating to show a list of the atom-model symbols to use.</p></li>
+<li><p><strong>“symbolsList”</strong> : Boolean indicating to show a list of the unique atom-model symbols to use.</p></li>
 </ul>
 </li>
 </ul>
@@ -2103,12 +2126,12 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
         <li class="right" >
           <a href="02._LAMMPS_functionality.html" title="Introduction to atomman: LAMMPS functionality"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

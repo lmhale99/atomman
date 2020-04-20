@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Semidiscrete variational Peierls-Nabarro model &#8212; atomman 1.3.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Introduction to atomman: Semidiscrete variational Peierls-Nabarro model &#8212; atomman 1.3.2 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,6 +12,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="04.6._Gamma_surface_plotting.html" title="Introduction to atomman: Gamma surface plotting"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,16 +50,16 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput,
-div.nbinput div.prompt,
-div.nbinput div.input_area,
-div.nbinput div[class*=highlight],
-div.nbinput div[class*=highlight] pre,
-div.nboutput,
-div.nbinput div.prompt,
-div.nbinput div.output_area,
-div.nboutput div[class*=highlight],
-div.nboutput div[class*=highlight] pre {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
     background: none;
     border: none;
     padding: 0 0;
@@ -69,13 +68,13 @@ div.nboutput div[class*=highlight] pre {
 }
 
 /* avoid gaps between output lines */
-div.nboutput div[class*=highlight] pre {
+div.nboutput.container div[class*=highlight] pre {
     line-height: normal;
 }
 
 /* input/output containers */
-div.nbinput,
-div.nboutput {
+div.nbinput.container,
+div.nboutput.container {
     display: -webkit-flex;
     display: flex;
     align-items: flex-start;
@@ -83,92 +82,91 @@ div.nboutput {
     width: 100%;
 }
 @media (max-width: 540px) {
-    div.nbinput,
-    div.nboutput {
+    div.nbinput.container,
+    div.nboutput.container {
         flex-direction: column;
     }
 }
 
 /* input container */
-div.nbinput {
+div.nbinput.container {
     padding-top: 5px;
 }
 
 /* last container */
-div.nblast {
+div.nblast.container {
     padding-bottom: 5px;
 }
 
 /* input prompt */
-div.nbinput div.prompt pre {
+div.nbinput.container div.prompt pre {
     color: #307FC1;
 }
 
 /* output prompt */
-div.nboutput div.prompt pre {
+div.nboutput.container div.prompt pre {
     color: #BF5B3D;
 }
 
 /* all prompts */
-div.nbinput div.prompt,
-div.nboutput div.prompt {
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
     min-width: 7ex;
-    padding-top: 0.4em;
-    padding-right: 0.4em;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
     text-align: right;
     flex: 0;
 }
 @media (max-width: 540px) {
-    div.nbinput div.prompt,
-    div.nboutput div.prompt {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
         text-align: left;
         padding: 0.4em;
     }
-    div.nboutput div.prompt.empty {
+    div.nboutput.container div.prompt.empty {
         padding: 0;
     }
 }
 
 /* disable scrollbars on prompts */
-div.nbinput div.prompt pre,
-div.nboutput div.prompt pre {
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
     overflow: hidden;
 }
 
 /* input/output area */
-div.nbinput div.input_area,
-div.nboutput div.output_area {
-    padding: 0.4em;
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
     -webkit-flex: 1;
     flex: 1;
     overflow: auto;
 }
 @media (max-width: 540px) {
-    div.nbinput div.input_area,
-    div.nboutput div.output_area {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
         width: 100%;
     }
 }
 
 /* input area */
-div.nbinput div.input_area {
+div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
     background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
-div.nboutput div[class*=MathJax] {
+div.nboutput.container div[class*=MathJax] {
     text-align: left !important;
 }
 
 /* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput div.math p {
+div.nboutput.container div.math p {
     text-align: left;
 }
 
 /* standard error */
-div.nboutput div.output_area.stderr {
+div.nboutput.container div.output_area.stderr {
     background: #fdd;
 }
 
@@ -211,6 +209,27 @@ div.nboutput div.output_area.stderr {
 
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
 
 /* Some additional styling taken form the Jupyter notebook CSS */
 div.rendered_html table {
@@ -261,7 +280,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
@@ -288,8 +307,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.0
-Notebook executed on 2019-11-05
+atomman version = 1.3.2
+Notebook executed on 2020-04-17
 </pre></div></div>
 </div>
 <div class="section" id="1.1.-Theory">
@@ -368,41 +387,112 @@ that minimizes the dislocation’s energy.</p>
 <h3>1.2. Methodology overview<a class="headerlink" href="#1.2.-Methodology-overview" title="Permalink to this headline">¶</a></h3>
 <p>Due to the complex nature of the calculation, this section provides a general overview of the steps involved in setting up and running the calculation shown in the remainder of the Notebook.</p>
 <ol class="arabic simple">
-<li><span class="math notranslate nohighlight">\(U_{elastic}\)</span> requires the energy coefficient tensor, <span class="math notranslate nohighlight">\(K_{ij}\)</span>, which is related to a material’s elastic constants and the orientation of the slip plane and elastic constants.<ol class="loweralpha">
-<li>Isotropic <span class="math notranslate nohighlight">\(K_{ij}\)</span> can be calculated using a material’s shear modulus and Poisson’s ratio: <span class="math notranslate nohighlight">\(K_{11} = K_{22} = \frac{\mu}{1-\nu}\)</span>, <span class="math notranslate nohighlight">\(K_{33} = \mu\)</span>, <span class="math notranslate nohighlight">\(K_{ij} = 0\)</span> for <span class="math notranslate nohighlight">\(i \ne j\)</span>.</li>
-<li>Anisotropic <span class="math notranslate nohighlight">\(K_{ij}\)</span> can be calculated using the Stroh method.</li>
+<li><p><span class="math notranslate nohighlight">\(U_{elastic}\)</span> requires the energy coefficient tensor, <span class="math notranslate nohighlight">\(K_{ij}\)</span>, which is related to a material’s elastic constants and the orientation of the slip plane and elastic constants.</p>
+<ol class="loweralpha simple">
+<li><p>Isotropic <span class="math notranslate nohighlight">\(K_{ij}\)</span> can be calculated using a material’s shear modulus and Poisson’s ratio: <span class="math notranslate nohighlight">\(K_{11} = K_{22} = \frac{\mu}{1-\nu}\)</span>, <span class="math notranslate nohighlight">\(K_{33} = \mu\)</span>, <span class="math notranslate nohighlight">\(K_{ij} = 0\)</span> for <span class="math notranslate nohighlight">\(i \ne j\)</span>.</p></li>
+<li><p>Anisotropic <span class="math notranslate nohighlight">\(K_{ij}\)</span> can be calculated using the Stroh method.</p></li>
 </ol>
 </li>
-<li>A function for <span class="math notranslate nohighlight">\(\gamma(\delta_i)\)</span> needs to be created. <strong>NOTE:</strong> Only 2D GSFs currently implemented.<ol class="loweralpha">
-<li>Use an analytical function.</li>
-<li>2D GSF: Measure relaxed generalized stacking fault energies in two dimensions. Interpolate <span class="math notranslate nohighlight">\(\gamma(\delta_i)\)</span> dependent on <span class="math notranslate nohighlight">\(\delta_1\)</span> and <span class="math notranslate nohighlight">\(\delta_3\)</span>.</li>
-<li>Pseudo 3D GSF: Measure relaxed generalized stacking fault energies in two dimensions and the associated relaxation perpendicular to the fault plane. Interpolate <span class="math notranslate nohighlight">\(\gamma(\delta_i)\)</span> and <span class="math notranslate nohighlight">\(\delta_2\)</span> dependent on <span class="math notranslate nohighlight">\(\delta_1\)</span> and <span class="math notranslate nohighlight">\(\delta_3\)</span>.</li>
-<li>3D GSF: Measure unrelaxed generalized stacking fault energies in thre dimensions. Interpolate <span class="math notranslate nohighlight">\(\gamma(\delta_i)\)</span> dependent on <span class="math notranslate nohighlight">\(\delta_1\)</span>, <span class="math notranslate nohighlight">\(\delta_2\)</span> and <span class="math notranslate nohighlight">\(\delta_3\)</span>.</li>
+<li><p>A function for <span class="math notranslate nohighlight">\(\gamma(\delta_i)\)</span> needs to be created. <strong>NOTE:</strong> Only 2D GSFs currently implemented.</p>
+<ol class="loweralpha simple">
+<li><p>Use an analytical function.</p></li>
+<li><p>2D GSF: Measure relaxed generalized stacking fault energies in two dimensions. Interpolate <span class="math notranslate nohighlight">\(\gamma(\delta_i)\)</span> dependent on <span class="math notranslate nohighlight">\(\delta_1\)</span> and <span class="math notranslate nohighlight">\(\delta_3\)</span>.</p></li>
+<li><p>Pseudo 3D GSF: Measure relaxed generalized stacking fault energies in two dimensions and the associated relaxation perpendicular to the fault plane. Interpolate <span class="math notranslate nohighlight">\(\gamma(\delta_i)\)</span> and <span class="math notranslate nohighlight">\(\delta_2\)</span> dependent on <span class="math notranslate nohighlight">\(\delta_1\)</span> and <span class="math notranslate nohighlight">\(\delta_3\)</span>.</p></li>
+<li><p>3D GSF: Measure unrelaxed generalized stacking fault energies in thre dimensions. Interpolate <span class="math notranslate nohighlight">\(\gamma(\delta_i)\)</span> dependent on <span class="math notranslate nohighlight">\(\delta_1\)</span>, <span class="math notranslate nohighlight">\(\delta_2\)</span> and <span class="math notranslate nohighlight">\(\delta_3\)</span>.</p></li>
 </ol>
 </li>
-<li>Initial disregistry values need to be given for all of the <span class="math notranslate nohighlight">\(\xi\)</span> coordinates.<ol class="loweralpha">
-<li>Use a step function such that <span class="math notranslate nohighlight">\(\delta_i(\xi &lt; 0) = 0\)</span> and <span class="math notranslate nohighlight">\(\delta_i(\xi &gt; 0) = b_i\)</span></li>
-<li>Use an arctan function that smoothly varies from 0 to <span class="math notranslate nohighlight">\(b_i\)</span>.</li>
+<li><p>Initial disregistry values need to be given for all of the <span class="math notranslate nohighlight">\(\xi\)</span> coordinates.</p>
+<ol class="loweralpha simple">
+<li><p>Use a step function such that <span class="math notranslate nohighlight">\(\delta_i(\xi &lt; 0) = 0\)</span> and <span class="math notranslate nohighlight">\(\delta_i(\xi &gt; 0) = b_i\)</span></p></li>
+<li><p>Use an arctan function that smoothly varies from 0 to <span class="math notranslate nohighlight">\(b_i\)</span>.</p></li>
 </ol>
 </li>
-<li>Solve the SDVPN model with <span class="math notranslate nohighlight">\(\tau_{ij}\)</span>, <span class="math notranslate nohighlight">\(\beta_{ij}\)</span>, and <span class="math notranslate nohighlight">\(\alpha_m\)</span> values all zero.</li>
-<li>(Optional) Starting with the SDVPN solution from #4, add either <span class="math notranslate nohighlight">\(\beta_{ij}\)</span> or <span class="math notranslate nohighlight">\(\alpha_m\)</span> correction constants and solve.</li>
-<li>(Optional) To obtain a prediction for the dislocation’s Peierls barrier, incrementally increase <span class="math notranslate nohighlight">\(\tau_{ij}\)</span> and resolve the SDVPN model until the dislocation is observed to move.</li>
+<li><p>Solve the SDVPN model with <span class="math notranslate nohighlight">\(\tau_{ij}\)</span>, <span class="math notranslate nohighlight">\(\beta_{ij}\)</span>, and <span class="math notranslate nohighlight">\(\alpha_m\)</span> values all zero.</p></li>
+<li><p>(Optional) Starting with the SDVPN solution from #4, add either <span class="math notranslate nohighlight">\(\beta_{ij}\)</span> or <span class="math notranslate nohighlight">\(\alpha_m\)</span> correction constants and solve.</p></li>
+<li><p>(Optional) To obtain a prediction for the dislocation’s Peierls barrier, incrementally increase <span class="math notranslate nohighlight">\(\tau_{ij}\)</span> and resolve the SDVPN model until the dislocation is observed to move.</p></li>
 </ol>
 </div>
 </div>
-<div class="section" id="2.-Dependent-parameters">
-<h2>2. Dependent parameters<a class="headerlink" href="#2.-Dependent-parameters" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="2.1.-Define-material-constants">
-<h3>2.1. Define material constants<a class="headerlink" href="#2.1.-Define-material-constants" title="Permalink to this headline">¶</a></h3>
-<p>Properties for fcc Al using the 2008–Mendelev-M-I–Al potential</p>
+<div class="section" id="Initialize-SDVPN-using-GammaSurface-and-VolterraDislocation">
+<h2>Initialize SDVPN using GammaSurface and VolterraDislocation<a class="headerlink" href="#Initialize-SDVPN-using-GammaSurface-and-VolterraDislocation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="2.2.-Load-\gamma-surface-results">
+<h3>2.2. Load <span class="math notranslate nohighlight">\(\gamma\)</span> surface results<a class="headerlink" href="#2.2.-Load-\gamma-surface-results" title="Permalink to this headline">¶</a></h3>
+<p>The atomman.defect.GammaSurface class loads and represents generalized stacking fault data.</p>
+<p>See <a class="reference external" href="04.6._Gamma_Surface_Plotting.html">04.6. Gamma Surface Plotting Notebook</a> for more details on this class.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.0453</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span></span><span class="c1"># Load pre-calculated stacking fault energy data (same data as used in Gamma Surface Plotting Notebook)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;files&#39;</span><span class="p">,</span> <span class="s1">&#39;2008--Mendelev-M-I--Al--A1--Cu--fcc--111sf.json&#39;</span><span class="p">)</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">GammaSurface</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
 
+<span class="n">box</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">box</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;a1vect, a2vect used:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gamma</span><span class="o">.</span><span class="n">a1vect</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gamma</span><span class="o">.</span><span class="n">a2vect</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+a1vect, a2vect used:
+[ 0.  -0.5  0.5]
+[ 0.5 -0.5  0. ]
+</pre></div></div>
+</div>
+<p>Plot smallest cell</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf_surface_plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_10_0.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_10_0.png" />
+</div>
+</div>
+<p>Plot common cell representation</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plotting_a1vect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="n">plotting_a2vect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf_surface_plot</span><span class="p">(</span><span class="n">a1vect</span> <span class="o">=</span> <span class="n">plotting_a1vect</span><span class="p">,</span>
+                               <span class="n">a2vect</span> <span class="o">=</span> <span class="n">plotting_a2vect</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_12_0.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_12_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="2.3.-Get-a-Volterra-dislocation-solution">
+<h3>2.3. Get a Volterra dislocation solution<a class="headerlink" href="#2.3.-Get-a-Volterra-dislocation-solution" title="Permalink to this headline">¶</a></h3>
+<p>The model uses Volterra solutions to compute the interaction stresses. A Volterra solution can easily be found using the solve_volterra_dislocation.</p>
+<p><strong>Note</strong>: The slip plane used here must match the slip plane of the gamma surface, otherwise SDVPN will not know how to relate the two!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Elastic constants for Al using the 2008--Mendelev-M-I--Al potential</span>
 <span class="n">C11</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">105.09</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
 <span class="n">C12</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span> <span class="mf">59.46</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
 <span class="n">C44</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span> <span class="mf">30.66</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
@@ -426,75 +516,60 @@ Cij in GPa:
  [  0.     0.     0.     0.     0.    30.66]]
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.2.-Get-K_{ij}-values">
-<h3>2.2. Get <span class="math notranslate nohighlight">\(K_{ij}\)</span> values<a class="headerlink" href="#2.2.-Get-K_{ij}-values" title="Permalink to this headline">¶</a></h3>
-<p>Define axes and Burgers vector for the <span class="math notranslate nohighlight">\(\frac{a}{2} \left&lt; 10\bar{1} \right&gt; \left\{ 111 \right\}\)</span> fcc edge dislocation. The configuration used by the Stroh method and the SDVPN model are defined with</p>
-<ul class="simple">
-<li>The slip plane normal to be parallel to the y-axis</li>
-<li>The dislocation line to coincide with the z-axis</li>
-</ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">burgers</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">])</span>
+<span></span><span class="c1"># Miller Burgers vector</span>
+<span class="n">burgers_uvw</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
-<span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">y_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">z_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<p>Get the anisotropic K_tensor using the Stroh method.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">stroh</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">Stroh</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">burgers</span><span class="o">=</span><span class="n">burgers</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">y_axis</span><span class="p">,</span> <span class="n">z_axis</span><span class="p">]))</span>
+<span class="c1"># Miller slip plane</span>
+<span class="n">slip_hkl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
-<span class="n">K_tensor</span> <span class="o">=</span> <span class="n">stroh</span><span class="o">.</span><span class="n">K_tensor</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;K_tensor in GPa:&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">K_tensor</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">))</span>
+<span class="c1"># The dislocation&#39;s line direction (ξ_uvw) determines character</span>
+<span class="n">ξ_uvw</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="c1"># 90 degree edge</span>
+
+<span class="n">volterra</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">solve_volterra_dislocation</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">burgers_uvw</span><span class="p">,</span> <span class="n">ξ_uvw</span><span class="o">=</span><span class="n">ξ_uvw</span><span class="p">,</span> <span class="n">slip_hkl</span><span class="o">=</span><span class="n">slip_hkl</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
 </div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-K_tensor in GPa:
-[[41.18476659  0.          0.        ]
- [ 0.         41.61278102 -1.20279982]
- [ 0.         -1.20279982 26.51226032]]
-</pre></div></div>
-</div>
-</div>
-<div class="section" id="2.3.-\gamma-surface">
-<h3>2.3. <span class="math notranslate nohighlight">\(\gamma\)</span> surface<a class="headerlink" href="#2.3.-\gamma-surface" title="Permalink to this headline">¶</a></h3>
-<p>The atomman.defect.GammaSurface class loads and represents generalized stacking fault data.</p>
-<p>See <a class="reference external" href="04.5._Gamma_Surface_Plotting.html">04.5. Gamma Surface Plotting Notebook</a> for more details on this class.</p>
-<p>Load pre-calculated <span class="math notranslate nohighlight">\(\gamma\)</span> surface data from a data model</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="section" id="2.3.-Initializing-an-SDVPN-object">
+<h3>2.3. Initializing an SDVPN object<a class="headerlink" href="#2.3.-Initializing-an-SDVPN-object" title="Permalink to this headline">¶</a></h3>
+<p>The Volterra dislocation solution and gamma surface provide all of the materials properties associated with the dislocation problem. During initialization, verification checks will be performed to make certain that the dislocation solution and gamma surface are compatible.</p>
+<p>There are many parameters that can be set during initialization. The first three are the most important, and the remainder are associated with settings listed in the theory section above. All the settings parameters (tau and below) can also be changed later.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><p><strong>volterra</strong> (<em>atomman.defect.VolterraDislocation, optional</em>) The elastic solution for a Volterra dislocation to use as the basis of the model. Either volterra or model are required, and both cannot be given at the same time.</p></li>
+<li><p><strong>gamma</strong> (<em>atomman.defect.GammaSurface, optional</em>) The gamma surface to use for the solution. Required unless model is given and the model content contains gamma surface data.</p></li>
+<li><p><strong>model</strong> (<em>str or DataModelDict, optional</em>) Saved data from previous SDVPN runs to load. Either volterra or model are required, and both cannot be given at the same time.</p></li>
+<li><p><strong>tau</strong> (<em>numpy.ndarray, optional</em>) A (3,3) array giving the stress tensor to apply to the system using the stress energy term. Only the xy, yy, and yz components are used. Default value is all zeros.</p></li>
+<li><p><strong>alpha</strong> (<em>list of float, optional</em>) The alpha coefficient(s) used by the nonlocal energy term. Default value is [0.0].</p></li>
+<li><p><strong>beta</strong> (<em>numpy.ndarray, optional</em>) The (3,3) array of beta coefficient(s) used by the gradient energy term. Default value is all zeros.</p></li>
+<li><p><strong>cutofflongrange</strong> (<em>float, optional</em>) The cutoff distance to use for computing the long-range energy. Default value is 1000 Angstroms.</p></li>
+<li><p><strong>fullstress</strong> (<em>bool, optional</em>) Flag indicating which stress energy algorithm to use. Default value is True.</p></li>
+<li><p><strong>cdiffelastic</strong> (<em>bool, optional</em>) Flag indicating if the dislocation density for the elastic energy component is computed with central difference (True) or simply neighboring values (False). Default value is False.</p></li>
+<li><p><strong>cdiffsurface</strong> (<em>bool, optional</em>) Flag indicating if the dislocation density for the surface energy component is computed with central difference (True) or simply neighboring values (False). Default value is True.</p></li>
+<li><p><strong>cdiffstress</strong> (<em>bool, optional</em>) Flag indicating if the dislocation density for the stress energy component is computed with central difference (True) or simply neighboring values (False). Only matters if fullstress is True. Default value is False.</p></li>
+<li><p><strong>min_method</strong> (<em>str, optional</em>) The scipy.optimize.minimize method to use. Default value is ‘Powell’, which seems to do well for this task.</p></li>
+<li><p><strong>min_options</strong> (<em>dict, optional</em>) Any options to pass on to scipy.optimize.minimize. Default value is {}.</p></li>
+</ul>
+<p><strong>Execution tips:</strong> Tests seem to indicate that the ‘Powell’ minimization option works well for this problem. For best results, use min_options to set xtol and ftol to smaller values and run the solver multiple times in a row (minimizer may get stuck).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Load pre-calculated stacking fault energy data</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;files&#39;</span><span class="p">,</span> <span class="s1">&#39;2008--Mendelev-M-I--Al--111-GSF.xml&#39;</span><span class="p">)</span>
-<span class="n">gamma</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">GammaSurface</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf_surface_plot</span><span class="p">()</span>
+<span></span><span class="n">min_options</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">min_options</span><span class="p">[</span><span class="s1">&#39;disp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>     <span class="c1"># will display convergence info</span>
+<span class="n">min_options</span><span class="p">[</span><span class="s1">&#39;xtol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-6</span>     <span class="c1"># smaller convergence tolerance than default</span>
+<span class="n">min_options</span><span class="p">[</span><span class="s1">&#39;ftol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-6</span>     <span class="c1"># smaller convergence tolerance than default</span>
+<span class="c1">#min_options[&#39;maxiter&#39;] = 2    # for testing purposes</span>
+
+<span class="c1"># Initialize SDVPN object from volterra and gamma</span>
+<span class="n">pnsolution</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">SDVPN</span><span class="p">(</span><span class="n">volterra</span><span class="o">=</span><span class="n">volterra</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">min_options</span><span class="o">=</span><span class="n">min_options</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_17_0.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_17_0.png" />
 </div>
 </div>
 </div>
@@ -509,28 +584,34 @@ K_tensor in GPa:
 <p>where <span class="math notranslate nohighlight">\(\xi\)</span> is the dislocation’s halfwidth and <span class="math notranslate nohighlight">\(b_i\)</span> is the Burgers vector.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>xmax</strong> (<em>float or None, optional</em>) Maximum value of x to use. Minimum value is taken as -xmax. At least 2 of xmax, xstep, and xnum must be not None. Default value is None.</li>
-<li><strong>xstep</strong> (<em>float or None, optional</em>) Step size to use between each x value. At least 2 of xmax, xstep, and xnum must be not None. Default value is None.</li>
-<li><strong>xnum</strong> (<em>int or None, optional</em>) Number of x values to use. At least 2 of xmax, xstep, and xnum must be not None. Default value is None.</li>
-<li><strong>burgers</strong> (<em>numpy.ndarray, optional</em>) The Burgers vector for the dislocation. Default value is [1, 0, 0].</li>
-<li><strong>halfwidth</strong> (<em>float, optional</em>) The dislocation halfwidth to use. Default value is 1.</li>
-<li><strong>normalize</strong> (<em>bool, optional</em>) If True (default), the disregistry values will be scaled such that the two endpoints differ by exactly one Burgers vector.</li>
-<li><strong>shift</strong> (<em>bool, optional</em>) If True (default), the disregistry will range [0, 0, 0] to burgers. If False, the disregistry will range from -burgers to burgers.</li>
+<li><p><strong>xmax</strong> (<em>float or None, optional</em>) Maximum value of x to use. Minimum value is taken as -xmax. At least 2 of xmax, xstep, and xnum must be not None. Default value is None.</p></li>
+<li><p><strong>xstep</strong> (<em>float or None, optional</em>) Step size to use between each x value. At least 2 of xmax, xstep, and xnum must be not None. Default value is None.</p></li>
+<li><p><strong>xnum</strong> (<em>int or None, optional</em>) Number of x values to use. At least 2 of xmax, xstep, and xnum must be not None. Default value is None.</p></li>
+<li><p><strong>burgers</strong> (<em>numpy.ndarray, optional</em>) The Burgers vector for the dislocation. Default value is [1, 0, 0].</p></li>
+<li><p><strong>halfwidth</strong> (<em>float, optional</em>) The dislocation halfwidth to use. Default value is 1.</p></li>
+<li><p><strong>normalize</strong> (<em>bool, optional</em>) If True (default), the disregistry values will be scaled such that the two endpoints differ by exactly one Burgers vector.</p></li>
+<li><p><strong>shift</strong> (<em>bool, optional</em>) If True (default), the disregistry will range [0, 0, 0] to burgers. If False, the disregistry will range from -burgers to burgers.</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li><strong>x</strong> (<em>numpy.ndarray</em>) The x-coordinates for the disregistry values.</li>
-<li><strong>disregistry</strong> (<em>numpy.ndarray</em>) The disregistry vector at each x-coordinate.</li>
+<li><p><strong>x</strong> (<em>numpy.ndarray</em>) The x-coordinates for the disregistry values.</p></li>
+<li><p><strong>disregistry</strong> (<em>numpy.ndarray</em>) The disregistry vector at each x-coordinate.</p></li>
 </ul>
 <p><strong>NOTE:</strong> the parameters normalize and shift should both be True for use with the SDVPN model.</p>
+<div class="section" id="3.1-Initial-disregistry">
+<h3>3.1 Initial disregistry<a class="headerlink" href="#3.1-Initial-disregistry" title="Permalink to this headline">¶</a></h3>
+<p>Check burgers vector as transformed for the SDVPN solution:</p>
+<ul class="simple">
+<li><p>x = edge component.</p></li>
+<li><p>y = normal (out-of-plane) component. Should be 0.0</p></li>
+<li><p>z = screw component.</p></li>
+</ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Transform Burgers vector to axes</span>
-<span class="n">transform</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">axes_check</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">y_axis</span><span class="p">,</span> <span class="n">z_axis</span><span class="p">]))</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
+<span></span><span class="n">b</span> <span class="o">=</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">burgers</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Transformed Burgers vector =&#39;</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -540,16 +621,16 @@ K_tensor in GPa:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Transformed Burgers vector = [2.86045906 0.         0.        ]
+Transformed Burgers vector = [2.86043063 0.         0.        ]
 </pre></div></div>
 </div>
+<p>Generate arctan disregistry using burgers.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Generate disregistry</span>
-<span class="n">xstep</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">4</span>  <span class="c1"># atomic column separation along [10-1] direction</span>
+<span></span><span class="n">xstep</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">4</span>  <span class="c1"># atomic column separation along [10-1] direction</span>
 <span class="n">xnum</span> <span class="o">=</span> <span class="mi">100</span>
 <span class="n">halfwidth</span> <span class="o">=</span> <span class="mi">2</span>
 
@@ -557,18 +638,58 @@ Transformed Burgers vector = [2.86045906 0.         0.        ]
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<p>Set x, disregistry to the SDVPN object</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">disreg</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;edge disregistry&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">disreg</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;normal disregistry&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">disreg</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;screw disregistry&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x-coordinate (angstrom)&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;disregistry (angstrom)&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
+<span></span><span class="n">pnsolution</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+<span class="n">pnsolution</span><span class="o">.</span><span class="n">disregistry</span> <span class="o">=</span> <span class="n">disreg</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="3.2-Check-initial-disregistry">
+<h3>3.2 Check initial disregistry<a class="headerlink" href="#3.2-Check-initial-disregistry" title="Permalink to this headline">¶</a></h3>
+<p>The SDVPN class has some built-in methods for checking the disregistry profile and the corresponding energy values.</p>
+<ul class="simple">
+<li><p><strong>total_energy(), misfit_energy(), elastic_energy(), longrange_energy(), stress_energy(), nonlocal_energy() and surface_energy()</strong> return the values for the different energy terms based on the current disregistry.</p></li>
+<li><p><strong>check_energies()</strong> prints out the current energies for all of the different energy terms.</p></li>
+<li><p><strong>disregistry_plot()</strong> creates a simple plot of the disregistry profiles.</p></li>
+<li><p><strong>E_gsf_surface_plot()</strong> extends the corresponding GammaSurface method by including a line for the disregistry profile.</p></li>
+<li><p><strong>E_gsf_vs_x_plot()</strong> plots the stacking fault energy associated with the disregistry values along x versus x.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">pnsolution</span><span class="o">.</span><span class="n">check_energies</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Dislocation energy terms in eV/angstrom:
+Misfit energy =     0.15238368652011883
+Elastic energy =    -0.21141715213384996
+Long-range energy = 2.312310391118972
+Stress energy =     -0.0
+Surface energy =    0.0
+Nonlocal energy =   0.0
+Total energy =      2.253276925505241
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">pnsolution</span><span class="o">.</span><span class="n">disregistry_plot</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -577,47 +698,57 @@ Transformed Burgers vector = [2.86045906 0.         0.        ]
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_23_0.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_23_0.png" />
+<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_30_0.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_30_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">pnsolution</span><span class="o">.</span><span class="n">E_gsf_surface_plot</span><span class="p">(</span><span class="n">a1vect</span><span class="o">=</span><span class="n">plotting_a1vect</span><span class="p">,</span> <span class="n">a2vect</span><span class="o">=</span><span class="n">plotting_a2vect</span><span class="p">,</span> <span class="n">energyperarea_unit</span><span class="o">=</span><span class="s1">&#39;mJ/m^2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_31_0.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_31_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">pnsolution</span><span class="o">.</span><span class="n">E_gsf_vs_x_plot</span><span class="p">(</span><span class="n">energyperarea_unit</span><span class="o">=</span><span class="s1">&#39;mJ/m^2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_32_0.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_32_0.png" />
+</div>
 </div>
 </div>
 </div>
 <div class="section" id="4.-Solve-SDVPN-model">
 <h2>4. Solve SDVPN model<a class="headerlink" href="#4.-Solve-SDVPN-model" title="Permalink to this headline">¶</a></h2>
-<p>A solution for the SDVPN model will be obtained through minimization upon initializing an object of the SDVPN class. There are numerous parameters that can be set.</p>
-<p>Parameters</p>
-<ul class="simple">
-<li><strong>x</strong> (<em>numpy.ndarray</em>) An array of shape (N) giving the x coordinates corresponding to the disregistry solution.</li>
-<li><strong>disregistry</strong> (<em>numpy.ndarray</em>) A (N,3) array giving the initial disregistry vector guess at each x coordinate.</li>
-<li><strong>gamma</strong> (<em>atomman.defect.GammaSurface</em>) The gamma surface (stacking fault map) to use for computing the misfit energy.</li>
-<li><strong>axes</strong> (<em>numpy.ndarray</em>) A (3,3) array defining the crystal directions of the dislocation system. Used to orient the disregistry vector to the gamma surface in computing the misfit energy.</li>
-<li><strong>K_tensor</strong> (<em>numpy.ndarray</em>) A (3,3) array giving the anisotropic elastic energy coefficients corresponding to the dislocation system’s orientation. Can be computed with atomman.defect.Stroh.</li>
-<li><strong>tau</strong> (<em>numpy.ndarray, optional</em>) A (3,3) array giving the stress tensor to apply to the system using the stress energy term. Only the xy, yy, and yz components are used. Default value is all zeros.</li>
-<li><strong>alpha</strong> (<em>list of float, optional</em>) The alpha coefficient(s) used by the nonlocal energy term. Default value is [0.0].</li>
-<li><strong>beta</strong> (<em>numpy.ndarray, optional</em>) The (3,3) array of beta coefficient(s) used by the gradient energy term. Default value is all zeros.</li>
-<li><strong>cutofflongrange</strong> (<em>float, optional</em>) The cutoff distance to use for computing the long-range energy. Default value is 1000 Angstroms.</li>
-<li><strong>burgers</strong> (<em>numpy.ndarray, optional</em>) The (3,) array of the dislocation’s Burgers vector relative to the dislocation system. Used only by the long-range energy. Default value is all zeros (long-range energy will be excluded).</li>
-<li><strong>fullstress</strong> (<em>bool, optional</em>) Flag indicating which stress energy algorithm to use. Default value is True.</li>
-<li><strong>cdiffelastic</strong> (<em>bool, optional</em>) Flag indicating if the dislocation density for the elastic energy component is computed with central difference (True) or simply neighboring values (False). Default value is False.</li>
-<li><strong>cdiffsurface</strong> (<em>bool, optional</em>) Flag indicating if the dislocation density for the surface energy component is computed with central difference (True) or simply neighboring values (False). Default value is True.</li>
-<li><strong>cdiffstress</strong> (<em>bool, optional</em>) Flag indicating if the dislocation density for the stress energy component is computed with central difference (True) or simply neighboring values (False). Only matters if fullstress is True. Default value is False.</li>
-<li><strong>min_method</strong> (<em>str, optional</em>) The scipy.optimize.minimize method to use. Default value is ‘Powell’.</li>
-<li><strong>min_options</strong> (<em>dict, optional</em>) Any options to pass on to scipy.optimize.minimize. Default value is {}.</li>
-</ul>
-<p><strong>Execution tips:</strong> Tests seem to indicate that the ‘Powell’ minimization option works well for this problem. For best results, use min_options to set xtol and ftol to smaller values and run the solver multiple times in a row (minimizer may get stuck).</p>
-<p>Set parameters and solve the first time</p>
+<p>Calling the SDVPN.solve() method will perform the energy minimization based on the current values of x, disregistry, and the various settings parameters. Initial x and disregistry values can be passed to solve() along with new values for the different settings parameters (tau and below for the class initialization parameters).</p>
+<div class="section" id="4.1-Call-solve-the-first-time">
+<h3>4.1 Call solve the first time<a class="headerlink" href="#4.1-Call-solve-the-first-time" title="Permalink to this headline">¶</a></h3>
+<p>Since x and disregistry have been set using the identified initial values, the minimization will start from there. Also note all options are as specified above.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">min_options</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">min_options</span><span class="p">[</span><span class="s1">&#39;disp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># will display convergence info</span>
-<span class="n">min_options</span><span class="p">[</span><span class="s1">&#39;xtol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-6</span> <span class="c1"># smaller convergence tolerance than default</span>
-<span class="n">min_options</span><span class="p">[</span><span class="s1">&#39;ftol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-6</span> <span class="c1"># smaller convergence tolerance than default</span>
-<span class="c1">#min_options[&#39;maxiter&#39;] = 2 # for testing purposes</span>
-<span class="n">pnsolution</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">SDVPN</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">disregistry</span><span class="o">=</span><span class="n">disreg</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span>
-                             <span class="n">axes</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">y_axis</span><span class="p">,</span> <span class="n">z_axis</span><span class="p">]),</span> <span class="n">K_tensor</span><span class="o">=</span><span class="n">K_tensor</span><span class="p">,</span>
-                             <span class="n">min_options</span><span class="o">=</span><span class="n">min_options</span><span class="p">)</span>
+<span></span><span class="n">pnsolution</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -627,33 +758,21 @@ Transformed Burgers vector = [2.86045906 0.         0.        ]
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Optimization terminated successfully.
-         Current function value: -0.098563
-         Iterations: 13
-         Function evaluations: 37899
+         Current function value: 2.213861
+         Iterations: 11
+         Function evaluations: 33045
 </pre></div></div>
 </div>
-<p>Values for the different energy terms can be obtained and the disregistry plotted.</p>
+</div>
+<div class="section" id="4.2-Check-results">
+<h3>4.2 Check results<a class="headerlink" href="#4.2-Check-results" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Dislocation energy terms in eV/angstrom:&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Misfit energy =    &#39;</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">misfit_energy</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Elastic energy =   &#39;</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">elastic_energy</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Long-range energy =&#39;</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">longrange_energy</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Stress energy =    &#39;</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">stress_energy</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Surface energy =   &#39;</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">surface_energy</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Nonlocal energy =  &#39;</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">nonlocal_energy</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Total energy =     &#39;</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">total_energy</span><span class="p">())</span>
-
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pnsolution</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">disregistry</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;edge disregistry&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pnsolution</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">disregistry</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;normal disregistry&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pnsolution</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">disregistry</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;screw disregistry&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x-coordinate (angstrom)&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;disregistry (angstrom)&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
+<span></span><span class="n">pnsolution</span><span class="o">.</span><span class="n">check_energies</span><span class="p">()</span>
+<span class="n">pnsolution</span><span class="o">.</span><span class="n">disregistry_plot</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -664,25 +783,29 @@ Optimization terminated successfully.
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Dislocation energy terms in eV/angstrom:
-Misfit energy =     0.157413973621664
-Elastic energy =    -0.25597652593604625
-Long-range energy = 0.0
+Misfit energy =     0.15766073245342901
+Elastic energy =    -0.2561105299830472
+Long-range energy = 2.312310391118972
 Stress energy =     -0.0
 Surface energy =    0.0
 Nonlocal energy =   0.0
-Total energy =      -0.09856255231438224
+Total energy =      2.2138605935893536
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_29_1.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_29_1.png" />
+<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_37_1.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_37_1.png" />
 </div>
 </div>
-<p>Call solve() to run the solver again, using the current disregistry solution as the input disregistry. All other parameters are left unchanged unless they are given.</p>
+</div>
+<div class="section" id="4.3-Repeat-minimization">
+<h3>4.3 Repeat minimization<a class="headerlink" href="#4.3-Repeat-minimization" title="Permalink to this headline">¶</a></h3>
+<p>The disregistry found after relaxing will replace the initial values in the class. Subsequent calls to solve() will then use the previous run’s final results as the initial starting place. Doing repeated solves is recommended as it can help further refine the results as the minimization algorithms (especially Powell) benefit from restarts.</p>
+<p>Also, note that you can change the various options and settings for subsequent runs. This can save time if you wish to see relaxed disregistries for multiple different settings, like different stress states, as the two relaxed disregistry states are likely closer to each other than the arbitrary initial state.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -697,68 +820,57 @@ Total energy =      -0.09856255231438224
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Optimization terminated successfully.
-         Current function value: -0.098563
+         Current function value: 2.213860
          Iterations: 1
-         Function evaluations: 4057
+         Function evaluations: 3721
 Optimization terminated successfully.
-         Current function value: -0.098563
+         Current function value: 2.213860
          Iterations: 1
-         Function evaluations: 4455
+         Function evaluations: 3801
 Optimization terminated successfully.
-         Current function value: -0.098563
+         Current function value: 2.213860
          Iterations: 1
-         Function evaluations: 4618
+         Function evaluations: 3869
 Optimization terminated successfully.
-         Current function value: -0.098563
+         Current function value: 2.213860
          Iterations: 1
-         Function evaluations: 4661
+         Function evaluations: 4144
 Optimization terminated successfully.
-         Current function value: -0.098563
+         Current function value: 2.213860
          Iterations: 1
-         Function evaluations: 4990
+         Function evaluations: 4542
 Optimization terminated successfully.
-         Current function value: -0.098563
+         Current function value: 2.213860
          Iterations: 1
-         Function evaluations: 4994
+         Function evaluations: 4652
 Optimization terminated successfully.
-         Current function value: -0.098563
+         Current function value: 2.213860
          Iterations: 1
-         Function evaluations: 5096
+         Function evaluations: 4847
 Optimization terminated successfully.
-         Current function value: -0.098563
+         Current function value: 2.213860
          Iterations: 1
-         Function evaluations: 5143
+         Function evaluations: 4822
 Optimization terminated successfully.
-         Current function value: -0.098563
+         Current function value: 2.213860
          Iterations: 1
-         Function evaluations: 5302
+         Function evaluations: 4780
 Optimization terminated successfully.
-         Current function value: -0.098563
+         Current function value: 2.213860
          Iterations: 1
-         Function evaluations: 5212
+         Function evaluations: 4798
 </pre></div></div>
 </div>
+</div>
+<div class="section" id="4.4-Check-results">
+<h3>4.4 Check results<a class="headerlink" href="#4.4-Check-results" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Dislocation energy terms in eV/angstrom:&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Misfit energy =    &#39;</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">misfit_energy</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Elastic energy =   &#39;</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">elastic_energy</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Long-range energy =&#39;</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">longrange_energy</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Stress energy =    &#39;</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">stress_energy</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Surface energy =   &#39;</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">surface_energy</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Nonlocal energy =  &#39;</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">nonlocal_energy</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Total energy =     &#39;</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">total_energy</span><span class="p">())</span>
-
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pnsolution</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">disregistry</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;edge disregistry&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pnsolution</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">disregistry</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;normal disregistry&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pnsolution</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pnsolution</span><span class="o">.</span><span class="n">disregistry</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;screw disregistry&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x-coordinate (angstrom)&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;disregistry (angstrom)&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
+<span></span><span class="n">pnsolution</span><span class="o">.</span><span class="n">check_energies</span><span class="p">()</span>
+<span class="n">pnsolution</span><span class="o">.</span><span class="n">disregistry_plot</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -769,62 +881,28 @@ Optimization terminated successfully.
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Dislocation energy terms in eV/angstrom:
-Misfit energy =     0.1574689864920074
-Elastic energy =    -0.25603162033855004
-Long-range energy = 0.0
+Misfit energy =     0.15764139414124087
+Elastic energy =    -0.25609172875102204
+Long-range energy = 2.312310391118972
 Stress energy =     -0.0
 Surface energy =    0.0
 Nonlocal energy =   0.0
-Total energy =      -0.09856263384654262
+Total energy =      2.2138600565091906
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_32_1.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_32_1.png" />
+<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_41_1.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_41_1.png" />
 </div>
 </div>
-<p>Plot disregistry path on the gamma surface</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">pos_to_xy</span><span class="p">(</span><span class="n">pnsolution</span><span class="o">.</span><span class="n">disregistry</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">transform</span><span class="p">))</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf_surface_plot</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;ro-&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>[&lt;matplotlib.lines.Line2D at 0x168802bd198&gt;]
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_34_1.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_34_1.png" />
-</div>
-</div>
-<p>Plot stacking fault energy as a function of x-coordinate</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">sf</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">E_gsf</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pnsolution</span><span class="o">.</span><span class="n">disregistry</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">transform</span><span class="p">))</span>
-
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pnsolution</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">sf</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x-coordinate (angstrom)&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Stacking fault energy (eV/angstrom^2)&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
+<span></span><span class="n">pnsolution</span><span class="o">.</span><span class="n">E_gsf_surface_plot</span><span class="p">(</span><span class="n">a1vect</span><span class="o">=</span><span class="n">plotting_a1vect</span><span class="p">,</span> <span class="n">a2vect</span><span class="o">=</span><span class="n">plotting_a2vect</span><span class="p">,</span> <span class="n">energyperarea_unit</span><span class="o">=</span><span class="s1">&#39;mJ/m^2&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -833,7 +911,42 @@ Total energy =      -0.09856263384654262
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_36_0.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_36_0.png" />
+<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_42_0.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_42_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">pnsolution</span><span class="o">.</span><span class="n">E_gsf_surface_plot</span><span class="p">(</span><span class="n">a1vect</span><span class="o">=</span><span class="p">[</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">a2vect</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">energyperarea_unit</span><span class="o">=</span><span class="s1">&#39;mJ/m^2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_43_0.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_43_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">pnsolution</span><span class="o">.</span><span class="n">E_gsf_vs_x_plot</span><span class="p">(</span><span class="n">energyperarea_unit</span><span class="o">=</span><span class="s1">&#39;mJ/m^2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_44_0.png" src="../_images/tutorial_04.7._Semidiscrete_variational_Peierls-Nabarro_model_44_0.png" />
+</div>
 </div>
 </div>
 </div>
@@ -862,14 +975,24 @@ Total energy =      -0.09856263384654262
 <li><a class="reference internal" href="#1.2.-Methodology-overview">1.2. Methodology overview</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#2.-Dependent-parameters">2. Dependent parameters</a><ul>
-<li><a class="reference internal" href="#2.1.-Define-material-constants">2.1. Define material constants</a></li>
-<li><a class="reference internal" href="#2.2.-Get-K_{ij}-values">2.2. Get <span class="math notranslate nohighlight">\(K_{ij}\)</span> values</a></li>
-<li><a class="reference internal" href="#2.3.-\gamma-surface">2.3. <span class="math notranslate nohighlight">\(\gamma\)</span> surface</a></li>
+<li><a class="reference internal" href="#Initialize-SDVPN-using-GammaSurface-and-VolterraDislocation">Initialize SDVPN using GammaSurface and VolterraDislocation</a><ul>
+<li><a class="reference internal" href="#2.2.-Load-\gamma-surface-results">2.2. Load <span class="math notranslate nohighlight">\(\gamma\)</span> surface results</a></li>
+<li><a class="reference internal" href="#2.3.-Get-a-Volterra-dislocation-solution">2.3. Get a Volterra dislocation solution</a></li>
+<li><a class="reference internal" href="#2.3.-Initializing-an-SDVPN-object">2.3. Initializing an SDVPN object</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#3.-Generate-initial-disregistry">3. Generate initial disregistry</a></li>
-<li><a class="reference internal" href="#4.-Solve-SDVPN-model">4. Solve SDVPN model</a></li>
+<li><a class="reference internal" href="#3.-Generate-initial-disregistry">3. Generate initial disregistry</a><ul>
+<li><a class="reference internal" href="#3.1-Initial-disregistry">3.1 Initial disregistry</a></li>
+<li><a class="reference internal" href="#3.2-Check-initial-disregistry">3.2 Check initial disregistry</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#4.-Solve-SDVPN-model">4. Solve SDVPN model</a><ul>
+<li><a class="reference internal" href="#4.1-Call-solve-the-first-time">4.1 Call solve the first time</a></li>
+<li><a class="reference internal" href="#4.2-Check-results">4.2 Check results</a></li>
+<li><a class="reference internal" href="#4.3-Repeat-minimization">4.3 Repeat minimization</a></li>
+<li><a class="reference internal" href="#4.4-Check-results">4.4 Check results</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -899,12 +1022,12 @@ Total energy =      -0.09856263384654262
         <li class="right" >
           <a href="04.6._Gamma_surface_plotting.html" title="Introduction to atomman: Gamma surface plotting"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

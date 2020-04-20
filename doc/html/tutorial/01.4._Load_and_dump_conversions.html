@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Load and dump conversions &#8212; atomman 1.3.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Introduction to atomman: Load and dump conversions &#8212; atomman 1.3.2 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,6 +12,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="01.3._System_class.html" title="Introduction to atomman: System class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -54,21 +53,21 @@
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
 <p>Atomman features an number of built-in converters between the atomman.System class and other representations of atomic configurations. This includes text-based representations for storing atomic information as files, and representations used by other Python packages. All conversions between the different format options are handled in a similar manner by defining the two operations</p>
 <ul class="simple">
-<li><strong>load</strong> creates a System object based on another representation.</li>
-<li><strong>dump</strong> converts a System object to another representation.</li>
+<li><p><strong>load</strong> creates a System object based on another representation.</p></li>
+<li><p><strong>dump</strong> converts a System object to another representation.</p></li>
 </ul>
 <p><strong>NOTE</strong>: A load/dump style may have additional Python package requirements in order to work. Check the documentation on each style for more details.</p>
 </div>
 <div class="section" id="2.-Load">
 <h2>2. Load<a class="headerlink" href="#2.-Load" title="Permalink to this headline">¶</a></h2>
-<p>Each style defines its own load function, which can be called directly as atomman.load_&lt;style&gt;(), (e.g.&nbsp;atomman.load_poscar()) or by calling atomman.load(style). The underlying code for the load functions can be found in the atomman/load directory.</p>
+<p>Each style defines its own load function, which can be called directly as atomman.load_&lt;style&gt;(), (e.g. atomman.load_poscar()) or by calling atomman.load(style). The underlying code for the load functions can be found in the atomman/load directory.</p>
 <div class="section" id="2.1-atomman.load_&lt;style&gt;()">
 <h3>2.1 atomman.load_&lt;style&gt;()<a class="headerlink" href="#2.1-atomman.load_<style>()" title="Permalink to this headline">¶</a></h3>
 <p>Style-specific load functions.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>content</strong> (<em>any</em>) the content to be loaded. For text formats, can be a str of the content, a file path or a file-like object.</li>
-<li><strong>**kwargs</strong> (<em>any</em>) any extra style-specific keyword arguments.</li>
+<li><p><strong>content</strong> (<em>any</em>) the content to be loaded. For text formats, can be a str of the content, a file path or a file-like object.</p></li>
+<li><p><strong>**kwargs</strong> (<em>any</em>) any extra style-specific keyword arguments.</p></li>
 </ul>
 </div>
 <div class="section" id="2.2.-atomman.load()">
@@ -76,9 +75,9 @@
 <p>Common load function that can be used for any style. Convenient for loading user-specified data as the format style is a string parameter.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>style</strong> (<em>str</em>) indicates the format of the content being loaded.</li>
-<li><strong>content</strong> (<em>any</em>) the content to be loaded. For text formats, can be a str of the content, a file path or a file-like object.</li>
-<li><strong>**kwargs</strong> (<em>any</em>) any extra style-specific keyword arguments.</li>
+<li><p><strong>style</strong> (<em>str</em>) indicates the format of the content being loaded.</p></li>
+<li><p><strong>content</strong> (<em>any</em>) the content to be loaded. For text formats, can be a str of the content, a file path or a file-like object.</p></li>
+<li><p><strong>**kwargs</strong> (<em>any</em>) any extra style-specific keyword arguments.</p></li>
 </ul>
 </div>
 </div>
@@ -90,8 +89,8 @@
 <p>Style-specific dump functions.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>system</strong> (<em>atomman.System</em>) The system to convert.</li>
-<li><strong>**kwargs</strong> (<em>any</em>) any extra style-specific keyword arguments.</li>
+<li><p><strong>system</strong> (<em>atomman.System</em>) The system to convert.</p></li>
+<li><p><strong>**kwargs</strong> (<em>any</em>) any extra style-specific keyword arguments.</p></li>
 </ul>
 </div>
 <div class="section" id="3.2.-atomman.dump()">
@@ -99,9 +98,9 @@
 <p>Common dump function that can be used for any style.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>style</strong> (<em>str</em>) indicates the format of the content to dump to.</li>
-<li><strong>system</strong> (<em>atomman.System</em>) The system to convert.</li>
-<li><strong>**kwargs</strong> (<em>any</em>) any extra style-specific keyword arguments.</li>
+<li><p><strong>style</strong> (<em>str</em>) indicates the format of the content to dump to.</p></li>
+<li><p><strong>system</strong> (<em>atomman.System</em>) The system to convert.</p></li>
+<li><p><strong>**kwargs</strong> (<em>any</em>) any extra style-specific keyword arguments.</p></li>
 </ul>
 </div>
 <div class="section" id="3.3.-System.dump()">
@@ -109,8 +108,8 @@
 <p>The System class also defines a dump() method that calls atomman.dump() on itself.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>style</strong> (<em>str</em>) indicates the format of the content to dump to.</li>
-<li><strong>**kwargs</strong> (<em>any</em>) any extra style-specific keyword arguments.</li>
+<li><p><strong>style</strong> (<em>str</em>) indicates the format of the content to dump to.</p></li>
+<li><p><strong>**kwargs</strong> (<em>any</em>) any extra style-specific keyword arguments.</p></li>
 </ul>
 </div>
 </div>
@@ -180,12 +179,12 @@
         <li class="right" >
           <a href="01.3._System_class.html" title="Introduction to atomman: System class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

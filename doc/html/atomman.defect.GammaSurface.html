@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>GammaSurface &#8212; atomman 1.3.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>GammaSurface &#8212; atomman 1.3.2 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -14,12 +12,13 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="IsotropicVolterraDislocation" href="atomman.defect.IsotropicVolterraDislocation.html" />
-    <link rel="prev" title="defect" href="atomman.defect.html" /> 
+    <link rel="next" title="VolterraDislocation" href="atomman.defect.VolterraDislocation.html" />
+    <link rel="prev" title="StackingFault" href="atomman.defect.StackingFault.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -31,12 +30,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="atomman.defect.IsotropicVolterraDislocation.html" title="IsotropicVolterraDislocation"
+          <a href="atomman.defect.VolterraDislocation.html" title="VolterraDislocation"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="atomman.defect.html" title="defect"
+          <a href="atomman.defect.StackingFault.html" title="StackingFault"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="atomman.defect.html" accesskey="U">defect</a> &#187;</li> 
       </ul>
@@ -51,558 +50,487 @@
 <h1>GammaSurface<a class="headerlink" href="#gammasurface" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="atomman.defect.GammaSurface">
-<em class="property">class </em><code class="descclassname">atomman.defect.</code><code class="descname">GammaSurface</code><span class="sig-paren">(</span><em>model=None</em>, <em>a1vect=None</em>, <em>a2vect=None</em>, <em>a1=None</em>, <em>a2=None</em>, <em>E_gsf=None</em>, <em>box=None</em>, <em>delta=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">atomman.defect.</code><code class="sig-name descname">GammaSurface</code><span class="sig-paren">(</span><em class="sig-param">model=None</em>, <em class="sig-param">a1vect=None</em>, <em class="sig-param">a2vect=None</em>, <em class="sig-param">a1=None</em>, <em class="sig-param">a2=None</em>, <em class="sig-param">E_gsf=None</em>, <em class="sig-param">box=None</em>, <em class="sig-param">delta=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class for representing gamma surfaces, i.e., generalized stacking faults.</p>
 <dl class="method">
 <dt id="atomman.defect.GammaSurface.E_gsf">
-<code class="descname">E_gsf</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.E_gsf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">E_gsf</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.E_gsf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns values for generalized stacking fault energy interpolated from
 the raw data.  Values can be obtained relative to a1, a2 fractional
 coordinates, x, y plotting coordinates, or pos Cartesian coordinates.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>a1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Fractional coordinate(s) along a1vect.</li>
-<li><strong>a2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Fractional coordinate(s) along a2vect.</li>
-<li><strong>pos</strong> (<em>np.array</em><em>, </em><em>optional</em>) – 3D Cartesian position vector(s).</li>
-<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Plotting x coordinate(s).</li>
-<li><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Plotting y coordinate(s).</li>
-<li><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Vector for the a1 fractional coordinates.  Default value of None
-uses the saved a1vect.</li>
-<li><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Vector for the a2 fractional coordinates.  Default value of None
-uses the saved a2vect.</li>
-<li><strong>xvect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Cartesian vector corresponding to the plotting x-axis. If None
-(default), this is taken as the Cartesian of a1vect.</li>
-<li><strong>smooth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If True (default) the returned values are smoothed using a RBF fit.
-If False, the closest measured values are returned.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Fractional coordinate(s) along a1vect.</p></li>
+<li><p><strong>a2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Fractional coordinate(s) along a2vect.</p></li>
+<li><p><strong>pos</strong> (<em>np.array</em><em>, </em><em>optional</em>) – 3D Cartesian position vector(s).</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Plotting x coordinate(s).</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Plotting y coordinate(s).</p></li>
+<li><p><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Vector for the a1 fractional coordinates.  Default value of None
+uses the saved a1vect.</p></li>
+<li><p><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Vector for the a2 fractional coordinates.  Default value of None
+uses the saved a2vect.</p></li>
+<li><p><strong>xvect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Cartesian vector corresponding to the plotting x-axis. If None
+(default), this is taken as the Cartesian of a1vect.</p></li>
+<li><p><strong>smooth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If True (default) the returned values are smoothed using a RBF fit.
+If False, the closest measured values are returned.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.GammaSurface.E_gsf_line_plot">
-<code class="descname">E_gsf_line_plot</code><span class="sig-paren">(</span><em>vect=None</em>, <em>num=None</em>, <em>smooth=True</em>, <em>length_unit='angstrom'</em>, <em>energyperarea_unit='eV/angstrom^2'</em>, <em>figsize=None</em>, <em>fig=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.E_gsf_line_plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">E_gsf_line_plot</code><span class="sig-paren">(</span><em class="sig-param">vect=None</em>, <em class="sig-param">num=None</em>, <em class="sig-param">smooth=True</em>, <em class="sig-param">length_unit='angstrom'</em>, <em class="sig-param">energyperarea_unit='eV/angstrom^2'</em>, <em class="sig-param">figsize=None</em>, <em class="sig-param">fig=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.E_gsf_line_plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a line plot for the interpolated generalized stacking fault
 energy along a specified crystallographic vector in the (a1, a2) plane.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>vect</strong> (<em>numpy.array</em><em>, </em><em>optional</em>) – Vector to plot the gsf along.  If box is set, this vect will be a
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vect</strong> (<em>numpy.array</em><em>, </em><em>optional</em>) – Vector to plot the gsf along.  If box is set, this vect will be a
 lattice vector, otherwise it will be a Cartesian vector.  Must be
 in the plane defined by the GammaSurface object’s a1vect and
-a2vect vectors.  Default value will use the set a1vect.</li>
-<li><strong>num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of points to evaluate the generalized stacking fault
+a2vect vectors.  Default value will use the set a1vect.</p></li>
+<li><p><strong>num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of points to evaluate the generalized stacking fault
 energy for.  Default value is 100 if smooth is True, otherwise is
-number of unique a1 values from 0 to 1.</li>
-<li><strong>smooth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If True (default), then plot shows smooth interpolated values.
-If False, plot shows nearest raw data values.</li>
-<li><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The unit of length to display the x-axis coordinates in.
-Default value is ‘angstrom’.</li>
-<li><strong>energyperarea_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The unit of energy per area to display the stacking fault energies
-in. Default value is ‘eV/angstrom^2’.</li>
-<li><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em>, </em><em>optional</em>) – The x,y size of the figure to return.  Default value is (10, 6).</li>
-<li><strong>fig</strong> (<em>matplotlib.figure</em><em>, </em><em>optional</em>) – An existing figure object to add the new plot to.  If not given, a
-new figure is generated.</li>
-<li><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keywords are passed into the underlying
+number of unique a1 values from 0 to 1.</p></li>
+<li><p><strong>smooth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If True (default), then plot shows smooth interpolated values.
+If False, plot shows nearest raw data values.</p></li>
+<li><p><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The unit of length to display the x-axis coordinates in.
+Default value is ‘angstrom’.</p></li>
+<li><p><strong>energyperarea_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The unit of energy per area to display the stacking fault energies
+in. Default value is ‘eV/angstrom^2’.</p></li>
+<li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em>, </em><em>optional</em>) – The x,y size of the figure to return.  Default value is (10, 6).</p></li>
+<li><p><strong>fig</strong> (<em>matplotlib.figure</em><em>, </em><em>optional</em>) – An existing figure object to add the new plot to.  If not given, a
+new figure is generated.</p></li>
+<li><p><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keywords are passed into the underlying
 matplotlib.pyplot.plot(). This allows control of such things
-like line color, style, etc.</li>
+like line color, style, etc.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">matplotlib.figure</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib.figure</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.GammaSurface.E_gsf_surface_plot">
-<code class="descname">E_gsf_surface_plot</code><span class="sig-paren">(</span><em>normalize=False</em>, <em>smooth=True</em>, <em>a1vect=None</em>, <em>a2vect=None</em>, <em>xvect=None</em>, <em>length_unit='angstrom'</em>, <em>energyperarea_unit='eV/angstrom^2'</em>, <em>numx=100</em>, <em>numy=100</em>, <em>figsize=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.E_gsf_surface_plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">E_gsf_surface_plot</code><span class="sig-paren">(</span><em class="sig-param">normalize=False</em>, <em class="sig-param">smooth=True</em>, <em class="sig-param">a1vect=None</em>, <em class="sig-param">a2vect=None</em>, <em class="sig-param">xvect=None</em>, <em class="sig-param">length_unit='angstrom'</em>, <em class="sig-param">energyperarea_unit='eV/angstrom^2'</em>, <em class="sig-param">numx=100</em>, <em class="sig-param">numy=100</em>, <em class="sig-param">figsize=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.E_gsf_surface_plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a 2D surface plot from the stacking fault energy values.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>normalize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if axes are Cartesian (False, default) or
-normalized by a1, a2 vectors (True).</li>
-<li><strong>smooth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If True (default), then plot shows smooth interpolated values.
-If False, plot shows nearest raw data values.</li>
-<li><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a1 vector to use for plotting.  Default
-value of None uses the saved a1vect.</li>
-<li><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a2 vector to use for plotting.  Default
-value of None uses the saved a2vect.</li>
-<li><strong>xvect</strong> (<em>numpy.array</em><em>, </em><em>optional</em>) – Crystal vector to align with the plotting x-axis for
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>normalize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if axes are Cartesian (False, default) or
+normalized by a1, a2 vectors (True).</p></li>
+<li><p><strong>smooth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If True (default), then plot shows smooth interpolated values.
+If False, plot shows nearest raw data values.</p></li>
+<li><p><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a1 vector to use for plotting.  Default
+value of None uses the saved a1vect.</p></li>
+<li><p><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a2 vector to use for plotting.  Default
+value of None uses the saved a2vect.</p></li>
+<li><p><strong>xvect</strong> (<em>numpy.array</em><em>, </em><em>optional</em>) – Crystal vector to align with the plotting x-axis for
 non-normalized plots.  If not given, this is taken as the Cartesian
-of a1vect.</li>
-<li><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The unit of length to display non-normalized axes values in.
-Default value is ‘angstrom’.</li>
-<li><strong>energyperarea_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The unit of energy per area to display the stacking fault energies
-in. Default value is ‘eV/angstrom^2’.</li>
-<li><strong>numx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of plotting points to use along the x-axis.  Default
-value is 100.</li>
-<li><strong>numy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of plotting points to use along the y-axis.  Default
-value is 100.</li>
-<li><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em>, </em><em>optional</em>) – The figure’s x,y dimensions.  If None (default), the values are
+of a1vect.</p></li>
+<li><p><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The unit of length to display non-normalized axes values in.
+Default value is ‘angstrom’.</p></li>
+<li><p><strong>energyperarea_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The unit of energy per area to display the stacking fault energies
+in. Default value is ‘eV/angstrom^2’.</p></li>
+<li><p><strong>numx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of plotting points to use along the x-axis.  Default
+value is 100.</p></li>
+<li><p><strong>numy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of plotting points to use along the y-axis.  Default
+value is 100.</p></li>
+<li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em>, </em><em>optional</em>) – The figure’s x,y dimensions.  If None (default), the values are
 scaled such that the x,y spacings are approximately equal, and the
-larger of the two values is set to 10.</li>
-<li><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keywords are passed into the underlying
+larger of the two values is set to 10.</p></li>
+<li><p><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keywords are passed into the underlying
 matplotlib.pyplot.pcolormesh(). This allows control of such things
-like the colormap (cmap).</li>
+like the colormap (cmap).</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">matplotlib.figure</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib.figure</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.GammaSurface.a12_to_pos">
-<code class="descname">a12_to_pos</code><span class="sig-paren">(</span><em>a1</em>, <em>a2</em>, <em>a1vect=None</em>, <em>a2vect=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.a12_to_pos" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">a12_to_pos</code><span class="sig-paren">(</span><em class="sig-param">a1</em>, <em class="sig-param">a2</em>, <em class="sig-param">a1vect=None</em>, <em class="sig-param">a2vect=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.a12_to_pos" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conversion function from normalized a1, a2 coordinates to Cartesian
 positions.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Fractional distance(s) along a1 vector.</li>
-<li><strong>a2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Fractional distance(s) along a2 vector.</li>
-<li><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a1 vector.  Default value of None uses the
-saved a1vect.</li>
-<li><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a2 vector.  Default value of None uses the
-saved a2vect.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Fractional distance(s) along a1 vector.</p></li>
+<li><p><strong>a2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Fractional distance(s) along a2 vector.</p></li>
+<li><p><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a1 vector.  Default value of None uses the
+saved a1vect.</p></li>
+<li><p><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a2 vector.  Default value of None uses the
+saved a2vect.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">3D Cartesian position vector(s).</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.array</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>3D Cartesian position vector(s).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.GammaSurface.a12_to_xy">
-<code class="descname">a12_to_xy</code><span class="sig-paren">(</span><em>a1</em>, <em>a2</em>, <em>a1vect=None</em>, <em>a2vect=None</em>, <em>xvect=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.a12_to_xy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">a12_to_xy</code><span class="sig-paren">(</span><em class="sig-param">a1</em>, <em class="sig-param">a2</em>, <em class="sig-param">a1vect=None</em>, <em class="sig-param">a2vect=None</em>, <em class="sig-param">xvect=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.a12_to_xy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conversion function from normalized a1, a2 coordinates to plotting x, y
 coordinates.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Fractional distance(s) along a1 vector.</li>
-<li><strong>a2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Fractional distance(s) along a2 vector.</li>
-<li><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a1 vector.  Default value of None uses the
-saved a1vect.</li>
-<li><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a2 vector.  Default value of None uses the
-saved a2vect.</li>
-<li><strong>xvect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Cartesian vector corresponding to the plotting x-axis. If None (default), this is
-taken as the Cartesian of a1vect.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Fractional distance(s) along a1 vector.</p></li>
+<li><p><strong>a2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Fractional distance(s) along a2 vector.</p></li>
+<li><p><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a1 vector.  Default value of None uses the
+saved a1vect.</p></li>
+<li><p><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a2 vector.  Default value of None uses the
+saved a2vect.</p></li>
+<li><p><strong>xvect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Cartesian vector corresponding to the plotting x-axis. If None (default), this is
+taken as the Cartesian of a1vect.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
-<li><strong>x</strong> (<em>float(s)</em>) – Plotting x coordinate(s).</li>
-<li><strong>y</strong> (<em>float(s)</em>) – Plotting y coordinate(s).</li>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>x</strong> (<em>float(s)</em>) – Plotting x coordinate(s).</p></li>
+<li><p><strong>y</strong> (<em>float(s)</em>) – Plotting y coordinate(s).</p></li>
 </ul>
 </p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.GammaSurface.a1vect">
-<code class="descname">a1vect</code><a class="headerlink" href="#atomman.defect.GammaSurface.a1vect" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">a1vect</code><a class="headerlink" href="#atomman.defect.GammaSurface.a1vect" title="Permalink to this definition">¶</a></dt>
 <dd><p>The a1 shifting vector.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.ndarray</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.GammaSurface.a2vect">
-<code class="descname">a2vect</code><a class="headerlink" href="#atomman.defect.GammaSurface.a2vect" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">a2vect</code><a class="headerlink" href="#atomman.defect.GammaSurface.a2vect" title="Permalink to this definition">¶</a></dt>
 <dd><p>The a2 shifting vector.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.ndarray</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.GammaSurface.box">
-<code class="descname">box</code><a class="headerlink" href="#atomman.defect.GammaSurface.box" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">box</code><a class="headerlink" href="#atomman.defect.GammaSurface.box" title="Permalink to this definition">¶</a></dt>
 <dd><p>A unit cell box used for converting between
 crystal lattice and Cartesian vectors.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="atomman.Box.html#atomman.Box" title="atomman.Box">atomman.Box</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="atomman.Box.html#atomman.Box" title="atomman.Box">atomman.Box</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.GammaSurface.data">
-<code class="descname">data</code><a class="headerlink" href="#atomman.defect.GammaSurface.data" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#atomman.defect.GammaSurface.data" title="Permalink to this definition">¶</a></dt>
 <dd><p>The raw data.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">pandas.DataFrame</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.GammaSurface.delta">
-<code class="descname">delta</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.delta" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">delta</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.delta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns values for generalized stacking fault energy interpolated from
 the raw data.  Values can be obtained relative to a1, a2 fractional
 coordinates, x, y plotting coordinates, or pos Cartesian coordinates.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>a1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Fractional coordinate(s) along a1vect.</li>
-<li><strong>a2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Fractional coordinate(s) along a2vect.</li>
-<li><strong>pos</strong> (<em>np.array</em><em>, </em><em>optional</em>) – 3D Cartesian position vector(s).</li>
-<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Plotting x coordinate(s).</li>
-<li><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Plotting y coordinate(s).</li>
-<li><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Vector for the a1 fractional coordinates.  Default value of None
-uses the saved a1vect.</li>
-<li><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Vector for the a2 fractional coordinates.  Default value of None
-uses the saved a2vect.</li>
-<li><strong>xvect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Cartesian vector corresponding to the plotting x-axis. If None
-(default), this is taken as the Cartesian of a1vect.</li>
-<li><strong>smooth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If True (default) the returned values are smoothed using a RBF fit.
-If False, the closest measured values are returned.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Fractional coordinate(s) along a1vect.</p></li>
+<li><p><strong>a2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Fractional coordinate(s) along a2vect.</p></li>
+<li><p><strong>pos</strong> (<em>np.array</em><em>, </em><em>optional</em>) – 3D Cartesian position vector(s).</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Plotting x coordinate(s).</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em><em>, </em><em>optional</em>) – Plotting y coordinate(s).</p></li>
+<li><p><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Vector for the a1 fractional coordinates.  Default value of None
+uses the saved a1vect.</p></li>
+<li><p><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Vector for the a2 fractional coordinates.  Default value of None
+uses the saved a2vect.</p></li>
+<li><p><strong>xvect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Cartesian vector corresponding to the plotting x-axis. If None
+(default), this is taken as the Cartesian of a1vect.</p></li>
+<li><p><strong>smooth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If True (default) the returned values are smoothed using a RBF fit.
+If False, the closest measured values are returned.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.GammaSurface.delta_line_plot">
-<code class="descname">delta_line_plot</code><span class="sig-paren">(</span><em>vect=None</em>, <em>num=None</em>, <em>smooth=True</em>, <em>length_unit='angstrom'</em>, <em>figsize=None</em>, <em>fig=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.delta_line_plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">delta_line_plot</code><span class="sig-paren">(</span><em class="sig-param">vect=None</em>, <em class="sig-param">num=None</em>, <em class="sig-param">smooth=True</em>, <em class="sig-param">length_unit='angstrom'</em>, <em class="sig-param">figsize=None</em>, <em class="sig-param">fig=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.delta_line_plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a line plot for the interpolated delta planar shift values
 along a specified crystallographic vector in the (a1, a2) plane.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>vect</strong> (<em>numpy.array</em><em>, </em><em>optional</em>) – Vector to plot the gsf along.  If box is set, this vect will be a
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vect</strong> (<em>numpy.array</em><em>, </em><em>optional</em>) – Vector to plot the gsf along.  If box is set, this vect will be a
 lattice vector, otherwise it will be a Cartesian vector.  Must be
 in the plane defined by the GammaSurface object’s a1vect and
-a2vect vectors.  Default value will use the set a1vect.</li>
-<li><strong>num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of points to evaluate the generalized stacking fault
+a2vect vectors.  Default value will use the set a1vect.</p></li>
+<li><p><strong>num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of points to evaluate the generalized stacking fault
 energy for.  Default value is 100 if smooth is True, otherwise is
-number of unique a1 values from 0 to 1.</li>
-<li><strong>smooth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If True (default), then plot shows smooth interpolated values.
-If False, plot shows nearest raw data values.</li>
-<li><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The unit of length to display the x-axis coordinates in.
-Default value is ‘angstrom’.</li>
-<li><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em>, </em><em>optional</em>) – The x,y size of the figure to return.  Default value is (10, 6).</li>
-<li><strong>fig</strong> (<em>matplotlib.figure</em><em>, </em><em>optional</em>) – An existing figure object to add the new plot to.  If not given, a
-new figure is generated.</li>
-<li><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keywords are passed into the underlying
+number of unique a1 values from 0 to 1.</p></li>
+<li><p><strong>smooth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If True (default), then plot shows smooth interpolated values.
+If False, plot shows nearest raw data values.</p></li>
+<li><p><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The unit of length to display the x-axis coordinates in.
+Default value is ‘angstrom’.</p></li>
+<li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em>, </em><em>optional</em>) – The x,y size of the figure to return.  Default value is (10, 6).</p></li>
+<li><p><strong>fig</strong> (<em>matplotlib.figure</em><em>, </em><em>optional</em>) – An existing figure object to add the new plot to.  If not given, a
+new figure is generated.</p></li>
+<li><p><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keywords are passed into the underlying
 matplotlib.pyplot.plot(). This allows control of such things
-like line color, style, etc.</li>
+like line color, style, etc.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">matplotlib.figure</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib.figure</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.GammaSurface.delta_surface_plot">
-<code class="descname">delta_surface_plot</code><span class="sig-paren">(</span><em>normalize=False</em>, <em>smooth=True</em>, <em>a1vect=None</em>, <em>a2vect=None</em>, <em>xvect=None</em>, <em>length_unit='angstrom'</em>, <em>numx=100</em>, <em>numy=100</em>, <em>figsize=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.delta_surface_plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">delta_surface_plot</code><span class="sig-paren">(</span><em class="sig-param">normalize=False</em>, <em class="sig-param">smooth=True</em>, <em class="sig-param">a1vect=None</em>, <em class="sig-param">a2vect=None</em>, <em class="sig-param">xvect=None</em>, <em class="sig-param">length_unit='angstrom'</em>, <em class="sig-param">numx=100</em>, <em class="sig-param">numy=100</em>, <em class="sig-param">figsize=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.delta_surface_plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a 2D surface plot from the delta planar displacement values.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>normalize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if axes are Cartesian (False, default) or
-normalized by a1, a2 vectors (True).</li>
-<li><strong>smooth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If True (default), then plot shows smooth interpolated values.
-If False, plot shows nearest raw data values.</li>
-<li><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a1 vector to use for plotting.  Default
-value of None uses the saved a1vect.</li>
-<li><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a2 vector to use for plotting.  Default
-value of None uses the saved a2vect.</li>
-<li><strong>xvect</strong> (<em>numpy.array</em><em>, </em><em>optional</em>) – Crystal vector to align with the plotting x-axis for
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>normalize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if axes are Cartesian (False, default) or
+normalized by a1, a2 vectors (True).</p></li>
+<li><p><strong>smooth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If True (default), then plot shows smooth interpolated values.
+If False, plot shows nearest raw data values.</p></li>
+<li><p><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a1 vector to use for plotting.  Default
+value of None uses the saved a1vect.</p></li>
+<li><p><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a2 vector to use for plotting.  Default
+value of None uses the saved a2vect.</p></li>
+<li><p><strong>xvect</strong> (<em>numpy.array</em><em>, </em><em>optional</em>) – Crystal vector to align with the plotting x-axis for
 non-normalized plots.  If not given, this is taken as the Cartesian
-of a1vect.</li>
-<li><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The unit of length to display delta and non-normalized axes values
-in.  Default value is ‘angstrom’.</li>
-<li><strong>numx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of plotting points to use along the x-axis.  Default
-value is 100.</li>
-<li><strong>numy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of plotting points to use along the y-axis.  Default
-value is 100.</li>
-<li><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em>, </em><em>optional</em>) – The figure’s x,y dimensions.  If None (default), the values are
+of a1vect.</p></li>
+<li><p><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The unit of length to display delta and non-normalized axes values
+in.  Default value is ‘angstrom’.</p></li>
+<li><p><strong>numx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of plotting points to use along the x-axis.  Default
+value is 100.</p></li>
+<li><p><strong>numy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of plotting points to use along the y-axis.  Default
+value is 100.</p></li>
+<li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em>, </em><em>optional</em>) – The figure’s x,y dimensions.  If None (default), the values are
 scaled such that the x,y spacings are approximately equal, and the
-larger of the two values is set to 10.</li>
-<li><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keywords are passed into the underlying
+larger of the two values is set to 10.</p></li>
+<li><p><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keywords are passed into the underlying
 matplotlib.pyplot.pcolormesh(). This allows control of such things
-like the colormap (cmap).</li>
+like the colormap (cmap).</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">matplotlib.figure</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib.figure</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.GammaSurface.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the interpolation functions from the raw data.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.GammaSurface.model">
-<code class="descname">model</code><span class="sig-paren">(</span><em>model=None</em>, <em>length_unit='angstrom'</em>, <em>energyperarea_unit='eV/angstrom^2'</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.model" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">model</code><span class="sig-paren">(</span><em class="sig-param">model=None</em>, <em class="sig-param">length_unit='angstrom'</em>, <em class="sig-param">energyperarea_unit='eV/angstrom^2'</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return or set DataModelDict representation of the gamma surface.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>file-like object</em><em> or </em><em>DataModelDict</em><em>, </em><em>optional</em>) – XML/JSON content to extract gamma surface energy from. If not
-given, model content will be generated.</li>
-<li><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Units to report delta displacement values in when a new model is
-generated. Default value is ‘angstrom’.</li>
-<li><strong>energyperarea_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Units to report fault energy values in when a new model is
-generated.  Default value is ‘mJ/m^2’.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>file-like object</em><em> or </em><em>DataModelDict</em><em>, </em><em>optional</em>) – XML/JSON content to extract gamma surface energy from. If not
+given, model content will be generated.</p></li>
+<li><p><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Units to report delta displacement values in when a new model is
+generated. Default value is ‘angstrom’.</p></li>
+<li><p><strong>energyperarea_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Units to report fault energy values in when a new model is
+generated.  Default value is ‘mJ/m^2’.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dictionary containing the stacking fault data of the
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary containing the stacking fault data of the
 GammaSurface object.  Returned if model is not given.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">DataModelDict</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataModelDict</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.GammaSurface.planenormal">
-<code class="descname">planenormal</code><a class="headerlink" href="#atomman.defect.GammaSurface.planenormal" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">planenormal</code><a class="headerlink" href="#atomman.defect.GammaSurface.planenormal" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Cartesian vector normal to the fault plane.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.ndarray</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.GammaSurface.pos_to_a12">
-<code class="descname">pos_to_a12</code><span class="sig-paren">(</span><em>pos</em>, <em>a1vect=None</em>, <em>a2vect=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.pos_to_a12" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pos_to_a12</code><span class="sig-paren">(</span><em class="sig-param">pos</em>, <em class="sig-param">a1vect=None</em>, <em class="sig-param">a2vect=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.pos_to_a12" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conversion function from Cartesian positions to normalized a1, a2
 coordinates.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pos</strong> (<em>np.array</em>) – 3D Cartesian position vector(s).</li>
-<li><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a1 vector.  Default value of None uses the
-saved a1vect.</li>
-<li><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a2 vector.  Default value of None uses the
-saved a2vect.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> (<em>np.array</em>) – 3D Cartesian position vector(s).</p></li>
+<li><p><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a1 vector.  Default value of None uses the
+saved a1vect.</p></li>
+<li><p><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a2 vector.  Default value of None uses the
+saved a2vect.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
-<li><strong>a1</strong> (<em>float(s)</em>) – Fractional distance(s) along a1 vector.</li>
-<li><strong>a2</strong> (<em>float(s)</em>) – Fractional distance(s) along a2 vector.</li>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>a1</strong> (<em>float(s)</em>) – Fractional distance(s) along a1 vector.</p></li>
+<li><p><strong>a2</strong> (<em>float(s)</em>) – Fractional distance(s) along a2 vector.</p></li>
 </ul>
 </p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.GammaSurface.pos_to_xy">
-<code class="descname">pos_to_xy</code><span class="sig-paren">(</span><em>pos</em>, <em>xvect=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.pos_to_xy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pos_to_xy</code><span class="sig-paren">(</span><em class="sig-param">pos</em>, <em class="sig-param">xvect=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.pos_to_xy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conversion function from Cartesian positions to plotting x, y
 coordinates.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pos</strong> (<em>np.array</em>) – 3D Cartesian position vector(s).</li>
-<li><strong>xvect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Cartesian vector corresponding to the plotting x-axis. If None (default), this is
-taken as the Cartesian of a1vect.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> (<em>np.array</em>) – 3D Cartesian position vector(s).</p></li>
+<li><p><strong>xvect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Cartesian vector corresponding to the plotting x-axis. If None (default), this is
+taken as the Cartesian of a1vect.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
-<li><strong>x</strong> (<em>float(s)</em>) – Plotting x coordinate(s).</li>
-<li><strong>y</strong> (<em>float(s)</em>) – Plotting y coordinate(s).</li>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>x</strong> (<em>float(s)</em>) – Plotting x coordinate(s).</p></li>
+<li><p><strong>y</strong> (<em>float(s)</em>) – Plotting y coordinate(s).</p></li>
 </ul>
 </p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.GammaSurface.set">
-<code class="descname">set</code><span class="sig-paren">(</span><em>a1vect</em>, <em>a2vect</em>, <em>a1</em>, <em>a2</em>, <em>E_gsf</em>, <em>box=None</em>, <em>delta=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.set" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param">a1vect</em>, <em class="sig-param">a2vect</em>, <em class="sig-param">a1</em>, <em class="sig-param">a2</em>, <em class="sig-param">E_gsf</em>, <em class="sig-param">box=None</em>, <em class="sig-param">delta=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets generalized stacking fault data.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>a1vect</strong> (<em>array-like object</em>) – The a1 shifting vector.  If box is given, a1vect is taken as a
-crystal lattice vector, otherwise as a Cartesian vector.</li>
-<li><strong>a2vect</strong> (<em>array-like object</em>) – The a2 shifting vector.  If box is given, a2vect is taken as a
-crystal lattice vector, otherwise as a Cartesian vector.</li>
-<li><strong>a1</strong> (<em>array-like object</em>) – List of fractional coordinates along a1vect corresponding to the
-E_gsf (and delta) values.</li>
-<li><strong>a2</strong> (<em>array-like object</em>) – List of fractional coordinates along a2vect corresponding to the
-E_gsf (and delta) values.</li>
-<li><strong>E_gsf</strong> (<em>array-like object</em>) – List of generalized stacking fault energies for the positions
-associated with the corresponding (a1, a2) fractional coordinates.</li>
-<li><strong>box</strong> (<a class="reference internal" href="atomman.Box.html#atomman.Box" title="atomman.Box"><em>atomman.Box</em></a><em>, </em><em>optional</em>) – Defines unit cell box dimensions for conversion between crystal
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a1vect</strong> (<em>array-like object</em>) – The a1 shifting vector.  If box is given, a1vect is taken as a
+crystal lattice vector, otherwise as a Cartesian vector.</p></li>
+<li><p><strong>a2vect</strong> (<em>array-like object</em>) – The a2 shifting vector.  If box is given, a2vect is taken as a
+crystal lattice vector, otherwise as a Cartesian vector.</p></li>
+<li><p><strong>a1</strong> (<em>array-like object</em>) – List of fractional coordinates along a1vect corresponding to the
+E_gsf (and delta) values.</p></li>
+<li><p><strong>a2</strong> (<em>array-like object</em>) – List of fractional coordinates along a2vect corresponding to the
+E_gsf (and delta) values.</p></li>
+<li><p><strong>E_gsf</strong> (<em>array-like object</em>) – List of generalized stacking fault energies for the positions
+associated with the corresponding (a1, a2) fractional coordinates.</p></li>
+<li><p><strong>box</strong> (<a class="reference internal" href="atomman.Box.html#atomman.Box" title="atomman.Box"><em>atomman.Box</em></a><em>, </em><em>optional</em>) – Defines unit cell box dimensions for conversion between crystal
 lattice and Cartesian vectors.  If not given, will be set as a
 square unit box, thus no conversion will occur (i.e. a1vect,
-a2vect will be Cartesian).</li>
-<li><strong>delta</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – List of change in displacements normal to the fault plane for the
+a2vect will be Cartesian).</p></li>
+<li><p><strong>delta</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – List of change in displacements normal to the fault plane for the
 positions associated with the corresponding (a1, a2) fractional
-coordinates.</li>
+coordinates.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.GammaSurface.xy_to_a12">
-<code class="descname">xy_to_a12</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>a1vect=None</em>, <em>a2vect=None</em>, <em>xvect=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.xy_to_a12" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">xy_to_a12</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">a1vect=None</em>, <em class="sig-param">a2vect=None</em>, <em class="sig-param">xvect=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.xy_to_a12" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conversion function from plotting x, y coordinates to normalized a1, a2
 coordinates.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Plotting x coordinate(s).</li>
-<li><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Plotting y coordinate(s).</li>
-<li><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a1 vector.  Default value of None uses the
-saved a1vect.</li>
-<li><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a2 vector.  Default value of None uses the
-saved a2vect.</li>
-<li><strong>xvect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Cartesian vector corresponding to the plotting x-axis. If None
-(default), this is taken as the Cartesian of a1vect.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Plotting x coordinate(s).</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Plotting y coordinate(s).</p></li>
+<li><p><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a1 vector.  Default value of None uses the
+saved a1vect.</p></li>
+<li><p><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a2 vector.  Default value of None uses the
+saved a2vect.</p></li>
+<li><p><strong>xvect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Cartesian vector corresponding to the plotting x-axis. If None
+(default), this is taken as the Cartesian of a1vect.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
-<li><strong>a1</strong> (<em>float(s)</em>) – Fractional distance(s) along a1 vector.</li>
-<li><strong>a2</strong> (<em>float(s)</em>) – Fractional distance(s) along a2 vector.</li>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>a1</strong> (<em>float(s)</em>) – Fractional distance(s) along a1 vector.</p></li>
+<li><p><strong>a2</strong> (<em>float(s)</em>) – Fractional distance(s) along a2 vector.</p></li>
 </ul>
 </p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.GammaSurface.xy_to_pos">
-<code class="descname">xy_to_pos</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>xvect=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.xy_to_pos" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">xy_to_pos</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">xvect=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.GammaSurface.xy_to_pos" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conversion function from plotting x, y coordinates to Cartesian
 positions.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Plotting x coordinate(s).</li>
-<li><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Plotting y coordinate(s).</li>
-<li><strong>xvect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Cartesian vector corresponding to the plotting x-axis. If None
-(default), this is taken as the Cartesian of a1vect.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Plotting x coordinate(s).</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>(</em><em>s</em><em>)</em>) – Plotting y coordinate(s).</p></li>
+<li><p><strong>xvect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Cartesian vector corresponding to the plotting x-axis. If None
+(default), this is taken as the Cartesian of a1vect.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>pos</strong> – 3D Cartesian position vector(s).</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.array</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>pos</strong> – 3D Cartesian position vector(s).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -616,11 +544,11 @@ positions.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="atomman.defect.html"
-                        title="previous chapter">defect</a></p>
+  <p class="topless"><a href="atomman.defect.StackingFault.html"
+                        title="previous chapter">StackingFault</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="atomman.defect.IsotropicVolterraDislocation.html"
-                        title="next chapter">IsotropicVolterraDislocation</a></p>
+  <p class="topless"><a href="atomman.defect.VolterraDislocation.html"
+                        title="next chapter">VolterraDislocation</a></p>
         </div>
       </div>
       <div class="clearer"></div>
@@ -635,18 +563,18 @@ positions.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="atomman.defect.IsotropicVolterraDislocation.html" title="IsotropicVolterraDislocation"
+          <a href="atomman.defect.VolterraDislocation.html" title="VolterraDislocation"
              >next</a> |</li>
         <li class="right" >
-          <a href="atomman.defect.html" title="defect"
+          <a href="atomman.defect.StackingFault.html" title="StackingFault"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="atomman.defect.html" >defect</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

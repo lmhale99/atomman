@@ -30,7 +30,7 @@ Tutorials
    04.1. Point defects <04.1._Point_defects>
    04.2. Volterra dislocation models <04.2._Volterra_dislocation_models>
    04.3. Dislocation analysis tools <04.3._Dislocation_analysis_tools>
-   04.4. Free surface rotation basis.ipynb <04.4._Free_surface_rotation_basis>
+   04.4. Free surface configuration generator <04.4._Free_surface_configuration_generator>
    04.5. Stacking fault configuration generator <04.5._Stacking_fault_configuration_generator>
    04.6. Gamma surface plotting <04.6._Gamma_surface_plotting>
    04.7. Semidiscrete variational Peierls-Nabarro model <04.7._Semidiscrete_variational_Peierls-Nabarro_model>

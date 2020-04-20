@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Box class &#8212; atomman 1.3.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Introduction to atomman: Box class &#8212; atomman 1.3.2 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,6 +12,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="01._Defining_atomic_systems.html" title="Introduction to atomman: Defining atomic systems"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,16 +50,16 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput,
-div.nbinput div.prompt,
-div.nbinput div.input_area,
-div.nbinput div[class*=highlight],
-div.nbinput div[class*=highlight] pre,
-div.nboutput,
-div.nbinput div.prompt,
-div.nbinput div.output_area,
-div.nboutput div[class*=highlight],
-div.nboutput div[class*=highlight] pre {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
     background: none;
     border: none;
     padding: 0 0;
@@ -69,13 +68,13 @@ div.nboutput div[class*=highlight] pre {
 }
 
 /* avoid gaps between output lines */
-div.nboutput div[class*=highlight] pre {
+div.nboutput.container div[class*=highlight] pre {
     line-height: normal;
 }
 
 /* input/output containers */
-div.nbinput,
-div.nboutput {
+div.nbinput.container,
+div.nboutput.container {
     display: -webkit-flex;
     display: flex;
     align-items: flex-start;
@@ -83,92 +82,91 @@ div.nboutput {
     width: 100%;
 }
 @media (max-width: 540px) {
-    div.nbinput,
-    div.nboutput {
+    div.nbinput.container,
+    div.nboutput.container {
         flex-direction: column;
     }
 }
 
 /* input container */
-div.nbinput {
+div.nbinput.container {
     padding-top: 5px;
 }
 
 /* last container */
-div.nblast {
+div.nblast.container {
     padding-bottom: 5px;
 }
 
 /* input prompt */
-div.nbinput div.prompt pre {
+div.nbinput.container div.prompt pre {
     color: #307FC1;
 }
 
 /* output prompt */
-div.nboutput div.prompt pre {
+div.nboutput.container div.prompt pre {
     color: #BF5B3D;
 }
 
 /* all prompts */
-div.nbinput div.prompt,
-div.nboutput div.prompt {
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
     min-width: 7ex;
-    padding-top: 0.4em;
-    padding-right: 0.4em;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
     text-align: right;
     flex: 0;
 }
 @media (max-width: 540px) {
-    div.nbinput div.prompt,
-    div.nboutput div.prompt {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
         text-align: left;
         padding: 0.4em;
     }
-    div.nboutput div.prompt.empty {
+    div.nboutput.container div.prompt.empty {
         padding: 0;
     }
 }
 
 /* disable scrollbars on prompts */
-div.nbinput div.prompt pre,
-div.nboutput div.prompt pre {
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
     overflow: hidden;
 }
 
 /* input/output area */
-div.nbinput div.input_area,
-div.nboutput div.output_area {
-    padding: 0.4em;
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
     -webkit-flex: 1;
     flex: 1;
     overflow: auto;
 }
 @media (max-width: 540px) {
-    div.nbinput div.input_area,
-    div.nboutput div.output_area {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
         width: 100%;
     }
 }
 
 /* input area */
-div.nbinput div.input_area {
+div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
     background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
-div.nboutput div[class*=MathJax] {
+div.nboutput.container div[class*=MathJax] {
     text-align: left !important;
 }
 
 /* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput div.math p {
+div.nboutput.container div.math p {
     text-align: left;
 }
 
 /* standard error */
-div.nboutput div.output_area.stderr {
+div.nboutput.container div.output_area.stderr {
     background: #fdd;
 }
 
@@ -212,6 +210,27 @@ div.nboutput div.output_area.stderr {
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
 
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
 /* Some additional styling taken form the Jupyter notebook CSS */
 div.rendered_html table {
   border: none;
@@ -254,10 +273,10 @@ div.rendered_html tbody tr:hover {
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
 <p>The atomman.Box class represents a generic parallelepiped that can be used as a simulation box/cell allowing for translational symmetry in all three dimensions. The underlying data structure consists of three 3D vectors:</p>
 <ul class="simple">
-<li><strong>avect</strong> is the Cartesian vector associated with the Box’s a lattice vector.</li>
-<li><strong>bvect</strong> is the Cartesian vector associated with the Box’s b lattice vector.</li>
-<li><strong>cvect</strong> is the Cartesian vector associated with the Box’s c lattice vector.</li>
-<li><strong>origin</strong> is the Cartesian position vector for the Box’s origin. The positions of the Box’s eight corners are given by adding combinations of avect, bvect and cvect to the origin.</li>
+<li><p><strong>avect</strong> is the Cartesian vector associated with the Box’s a lattice vector.</p></li>
+<li><p><strong>bvect</strong> is the Cartesian vector associated with the Box’s b lattice vector.</p></li>
+<li><p><strong>cvect</strong> is the Cartesian vector associated with the Box’s c lattice vector.</p></li>
+<li><p><strong>origin</strong> is the Cartesian position vector for the Box’s origin. The positions of the Box’s eight corners are given by adding combinations of avect, bvect and cvect to the origin.</p></li>
 </ul>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
@@ -288,8 +307,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.0
-Notebook executed on 2019-11-05
+atomman version = 1.3.2
+Notebook executed on 2020-04-15
 </pre></div></div>
 </div>
 <p>Create a default box with vects that are normal unit vectors.</p>
@@ -320,15 +339,15 @@ origin = [ 0.000,  0.000,  0.000]
 <h2>2. Box parameters<a class="headerlink" href="#2.-Box-parameters" title="Permalink to this headline">¶</a></h2>
 <p>The Box class supports a number of different parameters to represent the underlying box. All of these parameters can be fetched as class attributes.</p>
 <ul class="simple">
-<li><strong>avect, bvect, cvect</strong> are the Cartesian vectors associated with the Box’s lattice vectors.</li>
-<li><strong>origin</strong> is the Cartesian position vector for the Box’s origin.</li>
-<li><strong>vects</strong> is a 3x3 array containing [avect, bvect, cvect].</li>
-<li><strong>a, b, c</strong> are the Box’s lattice parameters (magnitudes of avect, bvect, cvect, respectively).</li>
-<li><strong>alpha, beta, gamma</strong> are the Box’s lattice angles in degrees.</li>
-<li><strong>xlo, xhi, ylo, yhi, zlo, zhi</strong> are the LAMMPS hi/lo box dimensions.</li>
-<li><strong>lx, ly, lz</strong> are the LAMMPS box dimensions (lx = xhi - xlo, etc.)</li>
-<li><strong>xy, xz, yz</strong> are the LAMMPS box tilt factors.</li>
-<li><strong>volume</strong> is the box’s volume (added version 1.2.5).</li>
+<li><p><strong>avect, bvect, cvect</strong> are the Cartesian vectors associated with the Box’s lattice vectors.</p></li>
+<li><p><strong>origin</strong> is the Cartesian position vector for the Box’s origin.</p></li>
+<li><p><strong>vects</strong> is a 3x3 array containing [avect, bvect, cvect].</p></li>
+<li><p><strong>a, b, c</strong> are the Box’s lattice parameters (magnitudes of avect, bvect, cvect, respectively).</p></li>
+<li><p><strong>alpha, beta, gamma</strong> are the Box’s lattice angles in degrees.</p></li>
+<li><p><strong>xlo, xhi, ylo, yhi, zlo, zhi</strong> are the LAMMPS hi/lo box dimensions.</p></li>
+<li><p><strong>lx, ly, lz</strong> are the LAMMPS box dimensions (lx = xhi - xlo, etc.)</p></li>
+<li><p><strong>xy, xz, yz</strong> are the LAMMPS box tilt factors.</p></li>
+<li><p><strong>volume</strong> is the box’s volume (added version 1.2.5).</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -442,10 +461,10 @@ box.volume -&gt; 1.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 0.677,  3.704,  1.053]
-bvect =  [ 0.719,  3.005,  1.046]
-cvect =  [ 3.117,  2.680,  0.236]
-origin = [ 0.218,  0.549,  0.330]
+avect =  [ 2.133,  2.776,  2.221]
+bvect =  [ 0.790,  2.237,  3.671]
+cvect =  [ 0.625,  0.535,  2.020]
+origin = [ 0.977,  0.491,  0.745]
 </pre></div></div>
 </div>
 </div>
@@ -453,11 +472,11 @@ origin = [ 0.218,  0.549,  0.330]
 <h3>3.2 Box initializing and Box.set() method<a class="headerlink" href="#3.2-Box-initializing-and-Box.set()-method" title="Permalink to this headline">¶</a></h3>
 <p>A new Box can be initialized or an existing Box can be changed using the Box.set() method by using one of the following sets of parameters (optional terms in parenthesis):</p>
 <ul class="simple">
-<li>vects (and origin)</li>
-<li>avect, bvect, cvect (and origin)</li>
-<li>a, b, c, (alpha, beta, gamma and origin)</li>
-<li>xlo, xhi, ylo, yhi, zlo, zhi, (xy, xz and yz)</li>
-<li>lx, ly, lz, (xy, xz, yz, and origin)</li>
+<li><p>vects (and origin)</p></li>
+<li><p>avect, bvect, cvect (and origin)</p></li>
+<li><p>a, b, c, (alpha, beta, gamma and origin)</p></li>
+<li><p>xlo, xhi, ylo, yhi, zlo, zhi, (xy, xz and yz)</p></li>
+<li><p>lx, ly, lz, (xy, xz, yz, and origin)</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -629,13 +648,13 @@ box.yz -&gt; 0.0
 <p><em>Added version 1.2.5</em></p>
 <p>There are also methods for each of the seven crystal families that are convenient for the construction of unit cell systems in standard representations:</p>
 <ul class="simple">
-<li><strong>cubic(a)</strong>: <span class="math notranslate nohighlight">\(a = b = c; \alpha = \beta = \gamma = 90^\circ\)</span></li>
-<li><strong>hexagonal(a, c)</strong>: <span class="math notranslate nohighlight">\(a = b \ne c; \alpha = \beta = 90^\circ; \gamma = 120^\circ\)</span></li>
-<li><strong>tetragonal(a, c)</strong>: <span class="math notranslate nohighlight">\(a = b \ne c; \alpha = \beta = \gamma = 90^\circ\)</span></li>
-<li><strong>trigonal(a, alpha)</strong>: <span class="math notranslate nohighlight">\(a = b = c; \alpha = \beta = \gamma &lt; 120^\circ\)</span></li>
-<li><strong>orthorhombic(a, b, c)</strong>: <span class="math notranslate nohighlight">\(a \ne b \ne c; \alpha = \beta = \gamma = 90^\circ\)</span></li>
-<li><strong>monoclinic(a, b, c, beta)</strong>: <span class="math notranslate nohighlight">\(a \ne b \ne c; \alpha = \gamma = 90^\circ; \beta &gt; 90^\circ\)</span></li>
-<li><strong>triclinic(a, b, c, alpha, beta, gamma)</strong>: <span class="math notranslate nohighlight">\(a \ne b \ne c; \alpha \ne \beta \ne \gamma\)</span></li>
+<li><p><strong>cubic(a)</strong>: <span class="math notranslate nohighlight">\(a = b = c; \alpha = \beta = \gamma = 90^\circ\)</span></p></li>
+<li><p><strong>hexagonal(a, c)</strong>: <span class="math notranslate nohighlight">\(a = b \ne c; \alpha = \beta = 90^\circ; \gamma = 120^\circ\)</span></p></li>
+<li><p><strong>tetragonal(a, c)</strong>: <span class="math notranslate nohighlight">\(a = b \ne c; \alpha = \beta = \gamma = 90^\circ\)</span></p></li>
+<li><p><strong>trigonal(a, alpha)</strong>: <span class="math notranslate nohighlight">\(a = b = c; \alpha = \beta = \gamma &lt; 120^\circ\)</span></p></li>
+<li><p><strong>orthorhombic(a, b, c)</strong>: <span class="math notranslate nohighlight">\(a \ne b \ne c; \alpha = \beta = \gamma = 90^\circ\)</span></p></li>
+<li><p><strong>monoclinic(a, b, c, beta)</strong>: <span class="math notranslate nohighlight">\(a \ne b \ne c; \alpha = \gamma = 90^\circ; \beta &gt; 90^\circ\)</span></p></li>
+<li><p><strong>triclinic(a, b, c, alpha, beta, gamma)</strong>: <span class="math notranslate nohighlight">\(a \ne b \ne c; \alpha \ne \beta \ne \gamma\)</span></p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
@@ -703,17 +722,15 @@ box.gamma -&gt; 119.99999999999999
 <h2>4. LAMMPS-compatible Boxes<a class="headerlink" href="#4.-LAMMPS-compatible-Boxes" title="Permalink to this headline">¶</a></h2>
 <p>For boxes to be compatible with LAMMPS, they have to adhere to the following conditions:</p>
 <ul>
-<li><p class="first">avect, bvect, cvect are right-handed.</p>
-</li>
-<li><p class="first">Only certain components of the lattice vectors are allowed to be non-zero:</p>
+<li><p>avect, bvect, cvect are right-handed.</p></li>
+<li><p>Only certain components of the lattice vectors are allowed to be non-zero:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">avect</span> <span class="o">=</span> <span class="p">[</span><span class="n">lx</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
 <span class="n">bvect</span> <span class="o">=</span> <span class="p">[</span><span class="n">xy</span><span class="p">,</span>  <span class="n">ly</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
 <span class="n">cvect</span> <span class="o">=</span> <span class="p">[</span><span class="n">xz</span><span class="p">,</span>  <span class="n">yz</span><span class="p">,</span>  <span class="n">lz</span><span class="p">]</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">The tilt factors are limited to being between -1/2 and 1/2 the corresponding length terms.</p>
-</li>
+<li><p>The tilt factors are limited to being between -1/2 and 1/2 the corresponding length terms.</p></li>
 </ul>
 <p>The first two conditions are automatically adhered to if the box is set with LAMMPS terms or crystal lattice parameters, but may not be true if the box was set using the crystal vectors. The third condition is not checked by atomman. Large tilt factors are allowed by LAMMPS if the “box tilt large” command is used.</p>
 <div class="section" id="4.1-Box.is_lammps_norm()">
@@ -922,12 +939,12 @@ origin = [ 0.000,  0.000,  0.000]
         <li class="right" >
           <a href="01._Defining_atomic_systems.html" title="Introduction to atomman: Defining atomic systems"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

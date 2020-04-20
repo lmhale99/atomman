@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Atoms &#8212; atomman 1.3.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Atoms &#8212; atomman 1.3.2 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -14,6 +12,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="atomman.plot.html" title="plot"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" accesskey="U">atomman package</a> &#187;</li> 
       </ul>
     </div>  
@@ -50,196 +49,171 @@
 <h1>Atoms<a class="headerlink" href="#atoms" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="atomman.Atoms">
-<em class="property">class </em><code class="descclassname">atomman.</code><code class="descname">Atoms</code><span class="sig-paren">(</span><em>natoms=None</em>, <em>atype=None</em>, <em>pos=None</em>, <em>prop=None</em>, <em>model=None</em>, <em>safecopy=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">atomman.</code><code class="sig-name descname">Atoms</code><span class="sig-paren">(</span><em class="sig-param">natoms=None</em>, <em class="sig-param">atype=None</em>, <em class="sig-param">pos=None</em>, <em class="sig-param">prop=None</em>, <em class="sig-param">model=None</em>, <em class="sig-param">safecopy=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class for representing a collection of atoms.</p>
 <dl class="class">
 <dt id="atomman.Atoms.PropertyDict">
-<em class="property">class </em><code class="descname">PropertyDict</code><span class="sig-paren">(</span><em>host</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms.PropertyDict" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">PropertyDict</code><span class="sig-paren">(</span><em class="sig-param">host</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms.PropertyDict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.OrderedDict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.OrderedDict</span></code></a></p>
 <p>Extends OrderedDict to work with Atoms</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.Atoms.atypes">
-<code class="descname">atypes</code><a class="headerlink" href="#atomman.Atoms.atypes" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">atypes</code><a class="headerlink" href="#atomman.Atoms.atypes" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of int atom types.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.Atoms.df">
-<code class="descname">df</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms.df" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">df</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms.df" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a pandas.DataFrame of all atomic properties.  Multi-dimensional
 per-atom data will be converted into multiple table columns.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.Atoms.extend">
-<code class="descname">extend</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms.extend" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms.extend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Allows additional atoms to be added to the end of the atoms list.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<a class="reference internal" href="#atomman.Atoms" title="atomman.Atoms"><em>atomman.Atoms</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – An int value will result in the atoms object being extended by
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<a class="reference internal" href="#atomman.Atoms" title="atomman.Atoms"><em>atomman.Atoms</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – An int value will result in the atoms object being extended by
 that number of atoms, with all per-atom properties having default
 values (atype = 1, everything else = 0).  For an Atoms value, the
 current atoms list will be extended by the correct number of atoms
 and all per-atom properties in value will be copied over.  Any
 properties defined in one Atoms object and not the other will be
-set to default values.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A new Atoms object containing all atoms and properties of the
-current object plus the additional atoms.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#atomman.Atoms" title="atomman.Atoms">atomman.Atoms</a></td>
-</tr>
-</tbody>
-</table>
+set to default values.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A new Atoms object containing all atoms and properties of the
+current object plus the additional atoms.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atomman.Atoms" title="atomman.Atoms">atomman.Atoms</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.Atoms.model">
-<code class="descname">model</code><span class="sig-paren">(</span><em>prop_name=None</em>, <em>unit=None</em>, <em>prop_unit=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms.model" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">model</code><span class="sig-paren">(</span><em class="sig-param">prop_name=None</em>, <em class="sig-param">unit=None</em>, <em class="sig-param">prop_unit=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms.model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a data model for the Atoms object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>prop_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><em>optional</em>) – The Atoms properties to include.  If neither prop_name nor prop_unit
-are given, all system properties will be included.</li>
-<li><strong>unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><em>optional</em>) – Lists the units for each prop_name as stored in the table.  For a
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prop_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><em>optional</em>) – The Atoms properties to include.  If neither prop_name nor prop_unit
+are given, all system properties will be included.</p></li>
+<li><p><strong>unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><em>optional</em>) – Lists the units for each prop_name as stored in the table.  For a
 value of None, no conversion will be performed for that property.
 If neither unit nor prop_units given, pos will be
-given in Angstroms and all other values will not be converted.</li>
-<li><strong>prop_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – dictionary where the keys are the property keys to include, and
+given in Angstroms and all other values will not be converted.</p></li>
+<li><p><strong>prop_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – dictionary where the keys are the property keys to include, and
 the values are units to use. If neither unit nor prop_units given,
 pos will be given in Angstroms and all other values will not be
-converted.</li>
+converted.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A JSON/XML data model for the current Atoms object.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">DataModelDict.DataModelDict</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A JSON/XML data model for the current Atoms object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataModelDict.DataModelDict</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.Atoms.natoms">
-<code class="descname">natoms</code><a class="headerlink" href="#atomman.Atoms.natoms" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">natoms</code><a class="headerlink" href="#atomman.Atoms.natoms" title="Permalink to this definition">¶</a></dt>
 <dd><p>The number of atoms in the Atoms class.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.Atoms.natypes">
-<code class="descname">natypes</code><a class="headerlink" href="#atomman.Atoms.natypes" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">natypes</code><a class="headerlink" href="#atomman.Atoms.natypes" title="Permalink to this definition">¶</a></dt>
 <dd><p>The number of atom types in the Atoms class.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.Atoms.prop">
-<code class="descname">prop</code><span class="sig-paren">(</span><em>key=None</em>, <em>index=None</em>, <em>value=None</em>, <em>a_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms.prop" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">prop</code><span class="sig-paren">(</span><em class="sig-param">key=None</em>, <em class="sig-param">index=None</em>, <em class="sig-param">value=None</em>, <em class="sig-param">a_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms.prop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Accesses the per-atom properties for controlled getting and setting.
 For getting values, prop() always returns a copy of the underlying
 data as opposed to the data itself.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Per-atom property name.</li>
-<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.8)"><em>slice</em></a><em>, </em><em>optional</em>) – Index of atoms.</li>
-<li><strong>value</strong> (<em>any</em><em>, </em><em>optional</em>) – Property values to assign.</li>
-<li><strong>a_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – Integer atom index.  Left in for backwards compatibility.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Per-atom property name.</p></li>
+<li><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.8)"><em>slice</em></a><em>, </em><em>optional</em>) – Index of atoms.</p></li>
+<li><p><strong>value</strong> (<em>any</em><em>, </em><em>optional</em>) – Property values to assign.</p></li>
+<li><p><strong>a_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – Integer atom index.  Left in for backwards compatibility.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><ul class="simple">
-<li><em>list</em> – If no parameters given, returns a list of all assigned property
-keys.</li>
-<li><em>atomman.Atoms</em> – If index or a_id is given without value or key, returns a new
-Atoms instance for the specified atom indices.</li>
-<li><em>numpy.ndarray</em> – If key (and index/a_id) is given without value, returns a copy of
-the data associated with that property key.</li>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>list</em> – If no parameters given, returns a list of all assigned property
+keys.</p></li>
+<li><p><em>atomman.Atoms</em> – If index or a_id is given without value or key, returns a new
+Atoms instance for the specified atom indices.</p></li>
+<li><p><em>numpy.ndarray</em> – If key (and index/a_id) is given without value, returns a copy of
+the data associated with that property key.</p></li>
 </ul>
 </p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If a_id and index are both given, or only value is given.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – If a_id and index are both given, or only value is given.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.Atoms.prop_atype">
-<code class="descname">prop_atype</code><span class="sig-paren">(</span><em>key</em>, <em>value</em>, <em>atype=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms.prop_atype" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">prop_atype</code><span class="sig-paren">(</span><em class="sig-param">key</em>, <em class="sig-param">value</em>, <em class="sig-param">atype=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.Atoms.prop_atype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Allows for per-atom properties to be assigned according to
 Atoms.atypes.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Per-atom property name.</li>
-<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><em>any</em>) – Property value(s) to assign.  If atype is not given, this should be
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Per-atom property name.</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><em>any</em>) – Property value(s) to assign.  If atype is not given, this should be
 an object of length Atoms.natypes. Otherwise, should be a single per-atom
-value.</li>
-<li><strong>atype</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – A specific atype to assign value to.</li>
+value.</p></li>
+<li><p><strong>atype</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – A specific atype to assign value to.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If length of value does not match Atoms.natypes or atype is not in
-Atoms.atypes.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – If length of value does not match Atoms.natypes or atype is not in
+    Atoms.atypes.</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.Atoms.view">
-<code class="descname">view</code><a class="headerlink" href="#atomman.Atoms.view" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">view</code><a class="headerlink" href="#atomman.Atoms.view" title="Permalink to this definition">¶</a></dt>
 <dd><p>All assigned per-atom properties.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#atomman.Atoms.PropertyDict" title="atomman.Atoms.PropertyDict">PropertyDict</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atomman.Atoms.PropertyDict" title="atomman.Atoms.PropertyDict">PropertyDict</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -277,12 +251,12 @@ Atoms.atypes.</p>
         <li class="right" >
           <a href="atomman.plot.html" title="plot"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

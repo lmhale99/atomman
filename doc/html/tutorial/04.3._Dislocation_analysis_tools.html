@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Dislocation analysis tools &#8212; atomman 1.3.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Introduction to atomman: Dislocation analysis tools &#8212; atomman 1.3.2 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,11 +12,12 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction to atomman: Free Surface Rotation Basis" href="04.4._Free_surface_rotation_basis.html" />
+    <link rel="next" title="Introduction to atomman: Free surface configuration generator" href="04.4._Free_surface_configuration_generator.html" />
     <link rel="prev" title="Introduction to atomman: Volterra dislocation models" href="04.2._Volterra_dislocation_models.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -31,12 +30,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="04.4._Free_surface_rotation_basis.html" title="Introduction to atomman: Free Surface Rotation Basis"
+          <a href="04.4._Free_surface_configuration_generator.html" title="Introduction to atomman: Free surface configuration generator"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="04.2._Volterra_dislocation_models.html" title="Introduction to atomman: Volterra dislocation models"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,16 +50,16 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput,
-div.nbinput div.prompt,
-div.nbinput div.input_area,
-div.nbinput div[class*=highlight],
-div.nbinput div[class*=highlight] pre,
-div.nboutput,
-div.nbinput div.prompt,
-div.nbinput div.output_area,
-div.nboutput div[class*=highlight],
-div.nboutput div[class*=highlight] pre {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
     background: none;
     border: none;
     padding: 0 0;
@@ -69,13 +68,13 @@ div.nboutput div[class*=highlight] pre {
 }
 
 /* avoid gaps between output lines */
-div.nboutput div[class*=highlight] pre {
+div.nboutput.container div[class*=highlight] pre {
     line-height: normal;
 }
 
 /* input/output containers */
-div.nbinput,
-div.nboutput {
+div.nbinput.container,
+div.nboutput.container {
     display: -webkit-flex;
     display: flex;
     align-items: flex-start;
@@ -83,92 +82,91 @@ div.nboutput {
     width: 100%;
 }
 @media (max-width: 540px) {
-    div.nbinput,
-    div.nboutput {
+    div.nbinput.container,
+    div.nboutput.container {
         flex-direction: column;
     }
 }
 
 /* input container */
-div.nbinput {
+div.nbinput.container {
     padding-top: 5px;
 }
 
 /* last container */
-div.nblast {
+div.nblast.container {
     padding-bottom: 5px;
 }
 
 /* input prompt */
-div.nbinput div.prompt pre {
+div.nbinput.container div.prompt pre {
     color: #307FC1;
 }
 
 /* output prompt */
-div.nboutput div.prompt pre {
+div.nboutput.container div.prompt pre {
     color: #BF5B3D;
 }
 
 /* all prompts */
-div.nbinput div.prompt,
-div.nboutput div.prompt {
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
     min-width: 7ex;
-    padding-top: 0.4em;
-    padding-right: 0.4em;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
     text-align: right;
     flex: 0;
 }
 @media (max-width: 540px) {
-    div.nbinput div.prompt,
-    div.nboutput div.prompt {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
         text-align: left;
         padding: 0.4em;
     }
-    div.nboutput div.prompt.empty {
+    div.nboutput.container div.prompt.empty {
         padding: 0;
     }
 }
 
 /* disable scrollbars on prompts */
-div.nbinput div.prompt pre,
-div.nboutput div.prompt pre {
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
     overflow: hidden;
 }
 
 /* input/output area */
-div.nbinput div.input_area,
-div.nboutput div.output_area {
-    padding: 0.4em;
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
     -webkit-flex: 1;
     flex: 1;
     overflow: auto;
 }
 @media (max-width: 540px) {
-    div.nbinput div.input_area,
-    div.nboutput div.output_area {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
         width: 100%;
     }
 }
 
 /* input area */
-div.nbinput div.input_area {
+div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
     background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
-div.nboutput div[class*=MathJax] {
+div.nboutput.container div[class*=MathJax] {
     text-align: left !important;
 }
 
 /* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput div.math p {
+div.nboutput.container div.math p {
     text-align: left;
 }
 
 /* standard error */
-div.nboutput div.output_area.stderr {
+div.nboutput.container div.output_area.stderr {
     background: #fdd;
 }
 
@@ -211,6 +209,27 @@ div.nboutput div.output_area.stderr {
 
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
 
 /* Some additional styling taken form the Jupyter notebook CSS */
 div.rendered_html table {
@@ -287,83 +306,51 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.0
-Notebook executed on 2019-11-05
+atomman version = 1.3.2
+Notebook executed on 2020-04-14
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="1.1.-Generate-systems">
-<h2>1.1. Generate systems<a class="headerlink" href="#1.1.-Generate-systems" title="Permalink to this headline">¶</a></h2>
-<p>The process used here for generating dislocation-containing systems is</p>
+<div class="section" id="1.1.-Load-atomic-systems">
+<h2>1.1. Load atomic systems<a class="headerlink" href="#1.1.-Load-atomic-systems" title="Permalink to this headline">¶</a></h2>
+<p>A system containing a single Al <span class="math notranslate nohighlight">\(\frac{a}{2}\)</span>&lt;111&gt; edge dislocation was created by</p>
 <ol class="arabic simple">
-<li>Build a unit cell system.</li>
-<li>Generate a defect-free reference system by rotating, shifting and supersizing the unit cell.</li>
-<li>Use the Stroh class to compute the elastic solution for a perfectly straight dislocation.</li>
-<li>Generate a defect-containing system by shifting atoms in the reference system by the Stroh displacements.</li>
+<li><p>Building a defect-free system where the crystal has been rotated for the dislocation solution.</p></li>
+<li><p>Using solve_volterra_dislocation to obtain an elastic solution for a perfectly straight dislocation.</p></li>
+<li><p>Inserting a dislocation into the defect-free system by shifting the atoms according to the elastic solution’s displacements.</p></li>
+<li><p>Performing a short low temerature anneal and energy minimization to relax the atomic configuration. During relaxation, the system is kept periodic along the dislocation line, but is non-periodic in the other two directions. Atoms at the edge of the non-periodic directions are held fixed.</p></li>
 </ol>
-<p><strong>Note #1</strong>: All the analysis tools used here require a defect-free reference system in order to identify the defects in the final systems. The system constructed in step #2 serves this purpose.</p>
-<p><strong>Note #2</strong>: The final defect systems presented here are for demonstration purposes only as no atomic relaxations are performed.</p>
+<p>All atomic dislocation analysis tools identify and characterize the presence of defects in an atomic system by comparing the local atomic environment around every atom to a reference state. Some of the tools in atomman do this by directly mapping each atom in the defect system to a corresponding defect-free base system. In creating a dislocation as listed above, the system constructed in step #1 serves this purpose.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># 0 K values for Al</span>
-<span class="n">alat</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.05</span><span class="p">,</span> <span class="s1">&#39;Å&#39;</span><span class="p">)</span>
-<span class="n">C11</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">1.143e12</span><span class="p">,</span> <span class="s1">&#39;dyn/cm^2&#39;</span><span class="p">)</span>
-<span class="n">C12</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">0.619e12</span><span class="p">,</span> <span class="s1">&#39;dyn/cm^2&#39;</span><span class="p">)</span>
-<span class="n">C44</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">0.316e12</span><span class="p">,</span> <span class="s1">&#39;dyn/cm^2&#39;</span><span class="p">)</span>
-
-<span class="c1"># Define properties for fcc edge dislocation system</span>
-<span class="n">burgers</span> <span class="o">=</span> <span class="n">alat</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">m</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">n</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">xaxis</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">yaxis</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-<span class="n">zaxis</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-<span class="n">shift</span> <span class="o">=</span> <span class="n">alat</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">6</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
-
-<span class="c1"># Generate fcc Al unit cell</span>
-<span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">alat</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">alat</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">alat</span><span class="p">)</span>
-<span class="n">atoms</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">]])</span>
-<span class="n">fcc_ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="c1"># Generate reference fcc system from unit cell</span>
-<span class="n">fcc_system</span> <span class="o">=</span> <span class="n">fcc_ucell</span><span class="o">.</span><span class="n">rotate</span><span class="p">([</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">])</span>
-<span class="n">fcc_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="n">shift</span>
-<span class="n">fcc_system</span><span class="o">.</span><span class="n">wrap</span><span class="p">()</span>
-<span class="n">fcc_system</span> <span class="o">=</span> <span class="n">fcc_system</span><span class="o">.</span><span class="n">supersize</span><span class="p">((</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
-
-<span class="c1"># Build ElasticConstants object (standard crystal reference)</span>
-<span class="n">C</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">ElasticConstants</span><span class="p">(</span><span class="n">C11</span><span class="o">=</span><span class="n">C11</span><span class="p">,</span> <span class="n">C12</span><span class="o">=</span><span class="n">C12</span><span class="p">,</span> <span class="n">C44</span><span class="o">=</span><span class="n">C44</span><span class="p">)</span>
-
-<span class="c1"># Solve the elastic problem</span>
-<span class="n">disl</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">solve_volterra_dislocation</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">])</span>
-
-<span class="c1"># Generate dislocation system</span>
-<span class="n">fcc_disl_system</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">fcc_system</span><span class="p">)</span>
-<span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="n">disl</span><span class="o">.</span><span class="n">displacement</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
-<span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span></span><span class="n">base_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;atom_dump&#39;</span><span class="p">,</span> <span class="s1">&#39;files/fcc_Al_base.dump&#39;</span><span class="p">)</span>
+<span class="n">disl_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;atom_dump&#39;</span><span class="p">,</span> <span class="s1">&#39;files/fcc_Al_disl.dump&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<p>The dislocation system is oriented with the line direction parallel to the x-axis and the slip plane perpendicular to the z-axis. As such, the Burgers vector of the full edge dislocation is entirely in the y direction.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># plot original positions of atoms in system</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fcc_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">fcc_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span></span><span class="n">alat</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.05</span><span class="p">,</span> <span class="s1">&#39;Å&#39;</span><span class="p">)</span>
+<span class="n">burgers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">alat</span> <span class="o">/</span> <span class="mi">2</span><span class="o">**</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<span class="n">burgers</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_6_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_6_0.png" />
-</div>
+<div class="highlight"><pre>
+array([0.        , 2.86378246, 0.        ])
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -371,7 +358,10 @@ Notebook executed on 2019-11-05
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># plot original positions of atoms in system</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">base_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">base_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -380,7 +370,28 @@ Notebook executed on 2019-11-05
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_7_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_7_0.png" />
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_8_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_8_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># plot positions of atoms in dislocation system</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_9_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_9_0.png" />
 </div>
 </div>
 </div>
@@ -390,53 +401,93 @@ Notebook executed on 2019-11-05
 165507</a>.</p>
 <div class="math notranslate nohighlight">
 \[S_{i \alpha} = -\sum_{\beta=1}^{n_{\alpha}} {\left( x_{i \alpha \beta} - X_{i \alpha \beta} \right)}\]</div>
-<p>where <span class="math notranslate nohighlight">\(n_{\alpha}\)</span> is the number of nearest neighbor atoms <span class="math notranslate nohighlight">\(\beta\)</span> of atom <span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(x_{i \alpha \beta}\)</span> is the vector difference between atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in the current (defect) configuration, and <span class="math notranslate nohighlight">\(X_{i \alpha \beta}\)</span> is the vector difference between atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in the reference (perfect crystal) configuration.</p>
-<p><strong>Note</strong>: To be general with any crystal and dislocation, the slip vector computed here is <em>not</em> scaled by the number of slipped neighbors like it is in the original formulation. To estimate the Burgers vector for a moving dislocation, divide the slip vector values by the number of neighbors across the slipped plane.</p>
+<p>where <span class="math notranslate nohighlight">\(n_{\alpha}\)</span> is the number of nearest neighbor atoms <span class="math notranslate nohighlight">\(\beta\)</span> of atom <span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(x_{i \alpha \beta}\)</span> is the vector difference between atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in the current configuration, and <span class="math notranslate nohighlight">\(X_{i \alpha \beta}\)</span> is the vector difference between atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in the reference configuration.</p>
+<p><strong>Note 1</strong>: To be general with any crystal and dislocation, the slip vector computed here is <em>not</em> scaled by the number of slipped neighbors like it is in the original formulation. This means that the value of the slip vector returned will be a multiple of the Burgers vector that caused the slip. To estimate the Burgers vector of a dislocation that moved along a slip plane, the slip vector value needs to be divided by the total number of neighbor atoms that are across the slip plane.</p>
+<p><strong>Note 2</strong>: The reference system does not need to be of a perfect crystal and can simply be an earlier state. With this choice, the slip vector will reveal the slip deformation that occured between the two states of the system. This can be useful for identifying how dislocations move in highly deformed/defective systems.</p>
 <div class="section" id="2.1-slip_vector()">
 <h3>2.1 slip_vector()<a class="headerlink" href="#2.1-slip_vector()" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>system_0</strong> (<em>atomman.system</em>) The base/reference system to use.</li>
-<li><strong>system_1</strong> (<em>atomman.system</em>) The defect/current system to use.</li>
-<li><strong>neighbors</strong> (<em>atomman.NeighborList, optional</em>) The neighbor list associated with system_0 to use. Either neighbors or cutoff must be given, or system_0 must have a neighbors attribute.</li>
-<li><strong>cutoff</strong> (<em>float, optional</em>) Cutoff distance for computing a neighbor list for system_0. Either neighbors or cutoff must be given, or system_0 have a neighbors attribute.</li>
+<li><p><strong>system_0</strong> (<em>atomman.system</em>) The base/reference system to use.</p></li>
+<li><p><strong>system_1</strong> (<em>atomman.system</em>) The defect/current system to use.</p></li>
+<li><p><strong>neighbors</strong> (<em>atomman.NeighborList, optional</em>) The neighbor list associated with system_0 to use. Either neighbors or cutoff must be given, or system_0 must have a neighbors attribute.</p></li>
+<li><p><strong>cutoff</strong> (<em>float, optional</em>) Cutoff distance for computing a neighbor list for system_0. Either neighbors or cutoff must be given, or system_0 have a neighbors attribute.</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li>(<em>numpy.ndarray</em>) The computed slip vectors.</li>
+<li><p>(<em>numpy.ndarray</em>) The computed slip vectors.</p></li>
 </ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Make reference system&#39;s pbc match defect system&#39;s pbc</span>
 <span class="c1"># This avoids free surfaces having large slip vectors</span>
-<span class="n">fcc_system</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">base_system</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
-<span class="c1"># Compute slip vector for all atoms</span>
-<span class="n">neighbors0</span> <span class="o">=</span> <span class="n">fcc_system</span><span class="o">.</span><span class="n">neighborlist</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">)</span>
-<span class="n">slip</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">slip_vector</span><span class="p">(</span><span class="n">fcc_system</span><span class="p">,</span> <span class="n">fcc_disl_system</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">=</span><span class="n">neighbors0</span><span class="p">)</span>
+<span class="c1"># Build the neighbor list using the reference system</span>
+<span class="n">neighbors0</span> <span class="o">=</span> <span class="n">base_system</span><span class="o">.</span><span class="n">neighborlist</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">)</span>
 
-<span class="c1"># plot slip vector magnitude for all atoms</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">slip</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="c1"># Compute max slip vector</span>
-<span class="n">maxslip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">slip</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-
-<span class="c1"># For fcc (111) planes, three neighbor atoms &quot;slip&quot;.</span>
-<span class="c1"># Divide slip vector by 3 to estimate burgers</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;burgers ≈&#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">maxslip</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Å&#39;</span><span class="p">),</span> <span class="s1">&#39;Å&#39;</span><span class="p">)</span>
+<span class="c1"># Compute the slip vector for all atoms</span>
+<span class="n">slip</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">slip_vector</span><span class="p">(</span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">=</span><span class="n">neighbors0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
+<p>As the reference system is the defect free system used to construct the dislocation system, the slip vector computed here shows the dislocation slip needed to insert the dislocation into the system. Note that the slip vector values on the two sides of the plane are equal but opposite.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># plot slip vector components for all atoms</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span><span class="mf">4.5</span><span class="p">))</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">slip</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+
+<span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">slip</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+
+<span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">slip</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_10_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_10_0.png" />
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_14_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_14_0.png" />
+</div>
+</div>
+<p>The Burgers vector for the dislocation can then be estimated from slip vector values for atoms along the slipped plane.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Find atoms with coordinates -30 &lt; y &lt; -25 and 0.0 &lt; z &lt; 3.0 and</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="p">((</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">30.0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">25.0</span><span class="p">)</span>
+          <span class="o">&amp;</span><span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">3.0</span><span class="p">))</span>
+
+<span class="c1"># Get average slip for the atoms</span>
+<span class="n">aveslip</span> <span class="o">=</span> <span class="n">slip</span><span class="p">[</span><span class="n">matches</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Divide the slip by 3 to estimate the Burgers vector</span>
+<span class="c1"># as fcc (111) planes have three cross-plane neighbors</span>
+<span class="n">burgers_est</span> <span class="o">=</span> <span class="n">aveslip</span> <span class="o">/</span> <span class="mi">3</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;actual Burgers vector:    [</span><span class="si">{burgers[0]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers[1]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers[2]: 7.4f}</span><span class="s1">]&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;estimated Burgers vector: [</span><span class="si">{burgers_est[0]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers_est[1]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers_est[2]: 7.4f}</span><span class="s1">]&#39;</span><span class="p">)</span>
+</pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -444,7 +495,42 @@ Notebook executed on 2019-11-05
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-burgers ≈ 2.8643383992622238 Å
+actual Burgers vector:    [ 0.0000,  2.8638,  0.0000]
+estimated Burgers vector: [-0.0016,  2.8662,  0.0060]
+</pre></div></div>
+</div>
+<p>Try estimating the partial dislocation by looking at slip in the stacking fault area</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Find atoms with coordinates -1 &lt; y &lt; 1 and 0.0 &lt; z &lt; 3.0 and</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="p">((</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">)</span>
+          <span class="o">&amp;</span><span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">3.0</span><span class="p">))</span>
+
+<span class="c1"># Get average slip for the atoms</span>
+<span class="n">aveslip</span> <span class="o">=</span> <span class="n">slip</span><span class="p">[</span><span class="n">matches</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Divide the slip by 3 to estimate the Burgers vector</span>
+<span class="c1"># as fcc (111) planes have three cross-plane neighbors</span>
+<span class="n">burgers_est</span> <span class="o">=</span> <span class="n">aveslip</span> <span class="o">/</span> <span class="mi">3</span>
+
+<span class="c1"># Define the Shockley Burgers vector relative to the system definintion</span>
+<span class="n">shockley</span> <span class="o">=</span> <span class="n">alat</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">6</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;actual Burgers vector:    [</span><span class="si">{shockley[0]: 7.4f}</span><span class="s1">, </span><span class="si">{shockley[1]: 7.4f}</span><span class="s1">, </span><span class="si">{shockley[2]: 7.4f}</span><span class="s1">]&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;estimated Burgers vector: [</span><span class="si">{burgers_est[0]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers_est[1]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers_est[2]: 7.4f}</span><span class="s1">]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+actual Burgers vector:    [ 0.8267,  1.4319,  0.0000]
+estimated Burgers vector: [ 0.7035,  1.4935, -0.0257]
 </pre></div></div>
 </div>
 </div>
@@ -456,32 +542,32 @@ burgers ≈ 2.8643383992622238 Å
 \[\delta_i(\xi) = u_i^+(\xi) - u_i^-(\xi)\]</div>
 <p>The algorithm used by atomman does the following:</p>
 <ol class="arabic simple">
-<li>Uses the base configuration to identify all atoms in the two atomic planes neighboring the slip plane.</li>
-<li>For all atoms identified in #1, finds the unique <span class="math notranslate nohighlight">\(\xi\)</span> coordinates from the base configuration and computes <span class="math notranslate nohighlight">\(u_i^+\)</span> and <span class="math notranslate nohighlight">\(u_i^-\)</span> for the defect configuration relative to the base configuration.</li>
-<li>Any <span class="math notranslate nohighlight">\(u_i^+\)</span> or <span class="math notranslate nohighlight">\(u_i^-\)</span> corresponding to the same <span class="math notranslate nohighlight">\(\xi\)</span> coordinates are averaged, and the values of <span class="math notranslate nohighlight">\(u_i^+\)</span> and <span class="math notranslate nohighlight">\(u_i^-\)</span> are linearly interpolated to all unique <span class="math notranslate nohighlight">\(\xi\)</span> coordinates. This is done as the <span class="math notranslate nohighlight">\(\xi\)</span> coordinates may differ for the two atomic planes.</li>
-<li>The disregistry is computed for all unique <span class="math notranslate nohighlight">\(\xi\)</span> coordinates by finding the difference in the interpolated <span class="math notranslate nohighlight">\(u_i^+\)</span> and <span class="math notranslate nohighlight">\(u_i^-\)</span> displacements.</li>
+<li><p>Uses the base configuration to identify all atoms in the two atomic planes neighboring the slip plane.</p></li>
+<li><p>For all atoms identified in #1, finds the unique <span class="math notranslate nohighlight">\(\xi\)</span> coordinates from the base configuration and computes <span class="math notranslate nohighlight">\(u_i^+\)</span> and <span class="math notranslate nohighlight">\(u_i^-\)</span> for the defect configuration relative to the base configuration.</p></li>
+<li><p>Any <span class="math notranslate nohighlight">\(u_i^+\)</span> or <span class="math notranslate nohighlight">\(u_i^-\)</span> corresponding to the same <span class="math notranslate nohighlight">\(\xi\)</span> coordinates are averaged, and the values of <span class="math notranslate nohighlight">\(u_i^+\)</span> and <span class="math notranslate nohighlight">\(u_i^-\)</span> are linearly interpolated to all unique <span class="math notranslate nohighlight">\(\xi\)</span> coordinates. This is done as the <span class="math notranslate nohighlight">\(\xi\)</span> coordinates may differ for the two atomic planes.</p></li>
+<li><p>The disregistry is computed for all unique <span class="math notranslate nohighlight">\(\xi\)</span> coordinates by finding the difference in the interpolated <span class="math notranslate nohighlight">\(u_i^+\)</span> and <span class="math notranslate nohighlight">\(u_i^-\)</span> displacements.</p></li>
 </ol>
 <div class="section" id="3.1-disregistry()">
 <h3>3.1 disregistry()<a class="headerlink" href="#3.1-disregistry()" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>basesystem</strong> (<em>atomman.System</em>) A perfect reference system with atoms directly corresponding to atoms in dislsystem.</li>
-<li><strong>dislsystem</strong> (<em>atomman.System</em>) A dislocation-containing system.</li>
-<li><strong>spreadvector</strong> (<em>array-like object, optional</em>) Unit vector defining the direction associated with the planar spreading along the slip plane. Default value is [1, 0, 0] (Cartesian x-coordinates).</li>
-<li><strong>planenormal</strong> (<em>array-like object, optional</em>) Unit vector defining the normal to the slip plane. Must be perpendicular to xvector. Default value is [0, 1, 0] (Cartesian y-axis).</li>
-<li><strong>planepos</strong> (<em>array-like object, optional</em>) A position on the slip plane so that the plane can be fully defined. The slip plane position should fall between two planes of atoms. Default value is [0,0,0].</li>
+<li><p><strong>basesystem</strong> (<em>atomman.System</em>) A perfect reference system with atoms directly corresponding to atoms in dislsystem.</p></li>
+<li><p><strong>dislsystem</strong> (<em>atomman.System</em>) A dislocation-containing system.</p></li>
+<li><p><strong>m</strong> (<em>array-like object, optional</em>) Unit vector defining the direction associated with the planar spreading along the slip plane. Default value is [1, 0, 0] (Cartesian x-coordinates).</p></li>
+<li><p><strong>n</strong> (<em>array-like object, optional</em>) Unit vector defining the normal to the slip plane. Must be perpendicular to xvector. Default value is [0, 1, 0] (Cartesian y-axis).</p></li>
+<li><p><strong>planepos</strong> (<em>array-like object, optional</em>) A position on the slip plane so that the plane can be fully defined. The slip plane position should fall between two planes of atoms. Default value is [0,0,0].</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li><strong>coord</strong> (<em>numpy.ndarray</em>) The (N,) array of unique coordinates (atomic columns) neighboring the slip plane.</li>
-<li><strong>disregistry</strong> (<em>numpy.ndarray</em>) A (N, 3) array of the dislocation’s disregistry at each x.</li>
+<li><p><strong>coord</strong> (<em>numpy.ndarray</em>) The (N,) array of unique coordinates (atomic columns) neighboring the slip plane.</p></li>
+<li><p><strong>disregistry</strong> (<em>numpy.ndarray</em>) A (N, 3) array of the dislocation’s disregistry at each x.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">xi</span><span class="p">,</span> <span class="n">disreg</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">disregistry</span><span class="p">(</span><span class="n">fcc_system</span><span class="p">,</span> <span class="n">fcc_disl_system</span><span class="p">)</span>
+<span></span><span class="n">xi</span><span class="p">,</span> <span class="n">disreg</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">disregistry</span><span class="p">(</span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
 
@@ -502,7 +588,7 @@ burgers ≈ 2.8643383992622238 Å
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_13_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_13_0.png" />
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_21_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_21_0.png" />
 </div>
 </div>
 </div>
@@ -513,20 +599,20 @@ burgers ≈ 2.8643383992622238 Å
 18-21.</a>, as well as code obtained from Yuri Mishin.</p>
 <p>The local environment around each atom <span class="math notranslate nohighlight">\(\alpha\)</span> is characterized using a list of the position vector differences between the atom and all neighboring atoms within a cutoff distance.</p>
 <ul class="simple">
-<li><span class="math notranslate nohighlight">\(p_{i \alpha \beta}\)</span> is the vector difference in the defect-free reference system between atom <span class="math notranslate nohighlight">\(\alpha\)</span> and a neighboring atom identified in the reference system, <span class="math notranslate nohighlight">\(\beta\)</span>.</li>
-<li><span class="math notranslate nohighlight">\(q_{i \alpha \gamma}\)</span> is the vector difference in the defect system between atom <span class="math notranslate nohighlight">\(\alpha\)</span> and a neighboring atom identified in the defect system, <span class="math notranslate nohighlight">\(\gamma\)</span>.</li>
+<li><p><span class="math notranslate nohighlight">\(p_{i \alpha \beta}\)</span> is the vector difference in the defect-free reference system between atom <span class="math notranslate nohighlight">\(\alpha\)</span> and a neighboring atom identified in the reference system, <span class="math notranslate nohighlight">\(\beta\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(q_{i \alpha \gamma}\)</span> is the vector difference in the defect system between atom <span class="math notranslate nohighlight">\(\alpha\)</span> and a neighboring atom identified in the defect system, <span class="math notranslate nohighlight">\(\gamma\)</span>.</p></li>
 </ul>
 <p>The list of <span class="math notranslate nohighlight">\(\beta\)</span> and <span class="math notranslate nohighlight">\(\gamma\)</span> neighbors may differ, so <span class="math notranslate nohighlight">\(p_{i \alpha \gamma}\)</span> vectors must be identified by uniquely pairing as many of the <span class="math notranslate nohighlight">\(p_{i \alpha \beta}\)</span> vectors to <span class="math notranslate nohighlight">\(q_{i \alpha \gamma}\)</span> vectors based on their directions and magnitudes. Using the pairs, a strain correspondence tensor, <span class="math notranslate nohighlight">\(G_{ij \alpha}\)</span>, is computed as a least squares solution of the linear matrix equation</p>
 <div class="math notranslate nohighlight">
 \[q_{i \alpha \gamma} = p_{j \alpha \gamma} G_{ij \alpha}\]</div>
 <p>Various strain properties can then be computed using <span class="math notranslate nohighlight">\(G_{ij \alpha}\)</span>:</p>
 <ul class="simple">
-<li>strain state</li>
+<li><p>strain state</p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[E_{ij \alpha} = \frac{(\delta_{ij} - G_{ij \alpha}) + (\delta_{ij} - G_{ji \alpha})}{2}\]</div>
 <ul class="simple">
-<li>strain invariants</li>
+<li><p>strain invariants</p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[I_{1 \alpha} = E_{11 \alpha} + E_{22 \alpha} + E_{33 \alpha}\]</div>
@@ -535,7 +621,7 @@ burgers ≈ 2.8643383992622238 Å
 <div class="math notranslate nohighlight">
 \[I_{3 \alpha} = \det{E_{ij \alpha}}\]</div>
 <ul class="simple">
-<li>angular velocity</li>
+<li><p>angular velocity</p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[R_{ij \alpha} = \frac{(\delta_{ij} - G_{ij \alpha}) - (\delta_{ij} - G_{ji \alpha})}{2}\]</div>
@@ -552,17 +638,17 @@ burgers ≈ 2.8643383992622238 Å
 <h3>3.1. Define p_vectors<a class="headerlink" href="#3.1.-Define-p_vectors" title="Permalink to this headline">¶</a></h3>
 <p>The Nye tensor calculation requires a list of reference radial neighbor vectors for each atom. For best results, these should correspond to a perfect crystal in the same/similar orientation as the defect system being analyzed.</p>
 <ul class="simple">
-<li>If all atom sites in the perfect crystal are symmetrically equivalent, then only one set of p_vectors is needed and is used for all atoms.</li>
-<li>Otherwise, a p_vector list needs to be specified for each atom individually based on its perfect crystal site.</li>
+<li><p>If all atom sites in the perfect crystal are symmetrically equivalent, then only one set of p_vectors is needed and is used for all atoms.</p></li>
+<li><p>Otherwise, a p_vector list needs to be specified for each atom individually based on its perfect crystal site.</p></li>
 </ul>
 <p>Some examples:</p>
 <ul class="simple">
-<li>Body-centered cubic and face-centered cubic cells only have atoms occupying one unique lattice site.</li>
-<li>Hexagonal close packed has two unique sites. With A/B basal plane stacking, all atoms in A planes are identical sites and all atoms in B planes are identical sites.</li>
-<li>Diamond cubic likewise has two unique sites: the face-centered cubic sites, and the sites in between.</li>
+<li><p>Body-centered cubic and face-centered cubic cells only have atoms occupying one unique lattice site.</p></li>
+<li><p>Hexagonal close packed has two unique sites. With A/B basal plane stacking, all atoms in A planes are identical sites and all atoms in B planes are identical sites.</p></li>
+<li><p>Diamond cubic likewise has two unique sites: the face-centered cubic sites, and the sites in between.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -597,12 +683,18 @@ burgers ≈ 2.8643383992622238 Å
 </div>
 <p>The p_vectors must be transformed to match the orientation of the defect system. This can either be done before calling nye_tensor() as shown here, or by using the axes parameter of the nye_tensor() function.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Transformed p_vectors</span>
-<span class="n">trans_p_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">p_vectors</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">axes_check</span><span class="p">([</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">]))</span>
+<span></span><span class="c1"># Define the transformation matrix</span>
+<span class="n">xaxis</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">yaxis</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">zaxis</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">transform</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">axes_check</span><span class="p">([</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">])</span>
+
+<span class="c1"># Transformed p_vectors</span>
+<span class="n">trans_p_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">p_vectors</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
 <span class="n">trans_p_vectors</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">trans_p_vectors</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">0.0</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">trans_p_vectors</span><span class="p">)</span>
 </pre></div>
@@ -613,18 +705,18 @@ burgers ≈ 2.8643383992622238 Å
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 1.43189123  2.33826859 -0.82670279]
- [ 0.          2.33826859  1.65340558]
- [-1.43189123  2.33826859 -0.82670279]
- [-1.43189123  0.         -2.48010836]
- [-2.86378246  0.          0.        ]
- [-1.43189123  0.          2.48010836]
- [ 1.43189123  0.          2.48010836]
- [ 2.86378246  0.          0.        ]
- [ 1.43189123  0.         -2.48010836]
- [-1.43189123 -2.33826859  0.82670279]
- [ 0.         -2.33826859 -1.65340558]
- [ 1.43189123 -2.33826859  0.82670279]]
+[[-1.65340558  0.          2.33826859]
+ [ 0.82670279  1.43189123  2.33826859]
+ [ 0.82670279 -1.43189123  2.33826859]
+ [ 0.         -2.86378246  0.        ]
+ [ 2.48010836 -1.43189123  0.        ]
+ [ 2.48010836  1.43189123  0.        ]
+ [ 0.          2.86378246  0.        ]
+ [-2.48010836  1.43189123  0.        ]
+ [-2.48010836 -1.43189123  0.        ]
+ [ 1.65340558  0.         -2.33826859]
+ [-0.82670279 -1.43189123 -2.33826859]
+ [-0.82670279  1.43189123 -2.33826859]]
 </pre></div></div>
 </div>
 </div>
@@ -633,28 +725,28 @@ burgers ≈ 2.8643383992622238 Å
 <p>For convenience, the atomman.defect.nye_tensor_p() function can be used to generate p_vector lists for all atoms using a base reference system. The reference system should directly correspond to the system that the nye_tensor() calculation will be performed on, but be a perfect defect-free crystal with all periodic boundaries.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>system</strong> (<em>atomman.system</em>) The base/reference system to use. This should be a defect-free perfect crystal system with atom ids directly corresponding to atoms in any system that you want to analyze with the Nye tensor.</li>
-<li><strong>neighbors</strong> (<em>atomman.NeighborList, optional</em>) The neighbor list associated with system to use. Either neighbors or cutoff must be given, or system must have a neighbors attribute.</li>
-<li><strong>cutoff</strong> (<em>float, optional</em>) Cutoff distance for computing a neighbor list for system. Either neighbors or cutoff must be given, or system have a neighbors attribute.</li>
+<li><p><strong>system</strong> (<em>atomman.system</em>) The base/reference system to use. This should be a defect-free perfect crystal system with atom ids directly corresponding to atoms in any system that you want to analyze with the Nye tensor.</p></li>
+<li><p><strong>neighbors</strong> (<em>atomman.NeighborList, optional</em>) The neighbor list associated with system to use. Either neighbors or cutoff must be given, or system must have a neighbors attribute.</p></li>
+<li><p><strong>cutoff</strong> (<em>float, optional</em>) Cutoff distance for computing a neighbor list for system. Either neighbors or cutoff must be given, or system have a neighbors attribute.</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li>(<em>numpy.ndarray</em>) The list of p distance vectors for each atom in system.</li>
+<li><p>(<em>numpy.ndarray</em>) The list of p distance vectors for each atom in system.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Make reference system&#39;s pbc all periodic</span>
-<span class="n">fcc_system</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">base_system</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Build p_vectors</span>
-<span class="n">neighbors0</span> <span class="o">=</span> <span class="n">fcc_system</span><span class="o">.</span><span class="n">neighborlist</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">alat</span><span class="o">*</span><span class="mf">0.9</span><span class="p">)</span>
-<span class="n">all_p_vectors</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">nye_tensor_p</span><span class="p">(</span><span class="n">fcc_system</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">=</span><span class="n">neighbors0</span><span class="p">)</span>
+<span class="n">neighbors0</span> <span class="o">=</span> <span class="n">base_system</span><span class="o">.</span><span class="n">neighborlist</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">alat</span><span class="o">*</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">all_p_vectors</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">nye_tensor_p</span><span class="p">(</span><span class="n">base_system</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">=</span><span class="n">neighbors0</span><span class="p">)</span>
 
 <span class="c1"># Show length of all_p_vectors to be natoms</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">fcc_system</span><span class="o">.</span><span class="n">natoms</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">base_system</span><span class="o">.</span><span class="n">natoms</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_p_vectors</span><span class="p">))</span>
 
 <span class="c1"># Show that first p_vectors list matches p_vectors above, besides order</span>
@@ -669,20 +761,20 @@ burgers ≈ 2.8643383992622238 Å
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2400
-2400
-[[-1.43189123  0.         -2.48010836]
- [-2.86378246  0.          0.        ]
- [-1.43189123  0.          2.48010836]
- [ 0.          2.33826859  1.65340558]
- [-1.43189123  2.33826859 -0.82670279]
- [ 2.86378246  0.          0.        ]
- [ 1.43189123  0.          2.48010836]
- [ 1.43189123  0.         -2.48010836]
- [ 1.43189123  2.33826859 -0.82670279]
- [ 0.         -2.33826859 -1.65340558]
- [-1.43189123 -2.33826859  0.82670279]
- [ 1.43189123 -2.33826859  0.82670279]]
+32640
+32640
+[[ 0.          2.86378576  0.        ]
+ [-2.48011122  1.43189288  0.        ]
+ [ 2.48011122 -1.43189288  0.        ]
+ [ 2.48011122  1.43189288  0.        ]
+ [ 1.65340748  0.         -2.33827128]
+ [-0.82670374 -1.43189288 -2.33827128]
+ [-0.82670374  1.43189288 -2.33827128]
+ [ 0.         -2.86378576  0.        ]
+ [-2.48011122 -1.43189288  0.        ]
+ [-1.65340748  0.          2.33827128]
+ [ 0.82670374  1.43189288  2.33827128]
+ [ 0.82670374 -1.43189288  2.33827128]]
 </pre></div></div>
 </div>
 </div>
@@ -690,37 +782,41 @@ burgers ≈ 2.8643383992622238 Å
 <h3>3.3 nye_tensor()<a class="headerlink" href="#3.3-nye_tensor()" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>system</strong> (<em>atomman.System</em>) The atomic system to compute the per-atom strain properties and Nye tensor for.</li>
-<li><strong>p_vectors</strong> (<em>array-like object</em>) List(s) of radial distance vectors between each atom and its nearest neighbors in a perfect crystal setting. If one list of p_vectors is given, then it is applied to all atoms.</li>
-<li><strong>theta_max</strong> (<em>float, optional</em>) The maximum theta angle in degrees to use when searching for matches between p vectors and q vectors. Optimum values are dependent on the crystal structure. Default value is 27, which is the original value used for fcc crystals.</li>
-<li><strong>axes</strong> (<em>array-like object, optional</em>) 3x3 array of right-handed orthogonal axes. If given, will be used to transform the p_vectors before computing the Nye tensor.</li>
-<li><strong>neighbors</strong> (<em>atomman.NeighborList, optional</em>) The neighbor list associated with system to use. Either neighbors or cutoff must be given, or system must have a neighbors attribute.</li>
-<li><strong>cutoff</strong> (<em>float</em>) Cutoff distance for computing a neighbor list for system. Either neighbors or cutoff must be given, or system have a neighbors attribute.</li>
+<li><p><strong>system</strong> (<em>atomman.System</em>) The atomic system to compute the per-atom strain properties and Nye tensor for.</p></li>
+<li><p><strong>p_vectors</strong> (<em>array-like object</em>) List(s) of radial distance vectors between each atom and its nearest neighbors in a perfect crystal setting. If one list of p_vectors is given, then it is applied to all atoms.</p></li>
+<li><p><strong>theta_max</strong> (<em>float, optional</em>) The maximum theta angle in degrees to use when searching for matches between p vectors and q vectors. Optimum values are dependent on the crystal structure. Default value is 27, which is the original value used for fcc crystals.</p></li>
+<li><p><strong>axes</strong> (<em>array-like object, optional</em>) 3x3 array of right-handed orthogonal axes. If given, will be used to transform the p_vectors before computing the Nye tensor.</p></li>
+<li><p><strong>neighbors</strong> (<em>atomman.NeighborList, optional</em>) The neighbor list associated with system to use. Either neighbors or cutoff must be given, or system must have a neighbors attribute.</p></li>
+<li><p><strong>cutoff</strong> (<em>float</em>) Cutoff distance for computing a neighbor list for system. Either neighbors or cutoff must be given, or system have a neighbors attribute.</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li>(<em>dict</em>) Contains the per-atom properties ‘strain’, ‘strain_invariant_1’, ‘strain_invariant_2’, ‘strain_invariant_3’, ‘angular_velocity’, and ‘Nye_tensor’.</li>
+<li><p>(<em>dict</em>) Contains the per-atom properties ‘strain’, ‘strain_invariant_1’, ‘strain_invariant_2’, ‘strain_invariant_3’, ‘angular_velocity’, and ‘Nye_tensor’.</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">neighbors</span> <span class="o">=</span> <span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">neighborlist</span><span class="p">(</span><span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">)</span>
+<span></span><span class="n">neighbors</span> <span class="o">=</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">neighborlist</span><span class="p">(</span><span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Compute strain values and Nye tensor</span>
-<span class="n">nye_dict</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">nye_tensor</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="p">,</span> <span class="n">p_vectors</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">],</span> <span class="n">neighbors</span><span class="o">=</span><span class="n">neighbors</span><span class="p">)</span>
+<span class="n">nye_dict</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">nye_tensor</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="n">p_vectors</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">],</span> <span class="n">neighbors</span><span class="o">=</span><span class="n">neighbors</span><span class="p">)</span>
+<span class="c1"># or</span>
+<span class="c1">#nye_dict = am.defect.nye_tensor(disl_system, trans_p_vectors, neighbors=neighbors)</span>
+<span class="c1"># or</span>
+<span class="c1">#nye_dict = am.defect.nye_tensor(disl_system, all_p_vectors, neighbors=neighbors)</span>
 
 <span class="c1"># Save results to fcc_disl_system as per-atom properties</span>
 <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">nye_dict</span><span class="p">:</span>
-    <span class="n">fcc_disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">view</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">nye_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">view</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">nye_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -730,46 +826,46 @@ burgers ≈ 2.8643383992622238 Å
 <p>The atomman.plot.interpolate_contour() function generates a pretty-looking contour plot of a per-atom property by interpolating values between the atoms. This provides a mapping of the per-atom properties as pseudo-continuum properties.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>system</strong> (<em>atomman.System</em>) The system with the per-atom property that you want to plot.</li>
-<li><strong>name</strong> (<em>str</em>) The name of the per-atom property that you want to plot.</li>
-<li><strong>property</strong> (<em>array-like object, optional</em>) Values for the per-atom property to plot. If not given, values will be taken as the “name” property of system.</li>
-<li><strong>index</strong> (<em>int or tuple, optional</em>) Specifies which component of a multidimensional property to plot. Not needed if the property is scalar.</li>
-<li><strong>magnitude</strong> (<em>bool, optional</em>) If True, plots the per-atom magnitude of a vector property. Cannot be combined with index. Default value is False.</li>
-<li><strong>plotxaxis</strong> (<em>str or array-like object, optional</em>) Indicates the Cartesian direction associated with the system’s atomic coordinates to align with the plotting x-axis. Values are either 3D unit vectors, or strings ‘x’, ‘y’, or ‘z’ for the Cartesian axes directions. plotxaxis and plotyaxis must be orthogonal. Default value is ‘x’ = [1, 0, 0].</li>
-<li><strong>plotyaxis</strong> (<em>str or array-like object, optional</em>) Indicates the Cartesian direction associated with the system’s atomic coordinates to align with the plotting y-axis. Values are either 3D unit vectors, or strings ‘x’, ‘y’, or ‘z’ for the Cartesian axes directions. plotxaxis and plotyaxis must be orthogonal. Default value is ‘y’ = [0, 1, 0].</li>
-<li><strong>xlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting x-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the plotting axis.</li>
-<li><strong>ylim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting y-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the plotting axis.</li>
-<li><strong>zlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates normal to the plotting axes (i.e.&nbsp;plotxaxis X plotyaxis) to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the axis.</li>
-<li><strong>xbins</strong> (<em>int, optional</em>) Specifies the number of interpolation bins to use along the plotting x-axis. Default value is 200.</li>
-<li><strong>ybins</strong> (<em>int, optional</em>) Specifies the number of interpolation bins to use along the plotting y-axis. Default value is 200.</li>
-<li><strong>dots</strong> (<em>bool, optional</em>) If True, then the positions of the atoms are shown as circles. Default value is True.</li>
-<li><strong>czero</strong> (<em>bool, optional</em>) If True, the range of property values will be centered around zero, i.e.&nbsp;cmax = -cmin. If False, cmax and cmin will be independently selected using the property values. Default value is True.</li>
-<li><strong>save</strong> (<em>bool, optional</em>) If True, the generated plot will be saved to “name.png”. Default value is False.</li>
-<li><strong>show</strong> (<em>bool, optional</em>) If True, matplotlib.pyplot.show() is called. Default value is True.</li>
-<li><strong>length_unit</strong> (<em>str, optional</em>) The units of length to use for the plotting x- and y-axes. Default value is ‘angstrom’.</li>
-<li><strong>property_unit</strong> (<em>str or None, optional</em>) The units to use for the property value being plotted. Default value is None, in which no unit conversion is applied.</li>
-<li><strong>cmap</strong> (<em>str, optional</em>) The name of the matplotlib colormap to use. Default value is ‘jet’.</li>
+<li><p><strong>system</strong> (<em>atomman.System</em>) The system with the per-atom property that you want to plot.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) The name of the per-atom property that you want to plot.</p></li>
+<li><p><strong>property</strong> (<em>array-like object, optional</em>) Values for the per-atom property to plot. If not given, values will be taken as the “name” property of system.</p></li>
+<li><p><strong>index</strong> (<em>int or tuple, optional</em>) Specifies which component of a multidimensional property to plot. Not needed if the property is scalar.</p></li>
+<li><p><strong>magnitude</strong> (<em>bool, optional</em>) If True, plots the per-atom magnitude of a vector property. Cannot be combined with index. Default value is False.</p></li>
+<li><p><strong>plotxaxis</strong> (<em>str or array-like object, optional</em>) Indicates the Cartesian direction associated with the system’s atomic coordinates to align with the plotting x-axis. Values are either 3D unit vectors, or strings ‘x’, ‘y’, or ‘z’ for the Cartesian axes directions. plotxaxis and plotyaxis must be orthogonal. Default value is ‘x’ = [1, 0, 0].</p></li>
+<li><p><strong>plotyaxis</strong> (<em>str or array-like object, optional</em>) Indicates the Cartesian direction associated with the system’s atomic coordinates to align with the plotting y-axis. Values are either 3D unit vectors, or strings ‘x’, ‘y’, or ‘z’ for the Cartesian axes directions. plotxaxis and plotyaxis must be orthogonal. Default value is ‘y’ = [0, 1, 0].</p></li>
+<li><p><strong>xlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting x-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the plotting axis.</p></li>
+<li><p><strong>ylim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting y-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the plotting axis.</p></li>
+<li><p><strong>zlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates normal to the plotting axes (i.e. plotxaxis X plotyaxis) to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the axis.</p></li>
+<li><p><strong>xbins</strong> (<em>int, optional</em>) Specifies the number of interpolation bins to use along the plotting x-axis. Default value is 200.</p></li>
+<li><p><strong>ybins</strong> (<em>int, optional</em>) Specifies the number of interpolation bins to use along the plotting y-axis. Default value is 200.</p></li>
+<li><p><strong>dots</strong> (<em>bool, optional</em>) If True, then the positions of the atoms are shown as circles. Default value is True.</p></li>
+<li><p><strong>czero</strong> (<em>bool, optional</em>) If True, the range of property values will be centered around zero, i.e. cmax = -cmin. If False, cmax and cmin will be independently selected using the property values. Default value is True.</p></li>
+<li><p><strong>save</strong> (<em>bool, optional</em>) If True, the generated plot will be saved to “name.png”. Default value is False.</p></li>
+<li><p><strong>show</strong> (<em>bool, optional</em>) If True, matplotlib.pyplot.show() is called. Default value is True.</p></li>
+<li><p><strong>length_unit</strong> (<em>str, optional</em>) The units of length to use for the plotting x- and y-axes. Default value is ‘angstrom’.</p></li>
+<li><p><strong>property_unit</strong> (<em>str or None, optional</em>) The units to use for the property value being plotted. Default value is None, in which no unit conversion is applied.</p></li>
+<li><p><strong>cmap</strong> (<em>str, optional</em>) The name of the matplotlib colormap to use. Default value is ‘jet’.</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li><strong>intsum</strong> (<em>float</em>) The area integrated sum of the property over the plotted region.</li>
-<li><strong>avsum</strong> (<em>float</em>) The average property value taken across all plotting bins.</li>
+<li><p><strong>intsum</strong> (<em>float</em>) The area integrated sum of the property over the plotted region.</p></li>
+<li><p><strong>avsum</strong> (<em>float</em>) The average property value taken across all plotting bins.</p></li>
 </ul>
 <p><strong>NOTE:</strong> The strain and Nye tensor values shown here are only for demonstration purposes and should <em>not</em> be used as there has been no atomic relaxations.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Make contour plots for the strain invariants</span>
-<span class="n">intsum</span><span class="p">,</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="p">,</span> <span class="s1">&#39;strain_invariant_1&#39;</span><span class="p">,</span>
-                                            <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">dots</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">intsum</span><span class="p">,</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;strain_invariant_1&#39;</span><span class="p">,</span> <span class="n">plotxaxis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">plotyaxis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                                            <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">),</span> <span class="n">dots</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<span class="n">intsum</span><span class="p">,</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="p">,</span> <span class="s1">&#39;strain_invariant_2&#39;</span><span class="p">,</span>
-                                            <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">dots</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">intsum</span><span class="p">,</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;strain_invariant_2&#39;</span><span class="p">,</span> <span class="n">plotxaxis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">plotyaxis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                                            <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">),</span> <span class="n">dots</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<span class="n">intsum</span><span class="p">,</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="p">,</span> <span class="s1">&#39;strain_invariant_3&#39;</span><span class="p">,</span>
-                                            <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">dots</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">intsum</span><span class="p">,</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;strain_invariant_3&#39;</span><span class="p">,</span> <span class="n">plotxaxis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">plotyaxis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                                            <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">),</span> <span class="n">dots</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -777,38 +873,41 @@ burgers ≈ 2.8643383992622238 Å
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_26_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_26_0.png" />
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_34_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_34_0.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_26_1.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_26_1.png" />
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_34_1.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_34_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_26_2.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_26_2.png" />
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_34_2.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_34_2.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># plot Nye tensor components related to dislocations</span>
 <span class="n">intsum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">intsum</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="p">,</span> <span class="s1">&#39;Nye_tensor&#39;</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
-                                               <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">)</span>
+<span class="n">intsum</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;Nye_tensor&#39;</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                                               <span class="n">plotxaxis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">plotyaxis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                                               <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">)</span>
 
-<span class="n">intsum</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="p">,</span> <span class="s1">&#39;Nye_tensor&#39;</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
-                                               <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">)</span>
+<span class="n">intsum</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;Nye_tensor&#39;</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                                               <span class="n">plotxaxis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">plotyaxis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                                               <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">)</span>
 
-<span class="n">intsum</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">fcc_disl_system</span><span class="p">,</span> <span class="s1">&#39;Nye_tensor&#39;</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span>
-                                               <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">)</span>
+<span class="n">intsum</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;Nye_tensor&#39;</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span>
+                                               <span class="n">plotxaxis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">plotyaxis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                                               <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -816,30 +915,31 @@ burgers ≈ 2.8643383992622238 Å
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_27_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_27_0.png" />
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_35_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_35_0.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_27_1.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_27_1.png" />
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_35_1.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_35_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_27_2.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_27_2.png" />
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_35_2.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_35_2.png" />
 </div>
 </div>
 <p>Burgers vector estimate is obtained from the integer sums over the plots</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Integration summation estimate of Burgers vector = [</span><span class="si">%f</span><span class="s1">, </span><span class="si">%f</span><span class="s1">, </span><span class="si">%f</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">intsum</span><span class="p">))</span>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;actual Burgers vector:    [</span><span class="si">{burgers[0]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers[1]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers[2]: 7.4f}</span><span class="s1">]&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;estimated Burgers vector: [</span><span class="si">{intsum[0]: 7.4f}</span><span class="s1">, </span><span class="si">{intsum[1]: 7.4f}</span><span class="s1">, </span><span class="si">{intsum[2]: 7.4f}</span><span class="s1">]&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -848,70 +948,224 @@ burgers ≈ 2.8643383992622238 Å
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Integration summation estimate of Burgers vector = [2.986842, 0.005223, -0.000769]
+actual Burgers vector:    [ 0.0000,  2.8638,  0.0000]
+estimated Burgers vector: [-0.0041,  2.9144,  0.0015]
 </pre></div></div>
 </div>
 </div>
 </div>
 <div class="section" id="4.-Differential-displacement-maps">
 <h2>4. Differential displacement maps<a class="headerlink" href="#4.-Differential-displacement-maps" title="Permalink to this headline">¶</a></h2>
-<p>Dislocation core structures can also be characterized using differential displacement maps as first used by <a class="reference external" href="https://doi.org/10.1080/14786437008238490">Vitek, Perrin and Bowen</a>. For every pair of neighboring atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span>, a differential displacement vector, <span class="math notranslate nohighlight">\(d_{i \alpha \beta}\)</span> is computed as</p>
+<p>Dislocation core structures can also be characterized using differential displacement maps as first used by <a class="reference external" href="https://doi.org/10.1080/14786437008238490">Vitek, Perrin and Bowen</a>.</p>
+<p>For every pair of neighboring atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span>, a differential displacement vector, <span class="math notranslate nohighlight">\(d_{i \alpha \beta}\)</span> is computed as</p>
 <div class="math notranslate nohighlight">
 \[d_{i \alpha \beta} =  x_{i \alpha \beta} - X_{i \alpha \beta}\]</div>
-<p>where <span class="math notranslate nohighlight">\(x_{i \alpha \beta}\)</span> is the vector difference between atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in the current (defect) configuration, and <span class="math notranslate nohighlight">\(X_{i \alpha \beta}\)</span> is the vector difference between atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in the reference (perfect crystal) configuration. Plots are then constructed where arrows representing components of the differential displacement vectors are positioned halfway between the corresponding atoms.</p>
-<p>Two component styles are currently supported</p>
+<p>where <span class="math notranslate nohighlight">\(x_{i \alpha \beta}\)</span> is the vector difference between atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in the current (defect) configuration, and <span class="math notranslate nohighlight">\(X_{i \alpha \beta}\)</span> is the vector difference between atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in the reference (perfect crystal) configuration.</p>
+<p>Plots are then constructed where atomic positions are shown as circles with arrows representing components of <span class="math notranslate nohighlight">\(d_{i \alpha \beta}\)</span>. The arrows are centered halfway between the two atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> for which that particular <span class="math notranslate nohighlight">\(d_{i \alpha \beta}\)</span> was computed. For most variations, the direction of the arrows indicate the two atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> that <span class="math notranslate nohighlight">\(d_{i \alpha \beta}\)</span> was computed for. Various plotting options and variations are described
+in more detail below.</p>
+<p><em>Update version 1.3.2</em> A DifferentialDisplacement class was introduced to make it easier to generate differential displacement maps and to allow for more options with different materials systems by separating the differential displacement calculation from the plotting. The class is meant to replace the old differential_displacement function.</p>
+<div class="section" id="4.1-DifferentialDisplacement-initialization/solve">
+<h3>4.1 DifferentialDisplacement initialization/solve<a class="headerlink" href="#4.1-DifferentialDisplacement-initialization/solve" title="Permalink to this headline">¶</a></h3>
+<p>Computing the differential displacement requires comparing the relative position vectors between a defect-free base system and a defect system for all pairs of neighbor atoms. Therefore, the calculation requires two compatible systems and a list of neighboring atoms.</p>
 <ul class="simple">
-<li><strong>‘standard’</strong> The classic differential displacement representation that works for all dislocation types. The arrows are oriented to point between atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> for each pair. The magnitudes of the arrows are taken as the component of <span class="math notranslate nohighlight">\(d_{i \alpha \beta}\)</span> parallel to the Burgers vector, <span class="math notranslate nohighlight">\(b_i\)</span>. Large values are adjusted such that the resulting magnitudes always fall between <span class="math notranslate nohighlight">\(\pm b_i / 2\)</span>.</li>
-<li><strong>‘xy’</strong> An alternate representation that is used for analyzing screw dislocations. The arrows’ directions and magnitudes directly show the in-plane edge components (i.e.&nbsp;within the plotting xy plane) of <span class="math notranslate nohighlight">\(d_{i \alpha \beta}\)</span>.</li>
+<li><p><strong>system_0</strong> (<em>atomman.system</em>) The defect-free base system to use.</p></li>
+<li><p><strong>system_1</strong> (<em>atomman.system</em>) The defect system to use.</p></li>
+<li><p><strong>neighbors</strong> (<em>atomman.NeighborList, optional</em>) The neighbor list to use.</p></li>
+<li><p><strong>cutoff</strong> (<em>float, optional</em>) Cutoff distance for computing a neighbor list. If reference = 0, then system_0 will be used to generate the list. If reference = 1, then system_1 will be used to generate the list.</p></li>
+<li><p><strong>reference</strong> (<em>int, optional</em>) Indicates which of the two systems should be used for the plotting reference: 0 or 1. If 0, then system_0’s atomic positions will be used for the calculation and neighbors should be for system_0. If 1 (default), then system_1’s atomic positions will be used for the calculation and neighbors should be for system_1.</p></li>
 </ul>
-<div class="section" id="4.1-differential_displacement()">
-<h3>4.1 differential_displacement()<a class="headerlink" href="#4.1-differential_displacement()" title="Permalink to this headline">¶</a></h3>
-<p>Parameters</p>
+<p>Either system_0 or system_1 can be used as the reference state for identifying neighbors and plotting atomic positions.</p>
 <ul class="simple">
-<li><strong>system_0</strong> (<em>atomman.system</em>) The base/reference system to use.</li>
-<li><strong>system_1</strong> (<em>atomman.system</em>) The defect/current system to use.</li>
-<li><strong>burgers</strong> (<em>array-like object</em>) The dislocation’s Burgers vector.</li>
-<li><strong>plotxaxis</strong> (<em>str or array-like object, optional</em>) Indicates the Cartesian direction associated with the system’s atomic coordinates to align with the plotting x-axis. Values are either 3D unit vectors, or strings ‘x’, ‘y’, or ‘z’ for the Cartesian axes directions. plotxaxis and plotyaxis must be orthogonal. Default value is ‘x’ = [1, 0, 0].</li>
-<li><strong>plotyaxis</strong> (<em>str or array-like object, optional</em>) Indicates the Cartesian direction associated with the system’s atomic coordinates to align with the plotting y-axis. Values are either 3D unit vectors, or strings ‘x’, ‘y’, or ‘z’ for the Cartesian axes directions. plotxaxis and plotyaxis must be orthogonal. Default value is ‘y’ = [0, 1, 0].</li>
-<li><strong>xlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting x-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the plotting axis.</li>
-<li><strong>ylim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting y-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the plotting axis.</li>
-<li><strong>zlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates normal to the plotting axes (i.e.&nbsp;plotxaxis X plotyaxis) to include in the fit. Values are taken in the specified length_unit. The optimum zlim should encompass only a single periodic slice. If not given, then the limits are set based on min and max atomic coordinates along the axis.</li>
-<li><strong>neighbors</strong> (<em>atomman.NeighborList, optional</em>) The neighbor list associated with system_0 to use. Either neighbors or cutoff must be given, or system_0 must have a neighbors attribute.</li>
-<li><strong>cutoff</strong> (<em>float, optional</em>) Cutoff distance for computing a neighbor list for system_0. Either neighbors or cutoff must be given, or system_0 have a neighbors attribute.</li>
-<li><strong>component</strong> (<em>str, optional</em>) Indicates the style of the calculation to use:<ul>
-<li>‘standard’ (default) plots the differential displacements between atoms in the Burgers direction.</li>
-<li>‘xy’ plots the differential displacements within the xy plotting plane. This is useful for screw dislocations with localized non-screw components.</li>
+<li><p>Using system_1 as the reference state will overlay the differential displacement vectors onto the relaxed atomic positions. This provides insight for the dislocation both in terms of its atomic nature and core spreading. This is the more common representation, especially for dislocations with large edge components.</p></li>
+<li><p>Using system_0 as the reference state will overlay the differential displacement vectors onto a perfect crystal. This indicates how the crystal needs to be deformed to introduce the dislocation.</p></li>
 </ul>
-</li>
-<li><strong>axes</strong> (<em>arraly-like object, optional</em>) 3x3 transformation array to apply to the Burgers vector to make it correspond to the system’s orientation.</li>
-<li><strong>plot_scale</strong> (<em>float, optional</em>) Scalar for multiplying the magnitude of the differential displacement arrows. Default value is 1 (no scaling).</li>
-<li><strong>atom_color</strong> (<em>str or list, optional</em>) Matplotlib color name(s) to use to display the atoms. If str, that color will be assigned to all atypes. If list, must give a color value or None for each atype. Default value (None) will use cmap instead. Note: atom_color and atom_cmap can be used together as long as exactly one color or cmap is given for each unique atype.</li>
-<li><strong>atom_cmap</strong> (<em>str or list, optional</em>) Matplotlib colormap name(s) to use to display the atoms. Atoms will be colored based on their initial positions and scaled using zlim. If str, that cmap will be assigned to all atypes. If list, must give a cmap value or None for each atype. Default value (None) will use ‘hsv’ cmap. Note: atom_color and atom_cmap can be used together as long as exactly one color or cmap is given for each unique atype.</li>
-<li><strong>display_final_pos</strong> (<em>bool, optional</em>) Flag to display positions of atoms and arrows relative to final configuration (system_1) rather than initial configuration (system_0). Note that this does not affect the atom’s cmap color as the initial plotzaxis is always used.</li>
-<li><strong>return_data</strong> (<em>bool, optional</em>) If True, will return a dict containing the differential displacement vectors and vector positions. Default is False. Note: returned values are oriented relative to the plotting axes.</li>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Note: the reference choice corresponds to the system for which the neighbor list was computed!</span>
+
+<span class="n">neighbors</span> <span class="o">=</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">neighborlist</span><span class="p">(</span><span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">)</span>
+<span class="n">dd</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">DifferentialDisplacement</span><span class="p">(</span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">=</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># or</span>
+<span class="c1">#neighbors = base_system.neighborlist(cutoff = 0.9*alat)</span>
+<span class="c1">#dd = am.defect.DifferentialDisplacement(base_system, disl_system, neighbors=neighbors, reference=0)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="4.2-DifferentialDisplacement-plotting">
+<h3>4.2 DifferentialDisplacement plotting<a class="headerlink" href="#4.2-DifferentialDisplacement-plotting" title="Permalink to this headline">¶</a></h3>
+<p>DifferentialDisplacement.plot() creates a differential displacement map as a matplotlib figure. There are many options to help control what is plotted as well as give you options for tweaking how the plots look.</p>
+<ul class="simple">
+<li><p><strong>component</strong> (<em>str or array-like object</em>) Indicates the component(s) of the differential displacement to plot. Values of ‘x’, ‘y’, or ‘z’ will plot the component along that Cartesian direction. A value of ‘projection’ will plot the differential displacement vectors as projected onto the plotting plane, thereby showing the two components perpendicular to the line direction. If a 3D vector is given, then the component parallel to that direction will be used.</p></li>
+<li><p><strong>ddmax</strong> (<em>float or None</em>) The maximum differential displacement value allowed. Values will be kept between +-ddmax by wrapping values with larger absolute values around by adding/subtracting 2*ddmax. Typically, this is set to be |b|/2, but can be defect-specific. For instance, fcc a/2&lt;110&gt; dislocations and basal hcp dislocations are typically plotted with ddmax=|b|/4. If set to None, then no wrapping is done.</p></li>
+<li><p><strong>plotxaxis</strong> (<em>str or array-like object, optional</em>) Indicates the Cartesian direction associated with the system’s atomic coordinates to align with the plotting x-axis. Values are either 3D unit vectors, or strings ‘x’, ‘y’, or ‘z’ for the Cartesian axes directions. plotxaxis and plotyaxis must be orthogonal. Default value is ‘x’ = [1, 0, 0].</p></li>
+<li><p><strong>plotyaxis</strong> (<em>str or array-like object, optional</em>) Indicates the Cartesian direction associated with the system’s atomic coordinates to align with the plotting y-axis. Values are either 3D unit vectors, or strings ‘x’, ‘y’, or ‘z’ for the Cartesian axes directions. plotxaxis and plotyaxis must be orthogonal. Default value is ‘y’ = [0, 1, 0].</p></li>
+<li><p><strong>xlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting x-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the plotting axis.</p></li>
+<li><p><strong>ylim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting y-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the plotting axis.</p></li>
+<li><p><strong>zlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates normal to the plotting axes (i.e. plotxaxis X plotyaxis) to include in the fit. Values are taken in the specified length_unit. The optimum zlim should encompass only a single periodic slice. If not given, then the limits are set based on min and max atomic coordinates along the axis.</p></li>
+<li><p><strong>arrowscale</strong> (<em>float, optional</em>) Scaling factor for the magnitude of the differential displacement arrows. Default value is 1: no scaling, vectors are in units of length. For major components, this is often set such that the max differential displacement compoent after wrapping (see normfactor) is scaled to the distance between the atom pairs in the plot. For minor components, this is often set to a large value simply to make the components visible.</p></li>
+<li><p><strong>arrowwidth</strong> (<em>float, optional</em>) Scaling factor to use for the width of the plotted arrows. Default value is 0.005 = 1/200.</p></li>
+<li><p><strong>use0z</strong> (<em>bool, optional</em>) If False (default), the z coordinates from the reference system will be used for zlim and atomcmap colors. If True, the z coordinates will be used from system0 even if system1 is the reference system.</p></li>
+<li><p><strong>atomcolor</strong> (<em>str or list, optional</em>) Matplotlib color name(s) to use to display the atoms. If str, that color will be assigned to all atypes. If list, must give a color value or None for each atype. Default value (None) will use cmap instead. Note: atomcolor and atomcmap can be used together as long as exactly one color or cmap is given for each unique atype.</p></li>
+<li><p><strong>atomcmap</strong> (<em>str or list, optional</em>) Matplotlib colormap name(s) to use to display the atoms. Atoms will be colored based on their initial positions and scaled using zlim. If str, that cmap will be assigned to all atypes. If list, must give a cmap value or None for each atype. Default value (None) will use ‘hsv’ cmap. Note: atomcolor and atomcmap can be used together as long as exactly one color or cmap is given for each unique atype.</p></li>
+<li><p><strong>atomsize</strong> (<em>float, optional</em>) The circle radius size to use for the plotted atom positions in units of length. Default value is 0.5.</p></li>
+<li><p><strong>figsize</strong> (<em>float or tuple, optional</em>) Specifies the size of the figure to create in inches. If a single value is given, it will be used for the figure’s width, and the height will be scaled based on the xlim and ylim values. Alternatively, both the width and height can be set by passing a tuple of two values, but the plot will not be guaranteed to be “regular” with respect to length dimensions.</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li><strong>fig</strong> (<em>matplotlib.figure</em>) The generated figure.</li>
-<li><strong>data</strong> (<em>dict</em>) Contains differential displacement vectors and arrow plotting information. Returned if return_data is True.</li>
+<li><p>(<em>matplotlib.Figure</em>) The generated figure. This is returned to allow users to further modify it after creation.</p></li>
+</ul>
+<div class="section" id="4.2.1-Common-plotting-variations">
+<h4>4.2.1 Common plotting variations<a class="headerlink" href="#4.2.1-Common-plotting-variations" title="Permalink to this headline">¶</a></h4>
+<p>Plot has a large number of parameters to allow for a wide range of variations and to give users the ability to tinker with the plots to make them look better if needed.</p>
+<p>As the differential displacement values are 3D vectors, the plots focus on showing one or two components</p>
+<ul class="simple">
+<li><p>‘x’, ‘y’, and ‘z’ are the components along the three Cartesian directions.</p></li>
+<li><p>Any other Cartesian vector can be specified to see components along it. It is especially useful to be able to plot the component parallel to the Burgers vector for mixed dislocations.</p></li>
+<li><p>‘projection’ plots the projection of the differential displacement vectors onto a plane perpendicular to the dislocation’s line direction. Unlike the other options, the direction of the arrows correspond to the vector values rather than the positions of the two atoms for which the vector was computed for.</p></li>
+</ul>
+<div class="line-block">
+<div class="line">Values are typically normalized to be within a range of <span class="math notranslate nohighlight">\(\pm\)</span> ddmax by adding/subtracting 2*ddmax to values outside the range.</div>
+<div class="line">- ddmax = <span class="math notranslate nohighlight">\(\frac{|b_i|}{2}\)</span> is typically used for full compact dislocations. As a displacement of <span class="math notranslate nohighlight">\(b_i\)</span> corresponds to a full lattice shift back to a perfect crystal, this choice ensures that only the region associated with the dislocation core will have large differential displacement values.</div>
+</div>
+<ul class="simple">
+<li><p>ddmax = <span class="math notranslate nohighlight">\(\frac{|b_i|}{4}\)</span> is typically used for fcc <span class="math notranslate nohighlight">\(\frac{a}{2}\)</span>&lt;<span class="math notranslate nohighlight">\(1\bar{1}0\)</span>&gt;{111} and hcp <span class="math notranslate nohighlight">\(\frac{a}{3}\)</span>&lt;<span class="math notranslate nohighlight">\(11\bar{2}0\)</span>&gt;{0001} dislocations. These dislocations tend to split into partials separated by a stacking fault width. This choice of ddmax means that the differential displacement parallel to the Burgers vector is near zero for the perfect crystal and the stacking fault, making it easy to see where the partial dislocation cores are located.</p></li>
+</ul>
+<p>Most of the other method parameters are associated with making the plots look good. The best suggestion is to create one plot, then tinker with the plotting parameters to improve how it looks.</p>
+<p>Define common plotting parameters.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ddmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>   <span class="c1"># a/2&lt;110&gt; fcc dislocations use |b|/4</span>
+
+<span class="c1"># Set dict of keyword parameter values (just to make settings same for all plots below)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;plotxaxis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;plotyaxis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;z&#39;</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;xlim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;ylim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;zlim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">alat</span><span class="o">*</span><span class="mi">6</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">)</span> <span class="c1"># Should be one periodic width (plus a small cushion)</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>         <span class="c1"># Only one value as the other is chosen to make plots &quot;regular&quot;</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;arrowwidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">50</span>    <span class="c1"># Made bigger to make arrows easier to see</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;arrowscale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.4</span>     <span class="c1"># Typically chosen to make arrows of length ddmax touch the corresponding atom circles</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="4.2.2-The-Cartesian-components">
+<h4>4.2.2 The Cartesian components<a class="headerlink" href="#4.2.2-The-Cartesian-components" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">ddmax</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;x component&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">ddmax</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;y component&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">ddmax</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;z component&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_47_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_47_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_47_1.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_47_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_47_2.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_47_2.png" />
+</div>
+</div>
+</div>
+<div class="section" id="4.2.3-Parallel-to-Burgers-(or-any-other-Cartesian-vector)">
+<h4>4.2.3 Parallel to Burgers (or any other Cartesian vector)<a class="headerlink" href="#4.2.3-Parallel-to-Burgers-(or-any-other-Cartesian-vector)" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Set ddmax to be 1/4 the magnitude of the Burgers vector (see above)</span>
+<span class="n">ddmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span><span class="o">/</span><span class="mi">4</span>
+
+<span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">burgers</span><span class="p">,</span> <span class="n">ddmax</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Parallel to Burgers&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_49_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_49_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="4.2.4-Radial">
+<h4>4.2.4 Radial<a class="headerlink" href="#4.2.4-Radial" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Set ddmax to be 1/4 the magnitude of the Burgers vector (see above)</span>
+<span class="n">ddmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span><span class="o">/</span><span class="mi">4</span>
+
+<span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;projection&#39;</span><span class="p">,</span> <span class="n">ddmax</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;In-plane projection&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_51_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_51_0.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="4.3-Raw-differential-displacement-data">
+<h3>4.3 Raw differential displacement data<a class="headerlink" href="#4.3-Raw-differential-displacement-data" title="Permalink to this headline">¶</a></h3>
+<p>The raw data used to generate the plots can also be retrieved as attributes of the DifferentialDisplacement objects.</p>
+<ul class="simple">
+<li><p><strong>ddvectors</strong> are the computed differential displacement vectors for each pair of neighbor atoms. Note that these are the full raw values computed during the class initialization and therefore have not been normalized with ddmax.</p></li>
+<li><p><strong>arrowcenters</strong> are the center positions for each of the differential displacement vector arrows. These points also correspond to the midpoints between the pair of neighbor atoms used to compute the differential displacement vector.</p></li>
+<li><p><strong>arrowuvectors</strong> are the unit vectors indicating the direction of the differential displacement vector arrows used by all component options except for ‘projection’.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Make boundaries match defect system to avoid large differential displacements</span>
-<span class="n">fcc_system</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-
-<span class="c1"># Specify plot limits</span>
-<span class="n">xlim</span><span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<span class="n">ylim</span><span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-
-<span class="c1"># zlim should encompass a single periodic z section</span>
-<span class="n">zlim</span><span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">alat</span> <span class="o">*</span> <span class="mi">6</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">differential_displacement</span><span class="p">(</span><span class="n">fcc_system</span><span class="p">,</span> <span class="n">fcc_disl_system</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span><span class="n">zaxis</span><span class="p">],</span>
-                                          <span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">xlim</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="n">ylim</span><span class="p">,</span> <span class="n">zlim</span><span class="o">=</span><span class="n">zlim</span><span class="p">,</span>
-                                          <span class="n">return_data</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">ddvectors</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">ddvectors</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -919,57 +1173,24 @@ Integration summation estimate of Burgers vector = [2.986842, 0.005223, -0.00076
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_32_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_32_0.png" />
-</div>
+<div class="highlight"><pre>
+(387340, 3)
+[[ 0.00030753  0.00574007  0.0056176 ]
+ [ 0.00015473  0.00286493  0.00279437]
+ [-0.0001565  -0.00285422 -0.00276553]
+ ...
+ [-0.00012418  0.00269864 -0.00278591]
+ [-0.00012418  0.00269864 -0.00278591]
+ [-0.00025094  0.00539228 -0.00554786]]
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">data</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>{&#39;centers&#39;: array([[-12.17107547, -14.02961154,   1.65340558],
-        [-12.88702109, -14.02961154,   2.89345976],
-        [-11.45512986, -14.02961154,   2.89345976],
-        ...,
-        [ 11.45512986,  14.02961154,   2.89345976],
-        [ 12.88702109,  14.02961154,   2.89345976],
-        [ 12.17107547,  14.02961154,   4.13351394]]),
- &#39;vectors&#39;: array([[ 3.25526312e-02,  1.59160356e-02, -8.04003278e-04],
-        [ 1.14509606e-02, -6.91577561e-03, -1.13217377e-05],
-        [ 5.35091799e-02,  3.99477258e-02, -1.35336464e-03],
-        ...,
-        [ 5.35091799e-02,  3.99477258e-02, -1.35336464e-03],
-        [ 1.14509606e-02, -6.91577561e-03, -1.13217377e-05],
-        [ 3.25526312e-02,  1.59160356e-02, -8.04003278e-04]])}
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Make boundaries match defect system to avoid large differential displacements</span>
-<span class="n">fcc_system</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-
-<span class="c1"># Specify plot limits</span>
-<span class="n">xlim</span><span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<span class="n">ylim</span><span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-
-<span class="c1"># zlim should encompass a single periodic z section</span>
-<span class="n">zlim</span><span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">alat</span> <span class="o">*</span> <span class="mi">6</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">)</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">differential_displacement</span><span class="p">(</span><span class="n">fcc_system</span><span class="p">,</span> <span class="n">fcc_disl_system</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span><span class="n">zaxis</span><span class="p">],</span>
-                                          <span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">xlim</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="n">ylim</span><span class="p">,</span> <span class="n">zlim</span><span class="o">=</span><span class="n">zlim</span><span class="p">,</span>
-                                          <span class="n">atom_color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">display_final_pos</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">arrowcenters</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">arrowcenters</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -977,17 +1198,24 @@ Integration summation estimate of Burgers vector = [2.986842, 0.005223, -0.00076
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_34_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_34_0.png" />
-</div>
+<div class="highlight"><pre>
+(387340, 3)
+[[   2.4866357  -112.592277   -109.13996141]
+ [   1.24650369 -113.30966101 -109.14137303]
+ [   3.72645929 -114.74441346 -109.14415298]
+ ...
+ [   5.38094613  108.99060147 -118.48030553]
+ [   7.86105735  108.99060147 -118.48030553]
+ [   6.62093836  109.70789473 -118.48168651]]
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">differential_displacement</span><span class="p">(</span><span class="n">fcc_system</span><span class="p">,</span> <span class="n">fcc_disl_system</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span><span class="n">zaxis</span><span class="p">],</span>
-                                          <span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">xlim</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="n">ylim</span><span class="p">,</span> <span class="n">zlim</span><span class="o">=</span><span class="n">zlim</span><span class="p">,</span>
-                                          <span class="n">atom_cmap</span><span class="o">=</span><span class="s1">&#39;binary&#39;</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">)</span>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">arrowuvectors</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">arrowuvectors</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -995,8 +1223,16 @@ Integration summation estimate of Burgers vector = [2.986842, 0.005223, -0.00076
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_04.3._Dislocation_analysis_tools_35_0.png" src="../_images/tutorial_04.3._Dislocation_analysis_tools_35_0.png" />
-</div>
+<div class="highlight"><pre>
+(387340, 3)
+[[ 1.07171033e-04  9.99998078e-01  1.95767095e-03]
+ [-8.65578157e-01  5.00772906e-01  9.75316053e-04]
+ [ 8.65579630e-01 -5.00770378e-01 -9.65254013e-04]
+ ...
+ [-8.65627722e-01  5.00687230e-01 -9.72312841e-04]
+ [ 8.65605989e-01  5.00724801e-01 -9.72385803e-04]
+ [-8.74616512e-05  9.99998127e-01 -1.93360212e-03]]
+</pre></div></div>
 </div>
 </div>
 </div>
@@ -1012,7 +1248,7 @@ Integration summation estimate of Burgers vector = [2.986842, 0.005223, -0.00076
   <ul>
 <li><a class="reference internal" href="#">Introduction to atomman: Dislocation analysis tools</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
-<li><a class="reference internal" href="#1.1.-Generate-systems">1.1. Generate systems</a></li>
+<li><a class="reference internal" href="#1.1.-Load-atomic-systems">1.1. Load atomic systems</a></li>
 <li><a class="reference internal" href="#2.-Slip-vector">2. Slip vector</a><ul>
 <li><a class="reference internal" href="#2.1-slip_vector()">2.1 slip_vector()</a></li>
 </ul>
@@ -1029,7 +1265,15 @@ Integration summation estimate of Burgers vector = [2.986842, 0.005223, -0.00076
 </ul>
 </li>
 <li><a class="reference internal" href="#4.-Differential-displacement-maps">4. Differential displacement maps</a><ul>
-<li><a class="reference internal" href="#4.1-differential_displacement()">4.1 differential_displacement()</a></li>
+<li><a class="reference internal" href="#4.1-DifferentialDisplacement-initialization/solve">4.1 DifferentialDisplacement initialization/solve</a></li>
+<li><a class="reference internal" href="#4.2-DifferentialDisplacement-plotting">4.2 DifferentialDisplacement plotting</a><ul>
+<li><a class="reference internal" href="#4.2.1-Common-plotting-variations">4.2.1 Common plotting variations</a></li>
+<li><a class="reference internal" href="#4.2.2-The-Cartesian-components">4.2.2 The Cartesian components</a></li>
+<li><a class="reference internal" href="#4.2.3-Parallel-to-Burgers-(or-any-other-Cartesian-vector)">4.2.3 Parallel to Burgers (or any other Cartesian vector)</a></li>
+<li><a class="reference internal" href="#4.2.4-Radial">4.2.4 Radial</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#4.3-Raw-differential-displacement-data">4.3 Raw differential displacement data</a></li>
 </ul>
 </li>
 </ul>
@@ -1040,8 +1284,8 @@ Integration summation estimate of Burgers vector = [2.986842, 0.005223, -0.00076
   <p class="topless"><a href="04.2._Volterra_dislocation_models.html"
                         title="previous chapter">Introduction to atomman: Volterra dislocation models</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="04.4._Free_surface_rotation_basis.html"
-                        title="next chapter">Introduction to atomman: Free Surface Rotation Basis</a></p>
+  <p class="topless"><a href="04.4._Free_surface_configuration_generator.html"
+                        title="next chapter">Introduction to atomman: Free surface configuration generator</a></p>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1056,17 +1300,17 @@ Integration summation estimate of Burgers vector = [2.986842, 0.005223, -0.00076
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="04.4._Free_surface_rotation_basis.html" title="Introduction to atomman: Free Surface Rotation Basis"
+          <a href="04.4._Free_surface_configuration_generator.html" title="Introduction to atomman: Free surface configuration generator"
              >next</a> |</li>
         <li class="right" >
           <a href="04.2._Volterra_dislocation_models.html" title="Introduction to atomman: Volterra dislocation models"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

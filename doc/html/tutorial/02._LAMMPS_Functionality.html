@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: LAMMPS functionality &#8212; atomman 1.3.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Introduction to atomman: LAMMPS functionality &#8212; atomman 1.3.2 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,6 +12,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="01.4.9._spglib_conversions.html" title="Introduction to atomman: Load and dump"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,16 +50,16 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput,
-div.nbinput div.prompt,
-div.nbinput div.input_area,
-div.nbinput div[class*=highlight],
-div.nbinput div[class*=highlight] pre,
-div.nboutput,
-div.nbinput div.prompt,
-div.nbinput div.output_area,
-div.nboutput div[class*=highlight],
-div.nboutput div[class*=highlight] pre {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
     background: none;
     border: none;
     padding: 0 0;
@@ -69,13 +68,13 @@ div.nboutput div[class*=highlight] pre {
 }
 
 /* avoid gaps between output lines */
-div.nboutput div[class*=highlight] pre {
+div.nboutput.container div[class*=highlight] pre {
     line-height: normal;
 }
 
 /* input/output containers */
-div.nbinput,
-div.nboutput {
+div.nbinput.container,
+div.nboutput.container {
     display: -webkit-flex;
     display: flex;
     align-items: flex-start;
@@ -83,92 +82,91 @@ div.nboutput {
     width: 100%;
 }
 @media (max-width: 540px) {
-    div.nbinput,
-    div.nboutput {
+    div.nbinput.container,
+    div.nboutput.container {
         flex-direction: column;
     }
 }
 
 /* input container */
-div.nbinput {
+div.nbinput.container {
     padding-top: 5px;
 }
 
 /* last container */
-div.nblast {
+div.nblast.container {
     padding-bottom: 5px;
 }
 
 /* input prompt */
-div.nbinput div.prompt pre {
+div.nbinput.container div.prompt pre {
     color: #307FC1;
 }
 
 /* output prompt */
-div.nboutput div.prompt pre {
+div.nboutput.container div.prompt pre {
     color: #BF5B3D;
 }
 
 /* all prompts */
-div.nbinput div.prompt,
-div.nboutput div.prompt {
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
     min-width: 7ex;
-    padding-top: 0.4em;
-    padding-right: 0.4em;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
     text-align: right;
     flex: 0;
 }
 @media (max-width: 540px) {
-    div.nbinput div.prompt,
-    div.nboutput div.prompt {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
         text-align: left;
         padding: 0.4em;
     }
-    div.nboutput div.prompt.empty {
+    div.nboutput.container div.prompt.empty {
         padding: 0;
     }
 }
 
 /* disable scrollbars on prompts */
-div.nbinput div.prompt pre,
-div.nboutput div.prompt pre {
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
     overflow: hidden;
 }
 
 /* input/output area */
-div.nbinput div.input_area,
-div.nboutput div.output_area {
-    padding: 0.4em;
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
     -webkit-flex: 1;
     flex: 1;
     overflow: auto;
 }
 @media (max-width: 540px) {
-    div.nbinput div.input_area,
-    div.nboutput div.output_area {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
         width: 100%;
     }
 }
 
 /* input area */
-div.nbinput div.input_area {
+div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
     background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
-div.nboutput div[class*=MathJax] {
+div.nboutput.container div[class*=MathJax] {
     text-align: left !important;
 }
 
 /* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput div.math p {
+div.nboutput.container div.math p {
     text-align: left;
 }
 
 /* standard error */
-div.nboutput div.output_area.stderr {
+div.nboutput.container div.output_area.stderr {
     background: #fdd;
 }
 
@@ -211,6 +209,27 @@ div.nboutput div.output_area.stderr {
 
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
 
 /* Some additional styling taken form the Jupyter notebook CSS */
 div.rendered_html table {
@@ -288,8 +307,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.0
-Notebook executed on 2019-11-05
+atomman version = 1.3.2
+Notebook executed on 2020-04-15
 </pre></div></div>
 </div>
 </div>
@@ -558,14 +577,14 @@ Supercell has 108 atoms
 <h3>3.3 Save to atom data file<a class="headerlink" href="#3.3-Save-to-atom-data-file" title="Permalink to this headline">¶</a></h3>
 <p>System.dump(‘atom_data’) outputs the system to a LAMMPS atom data file. The parameters of the method with this style:</p>
 <ul class="simple">
-<li><strong>style</strong> is the output format to use (‘atom_data’ here).</li>
-<li><strong>f</strong> is a file path or file-like object to write to. If not given, the generated content is returned.</li>
-<li><strong>atom_style</strong> (<em>str, optional</em>) The LAMMPS atom_style option associated with the data file. If neither atom_style or potential is given, will set atom_style to ‘atomic’.</li>
-<li><strong>units</strong> (<em>str, optional</em>) The LAMMPS units option associated with the data file. If neitherunits or potential is given, will set units ‘metal’.</li>
-<li><strong>natypes</strong> (<em>int, optional</em>) Allows the natypes value to be manually changed. This is needed if natypes needs to be greater than the current number of atypes. If neither natypes or potential is given, will use system.natypes.</li>
-<li><strong>potential</strong> (<em>atomman.lammps.Potential, optional</em>) Potential-specific values of atom_style, units, and natypes can be extracted from a Potential object. If both potential and any of the individual values are given, the individual values will be used.</li>
-<li><strong>float_format</strong> allows the c-style format of floating point values to be specified. Default value is ‘%.13f’.</li>
-<li><strong>return_info</strong> is a bool indicating if the LAMMPS command lines for reading in the generated file are to be returned. Default value is True.</li>
+<li><p><strong>style</strong> is the output format to use (‘atom_data’ here).</p></li>
+<li><p><strong>f</strong> is a file path or file-like object to write to. If not given, the generated content is returned.</p></li>
+<li><p><strong>atom_style</strong> (<em>str, optional</em>) The LAMMPS atom_style option associated with the data file. If neither atom_style or potential is given, will set atom_style to ‘atomic’.</p></li>
+<li><p><strong>units</strong> (<em>str, optional</em>) The LAMMPS units option associated with the data file. If neitherunits or potential is given, will set units ‘metal’.</p></li>
+<li><p><strong>natypes</strong> (<em>int, optional</em>) Allows the natypes value to be manually changed. This is needed if natypes needs to be greater than the current number of atypes. If neither natypes or potential is given, will use system.natypes.</p></li>
+<li><p><strong>potential</strong> (<em>atomman.lammps.Potential, optional</em>) Potential-specific values of atom_style, units, and natypes can be extracted from a Potential object. If both potential and any of the individual values are given, the individual values will be used.</p></li>
+<li><p><strong>float_format</strong> allows the c-style format of floating point values to be specified. Default value is ‘%.13f’.</p></li>
+<li><p><strong>return_info</strong> is a bool indicating if the LAMMPS command lines for reading in the generated file are to be returned. Default value is True.</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
@@ -749,13 +768,13 @@ Atoms # atomic
 <p>The lammps.style.timestep() function returns the default timestep value for a given LAMMPS units option.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>units</strong> (<em>str</em>) the LAMMPS units option being used.</li>
+<li><p><strong>units</strong> (<em>str</em>) the LAMMPS units option being used.</p></li>
 </ul>
 <p><strong>atomman.lammps.style.unit()</strong></p>
 <p>The lammps.style.unit() function returns a dictionary giving the units associated with physical quantities as used by LAMMPS with a given units option.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>units</strong> (<em>str</em>) the LAMMPS units option being used.</li>
+<li><p><strong>units</strong> (<em>str</em>) the LAMMPS units option being used.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
@@ -901,10 +920,10 @@ pair_coeff * * library-Al.meam Al Al.meam Al
 <p>The template can then be easily filled in with the atomman.tools.filltemplate() function.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>template</strong> (<em>str or file-like object</em>) is the template to fill in.</li>
-<li><strong>variable</strong> (<em>dict</em>) gives the delimited keys and corresponding values to insert into the template.</li>
-<li><strong>s_delimiter</strong> (<em>str</em>) the starting delimiter for identifying variable names.</li>
-<li><strong>e_delimiter</strong> (<em>str</em>) the ending delimiter for identifying variable names.</li>
+<li><p><strong>template</strong> (<em>str or file-like object</em>) is the template to fill in.</p></li>
+<li><p><strong>variable</strong> (<em>dict</em>) gives the delimited keys and corresponding values to insert into the template.</p></li>
+<li><p><strong>s_delimiter</strong> (<em>str</em>) the starting delimiter for identifying variable names.</p></li>
+<li><p><strong>e_delimiter</strong> (<em>str</em>) the ending delimiter for identifying variable names.</p></li>
 </ul>
 <p>Build dictionary of template variables</p>
 <div class="nbinput docutils container">
@@ -1061,7 +1080,7 @@ run 100000
 [&#39;Step&#39;, &#39;Temp&#39;, &#39;Press&#39;, &#39;Lx&#39;, &#39;Ly&#39;, &#39;Lz&#39;]
 </pre></div></div>
 </div>
-<p>Plot temperature vs.&nbsp;run step</p>
+<p>Plot temperature vs. run step</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
@@ -1086,7 +1105,7 @@ run 100000
 <img alt="../_images/tutorial_02._LAMMPS_functionality_55_0.png" src="../_images/tutorial_02._LAMMPS_functionality_55_0.png" />
 </div>
 </div>
-<p>Plot pressure vs.&nbsp;run step (note unit conversions)</p>
+<p>Plot pressure vs. run step (note unit conversions)</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
@@ -1134,72 +1153,22 @@ run 100000
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [12.197,  0.000,  0.000]
-bvect =  [ 0.000, 12.197,  0.000]
-cvect =  [ 0.000,  0.000, 12.197]
-origin = [-0.023, -0.023, -0.023]
+avect =  [12.192,  0.000,  0.000]
+bvect =  [ 0.000, 12.192,  0.000]
+cvect =  [ 0.000,  0.000, 12.192]
+origin = [-0.021, -0.021, -0.021]
      atype     pos[0]     pos[1]     pos[2]  atom_id
-0        1  -0.029581  -0.022464  -0.061953        1
-1        1   2.034797   2.059143  -0.051290        2
-2        1   2.028540  -0.030398   2.050263        3
-3        1   0.050079   2.054057   1.964628        4
-4        1   4.002476  -0.020009   0.058839        5
-5        1   6.083489   1.958725  -0.067257        6
-6        1   6.049081  -0.034647   1.964128        7
-7        1   4.032517   1.985973   1.998633        8
-8        1   8.245222  -0.078028  -0.043448        9
-9        1  10.191348   1.918841  -0.016149       10
-10       1  10.187836   0.002843   2.036895       11
-11       1   8.116885   1.992925   2.027138       12
-12       1  -0.015052   4.029566  -0.085076       13
-13       1   1.934990   6.105029  -0.074009       14
-14       1   2.032626   4.133045   2.062655       15
-15       1  -0.036624   6.051082   2.016770       16
-16       1   4.100967   4.001281  -0.060614       17
-17       1   6.119129   6.021406  -0.010740       18
-18       1   6.098784   3.999817   1.983412       19
-19       1   4.046946   6.048264   1.955712       20
-20       1   8.132961   3.929197  -0.002187       21
-21       1  10.196520   6.069572  -0.008792       22
-22       1  10.170967   4.043482   1.981155       23
-23       1   8.137632   6.062340   1.941881       24
-24       1  -0.016078   8.149646  -0.052045       25
-25       1   1.986997  10.176065  -0.058820       26
-26       1   2.042774   8.131229   1.937527       27
-27       1   0.032343  10.100042   1.960969       28
-28       1   4.074463   8.095979  -0.031837       29
-29       1   6.127801  10.083076  -0.016993       30
+0        1  -0.052640  -0.038378   0.057649        1
+1        1   2.028902   1.989947   0.009550        2
+2        1   1.991812   0.095592   2.061334        3
+3        1  -0.014576   1.968805   2.061785        4
+4        1   4.028834  -0.040338   0.062574        5
 ..     ...        ...        ...        ...      ...
-78       1   6.109530  -0.107700  10.214876       79
-79       1   4.091685   1.955115  10.115898       80
-80       1   8.019663  -0.042383   8.122105       81
-81       1  10.084283   2.011477   8.095406       82
-82       1  10.132230  -0.018254  10.102005       83
-83       1   8.078562   1.952309  10.136511       84
-84       1  -0.003213   4.049471   8.137242       85
-85       1   1.972129   6.129545   8.098199       86
-86       1   2.040737   4.027651  10.132498       87
-87       1  -0.030546   6.158244  10.119996       88
-88       1   3.980643   4.042153   8.100383       89
-89       1   6.066938   6.153732   8.147304       90
-90       1   6.100711   4.068901  10.158746       91
-91       1   4.020711   6.072243  10.106957       92
-92       1   8.116970   4.061119   8.208436       93
-93       1  10.120203   6.074354   8.074549       94
-94       1  10.172980   3.999024  10.194349       95
-95       1   8.116226   6.068670  10.167089       96
-96       1  -0.048265   8.144036   8.073061       97
-97       1   1.990230  10.136962   8.128716       98
-98       1   2.000390   8.123545  10.097944       99
-99       1  -0.061981  10.097151  10.075367      100
-100      1   4.015710   8.195104   8.137547      101
-101      1   6.058961  10.142048   8.145341      102
-102      1   6.069023   8.065914  10.192190      103
-103      1   4.051630  10.190495  10.205094      104
-104      1   8.105603   8.115507   8.159989      105
-105      1  10.146829  10.177212   8.082660      106
-106      1  10.092943   8.061194  10.171894      107
-107      1   8.189543  10.049290  10.180042      108
+103      1   4.025457  10.147519  10.130377      104
+104      1   8.073323   8.175398   8.085674      105
+105      1  10.105394  10.030557   8.104328      106
+106      1  10.113112   8.015555  10.133937      107
+107      1   8.157280  10.177379  10.036531      108
 
 [108 rows x 5 columns]
 </pre></div></div>
@@ -1290,12 +1259,12 @@ origin = [-0.023, -0.023, -0.023]
         <li class="right" >
           <a href="01.4.9._spglib_conversions.html" title="Introduction to atomman: Load and dump"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

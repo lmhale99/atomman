@@ -10,6 +10,7 @@ Classes
    atomman.lammps.Potential
    atomman.lammps.Log
    atomman.lammps.NEBLog
+   atomman.lammps.LammpsError
 
 Functions and attributes
 ------------------------

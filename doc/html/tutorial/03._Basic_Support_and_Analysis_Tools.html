@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Basic support and analysis tools &#8212; atomman 1.3.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Introduction to atomman: Basic support and analysis tools &#8212; atomman 1.3.2 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,6 +12,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="02.2._Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,16 +50,16 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput,
-div.nbinput div.prompt,
-div.nbinput div.input_area,
-div.nbinput div[class*=highlight],
-div.nbinput div[class*=highlight] pre,
-div.nboutput,
-div.nbinput div.prompt,
-div.nbinput div.output_area,
-div.nboutput div[class*=highlight],
-div.nboutput div[class*=highlight] pre {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
     background: none;
     border: none;
     padding: 0 0;
@@ -69,13 +68,13 @@ div.nboutput div[class*=highlight] pre {
 }
 
 /* avoid gaps between output lines */
-div.nboutput div[class*=highlight] pre {
+div.nboutput.container div[class*=highlight] pre {
     line-height: normal;
 }
 
 /* input/output containers */
-div.nbinput,
-div.nboutput {
+div.nbinput.container,
+div.nboutput.container {
     display: -webkit-flex;
     display: flex;
     align-items: flex-start;
@@ -83,92 +82,91 @@ div.nboutput {
     width: 100%;
 }
 @media (max-width: 540px) {
-    div.nbinput,
-    div.nboutput {
+    div.nbinput.container,
+    div.nboutput.container {
         flex-direction: column;
     }
 }
 
 /* input container */
-div.nbinput {
+div.nbinput.container {
     padding-top: 5px;
 }
 
 /* last container */
-div.nblast {
+div.nblast.container {
     padding-bottom: 5px;
 }
 
 /* input prompt */
-div.nbinput div.prompt pre {
+div.nbinput.container div.prompt pre {
     color: #307FC1;
 }
 
 /* output prompt */
-div.nboutput div.prompt pre {
+div.nboutput.container div.prompt pre {
     color: #BF5B3D;
 }
 
 /* all prompts */
-div.nbinput div.prompt,
-div.nboutput div.prompt {
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
     min-width: 7ex;
-    padding-top: 0.4em;
-    padding-right: 0.4em;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
     text-align: right;
     flex: 0;
 }
 @media (max-width: 540px) {
-    div.nbinput div.prompt,
-    div.nboutput div.prompt {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
         text-align: left;
         padding: 0.4em;
     }
-    div.nboutput div.prompt.empty {
+    div.nboutput.container div.prompt.empty {
         padding: 0;
     }
 }
 
 /* disable scrollbars on prompts */
-div.nbinput div.prompt pre,
-div.nboutput div.prompt pre {
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
     overflow: hidden;
 }
 
 /* input/output area */
-div.nbinput div.input_area,
-div.nboutput div.output_area {
-    padding: 0.4em;
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
     -webkit-flex: 1;
     flex: 1;
     overflow: auto;
 }
 @media (max-width: 540px) {
-    div.nbinput div.input_area,
-    div.nboutput div.output_area {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
         width: 100%;
     }
 }
 
 /* input area */
-div.nbinput div.input_area {
+div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
     background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
-div.nboutput div[class*=MathJax] {
+div.nboutput.container div[class*=MathJax] {
     text-align: left !important;
 }
 
 /* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput div.math p {
+div.nboutput.container div.math p {
     text-align: left;
 }
 
 /* standard error */
-div.nboutput div.output_area.stderr {
+div.nboutput.container div.output_area.stderr {
     background: #fdd;
 }
 
@@ -211,6 +209,27 @@ div.nboutput div.output_area.stderr {
 
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
 
 /* Some additional styling taken form the Jupyter notebook CSS */
 div.rendered_html table {
@@ -288,8 +307,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.0
-Notebook executed on 2019-11-06
+atomman version = 1.3.2
+Notebook executed on 2020-04-15
 </pre></div></div>
 </div>
 <p>Construct a demonstration 2x2x2 diamond cubic silicon system</p>
@@ -371,8 +390,8 @@ Cij (GPa) =
 <p>The System.dvect() method computes the shortest vector(s) between two points or list of points within the atomman.System taking into account the System’s periodic dimensions.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>pos_0</strong> (<em>numpy.ndarray or index</em>) Absolute Cartesian vector position(s) to use as reference point(s). If the value can be used as an index, then self.atoms.pos[pos_0] is taken.</li>
-<li><strong>pos_1</strong> (<em>numpy.ndarray or index</em>) Absolute Cartesian vector position(s) to find relative to pos_0. If the value can be used as an index, then self.atoms.pos[pos_1] is taken.</li>
+<li><p><strong>pos_0</strong> (<em>numpy.ndarray or index</em>) Absolute Cartesian vector position(s) to use as reference point(s). If the value can be used as an index, then self.atoms.pos[pos_0] is taken.</p></li>
+<li><p><strong>pos_1</strong> (<em>numpy.ndarray or index</em>) Absolute Cartesian vector position(s) to find relative to pos_0. If the value can be used as an index, then self.atoms.pos[pos_1] is taken.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -426,15 +445,16 @@ Cij (GPa) =
 </div>
 <div class="section" id="3.2.-displacement()">
 <h3>3.2. displacement()<a class="headerlink" href="#3.2.-displacement()" title="Permalink to this headline">¶</a></h3>
-<p>The atomman.displacement() function compares two systems with the same number of atoms and calculates the vector differences between all atoms with the same atomic id’s. The vectors returned are the shortest vectors after taking periodic boundaries in consideration, i.e.&nbsp;it uses dvect().</p>
+<p>The atomman.displacement() function compares two systems with the same number of atoms and calculates the vector differences between all atoms with the same atomic id’s. The vectors returned are the shortest vectors after taking periodic boundaries in consideration, i.e. it uses dvect().</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>system_0</strong> (<em>atomman.System</em>) The initial system to calculate displacements from.</li>
-<li><strong>system_1</strong> (<em>atomman.System</em>) The final system to calculate displacements to.</li>
-<li><strong>box_reference</strong> (<em>str or None</em>) Specifies which system’s boundary conditions to use.<ul>
-<li>‘initial’ uses system_0’s box and pbc.</li>
-<li>‘final’ uses system_1’s box and pbc (Default).</li>
-<li>None computes the straight difference between the positions without accounting for periodic boundaries.</li>
+<li><p><strong>system_0</strong> (<em>atomman.System</em>) The initial system to calculate displacements from.</p></li>
+<li><p><strong>system_1</strong> (<em>atomman.System</em>) The final system to calculate displacements to.</p></li>
+<li><p><strong>box_reference</strong> (<em>str or None</em>) Specifies which system’s boundary conditions to use.</p>
+<ul>
+<li><p>‘initial’ uses system_0’s box and pbc.</p></li>
+<li><p>‘final’ uses system_1’s box and pbc (Default).</p></li>
+<li><p>None computes the straight difference between the positions without accounting for periodic boundaries.</p></li>
 </ul>
 </li>
 </ul>
@@ -458,70 +478,70 @@ Cij (GPa) =
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[1.77628039 1.55317973 0.97706175]
- [0.1381128  2.04598977 2.21839059]
- [1.99662528 0.45615953 0.76069082]
- [1.65293211 2.25821975 2.16219312]
- [2.59619194 0.39584094 0.20704175]
- [0.32055987 1.07148388 2.66141893]
- [1.42635371 0.14867084 1.87812736]
- [2.50855729 1.55881572 1.10225299]
- [2.80697878 1.57903962 0.97631668]
- [2.54759589 1.10483773 2.24186845]
- [2.47461785 1.69458514 1.47879569]
- [2.08540229 1.94819311 0.26452982]
- [0.19516584 0.45693182 0.63972043]
- [1.15680112 1.65481225 1.60156832]
- [1.00488997 0.27729334 2.98516025]
- [1.02681856 1.65807995 2.40305866]
- [1.07629377 0.31066797 1.57612141]
- [2.53213425 0.26042847 1.93340517]
- [0.80113993 2.99568035 0.01040669]
- [2.50501142 2.97719779 1.33098116]
- [2.60345951 0.07692916 1.69620873]
- [1.78393496 0.26467154 2.88218084]
- [2.83321158 0.76708824 2.7765996 ]
- [1.5247339  2.59909625 1.37912535]
- [1.50558373 2.36946952 2.34828564]
- [0.58521044 1.15725704 1.78094029]
- [2.84571349 2.50009665 0.1641754 ]
- [2.10845511 0.02127383 0.08833716]
- [0.96302072 1.44658188 2.27541722]
- [0.17564797 1.82372289 1.38722662]
- [1.59584407 0.05466248 1.73089117]
- [2.79628918 2.51407865 1.29634787]
- [1.28640898 1.95111165 2.48791193]
- [0.61415596 0.23064343 2.87025724]
- [1.64385356 2.82763093 2.58152649]
- [2.02208838 1.97168425 1.06500036]
- [1.2913594  2.80076469 2.11864009]
- [0.54069412 2.15712424 1.43159361]
- [0.52695827 1.70408694 0.2974368 ]
- [1.84449257 0.60143874 1.90388558]
- [1.60321323 1.09162424 1.35239408]
- [2.7322691  0.67923977 1.25064738]
- [1.11060616 0.7849485  0.39090946]
- [2.33766556 1.13950879 2.16153013]
- [0.57675427 2.18748541 1.2615138 ]
- [2.32773233 0.09324331 2.31526988]
- [0.86880599 0.23244618 2.68272458]
- [2.36603196 0.40687184 2.63143941]
- [1.278692   2.579082   0.10687462]
- [2.31748099 2.37945965 2.36288386]
- [1.88061758 1.42585658 2.06820804]
- [1.41862194 1.1044902  1.6843085 ]
- [1.32555169 1.46711909 0.21325859]
- [2.9705959  1.49391662 0.56245272]
- [2.14704548 2.47927351 1.63786878]
- [2.73089931 0.27807938 2.04384503]
- [0.27841922 0.19341575 0.61010245]
- [0.53335191 2.83546718 0.98452219]
- [0.49049945 1.94144469 1.97936273]
- [1.06783158 2.31946324 2.87120494]
- [2.71307813 1.89265357 0.37788434]
- [0.42096147 1.97836669 2.8138075 ]
- [2.45484726 1.24283997 2.17406822]
- [0.87244139 1.66035573 2.6329374 ]]
+[[1.45629769 0.03696404 0.05722462]
+ [2.00686953 1.94532145 2.77116162]
+ [1.91756282 0.94092042 2.26377047]
+ [2.9526688  0.07250513 1.12895736]
+ [2.19722268 2.65485694 2.23476383]
+ [2.63916535 2.29916939 1.79608253]
+ [1.68939243 0.03100305 2.37374329]
+ [1.13899849 2.51595438 2.64002661]
+ [1.18727388 1.94055994 1.29324607]
+ [2.63406863 1.66458785 0.42472578]
+ [0.1801896  0.19913024 0.47132252]
+ [1.43823169 1.60062644 1.9801167 ]
+ [1.06678252 1.67307716 2.17109002]
+ [2.66102307 0.75125987 1.74577752]
+ [0.19523563 0.19894138 0.17892037]
+ [1.20842722 2.0379491  0.15797423]
+ [2.04350974 0.57966062 0.70072767]
+ [0.19184315 2.19370496 0.53833017]
+ [2.95244336 1.8956028  2.52859627]
+ [1.24800491 2.97190875 2.53275447]
+ [0.40229111 2.2664548  2.06719997]
+ [1.21177212 2.67299859 1.25635053]
+ [1.13794425 2.79344038 0.05812333]
+ [0.31003332 2.33413303 2.65571074]
+ [0.52931765 0.7374415  0.92127556]
+ [1.2294966  1.58689044 0.38830086]
+ [2.20931642 1.05278979 0.6757112 ]
+ [1.081391   0.45426115 0.7245832 ]
+ [2.9991907  2.43856586 1.95745012]
+ [0.48875965 1.65811912 1.73096561]
+ [2.78195203 2.05669005 1.28455495]
+ [2.23318689 2.66736586 1.60787869]
+ [0.26820787 1.88439082 0.77598973]
+ [2.50380772 2.18308933 0.07301058]
+ [2.11869311 1.56972576 1.24481659]
+ [1.10447952 0.71265862 1.42613734]
+ [2.09743188 2.21629133 2.85844232]
+ [1.70476632 2.65408886 1.06203527]
+ [1.588303   1.08921303 2.59617603]
+ [1.49469369 0.82369836 1.42980791]
+ [1.84601267 2.33351055 2.1979709 ]
+ [0.47909529 2.85488761 0.37421567]
+ [0.13989635 2.83854446 1.47026478]
+ [0.93078192 1.38071304 1.09652262]
+ [2.30515599 0.99438398 0.89492745]
+ [2.57150815 1.11713478 2.4869003 ]
+ [0.68953984 2.70052591 1.45014376]
+ [0.51076651 2.86574772 2.62898785]
+ [2.76220752 1.29497476 1.21676381]
+ [0.88179045 1.51229441 1.87699994]
+ [0.49422674 0.08164123 0.14685938]
+ [0.88700586 0.73196998 0.95348412]
+ [2.02648666 1.95222626 0.55270003]
+ [2.2247568  2.39158765 2.46514303]
+ [2.12110675 2.18959206 2.5282649 ]
+ [0.51782298 0.53856191 1.39356825]
+ [1.89842006 2.56365459 0.35106965]
+ [0.52290939 1.85172408 1.04131508]
+ [2.42468263 1.7087464  0.00346999]
+ [2.73847009 0.98941826 2.60552494]
+ [1.22619477 1.68183985 0.42465541]
+ [2.55323091 2.17034444 1.19097902]
+ [2.98580159 2.54431181 1.63393472]
+ [2.20723374 0.12076041 0.48688061]]
 </pre></div></div>
 </div>
 </div>
@@ -531,14 +551,14 @@ Cij (GPa) =
 <p>See the <a class="reference external" href="03.2._NeighborList_class.html">03.2. NeighborList class Jupyter Notebook</a> for more details on how the list is calculated and can be used.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>cutoff</strong> (<em>float, optional</em>) Radial cutoff distance for identifying neighbors. Must be given if model is not given.</li>
-<li><strong>model</strong> (<em>str or file-like object, optional</em>) Gives the file path or content to load. If given, no other parameters are allowed.</li>
-<li><strong>initialsize</strong> (<em>int, optional</em>) The number of neighbor positions to initially assign to each atom. Default value is 20.</li>
-<li><strong>deltasize</strong> (<em>int, optional</em>) Specifies the number of extra neighbor positions to allow each atom when the number of neighbors exceeds the underlying array size. Default value is 10.</li>
+<li><p><strong>cutoff</strong> (<em>float, optional</em>) Radial cutoff distance for identifying neighbors. Must be given if model is not given.</p></li>
+<li><p><strong>model</strong> (<em>str or file-like object, optional</em>) Gives the file path or content to load. If given, no other parameters are allowed.</p></li>
+<li><p><strong>initialsize</strong> (<em>int, optional</em>) The number of neighbor positions to initially assign to each atom. Default value is 20.</p></li>
+<li><p><strong>deltasize</strong> (<em>int, optional</em>) Specifies the number of extra neighbor positions to allow each atom when the number of neighbors exceeds the underlying array size. Default value is 10.</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li>(<em>atomman.NeighborList</em>) The compiled list of neighbors.</li>
+<li><p>(<em>atomman.NeighborList</em>) The compiled list of neighbors.</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -637,9 +657,9 @@ Neighbors of atom 6 = [ 2 11 33 40]
 <div class="section" id="5.1.-Atomic-information">
 <h3>5.1. Atomic information<a class="headerlink" href="#5.1.-Atomic-information" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><strong>atomman.tools.atomic_number()</strong> returns the atomic number associated with an element’s atomic symbol.</li>
-<li><strong>atomman.tools.atomic_symbol()</strong> returns the elemental symbol associated with an given atomic number.</li>
-<li><strong>atomman.tools.atomic_mass()</strong> returns the atomic mass of an element or isotope. The atom can be identified with atomic number or atomic/isotope symbol.</li>
+<li><p><strong>atomman.tools.atomic_number()</strong> returns the atomic number associated with an element’s atomic symbol.</p></li>
+<li><p><strong>atomman.tools.atomic_symbol()</strong> returns the elemental symbol associated with an given atomic number.</p></li>
+<li><p><strong>atomman.tools.atomic_mass()</strong> returns the atomic mass of an element or isotope. The atom can be identified with atomic number or atomic/isotope symbol.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
@@ -699,8 +719,8 @@ Fe
 <h3>5.2. axes_check()<a class="headerlink" href="#5.2.-axes_check()" title="Permalink to this headline">¶</a></h3>
 <p>The axes_check() function is useful when working in Cartesian systems. Given a (3,3) array representing three 3D Cartesian vectors:</p>
 <ul class="simple">
-<li>The three vectors are checked that they are orthogonal and right-handed.</li>
-<li>The corresponding array of unit vectors are returned. This can then be used for crystal transformations.</li>
+<li><p>The three vectors are checked that they are orthogonal and right-handed.</p></li>
+<li><p>The corresponding array of unit vectors are returned. This can then be used for crystal transformations.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
@@ -786,9 +806,9 @@ index -&gt; (2, 1) , istr -&gt; &#39;[2][1]&#39;
 <h3>5.5. uber_open_rmode<a class="headerlink" href="#5.5.-uber_open_rmode" title="Permalink to this headline">¶</a></h3>
 <p>uber_open_rmode is a context manager that allows for similar reading of content from a file or from a string variable. It equivalently handles:</p>
 <ul class="simple">
-<li>str path name to a file</li>
-<li>str content</li>
-<li>open file-like object</li>
+<li><p>str path name to a file</p></li>
+<li><p>str content</p></li>
+<li><p>open file-like object</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
@@ -849,9 +869,9 @@ b&#39;Here I am, read me!&#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Angle between [0.85212236 0.80192465 0.43328632] and [-0.5487525   0.27320908  0.05726526] =
-106.9293428642297 degrees
-1.8662690999747122 radians
+Angle between [-0.54473876  0.51764369 -0.57618031] and [-0.97503279 -0.48213065  0.14930763] =
+79.15926717548003 degrees
+1.3815898456779983 radians
 </pre></div></div>
 </div>
 </div>
@@ -901,22 +921,22 @@ Angle between [0.85212236 0.80192465 0.43328632] and [-0.5487525   0.27320908  0
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
+      <td>0</td>
       <td>1.00001</td>
       <td>Same</td>
     </tr>
     <tr>
-      <th>1</th>
+      <td>1</td>
       <td>1.00002</td>
       <td>Diff</td>
     </tr>
     <tr>
-      <th>2</th>
+      <td>2</td>
       <td>3.00000</td>
       <td>Same</td>
     </tr>
     <tr>
-      <th>3</th>
+      <td>3</td>
       <td>1.00000</td>
       <td>Same</td>
     </tr>
@@ -963,17 +983,17 @@ Angle between [0.85212236 0.80192465 0.43328632] and [-0.5487525   0.27320908  0
   </thead>
   <tbody>
     <tr>
-      <th>1</th>
+      <td>1</td>
       <td>1.00002</td>
       <td>Diff</td>
     </tr>
     <tr>
-      <th>2</th>
+      <td>2</td>
       <td>3.00000</td>
       <td>Same</td>
     </tr>
     <tr>
-      <th>3</th>
+      <td>3</td>
       <td>1.00000</td>
       <td>Same</td>
     </tr>
@@ -1033,17 +1053,17 @@ Angle between [0.85212236 0.80192465 0.43328632] and [-0.5487525   0.27320908  0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 5  5  5]
- [-3 -2 -1]
- [-3  5  4]]
+[[-5 -2 -2]
+ [-5  4 -2]
+ [ 5 -1 -1]]
 
-[[ 1.66666667  1.66666667 -3.33333333  5.        ]
- [-1.33333333 -0.33333333  1.66666667 -1.        ]
- [-3.66666667  4.33333333 -0.66666667  4.        ]]
+[[-2.66666667  0.33333333  2.33333333 -2.        ]
+ [-4.66666667  4.33333333  0.33333333 -2.        ]
+ [ 3.66666667 -2.33333333 -1.33333333 -1.        ]]
 
-[[ 5.  5.  5.]
- [-3. -2. -1.]
- [-3.  5.  4.]]
+[[-5. -2. -2.]
+ [-5.  4. -2.]
+ [ 5. -1. -1.]]
 </pre></div></div>
 </div>
 <p><strong>atomman.tools.miller.plane3to4(indices)</strong> converts planes from three-term Miller indices to four-term Miller-Bravais indices for hexagonal systems.</p>
@@ -1095,17 +1115,17 @@ Angle between [0.85212236 0.80192465 0.43328632] and [-0.5487525   0.27320908  0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[3 2 3]
- [5 4 4]
- [0 3 5]]
+[[-4 -2  0]
+ [ 0 -2  0]
+ [ 5  0 -1]]
 
-[[ 3.  2. -5.  3.]
- [ 5.  4. -9.  4.]
- [ 0.  3. -3.  5.]]
+[[-4. -2.  6.  0.]
+ [ 0. -2.  2.  0.]
+ [ 5.  0. -5. -1.]]
 
-[[3. 2. 3.]
- [5. 4. 4.]
- [0. 3. 5.]]
+[[-4. -2.  0.]
+ [ 0. -2.  0.]
+ [ 5.  0. -1.]]
 </pre></div></div>
 </div>
 <p><strong>atomman.tools.miller.vector_crystal_to_cartesian(indices, box)</strong> converts Miller and Miller-Bravais indices to Cartesian vectors based on a supplied box.</p>
@@ -1149,11 +1169,50 @@ Angle between [0.85212236 0.80192465 0.43328632] and [-0.5487525   0.27320908  0
  [ 0.          0.          4.07      ]]
 </pre></div></div>
 </div>
+<p><strong>atomman.tools.miller.plane_crystal_to_cartesian(indices, box)</strong> converts Miller and Miller-Bravais plane indices to Cartesian normal vectors based on a supplied box. The method uses the definition of the crystal planes to identify two in-plane crystal vectors, converts them to Cartesian, and obtains the plane normal as the cross product of the two vectors.</p>
+<p><em>Added version 1.3.2</em></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Define a hexagonal box</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">2.51</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.07</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+
+<span class="c1"># Pass Miller plane indices</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">plane_crystal_to_cartesian</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">box</span><span class="p">))</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">plane_crystal_to_cartesian</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">box</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># Pass equivalent Miller-Bravais indices</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">plane_crystal_to_cartesian</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">box</span><span class="p">))</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">miller</span><span class="o">.</span><span class="n">plane_crystal_to_cartesian</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">box</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[ 0. -0.  1.]
+[ 0.8660254  0.5       -0.       ]
+
+[ 0. -0.  1.]
+[ 0.8660254  0.5       -0.       ]
+</pre></div></div>
+</div>
 <p><em>Added version 1.2.6</em></p>
 <p><strong>atomman.tools.miller.vector_primitive_to_conventional(indices, setting)</strong> converts vectors relative to a primitive unit cell to a conventional unit cell in the given setting (p, a, b, c, i or f).</p>
 <p><strong>atomman.tools.miller.vector_conventional_to_primitive(indices, setting)</strong> converts vectors relative to a conventional unit cell in the given setting (p, a, b, c, i or f) to a primitive unit cell.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1184,7 +1243,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1218,7 +1277,7 @@ conventional uvws:
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1252,57 +1311,64 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <h3>5.8. Crystal lattice identification<a class="headerlink" href="#5.8.-Crystal-lattice-identification" title="Permalink to this headline">¶</a></h3>
 <p>There are also a few tests for identifying if a supplied box is consistent with a standard representation of a crystal family unit cell.</p>
 <ul class="simple">
-<li><strong>atomman.tools.identifyfamily(box)</strong> returns str crystal family if box corresponds to a standard crystal representation. Otherwise, returns None.</li>
-<li><strong>atomman.tools.iscubic(box))</strong> returns bool indicating if box is a standard cubic box.</li>
-<li><strong>atomman.tools.ishexagonal(box))</strong> returns bool indicating if box is a standard hexagonal box.</li>
-<li><strong>atomman.tools.istetragonal(box))</strong> returns bool indicating if box is a standard tetragonal box.</li>
-<li><strong>atomman.tools.isrhombohedral(box))</strong> returns bool indicating if box is a standard rhombohedral box.</li>
-<li><strong>atomman.tools.isorthorhombic(box))</strong> returns bool indicating if box is a standard orthorhombic box.</li>
-<li><strong>atomman.tools.ismonoclinic(box))</strong> returns bool indicating if box is a standard monoclinic box.</li>
-<li><strong>atomman.tools.istriclinic(box))</strong> returns bool indicating if box is a standard triclinic box.</li>
+<li><p><strong>atomman.tools.identifyfamily(box)</strong> returns str crystal family if box corresponds to a standard crystal representation. Otherwise, returns None.</p></li>
+<li><p><strong>atomman.tools.iscubic(box))</strong> returns bool indicating if box is a standard cubic box.</p></li>
+<li><p><strong>atomman.tools.ishexagonal(box))</strong> returns bool indicating if box is a standard hexagonal box.</p></li>
+<li><p><strong>atomman.tools.istetragonal(box))</strong> returns bool indicating if box is a standard tetragonal box.</p></li>
+<li><p><strong>atomman.tools.isrhombohedral(box))</strong> returns bool indicating if box is a standard rhombohedral box.</p></li>
+<li><p><strong>atomman.tools.isorthorhombic(box))</strong> returns bool indicating if box is a standard orthorhombic box.</p></li>
+<li><p><strong>atomman.tools.ismonoclinic(box))</strong> returns bool indicating if box is a standard monoclinic box.</p></li>
+<li><p><strong>atomman.tools.istriclinic(box))</strong> returns bool indicating if box is a standard triclinic box.</p></li>
 </ul>
 <p>All of these functions use the following standard representation criteria:</p>
 <ul class="simple">
-<li>cubic:<ul>
-<li><span class="math notranslate nohighlight">\(a = b = c\)</span></li>
-<li><span class="math notranslate nohighlight">\(\alpha = \beta = \gamma = 90\)</span></li>
+<li><p>cubic:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(a = b = c\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha = \beta = \gamma = 90\)</span></p></li>
 </ul>
 </li>
-<li>hexagonal:<ul>
-<li><span class="math notranslate nohighlight">\(a = b \ne c\)</span></li>
-<li><span class="math notranslate nohighlight">\(\alpha = \beta = 90\)</span></li>
-<li><span class="math notranslate nohighlight">\(\gamma = 120\)</span></li>
+<li><p>hexagonal:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(a = b \ne c\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha = \beta = 90\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\gamma = 120\)</span></p></li>
 </ul>
 </li>
-<li>tetragonal:<ul>
-<li><span class="math notranslate nohighlight">\(a = b \ne c\)</span></li>
-<li><span class="math notranslate nohighlight">\(\alpha = \beta = \gamma = 90\)</span></li>
+<li><p>tetragonal:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(a = b \ne c\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha = \beta = \gamma = 90\)</span></p></li>
 </ul>
 </li>
-<li>rhombohedral:<ul>
-<li><span class="math notranslate nohighlight">\(a = b = c\)</span></li>
-<li><span class="math notranslate nohighlight">\(\alpha = \beta = \gamma \ne 90\)</span></li>
+<li><p>rhombohedral:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(a = b = c\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha = \beta = \gamma \ne 90\)</span></p></li>
 </ul>
 </li>
-<li>orthorhombic:<ul>
-<li><span class="math notranslate nohighlight">\(a \ne b \ne c\)</span></li>
-<li><span class="math notranslate nohighlight">\(\alpha = \beta = \gamma = 90\)</span></li>
+<li><p>orthorhombic:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(a \ne b \ne c\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha = \beta = \gamma = 90\)</span></p></li>
 </ul>
 </li>
-<li>monoclinic:<ul>
-<li><span class="math notranslate nohighlight">\(a \ne b \ne c\)</span></li>
-<li><span class="math notranslate nohighlight">\(\alpha = \gamma = 90\)</span></li>
-<li><span class="math notranslate nohighlight">\(\beta \ne 90\)</span></li>
+<li><p>monoclinic:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(a \ne b \ne c\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha = \gamma = 90\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\beta \ne 90\)</span></p></li>
 </ul>
 </li>
-<li>triclinic:<ul>
-<li><span class="math notranslate nohighlight">\(a \ne b \ne c\)</span></li>
-<li><span class="math notranslate nohighlight">\(\alpha \ne \beta \ne \gamma\)</span></li>
+<li><p>triclinic:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(a \ne b \ne c\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha \ne \beta \ne \gamma\)</span></p></li>
 </ul>
 </li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1339,7 +1405,7 @@ istriclinic =    False
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1363,7 +1429,7 @@ identifyfamily = None
 <p><em>Added version 1.2.7</em></p>
 <p>Takes a list of symbols and the counts for each and returns a reduced composition string. Used by System.composition.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1383,7 +1449,7 @@ Composition = Al2Si5
 </div>
 <p><strong>File Cleanup</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1455,12 +1521,12 @@ Composition = Al2Si5
         <li class="right" >
           <a href="02.2._Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>SDVPN &#8212; atomman 1.3.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>SDVPN &#8212; atomman 1.3.2 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -14,12 +12,13 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="StackingFault" href="atomman.defect.StackingFault.html" />
-    <link rel="prev" title="IsotropicVolterraDislocation" href="atomman.defect.IsotropicVolterraDislocation.html" /> 
+    <link rel="next" title="plot" href="atomman.plot.html" />
+    <link rel="prev" title="DifferentialDisplacement" href="atomman.defect.DifferentialDisplacement.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -31,12 +30,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="atomman.defect.StackingFault.html" title="StackingFault"
+          <a href="atomman.plot.html" title="plot"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="atomman.defect.IsotropicVolterraDislocation.html" title="IsotropicVolterraDislocation"
+          <a href="atomman.defect.DifferentialDisplacement.html" title="DifferentialDisplacement"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="atomman.defect.html" accesskey="U">defect</a> &#187;</li> 
       </ul>
@@ -51,181 +50,239 @@
 <h1>SDVPN<a class="headerlink" href="#sdvpn" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="atomman.defect.SDVPN">
-<em class="property">class </em><code class="descclassname">atomman.defect.</code><code class="descname">SDVPN</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">atomman.defect.</code><code class="sig-name descname">SDVPN</code><span class="sig-paren">(</span><em class="sig-param">volterra=None, gamma=None, model=None, tau=array([[0., 0., 0.],        [0., 0., 0.],        [0., 0., 0.]]), alpha=0.0, beta=array([[0., 0., 0.],        [0., 0., 0.],        [0., 0., 0.]]), cutofflongrange=None, fullstress=True, cdiffelastic=False, cdiffsurface=True, cdiffstress=False, min_method='Powell', min_options=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class representation of the semidiscrete variational Peierls-Nabarro
 dislocation model.</p>
-<dl class="attribute">
+<dl class="method">
+<dt id="atomman.defect.SDVPN.E_gsf_surface_plot">
+<code class="sig-name descname">E_gsf_surface_plot</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">disregistry=None</em>, <em class="sig-param">fmt='ro-'</em>, <em class="sig-param">normalize=False</em>, <em class="sig-param">smooth=True</em>, <em class="sig-param">a1vect=None</em>, <em class="sig-param">a2vect=None</em>, <em class="sig-param">xvect=None</em>, <em class="sig-param">length_unit='angstrom'</em>, <em class="sig-param">energyperarea_unit='eV/angstrom^2'</em>, <em class="sig-param">numx=100</em>, <em class="sig-param">numy=100</em>, <em class="sig-param">figsize=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.E_gsf_surface_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extends the GammaSurface.E_gsf_surface_plot() method to plot the
+disregistry path on top of it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – x-coordinates.  Default value is the stored x-coordinates. If x
+or disregistry are not set/given, then the disregistry path will
+not be added.</p></li>
+<li><p><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – (N, 3) shaped array of disregistry vectors at each x-coordinate.
+Default value is the stored disregistry values.  If x
+or disregistry are not set/given, then the disregistry path will
+not be added.</p></li>
+<li><p><strong>fmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The matplotlib.pyplot.plot fmt parameter for the disregistry path
+line, i.e. color, marker and line style options.  Default value is
+‘ro-‘: red with circle markers and solid line.</p></li>
+<li><p><strong>normalize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if axes are Cartesian (False, default) or
+normalized by a1, a2 vectors (True).</p></li>
+<li><p><strong>smooth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If True (default), then plot shows smooth interpolated values.
+If False, plot shows nearest raw data values.</p></li>
+<li><p><strong>a1vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a1 vector to use for plotting.  Default
+value of None uses the saved a1vect.</p></li>
+<li><p><strong>a2vect</strong> (<em>np.array</em><em>, </em><em>optional</em>) – Crystal vector for the a2 vector to use for plotting.  Default
+value of None uses the saved a2vect.</p></li>
+<li><p><strong>xvect</strong> (<em>numpy.array</em><em>, </em><em>optional</em>) – Crystal vector to align with the plotting x-axis for
+non-normalized plots.  If not given, this is taken as the Cartesian
+of a1vect.</p></li>
+<li><p><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The unit of length to display non-normalized axes values in.
+Default value is ‘angstrom’.</p></li>
+<li><p><strong>energyperarea_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The unit of energy per area to display the stacking fault energies
+in. Default value is ‘eV/angstrom^2’.</p></li>
+<li><p><strong>numx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of plotting points to use along the x-axis.  Default
+value is 100.</p></li>
+<li><p><strong>numy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of plotting points to use along the y-axis.  Default
+value is 100.</p></li>
+<li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em>, </em><em>optional</em>) – The figure’s x,y dimensions.  If None (default), the values are
+scaled such that the x,y spacings are approximately equal, and the
+larger of the two values is set to 10.</p></li>
+<li><p><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keywords are passed into the underlying
+matplotlib.pyplot.pcolormesh(). This allows control of such things
+like the colormap (cmap).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib.figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.defect.SDVPN.E_gsf_vs_x_plot">
+<code class="sig-name descname">E_gsf_vs_x_plot</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">disregistry=None</em>, <em class="sig-param">figsize=None</em>, <em class="sig-param">length_unit='angstrom'</em>, <em class="sig-param">energyperarea_unit='eV/angstrom^2'</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.E_gsf_vs_x_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a plot of the stacking fault energy associated with the
+disregistry values for each x coordinate.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="atomman.defect.SDVPN.K_tensor">
-<code class="descname">K_tensor</code><a class="headerlink" href="#atomman.defect.SDVPN.K_tensor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dislocation energy coefficient tensor for system.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.ndarray</td>
-</tr>
-</tbody>
-</table>
+<em class="property">property </em><code class="sig-name descname">K_tensor</code><a class="headerlink" href="#atomman.defect.SDVPN.K_tensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dislocation energy coefficient tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.SDVPN.alpha">
-<code class="descname">alpha</code><a class="headerlink" href="#atomman.defect.SDVPN.alpha" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">alpha</code><a class="headerlink" href="#atomman.defect.SDVPN.alpha" title="Permalink to this definition">¶</a></dt>
 <dd><p>Coefficients for nonlocal energy correction.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list of float</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tuple of float</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="atomman.defect.SDVPN.axes">
-<code class="descname">axes</code><a class="headerlink" href="#atomman.defect.SDVPN.axes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Axes for orienting the disregistry to gamma.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.ndarray</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.SDVPN.beta">
-<code class="descname">beta</code><a class="headerlink" href="#atomman.defect.SDVPN.beta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Coefficients for gradient energy correction.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.ndarray</td>
-</tr>
-</tbody>
-</table>
+<em class="property">property </em><code class="sig-name descname">beta</code><a class="headerlink" href="#atomman.defect.SDVPN.beta" title="Permalink to this definition">¶</a></dt>
+<dd><p>3x3 coefficients for gradient energy correction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.SDVPN.burgers">
-<code class="descname">burgers</code><a class="headerlink" href="#atomman.defect.SDVPN.burgers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Full Burgers vector for long-range elastic energy.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.ndarray</td>
-</tr>
-</tbody>
-</table>
+<em class="property">property </em><code class="sig-name descname">burgers</code><a class="headerlink" href="#atomman.defect.SDVPN.burgers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Burgers vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.SDVPN.cdiffelastic">
-<code class="descname">cdiffelastic</code><a class="headerlink" href="#atomman.defect.SDVPN.cdiffelastic" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">cdiffelastic</code><a class="headerlink" href="#atomman.defect.SDVPN.cdiffelastic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flag indicating if elastic energy used central difference for computing the dislocation density.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.SDVPN.cdiffstress">
-<code class="descname">cdiffstress</code><a class="headerlink" href="#atomman.defect.SDVPN.cdiffstress" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">cdiffstress</code><a class="headerlink" href="#atomman.defect.SDVPN.cdiffstress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flag indicating if stress energy used central difference for computing the dislocation density.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.SDVPN.cdiffsurface">
-<code class="descname">cdiffsurface</code><a class="headerlink" href="#atomman.defect.SDVPN.cdiffsurface" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">cdiffsurface</code><a class="headerlink" href="#atomman.defect.SDVPN.cdiffsurface" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flag indicating if surface energy used central difference for computing the dislocation density.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
+<dt id="atomman.defect.SDVPN.check_energies">
+<code class="sig-name descname">check_energies</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">disregistry=None</em>, <em class="sig-param">energyperlength_unit='eV/angstrom'</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.check_energies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints a summary string of all computed energy components.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – x-coordinates.  Default value is the stored x-coordinates.</p></li>
+<li><p><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – (N, 3) shaped array of disregistry vectors at each x-coordinate.
+Default value is the stored disregistry values.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="atomman.defect.SDVPN.cutofflongrange">
-<code class="descname">cutofflongrange</code><a class="headerlink" href="#atomman.defect.SDVPN.cutofflongrange" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">cutofflongrange</code><a class="headerlink" href="#atomman.defect.SDVPN.cutofflongrange" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cutoff distance for long-range elastic energy.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.SDVPN.disldensity">
-<code class="descname">disldensity</code><span class="sig-paren">(</span><em>x=None</em>, <em>disregistry=None</em>, <em>cdiff=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.disldensity" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">disldensity</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">disregistry=None</em>, <em class="sig-param">cdiff=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.disldensity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the dislocation density as the numerical derivative of
 disregistry with respect to x.  Uses either neighboring values</p>
 <blockquote>
-<div>ρ[i] = (δ[i] - δ[i-1]) / (x[i] - x[i-1])</div></blockquote>
+<div><p>ρ[i] = (δ[i] - δ[i-1]) / (x[i] - x[i-1])</p>
+</div></blockquote>
 <p>or central difference</p>
 <blockquote>
-<div>ρ[i] = (δ[i+1] - δ[i-1]) / (x[i+1] - x[i-1])</div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cdiff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Flag indicating how to compute the derivative.  A value of False
+<div><p>ρ[i] = (δ[i+1] - δ[i-1]) / (x[i+1] - x[i-1])</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cdiff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Flag indicating how to compute the derivative.  A value of False
 (default) compares nearest values while a value of True compares
-next-nearest (i.e., central difference).</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
-<li><strong>newx</strong> (<em>numpy.array</em>) – The x positions corresponding to the dislocation density values.</li>
-<li><strong>rho</strong> (<em>numpy.array</em>) – The computed dislocation density.</li>
+next-nearest (i.e., central difference).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>newx</strong> (<em>numpy.array</em>) – The x positions corresponding to the dislocation density values.</p></li>
+<li><p><strong>rho</strong> (<em>numpy.array</em>) – The computed dislocation density.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.SDVPN.disregistry">
-<code class="descname">disregistry</code><a class="headerlink" href="#atomman.defect.SDVPN.disregistry" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">disregistry</code><a class="headerlink" href="#atomman.defect.SDVPN.disregistry" title="Permalink to this definition">¶</a></dt>
 <dd><p>The disregistry vector for each x coordinate.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.ndarray</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.defect.SDVPN.disregistry_plot">
+<code class="sig-name descname">disregistry_plot</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">disregistry=None</em>, <em class="sig-param">figsize=None</em>, <em class="sig-param">length_unit='angstrom'</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.disregistry_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a simple matplotlib figure showing the disregistry profiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – x-coordinates.  Default value is the stored x-coordinates.</p></li>
+<li><p><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – (N, 3) shaped array of disregistry vectors at each x-coordinate.
+Default value is the stored disregistry values.</p></li>
+<li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em>, </em><em>optional</em>) – matplotlib figure figsize parameter.  Default value is (10, 6).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The generated figure allowing users to perform additional
+modifications.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib.pyplot.figure</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.SDVPN.elastic_energy">
-<code class="descname">elastic_energy</code><span class="sig-paren">(</span><em>x=None</em>, <em>disregistry=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.elastic_energy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">elastic_energy</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">disregistry=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.elastic_energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the short-range configuration-dependent elastic energy term
 for the dislocation based on the dislocation density and K_tensor.</p>
 <blockquote>
@@ -233,375 +290,324 @@ for the dislocation based on the dislocation density and K_tensor.</p>
 <p>χ(i,j,Δx) = (3/2) Δx² + ψ(i-1,j-1,Δx) + ψ(i,j,Δx) - ψ(i,j-1,Δx) - ψ(j,i-1,Δx)</p>
 <p>ψ(i,j,Δx) = (1/2) (i-j)² Δx² ln(|i-j|Δx)</p>
 </div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – x-coordinates.  Default value is the stored x-coordinates.</li>
-<li><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – (N, 3) shaped array of disregistry vectors at each x-coordinate.
-Default value is the stored disregistry values.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – x-coordinates.  Default value is the stored x-coordinates.</p></li>
+<li><p><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – (N, 3) shaped array of disregistry vectors at each x-coordinate.
+Default value is the stored disregistry values.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The elastic energy for the dislocation.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The elastic energy for the dislocation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.SDVPN.fullstress">
-<code class="descname">fullstress</code><a class="headerlink" href="#atomman.defect.SDVPN.fullstress" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">fullstress</code><a class="headerlink" href="#atomman.defect.SDVPN.fullstress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flag indicating which stress algorithm was used.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.SDVPN.gamma">
-<code class="descname">gamma</code><a class="headerlink" href="#atomman.defect.SDVPN.gamma" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">gamma</code><a class="headerlink" href="#atomman.defect.SDVPN.gamma" title="Permalink to this definition">¶</a></dt>
 <dd><p>The stacking fault map.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="atomman.defect.GammaSurface.html#atomman.defect.GammaSurface" title="atomman.defect.GammaSurface">atomman.defect.GammaSurface</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="atomman.defect.GammaSurface.html#atomman.defect.GammaSurface" title="atomman.defect.GammaSurface">atomman.defect.GammaSurface</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.SDVPN.load">
-<code class="descname">load</code><span class="sig-paren">(</span><em>model</em>, <em>gamma=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.load" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">gamma=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load solution from a data model.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><em>DataModelDict</em>) – The semi-discrete-Peierls-Nabarro data model to load.</li>
-<li><strong>gamma</strong> (<a class="reference internal" href="atomman.defect.GammaSurface.html#atomman.defect.GammaSurface" title="atomman.defect.GammaSurface"><em>atomman.defect.GammaSurface</em></a>) – The gamma surface to use.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><em>DataModelDict</em>) – The semi-discrete-Peierls-Nabarro data model to load.</p></li>
+<li><p><strong>gamma</strong> (<a class="reference internal" href="atomman.defect.GammaSurface.html#atomman.defect.GammaSurface" title="atomman.defect.GammaSurface"><em>atomman.defect.GammaSurface</em></a>) – The gamma surface to use.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.SDVPN.longrange_energy">
-<code class="descname">longrange_energy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.longrange_energy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">longrange_energy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.longrange_energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the long-range elastic energy term for the dislocation using
 the K_tensor, Burgers vector and long-range cutoff.  This term is
 configuration-independent and thus the method takes no parameters.</p>
 <blockquote>
-<div>E_longrange = 1/(2π) K_lm b_l b_m ln(L)</div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The long-range energy for the dislocation.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></td>
-</tr>
-</tbody>
-</table>
+<div><p>E_longrange = 1/(2π) K_lm b_l b_m ln(L)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The long-range energy for the dislocation.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.SDVPN.min_method">
-<code class="descname">min_method</code><a class="headerlink" href="#atomman.defect.SDVPN.min_method" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">min_method</code><a class="headerlink" href="#atomman.defect.SDVPN.min_method" title="Permalink to this definition">¶</a></dt>
 <dd><p>scipy.optimize.minimize method used.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.SDVPN.min_options">
-<code class="descname">min_options</code><a class="headerlink" href="#atomman.defect.SDVPN.min_options" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">min_options</code><a class="headerlink" href="#atomman.defect.SDVPN.min_options" title="Permalink to this definition">¶</a></dt>
 <dd><p>scipy.optimize.minimize options used.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.SDVPN.misfit_energy">
-<code class="descname">misfit_energy</code><span class="sig-paren">(</span><em>x=None</em>, <em>disregistry=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.misfit_energy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">misfit_energy</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">disregistry=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.misfit_energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the misfit energy for the disregistry using the stored gamma
 surface</p>
 <blockquote>
-<div>E_misfit = Σ γ(δ)Δx</div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – x-coordinates.  Default value is the stored x-coordinates.</li>
-<li><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – (N, 3) shaped array of disregistry vectors at each x-coordinate.
-Default value is the stored disregistry values.</li>
+<div><p>E_misfit = Σ γ(δ)Δx</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – x-coordinates.  Default value is the stored x-coordinates.</p></li>
+<li><p><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – (N, 3) shaped array of disregistry vectors at each x-coordinate.
+Default value is the stored disregistry values.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The misfit energy for the dislocation.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The misfit energy for the dislocation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.SDVPN.model">
-<code class="descname">model</code><span class="sig-paren">(</span><em>length_unit='angstrom'</em>, <em>energy_unit='eV'</em>, <em>pressure_unit='GPa'</em>, <em>include_gamma=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.model" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">model</code><span class="sig-paren">(</span><em class="sig-param">length_unit='angstrom'</em>, <em class="sig-param">energy_unit='eV'</em>, <em class="sig-param">pressure_unit='GPa'</em>, <em class="sig-param">include_gamma=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a data model for the object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The unit of length to save values as.  Default is ‘angstrom’.</li>
-<li><strong>energy_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The unit of energy to save values as.  Default is ‘eV’.</li>
-<li><strong>pressure_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The unit of pressure to save values as.  Default is ‘GPa’.</li>
-<li><strong>include_gamma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Flag indicating if the gamma surface data is to be included.
-Default value is False.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The unit of length to save values as.  Default is ‘angstrom’.</p></li>
+<li><p><strong>energy_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The unit of energy to save values as.  Default is ‘eV’.</p></li>
+<li><p><strong>pressure_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The unit of pressure to save values as.  Default is ‘GPa’.</p></li>
+<li><p><strong>include_gamma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Flag indicating if the gamma surface data is to be included.
+Default value is False.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.SDVPN.nonlocal_energy">
-<code class="descname">nonlocal_energy</code><span class="sig-paren">(</span><em>x=None</em>, <em>disregistry=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.nonlocal_energy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">nonlocal_energy</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">disregistry=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.nonlocal_energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the nonlocal energy correction using alpha coefficient(s).</p>
 <blockquote>
-<div>E_nonlocal = Σ_m α_m Σ_i δ[i] (δ[i] - (δ[i+m] + δ[i-m]) / 2) Δx</div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – x-coordinates.  Default value is the stored x-coordinates.</li>
-<li><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – (N, 3) shaped array of disregistry vectors at each x-coordinate.
-Default value is the stored disregistry values.</li>
+<div><p>E_nonlocal = Σ_m α_m Σ_i δ[i] (δ[i] - (δ[i+m] + δ[i-m]) / 2) Δx</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – x-coordinates.  Default value is the stored x-coordinates.</p></li>
+<li><p><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – (N, 3) shaped array of disregistry vectors at each x-coordinate.
+Default value is the stored disregistry values.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The nonlocal energy for the dislocation.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The nonlocal energy for the dislocation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.SDVPN.res">
-<code class="descname">res</code><a class="headerlink" href="#atomman.defect.SDVPN.res" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">res</code><a class="headerlink" href="#atomman.defect.SDVPN.res" title="Permalink to this definition">¶</a></dt>
 <dd><p>scipy.optimize.minimize result.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">OptimizeResult</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>OptimizeResult</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.SDVPN.solve">
-<code class="descname">solve</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.solve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">disregistry=None</em>, <em class="sig-param">tau=None</em>, <em class="sig-param">alpha=None</em>, <em class="sig-param">beta=None</em>, <em class="sig-param">cutofflongrange=None</em>, <em class="sig-param">fullstress=None</em>, <em class="sig-param">cdiffelastic=None</em>, <em class="sig-param">cdiffsurface=None</em>, <em class="sig-param">cdiffstress=None</em>, <em class="sig-param">min_method=None</em>, <em class="sig-param">min_options=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.solve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Solves the semidiscrete variational Peierls-Nabarro dislocation
 disregistry through energy minimization using the set class
 properties.  All parameters are optional keyword arguments that
-replace the class properties.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – An array of shape (N) giving the x coordinates corresponding to
-the disregistry solution.</li>
-<li><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – A (N,3) array giving the initial disregistry vector guess at each
-x coordinate.</li>
-<li><strong>gamma</strong> (<a class="reference internal" href="atomman.defect.GammaSurface.html#atomman.defect.GammaSurface" title="atomman.defect.GammaSurface"><em>atomman.defect.GammaSurface</em></a><em>, </em><em>optional</em>) – The gamma surface (stacking fault map) to use for computing the
-misfit energy.</li>
-<li><strong>axes</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – A (3,3) array defining the crystal directions of the dislocation
-system. Used to orient the disregistry vector to the gamma surface
-in computing the misfit energy.</li>
-<li><strong>K_tensor</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – A (3,3) array giving the anisotropic elastic energy coefficients
-corresponding to the dislocation system’s orientation.  Can be
-computed with atomman.defect.Stroh.</li>
-<li><strong>tau</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – A (3,3) array giving the stress tensor to apply to the system
+can be used to change any of the previous settings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – An array of shape (N) giving the x coordinates corresponding to
+the disregistry solution.</p></li>
+<li><p><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – A (N,3) array giving the initial disregistry vector guess at each
+x coordinate.</p></li>
+<li><p><strong>tau</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – A (3,3) array giving the stress tensor to apply to the system
 using the stress energy term.  Only the xy, yy, and yz components
-are used.</li>
-<li><strong>alpha</strong> (<em>list of float</em><em>, </em><em>optional</em>) – The alpha coefficient(s) used by the nonlocal energy term.</li>
-<li><strong>beta</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – The (3,3) array of beta coefficient(s) used by the surface energy
-term.</li>
-<li><strong>cutofflongrange</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><em>optional</em>) – The cutoff distance to use for computing the long-range energy.</li>
-<li><strong>burgers</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – The (3,) array of the dislocation’s Burgers vector relative to the
-dislocation system.  Used only by the long-range energy.</li>
-<li><strong>fullstress</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating which stress energy algorithm to use.</li>
-<li><strong>cdiffelastic</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if the dislocation density for the elastic energy
+are used.</p></li>
+<li><p><strong>alpha</strong> (<em>list of float</em><em>, </em><em>optional</em>) – The alpha coefficient(s) used by the nonlocal energy term.</p></li>
+<li><p><strong>beta</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – The (3,3) array of beta coefficient(s) used by the surface energy
+term.</p></li>
+<li><p><strong>cutofflongrange</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><em>optional</em>) – The cutoff distance to use for computing the long-range energy.</p></li>
+<li><p><strong>fullstress</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating which stress energy algorithm to use.</p></li>
+<li><p><strong>cdiffelastic</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if the dislocation density for the elastic energy
 component is computed with central difference (True) or simply
-neighboring values (False).</li>
-<li><strong>cdiffsurface</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if the dislocation density for the surface energy
+neighboring values (False).</p></li>
+<li><p><strong>cdiffsurface</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if the dislocation density for the surface energy
 component is computed with central difference (True) or simply
-neighboring values (False).</li>
-<li><strong>cdiffstress</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if the dislocation density for the stress energy
+neighboring values (False).</p></li>
+<li><p><strong>cdiffstress</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if the dislocation density for the stress energy
 component is computed with central difference (True) or simply
-neighboring values (False).  Only matters if fullstress is True.</li>
-<li><strong>min_method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The scipy.optimize.minimize method to use.</li>
-<li><strong>min_options</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Any options to pass on to scipy.optimize.minimize.</li>
+neighboring values (False).  Only matters if fullstress is True.</p></li>
+<li><p><strong>min_method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – The scipy.optimize.minimize method to use.</p></li>
+<li><p><strong>min_options</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Any options to pass on to scipy.optimize.minimize.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.SDVPN.stress_energy">
-<code class="descname">stress_energy</code><span class="sig-paren">(</span><em>x=None</em>, <em>disregistry=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.stress_energy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">stress_energy</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">disregistry=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.stress_energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the stress energy due to the applied stress, tau.
 If fullstress is True:</p>
 <blockquote>
-<div>E_stress = -1/2 Σ_i (x[i]² - x[i-1]²) ρ_l τ_2l</div></blockquote>
+<div><p>E_stress = -1/2 Σ_i (x[i]² - x[i-1]²) ρ_l τ_2l</p>
+</div></blockquote>
 <p>If fullstress is False:</p>
 <blockquote>
-<div>E_stress = -1/2 Σ_i τ_2l (δ_l[i] + δ_l[i+1]) Δx</div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – x-coordinates.  Default value is the stored x-coordinates.</li>
-<li><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – (N, 3) shaped array of disregistry vectors at each x-coordinate.
-Default value is the stored disregistry values.</li>
+<div><p>E_stress = -1/2 Σ_i τ_2l (δ_l[i] + δ_l[i+1]) Δx</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – x-coordinates.  Default value is the stored x-coordinates.</p></li>
+<li><p><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – (N, 3) shaped array of disregistry vectors at each x-coordinate.
+Default value is the stored disregistry values.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The stress energy for the dislocation.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The stress energy for the dislocation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.SDVPN.surface_energy">
-<code class="descname">surface_energy</code><span class="sig-paren">(</span><em>x=None</em>, <em>disregistry=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.surface_energy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">surface_energy</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">disregistry=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.surface_energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the gradient surface energy correction using beta
 coefficients.</p>
 <blockquote>
-<div>E_surface = Σ_j β_lj / 4 Σ_i ρ_l[i]² Δx</div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – x-coordinates.  Default value is the stored x-coordinates.</li>
-<li><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – (N, 3) shaped array of disregistry vectors at each x-coordinate.
-Default value is the stored disregistry values.</li>
+<div><p>E_surface = Σ_j β_lj / 4 Σ_i ρ_l[i]² Δx</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – x-coordinates.  Default value is the stored x-coordinates.</p></li>
+<li><p><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – (N, 3) shaped array of disregistry vectors at each x-coordinate.
+Default value is the stored disregistry values.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The surface energy for the dislocation.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The surface energy for the dislocation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="atomman.defect.SDVPN.tau">
-<code class="descname">tau</code><a class="headerlink" href="#atomman.defect.SDVPN.tau" title="Permalink to this definition">¶</a></dt>
-<dd><p>The applied stress state.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.ndarray</td>
-</tr>
-</tbody>
-</table>
+<em class="property">property </em><code class="sig-name descname">tau</code><a class="headerlink" href="#atomman.defect.SDVPN.tau" title="Permalink to this definition">¶</a></dt>
+<dd><p>The applied 3x3 stress tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.defect.SDVPN.total_energy">
-<code class="descname">total_energy</code><span class="sig-paren">(</span><em>x=None</em>, <em>disregistry=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.total_energy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">total_energy</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">disregistry=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.total_energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the total energy for the dislocation.</p>
 <blockquote>
-<div>E_total = E_elastic + E_misfit + E_stress + E_surface + E_nonlocal</div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – x-coordinates.  Default value is the stored x-coordinates.</li>
-<li><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – (N, 3) shaped array of disregistry vectors at each x-coordinate.
-Default value is the stored disregistry values.</li>
+<div><p>E_total = E_elastic + E_misfit + E_stress + E_surface + E_nonlocal</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – x-coordinates.  Default value is the stored x-coordinates.</p></li>
+<li><p><strong>disregistry</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – (N, 3) shaped array of disregistry vectors at each x-coordinate.
+Default value is the stored disregistry values.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The total energy for the dislocation.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The total energy for the dislocation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
+<dt id="atomman.defect.SDVPN.transform">
+<em class="property">property </em><code class="sig-name descname">transform</code><a class="headerlink" href="#atomman.defect.SDVPN.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transformation matrix from standard crystal setting to dislocation solution setting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="atomman.defect.SDVPN.x">
-<code class="descname">x</code><a class="headerlink" href="#atomman.defect.SDVPN.x" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">x</code><a class="headerlink" href="#atomman.defect.SDVPN.x" title="Permalink to this definition">¶</a></dt>
 <dd><p>The x coordinates.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">numpy.ndarray</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -615,11 +621,11 @@ Default value is the stored disregistry values.</li>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="atomman.defect.IsotropicVolterraDislocation.html"
-                        title="previous chapter">IsotropicVolterraDislocation</a></p>
+  <p class="topless"><a href="atomman.defect.DifferentialDisplacement.html"
+                        title="previous chapter">DifferentialDisplacement</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="atomman.defect.StackingFault.html"
-                        title="next chapter">StackingFault</a></p>
+  <p class="topless"><a href="atomman.plot.html"
+                        title="next chapter">plot</a></p>
         </div>
       </div>
       <div class="clearer"></div>
@@ -634,18 +640,18 @@ Default value is the stored disregistry values.</li>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="atomman.defect.StackingFault.html" title="StackingFault"
+          <a href="atomman.plot.html" title="plot"
              >next</a> |</li>
         <li class="right" >
-          <a href="atomman.defect.IsotropicVolterraDislocation.html" title="IsotropicVolterraDislocation"
+          <a href="atomman.defect.DifferentialDisplacement.html" title="DifferentialDisplacement"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="atomman.defect.html" >defect</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

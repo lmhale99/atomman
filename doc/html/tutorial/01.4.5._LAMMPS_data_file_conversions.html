@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: LAMMPS data file conversions &#8212; atomman 1.3.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Introduction to atomman: LAMMPS data file conversions &#8212; atomman 1.3.2 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,6 +12,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="01.4.4._table_conversions.html" title="Introduction to atomman: table conversions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,16 +50,16 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput,
-div.nbinput div.prompt,
-div.nbinput div.input_area,
-div.nbinput div[class*=highlight],
-div.nbinput div[class*=highlight] pre,
-div.nboutput,
-div.nbinput div.prompt,
-div.nbinput div.output_area,
-div.nboutput div[class*=highlight],
-div.nboutput div[class*=highlight] pre {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
     background: none;
     border: none;
     padding: 0 0;
@@ -69,13 +68,13 @@ div.nboutput div[class*=highlight] pre {
 }
 
 /* avoid gaps between output lines */
-div.nboutput div[class*=highlight] pre {
+div.nboutput.container div[class*=highlight] pre {
     line-height: normal;
 }
 
 /* input/output containers */
-div.nbinput,
-div.nboutput {
+div.nbinput.container,
+div.nboutput.container {
     display: -webkit-flex;
     display: flex;
     align-items: flex-start;
@@ -83,92 +82,91 @@ div.nboutput {
     width: 100%;
 }
 @media (max-width: 540px) {
-    div.nbinput,
-    div.nboutput {
+    div.nbinput.container,
+    div.nboutput.container {
         flex-direction: column;
     }
 }
 
 /* input container */
-div.nbinput {
+div.nbinput.container {
     padding-top: 5px;
 }
 
 /* last container */
-div.nblast {
+div.nblast.container {
     padding-bottom: 5px;
 }
 
 /* input prompt */
-div.nbinput div.prompt pre {
+div.nbinput.container div.prompt pre {
     color: #307FC1;
 }
 
 /* output prompt */
-div.nboutput div.prompt pre {
+div.nboutput.container div.prompt pre {
     color: #BF5B3D;
 }
 
 /* all prompts */
-div.nbinput div.prompt,
-div.nboutput div.prompt {
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
     min-width: 7ex;
-    padding-top: 0.4em;
-    padding-right: 0.4em;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
     text-align: right;
     flex: 0;
 }
 @media (max-width: 540px) {
-    div.nbinput div.prompt,
-    div.nboutput div.prompt {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
         text-align: left;
         padding: 0.4em;
     }
-    div.nboutput div.prompt.empty {
+    div.nboutput.container div.prompt.empty {
         padding: 0;
     }
 }
 
 /* disable scrollbars on prompts */
-div.nbinput div.prompt pre,
-div.nboutput div.prompt pre {
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
     overflow: hidden;
 }
 
 /* input/output area */
-div.nbinput div.input_area,
-div.nboutput div.output_area {
-    padding: 0.4em;
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
     -webkit-flex: 1;
     flex: 1;
     overflow: auto;
 }
 @media (max-width: 540px) {
-    div.nbinput div.input_area,
-    div.nboutput div.output_area {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
         width: 100%;
     }
 }
 
 /* input area */
-div.nbinput div.input_area {
+div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
     background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
-div.nboutput div[class*=MathJax] {
+div.nboutput.container div[class*=MathJax] {
     text-align: left !important;
 }
 
 /* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput div.math p {
+div.nboutput.container div.math p {
     text-align: left;
 }
 
 /* standard error */
-div.nboutput div.output_area.stderr {
+div.nboutput.container div.output_area.stderr {
     background: #fdd;
 }
 
@@ -211,6 +209,27 @@ div.nboutput div.output_area.stderr {
 
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
 
 /* Some additional styling taken form the Jupyter notebook CSS */
 div.rendered_html table {
@@ -255,26 +274,28 @@ div.rendered_html tbody tr:hover {
 <p>The atom_data format is the atomic data files used by LAMMPS for importing initial configurations. Currently, atomman offers partial support for the atom_data format based on atomman’s core features. See the <a class="reference external" href="https://lammps.sandia.gov/doc/read_data.html">LAMMPS documentation</a> for more details on the format.</p>
 <p>The supported atom_data fields are</p>
 <ul class="simple">
-<li>Header sections:<ul>
-<li><strong>atoms</strong>: number of atoms. Required during load, always listed during dump.</li>
-<li><strong>atom types</strong>: number of atom types. Required during load if Masses is included, always listed during dump.</li>
-<li><strong>xlo xhi</strong>: simulation box boundaries in x dimension. Required during load, always listed during dump.</li>
-<li><strong>ylo yhi</strong>: simulation box boundaries in y dimension. Required during load, always listed during dump.</li>
-<li><strong>zlo zhi</strong>: simulation box boundaries in z dimension. Required during load, always listed during dump.</li>
-<li><strong>xy xz yz</strong>: simulation box tilt factors for triclinic system. Optional during load, listed during dump only if the tilt factors have non-zero values.</li>
+<li><p>Header sections:</p>
+<ul>
+<li><p><strong>atoms</strong>: number of atoms. Required during load, always listed during dump.</p></li>
+<li><p><strong>atom types</strong>: number of atom types. Required during load if Masses is included, always listed during dump.</p></li>
+<li><p><strong>xlo xhi</strong>: simulation box boundaries in x dimension. Required during load, always listed during dump.</p></li>
+<li><p><strong>ylo yhi</strong>: simulation box boundaries in y dimension. Required during load, always listed during dump.</p></li>
+<li><p><strong>zlo zhi</strong>: simulation box boundaries in z dimension. Required during load, always listed during dump.</p></li>
+<li><p><strong>xy xz yz</strong>: simulation box tilt factors for triclinic system. Optional during load, listed during dump only if the tilt factors have non-zero values.</p></li>
 </ul>
 </li>
-<li>Body sections:<ul>
-<li><strong>Atoms</strong>: lists per-atom properties associated with each atom. The mapping of LAMMPS&lt;-&gt;atomman representations of the per-atom properties can be found in atomman.load.atom_data.atoms_prop_info and atomman.dump.atom_data.atoms_prop_info. Required during load, always listed during dump.</li>
-<li><strong>Velocities</strong>: list per-atom velocity properties associated with each atom. The mapping of LAMMPS&lt;-&gt;atomman representations of the per-atom properties can be found in atomman.load.atom_data.velocities_prop_info and atomman.dump.atom_data.velocities_prop_info. Optional during load, will be listed during dump if ‘velocity’ is set as a per-atom property.</li>
-<li><strong>Masses</strong>: masses per each atom type. Optional during load, where values are saved to system.masses. As for dump, the Masses section is never included because atomman.lammps.Potential generates LAMMPS mass input command lines. See Section 3.4 below for more details.</li>
+<li><p>Body sections:</p>
+<ul>
+<li><p><strong>Atoms</strong>: lists per-atom properties associated with each atom. The mapping of LAMMPS&lt;-&gt;atomman representations of the per-atom properties can be found in atomman.load.atom_data.atoms_prop_info and atomman.dump.atom_data.atoms_prop_info. Required during load, always listed during dump.</p></li>
+<li><p><strong>Velocities</strong>: list per-atom velocity properties associated with each atom. The mapping of LAMMPS&lt;-&gt;atomman representations of the per-atom properties can be found in atomman.load.atom_data.velocities_prop_info and atomman.dump.atom_data.velocities_prop_info. Optional during load, will be listed during dump if ‘velocity’ is set as a per-atom property.</p></li>
+<li><p><strong>Masses</strong>: masses per each atom type. Optional during load, where values are saved to system.masses. As for dump, the Masses section is never included because atomman.lammps.Potential generates LAMMPS mass input command lines. See Section 3.4 below for more details.</p></li>
 </ul>
 </li>
 </ul>
 <p>Notes on ignored fields:</p>
 <ul class="simple">
-<li>The <strong>Pair Coeffs</strong> and <strong>PairIJ Coeffs</strong> fields are ignored as potential parameters are handled with the atomman.lammps.Potential class.</li>
-<li>Support for <strong>bonds, angles, dihedrals, impropers, ellipsoids, lines, triangles,</strong> and <strong>bodies</strong> would require defining how to represent these as objects in atomman. Extending support is possible, but only if there is enough interest and help from experts of these data types.</li>
+<li><p>The <strong>Pair Coeffs</strong> and <strong>PairIJ Coeffs</strong> fields are ignored as potential parameters are handled with the atomman.lammps.Potential class.</p></li>
+<li><p>Support for <strong>bonds, angles, dihedrals, impropers, ellipsoids, lines, triangles,</strong> and <strong>bodies</strong> would require defining how to represent these as objects in atomman. Extending support is possible, but only if there is enough interest and help from experts of these data types.</p></li>
 </ul>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
@@ -306,8 +327,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.0
-Notebook executed on 2019-11-05
+atomman version = 1.3.2
+Notebook executed on 2020-04-15
 </pre></div></div>
 </div>
 </div>
@@ -316,21 +337,21 @@ Notebook executed on 2019-11-05
 <p><em>Update version 1.3.0</em>: Support for image flags, Masses, and atom_style values listed in the data file are added. Errors returned by the method are updated to be more meaningful.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>data</strong> (<em>str or file-like object</em>) The atom data content to read. Can be str content, path name, or open file-like object.</li>
-<li><strong>pbc</strong> (<em>list of bool</em>) Three boolean values indicating which System directions are periodic. Default value is (True, True, True).</li>
-<li><strong>symbols</strong> (<em>tuple, optional</em>) Allows the list of element symbols to be assigned during loading.</li>
-<li><strong>atom_style</strong> (<em>str, optional</em>) The LAMMPS atom_style option associated with the data file. Optional as the data can list this value in a comment in the Atoms section header. If not given and not found in data, the default value of ‘atomic’ is used.</li>
-<li><strong>units</strong> (<em>str, optional</em>) The LAMMPS units option associated with the data file. Default value is ‘metal’.</li>
+<li><p><strong>data</strong> (<em>str or file-like object</em>) The atom data content to read. Can be str content, path name, or open file-like object.</p></li>
+<li><p><strong>pbc</strong> (<em>list of bool</em>) Three boolean values indicating which System directions are periodic. Default value is (True, True, True).</p></li>
+<li><p><strong>symbols</strong> (<em>tuple, optional</em>) Allows the list of element symbols to be assigned during loading.</p></li>
+<li><p><strong>atom_style</strong> (<em>str, optional</em>) The LAMMPS atom_style option associated with the data file. Optional as the data can list this value in a comment in the Atoms section header. If not given and not found in data, the default value of ‘atomic’ is used.</p></li>
+<li><p><strong>units</strong> (<em>str, optional</em>) The LAMMPS units option associated with the data file. Default value is ‘metal’.</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li>(<em>atomman.System</em>) The corresponding system. Note all property values will be automatically converted to atomman.unitconvert’s working units.</li>
+<li><p>(<em>atomman.System</em>) The corresponding system. Note all property values will be automatically converted to atomman.unitconvert’s working units.</p></li>
 </ul>
 <p>Raises</p>
 <ul class="simple">
-<li>(<em>FileNotFoundError</em>) If data is (likely) a file name and no matching file is found.</li>
-<li>(<em>FileFormatError</em>) If required content fields not found.</li>
-<li>(<em>ValueError</em>) If atom_style is both given as a parameter and found in data, but are not the same</li>
+<li><p>(<em>FileNotFoundError</em>) If data is (likely) a file name and no matching file is found.</p></li>
+<li><p>(<em>FileFormatError</em>) If required content fields not found.</p></li>
+<li><p>(<em>ValueError</em>) If atom_style is both given as a parameter and found in data, but are not the same</p></li>
 </ul>
 <div class="section" id="2.1-Basic-example">
 <h3>2.1 Basic example<a class="headerlink" href="#2.1-Basic-example" title="Permalink to this headline">¶</a></h3>
@@ -570,24 +591,24 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <p><em>Updated version 1.3.0</em>: Parameters natypes, potential, and return_pair_info are added to provide better integration and compatibility across potentials with different pair_styles.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>f</strong> (<em>str or file-like object, optional</em>) File path or file-like object to write the content to. If not given, then the content is returned as a str.</li>
-<li><strong>atom_style</strong> (<em>str, optional</em>) The LAMMPS atom_style option associated with the data file. If neither atom_style or potential is given, will set atom_style to ‘atomic’.</li>
-<li><strong>units</strong> (<em>str, optional</em>) The LAMMPS units option associated with the data file. If neitherunits or potential is given, will set units ‘metal’.</li>
-<li><strong>natypes</strong> (<em>int, optional</em>) Allows the natypes value to be manually changed. This is needed if natypes needs to be greater than the current number of atypes. If neither natypes or potential is given, will use system.natypes.</li>
-<li><strong>potential</strong> (<em>atomman.lammps.Potential, optional</em>) Potential-specific values of atom_style, units, and natypes can be extracted from a Potential object. If both potential and any of the individual values are given, the individual values will be used.</li>
-<li><strong>float_format</strong> (<em>str, optional</em>) c-style formatting string for floating point values. Default value is ‘%.13f’.</li>
-<li><strong>return_info</strong> (<em>bool, optional</em>) Indicates if the LAMMPS command lines associated with reading in the file are to be returned as a str. Default value is True.</li>
-<li><strong>return_pair_info</strong> (<em>bool, optional</em>) Indicates if the LAMMPS command lines associated with setting mass, pair_style and pair_coeff are included in the returned info. If True, potential must be given and return_info must be True. Default value is False.</li>
-<li><strong>safecopy</strong> (<em>bool, optional</em>) The LAMMPS data format requires all atoms to be inside box bounds, i.e. “wrapped”. If safecopy is True then a copy of the system is made to keep the original unwrapped. Default value is False.</li>
+<li><p><strong>f</strong> (<em>str or file-like object, optional</em>) File path or file-like object to write the content to. If not given, then the content is returned as a str.</p></li>
+<li><p><strong>atom_style</strong> (<em>str, optional</em>) The LAMMPS atom_style option associated with the data file. If neither atom_style or potential is given, will set atom_style to ‘atomic’.</p></li>
+<li><p><strong>units</strong> (<em>str, optional</em>) The LAMMPS units option associated with the data file. If neitherunits or potential is given, will set units ‘metal’.</p></li>
+<li><p><strong>natypes</strong> (<em>int, optional</em>) Allows the natypes value to be manually changed. This is needed if natypes needs to be greater than the current number of atypes. If neither natypes or potential is given, will use system.natypes.</p></li>
+<li><p><strong>potential</strong> (<em>atomman.lammps.Potential, optional</em>) Potential-specific values of atom_style, units, and natypes can be extracted from a Potential object. If both potential and any of the individual values are given, the individual values will be used.</p></li>
+<li><p><strong>float_format</strong> (<em>str, optional</em>) c-style formatting string for floating point values. Default value is ‘%.13f’.</p></li>
+<li><p><strong>return_info</strong> (<em>bool, optional</em>) Indicates if the LAMMPS command lines associated with reading in the file are to be returned as a str. Default value is True.</p></li>
+<li><p><strong>return_pair_info</strong> (<em>bool, optional</em>) Indicates if the LAMMPS command lines associated with setting mass, pair_style and pair_coeff are included in the returned info. If True, potential must be given and return_info must be True. Default value is False.</p></li>
+<li><p><strong>safecopy</strong> (<em>bool, optional</em>) The LAMMPS data format requires all atoms to be inside box bounds, i.e. “wrapped”. If safecopy is True then a copy of the system is made to keep the original unwrapped. Default value is False.</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li><strong>content</strong> (<em>str, optional</em>) The data file contents. Returned if f is not given.</li>
-<li><strong>read_info</strong> (<em>str, optional</em>) The LAMMPS input command lines to read the created data file in. Returned if return_info is True. If return_pair_info is also True and potential is given, the LAMMPS input command lines for the potential are also included.</li>
+<li><p><strong>content</strong> (<em>str, optional</em>) The data file contents. Returned if f is not given.</p></li>
+<li><p><strong>read_info</strong> (<em>str, optional</em>) The LAMMPS input command lines to read the created data file in. Returned if return_info is True. If return_pair_info is also True and potential is given, the LAMMPS input command lines for the potential are also included.</p></li>
 </ul>
 <p>Raises</p>
 <ul class="simple">
-<li>(<em>ValueError</em>) If return_pair_info is True and return_info is False or potential is not given.</li>
+<li><p>(<em>ValueError</em>) If return_pair_info is True and return_info is False or potential is not given.</p></li>
 </ul>
 <div class="section" id="3.1-Basic-example">
 <h3>3.1 Basic example<a class="headerlink" href="#3.1-Basic-example" title="Permalink to this headline">¶</a></h3>
@@ -833,9 +854,9 @@ pair_coeff * * FeDemo.eam.alloy Fe
 <p>The Masses section is not included in the generated data file because atomman specifies mass values by creating LAMMPS mass command lines. This allows for default mass values to be defined based on the chosen potential’s symbols/elements. The mass command lines can be obtained using either Potential.pair_style(), or as described in the last section.</p>
 <p>The masses that are listed in the generated mass command lines are selected according to the following order of precedence</p>
 <ol class="arabic simple">
-<li>Any values of System.masses that are not None.</li>
-<li>The value of mass specified in a Potential data model for the atom type’s symbol.</li>
-<li>The standard reference mass for the element associated with the atom type’s symbol.</li>
+<li><p>Any values of System.masses that are not None.</p></li>
+<li><p>The value of mass specified in a Potential data model for the atom type’s symbol.</p></li>
+<li><p>The standard reference mass for the element associated with the atom type’s symbol.</p></li>
 </ol>
 <p>In the previous example, the mass listed was taken as the standard reference value of Fe: 55.845. Some potentials define specific mass values to use, which can be listed in the data model on a per model basis.</p>
 <div class="nbinput nblast docutils container">
@@ -1006,12 +1027,12 @@ pair_coeff * * FeDemo.eam.alloy Fe
         <li class="right" >
           <a href="01.4.4._table_conversions.html" title="Introduction to atomman: table conversions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

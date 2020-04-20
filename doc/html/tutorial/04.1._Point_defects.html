@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Introduction to atomman: Point defect generation &#8212; atomman 1.3.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Introduction to atomman: Point defect generation &#8212; atomman 1.3.2 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,6 +12,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="04._Defect_creation_and_analysis.html" title="Introduction to atomman: Defect creation and analysis"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,16 +50,16 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput,
-div.nbinput div.prompt,
-div.nbinput div.input_area,
-div.nbinput div[class*=highlight],
-div.nbinput div[class*=highlight] pre,
-div.nboutput,
-div.nbinput div.prompt,
-div.nbinput div.output_area,
-div.nboutput div[class*=highlight],
-div.nboutput div[class*=highlight] pre {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
     background: none;
     border: none;
     padding: 0 0;
@@ -69,13 +68,13 @@ div.nboutput div[class*=highlight] pre {
 }
 
 /* avoid gaps between output lines */
-div.nboutput div[class*=highlight] pre {
+div.nboutput.container div[class*=highlight] pre {
     line-height: normal;
 }
 
 /* input/output containers */
-div.nbinput,
-div.nboutput {
+div.nbinput.container,
+div.nboutput.container {
     display: -webkit-flex;
     display: flex;
     align-items: flex-start;
@@ -83,92 +82,91 @@ div.nboutput {
     width: 100%;
 }
 @media (max-width: 540px) {
-    div.nbinput,
-    div.nboutput {
+    div.nbinput.container,
+    div.nboutput.container {
         flex-direction: column;
     }
 }
 
 /* input container */
-div.nbinput {
+div.nbinput.container {
     padding-top: 5px;
 }
 
 /* last container */
-div.nblast {
+div.nblast.container {
     padding-bottom: 5px;
 }
 
 /* input prompt */
-div.nbinput div.prompt pre {
+div.nbinput.container div.prompt pre {
     color: #307FC1;
 }
 
 /* output prompt */
-div.nboutput div.prompt pre {
+div.nboutput.container div.prompt pre {
     color: #BF5B3D;
 }
 
 /* all prompts */
-div.nbinput div.prompt,
-div.nboutput div.prompt {
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
     min-width: 7ex;
-    padding-top: 0.4em;
-    padding-right: 0.4em;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
     text-align: right;
     flex: 0;
 }
 @media (max-width: 540px) {
-    div.nbinput div.prompt,
-    div.nboutput div.prompt {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
         text-align: left;
         padding: 0.4em;
     }
-    div.nboutput div.prompt.empty {
+    div.nboutput.container div.prompt.empty {
         padding: 0;
     }
 }
 
 /* disable scrollbars on prompts */
-div.nbinput div.prompt pre,
-div.nboutput div.prompt pre {
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
     overflow: hidden;
 }
 
 /* input/output area */
-div.nbinput div.input_area,
-div.nboutput div.output_area {
-    padding: 0.4em;
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
     -webkit-flex: 1;
     flex: 1;
     overflow: auto;
 }
 @media (max-width: 540px) {
-    div.nbinput div.input_area,
-    div.nboutput div.output_area {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
         width: 100%;
     }
 }
 
 /* input area */
-div.nbinput div.input_area {
+div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
     background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
-div.nboutput div[class*=MathJax] {
+div.nboutput.container div[class*=MathJax] {
     text-align: left !important;
 }
 
 /* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput div.math p {
+div.nboutput.container div.math p {
     text-align: left;
 }
 
 /* standard error */
-div.nboutput div.output_area.stderr {
+div.nboutput.container div.output_area.stderr {
     background: #fdd;
 }
 
@@ -211,6 +209,27 @@ div.nboutput div.output_area.stderr {
 
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
 
 /* Some additional styling taken form the Jupyter notebook CSS */
 div.rendered_html table {
@@ -282,8 +301,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.0
-Notebook executed on 2019-11-05
+atomman version = 1.3.2
+Notebook executed on 2020-04-15
 </pre></div></div>
 </div>
 <p>Define 2x2x2 CsCl supercell for testing</p>
@@ -351,7 +370,7 @@ natypes = 2
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
+      <td>0</td>
       <td>1</td>
       <td>0.000</td>
       <td>0.000</td>
@@ -359,7 +378,7 @@ natypes = 2
       <td>-1.0</td>
     </tr>
     <tr>
-      <th>1</th>
+      <td>1</td>
       <td>2</td>
       <td>2.055</td>
       <td>2.055</td>
@@ -367,7 +386,7 @@ natypes = 2
       <td>1.0</td>
     </tr>
     <tr>
-      <th>2</th>
+      <td>2</td>
       <td>1</td>
       <td>4.110</td>
       <td>0.000</td>
@@ -375,7 +394,7 @@ natypes = 2
       <td>-1.0</td>
     </tr>
     <tr>
-      <th>3</th>
+      <td>3</td>
       <td>2</td>
       <td>6.165</td>
       <td>2.055</td>
@@ -383,7 +402,7 @@ natypes = 2
       <td>1.0</td>
     </tr>
     <tr>
-      <th>4</th>
+      <td>4</td>
       <td>1</td>
       <td>0.000</td>
       <td>4.110</td>
@@ -391,7 +410,7 @@ natypes = 2
       <td>-1.0</td>
     </tr>
     <tr>
-      <th>5</th>
+      <td>5</td>
       <td>2</td>
       <td>2.055</td>
       <td>6.165</td>
@@ -399,7 +418,7 @@ natypes = 2
       <td>1.0</td>
     </tr>
     <tr>
-      <th>6</th>
+      <td>6</td>
       <td>1</td>
       <td>4.110</td>
       <td>4.110</td>
@@ -407,7 +426,7 @@ natypes = 2
       <td>-1.0</td>
     </tr>
     <tr>
-      <th>7</th>
+      <td>7</td>
       <td>2</td>
       <td>6.165</td>
       <td>6.165</td>
@@ -415,7 +434,7 @@ natypes = 2
       <td>1.0</td>
     </tr>
     <tr>
-      <th>8</th>
+      <td>8</td>
       <td>1</td>
       <td>0.000</td>
       <td>0.000</td>
@@ -423,7 +442,7 @@ natypes = 2
       <td>-1.0</td>
     </tr>
     <tr>
-      <th>9</th>
+      <td>9</td>
       <td>2</td>
       <td>2.055</td>
       <td>2.055</td>
@@ -431,7 +450,7 @@ natypes = 2
       <td>1.0</td>
     </tr>
     <tr>
-      <th>10</th>
+      <td>10</td>
       <td>1</td>
       <td>4.110</td>
       <td>0.000</td>
@@ -439,7 +458,7 @@ natypes = 2
       <td>-1.0</td>
     </tr>
     <tr>
-      <th>11</th>
+      <td>11</td>
       <td>2</td>
       <td>6.165</td>
       <td>2.055</td>
@@ -447,7 +466,7 @@ natypes = 2
       <td>1.0</td>
     </tr>
     <tr>
-      <th>12</th>
+      <td>12</td>
       <td>1</td>
       <td>0.000</td>
       <td>4.110</td>
@@ -455,7 +474,7 @@ natypes = 2
       <td>-1.0</td>
     </tr>
     <tr>
-      <th>13</th>
+      <td>13</td>
       <td>2</td>
       <td>2.055</td>
       <td>6.165</td>
@@ -463,7 +482,7 @@ natypes = 2
       <td>1.0</td>
     </tr>
     <tr>
-      <th>14</th>
+      <td>14</td>
       <td>1</td>
       <td>4.110</td>
       <td>4.110</td>
@@ -471,7 +490,7 @@ natypes = 2
       <td>-1.0</td>
     </tr>
     <tr>
-      <th>15</th>
+      <td>15</td>
       <td>2</td>
       <td>6.165</td>
       <td>6.165</td>
@@ -487,20 +506,20 @@ natypes = 2
 <h2>2. atomman.defect.vacancy()<a class="headerlink" href="#2.-atomman.defect.vacancy()" title="Permalink to this headline">¶</a></h2>
 <p>Generates a new system by adding a vacancy point defect.</p>
 <ol class="arabic simple">
-<li>Removes the indicated atom from the system</li>
-<li>Adds per-atom property old_id if it doesn’t exist corresponding to the atom ids in the original system.</li>
+<li><p>Removes the indicated atom from the system</p></li>
+<li><p>Adds per-atom property old_id if it doesn’t exist corresponding to the atom ids in the original system.</p></li>
 </ol>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>system</strong> (<em>atomman.System</em>) The base System to add the defect to.</li>
-<li><strong>pos</strong> (<em>array-like object, optional</em>) Position of the atom to be removed. Either pos or ptd_id must be given.</li>
-<li><strong>ptd_id</strong> (<em>int, optional</em>) Id of the atom to be removed. Either pos or ptd_id must be given.</li>
-<li><strong>scale</strong> (<em>bool, optional</em>) Indicates if pos is Cartesian (False) or box-relative (True). Default value is False.</li>
-<li><strong>atol</strong> (<em>float, optional</em>) Absolute tolerance for position-based searching. Default value is 1e-3 angstroms.</li>
+<li><p><strong>system</strong> (<em>atomman.System</em>) The base System to add the defect to.</p></li>
+<li><p><strong>pos</strong> (<em>array-like object, optional</em>) Position of the atom to be removed. Either pos or ptd_id must be given.</p></li>
+<li><p><strong>ptd_id</strong> (<em>int, optional</em>) Id of the atom to be removed. Either pos or ptd_id must be given.</p></li>
+<li><p><strong>scale</strong> (<em>bool, optional</em>) Indicates if pos is Cartesian (False) or box-relative (True). Default value is False.</p></li>
+<li><p><strong>atol</strong> (<em>float, optional</em>) Absolute tolerance for position-based searching. Default value is 1e-3 angstroms.</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li>(<em>atomman.System</em>) A new system with the vacancy added.</li>
+<li><p>(<em>atomman.System</em>) A new system with the vacancy added.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -567,7 +586,7 @@ natypes = 2
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
+      <td>0</td>
       <td>1</td>
       <td>0.000</td>
       <td>0.000</td>
@@ -576,7 +595,7 @@ natypes = 2
       <td>0</td>
     </tr>
     <tr>
-      <th>1</th>
+      <td>1</td>
       <td>2</td>
       <td>2.055</td>
       <td>2.055</td>
@@ -585,7 +604,7 @@ natypes = 2
       <td>1</td>
     </tr>
     <tr>
-      <th>2</th>
+      <td>2</td>
       <td>1</td>
       <td>4.110</td>
       <td>0.000</td>
@@ -594,7 +613,7 @@ natypes = 2
       <td>2</td>
     </tr>
     <tr>
-      <th>3</th>
+      <td>3</td>
       <td>2</td>
       <td>6.165</td>
       <td>2.055</td>
@@ -603,7 +622,7 @@ natypes = 2
       <td>3</td>
     </tr>
     <tr>
-      <th>4</th>
+      <td>4</td>
       <td>1</td>
       <td>0.000</td>
       <td>4.110</td>
@@ -612,7 +631,7 @@ natypes = 2
       <td>4</td>
     </tr>
     <tr>
-      <th>5</th>
+      <td>5</td>
       <td>1</td>
       <td>4.110</td>
       <td>4.110</td>
@@ -621,7 +640,7 @@ natypes = 2
       <td>6</td>
     </tr>
     <tr>
-      <th>6</th>
+      <td>6</td>
       <td>2</td>
       <td>6.165</td>
       <td>6.165</td>
@@ -630,7 +649,7 @@ natypes = 2
       <td>7</td>
     </tr>
     <tr>
-      <th>7</th>
+      <td>7</td>
       <td>1</td>
       <td>0.000</td>
       <td>0.000</td>
@@ -639,7 +658,7 @@ natypes = 2
       <td>8</td>
     </tr>
     <tr>
-      <th>8</th>
+      <td>8</td>
       <td>2</td>
       <td>2.055</td>
       <td>2.055</td>
@@ -648,7 +667,7 @@ natypes = 2
       <td>9</td>
     </tr>
     <tr>
-      <th>9</th>
+      <td>9</td>
       <td>1</td>
       <td>4.110</td>
       <td>0.000</td>
@@ -657,7 +676,7 @@ natypes = 2
       <td>10</td>
     </tr>
     <tr>
-      <th>10</th>
+      <td>10</td>
       <td>2</td>
       <td>6.165</td>
       <td>2.055</td>
@@ -666,7 +685,7 @@ natypes = 2
       <td>11</td>
     </tr>
     <tr>
-      <th>11</th>
+      <td>11</td>
       <td>2</td>
       <td>2.055</td>
       <td>6.165</td>
@@ -675,7 +694,7 @@ natypes = 2
       <td>13</td>
     </tr>
     <tr>
-      <th>12</th>
+      <td>12</td>
       <td>1</td>
       <td>4.110</td>
       <td>4.110</td>
@@ -684,7 +703,7 @@ natypes = 2
       <td>14</td>
     </tr>
     <tr>
-      <th>13</th>
+      <td>13</td>
       <td>2</td>
       <td>6.165</td>
       <td>6.165</td>
@@ -701,21 +720,21 @@ natypes = 2
 <h2>3. atomman.defect.interstitial()<a class="headerlink" href="#3.-atomman.defect.interstitial()" title="Permalink to this headline">¶</a></h2>
 <p>Generates a new system by adding a vacancy point defect.</p>
 <ol class="arabic simple">
-<li>Adds a new atom to the end of the Atoms list.</li>
-<li>Adds per-atom property old_id if it doesn’t exist corresponding to the atom ids in the original system.</li>
-<li>Sets any of the new atom’s per-atom properties to values given as kwargs. Any undefined properties are given zero values except atype, which is set to 1.</li>
+<li><p>Adds a new atom to the end of the Atoms list.</p></li>
+<li><p>Adds per-atom property old_id if it doesn’t exist corresponding to the atom ids in the original system.</p></li>
+<li><p>Sets any of the new atom’s per-atom properties to values given as kwargs. Any undefined properties are given zero values except atype, which is set to 1.</p></li>
 </ol>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>system</strong> (<em>atomman.System</em>) The base System to add the defect to.</li>
-<li><strong>pos</strong> (<em>array-like object</em>) Position of the atom being added.</li>
-<li><strong>scale</strong> (<em>bool, optional</em>) Indicates if pos is Cartesian (False) or box-relative (True). Default value is False.</li>
-<li><strong>atol</strong> (<em>float, optional</em>) Absolute tolerance for position-based searching. Default value is 1e-3 angstroms.</li>
-<li><strong>**kwargs</strong> (<em>any, optional</em>) Keyword arguments corresponding to per-atom property values for the new atom. By default, atype==1 and all other properties are set to be all zeros for the property’s shape.</li>
+<li><p><strong>system</strong> (<em>atomman.System</em>) The base System to add the defect to.</p></li>
+<li><p><strong>pos</strong> (<em>array-like object</em>) Position of the atom being added.</p></li>
+<li><p><strong>scale</strong> (<em>bool, optional</em>) Indicates if pos is Cartesian (False) or box-relative (True). Default value is False.</p></li>
+<li><p><strong>atol</strong> (<em>float, optional</em>) Absolute tolerance for position-based searching. Default value is 1e-3 angstroms.</p></li>
+<li><p><strong>**kwargs</strong> (<em>any, optional</em>) Keyword arguments corresponding to per-atom property values for the new atom. By default, atype==1 and all other properties are set to be all zeros for the property’s shape.</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li>(<em>atomman.System</em>) A new system with the interstitial added.</li>
+<li><p>(<em>atomman.System</em>) A new system with the interstitial added.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -782,7 +801,7 @@ natypes = 2
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
+      <td>0</td>
       <td>1</td>
       <td>0.000</td>
       <td>0.000</td>
@@ -791,7 +810,7 @@ natypes = 2
       <td>0</td>
     </tr>
     <tr>
-      <th>1</th>
+      <td>1</td>
       <td>2</td>
       <td>2.055</td>
       <td>2.055</td>
@@ -800,7 +819,7 @@ natypes = 2
       <td>1</td>
     </tr>
     <tr>
-      <th>2</th>
+      <td>2</td>
       <td>1</td>
       <td>4.110</td>
       <td>0.000</td>
@@ -809,7 +828,7 @@ natypes = 2
       <td>2</td>
     </tr>
     <tr>
-      <th>3</th>
+      <td>3</td>
       <td>2</td>
       <td>6.165</td>
       <td>2.055</td>
@@ -818,7 +837,7 @@ natypes = 2
       <td>3</td>
     </tr>
     <tr>
-      <th>4</th>
+      <td>4</td>
       <td>1</td>
       <td>0.000</td>
       <td>4.110</td>
@@ -827,7 +846,7 @@ natypes = 2
       <td>4</td>
     </tr>
     <tr>
-      <th>5</th>
+      <td>5</td>
       <td>2</td>
       <td>2.055</td>
       <td>6.165</td>
@@ -836,7 +855,7 @@ natypes = 2
       <td>5</td>
     </tr>
     <tr>
-      <th>6</th>
+      <td>6</td>
       <td>1</td>
       <td>4.110</td>
       <td>4.110</td>
@@ -845,7 +864,7 @@ natypes = 2
       <td>6</td>
     </tr>
     <tr>
-      <th>7</th>
+      <td>7</td>
       <td>2</td>
       <td>6.165</td>
       <td>6.165</td>
@@ -854,7 +873,7 @@ natypes = 2
       <td>7</td>
     </tr>
     <tr>
-      <th>8</th>
+      <td>8</td>
       <td>1</td>
       <td>0.000</td>
       <td>0.000</td>
@@ -863,7 +882,7 @@ natypes = 2
       <td>8</td>
     </tr>
     <tr>
-      <th>9</th>
+      <td>9</td>
       <td>2</td>
       <td>2.055</td>
       <td>2.055</td>
@@ -872,7 +891,7 @@ natypes = 2
       <td>9</td>
     </tr>
     <tr>
-      <th>10</th>
+      <td>10</td>
       <td>1</td>
       <td>4.110</td>
       <td>0.000</td>
@@ -881,7 +900,7 @@ natypes = 2
       <td>10</td>
     </tr>
     <tr>
-      <th>11</th>
+      <td>11</td>
       <td>2</td>
       <td>6.165</td>
       <td>2.055</td>
@@ -890,7 +909,7 @@ natypes = 2
       <td>11</td>
     </tr>
     <tr>
-      <th>12</th>
+      <td>12</td>
       <td>1</td>
       <td>0.000</td>
       <td>4.110</td>
@@ -899,7 +918,7 @@ natypes = 2
       <td>12</td>
     </tr>
     <tr>
-      <th>13</th>
+      <td>13</td>
       <td>2</td>
       <td>2.055</td>
       <td>6.165</td>
@@ -908,7 +927,7 @@ natypes = 2
       <td>13</td>
     </tr>
     <tr>
-      <th>14</th>
+      <td>14</td>
       <td>1</td>
       <td>4.110</td>
       <td>4.110</td>
@@ -917,7 +936,7 @@ natypes = 2
       <td>14</td>
     </tr>
     <tr>
-      <th>15</th>
+      <td>15</td>
       <td>2</td>
       <td>6.165</td>
       <td>6.165</td>
@@ -926,7 +945,7 @@ natypes = 2
       <td>15</td>
     </tr>
     <tr>
-      <th>16</th>
+      <td>16</td>
       <td>1</td>
       <td>1.515</td>
       <td>1.515</td>
@@ -935,7 +954,7 @@ natypes = 2
       <td>16</td>
     </tr>
     <tr>
-      <th>17</th>
+      <td>17</td>
       <td>2</td>
       <td>1.515</td>
       <td>4.545</td>
@@ -952,23 +971,23 @@ natypes = 2
 <h2>4. atomman.defect.substitutional()<a class="headerlink" href="#4.-atomman.defect.substitutional()" title="Permalink to this headline">¶</a></h2>
 <p>Generates a new system by adding a substitutional point defect.</p>
 <ol class="arabic simple">
-<li>Moves the indicated atom to the end of the list and changes its atype to the value given.</li>
-<li>Adds per-atom property old_id if it doesn’t exist corresponding to the atom ids in the original system.</li>
-<li>Sets any of the moved atom’s per-atom properties to values given as kwargs. Any undefined properties are left unchanged.</li>
+<li><p>Moves the indicated atom to the end of the list and changes its atype to the value given.</p></li>
+<li><p>Adds per-atom property old_id if it doesn’t exist corresponding to the atom ids in the original system.</p></li>
+<li><p>Sets any of the moved atom’s per-atom properties to values given as kwargs. Any undefined properties are left unchanged.</p></li>
 </ol>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>system</strong> (<em>atomman.System</em>) The base System to add the defect to.</li>
-<li><strong>pos</strong> (<em>array-like object, optional</em>) Position of the atom being modified. Either pos or ptd_id must be given.</li>
-<li><strong>ptd_id</strong> (<em>int, optional</em>) Id of the atom to be modified. Either pos or ptd_id must be given.</li>
-<li><strong>atype</strong> (<em>int, optional</em>) Integer atomic type to change the identified atom to. Must be different than the atom’s current id. Default value is 1.</li>
-<li><strong>scale</strong> (<em>bool, optional</em>) Indicates if pos is Cartesian (False) or box-relative (True). Default value is False.</li>
-<li><strong>atol</strong> (<em>float, optional</em>) Absolute tolerance for position-based searching. Default value is 1e-3 angstroms.</li>
-<li><strong>**kwargs</strong> (<em>any, optional</em>) Keyword arguments corresponding to per-atom property values for the modified atom. By default, all properties (except atype) are left unchanged.</li>
+<li><p><strong>system</strong> (<em>atomman.System</em>) The base System to add the defect to.</p></li>
+<li><p><strong>pos</strong> (<em>array-like object, optional</em>) Position of the atom being modified. Either pos or ptd_id must be given.</p></li>
+<li><p><strong>ptd_id</strong> (<em>int, optional</em>) Id of the atom to be modified. Either pos or ptd_id must be given.</p></li>
+<li><p><strong>atype</strong> (<em>int, optional</em>) Integer atomic type to change the identified atom to. Must be different than the atom’s current id. Default value is 1.</p></li>
+<li><p><strong>scale</strong> (<em>bool, optional</em>) Indicates if pos is Cartesian (False) or box-relative (True). Default value is False.</p></li>
+<li><p><strong>atol</strong> (<em>float, optional</em>) Absolute tolerance for position-based searching. Default value is 1e-3 angstroms.</p></li>
+<li><p><strong>**kwargs</strong> (<em>any, optional</em>) Keyword arguments corresponding to per-atom property values for the modified atom. By default, all properties (except atype) are left unchanged.</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li>(<em>atomman.System</em>) A new system with the substitutional added.</li>
+<li><p>(<em>atomman.System</em>) A new system with the substitutional added.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -1035,7 +1054,7 @@ natypes = 3
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
+      <td>0</td>
       <td>1</td>
       <td>0.000</td>
       <td>0.000</td>
@@ -1044,7 +1063,7 @@ natypes = 3
       <td>0</td>
     </tr>
     <tr>
-      <th>1</th>
+      <td>1</td>
       <td>1</td>
       <td>4.110</td>
       <td>0.000</td>
@@ -1053,7 +1072,7 @@ natypes = 3
       <td>2</td>
     </tr>
     <tr>
-      <th>2</th>
+      <td>2</td>
       <td>2</td>
       <td>6.165</td>
       <td>2.055</td>
@@ -1062,7 +1081,7 @@ natypes = 3
       <td>3</td>
     </tr>
     <tr>
-      <th>3</th>
+      <td>3</td>
       <td>1</td>
       <td>0.000</td>
       <td>4.110</td>
@@ -1071,7 +1090,7 @@ natypes = 3
       <td>4</td>
     </tr>
     <tr>
-      <th>4</th>
+      <td>4</td>
       <td>2</td>
       <td>2.055</td>
       <td>6.165</td>
@@ -1080,7 +1099,7 @@ natypes = 3
       <td>5</td>
     </tr>
     <tr>
-      <th>5</th>
+      <td>5</td>
       <td>1</td>
       <td>4.110</td>
       <td>4.110</td>
@@ -1089,7 +1108,7 @@ natypes = 3
       <td>6</td>
     </tr>
     <tr>
-      <th>6</th>
+      <td>6</td>
       <td>2</td>
       <td>6.165</td>
       <td>6.165</td>
@@ -1098,7 +1117,7 @@ natypes = 3
       <td>7</td>
     </tr>
     <tr>
-      <th>7</th>
+      <td>7</td>
       <td>1</td>
       <td>0.000</td>
       <td>0.000</td>
@@ -1107,7 +1126,7 @@ natypes = 3
       <td>8</td>
     </tr>
     <tr>
-      <th>8</th>
+      <td>8</td>
       <td>2</td>
       <td>2.055</td>
       <td>2.055</td>
@@ -1116,7 +1135,7 @@ natypes = 3
       <td>9</td>
     </tr>
     <tr>
-      <th>9</th>
+      <td>9</td>
       <td>1</td>
       <td>4.110</td>
       <td>0.000</td>
@@ -1125,7 +1144,7 @@ natypes = 3
       <td>10</td>
     </tr>
     <tr>
-      <th>10</th>
+      <td>10</td>
       <td>2</td>
       <td>6.165</td>
       <td>2.055</td>
@@ -1134,7 +1153,7 @@ natypes = 3
       <td>11</td>
     </tr>
     <tr>
-      <th>11</th>
+      <td>11</td>
       <td>2</td>
       <td>2.055</td>
       <td>6.165</td>
@@ -1143,7 +1162,7 @@ natypes = 3
       <td>13</td>
     </tr>
     <tr>
-      <th>12</th>
+      <td>12</td>
       <td>1</td>
       <td>4.110</td>
       <td>4.110</td>
@@ -1152,7 +1171,7 @@ natypes = 3
       <td>14</td>
     </tr>
     <tr>
-      <th>13</th>
+      <td>13</td>
       <td>2</td>
       <td>6.165</td>
       <td>6.165</td>
@@ -1161,7 +1180,7 @@ natypes = 3
       <td>15</td>
     </tr>
     <tr>
-      <th>14</th>
+      <td>14</td>
       <td>3</td>
       <td>2.055</td>
       <td>2.055</td>
@@ -1170,7 +1189,7 @@ natypes = 3
       <td>1</td>
     </tr>
     <tr>
-      <th>15</th>
+      <td>15</td>
       <td>2</td>
       <td>0.000</td>
       <td>4.110</td>
@@ -1187,24 +1206,24 @@ natypes = 3
 <h2>5. atomman.defect.dumbbell()<a class="headerlink" href="#5.-atomman.defect.dumbbell()" title="Permalink to this headline">¶</a></h2>
 <p>Generates a new system by adding a dumbbell interstitial point defect.</p>
 <ol class="arabic simple">
-<li>Copies the indicated atom and moves both the original and copy to the end of the Atoms list.</li>
-<li>Displaces the dumbbell atoms position’s by +-db_vect.</li>
-<li>Adds per-atom property old_id if it doesn’t exist corresponding to the atom ids in the original system.</li>
-<li>Sets any of the new atom’s per-atom properties to values given as kwargs. Any undefined properties are left unchanged.</li>
+<li><p>Copies the indicated atom and moves both the original and copy to the end of the Atoms list.</p></li>
+<li><p>Displaces the dumbbell atoms position’s by +-db_vect.</p></li>
+<li><p>Adds per-atom property old_id if it doesn’t exist corresponding to the atom ids in the original system.</p></li>
+<li><p>Sets any of the new atom’s per-atom properties to values given as kwargs. Any undefined properties are left unchanged.</p></li>
 </ol>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>system</strong> (<em>atomman.System</em>) The base System to add the defect to.</li>
-<li><strong>pos</strong> (<em>array-like object, optional</em>) Position of the atom being modified. Either pos or ptd_id must be given.</li>
-<li><strong>ptd_id</strong> (<em>int, optional</em>) Id of the atom to be modified. Either pos or ptd_id must be given.</li>
-<li><strong>db_vect</strong> (<em>array-like object</em>) Vector shift to apply to the atoms in the dumbbell.</li>
-<li><strong>scale</strong> (<em>bool, optional</em>) Indicates if pos and db_vect are Cartesian (False) or box-relative (True). Default value is False.</li>
-<li><strong>atol</strong> (<em>float, optional</em>) Absolute tolerance for position-based searching. Default value is 1e-3 angstroms.</li>
-<li><strong>**kwargs</strong> (<em>any, optional</em>) Keyword arguments corresponding to per-atom property values for the new atom in the dumbbell. By default, all properties are left unchanged (i.e.&nbsp;same as atom that was copied).</li>
+<li><p><strong>system</strong> (<em>atomman.System</em>) The base System to add the defect to.</p></li>
+<li><p><strong>pos</strong> (<em>array-like object, optional</em>) Position of the atom being modified. Either pos or ptd_id must be given.</p></li>
+<li><p><strong>ptd_id</strong> (<em>int, optional</em>) Id of the atom to be modified. Either pos or ptd_id must be given.</p></li>
+<li><p><strong>db_vect</strong> (<em>array-like object</em>) Vector shift to apply to the atoms in the dumbbell.</p></li>
+<li><p><strong>scale</strong> (<em>bool, optional</em>) Indicates if pos and db_vect are Cartesian (False) or box-relative (True). Default value is False.</p></li>
+<li><p><strong>atol</strong> (<em>float, optional</em>) Absolute tolerance for position-based searching. Default value is 1e-3 angstroms.</p></li>
+<li><p><strong>**kwargs</strong> (<em>any, optional</em>) Keyword arguments corresponding to per-atom property values for the new atom in the dumbbell. By default, all properties are left unchanged (i.e. same as atom that was copied).</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li>(<em>atomman.System</em>) A new system with the dumbbell added.</li>
+<li><p>(<em>atomman.System</em>) A new system with the dumbbell added.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -1268,7 +1287,7 @@ natypes = 2
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
+      <td>0</td>
       <td>1</td>
       <td>0.000</td>
       <td>0.000</td>
@@ -1277,7 +1296,7 @@ natypes = 2
       <td>0</td>
     </tr>
     <tr>
-      <th>1</th>
+      <td>1</td>
       <td>2</td>
       <td>2.055</td>
       <td>2.055</td>
@@ -1286,7 +1305,7 @@ natypes = 2
       <td>1</td>
     </tr>
     <tr>
-      <th>2</th>
+      <td>2</td>
       <td>1</td>
       <td>4.110</td>
       <td>0.000</td>
@@ -1295,7 +1314,7 @@ natypes = 2
       <td>2</td>
     </tr>
     <tr>
-      <th>3</th>
+      <td>3</td>
       <td>2</td>
       <td>6.165</td>
       <td>2.055</td>
@@ -1304,7 +1323,7 @@ natypes = 2
       <td>3</td>
     </tr>
     <tr>
-      <th>4</th>
+      <td>4</td>
       <td>1</td>
       <td>0.000</td>
       <td>4.110</td>
@@ -1313,7 +1332,7 @@ natypes = 2
       <td>4</td>
     </tr>
     <tr>
-      <th>5</th>
+      <td>5</td>
       <td>1</td>
       <td>4.110</td>
       <td>4.110</td>
@@ -1322,7 +1341,7 @@ natypes = 2
       <td>6</td>
     </tr>
     <tr>
-      <th>6</th>
+      <td>6</td>
       <td>2</td>
       <td>6.165</td>
       <td>6.165</td>
@@ -1331,7 +1350,7 @@ natypes = 2
       <td>7</td>
     </tr>
     <tr>
-      <th>7</th>
+      <td>7</td>
       <td>1</td>
       <td>0.000</td>
       <td>0.000</td>
@@ -1340,7 +1359,7 @@ natypes = 2
       <td>8</td>
     </tr>
     <tr>
-      <th>8</th>
+      <td>8</td>
       <td>2</td>
       <td>2.055</td>
       <td>2.055</td>
@@ -1349,7 +1368,7 @@ natypes = 2
       <td>9</td>
     </tr>
     <tr>
-      <th>9</th>
+      <td>9</td>
       <td>1</td>
       <td>4.110</td>
       <td>0.000</td>
@@ -1358,7 +1377,7 @@ natypes = 2
       <td>10</td>
     </tr>
     <tr>
-      <th>10</th>
+      <td>10</td>
       <td>2</td>
       <td>6.165</td>
       <td>2.055</td>
@@ -1367,7 +1386,7 @@ natypes = 2
       <td>11</td>
     </tr>
     <tr>
-      <th>11</th>
+      <td>11</td>
       <td>1</td>
       <td>0.000</td>
       <td>4.110</td>
@@ -1376,7 +1395,7 @@ natypes = 2
       <td>12</td>
     </tr>
     <tr>
-      <th>12</th>
+      <td>12</td>
       <td>2</td>
       <td>2.055</td>
       <td>6.165</td>
@@ -1385,7 +1404,7 @@ natypes = 2
       <td>13</td>
     </tr>
     <tr>
-      <th>13</th>
+      <td>13</td>
       <td>1</td>
       <td>4.110</td>
       <td>4.110</td>
@@ -1394,7 +1413,7 @@ natypes = 2
       <td>14</td>
     </tr>
     <tr>
-      <th>14</th>
+      <td>14</td>
       <td>2</td>
       <td>6.165</td>
       <td>6.165</td>
@@ -1403,7 +1422,7 @@ natypes = 2
       <td>15</td>
     </tr>
     <tr>
-      <th>15</th>
+      <td>15</td>
       <td>2</td>
       <td>1.555</td>
       <td>5.665</td>
@@ -1412,7 +1431,7 @@ natypes = 2
       <td>5</td>
     </tr>
     <tr>
-      <th>16</th>
+      <td>16</td>
       <td>2</td>
       <td>2.555</td>
       <td>6.665</td>
@@ -1448,29 +1467,30 @@ natypes = 2
 <p>Generates a new System where a point defect has been inserted. Provides a common interface for the vacancy(), interstitial(), substitutional() and dumbbell() functions.</p>
 <p>Parameters</p>
 <ul class="simple">
-<li><strong>system</strong> (<em>atomman.System</em>) The base System to add the defect to.</li>
-<li><strong>ptd_type</strong> (<em>str, optional</em>) Key indicating which type of defect to add. Default value is ‘v’:<ul>
-<li>‘v’ : vacancy.</li>
-<li>‘i’ : positional interstitial.</li>
-<li>‘s’ : substitutional.</li>
-<li>‘db’ : dumbbell interstitial.</li>
+<li><p><strong>system</strong> (<em>atomman.System</em>) The base System to add the defect to.</p></li>
+<li><p><strong>ptd_type</strong> (<em>str, optional</em>) Key indicating which type of defect to add. Default value is ‘v’:</p>
+<ul>
+<li><p>‘v’ : vacancy.</p></li>
+<li><p>‘i’ : positional interstitial.</p></li>
+<li><p>‘s’ : substitutional.</p></li>
+<li><p>‘db’ : dumbbell interstitial.</p></li>
 </ul>
 </li>
-<li><strong>pos</strong> (<em>array-like object, optional</em>) Position for adding the defect atom (all styles).</li>
-<li><strong>ptd_id</strong> (<em>int, optional</em>) Atom id where defect is added. Alternative to using pos (‘v’, ‘s’, ‘db’ styles).</li>
-<li><strong>db_vect</strong> (<em>array-like object, optional</em>) Vector associated with the dumbbell interstitial (‘db’ style).</li>
-<li><strong>scale</strong> (<em>bool, optional</em>) Indicates if pos and db_vect are Cartesian (False) or box-relative (True). Default value is False.</li>
-<li><strong>atol</strong> (<em>float, optional</em>) Absolute tolerance for position-based searching. Default value is 1e-3 angstroms.</li>
-<li><strong>**kwargs</strong> (<em>any, optional</em>) Keyword arguments corresponding to per-atom property values for the new/modified atom (‘i’, ‘s’, ‘db’ styles).</li>
+<li><p><strong>pos</strong> (<em>array-like object, optional</em>) Position for adding the defect atom (all styles).</p></li>
+<li><p><strong>ptd_id</strong> (<em>int, optional</em>) Atom id where defect is added. Alternative to using pos (‘v’, ‘s’, ‘db’ styles).</p></li>
+<li><p><strong>db_vect</strong> (<em>array-like object, optional</em>) Vector associated with the dumbbell interstitial (‘db’ style).</p></li>
+<li><p><strong>scale</strong> (<em>bool, optional</em>) Indicates if pos and db_vect are Cartesian (False) or box-relative (True). Default value is False.</p></li>
+<li><p><strong>atol</strong> (<em>float, optional</em>) Absolute tolerance for position-based searching. Default value is 1e-3 angstroms.</p></li>
+<li><p><strong>**kwargs</strong> (<em>any, optional</em>) Keyword arguments corresponding to per-atom property values for the new/modified atom (‘i’, ‘s’, ‘db’ styles).</p></li>
 </ul>
 <p>Raises</p>
 <ul class="simple">
-<li>(<em>AssertionError</em>) If parameters are given for styles that don’t allow them.</li>
-<li>(<em>ValueError</em>) If an invalid ptd_type is given.</li>
+<li><p>(<em>AssertionError</em>) If parameters are given for styles that don’t allow them.</p></li>
+<li><p>(<em>ValueError</em>) If an invalid ptd_type is given.</p></li>
 </ul>
 <p>Returns</p>
 <ul class="simple">
-<li>(<em>atomman.System</em>) A new system containing the defect.</li>
+<li><p>(<em>atomman.System</em>) A new system containing the defect.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -1539,7 +1559,7 @@ natypes = 3
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
+      <td>0</td>
       <td>1</td>
       <td>0.000</td>
       <td>0.000</td>
@@ -1548,7 +1568,7 @@ natypes = 3
       <td>0</td>
     </tr>
     <tr>
-      <th>1</th>
+      <td>1</td>
       <td>2</td>
       <td>2.055</td>
       <td>2.055</td>
@@ -1557,7 +1577,7 @@ natypes = 3
       <td>1</td>
     </tr>
     <tr>
-      <th>2</th>
+      <td>2</td>
       <td>1</td>
       <td>4.110</td>
       <td>0.000</td>
@@ -1566,7 +1586,7 @@ natypes = 3
       <td>2</td>
     </tr>
     <tr>
-      <th>3</th>
+      <td>3</td>
       <td>2</td>
       <td>6.165</td>
       <td>2.055</td>
@@ -1575,7 +1595,7 @@ natypes = 3
       <td>3</td>
     </tr>
     <tr>
-      <th>4</th>
+      <td>4</td>
       <td>1</td>
       <td>0.000</td>
       <td>4.110</td>
@@ -1584,7 +1604,7 @@ natypes = 3
       <td>4</td>
     </tr>
     <tr>
-      <th>5</th>
+      <td>5</td>
       <td>2</td>
       <td>2.055</td>
       <td>6.165</td>
@@ -1593,7 +1613,7 @@ natypes = 3
       <td>5</td>
     </tr>
     <tr>
-      <th>6</th>
+      <td>6</td>
       <td>1</td>
       <td>4.110</td>
       <td>4.110</td>
@@ -1602,7 +1622,7 @@ natypes = 3
       <td>6</td>
     </tr>
     <tr>
-      <th>7</th>
+      <td>7</td>
       <td>1</td>
       <td>0.000</td>
       <td>0.000</td>
@@ -1611,7 +1631,7 @@ natypes = 3
       <td>8</td>
     </tr>
     <tr>
-      <th>8</th>
+      <td>8</td>
       <td>2</td>
       <td>2.055</td>
       <td>2.055</td>
@@ -1620,7 +1640,7 @@ natypes = 3
       <td>9</td>
     </tr>
     <tr>
-      <th>9</th>
+      <td>9</td>
       <td>1</td>
       <td>4.110</td>
       <td>0.000</td>
@@ -1629,7 +1649,7 @@ natypes = 3
       <td>10</td>
     </tr>
     <tr>
-      <th>10</th>
+      <td>10</td>
       <td>2</td>
       <td>6.165</td>
       <td>2.055</td>
@@ -1638,7 +1658,7 @@ natypes = 3
       <td>11</td>
     </tr>
     <tr>
-      <th>11</th>
+      <td>11</td>
       <td>1</td>
       <td>0.000</td>
       <td>4.110</td>
@@ -1647,7 +1667,7 @@ natypes = 3
       <td>12</td>
     </tr>
     <tr>
-      <th>12</th>
+      <td>12</td>
       <td>2</td>
       <td>2.055</td>
       <td>6.165</td>
@@ -1656,7 +1676,7 @@ natypes = 3
       <td>13</td>
     </tr>
     <tr>
-      <th>13</th>
+      <td>13</td>
       <td>1</td>
       <td>4.110</td>
       <td>4.110</td>
@@ -1665,7 +1685,7 @@ natypes = 3
       <td>14</td>
     </tr>
     <tr>
-      <th>14</th>
+      <td>14</td>
       <td>2</td>
       <td>6.165</td>
       <td>6.165</td>
@@ -1674,7 +1694,7 @@ natypes = 3
       <td>15</td>
     </tr>
     <tr>
-      <th>15</th>
+      <td>15</td>
       <td>3</td>
       <td>5.565</td>
       <td>6.165</td>
@@ -1683,7 +1703,7 @@ natypes = 3
       <td>7</td>
     </tr>
     <tr>
-      <th>16</th>
+      <td>16</td>
       <td>3</td>
       <td>6.765</td>
       <td>6.165</td>
@@ -1742,12 +1762,12 @@ natypes = 3
         <li class="right" >
           <a href="04._Defect_creation_and_analysis.html" title="Introduction to atomman: Defect creation and analysis"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>
