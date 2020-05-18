@@ -472,7 +472,9 @@ class GammaSurface(object):
         
         # Solve for a1, a2, a3
         a3vect = np.cross(a1vect, a2vect)
-        coeffs = np.array([np.array([a1vect, a2vect, a3vect]).T])
+        coeffs = np.array([a1vect, a2vect, a3vect]).T
+        if pos.ndim == 2:
+            coeffs = np.array([coeffs])
         a123 = np.linalg.solve(coeffs, pos)
         assert np.allclose(a123[...,2], 0.0, atol=1e-6), np.abs(a123[...,2]).max()
 
@@ -620,26 +622,54 @@ class GammaSurface(object):
             a2vect = kwargs.pop('a2vect', None)
             assert len(kwargs) == 0, 'Unknown/incompatible arguments given'
             if a1vect is not None or a2vect is not None:
-                shape = a1.shape               
+                shape = a1.shape
                 # Convert into pos using given a1vect, a2vect, then back into a1, a2
                 pos = self.a12_to_pos(a1, a2, a1vect=a1vect, a2vect=a2vect)
                 a1, a2 = self.pos_to_a12(pos)
                 a1 = a1.reshape(shape)
                 a2 = a2.reshape(shape)
-        
-        # Wrap all values within 0.0 < a1, a2 < 1.0
-        while np.any(a1 > 1.0): 
-            a1[a1 > 1.0] -= 1.0
-        while np.any(a1 < 0.0): 
-            a1[a1 < 0.0] += 1.0
-        while np.any(a2 > 1.0): 
-            a2[a2 > 1.0] -= 1.0
-        while np.any(a2 < 0.0): 
-            a2[a2 < 0.0] += 1.0
-        
+
+        # Return interpolated values
         if smooth:
-            return self.__E_gsf_fit(a1, a2)
+            cushion = (1 - self.data.a1.max()) / 2
+    
+            # Wrap all a1, a2 values within [-cushion, 1.0 - cushion)
+            while np.any(a1 >= 1.0 - cushion): 
+                a1[a1 >= 1.0 - cushion] -= 1.0
+            while np.any(a1 < -cushion): 
+                a1[a1 < -cushion] += 1.0
+            while np.any(a2 >= 1.0 - cushion): 
+                a2[a2 >= 1.0 - cushion] -= 1.0
+            while np.any(a2 < -cushion): 
+                a2[a2 < -cushion] += 1.0
+            
+            # Compute weighting factors
+            def zone1(x):
+                return (x + cushion) / (2 * cushion)
+            def zone2(x):
+                return np.ones_like(x)
+            x = np.piecewise(a1, [a1 < cushion, a1>= cushion], [zone1, zone2])
+            y = np.piecewise(a2, [a2 < cushion, a2>= cushion], [zone1, zone2])
+            
+            # Linear smoothing across boundaries
+            return ( x * y * self.__E_gsf_fit(a1, a2)
+                + x * (1 - y) * self.__E_gsf_fit(a1, a2 + 1)
+                + (1 - x) * y * self.__E_gsf_fit(a1 + 1, a2)
+                + (1 - x) * (1 - y) * self.__E_gsf_fit(a1 + 1, a2 + 1))
+        
+        # Return nearest values
         else:
+
+            # Wrap all values within 0.0 < a1, a2 < 1.0
+            while np.any(a1 > 1.0): 
+                a1[a1 > 1.0] -= 1.0
+            while np.any(a1 < 0.0): 
+                a1[a1 < 0.0] += 1.0
+            while np.any(a2 > 1.0): 
+                a2[a2 > 1.0] -= 1.0
+            while np.any(a2 < 0.0): 
+                a2[a2 < 0.0] += 1.0
+
             return self.__E_gsf_nearest(np.array([a1.flatten(), a2.flatten()]).T).reshape(a1.shape)
     
     def delta(self, **kwargs):
@@ -815,8 +845,10 @@ class GammaSurface(object):
             x_grid = uc.get_in_units(x_grid, length_unit)
             y_grid = uc.get_in_units(y_grid, length_unit)
             yscale = (y_grid.max()-y_grid.min()) / (x_grid.max() - x_grid.min())
-            xlabel = f'$x$ along {a1vect} ({length_unit})'
-            ylabel = f'$y$ along {a2vect} ({length_unit})'
+            #xlabel = f'$x$ along {a1vect} ({length_unit})'
+            #ylabel = f'$y$ along {a2vect} ({length_unit})'
+            xlabel = f'$x$ along {a1vect} ($\\mathring{{A}}$)'
+            ylabel = f'$y$ along {a2vect} ($\\mathring{{A}}$)'
         
         # Set default figsize if needed
         if figsize is None:
@@ -829,11 +861,12 @@ class GammaSurface(object):
         # Generate plot
         fig = plt.figure(figsize=figsize)
         plt.pcolormesh(x_grid, y_grid, C, **kwargs)
-        plt.xlabel(xlabel, fontsize='x-large')
-        plt.ylabel(ylabel, fontsize='x-large')
+        plt.xlabel(xlabel, fontsize='xx-large')
+        plt.ylabel(ylabel, fontsize='xx-large')
         cbar = plt.colorbar(aspect=40, fraction=0.1)
-        cbar.ax.set_ylabel('$E_{gsf}$ (' + energyperarea_unit + ')',
-                           fontsize='x-large')
+        #cbar.ax.set_ylabel('$E_{gsf}$ (' + energyperarea_unit + ')',
+        #                   fontsize='x-large')
+        cbar.ax.set_ylabel('$\\gamma_{{gsf}}$ (mJ/m$^2$)', fontsize='x-large')
         
         return fig
     
