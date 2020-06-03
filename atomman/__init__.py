@@ -1,9 +1,14 @@
 # coding: utf-8
-# Standard Python libraries
-from importlib import resources
 
 # Read version from VERSION file
-__version__ = resources.read_text('atomman', 'VERSION').strip()
+try:
+    from importlib import resources
+except:
+    from pathlib import Path
+    with open(Path(Path(__file__).resolve().parent, 'VERSION')) as version_file:
+        __version__ = version_file.read().strip()
+else:
+    __version__ = resources.read_text('atomman', 'VERSION').strip()
 
 # atomman imports
 from . import unitconvert
