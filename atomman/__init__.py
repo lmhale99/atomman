@@ -8,6 +8,8 @@ __version__ = resources.read_text('atomman', 'VERSION').strip()
 # atomman imports
 from . import unitconvert
 from . import tools
+from .settings import Settings
+from .library import Library
 from . import region
 from . import lammps
 from .dump import *
