@@ -62,7 +62,8 @@ setup(name = 'atomman',
         'pandas',
         'cython',
         'numericalunits',
-        'toolz'
+        'toolz',
+        'potentials>=0.2.2'
       ],
       include_package_data = True,
       zip_safe = False)
