@@ -19,8 +19,8 @@ from . import style
 from .Log import Log
 from .NEBLog import NEBLog
 from .Potential import Potential
-from .load_potential import load_potential
 from .run import run
 from .normalize import normalize
 from .checkversion import checkversion
-__all__ = ['LammpsError', 'style', 'run', 'normalize', 'Potential', 'Log', 'NEBLog', 'checkversion']
+__all__ = ['LammpsError', 'style', 'run', 'normalize', 'Potential', 'Log',
+           'NEBLog', 'checkversion']

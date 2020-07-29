@@ -19,7 +19,8 @@ from .phonopy_Atoms import load as load_phonopy_Atoms
 __all__ = ['FileFormatError', 'load', 'load_ase_Atoms', 'load_pymatgen_Structure',
            'load_table', 'load_system_model', 'load_poscar', 'load_atom_data',
            'load_atom_dump', 'load_cif', 'load_spglib_cell', 'load_phonopy_Atoms',
-           'load_prototype', 'load_crystal']
+           'load_prototype', 'load_crystal'
+           ]
 
 def load(style, *args, **kwargs):
     """

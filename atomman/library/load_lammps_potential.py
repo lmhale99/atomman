@@ -1,10 +1,11 @@
 # coding: utf-8
 
-from .. import Library
-def load_potential(id=None, key=None, potid=None, potkey=None,
+from . import Database
+def load_lammps_potential(id=None, key=None, potid=None, potkey=None,
                    status='active', pair_style=None, element=None,
                    symbol=None, verbose=False, get_files=False,
-                   local=True, remote=True):
+                   database=None,
+                   localpath=None, local=True, remote=True):
     """
     Gets a LAMMPS potential from the iprPy library or by downloading from
     potentials.nist.gov if a local copy is not found.  Will raise an error
@@ -47,7 +48,14 @@ def load_potential(id=None, key=None, potid=None, potkey=None,
     Potential
         The potential object to use.
     """
-    library = Library(local=local, remote=remote)
-    return library.get_potential(id=id, key=key, potid=potid, potkey=potkey,
+    # Create Database object and load if needed
+    if database is None:
+        if local is True:
+            database = Database(load='lammps_potentials', localpath=localpath,
+                                local=local, remote=remote, verbose=verbose)
+        else:
+            database = Database(local=local, remote=remote, verbose=verbose)
+    
+    return database.get_lammps_potential(id=id, key=key, potid=potid, potkey=potkey,
                                  status=status, pair_style=pair_style, element=element,
                                  symbol=symbol, verbose=verbose, get_files=get_files)

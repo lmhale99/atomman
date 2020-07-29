@@ -2,25 +2,41 @@
  
 # atomman imports
 from .. import load_system_model
-from ... import Library
+from ...library import Database
 from ...tools import identifyfamily, screen_input
 
-def load(keyword=None, title=None, a=None, b=None, c=None,
-         alpha=None, beta=None, gamma=None, symbols=None, local=True,
-         remote=True):
+def load(id=None, key=None, name=None, prototype=None,
+         pearson=None, strukturbericht=None, sg_number=None,
+         sg_hm=None, sg_schoenflies=None, keyword=None,
+         a=None, b=None, c=None, alpha=None, beta=None, gamma=None, symbols=None,
+         database=None, localpath=None, local=True, remote=True, verbose=False):
     """
     Loads a crystal prototype record from the library. If multiple matches
     are found based on inputs a selection menu will appear.
     
-    Parameters
-    ----------
+    id : str or list, optional
+        Prototype ID(s) to search for.  These are unique identifiers for each
+        prototype based on comm.
+    key : str or list, optional
+        UUID4 key(s) to search for.  Each entry has a unique random-generated
+        UUID4 key.
+    name : str or list, optional
+        Common name(s) to limit the search by.
+    prototype : str or list, optionypeal
+        Prototype identifying composition(s) to limit the search by.
+    pearson : str or list, optional
+        The Pearson symbol(s) to limit the search by.
+    strukturbericht : str or list, optional
+        The strukturbericht identifier(s) to limit the search by.
+    sg_number : int or list, optional
+        The space group number(s) to limit the search by.
+    sg_hm : str or list, optional
+        The space group Hermann-Maguin identifier(s) to limit the search by.
+    sg_schoenflies : str or list, optional
+        The space group Schoenflies identifier(s) to limit the search by.
     keyword : str, optional
-        Used to parse which prototype to load: a substring search is performed
-        on the contents of all crystal prototype records and any containing
-        this string are selected.
-    title : str, optional
-        The title (id) of the prototype record to load. Cannot be used with
-        keyword.
+        If given, will limit the search to all records that contain the keyword
+        substring.  Cannot be combined with any of the above parameters.
     a : float, optional
         The a lattice parameter to scale the prototype by. Can only be given
         if it is a unique lattice parameter for the prototype's crystal family,
@@ -49,12 +65,22 @@ def load(keyword=None, title=None, a=None, b=None, c=None,
         Allows the list of element symbols to be assigned during loading.
         Useful if the symbols for the model differ from the standard element
         tags or if the poscar file has no elemental information.
+    database : atomman.library.Database, optional
+        A pre-defined Database object to use.  If not given, will initialize
+        a new Database object.  Passing in a database can save time if multiple
+        calls are made for the same record type. 
+    localpath : str, optional
+        The local library path to use when initializing a new Database.  IF not
+        given, will use the default localpath.  Ignored if database is given. 
     local : bool, optional
-        Indicates if the local version of the library should be searched.
-        Default value is True.
+        Indicates if the Database object is to look for local records.  Default
+        is True.  Ignored if database is given.
     remote : bool, optional
-        Indicates if the remote version of the library should be searched.
-        Default value is True.
+        Indicates if the Database object is to look for remote records.  Default
+        is True.  Ignored if database is given.
+    verbose : bool, optional
+        If True, info messages will be printed during operations.  Default
+        value is False.
     
     Returns
     -------
@@ -62,25 +88,24 @@ def load(keyword=None, title=None, a=None, b=None, c=None,
         The system object generated from the crystal prototype.
     """
 
-    # Load library and fetch matching crystal_prototype records
-    library = Library(remote=remote, local=local)
-    records = library.potdb.get_records(template='crystal_prototype',
-                                        keyword=keyword, title=title)
-
-    # Check number of matches and select
-    if len(records) == 1:
-        record = records[0]
-    elif len(records) > 1:
-        print('Multiple matching prototypes found.')
-        for i, record in enumerate(records):
-            print(i+1, record['crystal-prototype']['id'])
-        choice = int(screen_input('Select which one:'))
-        record = records[choice-1]        
-    else:
-        raise ValueError('No matching prototypes found')
+    # Create Database object and load if needed
+    if database is None:
+        if local is True:
+            database = Database(load='crystal_prototype', localpath=localpath,
+                                local=local, remote=remote, verbose=verbose)
+        else:
+            database = Database(local=local, remote=remote, verbose=verbose)
     
-    ucell = load_system_model(record, symbols=symbols)
+    # Get crystal prototype record
+    prototype = database.get_crystal_prototype(id=id, key=key, name=name, prototype=prototype,
+         pearson=pearson, strukturbericht=strukturbericht, sg_number=sg_number,
+         sg_hm=sg_hm, sg_schoenflies=sg_schoenflies, keyword=keyword, verbose=verbose)
     
+    # Retrieve unit cell information and set symbols
+    ucell = prototype.ucell
+    ucell.symbols = symbols
+    
+    # Allow lattice constants to be set based on crystal family
     family = identifyfamily(ucell.box)
     if family == 'cubic':
         if a is not None:
@@ -133,5 +158,5 @@ def load(keyword=None, title=None, a=None, b=None, c=None,
             ucell.box_set(a=a, b=b, c=c, alpha=alpha, beta=beta, gamma=gamma, scale=True)
         elif a is not None or b is not None or c is not None or alpha is not None or beta is not None or gamma is not None:
             raise ValueError('All or neither of a, b, c, alpha, beta, gamma must be set for triclinic prototypes')
-            
+    
     return ucell
