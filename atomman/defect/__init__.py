@@ -15,8 +15,8 @@ from .VolterraDislocation import VolterraDislocation
 from .Stroh import Stroh
 from .IsotropicVolterraDislocation import IsotropicVolterraDislocation
 from .solve_volterra_dislocation import solve_volterra_dislocation
-
 from .dislocation_array import dislocation_array
+from .Dislocation import Dislocation
 
 from .free_surface_basis import free_surface_basis
 from .FreeSurface import FreeSurface
@@ -27,7 +27,7 @@ from .SDVPN import SDVPN
 
 __all__ = ['differential_displacement', 'disregistry', 'dislocation_array',
            'slip_vector', 'nye_tensor', 'nye_tensor_p', 'Stroh', 'FreeSurface',
-           'StackingFault',
+           'StackingFault', 'Dislocation',
            'GammaSurface', 'free_surface_basis', 'pn_arctan_disregistry',
            'SDVPN']
 __all__.extend(point_all)
