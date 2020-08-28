@@ -22,7 +22,7 @@ def solve_volterra_dislocation(C, burgers, ξ_uvw=None, slip_hkl=None,
         transformation matrix to use on C and burgers.
     slip_hkl : array-like object
         The Miller plane indices associated with the dislocation's slip
-        plane.  Must be given with slip_hkl to identify the
+        plane.  Must be given with ξ_uvw to identify the
         transformation matrix to use on C and burgers.
     transform : array-like object, optional
         A 3x3 set of orthogonal Cartesian vectors that define the
