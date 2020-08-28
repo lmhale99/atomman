@@ -382,8 +382,8 @@ class Box(Shape, object):
     def planes(self):
         """tuple : The box's planes represented as atomman.region.Plane objects."""
         return (Plane(np.cross(self.cvect, self.bvect), self.origin),
-                Plane(np.cross(self.bvect, self.avect), self.origin),
                 Plane(np.cross(self.avect, self.cvect), self.origin),
+                Plane(np.cross(self.bvect, self.avect), self.origin),
                 Plane(np.cross(self.bvect, self.cvect), self.origin + self.avect),
                 Plane(np.cross(self.cvect, self.avect), self.origin + self.bvect),
                 Plane(np.cross(self.avect, self.bvect), self.origin + self.cvect))
