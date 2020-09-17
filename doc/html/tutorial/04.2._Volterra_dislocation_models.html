@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: Volterra dislocation models &#8212; atomman 1.3.2 documentation</title>
+    <title>Introduction to atomman: Volterra dislocation models &#8212; atomman 1.3.4 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="04.1._Point_defects.html" title="Introduction to atomman: Point defect generation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -278,6 +278,7 @@ div.rendered_html tbody tr:hover {
 <li><p>atomman.defect.Stroh class solves the Eshelby anisotropic straight dislocation problem using the Stroh (eigenvector) method.</p></li>
 </ul>
 <p>Both calculation classes are children of the atomman.defect.VolterraDislocation template class, and therefore provide a similar interface for initialization and obtaining evaluated properties.</p>
+<p><strong>NOTE</strong>: This Notebook outlines the methods in atomman for obtaining elastic solutions for Volterra dislocations. If you wish to construct atomic configurations of dislocations based on the Volterra solutions, check out the <a class="reference external" href="04.9._Dislocation_class.html">04.9. Dislocation class Jupyter Notebook</a>.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -313,8 +314,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.2
-Notebook executed on 2020-04-15
+atomman version = 1.3.4
+Notebook executed on 2020-09-15
 </pre></div></div>
 </div>
 </div>
@@ -864,15 +865,9 @@ Stress components in GPa, coordinates in Angstroms
 </div>
 </div>
 </div>
-<div class="section" id="5.-Generate-dislocation-configuration">
-<h2>5. Generate dislocation configuration<a class="headerlink" href="#5.-Generate-dislocation-configuration" title="Permalink to this headline">¶</a></h2>
-<p>The solution’s displacements can also be used to insert a dislocation into an otherwise perfect atomic configuration. This provides a nice initial guess for the atomic structure of the dislocation that can be further relaxed.</p>
-<p>The dislocation solution itself is a continuum model and therefore does not depend on the discrete atomic positions. However, care must be used when generating an atomic configuration to ensure that the atoms are compatible with the solution. This involves:</p>
-<ol class="arabic simple">
-<li><p>Rotating the crystal structure to coincide with the dislocation solution orientation.</p></li>
-<li><p>Shifting the atoms so that none are directly on the slip plane. This is because the displacement solution has a discontinuity at the slip plane.</p></li>
-<li><p>Displacing the atoms using the solution’s displacement values.</p></li>
-</ol>
+<div class="section" id="5.-Generate-dislocation-configurations">
+<h2>5. Generate dislocation configurations<a class="headerlink" href="#5.-Generate-dislocation-configurations" title="Permalink to this headline">¶</a></h2>
+<p><em>Added version 1.3.4</em>: The Dislocation class provides a user-friendly interface for generating dislocation monopole and periodic array of dislocation atomic configurations using Volterra solutions. See the <a class="reference external" href="04.9._Dislocation_class.html">04.9. Dislocation class Jupyter Notebook</a> for more details.</p>
 <div class="section" id="5.1.-Start-with-a-unit-cell">
 <h3>5.1. Start with a unit cell<a class="headerlink" href="#5.1.-Start-with-a-unit-cell" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
@@ -1405,7 +1400,7 @@ Transformation matrix from standard orientation to dislocation orientation:
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#5.-Generate-dislocation-configuration">5. Generate dislocation configuration</a><ul>
+<li><a class="reference internal" href="#5.-Generate-dislocation-configurations">5. Generate dislocation configurations</a><ul>
 <li><a class="reference internal" href="#5.1.-Start-with-a-unit-cell">5.1. Start with a unit cell</a></li>
 <li><a class="reference internal" href="#5.2-Use-dislocation_system_basis-to-identify-the-rotation-crystal-vectors">5.2 Use dislocation_system_basis to identify the rotation crystal vectors</a></li>
 <li><a class="reference internal" href="#5.3-Rotate-ucell-using-uvws">5.3 Rotate ucell using uvws</a></li>
@@ -1445,7 +1440,7 @@ Transformation matrix from standard orientation to dislocation orientation:
         <li class="right" >
           <a href="04.1._Point_defects.html" title="Introduction to atomman: Point defect generation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

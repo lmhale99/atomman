@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: Region selectors &#8212; atomman 1.3.2 documentation</title>
+    <title>Introduction to atomman: Region selectors &#8212; atomman 1.3.4 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="03.2._NeighborList_class.html" title="Introduction to atomman: NeighborList class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -305,8 +305,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.2
-Notebook executed on 2020-04-15
+atomman version = 1.3.4
+Notebook executed on 2020-09-14
 </pre></div></div>
 </div>
 <p>Define function for plotting projection plots of atoms, with positions given by pos and colors by atype.</p>
@@ -617,6 +617,44 @@ system has 32000 atoms
 </div>
 </div>
 </div>
+<div class="section" id="3.5-PlaneSet">
+<h3>3.5 PlaneSet<a class="headerlink" href="#3.5-PlaneSet" title="Permalink to this headline">¶</a></h3>
+<p><em>Added version 1.3.4</em></p>
+<p>Defines a shape based on a list of Plane objects.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><p><strong>planes</strong> (<em>list of atomman.region.Plane</em>) The planes to use in constructing the shape. Points “below” all planes are considered inside the shape.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Define planes for a triangular region that is open in the z direction (i.e. no limits according to z coordinate)</span>
+<span class="n">planes</span> <span class="o">=</span> <span class="p">[</span><span class="n">am</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">Plane</span><span class="p">(</span><span class="n">normal</span><span class="o">=</span><span class="p">[</span> <span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">point</span><span class="o">=</span><span class="p">[</span>  <span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="c1"># Triangle base normal to y-axis</span>
+          <span class="n">am</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">Plane</span><span class="p">(</span><span class="n">normal</span><span class="o">=</span><span class="p">[</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">point</span><span class="o">=</span><span class="p">[</span> <span class="mi">30</span><span class="p">,</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="c1"># Right side</span>
+          <span class="n">am</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">Plane</span><span class="p">(</span><span class="n">normal</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">point</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="c1"># Left side</span>
+        <span class="p">]</span>
+
+<span class="c1"># Create the PlaneSet shape object</span>
+<span class="n">planeset</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">PlaneSet</span><span class="p">(</span><span class="n">planes</span><span class="p">)</span>
+
+<span class="c1"># Slice to create triangular particle system</span>
+<span class="n">newsystem</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms_ix</span><span class="p">[</span><span class="n">planeset</span><span class="o">.</span><span class="n">inside</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">)]</span>
+
+<span class="c1"># Make projectionplots</span>
+<span class="n">projectionplots</span><span class="p">(</span><span class="n">newsystem</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_03.3._Region_selectors_29_0.png" src="../_images/tutorial_03.3._Region_selectors_29_0.png" />
+</div>
+</div>
+</div>
 </div>
 </div>
 
@@ -641,6 +679,7 @@ system has 32000 atoms
 <li><a class="reference internal" href="#3.2-Box">3.2 Box</a></li>
 <li><a class="reference internal" href="#3.3-Sphere">3.3 Sphere</a></li>
 <li><a class="reference internal" href="#3.4-Cylinder">3.4 Cylinder</a></li>
+<li><a class="reference internal" href="#3.5-PlaneSet">3.5 PlaneSet</a></li>
 </ul>
 </li>
 </ul>
@@ -672,7 +711,7 @@ system has 32000 atoms
         <li class="right" >
           <a href="03.2._NeighborList_class.html" title="Introduction to atomman: NeighborList class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

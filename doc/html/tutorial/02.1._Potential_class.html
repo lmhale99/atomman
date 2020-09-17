@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: Potential class &#8212; atomman 1.3.2 documentation</title>
+    <title>Introduction to atomman: LAMMPS Potentials &#8212; atomman 1.3.4 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="02._LAMMPS_functionality.html" title="Introduction to atomman: LAMMPS functionality"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -265,14 +265,22 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-Potential-class">
-<h1>Introduction to atomman: Potential class<a class="headerlink" href="#Introduction-to-atomman:-Potential-class" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Introduction-to-atomman:-LAMMPS-Potentials">
+<h1>Introduction to atomman: LAMMPS Potentials<a class="headerlink" href="#Introduction-to-atomman:-LAMMPS-Potentials" title="Permalink to this headline">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
+<p><strong>Table of contents</strong></p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="#section1">Introduction</a></p></li>
+<li><p><a class="reference external" href="#section2">Loading LAMMPS Potentials</a></p></li>
+<li><p><a class="reference external" href="#section3">Potential Classes</a></p></li>
+<li><p><a class="reference external" href="#section4">User-Defined Potentials</a></p></li>
+<li><p><a class="reference external" href="#section5">potential_LAMMPS Data Model</a></p></li>
+</ol>
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
-<p>The Potential class is a Python interpretation of the potential_LAMMPS data model record format. The potential_LAMMPS data models contain metadata associated with the LAMMPS input command lines associated with properly running a simulation with the indicated potential. Together, the potential_LAMMPS data model and the Potential class make it easy to design simulations that can be easily executed across multiple potentials of any LAMMPS pair style.</p>
-<p>Complete potential_LAMMPS data models in JSON and the associated potential parameter files for all potentials hosted by the NIST Interatomic Potentials Repository can be found at <a class="reference external" href="https://potentials.nist.gov/">https://potentials.nist.gov/</a>.</p>
+<p>The atomman package is designed to interact with LAMMPS-compatible interatomic potential implementations and assist with the automatic and dynamic generation of the associated LAMMPS command lines. Starting with atomman version 1.3.3, the main management of LAMMPS potentials is now handled with the <a class="reference external" href="https://github.com/usnistgov/potentials">potentials package</a>, with atomman inheriting classes for representing LAMMPS potentials and accessing database records from the NIST Interatomic Potentials
+Repository. These methods allow for pre-defined potentials to be retrieved either from the <a class="reference external" href="https://potentials.nist.gov/">remote database potentials.nist.gov</a> or from a local directory, and for user-defined potentials to be easily integrated in with the official ones.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -280,7 +288,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard libraries</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
@@ -304,19 +312,508 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.2
-Notebook executed on 2020-04-15
+atomman version = 1.3.4
+Notebook executed on 2020-09-15
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="2.-Class-Basics">
-<h2>2. Class Basics<a class="headerlink" href="#2.-Class-Basics" title="Permalink to this headline">¶</a></h2>
-<p>The atomman.Potential class is a Python interpretation of the potential_LAMMPS data model record format. A Potential object is initialized by reading in a data model as either a <a class="reference external" href="https://github.com/usnistgov/DataModelDict">DataModelDict</a>, or JSON or XML content.</p>
-<div class="section" id="2.1.Demonstration-data-model">
-<h3>2.1.Demonstration data model<a class="headerlink" href="#2.1.Demonstration-data-model" title="Permalink to this headline">¶</a></h3>
-<p>This is a demonstration data model record for an eam/alloy style potential. See <a class="reference external" href="#section5">Section 5</a>. for more details on the data model record format and examples for other pair styles.</p>
-<div class="nbinput nblast docutils container">
+<div class="section" id="2.-Loading-LAMMPS-Potentials">
+<h2>2. Loading LAMMPS Potentials<a class="headerlink" href="#2.-Loading-LAMMPS-Potentials" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="2.1.-Using-load_lammps_potential">
+<h3>2.1. Using load_lammps_potential<a class="headerlink" href="#2.1.-Using-load_lammps_potential" title="Permalink to this headline">¶</a></h3>
+<p><em>Added version 1.3.3</em></p>
+<p>The function atomman.load_lammps_potential allows for a LAMMPS potential to be loaded from the potentials database. Depending on the settings used, this function will search for matching potentials from potentials.nist.gov and/or from the local copy of the database.</p>
+<p>Search parameters</p>
+<ul class="simple">
+<li><p><strong>id</strong> (<em>str or list, optional</em>) The id value(s) to limit the search by.</p></li>
+<li><p><strong>key</strong> (<em>str or list, optional</em>) The key value(s) to limit the search by.</p></li>
+<li><p><strong>potid</strong> (<em>str or list, optional</em>) The potid value(s) to limit the search by.</p></li>
+<li><p><strong>potkey</strong> (<em>str or list, optional</em>) The potkey value(s) to limit the search by.</p></li>
+<li><p><strong>status</strong> (<em>str or list, optional</em>) The status value(s) to limit the search by.</p></li>
+<li><p><strong>pair_style</strong> (<em>str or list, optional</em>) The pair_style value(s) to limit the search by.</p></li>
+<li><p><strong>elements</strong> (<em>str or list, optional</em>) The included elemental model(s) to limit the search by.</p></li>
+<li><p><strong>symbols</strong> (<em>str or list, optional</em>) The included symbol model(s) to limit the search by.</p></li>
+</ul>
+<p>Access options</p>
+<ul class="simple">
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) If True, informative print statements will be used.</p></li>
+<li><p><strong>getfiles</strong> (<em>bool, optional</em>) If True, then the parameter files for the matching potentials will also be retrieved and copied to the working directory. If False (default) and the parameter files are in the library, then the returned objects’ pot_dir path will be set appropriately.</p></li>
+</ul>
+<p>Database options</p>
+<ul class="simple">
+<li><p><strong>database</strong> (<em>atomman.library.Database, optional</em>) A pre-existing Database class to use for accessing the records. Useful if multiple potentials are being retrieved as records can be pre-loaded for efficiency. If not given, a new database object will be initialized based on the parameters below.</p></li>
+<li><p><strong>localpath</strong> (<em>str, optional</em>) The path to the local database directory to use. If not given, will use the default potentials database path. Ignored if database is given.</p></li>
+<li><p><strong>local</strong> (<em>bool, optional</em>) Indicates if the local version of the library should be searched. Default value is True. Ignored if database is given.</p></li>
+<li><p><strong>remote</strong> (<em>bool, optional</em>) Indicates if the remote version of the library should be searched. Default value is True. Ignored if database is given.</p></li>
+</ul>
+<p>Returns</p>
+<ul class="simple">
+<li><p>(<em>potentials.PotentialLAMMPS</em>) The potential object to use.</p></li>
+</ul>
+<div class="section" id="2.1.1.-By-id">
+<h4>2.1.1. By id<a class="headerlink" href="#2.1.1.-By-id" title="Permalink to this headline">¶</a></h4>
+<p>Each LAMMPS potential in the NIST Interatomic Potentials Repository has a unique id that indicates the associated publication, what the model represents, and which archived version it is for. These id’s can be easily found by either searching for potentials using</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.ctcms.nist.gov/potentials">Interatomic Potentials Repository</a> and finding the ids for the LAMMPS versions you want to use - the id’s in parenthesis that contain “LAMMPS” within them.</p></li>
+<li><p><a class="reference external" href="https://potentials.nist.gov/explore/keyword/">potentials.nist.gov</a> and in the “Filter by Template” section on the left clicking the box next to potential_LAMMPS.</p></li>
+</ul>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">potential</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load_lammps_potential</span><span class="p">(</span><span class="s1">&#39;1989--Adams-J-B--Ni--LAMMPS--ipr1&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">potential</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1989--Adams-J-B--Ni--LAMMPS--ipr1
+</pre></div></div>
+</div>
+<p>Note that by default the function will only return currently active versions of LAMMPS potentials, so older versions that have been marked as “superseded” or “retracted” won’t show. Setting the status parameter to None will allow for the old versions to be retrieved.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Old LAMMPS version won&#39;t be found because it is not &quot;active&quot;</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">potential</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load_lammps_potential</span><span class="p">(</span><span class="s1">&#39;2004--Zhou-X-W--Ni--LAMMPS--ipr1&#39;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{type(ex).__name__}: </span><span class="si">{ex.args[0]}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">potential</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ValueError: No matching LAMMPS potentials found
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Setting status=None allows for the old version to be retrieved</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">potential</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load_lammps_potential</span><span class="p">(</span><span class="s1">&#39;2004--Zhou-X-W--Ni--LAMMPS--ipr1&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{type(ex).__name__}: </span><span class="si">{ex.args[0]}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">potential</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2004--Zhou-X-W--Ni--LAMMPS--ipr1
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="2.1.2.-By-potid">
+<h4>2.1.2. By potid<a class="headerlink" href="#2.1.2.-By-potid" title="Permalink to this headline">¶</a></h4>
+<p>You can also search using the potential model id - the main identifier for potentials on the Interatomic Potentials Reporitory - using the potid parameter. For most but not all potentials, there is only one “active” LAMMPS version, so searching in this manner is almost the same as above and will ensure that you get the newest version(s).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">potential</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load_lammps_potential</span><span class="p">(</span><span class="n">potid</span><span class="o">=</span><span class="s1">&#39;2004--Zhou-X-W-Johnson-R-A-Wadley-H-N-G--Ni&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">potential</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2004--Zhou-X-W--Ni--LAMMPS--ipr2
+</pre></div></div>
+</div>
+<p>Note that just like before, setting status=None will allow you to explore all potentials, even the older versions. If multiple matches are found, they will all be listed with a prompt.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">potential</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load_lammps_potential</span><span class="p">(</span><span class="n">potid</span><span class="o">=</span><span class="s1">&#39;2004--Zhou-X-W-Johnson-R-A-Wadley-H-N-G--Ni&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">potential</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Multiple matching LAMMPS potentials found
+1 2004--Zhou-X-W--Ni--LAMMPS--ipr1
+2 2004--Zhou-X-W--Ni--LAMMPS--ipr2
+Please select one:2
+2004--Zhou-X-W--Ni--LAMMPS--ipr2
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="2.1.3.-By-category">
+<h4>2.1.3. By category<a class="headerlink" href="#2.1.3.-By-category" title="Permalink to this headline">¶</a></h4>
+<p>The LAMMPS potentials can also be (partially) explored by using the pair_style, elements, and symbols parameters. For elements vs. symbols</p>
+<ul class="simple">
+<li><p>elements are the specific elements that potentials for modeling atoms are representing. A model may not be associated with an element if it is a meta or coarse-grain model.</p></li>
+<li><p>symbols are the model names for each unique interaction. For atomic models, this is usually the same as elements but can differ if multiple models for the same element are part of the same potential.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Select an eam-style potential for Co</span>
+<span class="n">potential</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load_lammps_potential</span><span class="p">(</span><span class="n">pair_style</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;eam&#39;</span><span class="p">,</span> <span class="s1">&#39;eam/alloy&#39;</span><span class="p">,</span> <span class="s1">&#39;eam/fs&#39;</span><span class="p">],</span> <span class="n">elements</span><span class="o">=</span><span class="s1">&#39;Ni&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">potential</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Multiple matching LAMMPS potentials found
+1 1985--Foiles-S-M--Ni-Cu--LAMMPS--ipr1
+2 1986--Foiles-S-M--Ag-Au-Cu-Ni-Pd-Pt--LAMMPS--ipr1
+3 1986--Foiles-S-M--Ni--LAMMPS--ipr1
+4 1987--Ackland-G-J--Ni--LAMMPS--ipr1
+5 1987--Ackland-G-J--Ni--LAMMPS--ipr2
+6 1989--Adams-J-B--Ag-Au-Cu-Ni-Pd-Pt--LAMMPS--ipr1
+7 1989--Adams-J-B--Ni--LAMMPS--ipr1
+8 1995--Angelo-J-E--Ni-Al-H--LAMMPS--ipr1
+9 1999--Mishin-Y--Ni--LAMMPS--ipr1
+10 2002--Mishin-Y--Ni-Al--LAMMPS--ipr1
+11 2004--Mishin-Y--Ni-Al--LAMMPS--ipr1
+12 2004--Zhou-X-W--Ni--LAMMPS--ipr2
+13 2009--Bonny-G--Fe-Cu-Ni--LAMMPS--ipr1
+14 2009--Bonny-G--Fe-Ni--LAMMPS--ipr1
+15 2009--Purja-Pun-G-P--Ni-Al--LAMMPS--ipr1
+16 2011--Bonny-G--Fe-Ni-Cr--LAMMPS--ipr1
+17 2012--Mendelev-M-I--Ni--LAMMPS--ipr1
+18 2012--Mendelev-M-I--Ni-Zr--LAMMPS--ipr1
+19 2013--Bonny-G--Fe-Ni-Cr--LAMMPS--ipr1
+20 2013--Onat-B--Cu-Ni--LAMMPS--ipr2
+21 2015--Purja-Pun-G-P--Ni-Al-Co--LAMMPS--ipr2
+22 2015--Purja-Pun-G-P--Ni-Co--LAMMPS--ipr2
+23 2015--Wilson-S-R--Ni-Zr--LAMMPS--ipr1
+24 2016--Beland-L-K--Ni-Co--LAMMPS--ipr1
+25 2016--Samolyuk-G-D--Ni-Pd--LAMMPS--ipr1
+26 2016--Stoller-R-E--Ni--LAMMPS--ipr1
+27 2016--Zhang-Y--Ni-Nb--LAMMPS--ipr1
+28 2017--Beland-L-K--Fe-Ni-Cr--LAMMPS--ipr1
+29 2018--Farkas-D--Fe-Ni-Cr-Co-Cu--LAMMPS--ipr2
+30 2018--Pan-Z--Ag-Ni--LAMMPS--ipr1
+31 2018--Zhou-X-W--Fe-Ni-Cr--LAMMPS--ipr1
+32 2018--Zhou-X-W--Fe-Ni-Cr--LAMMPS--ipr2
+33 2019--Fischer-F--Cu-Ni--LAMMPS--ipr1
+34 2019--Fischer-F--Cu-Ni--LAMMPS--ipr2
+35 2019--Mendelev-M-I--Fe-Ni-Cr--LAMMPS--ipr1
+Please select one:11
+2004--Mishin-Y--Ni-Al--LAMMPS--ipr1
+</pre></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="2.2.-Using-Database-class">
+<h3>2.2. Using Database class<a class="headerlink" href="#2.2.-Using-Database-class" title="Permalink to this headline">¶</a></h3>
+<p><em>Added version 1.3.3</em></p>
+<p>More involved searches can be performed using the atomman.library.Database class. This class inherits from potentials.Database and has all of the methods for exploring the potentials and LAMMPS potentials entries as the parent class.</p>
+<p>See the documentation Notebooks for the <a class="reference external" href="https://github.com/usnistgov/potentials">potentials package</a> for more details and options.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Initialize a Database object and load LAMMPS potentials</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">library</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="s1">&#39;lammps_potentials&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Loading “lammps_potentials” with the database object will place all LAMMPS potentials into memory and build a corresponding pandas.DataFrame for parsing them.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">lammps_potentials</span><span class="p">),</span> <span class="s1">&#39;total LAMMPS potentials loaded&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The first loaded LAMMPS potential is&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">lammps_potentials</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+279 total LAMMPS potentials loaded
+The first loaded LAMMPS potential is 1985--Foiles-S-M--Ni-Cu--LAMMPS--ipr1
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">db</span><span class="o">.</span><span class="n">lammps_potentials_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>key</th>
+      <th>potid</th>
+      <th>potkey</th>
+      <th>units</th>
+      <th>atom_style</th>
+      <th>allsymbols</th>
+      <th>pair_style</th>
+      <th>status</th>
+      <th>symbols</th>
+      <th>elements</th>
+      <th>masses</th>
+      <th>charges</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>1985--Foiles-S-M--Ni-Cu--LAMMPS--ipr1</td>
+      <td>062d2ba7-3903-40ae-a772-daa471d107c6</td>
+      <td>1985--Foiles-S-M--Ni-Cu</td>
+      <td>301f04ce-9082-4542-8590-489300cd19e8</td>
+      <td>metal</td>
+      <td>atomic</td>
+      <td>False</td>
+      <td>eam</td>
+      <td>active</td>
+      <td>[Cu, Ni]</td>
+      <td>[Cu, Ni]</td>
+      <td>[63.55, 58.71]</td>
+      <td>[0.0, 0.0]</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1985--Stillinger-F-H--Si--LAMMPS--ipr1</td>
+      <td>d085648c-b3ef-4be8-824b-7093fd22770a</td>
+      <td>1985--Stillinger-F-H-Weber-T-A--Si</td>
+      <td>edc31ad6-2b9a-455c-9b5f-e888a672ecbd</td>
+      <td>metal</td>
+      <td>atomic</td>
+      <td>False</td>
+      <td>sw</td>
+      <td>active</td>
+      <td>[Si]</td>
+      <td>[Si]</td>
+      <td>[28.085]</td>
+      <td>[0.0]</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>1986--Foiles-S-M--Ag--LAMMPS--ipr1</td>
+      <td>76a265fc-45ff-49d7-8c64-2044f12402f2</td>
+      <td>1986--Foiles-S-M-Baskes-M-I-Daw-M-S--Ag</td>
+      <td>672d54f8-9f48-4200-af56-8a7378ebbc4a</td>
+      <td>metal</td>
+      <td>atomic</td>
+      <td>False</td>
+      <td>eam</td>
+      <td>active</td>
+      <td>[Ag]</td>
+      <td>[Ag]</td>
+      <td>[107.87]</td>
+      <td>[0.0]</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>1986--Foiles-S-M--Ag-Au-Cu-Ni-Pd-Pt--LAMMPS--ipr1</td>
+      <td>c5afa7e8-6b3b-49cd-ad1c-ae3e4329363a</td>
+      <td>1986--Foiles-S-M-Baskes-M-I-Daw-M-S--Ag-Au-Cu-...</td>
+      <td>7a1302de-59cf-4efb-900e-cad845b68ee5</td>
+      <td>metal</td>
+      <td>atomic</td>
+      <td>False</td>
+      <td>eam</td>
+      <td>active</td>
+      <td>[Ag, Au, Cu, Ni, Pd, Pt]</td>
+      <td>[Ag, Au, Cu, Ni, Pd, Pt]</td>
+      <td>[107.87, 196.97, 63.55, 58.71, 106.4, 195.09]</td>
+      <td>[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>1986--Foiles-S-M--Au--LAMMPS--ipr1</td>
+      <td>c588810a-b96d-4871-bfe2-cff8a5a7c709</td>
+      <td>1986--Foiles-S-M-Baskes-M-I-Daw-M-S--Au</td>
+      <td>ffb66faa-319d-4556-8363-dad3959cd553</td>
+      <td>metal</td>
+      <td>atomic</td>
+      <td>False</td>
+      <td>eam</td>
+      <td>active</td>
+      <td>[Au]</td>
+      <td>[Au]</td>
+      <td>[196.97]</td>
+      <td>[0.0]</td>
+    </tr>
+    <tr>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <td>274</td>
+      <td>2019--Mendelev-M-I--Cu-Zr--LAMMPS--ipr1</td>
+      <td>73d03486-1b34-4a24-b1d2-4da253abdda0</td>
+      <td>2019--Mendelev-M-I--Cu-Zr</td>
+      <td>2e5ed18c-5fb4-46e4-ae7a-5f50d9429d95</td>
+      <td>metal</td>
+      <td>atomic</td>
+      <td>False</td>
+      <td>eam/fs</td>
+      <td>active</td>
+      <td>[Cu, Zr]</td>
+      <td>[Cu, Zr]</td>
+      <td>[63.546, 91.224]</td>
+      <td>[0.0, 0.0]</td>
+    </tr>
+    <tr>
+      <td>275</td>
+      <td>2019--Mendelev-M-I--Fe-Ni-Cr--LAMMPS--ipr1</td>
+      <td>43aa1b40-dce4-48cf-8e4f-fb0e079180b6</td>
+      <td>2019--Mendelev-M-I--Fe-Ni-Cr</td>
+      <td>6c5d342a-7e25-467f-a234-d937301f6bc4</td>
+      <td>metal</td>
+      <td>atomic</td>
+      <td>False</td>
+      <td>eam/fs</td>
+      <td>active</td>
+      <td>[Fe, Ni, Cr]</td>
+      <td>[Fe, Ni, Cr]</td>
+      <td>[55.845, 58.6934, 51.9961]</td>
+      <td>[0.0, 0.0, 0.0]</td>
+    </tr>
+    <tr>
+      <td>276</td>
+      <td>2020--Byggmastar-J--Fe--LAMMPS--ipr1</td>
+      <td>a1d123a0-eba2-4271-962c-720d9d564a9b</td>
+      <td>2020--Byggmastar-J-Granberg-F--Fe</td>
+      <td>114b0f72-8f6d-4ac1-82fb-ac15fd6b7bde</td>
+      <td>metal</td>
+      <td>atomic</td>
+      <td>False</td>
+      <td>tersoff/zbl</td>
+      <td>active</td>
+      <td>[Fe]</td>
+      <td>[Fe]</td>
+      <td>[55.845]</td>
+      <td>[0.0]</td>
+    </tr>
+    <tr>
+      <td>277</td>
+      <td>2020--Starikov-S--Si-Au-Al--LAMMPS--ipr1</td>
+      <td>6ea50417-2147-4d53-871c-0a289656f794</td>
+      <td>2020--Starikov-S-Gordeev-I-Lysogorskiy-Y-et-al...</td>
+      <td>e5d06433-937f-4deb-916a-531f6cbb9ed6</td>
+      <td>metal</td>
+      <td>atomic</td>
+      <td>False</td>
+      <td>adp</td>
+      <td>active</td>
+      <td>[Si, Au, Al]</td>
+      <td>[Si, Au, Al]</td>
+      <td>[28.084, 196.967, 26.98]</td>
+      <td>[0.0, 0.0, 0.0]</td>
+    </tr>
+    <tr>
+      <td>278</td>
+      <td>2021--Wang-G--Au-Rh--LAMMPS--ipr1</td>
+      <td>f8f52d2e-597d-435a-926a-09f38094b1da</td>
+      <td>2021--Wang-G-Xu-Y-Qian-P-Su-Y--Au-Rh</td>
+      <td>ccd7fceb-a257-40df-812b-b1326955bff1</td>
+      <td>metal</td>
+      <td>atomic</td>
+      <td>False</td>
+      <td>adp</td>
+      <td>active</td>
+      <td>[Au, Rh]</td>
+      <td>[Au, Rh]</td>
+      <td>[196.9666, 102.9055]</td>
+      <td>[0.0, 0.0]</td>
+    </tr>
+  </tbody>
+</table>
+<p>279 rows × 13 columns</p>
+</div></div>
+</div>
+</div>
+<div class="section" id="2.3-From-data-model">
+<h3>2.3 From data model<a class="headerlink" href="#2.3-From-data-model" title="Permalink to this headline">¶</a></h3>
+<p><em>Updated version 1.3.3 - atomman.lammps.Potential is now an alias of potentials.PotentialLAMMPS</em></p>
+<p>Potentials can also be directly loaded from a potential_LAMMPS data model record using the atomman.lammps.Potential class. The data models can exist as Python dictionaries or be represented in JSON/XML formatted strings or files.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><p><strong>model</strong> (<em>DataModelDict, str, or file-like object</em>) The potential_LAMMPS data model content to load.</p></li>
+<li><p><strong>pot_dir</strong> (<em>str, optional</em>) directory location for any artifacts (eg. .eam.alloy files) associated with the potential. A value of None (default) indicates to use the working directory where the simulation will be ran.</p></li>
+</ul>
+<p>This is a demonstration data model record for an eam/alloy style potential. NOT A REAL RECORD!</p>
+<ul class="simple">
+<li><p>See <a class="reference external" href="#section4">Section 4</a> for tools to build the data models for most common LAMMPS pair_styles</p></li>
+<li><p>See <a class="reference external" href="#section5">Section 5</a> for specific details on the data model record schema and examples.</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -363,47 +860,55 @@ Notebook executed on 2020-04-15
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="2.2.-Load-a-data-model-with-Potential">
-<h3>2.2. Load a data model with Potential<a class="headerlink" href="#2.2.-Load-a-data-model-with-Potential" title="Permalink to this headline">¶</a></h3>
-<p>A Potential object is initialized by loading a data model.</p>
-<p>Parameters</p>
-<ul class="simple">
-<li><p><strong>model</strong> (<em>DataModelDict, str, or file-like object</em>) The potential_LAMMPS data model content to load.</p></li>
-<li><p><strong>pot_dir</strong> (<em>str, optional</em>) directory location for any artifacts (eg. .eam.alloy files) associated with the potential. A value of None (default) indicates to use the working directory where the simulation will be ran.</p></li>
-</ul>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<p>Load the potential from the record.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">potential</span> <span class="o">=</span> <span class="n">lmp</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="n">eam_alloy_json</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">potential</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>Alternatively, a data model can be loaded by an existing Potential object with the load() method. It has the same parameters as the class initializer.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
-</pre></div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">potential</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">eam_alloy_json</span><span class="p">,</span> <span class="n">pot_dir</span><span class="o">=</span><span class="s1">&#39;potential_folder&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+EAM-demo--LAMMPS--v1
+</pre></div></div>
 </div>
 </div>
-<div class="section" id="2.3.-Potential-identifiers">
-<h3>2.3. Potential identifiers<a class="headerlink" href="#2.3.-Potential-identifiers" title="Permalink to this headline">¶</a></h3>
-<p>Each potential_LAMMPS record has multiple terms to uniquely identify the potential model and implementation.</p>
+</div>
+<div class="section" id="3.-Potential-Classes">
+<h2>3. Potential Classes<a class="headerlink" href="#3.-Potential-Classes" title="Permalink to this headline">¶</a></h2>
+<p><em>Updated version 1.3.3: atomman.lammps.Potential is now an alias of potentials.PotentialLAMMPS</em></p>
+<p>The objects for the loaded potentials have a number of attributes and methods that</p>
+<ul class="simple">
+<li><p>Uniquely identify the LAMMPS potential version and the conceptual potential model that it is based on.</p></li>
+<li><p>Specify the LAMMPS settings to use with the potential.</p></li>
+<li><p>Define metadata for all unique atom models, i.e. atom type properties</p></li>
+<li><p>Dynamically construct LAMMPS command lines for the potential based on the list of model symbols found in an atomic system.</p></li>
+</ul>
+<div class="section" id="3.1.-Potential-identifiers-and-database-metadata">
+<h3>3.1. Potential identifiers and database metadata<a class="headerlink" href="#3.1.-Potential-identifiers-and-database-metadata" title="Permalink to this headline">¶</a></h3>
+<p>Each LAMMPS potential is identified according to a potential model, i.e. the concept of the potential, and the implementation, i.e. the version of the parameter file(s). The potential is further characterized with a status that allows for older, less preferred and erroneous implementations to be filtered out.</p>
 <ul class="simple">
 <li><p><strong>potkey</strong> (<em>str</em>) uuid4 hash-key for the potential model, i.e. the published mathematical form. This is permanent once assigned.</p></li>
 <li><p><strong>potid</strong> (<em>str</em>) human-readable unique identifier for the potential model derived from year, author, element model information. This ideally is permanent, but may change based on updated publication information.</p></li>
 <li><p><strong>key</strong> (<em>str</em>) uuid hash-key for the LAMMPS potential implementation, i.e. the specific potential parameter file(s) and/or LAMMPS pair_style/pair_coeff command lines used. This is permament once assigned.</p></li>
 <li><p><strong>id</strong> (<em>str</em>) human-readable identifier for the LAMMPS potential implementation derived from the potid, source and version. This may change if potid changes.</p></li>
+<li><p><strong>status</strong> (<em>str</em>) indicates the current status of the potential implementation</p>
+<ul>
+<li><p>‘active’ = any implementation that is not known to be incorrect or superceded by a newer version.</p></li>
+<li><p>‘superceded’ = a correctly implemented version that has been replaced by a newer version to address minor issues.</p></li>
+<li><p>‘retracted’ = an incorrectly implemented version due to either critical errors with the parameterization, file format, or metadata in the associated potential_LAMMPS record.</p></li>
 </ul>
-<p>Another way to think about it is that potkey and potid name the potential, while key and id name the version.</p>
+</li>
+</ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -411,6 +916,7 @@ Notebook executed on 2020-04-15
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.potid -&gt; &quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">potid</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.key -&gt;   &quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.id -&gt;    &quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.status -&gt;&quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -423,11 +929,12 @@ potential.potkey -&gt; 820738a9-f556-468b-9041-9d98351ff751
 potential.potid -&gt;  EAM-demo
 potential.key -&gt;    a45a7731-d115-4079-b6f5-aa700c5b5c56
 potential.id -&gt;     EAM-demo--LAMMPS--v1
+potential.status -&gt; active
 </pre></div></div>
 </div>
 <p>The string representation of the Potential returns its id.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -444,35 +951,24 @@ EAM-demo--LAMMPS--v1
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="2.4.-Other-attributes">
-<h3>2.4. Other attributes<a class="headerlink" href="#2.4.-Other-attributes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="3.2.-LAMMPS-settings">
+<h3>3.2. LAMMPS settings<a class="headerlink" href="#3.2.-LAMMPS-settings" title="Permalink to this headline">¶</a></h3>
+<p>A number of attributes are used to specify required settings to use with the potentials.</p>
 <ul class="simple">
 <li><p><strong>atom_style</strong> (<em>str</em>) LAMMPS atom_style option for the potential.</p></li>
 <li><p><strong>pair_style</strong> (<em>str</em>) LAMMPS pair_style option for the potential.</p></li>
-<li><p><strong>pot_dir</strong> (<em>str</em>) the directory containing files associated with the potential.</p></li>
-<li><p><strong>symbols</strong> (<em>list</em>) list of all atom-model symbols for the potential.</p></li>
 <li><p><strong>units</strong> (<em>str</em>) LAMMPS units option for the potential.</p></li>
-<li><p><strong>allsymbols</strong> (<em>bool</em>) flag affecting how pair_coeff lines are generated, is False for most potentials</p></li>
-<li><p><strong>status</strong> (<em>str</em>) indicates the current status of the potential implementation</p>
-<ul>
-<li><p>‘active’ = any implementation that is not known to be incorrect or superceded by a newer version.</p></li>
-<li><p>‘superceded’ = a correctly implemented version that has been replaced by a newer version to address minor issues.</p></li>
-<li><p>‘retracted’ = an incorrectly implemented version due to either a poor/wrong parameterization or data model representation resulting in major issues and deviations from the underlying potential model.</p></li>
-</ul>
-</li>
+<li><p><strong>allsymbols</strong> (<em>bool</em>) flag that indicates if the pair_style requires that pair_coeff be specified for all interaction models even if some models are not actually used.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.atom_style -&gt;&quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">atom_style</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.pair_style -&gt;&quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">pair_style</span><span class="p">)</span>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.pair_style -&gt;&quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">pair_style</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.atom_style -&gt;&quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">atom_style</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.units -&gt;     &quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.symbols -&gt;   &quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.pot_dir -&gt;   &quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">pot_dir</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.allsymbols -&gt;&quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">allsymbols</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.status -&gt;    &quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -481,50 +977,29 @@ EAM-demo--LAMMPS--v1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-potential.atom_style -&gt; atomic
 potential.pair_style -&gt; eam/alloy
+potential.atom_style -&gt; atomic
 potential.units -&gt;      metal
-potential.symbols -&gt;    [&#39;Ni&#39;, &#39;Al&#39;, &#39;Co&#39;]
-potential.pot_dir -&gt;    potential_folder
 potential.allsymbols -&gt; False
-potential.status -&gt;     active
-</pre></div></div>
-</div>
-<p>The pot_dir can also be changed at any time.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">potential</span><span class="o">.</span><span class="n">pot_dir</span> <span class="o">=</span> <span class="s1">&#39;new_potential_folder&#39;</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.pot_dir -&gt; &quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">pot_dir</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-potential.pot_dir -&gt;  new_potential_folder
 </pre></div></div>
 </div>
 </div>
-</div>
-<div class="section" id="3.-Elements,-Charges-and-Masses">
-<h2>3. Elements, Charges and Masses<a class="headerlink" href="#3.-Elements,-Charges-and-Masses" title="Permalink to this headline">¶</a></h2>
-<p>Information about the elements, charges and masses associated with each atom-model symbol can also be retrieved using the elements(), charges() and masses() methods. All three methods have the same parameters.</p>
-<p><strong>SYMBOLS VS ELEMENTS NOTE:</strong> The Potential class makes a distinction between symbols and elements. The symbols are the tags used by LAMMPS to identify which atom-model listed in a parameter file to use. These typically coincide with the elements the models represent, but this is not always the case as some potential styles allow multiple interaction models to be defined for the same elements. Differentiating between symbols and elements allows for the Potential class to handle these types of
-potentials as well.</p>
-<p><strong>CHARGES NOTE:</strong> The default charge is 0. Charges only need to be defined for potentials with formats (pair_styles) where the ionic charge is constant for each atom model, e.g. Coulombic potentials. Potentials with variable charges, e.g. ReaxFF and COMB, compute the charges on a per-atom basis during simulations.</p>
-<p>Parameters</p>
+<div class="section" id="3.3-Atom-type-properties">
+<h3>3.3 Atom-type properties<a class="headerlink" href="#3.3-Atom-type-properties" title="Permalink to this headline">¶</a></h3>
+<p>Each unique atomic model is associated with a symbol, and that symbol can then be associated with an element, a mass and/or a charge.</p>
 <ul class="simple">
-<li><p><strong>symbols</strong> (<em>str or list, optional</em>) a list of the potential’s symbol models to retrieve values for. If value is None (default) then Potential.symbols is used.</p></li>
+<li><p><strong>symbols</strong> (<em>list</em>) The symbols used to uniquely identify the different atomic models defined by the potential.</p></li>
+<li><p><strong>elements()</strong> (<em>list</em>) Returns the list of elements that correspond to the symbols. If a symbol is not associated with an element, then that symbol’s element is given as None.</p></li>
+<li><p><strong>masses()</strong> (<em>list</em>) The atomic/particle masses that correspond to the symbols. For symbols associated with elements, the class will return the standard elemental mass for that element if the mass is not explicitly set elsewhere.</p></li>
+<li><p><strong>charges()</strong> (<em>list</em>) The atomic/particle charges that correspond to the symbols. This is used for potentials that assign constant charges to particles based on their symbols, e.g. Coulumbic potentials. Charges for potentials with variable charges, e.g. ReaxFF and COMB, should not be set. If no charge is set for a symbol, the charge is assumed to be 0.</p></li>
+</ul>
+<p>The elements(), masses(), and charges() methods all take the same parameters</p>
+<ul class="simple">
+<li><p><strong>symbols</strong> (<em>str or list, optional</em>) a list of the potential’s symbol models to retrieve values for. If value is None (default) then all values are returned according to the symbols attribute of the class.</p></li>
 </ul>
 <p>Calling the methods without parameters uses all symbols.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -549,7 +1024,7 @@ potential.masses() -&gt;   [58.6934, 26.981539, 58.9332]
 </div>
 <p>Calling the methods with symbols gives values for that particular set.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -582,10 +1057,63 @@ potential.masses([&#39;Al&#39;, &#39;Al&#39;, &#39;Co&#39;, &#39;Al&#39;]) -&gt;
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="4.-Generate-LAMMPS-commands">
-<h2>4. Generate LAMMPS commands<a class="headerlink" href="#4.-Generate-LAMMPS-commands" title="Permalink to this headline">¶</a></h2>
-<p>The LAMMPS input command lines for using the potential can also be autogenerated using the pair_info() method.</p>
-<p><strong>Potential.pair_info()</strong></p>
+<div class="section" id="3.4.-Generate-LAMMPS-commands">
+<h3>3.4. Generate LAMMPS commands<a class="headerlink" href="#3.4.-Generate-LAMMPS-commands" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="3.4.1.-Potential-directory">
+<h4>3.4.1. Potential directory<a class="headerlink" href="#3.4.1.-Potential-directory" title="Permalink to this headline">¶</a></h4>
+<p>For potentials with parameter files, LAMMPS needs to know where the files are in order to read them in. With the Potential class, this is handled with the pot_dir parameter</p>
+<ul class="simple">
+<li><p><strong>pot_dir</strong> (<em>str or None</em>) the directory containing files associated with the potential. If None, then the files are assumed to either be in the working directory or a directory that LAMMPS knows about.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.pot_dir -&gt;  &quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">pot_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+potential.pot_dir -&gt;
+</pre></div></div>
+</div>
+<p>Depending on how the potential was loaded, the default value of pot_dir may be different:</p>
+<ul class="simple">
+<li><p>If load_lammps_potential() is used with getfiles=True, then the parameter files will be copied to the current working directory in a subfolder named for the potential’s id. pot_dir will then match the potential’s id. This is useful for packaging complete calculations and if you are using potentials from both local and remote locations.</p></li>
+<li><p>If load_lammps_potential() is used with getfiles=False and the potential is retrieved from the local database copy, then pot_dir will be set to the full path to the library directory where the potential’s parameter files are stored. This is convenient for purely local users as it allows for the potentials to work properly without copying the files.</p></li>
+<li><p>If load_lammps_potential() is used with getfiles=False the the potential is retrieved from the remote database, then pot_dir will be set to None. This is done as the method will have no information about where the parameter files would be located locally, if they even are.</p></li>
+<li><p>If a potential is taken from the loaded potentials of a Database object, then pot_dir is None.</p></li>
+<li><p>If a potential is loaded from a file using atomman.lammps.Potential, the default pot_dir value is None, but it can be set during initialization using the pot_dir parameter.</p></li>
+</ul>
+<p><strong>NOTE</strong>: The pot_dir attribute can be directly set to a different value at any time after the object has been created.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">potential</span><span class="o">.</span><span class="n">pot_dir</span> <span class="o">=</span> <span class="s1">&#39;/demo/new_potential_folder&#39;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.pot_dir -&gt; &quot;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">pot_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+potential.pot_dir -&gt;  /demo/new_potential_folder
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="3.4.2.-pair_info()">
+<h4>3.4.2. pair_info()<a class="headerlink" href="#3.4.2.-pair_info()" title="Permalink to this headline">¶</a></h4>
+<p>The LAMMPS input command lines for using the potential can be autogenerated using the pair_info() method.</p>
 <p>Parameters</p>
 <ul class="simple">
 <li><p><strong>symbols</strong> (<em>str or list, optional</em>) a list of the potential’s symbol models to associate with integer atom types of a system. If value is None (default) then Potential.symbols is used.</p></li>
@@ -594,7 +1122,7 @@ potential.masses([&#39;Al&#39;, &#39;Al&#39;, &#39;Co&#39;, &#39;Al&#39;]) -&gt;
 <p><strong>NOTE:</strong> For pair_styles hybrid and hybrid/overlay, the list of symbols given as parameters must include all defined atom model interactions.</p>
 <p>Without symbols gives LAMMPS commands for all symbols in the same order as the data model.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -614,13 +1142,13 @@ mass 2 26.981539
 mass 3 58.9332
 
 pair_style eam/alloy
-pair_coeff * * new_potential_folder\file.eam.alloy Ni Al Co
+pair_coeff * * \demo\new_potential_folder\file.eam.alloy Ni Al Co
 
 </pre></div></div>
 </div>
 <p>Give a list of symbols to dynamically generate commands based on the elements in the associated atomic system.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -638,12 +1166,12 @@ potential.pair_info(&#39;Ni&#39;) -&gt;
 mass 1 58.6934
 
 pair_style eam/alloy
-pair_coeff * * new_potential_folder\file.eam.alloy Ni
+pair_coeff * * \demo\new_potential_folder\file.eam.alloy Ni
 
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -664,13 +1192,13 @@ mass 3 58.9332
 mass 4 26.981539
 
 pair_style eam/alloy
-pair_coeff * * new_potential_folder\file.eam.alloy Al Al Co Al
+pair_coeff * * \demo\new_potential_folder\file.eam.alloy Al Al Co Al
 
 </pre></div></div>
 </div>
 <p>Specify masses to override default values</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -688,7 +1216,134 @@ potential.pair_info(&#39;Ni&#39;, masses=27) -&gt;
 mass 1 27
 
 pair_style eam/alloy
-pair_coeff * * new_potential_folder\file.eam.alloy Ni
+pair_coeff * * \demo\new_potential_folder\file.eam.alloy Ni
+
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="3.4.3.-System.dump(‘atom_data’)">
+<h4>3.4.3. System.dump(‘atom_data’)<a class="headerlink" href="#3.4.3.-System.dump(‘atom_data’)" title="Permalink to this headline">¶</a></h4>
+<p>The pair info command lines can also be directly incorporated with the read atom info command lines generated when a System is dumped to a LAMMPS data file by giving the potential to the dump function and setting return_pair_info=True. This is the preferred method for writing calculation methods to be agnostic to the potential as it ensures that the data file is compatible with the potential information.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Define a simple unit cell</span>
+<span class="n">fcc_test</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;prototype&#39;</span><span class="p">,</span> <span class="s1">&#39;A1--Cu--fcc&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">3.52</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Ni&#39;</span><span class="p">)</span>
+
+<span class="c1"># Dump to data file</span>
+<span class="n">atom_pair_info</span> <span class="o">=</span> <span class="n">fcc_test</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;atom_data&#39;</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="s1">&#39;test.dat&#39;</span><span class="p">,</span> <span class="n">potential</span><span class="o">=</span><span class="n">potential</span><span class="p">,</span> <span class="n">return_pair_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Check the command lines</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">atom_pair_info</span><span class="p">)</span>
+
+<span class="c1"># Delete dump file</span>
+<span class="n">Path</span><span class="p">(</span><span class="s1">&#39;test.dat&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+# Script and atom data file prepared using atomman Python package
+
+units metal
+atom_style atomic
+
+boundary p p p
+read_data test.dat
+
+mass 1 58.6934
+
+pair_style eam/alloy
+pair_coeff * * \demo\new_potential_folder\file.eam.alloy Ni
+
+</pre></div></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="4.-Building-a-new-potential">
+<h2>4. Building a new potential<a class="headerlink" href="#4.-Building-a-new-potential" title="Permalink to this headline">¶</a></h2>
+<p><em>Added version 1.3.4</em></p>
+<p>The function build_lammps_potential() is also inherited from potentials allowing for users to easily build and save their own potential objects.</p>
+<p>See the documentation for the <a class="reference external" href="https://github.com/usnistgov/potentials">potentials package</a> for more details and examples.</p>
+<p>Parameters for all formats</p>
+<ul class="simple">
+<li><p><strong>pair_style</strong> (<em>str</em>) The LAMMPS pair_style option to use.</p></li>
+<li><p><strong>id</strong> (<em>str, optional</em>) A human-readable identifier to name the LAMMPS potential implementation. Must be set in order to save to the database as the id is used as the potential’s file name.</p></li>
+<li><p><strong>key</strong> (<em>str, optional</em>) A UUID4 code to uniquely identify the LAMMPS potential implementation. If not specified, a new UUID4 code is automatically generated.</p></li>
+<li><p><strong>potid</strong> (<em>str, optional</em>) A human-readable identifier to refer to the conceptual potential model that the potential is based on. This should be shared by alternate implementations of the same potential.</p></li>
+<li><p><strong>potkey</strong> (<em>str, optional</em>) A UUID4 code to uniquely identify the conceptual potential model. This should be shared by alternate implementations of the same potential. If not specified, a new UUID4 code is automatically generated.</p></li>
+<li><p><strong>units</strong> (<em>str, optional</em>) The LAMMPS units option to use.</p></li>
+<li><p><strong>atom_style</strong> (<em>str, optional</em>) The LAMMPS atom_style option to use.</p></li>
+<li><p><strong>pair_style_terms</strong> (<em>list, optional</em>) Any other terms that appear on the pair_style line (like cutoff) if needed.</p></li>
+<li><p><strong>status</strong> (<em>str, optional</em>) Indicates if the implementation is ‘active’ (valid and current), ‘superseded’ (valid, but better ones exist), or ‘retracted’ (invalid). Default value is ‘active’.</p></li>
+<li><p><strong>allsymbols</strong> (<em>bool, optional</em>) Flag indicating if the coefficient lines must be defined for every particle model in the potential even if those particles are not used. Default value is False as most pair_styles do not require this.</p></li>
+<li><p><strong>elements</strong> (<em>str or list, optional</em>) The elemental symbols associated with each particle model if the particles represent atoms.</p></li>
+<li><p><strong>masses</strong> (<em>float or list, optional</em>) The masses of each particle. Optional if elements is given as standard values can be used.</p></li>
+<li><p><strong>charges</strong> (<em>float or list, optional</em>) The static charges to assign to each particle, if the model calls for it.</p></li>
+<li><p><strong>symbols</strong> (<em>str or list, optional</em>) The symbols used to identify each unique particle model. Optional if elements is given and the particle symbols are the same as the elemental symbols.</p></li>
+<li><p><strong>command_terms</strong> (<em>list, optional</em>) Allows any other LAMMPS command lines that must be set for the potential to work properly to be set. Each command line should be given as a list of terms, and multiple command lines given as a list of lists.</p></li>
+</ul>
+<p>Parameters for true pair potentials, e.g. lj/cut</p>
+<ul class="simple">
+<li><p><strong>interactions</strong> (<em>dict or list of dict, optional</em>) Each unique pair interaction is characterized by a dict containing symbols=two element model symbols, and terms=list of pair_coeff terms.</p></li>
+</ul>
+<p>Parameters for potentials with a single parameter file, e.g. eam/alloy</p>
+<ul class="simple">
+<li><p><strong>paramfile</strong> (<em>str, optional</em>) The name of the potential’s parameter file.</p></li>
+</ul>
+<p>Parameters for potentials with common library and specific parameter files, e.g. meam and eim</p>
+<ul class="simple">
+<li><p><strong>libfile</strong> (<em>str, optional</em>) The name of the potential’s library file.</p></li>
+<li><p><strong>paramfile</strong> (<em>str, optional</em>) The name of the potential’s parameter file.</p></li>
+</ul>
+<p>Parameters for the original eam style</p>
+<ul class="simple">
+<li><p><strong>paramfiles</strong> (<em>str or list, optional</em>) The name(s) of the potential’s parameter file(s). There should be one parameter file for each element model.</p></li>
+</ul>
+<p><strong>NOTE</strong>: This function currently supports <em>most but not all</em> LAMMPS pair_styles. If the function says that the pair_style is unsupported but it has a format similar to one of the listed options, you can call the associated builder class in potentials directly (and let us know it needs to be added to the lists). If the format is decidedly different (e.g. hybrid), then the underlying information can be manually built as detailed in Section #6 below.</p>
+<p>Initialize a builder for an eam/alloy potential</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">custom_eam_potential</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">build_lammps_potential</span><span class="p">(</span><span class="n">pair_style</span><span class="o">=</span><span class="s1">&#39;eam/alloy&#39;</span><span class="p">,</span>
+                                                 <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;custom-eam--LAMMPS--v1&#39;</span><span class="p">,</span>
+                                                 <span class="n">potid</span><span class="o">=</span><span class="s1">&#39;custom-eam&#39;</span><span class="p">,</span>
+                                                 <span class="n">elements</span><span class="o">=</span><span class="s1">&#39;Ag&#39;</span><span class="p">,</span>
+                                                 <span class="n">paramfile</span><span class="o">=</span><span class="s1">&#39;Ag-custom.eam.alloy&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Generate a potential object from the builder</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">potential</span> <span class="o">=</span> <span class="n">custom_eam_potential</span><span class="o">.</span><span class="n">potential</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">potential</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">potential</span><span class="o">.</span><span class="n">pair_info</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+custom-eam--LAMMPS--v1
+mass 1 107.8682
+
+pair_style eam/alloy
+pair_coeff * * Ag-custom.eam.alloy Ag
 
 </pre></div></div>
 </div>
@@ -722,7 +1377,7 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <li><p><strong>“id”</strong> : a human-readable identifier that uniquely identifies the potential model. Corresponds to the Potential.potid attribute.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -760,7 +1415,7 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <li><p><strong>“charge”</strong>: ionic charge associated with the atom-model. If not given, it is set to 0.0. Only needs to be defined for pair_styles where the ionic charge is constant for a given atom-model e.g. Columbic potentials.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -792,7 +1447,7 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -849,7 +1504,7 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <li><p><strong>“term”</strong> : a list characterizing any additional terms that appear in the pair_style command line. The available subelements are the same as the ones available in the <strong>“term”</strong> branch of <strong>“pair_coeff”</strong>.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -917,7 +1572,7 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <li><p>For hybrid style potentials, <strong>“interaction”</strong>-<strong>“symbol”</strong> lists all atom-model symbols associated with the particular sub-style. It will have two values for pair sub-styles, but can be of any length for many-body sub-styles.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1029,7 +1684,7 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1097,7 +1752,7 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 </li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1155,7 +1810,7 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <div class="section" id="5.2.1.-Lennard-Jones-and-other-two-body-style-potentials">
 <h4>5.2.1. Lennard-Jones and other two-body style potentials<a class="headerlink" href="#5.2.1.-Lennard-Jones-and-other-two-body-style-potentials" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1326,7 +1981,7 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <h4>5.2.2. eam/alloy and other many-body potentials from single parameter files<a class="headerlink" href="#5.2.2.-eam/alloy-and-other-many-body-potentials-from-single-parameter-files" title="Permalink to this headline">¶</a></h4>
 <p><strong>NOTE:</strong> Data models for the original eam pair_style are different (see <a class="reference external" href="#section5.2.6">Section 5.2.6.</a>)!</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1422,7 +2077,7 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <div class="section" id="5.2.3.-COMB-and-other-potentials-requiring-additional-commands">
 <h4>5.2.3. COMB and other potentials requiring additional commands<a class="headerlink" href="#5.2.3.-COMB-and-other-potentials-requiring-additional-commands" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1550,7 +2205,7 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <div class="section" id="5.2.4.-MEAM-and-other-many-body-potentials-with-library-and-parameter-files">
 <h4>5.2.4. MEAM and other many-body potentials with library and parameter files<a class="headerlink" href="#5.2.4.-MEAM-and-other-many-body-potentials-with-library-and-parameter-files" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1658,7 +2313,7 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <div class="section" id="5.2.5.-hybrid-style-potentials">
 <h4>5.2.5. hybrid-style potentials<a class="headerlink" href="#5.2.5.-hybrid-style-potentials" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1860,7 +2515,7 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <div class="section" id="5.2.6.-Original-eam-pair_style">
 <h4>5.2.6. Original eam pair_style<a class="headerlink" href="#5.2.6.-Original-eam-pair_style" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1977,7 +2632,7 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
 <div class="section" id="5.2.7-Columbic-pair_style">
 <h3>5.2.7 Columbic pair_style<a class="headerlink" href="#5.2.7-Columbic-pair_style" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2065,17 +2720,32 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Introduction to atomman: Potential class</a><ul>
+<li><a class="reference internal" href="#">Introduction to atomman: LAMMPS Potentials</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
-<li><a class="reference internal" href="#2.-Class-Basics">2. Class Basics</a><ul>
-<li><a class="reference internal" href="#2.1.Demonstration-data-model">2.1.Demonstration data model</a></li>
-<li><a class="reference internal" href="#2.2.-Load-a-data-model-with-Potential">2.2. Load a data model with Potential</a></li>
-<li><a class="reference internal" href="#2.3.-Potential-identifiers">2.3. Potential identifiers</a></li>
-<li><a class="reference internal" href="#2.4.-Other-attributes">2.4. Other attributes</a></li>
+<li><a class="reference internal" href="#2.-Loading-LAMMPS-Potentials">2. Loading LAMMPS Potentials</a><ul>
+<li><a class="reference internal" href="#2.1.-Using-load_lammps_potential">2.1. Using load_lammps_potential</a><ul>
+<li><a class="reference internal" href="#2.1.1.-By-id">2.1.1. By id</a></li>
+<li><a class="reference internal" href="#2.1.2.-By-potid">2.1.2. By potid</a></li>
+<li><a class="reference internal" href="#2.1.3.-By-category">2.1.3. By category</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#3.-Elements,-Charges-and-Masses">3. Elements, Charges and Masses</a></li>
-<li><a class="reference internal" href="#4.-Generate-LAMMPS-commands">4. Generate LAMMPS commands</a></li>
+<li><a class="reference internal" href="#2.2.-Using-Database-class">2.2. Using Database class</a></li>
+<li><a class="reference internal" href="#2.3-From-data-model">2.3 From data model</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#3.-Potential-Classes">3. Potential Classes</a><ul>
+<li><a class="reference internal" href="#3.1.-Potential-identifiers-and-database-metadata">3.1. Potential identifiers and database metadata</a></li>
+<li><a class="reference internal" href="#3.2.-LAMMPS-settings">3.2. LAMMPS settings</a></li>
+<li><a class="reference internal" href="#3.3-Atom-type-properties">3.3 Atom-type properties</a></li>
+<li><a class="reference internal" href="#3.4.-Generate-LAMMPS-commands">3.4. Generate LAMMPS commands</a><ul>
+<li><a class="reference internal" href="#3.4.1.-Potential-directory">3.4.1. Potential directory</a></li>
+<li><a class="reference internal" href="#3.4.2.-pair_info()">3.4.2. pair_info()</a></li>
+<li><a class="reference internal" href="#3.4.3.-System.dump(‘atom_data’)">3.4.3. System.dump(‘atom_data’)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#4.-Building-a-new-potential">4. Building a new potential</a></li>
 <li><a class="reference internal" href="#5.-potential_LAMMPS-Data-Model">5. potential_LAMMPS Data Model</a><ul>
 <li><a class="reference internal" href="#5.1.-potential_LAMMPS-data-model-schema">5.1. potential_LAMMPS data model schema</a><ul>
 <li><a class="reference internal" href="#5.1.1.-The-“potential”-branch">5.1.1. The “potential” branch</a></li>
@@ -2126,7 +2796,7 @@ pair_coeff * * new_potential_folder\file.eam.alloy Ni
         <li class="right" >
           <a href="02._LAMMPS_functionality.html" title="Introduction to atomman: LAMMPS functionality"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

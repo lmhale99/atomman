@@ -19,6 +19,8 @@ Tutorials
    01.4.7. ase and phonopy conversions <01.4.7._ase_and_phonopy_conversions>
    01.4.8. pymatgen conversions <01.4.8._pymatgen_conversions>
    01.4.9. spglib conversions <01.4.9._spglib_conversions>
+   01.4.10. prototype loading <01.4.10._prototype_loading>
+   01.4.11. crystal loading <01.4.11._crystal_loading>
    02. LAMMPS functionality <02._LAMMPS_functionality>
    02.1. Potential class <02.1._Potential_class>
    02.2. Running LAMMPS and the Log class <02.2._Running_LAMMPS_and_the_Log_class>
@@ -35,3 +37,4 @@ Tutorials
    04.6. Gamma surface plotting <04.6._Gamma_surface_plotting>
    04.7. Semidiscrete variational Peierls-Nabarro model <04.7._Semidiscrete_variational_Peierls-Nabarro_model>
    04.8. Periodic array of dislocations <04.8._Periodic_array_of_dislocations>
+   04.9. Dislocation class <04.9._Dislocation_class>

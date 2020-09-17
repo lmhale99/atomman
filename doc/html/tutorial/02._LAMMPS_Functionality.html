@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: LAMMPS functionality &#8212; atomman 1.3.2 documentation</title>
+    <title>Introduction to atomman: LAMMPS functionality &#8212; atomman 1.3.4 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -17,8 +17,8 @@
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction to atomman: Potential class" href="02.1._Potential_class.html" />
-    <link rel="prev" title="Introduction to atomman: Load and dump" href="01.4.9._spglib_conversions.html" /> 
+    <link rel="next" title="Introduction to atomman: LAMMPS Potentials" href="02.1._Potential_class.html" />
+    <link rel="prev" title="Introduction to atomman: crystal loading" href="01.4.11._crystal_loading.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -30,12 +30,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="02.1._Potential_class.html" title="Introduction to atomman: Potential class"
+          <a href="02.1._Potential_class.html" title="Introduction to atomman: LAMMPS Potentials"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="01.4.9._spglib_conversions.html" title="Introduction to atomman: Load and dump"
+          <a href="01.4.11._crystal_loading.html" title="Introduction to atomman: crystal loading"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -279,7 +279,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard libraries</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
@@ -307,123 +307,82 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.2
-Notebook executed on 2020-04-15
+atomman version = 1.3.4
+Notebook executed on 2020-09-11
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="2.-Interatomic-Potential-Control">
 <h2>2. Interatomic Potential Control<a class="headerlink" href="#2.-Interatomic-Potential-Control" title="Permalink to this headline">¶</a></h2>
 <p>LAMMPS is capable of using a wide array of interatomic potential styles, which are defined through a combination of LAMMPS commands and potential parameter files. In atomman, the LAMMPS commands can be automatically generated using the Potentials class and structured data model files (Section 2.2).</p>
-<div class="section" id="2.1-MEAM-parameter-files">
-<h3>2.1 MEAM parameter files<a class="headerlink" href="#2.1-MEAM-parameter-files" title="Permalink to this headline">¶</a></h3>
-<p>This generates the library and parameter files for the 2015–Pascuet-M-I–Al potential. It serves as a nice demonstration as the parameter files are short compared to other potentials allowing them to be embedded in this Notebook.</p>
+<div class="section" id="2.1-Load-potential-from-database">
+<h3>2.1 Load potential from database<a class="headerlink" href="#2.1-Load-potential-from-database" title="Permalink to this headline">¶</a></h3>
+<p>Any LAMMPS-compatible potential in the NIST Interatomic Potentials Repository can be loaded/downloaded using load_lammps_potential().</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Generate Al.meam parameter file</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;Al.meam&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;re(1,1) =   2.86378</span>
-<span class="s2">attrac(1,1) = 0.39558</span>
-<span class="s2">repuls(1,1) = 0.09806</span>
-<span class="s2">Cmin(1,1,1) = 1.00769</span>
-<span class="s2">Cmax(1,1,1) = 2.31407</span>
-<span class="s2">#</span>
-<span class="s2">rc = 5.0</span>
-<span class="s2">delr = 0.1</span>
-<span class="s2">augt1 = 1&quot;&quot;&quot;</span><span class="p">)</span>
+<span></span><span class="c1"># Load potential based on its unique ID</span>
+<span class="n">pot_id</span> <span class="o">=</span> <span class="s1">&#39;2015--Pascuet-M-I--Al--LAMMPS--ipr1&#39;</span>
+<span class="n">potential</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load_lammps_potential</span><span class="p">(</span><span class="n">pot_id</span><span class="p">,</span> <span class="n">getfiles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+</div>
+<div class="section" id="2.2-Potential-parameter-files">
+<h3>2.2 Potential parameter files<a class="headerlink" href="#2.2-Potential-parameter-files" title="Permalink to this headline">¶</a></h3>
+<p>Setting getfiles=True will copy/download the potential parameter files from the local/remote library database to the current working directory in a subfolder matching the potential’s id.</p>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Generate library-Al.meam parameter file</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;library-Al.meam&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;# References:</span>
-<span class="s2"># elt        lat     z       ielement     atwt</span>
-<span class="s2"># alpha      b0      b1      b2           b3    alat    esub    asub</span>
-<span class="s2"># t0         t1              t2           t3            rozero  ibar</span>
-<span class="s2">#</span>
-<span class="s2">&#39;Al&#39;        &#39;fcc&#39;   12.     13           26.9815</span>
-<span class="s2">  4.68604   1.56205   5.39270   5.29601  -1.00047   4.05000   3.35999   1.06859</span>
-<span class="s2">1.0  -1.54917  -1.28508  10.01041 1.0 0 &quot;&quot;&quot;</span><span class="p">)</span>
+<span></span><span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">pot_id</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
 </div>
-<div class="section" id="2.2-potential-LAMMPS-data-model-file">
-<h3>2.2 potential-LAMMPS data model file<a class="headerlink" href="#2.2-potential-LAMMPS-data-model-file" title="Permalink to this headline">¶</a></h3>
-<p>This generates the data model associated with the potential above. The different fields of the model depict values that are used to generate the LAMMPS command lines associated with the potential.</p>
-<p>See <a class="reference external" href="02.1._Potential_class.html">02.1. Potential class Jupyter Notebook</a> for more details on the data model format.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Data model corresponding to the potential parameter files above</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;2015--Pascuet-M-I--Al--LAMMPS--ipr1.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;{</span>
-<span class="s2">    &quot;potential-LAMMPS&quot;: {</span>
-<span class="s2">        &quot;key&quot;: &quot;83ca7343-12d3-4644-b85b-2b3a839f884e&quot;,</span>
-<span class="s2">        &quot;id&quot;: &quot;2015--Pascuet-M-I--Al--LAMMPS--ipr1&quot;,</span>
-<span class="s2">        &quot;potential&quot;: {</span>
-<span class="s2">            &quot;key&quot;: &quot;b5fb2f1f-a582-4f81-9445-f002ce31e66e&quot;,</span>
-<span class="s2">            &quot;id&quot;: &quot;2015--Pascuet-M-I--Al&quot;</span>
-<span class="s2">        },</span>
-<span class="s2">        &quot;units&quot;: &quot;metal&quot;,</span>
-<span class="s2">        &quot;atom_style&quot;: &quot;atomic&quot;,</span>
-<span class="s2">        &quot;atom&quot;: [</span>
-<span class="s2">            {</span>
-<span class="s2">                &quot;element&quot;: &quot;Al&quot;,</span>
-<span class="s2">                &quot;mass&quot;: 26.9815</span>
-<span class="s2">            }</span>
-<span class="s2">        ],</span>
-<span class="s2">        &quot;pair_style&quot;: {</span>
-<span class="s2">            &quot;type&quot;: &quot;meam&quot;</span>
-<span class="s2">        },</span>
-<span class="s2">        &quot;pair_coeff&quot;: {</span>
-<span class="s2">            &quot;term&quot;: [</span>
-<span class="s2">                {</span>
-<span class="s2">                    &quot;file&quot;: &quot;library-Al.meam&quot;</span>
-<span class="s2">                },</span>
-<span class="s2">                {</span>
-<span class="s2">                    &quot;option&quot;: &quot;Al&quot;</span>
-<span class="s2">                },</span>
-<span class="s2">                {</span>
-<span class="s2">                    &quot;file&quot;: &quot;Al.meam&quot;</span>
-<span class="s2">                },</span>
-<span class="s2">                {</span>
-<span class="s2">                    &quot;symbols&quot;: &quot;True&quot;</span>
-<span class="s2">                }</span>
-<span class="s2">            ]</span>
-<span class="s2">        }</span>
-<span class="s2">    }</span>
-<span class="s2">}&quot;&quot;&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam
+re(1,1) =   2.86378
+attrac(1,1) = 0.39558
+repuls(1,1) = 0.09806
+Cmin(1,1,1) = 1.00769
+Cmax(1,1,1) = 2.31407
+#
+rc = 5.0
+delr = 0.1
+augt1 = 1
+
+
+2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam
+# References:
+# elt        lat     z       ielement     atwt
+# alpha      b0      b1      b2           b3    alat    esub    asub
+# t0         t1              t2           t3            rozero  ibar
+#
+&#39;Al&#39;        &#39;fcc&#39;   12.     13           26.9815
+  4.68604   1.56205   5.39270   5.29601  -1.00047   4.05000   3.35999   1.06859
+1.0  -1.54917  -1.28508  10.01041 1.0 0
+
+
+</pre></div></div>
 </div>
 </div>
 <div class="section" id="2.3-lammps.Potential-Class">
 <h3>2.3 lammps.Potential Class<a class="headerlink" href="#2.3-lammps.Potential-Class" title="Permalink to this headline">¶</a></h3>
-<p>The data model can then be read in and interpreted using a lammps.Potential object. This allows for the generation of dynamic LAMMPS command lines for the potential.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Read in potential data model during initialization</span>
-<span class="n">potential</span> <span class="o">=</span> <span class="n">lmp</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s1">&#39;2015--Pascuet-M-I--Al--LAMMPS--ipr1.json&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
+<p>The load_lammps_potential() function returns a Potential object that can be used to explore properties of the potential and generate LAMMPS input commands.</p>
 <p>Basic properties can be directly obtained.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -454,16 +413,12 @@ potential.masses() -&gt;    [26.9815]
 </div>
 <p>The LAMMPS command lines for the potential are auto-generated based on a list of symbols corresponding to LAMMPS atom types. This fully works for all LAMMPS pair_styles, with only the hybrid and hybrid/overlay styles having limitations.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;potential.pair_info() -&gt;&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">potential</span><span class="o">.</span><span class="n">pair_info</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.pair_info([&#39;Al&#39;, &#39;Al&#39;, &#39;Al&#39;]) -&gt;&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">potential</span><span class="o">.</span><span class="n">pair_info</span><span class="p">([</span><span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="s1">&#39;Al&#39;</span><span class="p">]))</span>
 </pre></div>
 </div>
 </div>
@@ -476,16 +431,32 @@ potential.pair_info() -&gt;
 mass 1 26.9815
 
 pair_style meam
-pair_coeff * * library-Al.meam Al Al.meam Al
+pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al
 
-
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.pair_info([&#39;Al&#39;, &#39;Al&#39;, &#39;Al&#39;]) -&gt;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">potential</span><span class="o">.</span><span class="n">pair_info</span><span class="p">([</span><span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="s1">&#39;Al&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 potential.pair_info([&#39;Al&#39;, &#39;Al&#39;, &#39;Al&#39;]) -&gt;
 mass 1 26.9815
 mass 2 26.9815
 mass 3 26.9815
 
 pair_style meam
-pair_coeff * * library-Al.meam Al Al.meam Al Al Al
+pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al Al Al
 
 </pre></div></div>
 </div>
@@ -496,35 +467,13 @@ pair_coeff * * library-Al.meam Al Al.meam Al Al Al
 <div class="section" id="3.1-Load-poscar-Al-fcc-unit-cell">
 <h3>3.1 Load poscar Al fcc unit cell<a class="headerlink" href="#3.1-Load-poscar-Al-fcc-unit-cell" title="Permalink to this headline">¶</a></h3>
 <p>A crystalline system can be easily generated using a unit cell system either defined in atomman or imported from another format. For simplicity, here we will load a unit cell from a poscar file.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Generate poscar file</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;Al-fcc.poscar&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;POSCAR for fcc Al standard unit cell</span>
-<span class="s2">1.0</span>
-<span class="s2">4.05 0.00 0.00</span>
-<span class="s2">0.00 4.05 0.00</span>
-<span class="s2">0.00 0.00 4.05</span>
-<span class="s2">Al</span>
-<span class="s2">4</span>
-<span class="s2">direct</span>
-<span class="s2">0.00 0.00 0.00</span>
-<span class="s2">0.50 0.50 0.00</span>
-<span class="s2">0.50 0.00 0.50</span>
-<span class="s2">0.00 0.50 0.50&quot;&quot;&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<p>Load poscar file to an atomman.System</p>
+<p>Load fcc prototype with Al lattice constant</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;poscar&#39;</span><span class="p">,</span> <span class="s1">&#39;Al-fcc.poscar&#39;</span><span class="p">)</span>
+<span></span><span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;prototype&#39;</span><span class="p">,</span> <span class="s1">&#39;A1--Cu--fcc&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">4.05</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -545,9 +494,9 @@ pbc = [ True  True  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
-      1 |       1 |   2.025 |   2.025 |   0.000
+      1 |       1 |   0.000 |   2.025 |   2.025
       2 |       1 |   2.025 |   0.000 |   2.025
-      3 |       1 |   0.000 |   2.025 |   2.025
+      3 |       1 |   2.025 |   2.025 |   0.000
 </pre></div></div>
 </div>
 </div>
@@ -555,7 +504,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <h3>3.2 Manipulate system<a class="headerlink" href="#3.2-Manipulate-system" title="Permalink to this headline">¶</a></h3>
 <p>More complicated atomic configurations can then be generated by manipulating the seed system and the atoms contained within. Here, we’ll limit the manipulations to making the system a 3x3x3 supercell of itself.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -575,36 +524,32 @@ Supercell has 108 atoms
 </div>
 <div class="section" id="3.3-Save-to-atom-data-file">
 <h3>3.3 Save to atom data file<a class="headerlink" href="#3.3-Save-to-atom-data-file" title="Permalink to this headline">¶</a></h3>
-<p>System.dump(‘atom_data’) outputs the system to a LAMMPS atom data file. The parameters of the method with this style:</p>
+<p>System.dump(‘atom_data’) outputs the system to a LAMMPS atom data file. Quick notes on the parameters used here</p>
 <ul class="simple">
-<li><p><strong>style</strong> is the output format to use (‘atom_data’ here).</p></li>
-<li><p><strong>f</strong> is a file path or file-like object to write to. If not given, the generated content is returned.</p></li>
-<li><p><strong>atom_style</strong> (<em>str, optional</em>) The LAMMPS atom_style option associated with the data file. If neither atom_style or potential is given, will set atom_style to ‘atomic’.</p></li>
-<li><p><strong>units</strong> (<em>str, optional</em>) The LAMMPS units option associated with the data file. If neitherunits or potential is given, will set units ‘metal’.</p></li>
-<li><p><strong>natypes</strong> (<em>int, optional</em>) Allows the natypes value to be manually changed. This is needed if natypes needs to be greater than the current number of atypes. If neither natypes or potential is given, will use system.natypes.</p></li>
-<li><p><strong>potential</strong> (<em>atomman.lammps.Potential, optional</em>) Potential-specific values of atom_style, units, and natypes can be extracted from a Potential object. If both potential and any of the individual values are given, the individual values will be used.</p></li>
-<li><p><strong>float_format</strong> allows the c-style format of floating point values to be specified. Default value is ‘%.13f’.</p></li>
-<li><p><strong>return_info</strong> is a bool indicating if the LAMMPS command lines for reading in the generated file are to be returned. Default value is True.</p></li>
+<li><p>Giving potential allows for the appropriate units and atom_style settings to be used.</p></li>
+<li><p>The float_format value used here is a small precision to enhance clarity of print statements below. Typically, the precision should be large (default value is ‘%.13f’).</p></li>
+<li><p>Setting return_pair_info=True will return the LAMMPS commands for both the system and the potential together. This is the preferred method as it ensures compatibility between the two sets of commands.</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Save System to &#39;atom.dat&#39; atom data file</span>
-<span class="n">system_info</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;atom_data&#39;</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="s1">&#39;atom.dat&#39;</span><span class="p">,</span>
+<span class="n">system_pair_info</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;atom_data&#39;</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="s1">&#39;atom.dat&#39;</span><span class="p">,</span>
                           <span class="n">potential</span><span class="o">=</span><span class="n">potential</span><span class="p">,</span>
-                          <span class="n">float_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%.4f</span><span class="s1">&#39;</span><span class="p">)</span>
+                          <span class="n">float_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%.4f</span><span class="s1">&#39;</span><span class="p">,</span> <span class="c1"># Remove or make larger precision for real runs!</span>
+                          <span class="n">return_pair_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <p>Show the returned LAMMPS command lines</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">system_info</span><span class="p">)</span>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">system_pair_info</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -621,11 +566,16 @@ atom_style atomic
 boundary p p p
 read_data atom.dat
 
+mass 1 26.9815
+
+pair_style meam
+pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al
+
 </pre></div></div>
 </div>
 <p>Show the contents of the data file</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -649,113 +599,113 @@ read_data atom.dat
 Atoms # atomic
 
 1 1 0.0000 0.0000 0.0000
-2 1 2.0250 2.0250 0.0000
+2 1 0.0000 2.0250 2.0250
 3 1 2.0250 0.0000 2.0250
-4 1 0.0000 2.0250 2.0250
+4 1 2.0250 2.0250 0.0000
 5 1 4.0500 0.0000 0.0000
-6 1 6.0750 2.0250 0.0000
+6 1 4.0500 2.0250 2.0250
 7 1 6.0750 0.0000 2.0250
-8 1 4.0500 2.0250 2.0250
+8 1 6.0750 2.0250 0.0000
 9 1 8.1000 0.0000 0.0000
-10 1 10.1250 2.0250 0.0000
+10 1 8.1000 2.0250 2.0250
 11 1 10.1250 0.0000 2.0250
-12 1 8.1000 2.0250 2.0250
+12 1 10.1250 2.0250 0.0000
 13 1 0.0000 4.0500 0.0000
-14 1 2.0250 6.0750 0.0000
+14 1 0.0000 6.0750 2.0250
 15 1 2.0250 4.0500 2.0250
-16 1 0.0000 6.0750 2.0250
+16 1 2.0250 6.0750 0.0000
 17 1 4.0500 4.0500 0.0000
-18 1 6.0750 6.0750 0.0000
+18 1 4.0500 6.0750 2.0250
 19 1 6.0750 4.0500 2.0250
-20 1 4.0500 6.0750 2.0250
+20 1 6.0750 6.0750 0.0000
 21 1 8.1000 4.0500 0.0000
-22 1 10.1250 6.0750 0.0000
+22 1 8.1000 6.0750 2.0250
 23 1 10.1250 4.0500 2.0250
-24 1 8.1000 6.0750 2.0250
+24 1 10.1250 6.0750 0.0000
 25 1 0.0000 8.1000 0.0000
-26 1 2.0250 10.1250 0.0000
+26 1 0.0000 10.1250 2.0250
 27 1 2.0250 8.1000 2.0250
-28 1 0.0000 10.1250 2.0250
+28 1 2.0250 10.1250 0.0000
 29 1 4.0500 8.1000 0.0000
-30 1 6.0750 10.1250 0.0000
+30 1 4.0500 10.1250 2.0250
 31 1 6.0750 8.1000 2.0250
-32 1 4.0500 10.1250 2.0250
+32 1 6.0750 10.1250 0.0000
 33 1 8.1000 8.1000 0.0000
-34 1 10.1250 10.1250 0.0000
+34 1 8.1000 10.1250 2.0250
 35 1 10.1250 8.1000 2.0250
-36 1 8.1000 10.1250 2.0250
+36 1 10.1250 10.1250 0.0000
 37 1 0.0000 0.0000 4.0500
-38 1 2.0250 2.0250 4.0500
+38 1 0.0000 2.0250 6.0750
 39 1 2.0250 0.0000 6.0750
-40 1 0.0000 2.0250 6.0750
+40 1 2.0250 2.0250 4.0500
 41 1 4.0500 0.0000 4.0500
-42 1 6.0750 2.0250 4.0500
+42 1 4.0500 2.0250 6.0750
 43 1 6.0750 0.0000 6.0750
-44 1 4.0500 2.0250 6.0750
+44 1 6.0750 2.0250 4.0500
 45 1 8.1000 0.0000 4.0500
-46 1 10.1250 2.0250 4.0500
+46 1 8.1000 2.0250 6.0750
 47 1 10.1250 0.0000 6.0750
-48 1 8.1000 2.0250 6.0750
+48 1 10.1250 2.0250 4.0500
 49 1 0.0000 4.0500 4.0500
-50 1 2.0250 6.0750 4.0500
+50 1 0.0000 6.0750 6.0750
 51 1 2.0250 4.0500 6.0750
-52 1 0.0000 6.0750 6.0750
+52 1 2.0250 6.0750 4.0500
 53 1 4.0500 4.0500 4.0500
-54 1 6.0750 6.0750 4.0500
+54 1 4.0500 6.0750 6.0750
 55 1 6.0750 4.0500 6.0750
-56 1 4.0500 6.0750 6.0750
+56 1 6.0750 6.0750 4.0500
 57 1 8.1000 4.0500 4.0500
-58 1 10.1250 6.0750 4.0500
+58 1 8.1000 6.0750 6.0750
 59 1 10.1250 4.0500 6.0750
-60 1 8.1000 6.0750 6.0750
+60 1 10.1250 6.0750 4.0500
 61 1 0.0000 8.1000 4.0500
-62 1 2.0250 10.1250 4.0500
+62 1 0.0000 10.1250 6.0750
 63 1 2.0250 8.1000 6.0750
-64 1 0.0000 10.1250 6.0750
+64 1 2.0250 10.1250 4.0500
 65 1 4.0500 8.1000 4.0500
-66 1 6.0750 10.1250 4.0500
+66 1 4.0500 10.1250 6.0750
 67 1 6.0750 8.1000 6.0750
-68 1 4.0500 10.1250 6.0750
+68 1 6.0750 10.1250 4.0500
 69 1 8.1000 8.1000 4.0500
-70 1 10.1250 10.1250 4.0500
+70 1 8.1000 10.1250 6.0750
 71 1 10.1250 8.1000 6.0750
-72 1 8.1000 10.1250 6.0750
+72 1 10.1250 10.1250 4.0500
 73 1 0.0000 0.0000 8.1000
-74 1 2.0250 2.0250 8.1000
+74 1 0.0000 2.0250 10.1250
 75 1 2.0250 0.0000 10.1250
-76 1 0.0000 2.0250 10.1250
+76 1 2.0250 2.0250 8.1000
 77 1 4.0500 0.0000 8.1000
-78 1 6.0750 2.0250 8.1000
+78 1 4.0500 2.0250 10.1250
 79 1 6.0750 0.0000 10.1250
-80 1 4.0500 2.0250 10.1250
+80 1 6.0750 2.0250 8.1000
 81 1 8.1000 0.0000 8.1000
-82 1 10.1250 2.0250 8.1000
+82 1 8.1000 2.0250 10.1250
 83 1 10.1250 0.0000 10.1250
-84 1 8.1000 2.0250 10.1250
+84 1 10.1250 2.0250 8.1000
 85 1 0.0000 4.0500 8.1000
-86 1 2.0250 6.0750 8.1000
+86 1 0.0000 6.0750 10.1250
 87 1 2.0250 4.0500 10.1250
-88 1 0.0000 6.0750 10.1250
+88 1 2.0250 6.0750 8.1000
 89 1 4.0500 4.0500 8.1000
-90 1 6.0750 6.0750 8.1000
+90 1 4.0500 6.0750 10.1250
 91 1 6.0750 4.0500 10.1250
-92 1 4.0500 6.0750 10.1250
+92 1 6.0750 6.0750 8.1000
 93 1 8.1000 4.0500 8.1000
-94 1 10.1250 6.0750 8.1000
+94 1 8.1000 6.0750 10.1250
 95 1 10.1250 4.0500 10.1250
-96 1 8.1000 6.0750 10.1250
+96 1 10.1250 6.0750 8.1000
 97 1 0.0000 8.1000 8.1000
-98 1 2.0250 10.1250 8.1000
+98 1 0.0000 10.1250 10.1250
 99 1 2.0250 8.1000 10.1250
-100 1 0.0000 10.1250 10.1250
+100 1 2.0250 10.1250 8.1000
 101 1 4.0500 8.1000 8.1000
-102 1 6.0750 10.1250 8.1000
+102 1 4.0500 10.1250 10.1250
 103 1 6.0750 8.1000 10.1250
-104 1 4.0500 10.1250 10.1250
+104 1 6.0750 10.1250 8.1000
 105 1 8.1000 8.1000 8.1000
-106 1 10.1250 10.1250 8.1000
+106 1 8.1000 10.1250 10.1250
 107 1 10.1250 8.1000 10.1250
-108 1 8.1000 10.1250 10.1250
+108 1 10.1250 10.1250 8.1000
 
 </pre></div></div>
 </div>
@@ -777,7 +727,7 @@ Atoms # atomic
 <li><p><strong>units</strong> (<em>str</em>) the LAMMPS units option being used.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -795,7 +745,7 @@ Atoms # atomic
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -818,13 +768,13 @@ OrderedDict([(&#39;mass&#39;, &#39;g/mol&#39;), (&#39;length&#39;, &#39;angstrom
 <p>LAMMPS scripts can easily be constructed by combining the system_info generated from System.dump(‘atom_data’), the pair_info from Potential.pair_info(), and any user-defined input lines. This allows for specific simulation actions to easily be perfored across different potentials or initial configurations.</p>
 <div class="section" id="5.1-Show-content-generated-in-previous-sections">
 <h3>5.1 Show content generated in previous sections<a class="headerlink" href="#5.1-Show-content-generated-in-previous-sections" title="Permalink to this headline">¶</a></h3>
-<p>Show system_info generated in Section 3.3.</p>
+<p>Show system_pair_info generated in Section 3.3.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">system_info</span><span class="p">)</span>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">system_pair_info</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -841,28 +791,10 @@ atom_style atomic
 boundary p p p
 read_data atom.dat
 
-</pre></div></div>
-</div>
-<p>Generate pair_info using potential object created in Section 2.3 with the list of symbols from Section 3.1</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">pair_info</span> <span class="o">=</span> <span class="n">potential</span><span class="o">.</span><span class="n">pair_info</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">pair_info</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
 mass 1 26.9815
 
 pair_style meam
-pair_coeff * * library-Al.meam Al Al.meam Al
+pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al
 
 </pre></div></div>
 </div>
@@ -871,14 +803,12 @@ pair_coeff * * library-Al.meam Al Al.meam Al
 <h3>5.2 Write LAMMPS input script template<a class="headerlink" href="#5.2-Write-LAMMPS-input-script-template" title="Permalink to this headline">¶</a></h3>
 <p>LAMMPS scripts can be dynamically generated using Python functions or templates that take the above info lines and other values as parameters. Here, we demonstrate a LAMMPS input template script where all fields to be filled in in Python are delimited with &lt;&gt; brackets.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">&lt;system_info&gt;</span>
-
-<span class="s2">&lt;pair_info&gt;</span>
+<span class="s2">&lt;system_pair_info&gt;</span>
 
 <span class="s2"># Define temperature and dependent variables</span>
 <span class="s2">variable T equal &lt;temperature&gt;</span>
@@ -927,15 +857,14 @@ pair_coeff * * library-Al.meam Al Al.meam Al
 </ul>
 <p>Build dictionary of template variables</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">lammps_variable</span> <span class="o">=</span> <span class="p">{}</span>
 
 <span class="c1"># Generated above</span>
-<span class="n">lammps_variable</span><span class="p">[</span><span class="s1">&#39;system_info&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">system_info</span>
-<span class="n">lammps_variable</span><span class="p">[</span><span class="s1">&#39;pair_info&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pair_info</span>
+<span class="n">lammps_variable</span><span class="p">[</span><span class="s1">&#39;system_pair_info&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">system_pair_info</span>
 
 <span class="c1"># Set timestep to default value for LAMMPS units</span>
 <span class="n">lammps_variable</span><span class="p">[</span><span class="s1">&#39;timestep&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lmp</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">timestep</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="n">potential</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
@@ -956,12 +885,12 @@ pair_coeff * * library-Al.meam Al Al.meam Al
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;system_info&#39;: &#39;# Script and atom data file prepared using atomman Python package\n\nunits metal\natom_style atomic\n\nboundary p p p\nread_data atom.dat\n&#39;, &#39;pair_info&#39;: &#39;mass 1 26.9815\n\npair_style meam\npair_coeff * * library-Al.meam Al Al.meam Al\n&#39;, &#39;timestep&#39;: 0.001, &#39;temperature&#39;: 100, &#39;pressure&#39;: 0.0}
+{&#39;system_pair_info&#39;: &#39;# Script and atom data file prepared using atomman Python package\n\nunits metal\natom_style atomic\n\nboundary p p p\nread_data atom.dat\n\nmass 1 26.9815\n\npair_style meam\npair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\\Al.meam Al\n&#39;, &#39;timestep&#39;: 0.001, &#39;temperature&#39;: 100, &#39;pressure&#39;: 0.0}
 </pre></div></div>
 </div>
 <p>Fill in template</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -992,11 +921,10 @@ atom_style atomic
 boundary p p p
 read_data atom.dat
 
-
 mass 1 26.9815
 
 pair_style meam
-pair_coeff * * library-Al.meam Al Al.meam Al
+pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al
 
 
 # Define temperature and dependent variables
@@ -1039,7 +967,7 @@ run 100000
 <p>The LAMMPS simulation can be ran from within Python using the run() function.</p>
 <p>Specify your lammps executable</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1049,7 +977,7 @@ run 100000
 </div>
 <p>Run the simulation</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1064,7 +992,7 @@ run 100000
 <p>Data for each run/minimization is stored in in a list of dictionaries called simulations in the returned Log file. In each dictionary, there is a thermo key that represents a pandas.DataFrame of the thermo data.</p>
 <p>Show thermo data column names for the first (and only) simulation run.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1082,7 +1010,7 @@ run 100000
 </div>
 <p>Plot temperature vs. run step</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1102,12 +1030,12 @@ run 100000
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_02._LAMMPS_functionality_55_0.png" src="../_images/tutorial_02._LAMMPS_functionality_55_0.png" />
+<img alt="../_images/tutorial_02._LAMMPS_functionality_51_0.png" src="../_images/tutorial_02._LAMMPS_functionality_51_0.png" />
 </div>
 </div>
 <p>Plot pressure vs. run step (note unit conversions)</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1130,7 +1058,7 @@ run 100000
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_02._LAMMPS_functionality_57_0.png" src="../_images/tutorial_02._LAMMPS_functionality_57_0.png" />
+<img alt="../_images/tutorial_02._LAMMPS_functionality_53_0.png" src="../_images/tutorial_02._LAMMPS_functionality_53_0.png" />
 </div>
 </div>
 </div>
@@ -1138,7 +1066,7 @@ run 100000
 <h2>8 Reading in dump files<a class="headerlink" href="#8-Reading-in-dump-files" title="Permalink to this headline">¶</a></h2>
 <p>Finally, any dump files generated by the LAMMPS simulation can be loaded into atomman as Systems.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1153,45 +1081,41 @@ run 100000
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [12.192,  0.000,  0.000]
-bvect =  [ 0.000, 12.192,  0.000]
-cvect =  [ 0.000,  0.000, 12.192]
+avect =  [12.191,  0.000,  0.000]
+bvect =  [ 0.000, 12.191,  0.000]
+cvect =  [ 0.000,  0.000, 12.191]
 origin = [-0.021, -0.021, -0.021]
      atype     pos[0]     pos[1]     pos[2]  atom_id
-0        1  -0.052640  -0.038378   0.057649        1
-1        1   2.028902   1.989947   0.009550        2
-2        1   1.991812   0.095592   2.061334        3
-3        1  -0.014576   1.968805   2.061785        4
-4        1   4.028834  -0.040338   0.062574        5
+0        1   0.003687  -0.060490  -0.023425        1
+1        1  -0.054033   2.032270   1.997684        2
+2        1   2.055068   0.018910   1.980677        3
+3        1   1.997684   2.080987  -0.002075        4
+4        1   4.081188   0.036592  -0.051009        5
 ..     ...        ...        ...        ...      ...
-103      1   4.025457  10.147519  10.130377      104
-104      1   8.073323   8.175398   8.085674      105
-105      1  10.105394  10.030557   8.104328      106
-106      1  10.113112   8.015555  10.133937      107
-107      1   8.157280  10.177379  10.036531      108
+103      1   6.042340  10.090836   8.060340      104
+104      1   8.037871   8.044527   8.075286      105
+105      1   8.068666  10.122228  10.109220      106
+106      1  10.135773   8.173499  10.091238      107
+107      1  10.139345  10.137333   8.031605      108
 
 [108 rows x 5 columns]
 </pre></div></div>
 </div>
 <p><strong>File Cleanup</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;Al.meam&#39;</span><span class="p">)</span>
-<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;library-Al.meam&#39;</span><span class="p">)</span>
-<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;2015--Pascuet-M-I--Al--LAMMPS--ipr1.json&#39;</span><span class="p">)</span>
-<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;Al-fcc.poscar&#39;</span><span class="p">)</span>
-<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;atom.dat&#39;</span><span class="p">)</span>
-<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;nvt.in&#39;</span><span class="p">)</span>
-<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;log.lammps&#39;</span><span class="p">)</span>
+<span></span><span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">pot_id</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">):</span>
+    <span class="n">fname</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+<span class="n">Path</span><span class="p">(</span><span class="n">pot_id</span><span class="p">)</span><span class="o">.</span><span class="n">rmdir</span><span class="p">()</span>
+<span class="n">Path</span><span class="p">(</span><span class="s1">&#39;atom.dat&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+<span class="n">Path</span><span class="p">(</span><span class="s1">&#39;nvt.in&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+<span class="n">Path</span><span class="p">(</span><span class="s1">&#39;log.lammps&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
 
-<span class="c1"># Remove dump files</span>
-<span class="n">flist</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
-<span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">flist</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">fname</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]</span> <span class="o">==</span> <span class="s1">&#39;.dump&#39;</span><span class="p">:</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.dump&#39;</span><span class="p">):</span>
+    <span class="n">fname</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1209,8 +1133,8 @@ origin = [-0.021, -0.021, -0.021]
 <li><a class="reference internal" href="#">Introduction to atomman: LAMMPS functionality</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
 <li><a class="reference internal" href="#2.-Interatomic-Potential-Control">2. Interatomic Potential Control</a><ul>
-<li><a class="reference internal" href="#2.1-MEAM-parameter-files">2.1 MEAM parameter files</a></li>
-<li><a class="reference internal" href="#2.2-potential-LAMMPS-data-model-file">2.2 potential-LAMMPS data model file</a></li>
+<li><a class="reference internal" href="#2.1-Load-potential-from-database">2.1 Load potential from database</a></li>
+<li><a class="reference internal" href="#2.2-Potential-parameter-files">2.2 Potential parameter files</a></li>
 <li><a class="reference internal" href="#2.3-lammps.Potential-Class">2.3 lammps.Potential Class</a></li>
 </ul>
 </li>
@@ -1235,11 +1159,11 @@ origin = [-0.021, -0.021, -0.021]
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="01.4.9._spglib_conversions.html"
-                        title="previous chapter">Introduction to atomman: Load and dump</a></p>
+  <p class="topless"><a href="01.4.11._crystal_loading.html"
+                        title="previous chapter">Introduction to atomman: crystal loading</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="02.1._Potential_class.html"
-                        title="next chapter">Introduction to atomman: Potential class</a></p>
+                        title="next chapter">Introduction to atomman: LAMMPS Potentials</a></p>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1254,12 +1178,12 @@ origin = [-0.021, -0.021, -0.021]
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="02.1._Potential_class.html" title="Introduction to atomman: Potential class"
+          <a href="02.1._Potential_class.html" title="Introduction to atomman: LAMMPS Potentials"
              >next</a> |</li>
         <li class="right" >
-          <a href="01.4.9._spglib_conversions.html" title="Introduction to atomman: Load and dump"
+          <a href="01.4.11._crystal_loading.html" title="Introduction to atomman: crystal loading"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

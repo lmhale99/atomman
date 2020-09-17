@@ -1,6 +1,47 @@
 Updates
 =======
 
+Version 1.3.4
+-------------
+
+- **atomman.defect.Dislocation** class added that handles the generation of
+  dislocation monopole and periodic array of dislocation atomic configurations
+  in a more user-friendly interface than the previous functions.
+
+- **atomman.region.PlaneSet** class added that allows for a region/shape to be
+  defined using a list of planes.  This allows for the construction of 
+  multi-faceted and/or open-ended shapes.
+
+- **atomman.Box.planes** changed so that the order of the planes returned is
+  consistent with the underlying indices.
+
+- **atomman.build_lammps_potential** inherited from potentials package.
+
+Version 1.3.3
+-------------
+
+- **atomman.Settings** class added that inherits from the corresponding class
+  in the potentials package.  This makes it possible for atomman to access the
+  same local directory of records as the potentials package.
+  
+- **atomman.library** module added that extends the corresponding module from
+  the potentials package to include support for crystal_prototype and 
+  relaxed_crystal records.
+
+- **atomman.load_lammps_potential** added that loads LAMMPS potential
+  information and downloads parameter files from the NIST Interatomic
+  Potentials Repository.
+
+- **atomman.load_prototype** and **atomman.load_crystal** load options added
+  that allow for new Systems to be generated based on crystal_prototype and
+  relaxed_crystal records in the NIST Interatomic Potentials Repository.
+
+- **atomman.defect.GammaSurface** class updated so that the RBF interpolated
+  energies are smoothed across the periodic cell boundaries.
+
+- Fix to keep the code compatible with Python 3.6 (which broke in version
+  1.3.2)
+
 Version 1.3.2
 -------------
 
@@ -30,7 +71,7 @@ Version 1.3.2
   **atomman.defect.IsotropicVolterraDislocation**, and
   **atomman.defect.solve_volterra_dislocation** were updated by integrating in
   the dislocation_system functions. This makes it possible to now easily define
-  dislocaiton solutions based on the slip plane, line direction and Burgers
+  dislocation solutions based on the slip plane, line direction and Burgers
   vector alone.
   
 - **atomman.defect.dislocation_periodic_array** was updated to add an old_id
@@ -46,7 +87,7 @@ Version 1.3.2
   from unit cell, (hkl) and shift values.
 
 - **atomman.defect.DifferentialDisplacement** class created. This class offers
-  more ploting options than the old differential_displacement function while
+  more plotting options than the old differential_displacement function while
   dividing the calculation and plotting into separate steps to make it easier
   to work with.
 

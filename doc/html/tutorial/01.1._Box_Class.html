@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: Box class &#8212; atomman 1.3.2 documentation</title>
+    <title>Introduction to atomman: Box class &#8212; atomman 1.3.4 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="01._Defining_atomic_systems.html" title="Introduction to atomman: Defining atomic systems"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -307,8 +307,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.2
-Notebook executed on 2020-04-15
+atomman version = 1.3.4
+Notebook executed on 2020-09-10
 </pre></div></div>
 </div>
 <p>Create a default box with vects that are normal unit vectors.</p>
@@ -461,10 +461,10 @@ box.volume -&gt; 1.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 2.133,  2.776,  2.221]
-bvect =  [ 0.790,  2.237,  3.671]
-cvect =  [ 0.625,  0.535,  2.020]
-origin = [ 0.977,  0.491,  0.745]
+avect =  [ 2.867,  3.373,  2.741]
+bvect =  [ 2.777,  3.554,  1.919]
+cvect =  [ 0.575,  3.954,  3.877]
+origin = [ 0.187,  0.009,  0.398]
 </pre></div></div>
 </div>
 </div>
@@ -886,6 +886,74 @@ origin = [ 0.000,  0.000,  0.000]
 </pre></div></div>
 </div>
 </div>
+<div class="section" id="6.-Inside/outside">
+<h2>6. Inside/outside<a class="headerlink" href="#6.-Inside/outside" title="Permalink to this headline">¶</a></h2>
+<p><em>Added version 1.3.0</em></p>
+<p>The Box is treated as a regional shape object (see <a class="reference external" href="03.3._Region_selectors.html">03.3._Region_selectors.html</a>) and has methods inside() and outside() that indicate whether any 3D coordinate(s) are located inside or outside the shape.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Build random list of points</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[1.92974318 7.17502066 8.25252688]
+ [3.18088996 7.1518578  2.10739134]
+ [9.12182692 2.99266615 0.39769235]
+ [7.11731888 0.04626114 4.03010765]
+ [3.31366429 6.79853498 7.76995843]
+ [0.61541151 3.17023541 0.77691391]
+ [9.52959554 4.40839126 8.43173751]
+ [7.24535385 1.45713575 3.24714736]
+ [1.80370564 4.53885627 6.5475112 ]
+ [2.33067412 2.68732444 3.30946204]
+ [6.51583073 5.47878706 1.19986304]
+ [6.4449342  4.53269525 9.90657395]
+ [4.98554796 3.10519183 8.20894381]
+ [5.90780385 7.85600989 8.30026364]
+ [4.4033538  2.21073331 8.22782843]
+ [2.05761164 5.4930655  4.75542479]
+ [1.49023503 4.5666379  5.80821962]
+ [8.29657943 3.24586098 7.39322159]
+ [4.42701042 6.35812043 3.23221951]
+ [7.48026977 5.30192891 7.18613954]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Points inside:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">inside</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Points outside:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">outside</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Points inside:
+[ True  True  True False  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True]
+Points outside:
+[False False False  True False False False False False False False False
+ False False False False False False False False]
+</pre></div></div>
+</div>
+</div>
 </div>
 
 
@@ -910,6 +978,7 @@ origin = [ 0.000,  0.000,  0.000]
 </ul>
 </li>
 <li><a class="reference internal" href="#5.-Box-model">5. Box model</a></li>
+<li><a class="reference internal" href="#6.-Inside/outside">6. Inside/outside</a></li>
 </ul>
 </li>
 </ul>
@@ -939,7 +1008,7 @@ origin = [ 0.000,  0.000,  0.000]
         <li class="right" >
           <a href="01._Defining_atomic_systems.html" title="Introduction to atomman: Defining atomic systems"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

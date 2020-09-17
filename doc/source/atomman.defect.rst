@@ -13,6 +13,7 @@ Classes
    atomman.defect.VolterraDislocation
    atomman.defect.IsotropicVolterraDislocation
    atomman.defect.Stroh
+   atomman.defect.Dislocation
    atomman.defect.DifferentialDisplacement
    atomman.defect.SDVPN
 
