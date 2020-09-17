@@ -623,7 +623,7 @@ class Dislocation():
         else:
             return disl_system
 
-    def periodicarray(self, sizemults=None, amin=None, bmin=None, cmin=None,
+    def periodicarray(self, sizemults=None, amin=0.0, bmin=0.0, cmin=0.0,
                       shift=None, shiftindex=None, shiftscale=False,
                       boundarywidth=0.0, boundaryscale=False, linear=False,
                       cutoff=None, return_base_system=False):

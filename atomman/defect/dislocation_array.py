@@ -145,7 +145,7 @@ def dislocation_array(system, dislsol=None, m=None, n=None, burgers=None,
 
     # Identify atoms at the motionindex boundary to include in the duplicate check
     spos = testsystem.atoms_prop(key='pos', scale=True)
-    sburgers = 2 * burgers[motionindex] / (length)
+    sburgers = np.abs(2 * burgers[motionindex] / (length))
     boundaryatoms = testsystem.atoms[  (spos[:, motionindex] < sburgers) 
                                      | (spos[:, motionindex] > 1.0 - sburgers) ]
 
