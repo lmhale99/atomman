@@ -63,7 +63,7 @@ setup(name = 'atomman',
         'cython',
         'numericalunits',
         'toolz',
-        'potentials>=0.2.2'
+        'potentials==0.2.5'
       ],
       include_package_data = True,
       zip_safe = False)
