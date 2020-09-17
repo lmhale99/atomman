@@ -10,6 +10,9 @@ except:
 else:
     __version__ = resources.read_text('atomman', 'VERSION').strip()
 
+# potentials imports
+from potentials import build_lammps_potential
+
 # atomman imports
 from . import unitconvert
 from . import tools
@@ -28,6 +31,7 @@ from . import defect
 
 
 __all__ = ['__version__'] + dump_all + core_all + load_all
+__all__ += ['load_lammps_potential', 'build_lammps_potential']
 __all__.sort()
 
 # Define default working units
