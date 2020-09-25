@@ -141,7 +141,7 @@ class VolterraDislocation(object):
         # Transform burgers and C
         burgers = miller.vector_crystal_to_cartesian(burgers, box)
         burgers = transform.dot(burgers)
-        burgers[np.isclose(burgers / burgers.max(), 0.0, atol = tol)] = 0.0
+        burgers[np.isclose(burgers / np.abs(burgers).max(), 0.0, atol = tol)] = 0.0
         C = C.transform(transform)
         
         self.__C = C
