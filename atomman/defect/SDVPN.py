@@ -754,7 +754,7 @@ class SDVPN(object):
                 + self.surface_energy(x, disregistry))
     
     def check_energies(self, x=None, disregistry=None, 
-                       energyperlength_unit='eV/angstrom'):
+                       energyperlength_unit='eV/Å'):
         """
         Prints a summary string of all computed energy components.
 
@@ -765,6 +765,9 @@ class SDVPN(object):
         disregistry : numpy.ndarray, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.
+        energyperlength_unit : str, optional
+            The units of energy per length to report the dislocation line
+            energies in.  Default value is 'eV/Å'.
         """
         hasvals = True
         # Default values are class properties
@@ -792,7 +795,7 @@ class SDVPN(object):
             print('x and disregistry must be set/given to check energies')
     
     def disregistry_plot(self, x=None, disregistry=None, figsize=None,
-                         length_unit='angstrom'):
+                         length_unit='Å'):
         """
         Creates a simple matplotlib figure showing the disregistry profiles.
 
@@ -805,7 +808,10 @@ class SDVPN(object):
             Default value is the stored disregistry values.
         figsize : tuple, optional
             matplotlib figure figsize parameter.  Default value is (10, 6).
-
+        length_unit : str, optional
+            The unit of length to display positions and disregistry values in.
+            Default value is 'Å'.
+            
         Returns
         -------
         matplotlib.pyplot.figure
@@ -830,12 +836,15 @@ class SDVPN(object):
                 figsize = (10, 6)
 
             fig = plt.figure(figsize=figsize)
+            
+            x = uc.get_in_units(x, length_unit)
+            disregistry = uc.get_in_units(disregistry, length_unit)
             plt.plot(x, disregistry[:, 0], label='edge disregistry')
             plt.plot(x, disregistry[:, 1], label='normal disregistry')
             plt.plot(x, disregistry[:, 2], label='screw disregistry')
             plt.legend(fontsize='xx-large')
-            plt.xlabel('x (Å)', size='xx-large')
-            plt.ylabel('disregistry (Å)', size='xx-large')
+            plt.xlabel(f'x (${length_unit}$)', size='xx-large')
+            plt.ylabel(f'disregistry (${length_unit}$', size='xx-large')
             return fig
 
         else:
@@ -904,7 +913,9 @@ class SDVPN(object):
             
         Returns
         -------
-        matplotlib.figure
+        matplotlib.pyplot.figure
+            The generated figure allowing users to perform additional
+            modifications.
         """
 
         # Generate the surface plot
@@ -947,8 +958,35 @@ class SDVPN(object):
     def E_gsf_vs_x_plot(self, x=None, disregistry=None, figsize=None, 
                         length_unit='Å', energyperarea_unit='eV/Å^2'):
         """
-        Generates a plot of the stacking fault energy associated with the
-        disregistry values for each x coordinate.
+        Generates a plot of the stacking fault energy, i.e. misfit energy,
+        associated with the disregistry values for each x coordinate.
+        
+        Parameters
+        ----------
+        x : numpy.ndarray, optional
+            x-coordinates.  Default value is the stored x-coordinates. If x
+            or disregistry are not set/given, then the disregistry path will
+            not be added.
+        disregistry : numpy.ndarray, optional
+            (N, 3) shaped array of disregistry vectors at each x-coordinate.
+            Default value is the stored disregistry values.  If x
+            or disregistry are not set/given, then the disregistry path will
+            not be added.
+        figsize : tuple or None, optional
+            The figure's x,y dimensions.  If None (default), then a figure
+            size of (10, 6) will be generated.
+        length_unit : str, optional
+            The unit of length to display x coordinates in.  Default value is
+            'Å'.
+        energyperarea_unit : str, optional
+            The unit of energy per area to display the stacking fault energies
+            in. Default value is 'eV/Å^2'.
+            
+        Returns
+        -------
+        matplotlib.pyplot.figure
+            The generated figure allowing users to perform additional
+            modifications.
         """
         hasvals = True
         # Default values are class properties
@@ -988,8 +1026,15 @@ class SDVPN(object):
         ----------
         model : str or DataModelDict
             The semi-discrete-Peierls-Nabarro data model to load.
-        gamma : atomman.defect.GammaSurface
-            The gamma surface to use.
+        gamma : atomman.defect.GammaSurface, optional
+            The gamma surface to use.  If not given, will check to see if the
+            content is inside model.
+        
+        Raises
+        ------
+        ValueError
+            If the gamma surface information is not given and it is not found
+            in model.
         """
         
         # Identify model element
@@ -1032,24 +1077,30 @@ class SDVPN(object):
         self.x = uc.value_unit(solution['x'])
         self.disregistry = uc.value_unit(solution['disregistry'])
     
-    def model(self, length_unit='angstrom', energyperarea_unit='mJ/m^2',
+    def model(self, length_unit='Å', energyperarea_unit='eV/Å^2',
               pressure_unit='GPa', include_gamma=False):
         """
         Generate a data model for the object.
         
         Parameters
         ----------
-        length_unit : str
-            The unit of length to save values as.  Default is 'angstrom'.
-        energyperarea_unit : str
-            The unit of energy per area s to report fault energy values in
-            if the gamma surface information is included.  Default value is
-            'mJ/m^2'.
-        pressure_unit : str
+        length_unit : str, optional
+            The unit of length to save values as.  Default is 'Å'.
+        energyperarea_unit : str, optional
+            The unit of energy per area to save fault energy values as.  Only
+            used if the gamma surface information is included.  Default value
+            is 'eV/Å^2'.
+        pressure_unit : str, optional
             The unit of pressure to save values as.  Default is 'GPa'.
-        include_gamma : bool
+        include_gamma : bool, optional
             Flag indicating if the gamma surface data is to be included.
             Default value is False.
+            
+        Returns
+        -------
+        DataModelDict
+            The data model containing all input parameters and the current
+            disregistry vectors.
         """
         model = DM()
         model['semidiscrete-variational-Peierls-Nabarro'] = sdpn = DM()
