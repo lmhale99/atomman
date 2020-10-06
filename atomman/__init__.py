@@ -11,7 +11,7 @@ else:
     __version__ = resources.read_text('atomman', 'VERSION').strip()
 
 # potentials imports
-from potentials import build_lammps_potential
+from potentials import build_lammps_potential, Settings
 
 # atomman imports
 from . import unitconvert
