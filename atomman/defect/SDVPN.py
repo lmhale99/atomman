@@ -844,7 +844,7 @@ class SDVPN(object):
     def E_gsf_surface_plot(self, x=None, disregistry=None, fmt='ro-',
                            normalize=False, smooth=True, 
                            a1vect=None, a2vect=None, xvect=None,
-                           length_unit='angstrom', energyperarea_unit='eV/angstrom^2',
+                           length_unit='Å', energyperarea_unit='eV/Å^2',
                            numx=100, numy=100, figsize=None, **kwargs):
         """
         Extends the GammaSurface.E_gsf_surface_plot() method to plot the
@@ -883,10 +883,10 @@ class SDVPN(object):
             of a1vect.
         length_unit : str, optional
             The unit of length to display non-normalized axes values in.
-            Default value is 'angstrom'.
+            Default value is 'Å'.
         energyperarea_unit : str, optional
             The unit of energy per area to display the stacking fault energies
-            in. Default value is 'eV/angstrom^2'.
+            in. Default value is 'eV/Å^2'.
         numx : int, optional
             The number of plotting points to use along the x-axis.  Default
             value is 100.
@@ -938,12 +938,14 @@ class SDVPN(object):
             
             # Transform to x, y plotting coordinates and plot
             x, y = self.gamma.pos_to_xy(pos, xvect=xvect)
+            x = uc.get_in_units(x, length_unit)
+            y = uc.get_in_units(y, length_unit)
             plt.plot(x, y, fmt)
 
         return fig
 
     def E_gsf_vs_x_plot(self, x=None, disregistry=None, figsize=None, 
-                        length_unit='angstrom', energyperarea_unit='eV/angstrom^2'):
+                        length_unit='Å', energyperarea_unit='eV/Å^2'):
         """
         Generates a plot of the stacking fault energy associated with the
         disregistry values for each x coordinate.
@@ -970,8 +972,8 @@ class SDVPN(object):
             fig = plt.figure(figsize=figsize)
             plt.plot(uc.get_in_units(x, length_unit),
                      uc.get_in_units(gsf, energyperarea_unit))
-            plt.xlabel(f'x-coordinate ({length_unit})', size='xx-large')
-            plt.ylabel(f'Stacking fault energy ({energyperarea_unit})', size='xx-large')
+            plt.xlabel(f'x-coordinate (${length_unit}$)', size='xx-large')
+            plt.ylabel(f'Stacking fault energy (${energyperarea_unit}$)', size='xx-large')
             return fig
         
         else:
@@ -998,7 +1000,10 @@ class SDVPN(object):
         
         # Load calculation parameters
         params = sdpn['parameter']
-        self.__transform = uc.value_unit(params.get('transform', params['axes']))
+        try:
+            self.__transform = uc.value_unit(params['transform'])
+        except: 
+            self.__transform = uc.value_unit(params['axes'])
         self.__K_tensor = uc.value_unit(params['K_tensor'])
         self.__burgers = uc.value_unit(params['burgers'])
         self.tau = uc.value_unit(params['tau'])
@@ -1027,7 +1032,7 @@ class SDVPN(object):
         self.x = uc.value_unit(solution['x'])
         self.disregistry = uc.value_unit(solution['disregistry'])
     
-    def model(self, length_unit='angstrom', energy_unit='eV',
+    def model(self, length_unit='angstrom', energyperarea_unit='mJ/m^2',
               pressure_unit='GPa', include_gamma=False):
         """
         Generate a data model for the object.
@@ -1036,8 +1041,10 @@ class SDVPN(object):
         ----------
         length_unit : str
             The unit of length to save values as.  Default is 'angstrom'.
-        energy_unit : str
-            The unit of energy to save values as.  Default is 'eV'.
+        energyperarea_unit : str
+            The unit of energy per area s to report fault energy values in
+            if the gamma surface information is included.  Default value is
+            'mJ/m^2'.
         pressure_unit : str
             The unit of pressure to save values as.  Default is 'GPa'.
         include_gamma : bool
@@ -1066,8 +1073,7 @@ class SDVPN(object):
         if include_gamma is True:
             sdpn['generalized-stacking-fault'] = self.gamma.model(
                                                   length_unit=length_unit,
-                                                  energy_unit=energy_unit,
-                                                  pressure_unit=pressure_unit)
+                                                  energyperarea_unit=energyperarea_unit)
         
         sdpn['solution'] = solution = DM()
         solution['x'] = uc.model(self.x, length_unit)

@@ -253,7 +253,7 @@ class GammaSurface(object):
             self.__delta_nearest = NearestNDInterpolator(np.array([a1[ix], a2[ix]]).T, delta[ix])
     
     def model(self, model=None, length_unit='angstrom',
-              energyperarea_unit='eV/angstrom^2'):
+              energyperarea_unit='mJ/m^2'):
         """
         Return or set DataModelDict representation of the gamma surface.
         
@@ -760,7 +760,7 @@ class GammaSurface(object):
     
     def E_gsf_surface_plot(self, normalize=False, smooth=True, 
                            a1vect=None, a2vect=None, xvect=None,
-                           length_unit='angstrom', energyperarea_unit='eV/angstrom^2',
+                           length_unit='Å', energyperarea_unit='eV/Å^2',
                            numx=100, numy=100, figsize=None, **kwargs):
         """
         Creates a 2D surface plot from the stacking fault energy values.
@@ -785,10 +785,10 @@ class GammaSurface(object):
             of a1vect.
         length_unit : str, optional
             The unit of length to display non-normalized axes values in.
-            Default value is 'angstrom'.
+            Default value is 'Å'.
         energyperarea_unit : str, optional
             The unit of energy per area to display the stacking fault energies
-            in. Default value is 'eV/angstrom^2'.
+            in. Default value is 'eV/Å^2'.
         numx : int, optional
             The number of plotting points to use along the x-axis.  Default
             value is 100.
@@ -845,10 +845,8 @@ class GammaSurface(object):
             x_grid = uc.get_in_units(x_grid, length_unit)
             y_grid = uc.get_in_units(y_grid, length_unit)
             yscale = (y_grid.max()-y_grid.min()) / (x_grid.max() - x_grid.min())
-            #xlabel = f'$x$ along {a1vect} ({length_unit})'
-            #ylabel = f'$y$ along {a2vect} ({length_unit})'
-            xlabel = f'$x$ along {a1vect} ($\\mathring{{A}}$)'
-            ylabel = f'$y$ along {a2vect} ($\\mathring{{A}}$)'
+            xlabel = f'$x$ along {a1vect} (${length_unit}$)'
+            ylabel = f'$y$ along {a2vect} (${length_unit}$)'
         
         # Set default figsize if needed
         if figsize is None:
@@ -864,14 +862,12 @@ class GammaSurface(object):
         plt.xlabel(xlabel, fontsize='xx-large')
         plt.ylabel(ylabel, fontsize='xx-large')
         cbar = plt.colorbar(aspect=40, fraction=0.1)
-        #cbar.ax.set_ylabel('$E_{gsf}$ (' + energyperarea_unit + ')',
-        #                   fontsize='x-large')
-        cbar.ax.set_ylabel('$\\gamma_{{gsf}}$ (mJ/m$^2$)', fontsize='x-large')
+        cbar.ax.set_ylabel(f'$γ_{{gsf}}$ (${energyperarea_unit}$)', fontsize='x-large')
         
         return fig
     
     def E_gsf_line_plot(self, vect=None, num=None, smooth=True,
-                        length_unit='angstrom', energyperarea_unit='eV/angstrom^2',
+                        length_unit='Å', energyperarea_unit='eV/Å^2',
                         figsize=None, fig=None, **kwargs):
         """
         Generates a line plot for the interpolated generalized stacking fault
@@ -893,10 +889,10 @@ class GammaSurface(object):
             If False, plot shows nearest raw data values.
         length_unit : str, optional
             The unit of length to display the x-axis coordinates in.
-            Default value is 'angstrom'.
+            Default value is 'Å'.
         energyperarea_unit : str, optional
             The unit of energy per area to display the stacking fault energies
-            in. Default value is 'eV/angstrom^2'.
+            in. Default value is 'eV/Å^2'.
         figsize : tuple, optional
             The x,y size of the figure to return.  Default value is (10, 6).
         fig : matplotlib.figure, optional
@@ -957,9 +953,8 @@ class GammaSurface(object):
         if vect is None:
             vect = self.a1vect
 
-        plt.xlabel('$x$ along ' + str(vect) + ' (' + str(length_unit) + ')',
-                   fontsize='x-large')
-        plt.ylabel('$E_{gsf}$ (' + str(energyperarea_unit) + ')', fontsize='x-large')
+        plt.xlabel(f'$x$ along {vect} (${length_unit}$)', fontsize='x-large')
+        plt.ylabel(f'$γ_{{gsf}}$ (${energyperarea_unit}$)', fontsize='x-large')
         plt.xlim(0, xmax)
         plt.ylim(emin, emax)
         
@@ -967,7 +962,7 @@ class GammaSurface(object):
     
     def delta_surface_plot(self, normalize=False, smooth=True, 
                            a1vect=None, a2vect=None, xvect=None,
-                           length_unit='angstrom',
+                           length_unit='Å',
                            numx=100, numy=100, figsize=None, **kwargs):
         """
         Creates a 2D surface plot from the delta planar displacement values.
@@ -992,7 +987,7 @@ class GammaSurface(object):
             of a1vect.
         length_unit : str, optional
             The unit of length to display delta and non-normalized axes values
-            in.  Default value is 'angstrom'.
+            in.  Default value is 'Å'.
         numx : int, optional
             The number of plotting points to use along the x-axis.  Default
             value is 100.
@@ -1038,8 +1033,8 @@ class GammaSurface(object):
         # Set parameters for normalized plots
         if normalize is True:
             yscale = 1
-            xlabel = '$a_1$ = ' + str(a1vect)
-            ylabel = '$a_2$ = ' + str(a2vect)
+            xlabel = f'$a_1$ = {a1vect}'
+            ylabel = f'$a_2$ = {a2vect}'
         
         # Set parameters for absolute plots
         else:
@@ -1051,8 +1046,8 @@ class GammaSurface(object):
             x_grid = uc.get_in_units(x_grid, length_unit)
             y_grid = uc.get_in_units(y_grid, length_unit)
             yscale = (y_grid.max()-y_grid.min()) / (x_grid.max() - x_grid.min())
-            xlabel = 'x (' + length_unit + ')'
-            ylabel = 'y (' + length_unit + ')'
+            xlabel = f'x (${length_unit}$)'
+            ylabel = f'y (${length_unit}$)'
         
         # Set default figsize if needed
         if figsize is None:
@@ -1068,13 +1063,12 @@ class GammaSurface(object):
         plt.xlabel(xlabel, fontsize='x-large')
         plt.ylabel(ylabel, fontsize='x-large')
         cbar = plt.colorbar(aspect=40, fraction=0.1)
-        cbar.ax.set_ylabel(r'$\delta_{gsf}$ (' + length_unit + ')',
-                           fontsize='x-large')
+        cbar.ax.set_ylabel(f'$δ_{{gsf}}$ (${length_unit}$)', fontsize='x-large')
         
         return fig
     
     def delta_line_plot(self, vect=None, num=None, smooth=True,
-                        length_unit='angstrom',
+                        length_unit='Å',
                         figsize=None, fig=None, **kwargs):
         """
         Generates a line plot for the interpolated delta planar shift values
@@ -1096,7 +1090,7 @@ class GammaSurface(object):
             If False, plot shows nearest raw data values.
         length_unit : str, optional
             The unit of length to display the x-axis coordinates in.
-            Default value is 'angstrom'.
+            Default value is 'Å'.
         figsize : tuple, optional
             The x,y size of the figure to return.  Default value is (10, 6).
         fig : matplotlib.figure, optional
@@ -1151,7 +1145,7 @@ class GammaSurface(object):
             if old_dmax > dmax:
                 dmax = old_dmax
         if 'fmt' in kwargs:
-            fmt = kwargs.pop('fmt')      
+            fmt = kwargs.pop('fmt')
             plt.plot(x, d, fmt, **kwargs)
         else:
             plt.plot(x, d, **kwargs)
@@ -1159,9 +1153,8 @@ class GammaSurface(object):
         if vect is None:
             vect = self.a1vect
 
-        plt.xlabel('$x$ along ' + str(vect) + ' (' + str(length_unit) + ')',
-                   fontsize='x-large')
-        plt.ylabel(r'$\delta_{gsf}$ (' + str(length_unit) + ')', fontsize='x-large')
+        plt.xlabel(f'$x$ along {vect} (${length_unit}$)', fontsize='x-large')
+        plt.ylabel(f'$δ_{{gsf}}$ (${length_unit}$)', fontsize='x-large')
         plt.xlim(0, xmax)
         plt.ylim(dmin, dmax)
         
