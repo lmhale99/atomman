@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: LAMMPS functionality &#8212; atomman 1.3.4 documentation</title>
+    <title>Introduction to atomman: LAMMPS functionality &#8212; atomman 1.3.5 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: LAMMPS Potentials" href="02.1._Potential_class.html" />
-    <link rel="prev" title="Introduction to atomman: crystal loading" href="01.4.11._crystal_loading.html" /> 
+    <link rel="prev" title="Introduction to atomman: Settings and Library" href="01.5._Settings_and_Library_classes.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -33,9 +33,9 @@
           <a href="02.1._Potential_class.html" title="Introduction to atomman: LAMMPS Potentials"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="01.4.11._crystal_loading.html" title="Introduction to atomman: crystal loading"
+          <a href="01.5._Settings_and_Library_classes.html" title="Introduction to atomman: Settings and Library"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -111,20 +111,33 @@ div.nboutput.container div.prompt pre {
 /* all prompts */
 div.nbinput.container div.prompt,
 div.nboutput.container div.prompt {
-    min-width: 7ex;
-    padding-top: 0.3rem;
-    padding-right: 0.3rem;
-    text-align: right;
-    flex: 0;
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
 }
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
 @media (max-width: 540px) {
     div.nbinput.container div.prompt,
     div.nboutput.container div.prompt {
+        width: unset;
         text-align: left;
         padding: 0.4em;
     }
     div.nboutput.container div.prompt.empty {
         padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
     }
 }
 
@@ -217,7 +230,7 @@ div.nboutput.container div.output_area div[class*=highlight].math,
 div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 0.3rem;
+    padding: 5px;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -307,8 +320,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.4
-Notebook executed on 2020-09-11
+atomman version = 1.3.5
+Notebook executed on 2020-10-06
 </pre></div></div>
 </div>
 </div>
@@ -1091,7 +1104,57 @@ origin = [-0.021, -0.021, -0.021]
 2        1   2.055068   0.018910   1.980677        3
 3        1   1.997684   2.080987  -0.002075        4
 4        1   4.081188   0.036592  -0.051009        5
+5        1   4.022243   2.036891   2.031112        6
+6        1   6.070148   0.064577   2.020823        7
+7        1   6.134932   2.015788  -0.056428        8
+8        1   8.107532  -0.062155  -0.006683        9
+9        1   8.107922   2.043352   2.040621       10
+10       1  10.182953  -0.098032   2.031405       11
+11       1  10.104600   1.968607  -0.000193       12
+12       1  -0.033908   4.044138   0.004996       13
+13       1  -0.090555   6.055396   1.985541       14
+14       1   1.965084   4.037335   2.010424       15
+15       1   1.986443   6.057518  -0.050779       16
+16       1   4.076884   4.023011  -0.045361       17
+17       1   3.973307   6.043583   1.998586       18
+18       1   5.978738   4.005248   2.045961       19
+19       1   6.093897   6.023809  -0.010560       20
+20       1   8.105606   4.020280   0.021797       21
+21       1   8.035774   6.122765   1.939653       22
+22       1  10.100845   4.057219   2.038951       23
+23       1  10.103929   6.078779  -0.027954       24
+24       1  -0.063701   8.139303  -0.038682       25
+25       1   0.062029  10.132810   1.995818       26
+26       1   2.083852   8.070666   2.029186       27
+27       1   2.026443  10.143977  -0.001598       28
+28       1   3.995239   8.087136   0.014932       29
+29       1   4.020146  10.284982   2.004767       30
 ..     ...        ...        ...        ...      ...
+78       1   6.162777  -0.029500  10.118790       79
+79       1   6.114122   1.979238   8.092037       80
+80       1   8.141070  -0.136045   8.121345       81
+81       1   8.169378   2.053934  10.099333       82
+82       1  10.204824  -0.050843  10.146611       83
+83       1  10.134627   1.958038   8.103143       84
+84       1  -0.045947   4.004431   8.107069       85
+85       1  -0.018371   6.004461  10.165532       86
+86       1   2.080463   4.067277  10.158936       87
+87       1   2.035038   6.039280   8.103826       88
+88       1   4.068021   4.084199   8.143496       89
+89       1   4.106460   6.082681  10.168336       90
+90       1   6.139455   4.025400  10.082472       91
+91       1   6.097700   6.072671   8.123259       92
+92       1   8.095255   4.071556   8.076993       93
+93       1   8.140644   6.027027  10.152182       94
+94       1  10.140991   4.036409  10.167933       95
+95       1  10.137272   6.093982   8.132841       96
+96       1  -0.023615   8.099608   8.114761       97
+97       1  -0.013326  10.111561  10.163484       98
+98       1   1.956124   8.095560  10.122058       99
+99       1   2.004035  10.106501   8.142302      100
+100      1   4.052806   8.025082   8.131488      101
+101      1   4.050197  10.059114  10.138357      102
+102      1   6.082351   8.100071  10.123399      103
 103      1   6.042340  10.090836   8.060340      104
 104      1   8.037871   8.044527   8.075286      105
 105      1   8.068666  10.122228  10.109220      106
@@ -1159,8 +1222,8 @@ origin = [-0.021, -0.021, -0.021]
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="01.4.11._crystal_loading.html"
-                        title="previous chapter">Introduction to atomman: crystal loading</a></p>
+  <p class="topless"><a href="01.5._Settings_and_Library_classes.html"
+                        title="previous chapter">Introduction to atomman: Settings and Library</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="02.1._Potential_class.html"
                         title="next chapter">Introduction to atomman: LAMMPS Potentials</a></p>
@@ -1181,14 +1244,14 @@ origin = [-0.021, -0.021, -0.021]
           <a href="02.1._Potential_class.html" title="Introduction to atomman: LAMMPS Potentials"
              >next</a> |</li>
         <li class="right" >
-          <a href="01.4.11._crystal_loading.html" title="Introduction to atomman: crystal loading"
+          <a href="01.5._Settings_and_Library_classes.html" title="Introduction to atomman: Settings and Library"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

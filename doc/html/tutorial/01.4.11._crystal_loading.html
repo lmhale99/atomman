@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: crystal loading &#8212; atomman 1.3.4 documentation</title>
+    <title>Introduction to atomman: crystal loading &#8212; atomman 1.3.5 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -17,7 +17,7 @@
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction to atomman: LAMMPS functionality" href="02._LAMMPS_functionality.html" />
+    <link rel="next" title="Introduction to atomman: Settings and Library" href="01.5._Settings_and_Library_classes.html" />
     <link rel="prev" title="Introduction to atomman: prototype loading" href="01.4.10._prototype_loading.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -30,12 +30,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="02._LAMMPS_functionality.html" title="Introduction to atomman: LAMMPS functionality"
+          <a href="01.5._Settings_and_Library_classes.html" title="Introduction to atomman: Settings and Library"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="01.4.10._prototype_loading.html" title="Introduction to atomman: prototype loading"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -111,20 +111,33 @@ div.nboutput.container div.prompt pre {
 /* all prompts */
 div.nbinput.container div.prompt,
 div.nboutput.container div.prompt {
-    min-width: 7ex;
-    padding-top: 0.3rem;
-    padding-right: 0.3rem;
-    text-align: right;
-    flex: 0;
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
 }
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
 @media (max-width: 540px) {
     div.nbinput.container div.prompt,
     div.nboutput.container div.prompt {
+        width: unset;
         text-align: left;
         padding: 0.4em;
     }
     div.nboutput.container div.prompt.empty {
         padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
     }
 }
 
@@ -217,7 +230,7 @@ div.nboutput.container div.output_area div[class*=highlight].math,
 div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 0.3rem;
+    padding: 5px;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -300,8 +313,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.4
-Notebook executed on 2020-09-10
+atomman version = 1.3.5
+Notebook executed on 2020-10-06
 </pre></div></div>
 </div>
 </div>
@@ -337,21 +350,13 @@ Notebook executed on 2020-09-10
 <ul class="simple">
 <li><p><strong>system</strong> (<em>atomman.System</em>) The system object generated from the relaxed crystal.</p></li>
 </ul>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">db</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">library</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;crystal&#39;</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;A1--Cu--fcc&#39;</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Al&#39;</span><span class="p">])</span>
+<span></span><span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;crystal&#39;</span><span class="p">,</span> <span class="n">potential_id</span><span class="o">=</span><span class="s1">&#39;2003--Zope-R-R-Mishin-Y--Al&#39;</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;A1--Cu--fcc&#39;</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Al&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ucell</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -360,43 +365,21 @@ Notebook executed on 2020-09-10
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">ValueError</span>                                Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-2-5b7e882c3b86&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>am<span class="ansi-yellow-intense-fg ansi-bold">.</span>load<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;crystal&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> family<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#39;A1--Cu--fcc&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> symbols<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;Al&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\lmh1\documents\python-packages\atomman\atomman\load\__init__.py</span> in <span class="ansi-cyan-fg">load</span><span class="ansi-blue-intense-fg ansi-bold">(style, *args, **kwargs)</span>
-<span class="ansi-green-fg">     49</span>
-<span class="ansi-green-fg">     50</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> style <span class="ansi-yellow-intense-fg ansi-bold">==</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;crystal&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 51</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">return</span> load_crystal<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">*</span>args<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">     52</span>
-<span class="ansi-green-fg">     53</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> style <span class="ansi-yellow-intense-fg ansi-bold">==</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;cif&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\lmh1\documents\python-packages\atomman\atomman\load\crystal\load.py</span> in <span class="ansi-cyan-fg">load</span><span class="ansi-blue-intense-fg ansi-bold">(key, method, standing, family, parent_key, potential, potential_LAMMPS_id, potential_LAMMPS_key, potential_id, potential_key, symbols, natoms, natypes, keyword, verbose, database, localpath, local, remote)</span>
-<span class="ansi-green-fg">     95</span>                    potential_id<span class="ansi-yellow-intense-fg ansi-bold">=</span>potential_id<span class="ansi-yellow-intense-fg ansi-bold">,</span> potential_key<span class="ansi-yellow-intense-fg ansi-bold">=</span>potential_key<span class="ansi-yellow-intense-fg ansi-bold">,</span>
-<span class="ansi-green-fg">     96</span>                    symbols<span class="ansi-yellow-intense-fg ansi-bold">=</span>symbols<span class="ansi-yellow-intense-fg ansi-bold">,</span> natoms<span class="ansi-yellow-intense-fg ansi-bold">=</span>natoms<span class="ansi-yellow-intense-fg ansi-bold">,</span> natypes<span class="ansi-yellow-intense-fg ansi-bold">=</span>natypes<span class="ansi-yellow-intense-fg ansi-bold">,</span> keyword<span class="ansi-yellow-intense-fg ansi-bold">=</span>keyword<span class="ansi-yellow-intense-fg ansi-bold">,</span>
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 97</span><span class="ansi-yellow-intense-fg ansi-bold">                    verbose=verbose)
-</span><span class="ansi-green-fg">     98</span>
-<span class="ansi-green-fg">     99</span>     <span class="ansi-red-intense-fg ansi-bold"># Retrieve unit cell information and set symbols</span>
-
-<span class="ansi-green-intense-fg ansi-bold">c:\users\lmh1\documents\python-packages\atomman\atomman\library\Database\_relaxed_crystal.py</span> in <span class="ansi-cyan-fg">get_relaxed_crystal</span><span class="ansi-blue-intense-fg ansi-bold">(self, key, method, standing, family, parent_key, potential, potential_LAMMPS_id, potential_LAMMPS_key, potential_id, potential_key, symbols, natoms, natypes, keyword, verbose)</span>
-<span class="ansi-green-fg">    469</span>
-<span class="ansi-green-fg">    470</span>     <span class="ansi-green-intense-fg ansi-bold">else</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 471</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">raise</span> ValueError<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;No matching relaxed crystals found&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    472</span>
-<span class="ansi-green-fg">    473</span> def download_relaxed_crystals(self, localpath=None, crystals=None, standing=&#39;good&#39;,
-
-<span class="ansi-red-intense-fg ansi-bold">ValueError</span>: No matching relaxed crystals found
+avect =  [ 4.050,  0.000,  0.000]
+bvect =  [ 0.000,  4.050,  0.000]
+cvect =  [ 0.000,  0.000,  4.050]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 4
+natypes = 1
+symbols = (&#39;Al&#39;,)
+pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   0.000 |   0.000 |   0.000
+      1 |       1 |   0.000 |   2.025 |   2.025
+      2 |       1 |   2.025 |   0.000 |   2.025
+      3 |       1 |   2.025 |   2.025 |   0.000
 </pre></div></div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
 </div>
 </div>
 </div>
@@ -420,8 +403,8 @@ Notebook executed on 2020-09-10
   <p class="topless"><a href="01.4.10._prototype_loading.html"
                         title="previous chapter">Introduction to atomman: prototype loading</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="02._LAMMPS_functionality.html"
-                        title="next chapter">Introduction to atomman: LAMMPS functionality</a></p>
+  <p class="topless"><a href="01.5._Settings_and_Library_classes.html"
+                        title="next chapter">Introduction to atomman: Settings and Library</a></p>
         </div>
       </div>
       <div class="clearer"></div>
@@ -436,17 +419,17 @@ Notebook executed on 2020-09-10
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="02._LAMMPS_functionality.html" title="Introduction to atomman: LAMMPS functionality"
+          <a href="01.5._Settings_and_Library_classes.html" title="Introduction to atomman: Settings and Library"
              >next</a> |</li>
         <li class="right" >
           <a href="01.4.10._prototype_loading.html" title="Introduction to atomman: prototype loading"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: Gamma surface plotting &#8212; atomman 1.3.4 documentation</title>
+    <title>Introduction to atomman: Gamma surface plotting &#8212; atomman 1.3.5 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="04.5._Stacking_fault_configuration_generator.html" title="Introduction to atomman: Stacking fault configuration generator"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -111,20 +111,33 @@ div.nboutput.container div.prompt pre {
 /* all prompts */
 div.nbinput.container div.prompt,
 div.nboutput.container div.prompt {
-    min-width: 7ex;
-    padding-top: 0.3rem;
-    padding-right: 0.3rem;
-    text-align: right;
-    flex: 0;
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
 }
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
 @media (max-width: 540px) {
     div.nbinput.container div.prompt,
     div.nboutput.container div.prompt {
+        width: unset;
         text-align: left;
         padding: 0.4em;
     }
     div.nboutput.container div.prompt.empty {
         padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
     }
 }
 
@@ -217,7 +230,7 @@ div.nboutput.container div.output_area div[class*=highlight].math,
 div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 0.3rem;
+    padding: 5px;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -306,8 +319,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.4
-Notebook executed on 2020-09-15
+atomman version = 1.3.5
+Notebook executed on 2020-10-06
 </pre></div></div>
 </div>
 </div>
@@ -458,77 +471,427 @@ origin = [ 0.000,  0.000,  0.000]
   </thead>
   <tbody>
     <tr>
-      <td>0</td>
+      <th>0</th>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
     </tr>
     <tr>
-      <td>1</td>
+      <th>1</th>
       <td>0.033333</td>
       <td>0.000000</td>
       <td>0.000328</td>
       <td>0.005542</td>
     </tr>
     <tr>
-      <td>2</td>
+      <th>2</th>
       <td>0.066667</td>
       <td>0.000000</td>
       <td>0.001320</td>
       <td>0.019437</td>
     </tr>
     <tr>
-      <td>3</td>
+      <th>3</th>
       <td>0.100000</td>
       <td>0.000000</td>
       <td>0.003008</td>
       <td>0.038158</td>
     </tr>
     <tr>
-      <td>4</td>
+      <th>4</th>
       <td>0.133333</td>
       <td>0.000000</td>
       <td>0.005299</td>
       <td>0.060688</td>
     </tr>
     <tr>
-      <td>...</td>
+      <th>5</th>
+      <td>0.166667</td>
+      <td>0.000000</td>
+      <td>0.007854</td>
+      <td>0.088513</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.200000</td>
+      <td>0.000000</td>
+      <td>0.010345</td>
+      <td>0.112624</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.233333</td>
+      <td>0.000000</td>
+      <td>0.012747</td>
+      <td>0.130759</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.266667</td>
+      <td>0.000000</td>
+      <td>0.015027</td>
+      <td>0.145926</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.300000</td>
+      <td>0.000000</td>
+      <td>0.017133</td>
+      <td>0.160820</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>0.333333</td>
+      <td>0.000000</td>
+      <td>0.018964</td>
+      <td>0.179702</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>0.366667</td>
+      <td>0.000000</td>
+      <td>0.020360</td>
+      <td>0.202956</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>0.400000</td>
+      <td>0.000000</td>
+      <td>0.021289</td>
+      <td>0.222372</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>0.433333</td>
+      <td>0.000000</td>
+      <td>0.021853</td>
+      <td>0.235330</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>0.466667</td>
+      <td>0.000000</td>
+      <td>0.022146</td>
+      <td>0.242556</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>0.500000</td>
+      <td>0.000000</td>
+      <td>0.022235</td>
+      <td>0.244852</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.533333</td>
+      <td>0.000000</td>
+      <td>0.022146</td>
+      <td>0.242556</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>0.566667</td>
+      <td>0.000000</td>
+      <td>0.021853</td>
+      <td>0.235330</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>0.600000</td>
+      <td>0.000000</td>
+      <td>0.021289</td>
+      <td>0.222372</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>0.633333</td>
+      <td>0.000000</td>
+      <td>0.020360</td>
+      <td>0.202956</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>0.666667</td>
+      <td>0.000000</td>
+      <td>0.018964</td>
+      <td>0.179702</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>0.700000</td>
+      <td>0.000000</td>
+      <td>0.017133</td>
+      <td>0.160820</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>0.733333</td>
+      <td>0.000000</td>
+      <td>0.015027</td>
+      <td>0.145926</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>0.766667</td>
+      <td>0.000000</td>
+      <td>0.012747</td>
+      <td>0.130759</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>0.800000</td>
+      <td>0.000000</td>
+      <td>0.010345</td>
+      <td>0.112624</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>0.833333</td>
+      <td>0.000000</td>
+      <td>0.007854</td>
+      <td>0.088513</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>0.866667</td>
+      <td>0.000000</td>
+      <td>0.005299</td>
+      <td>0.060688</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>0.900000</td>
+      <td>0.000000</td>
+      <td>0.003008</td>
+      <td>0.038158</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>0.933333</td>
+      <td>0.000000</td>
+      <td>0.001320</td>
+      <td>0.019437</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>0.966667</td>
+      <td>0.000000</td>
+      <td>0.000328</td>
+      <td>0.005542</td>
+    </tr>
+    <tr>
+      <th>...</th>
       <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
     </tr>
     <tr>
-      <td>895</td>
+      <th>870</th>
+      <td>0.000000</td>
+      <td>0.966667</td>
+      <td>0.000328</td>
+      <td>0.005542</td>
+    </tr>
+    <tr>
+      <th>871</th>
+      <td>0.033333</td>
+      <td>0.966667</td>
+      <td>0.000328</td>
+      <td>0.005542</td>
+    </tr>
+    <tr>
+      <th>872</th>
+      <td>0.066667</td>
+      <td>0.966667</td>
+      <td>0.001009</td>
+      <td>0.016933</td>
+    </tr>
+    <tr>
+      <th>873</th>
+      <td>0.100000</td>
+      <td>0.966667</td>
+      <td>0.002400</td>
+      <td>0.034969</td>
+    </tr>
+    <tr>
+      <th>874</th>
+      <td>0.133333</td>
+      <td>0.966667</td>
+      <td>0.004494</td>
+      <td>0.055966</td>
+    </tr>
+    <tr>
+      <th>875</th>
+      <td>0.166667</td>
+      <td>0.966667</td>
+      <td>0.007090</td>
+      <td>0.080366</td>
+    </tr>
+    <tr>
+      <th>876</th>
+      <td>0.200000</td>
+      <td>0.966667</td>
+      <td>0.009792</td>
+      <td>0.108189</td>
+    </tr>
+    <tr>
+      <th>877</th>
+      <td>0.233333</td>
+      <td>0.966667</td>
+      <td>0.012404</td>
+      <td>0.129968</td>
+    </tr>
+    <tr>
+      <th>878</th>
+      <td>0.266667</td>
+      <td>0.966667</td>
+      <td>0.014935</td>
+      <td>0.148037</td>
+    </tr>
+    <tr>
+      <th>879</th>
+      <td>0.300000</td>
+      <td>0.966667</td>
+      <td>0.017328</td>
+      <td>0.166086</td>
+    </tr>
+    <tr>
+      <th>880</th>
+      <td>0.333333</td>
+      <td>0.966667</td>
+      <td>0.019454</td>
+      <td>0.187787</td>
+    </tr>
+    <tr>
+      <th>881</th>
+      <td>0.366667</td>
+      <td>0.966667</td>
+      <td>0.021147</td>
+      <td>0.210569</td>
+    </tr>
+    <tr>
+      <th>882</th>
+      <td>0.400000</td>
+      <td>0.966667</td>
+      <td>0.022370</td>
+      <td>0.230913</td>
+    </tr>
+    <tr>
+      <th>883</th>
+      <td>0.433333</td>
+      <td>0.966667</td>
+      <td>0.023178</td>
+      <td>0.246456</td>
+    </tr>
+    <tr>
+      <th>884</th>
+      <td>0.466667</td>
+      <td>0.966667</td>
+      <td>0.023658</td>
+      <td>0.256395</td>
+    </tr>
+    <tr>
+      <th>885</th>
+      <td>0.500000</td>
+      <td>0.966667</td>
+      <td>0.023876</td>
+      <td>0.261167</td>
+    </tr>
+    <tr>
+      <th>886</th>
+      <td>0.533333</td>
+      <td>0.966667</td>
+      <td>0.023876</td>
+      <td>0.261167</td>
+    </tr>
+    <tr>
+      <th>887</th>
+      <td>0.566667</td>
+      <td>0.966667</td>
+      <td>0.023658</td>
+      <td>0.256395</td>
+    </tr>
+    <tr>
+      <th>888</th>
+      <td>0.600000</td>
+      <td>0.966667</td>
+      <td>0.023178</td>
+      <td>0.246456</td>
+    </tr>
+    <tr>
+      <th>889</th>
+      <td>0.633333</td>
+      <td>0.966667</td>
+      <td>0.022370</td>
+      <td>0.230913</td>
+    </tr>
+    <tr>
+      <th>890</th>
+      <td>0.666667</td>
+      <td>0.966667</td>
+      <td>0.021147</td>
+      <td>0.210569</td>
+    </tr>
+    <tr>
+      <th>891</th>
+      <td>0.700000</td>
+      <td>0.966667</td>
+      <td>0.019454</td>
+      <td>0.187787</td>
+    </tr>
+    <tr>
+      <th>892</th>
+      <td>0.733333</td>
+      <td>0.966667</td>
+      <td>0.017328</td>
+      <td>0.166086</td>
+    </tr>
+    <tr>
+      <th>893</th>
+      <td>0.766667</td>
+      <td>0.966667</td>
+      <td>0.014935</td>
+      <td>0.148037</td>
+    </tr>
+    <tr>
+      <th>894</th>
+      <td>0.800000</td>
+      <td>0.966667</td>
+      <td>0.012404</td>
+      <td>0.129968</td>
+    </tr>
+    <tr>
+      <th>895</th>
       <td>0.833333</td>
       <td>0.966667</td>
       <td>0.009792</td>
       <td>0.108189</td>
     </tr>
     <tr>
-      <td>896</td>
+      <th>896</th>
       <td>0.866667</td>
       <td>0.966667</td>
       <td>0.007090</td>
       <td>0.080366</td>
     </tr>
     <tr>
-      <td>897</td>
+      <th>897</th>
       <td>0.900000</td>
       <td>0.966667</td>
       <td>0.004494</td>
       <td>0.055966</td>
     </tr>
     <tr>
-      <td>898</td>
+      <th>898</th>
       <td>0.933333</td>
       <td>0.966667</td>
       <td>0.002400</td>
       <td>0.034969</td>
     </tr>
     <tr>
-      <td>899</td>
+      <th>899</th>
       <td>0.966667</td>
       <td>0.966667</td>
       <td>0.001009</td>
@@ -591,8 +954,8 @@ origin = [ 0.000,  0.000,  0.000]
 <li><p><strong>vect</strong> (<em>numpy.array, optional</em>) Vector to plot the gsf along. If box is set, this vect will be a lattice vector, otherwise it will be a Cartesian vector. Must be in the plane defined by the GammaSurface object’s a1vect and a2vect vectors. Default value will use the set a1vect.</p></li>
 <li><p><strong>num</strong> (<em>int, optional</em>) The number of points to evaluate the generalized stacking fault energy for. Default value is 100 if smooth is True, otherwise is number of unique a1 values from 0 to 1.</p></li>
 <li><p><strong>smooth</strong> (<em>bool, optional</em>) If True (default), then plot shows smooth interpolated values. If False, plot shows nearest raw data values.</p></li>
-<li><p><strong>length_unit</strong> (<em>str, optional</em>) The unit of length to display the x-axis coordinates in. Default value is ‘angstrom’.</p></li>
-<li><p><strong>energyperarea_unit</strong> (<em>str, optional</em>) The unit of energy per area to display the stacking fault energies in. Default value is ‘eV/angstrom^2’.</p></li>
+<li><p><strong>length_unit</strong> (<em>str, optional</em>) The unit of length to display the x-axis coordinates in. Default value is ‘Å’.</p></li>
+<li><p><strong>energyperarea_unit</strong> (<em>str, optional</em>) The unit of energy per area to display the stacking fault energies in. Default value is ‘eV/Å^2’.</p></li>
 <li><p><strong>figsize</strong> (<em>tuple, optional</em>) The x,y size of the figure to return. Default value is (10, 6).</p></li>
 <li><p><strong>fig</strong> (<em>matplotlib.figure, optional</em>) An existing figure object to add the new plot to. If not given, a new figure is generated.</p></li>
 <li><p><strong>**kwargs</strong> (<em>dict, optional</em>) Additional keywords are passed into the underlying matplotlib.pyplot.plot(). This allows control of such things like line color, style, etc.</p></li>
@@ -660,7 +1023,7 @@ origin = [ 0.000,  0.000,  0.000]
 <li><p><strong>vect</strong> (<em>numpy.array, optional</em>) Vector to plot the gsf along. If box is set, this vect will be a lattice vector, otherwise it will be a Cartesian vector. Must be in the plane defined by the GammaSurface object’s a1vect and a2vect vectors. Default value will use the set a1vect.</p></li>
 <li><p><strong>num</strong> (<em>int, optional</em>) The number of points to evaluate the generalized stacking fault energy for. Default value is 100 if smooth is True, otherwise is number of unique a1 values from 0 to 1.</p></li>
 <li><p><strong>smooth</strong> (<em>bool, optional</em>) If True (default), then plot shows smooth interpolated values. If False, plot shows nearest raw data values.</p></li>
-<li><p><strong>length_unit</strong> (<em>str, optional</em>) The unit of length to display the x-axis coordinates in. Default value is ‘angstrom’.</p></li>
+<li><p><strong>length_unit</strong> (<em>str, optional</em>) The unit of length to display the x-axis coordinates in. Default value is ‘Å’.</p></li>
 <li><p><strong>figsize</strong> (<em>tuple, optional</em>) The x,y size of the figure to return. Default value is (10, 6).</p></li>
 <li><p><strong>fig</strong> (<em>matplotlib.figure, optional</em>) An existing figure object to add the new plot to. If not given, a new figure is generated.</p></li>
 <li><p><strong>**kwargs</strong> (<em>dict, optional</em>) Additional keywords are passed into the underlying matplotlib.pyplot.plot(). This allows control of such things like line color, style, etc.</p></li>
@@ -729,8 +1092,8 @@ origin = [ 0.000,  0.000,  0.000]
 <li><p><strong>a1vect</strong> (<em>np.array, optional</em>) Crystal vector for the a1 vector to use for plotting. Default value of None uses the saved a1vect.</p></li>
 <li><p><strong>a2vect</strong> (<em>np.array, optional</em>) Crystal vector for the a2 vector to use for plotting. Default value of None uses the saved a2vect.</p></li>
 <li><p><strong>xvect</strong> (<em>numpy.array, optional</em>) Crystal vector to align with the plotting x-axis for non-normalized plots. If not given, this is taken as the Cartesian of a1vect.</p></li>
-<li><p><strong>length_unit</strong> (<em>str, optional</em>) The unit of length to display non-normalized axes values in. Default value is ‘angstrom’.</p></li>
-<li><p><strong>energyperarea_unit</strong> (<em>str, optional</em>) The unit of energy per area to display the stacking fault energies in. Default value is ‘eV/angstrom^2’.</p></li>
+<li><p><strong>length_unit</strong> (<em>str, optional</em>) The unit of length to display non-normalized axes values in. Default value is ‘Å’.</p></li>
+<li><p><strong>energyperarea_unit</strong> (<em>str, optional</em>) The unit of energy per area to display the stacking fault energies in. Default value is ‘eV/Å^2’.</p></li>
 <li><p><strong>numx</strong> (<em>int, optional</em>) The number of plotting points to use along the x-axis. Default value is 100.</p></li>
 <li><p><strong>numy</strong> (<em>int, optional</em>) The number of plotting points to use along the y-axis. Default value is 100.</p></li>
 <li><p><strong>figsize</strong> (<em>tuple or None, optional</em>) The figure’s x,y dimensions. If None (default), the values are scaled such that the x,y spacings are approximately equal, and the larger of the two values is set to 10.</p></li>
@@ -806,7 +1169,7 @@ origin = [ 0.000,  0.000,  0.000]
 <li><p><strong>a1vect</strong> (<em>np.array, optional</em>) Crystal vector for the a1 vector to use for plotting. Default value of None uses the saved a1vect.</p></li>
 <li><p><strong>a2vect</strong> (<em>np.array, optional</em>) Crystal vector for the a2 vector to use for plotting. Default value of None uses the saved a2vect.</p></li>
 <li><p><strong>xvect</strong> (<em>numpy.array, optional</em>) Crystal vector to align with the plotting x-axis for non-normalized plots. If not given, this is taken as the Cartesian of a1vect.</p></li>
-<li><p><strong>length_unit</strong> (<em>str, optional</em>) The unit of length to display non-normalized axes values in. Default value is ‘angstrom’.</p></li>
+<li><p><strong>length_unit</strong> (<em>str, optional</em>) The unit of length to display non-normalized axes values in. Default value is ‘Å’.</p></li>
 <li><p><strong>numx</strong> (<em>int, optional</em>) The number of plotting points to use along the x-axis. Default value is 100.</p></li>
 <li><p><strong>numy</strong> (<em>int, optional</em>) The number of plotting points to use along the y-axis. Default value is 100.</p></li>
 <li><p><strong>figsize</strong> (<em>tuple or None, optional</em>) The figure’s x,y dimensions. If None (default), the values are scaled such that the x,y spacings are approximately equal, and the larger of the two values is set to 10.</p></li>
@@ -916,8 +1279,8 @@ origin = [ 0.000,  0.000,  0.000]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Close to E_isf = 127.08436673732588 mJ/m^2
-Close to E_usf = 471.025881975167 mJ/m^2
+Close to E_isf = 127.0843667373249 mJ/m^2
+Close to E_usf = 471.02588197516667 mJ/m^2
 </pre></div></div>
 </div>
 </div>
@@ -955,8 +1318,8 @@ Close to E_usf = 471.025881975167 mJ/m^2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Close to δ_isf = 0.04908088528014787 angstrom
-Close to δ_usf = 0.3865334761953485 angstrom
+Close to δ_isf = 0.04908088528014831 angstrom
+Close to δ_usf = 0.38653347619534983 angstrom
 </pre></div></div>
 </div>
 </div>
@@ -1048,12 +1411,12 @@ Close to δ_usf = 0.3865334761953485 angstrom
         <li class="right" >
           <a href="04.5._Stacking_fault_configuration_generator.html" title="Introduction to atomman: Stacking fault configuration generator"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

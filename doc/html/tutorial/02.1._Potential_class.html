@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: LAMMPS Potentials &#8212; atomman 1.3.4 documentation</title>
+    <title>Introduction to atomman: LAMMPS Potentials &#8212; atomman 1.3.5 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="02._LAMMPS_functionality.html" title="Introduction to atomman: LAMMPS functionality"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -111,20 +111,33 @@ div.nboutput.container div.prompt pre {
 /* all prompts */
 div.nbinput.container div.prompt,
 div.nboutput.container div.prompt {
-    min-width: 7ex;
-    padding-top: 0.3rem;
-    padding-right: 0.3rem;
-    text-align: right;
-    flex: 0;
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
 }
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
 @media (max-width: 540px) {
     div.nbinput.container div.prompt,
     div.nboutput.container div.prompt {
+        width: unset;
         text-align: left;
         padding: 0.4em;
     }
     div.nboutput.container div.prompt.empty {
         padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
     }
 }
 
@@ -217,7 +230,7 @@ div.nboutput.container div.output_area div[class*=highlight].math,
 div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 0.3rem;
+    padding: 5px;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -312,8 +325,8 @@ Repository. These methods allow for pre-defined potentials to be retrieved eithe
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.4
-Notebook executed on 2020-09-15
+atomman version = 1.3.5
+Notebook executed on 2020-10-06
 </pre></div></div>
 </div>
 </div>
@@ -480,7 +493,7 @@ Please select one:2
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Select an eam-style potential for Co</span>
+<span></span><span class="c1"># Select an eam-style potential for Ni</span>
 <span class="n">potential</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load_lammps_potential</span><span class="p">(</span><span class="n">pair_style</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;eam&#39;</span><span class="p">,</span> <span class="s1">&#39;eam/alloy&#39;</span><span class="p">,</span> <span class="s1">&#39;eam/fs&#39;</span><span class="p">],</span> <span class="n">elements</span><span class="o">=</span><span class="s1">&#39;Ni&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">potential</span><span class="p">)</span>
 </pre></div>
@@ -527,8 +540,8 @@ Multiple matching LAMMPS potentials found
 33 2019--Fischer-F--Cu-Ni--LAMMPS--ipr1
 34 2019--Fischer-F--Cu-Ni--LAMMPS--ipr2
 35 2019--Mendelev-M-I--Fe-Ni-Cr--LAMMPS--ipr1
-Please select one:11
-2004--Mishin-Y--Ni-Al--LAMMPS--ipr1
+Please select one:30
+2018--Pan-Z--Ag-Ni--LAMMPS--ipr1
 </pre></div></div>
 </div>
 </div>
@@ -564,7 +577,7 @@ Please select one:11
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-279 total LAMMPS potentials loaded
+280 total LAMMPS potentials loaded
 The first loaded LAMMPS potential is 1985--Foiles-S-M--Ni-Cu--LAMMPS--ipr1
 </pre></div></div>
 </div>
@@ -600,104 +613,504 @@ The first loaded LAMMPS potential is 1985--Foiles-S-M--Ni-Cu--LAMMPS--ipr1
   <thead>
     <tr style="text-align: right;">
       <th></th>
+      <th>allsymbols</th>
+      <th>atom_style</th>
+      <th>charges</th>
+      <th>elements</th>
       <th>id</th>
       <th>key</th>
+      <th>masses</th>
+      <th>pair_style</th>
       <th>potid</th>
       <th>potkey</th>
-      <th>units</th>
-      <th>atom_style</th>
-      <th>allsymbols</th>
-      <th>pair_style</th>
       <th>status</th>
       <th>symbols</th>
-      <th>elements</th>
-      <th>masses</th>
-      <th>charges</th>
+      <th>units</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>0</td>
+      <th>0</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[Cu, Ni]</td>
       <td>1985--Foiles-S-M--Ni-Cu--LAMMPS--ipr1</td>
       <td>062d2ba7-3903-40ae-a772-daa471d107c6</td>
+      <td>[63.55, 58.71]</td>
+      <td>eam</td>
       <td>1985--Foiles-S-M--Ni-Cu</td>
       <td>301f04ce-9082-4542-8590-489300cd19e8</td>
-      <td>metal</td>
-      <td>atomic</td>
-      <td>False</td>
-      <td>eam</td>
       <td>active</td>
       <td>[Cu, Ni]</td>
-      <td>[Cu, Ni]</td>
-      <td>[63.55, 58.71]</td>
-      <td>[0.0, 0.0]</td>
+      <td>metal</td>
     </tr>
     <tr>
-      <td>1</td>
+      <th>1</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Si]</td>
       <td>1985--Stillinger-F-H--Si--LAMMPS--ipr1</td>
       <td>d085648c-b3ef-4be8-824b-7093fd22770a</td>
+      <td>[28.085]</td>
+      <td>sw</td>
       <td>1985--Stillinger-F-H-Weber-T-A--Si</td>
       <td>edc31ad6-2b9a-455c-9b5f-e888a672ecbd</td>
-      <td>metal</td>
-      <td>atomic</td>
-      <td>False</td>
-      <td>sw</td>
       <td>active</td>
       <td>[Si]</td>
-      <td>[Si]</td>
-      <td>[28.085]</td>
-      <td>[0.0]</td>
+      <td>metal</td>
     </tr>
     <tr>
-      <td>2</td>
+      <th>2</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Ag]</td>
       <td>1986--Foiles-S-M--Ag--LAMMPS--ipr1</td>
       <td>76a265fc-45ff-49d7-8c64-2044f12402f2</td>
+      <td>[107.87]</td>
+      <td>eam</td>
       <td>1986--Foiles-S-M-Baskes-M-I-Daw-M-S--Ag</td>
       <td>672d54f8-9f48-4200-af56-8a7378ebbc4a</td>
-      <td>metal</td>
-      <td>atomic</td>
-      <td>False</td>
-      <td>eam</td>
       <td>active</td>
       <td>[Ag]</td>
-      <td>[Ag]</td>
-      <td>[107.87]</td>
-      <td>[0.0]</td>
+      <td>metal</td>
     </tr>
     <tr>
-      <td>3</td>
+      <th>3</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]</td>
+      <td>[Ag, Au, Cu, Ni, Pd, Pt]</td>
       <td>1986--Foiles-S-M--Ag-Au-Cu-Ni-Pd-Pt--LAMMPS--ipr1</td>
       <td>c5afa7e8-6b3b-49cd-ad1c-ae3e4329363a</td>
+      <td>[107.87, 196.97, 63.55, 58.71, 106.4, 195.09]</td>
+      <td>eam</td>
       <td>1986--Foiles-S-M-Baskes-M-I-Daw-M-S--Ag-Au-Cu-...</td>
       <td>7a1302de-59cf-4efb-900e-cad845b68ee5</td>
-      <td>metal</td>
-      <td>atomic</td>
-      <td>False</td>
-      <td>eam</td>
       <td>active</td>
       <td>[Ag, Au, Cu, Ni, Pd, Pt]</td>
-      <td>[Ag, Au, Cu, Ni, Pd, Pt]</td>
-      <td>[107.87, 196.97, 63.55, 58.71, 106.4, 195.09]</td>
-      <td>[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]</td>
+      <td>metal</td>
     </tr>
     <tr>
-      <td>4</td>
+      <th>4</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Au]</td>
       <td>1986--Foiles-S-M--Au--LAMMPS--ipr1</td>
       <td>c588810a-b96d-4871-bfe2-cff8a5a7c709</td>
+      <td>[196.97]</td>
+      <td>eam</td>
       <td>1986--Foiles-S-M-Baskes-M-I-Daw-M-S--Au</td>
       <td>ffb66faa-319d-4556-8363-dad3959cd553</td>
-      <td>metal</td>
-      <td>atomic</td>
-      <td>False</td>
-      <td>eam</td>
       <td>active</td>
       <td>[Au]</td>
-      <td>[Au]</td>
-      <td>[196.97]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>False</td>
+      <td>atomic</td>
       <td>[0.0]</td>
+      <td>[Cu]</td>
+      <td>1986--Foiles-S-M--Cu--LAMMPS--ipr1</td>
+      <td>380d3b47-51e9-4590-8a59-8313dd8fb018</td>
+      <td>[63.55]</td>
+      <td>eam</td>
+      <td>1986--Foiles-S-M-Baskes-M-I-Daw-M-S--Cu</td>
+      <td>7991d330-58cd-43ac-bba9-ff6a58dcf617</td>
+      <td>active</td>
+      <td>[Cu]</td>
+      <td>metal</td>
     </tr>
     <tr>
-      <td>...</td>
+      <th>6</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Ni]</td>
+      <td>1986--Foiles-S-M--Ni--LAMMPS--ipr1</td>
+      <td>8e9ae12d-5034-418a-a168-fb5499ecffcd</td>
+      <td>[58.71]</td>
+      <td>eam</td>
+      <td>1986--Foiles-S-M-Baskes-M-I-Daw-M-S--Ni</td>
+      <td>15a085b9-d9d6-404f-9c2f-3ed40e8ff7a4</td>
+      <td>active</td>
+      <td>[Ni]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Pd]</td>
+      <td>1986--Foiles-S-M--Pd--LAMMPS--ipr1</td>
+      <td>fa189ff3-4a27-4c36-b8b7-3821443a4edd</td>
+      <td>[106.4]</td>
+      <td>eam</td>
+      <td>1986--Foiles-S-M-Baskes-M-I-Daw-M-S--Pd</td>
+      <td>16dde7ea-c8cf-4a23-95b3-494a2b252e9b</td>
+      <td>active</td>
+      <td>[Pd]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Pt]</td>
+      <td>1986--Foiles-S-M--Pt--LAMMPS--ipr1</td>
+      <td>0a74d2a8-ec49-459c-903a-44bd3e50969a</td>
+      <td>[195.09]</td>
+      <td>eam</td>
+      <td>1986--Foiles-S-M-Baskes-M-I-Daw-M-S--Pt</td>
+      <td>87657840-e5e6-4378-94ea-381a90608142</td>
+      <td>active</td>
+      <td>[Pt]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Ag]</td>
+      <td>1987--Ackland-G-J--Ag--LAMMPS--ipr1</td>
+      <td>59a266da-922c-429c-8633-8d3a8de4cd70</td>
+      <td>[107.8682]</td>
+      <td>eam/fs</td>
+      <td>1987--Ackland-G-J-Tichy-G-Vitek-V-Finnis-M-W--Ag</td>
+      <td>dc4149ce-3592-4131-8683-ecf654d5a519</td>
+      <td>active</td>
+      <td>[Ag]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Ag]</td>
+      <td>1987--Ackland-G-J--Ag--LAMMPS--ipr2</td>
+      <td>024ec18c-c358-4eca-b6f9-442d70cfbf05</td>
+      <td>[107.8682]</td>
+      <td>eam/fs</td>
+      <td>1987--Ackland-G-J-Tichy-G-Vitek-V-Finnis-M-W--Ag</td>
+      <td>dc4149ce-3592-4131-8683-ecf654d5a519</td>
+      <td>active</td>
+      <td>[Ag]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Au]</td>
+      <td>1987--Ackland-G-J--Au--LAMMPS--ipr1</td>
+      <td>d8dc01ec-7e50-48f2-92a7-a3b670f28037</td>
+      <td>[196.96655]</td>
+      <td>eam/fs</td>
+      <td>1987--Ackland-G-J-Tichy-G-Vitek-V-Finnis-M-W--Au</td>
+      <td>25899e46-6992-460a-b1c7-fb2704629e9f</td>
+      <td>active</td>
+      <td>[Au]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Au]</td>
+      <td>1987--Ackland-G-J--Au--LAMMPS--ipr2</td>
+      <td>0fb01014-9712-408b-9707-1663fdde3d9f</td>
+      <td>[196.96655]</td>
+      <td>eam/fs</td>
+      <td>1987--Ackland-G-J-Tichy-G-Vitek-V-Finnis-M-W--Au</td>
+      <td>25899e46-6992-460a-b1c7-fb2704629e9f</td>
+      <td>active</td>
+      <td>[Au]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Cu]</td>
+      <td>1987--Ackland-G-J--Cu--LAMMPS--ipr1</td>
+      <td>e879eafc-5f54-4c71-8488-719fe2f6d9ad</td>
+      <td>[63.546]</td>
+      <td>eam/fs</td>
+      <td>1987--Ackland-G-J-Tichy-G-Vitek-V-Finnis-M-W--Cu</td>
+      <td>41ea33df-5737-4c25-b94c-a708f063f26f</td>
+      <td>active</td>
+      <td>[Cu]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Cu]</td>
+      <td>1987--Ackland-G-J--Cu--LAMMPS--ipr2</td>
+      <td>176dfbb2-63a5-450e-a17f-b2b5f260eb4f</td>
+      <td>[63.546]</td>
+      <td>eam/fs</td>
+      <td>1987--Ackland-G-J-Tichy-G-Vitek-V-Finnis-M-W--Cu</td>
+      <td>41ea33df-5737-4c25-b94c-a708f063f26f</td>
+      <td>active</td>
+      <td>[Cu]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Mo]</td>
+      <td>1987--Ackland-G-J--Mo--LAMMPS--ipr3</td>
+      <td>0014647b-dd8e-4a96-a8b1-fab20b39c4de</td>
+      <td>[95.94]</td>
+      <td>eam/alloy</td>
+      <td>1987--Ackland-G-J-Thetford-R--Mo</td>
+      <td>ff748ef8-f019-42b2-bdda-b5b5cadd6264</td>
+      <td>active</td>
+      <td>[Mo]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Ni]</td>
+      <td>1987--Ackland-G-J--Ni--LAMMPS--ipr1</td>
+      <td>7ba46c78-4880-45c4-86a6-87ee65acf5c4</td>
+      <td>[58.6934]</td>
+      <td>eam/fs</td>
+      <td>1987--Ackland-G-J-Tichy-G-Vitek-V-Finnis-M-W--Ni</td>
+      <td>6fbc40e6-1388-4988-87d5-88805b1b3690</td>
+      <td>active</td>
+      <td>[Ni]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Ni]</td>
+      <td>1987--Ackland-G-J--Ni--LAMMPS--ipr2</td>
+      <td>1510cddb-d6fe-4100-842e-a1002a0dfe7d</td>
+      <td>[58.6934]</td>
+      <td>eam/fs</td>
+      <td>1987--Ackland-G-J-Tichy-G-Vitek-V-Finnis-M-W--Ni</td>
+      <td>6fbc40e6-1388-4988-87d5-88805b1b3690</td>
+      <td>active</td>
+      <td>[Ni]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Si]</td>
+      <td>1988--Tersoff-J--Si-b--LAMMPS--ipr1</td>
+      <td>e01d150d-054c-46cd-a438-956e754436b6</td>
+      <td>[28.085]</td>
+      <td>tersoff</td>
+      <td>1988--Tersoff-J--Si-b</td>
+      <td>fc49b18c-eb42-4e83-bf2f-4f1fe334be77</td>
+      <td>active</td>
+      <td>[Si]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Si]</td>
+      <td>1988--Tersoff-J--Si-c--LAMMPS--ipr1</td>
+      <td>267a8ce8-e0fa-444d-8d5a-029ca2d4ba41</td>
+      <td>[28.085]</td>
+      <td>tersoff</td>
+      <td>1988--Tersoff-J--Si-c</td>
+      <td>ddd7d77b-7c4d-4de3-b703-97fdd0869457</td>
+      <td>active</td>
+      <td>[Si]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Ag]</td>
+      <td>1989--Adams-J-B--Ag--LAMMPS--ipr1</td>
+      <td>cbe0bfac-4e4c-49e4-91a4-e6d360ff0516</td>
+      <td>[107.87]</td>
+      <td>eam</td>
+      <td>1989--Adams-J-B-Foiles-S-M-Wolfer-W-G--Ag</td>
+      <td>d1e36148-f138-4ee0-ab7d-1fb5442805d8</td>
+      <td>active</td>
+      <td>[Ag]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]</td>
+      <td>[Ag, Au, Cu, Ni, Pd, Pt]</td>
+      <td>1989--Adams-J-B--Ag-Au-Cu-Ni-Pd-Pt--LAMMPS--ipr1</td>
+      <td>8a99e4c9-7a90-4c0e-96f5-57048066940f</td>
+      <td>[107.87, 196.97, 63.55, 58.71, 106.4, 195.09]</td>
+      <td>eam</td>
+      <td>1989--Adams-J-B-Foiles-S-M-Wolfer-W-G--Ag-Au-C...</td>
+      <td>9ddb10de-d3f8-43fe-9dfc-472d704537e1</td>
+      <td>active</td>
+      <td>[Ag, Au, Cu, Ni, Pd, Pt]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Au]</td>
+      <td>1989--Adams-J-B--Au--LAMMPS--ipr1</td>
+      <td>ee3495e7-e36a-418e-9de3-c5ef4643ef7f</td>
+      <td>[196.97]</td>
+      <td>eam</td>
+      <td>1989--Adams-J-B-Foiles-S-M-Wolfer-W-G--Au</td>
+      <td>8018facc-a337-4e34-b13f-b293f36a3458</td>
+      <td>active</td>
+      <td>[Au]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Cu]</td>
+      <td>1989--Adams-J-B--Cu--LAMMPS--ipr1</td>
+      <td>ddb93f7b-349f-4ab2-a630-97de04d12eff</td>
+      <td>[63.55]</td>
+      <td>eam</td>
+      <td>1989--Adams-J-B-Foiles-S-M-Wolfer-W-G--Cu</td>
+      <td>69d9f89a-f9a2-47ef-bd15-415d1bb7a9ba</td>
+      <td>active</td>
+      <td>[Cu]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Ni]</td>
+      <td>1989--Adams-J-B--Ni--LAMMPS--ipr1</td>
+      <td>27a40f2f-0c18-417d-81cc-97b788bcecf7</td>
+      <td>[58.71]</td>
+      <td>eam</td>
+      <td>1989--Adams-J-B-Foiles-S-M-Wolfer-W-G--Ni</td>
+      <td>e4cf8356-8b84-4e07-ac2b-580419a21730</td>
+      <td>active</td>
+      <td>[Ni]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Pd]</td>
+      <td>1989--Adams-J-B--Pd--LAMMPS--ipr1</td>
+      <td>a5486f00-b393-45af-9b99-c841d2615563</td>
+      <td>[106.4]</td>
+      <td>eam</td>
+      <td>1989--Adams-J-B-Foiles-S-M-Wolfer-W-G--Pd</td>
+      <td>d43c300c-e557-42f8-87a0-c26cf82370df</td>
+      <td>active</td>
+      <td>[Pd]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Pt]</td>
+      <td>1989--Adams-J-B--Pt--LAMMPS--ipr1</td>
+      <td>945f91fc-e7d9-40d6-bb03-b147036c19d8</td>
+      <td>[195.09]</td>
+      <td>eam</td>
+      <td>1989--Adams-J-B-Foiles-S-M-Wolfer-W-G--Pt</td>
+      <td>6f92bdbe-0eea-4865-ac81-888e522b6a90</td>
+      <td>active</td>
+      <td>[Pt]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[Si, C]</td>
+      <td>1989--Tersoff-J--Si-C--LAMMPS--ipr1</td>
+      <td>bd5e167c-0aff-41ae-a584-b95dbb8c3d2b</td>
+      <td>[28.085, 12.0106]</td>
+      <td>tersoff</td>
+      <td>1989--Tersoff-J--Si-C</td>
+      <td>f6b04d63-2165-423d-bfe6-15c606e09b82</td>
+      <td>active</td>
+      <td>[Si, C]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[Si, Ge]</td>
+      <td>1989--Tersoff-J--Si-Ge--LAMMPS--ipr1</td>
+      <td>7a0fc5db-0c9f-44f0-a005-4d6d6862a7aa</td>
+      <td>[28.085, 72.63]</td>
+      <td>tersoff</td>
+      <td>1989--Tersoff-J--Si-Ge</td>
+      <td>866a3898-fa41-42e0-9b2c-7a25beb42604</td>
+      <td>active</td>
+      <td>[Si, Ge]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[Cd, Te]</td>
+      <td>1989--Wang-Z-Q--Cd-Te--LAMMPS--ipr1</td>
+      <td>611dadcf-34a0-4f26-8c8e-9ecf1560c928</td>
+      <td>[112.414, 127.6]</td>
+      <td>sw</td>
+      <td>1989--Wang-Z-Q-Stroud-D-Markworth-A-J--Cd-Te</td>
+      <td>d0d348ef-47e3-4d59-a066-bec02d0525f7</td>
+      <td>active</td>
+      <td>[Cd, Te]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>...</th>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -713,88 +1126,488 @@ The first loaded LAMMPS potential is 1985--Foiles-S-M--Ni-Cu--LAMMPS--ipr1
       <td>...</td>
     </tr>
     <tr>
-      <td>274</td>
+      <th>250</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Cu]</td>
+      <td>2018--Etesami-S-A--Cu--LAMMPS--ipr1</td>
+      <td>52faed47-018b-4f62-aea6-16522367bcd5</td>
+      <td>[63.546]</td>
+      <td>meam</td>
+      <td>2018--Etesami-S-A-Asadi-E--Cu</td>
+      <td>080d6165-e0be-45b5-8228-4eac51e7b78d</td>
+      <td>active</td>
+      <td>[Cu]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>251</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Fe]</td>
+      <td>2018--Etesami-S-A--Fe--LAMMPS--ipr1</td>
+      <td>5796a72b-bcf4-4dd4-a0f3-ee5f462b7f7c</td>
+      <td>[55.845]</td>
+      <td>meam</td>
+      <td>2018--Etesami-S-A-Asadi-E--Fe</td>
+      <td>6c0f6df2-88e4-451b-833e-b9a0d3ccdc34</td>
+      <td>active</td>
+      <td>[Fe]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>252</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Ni]</td>
+      <td>2018--Etesami-S-A--Ni--LAMMPS--ipr1</td>
+      <td>068259bd-61b9-4efb-8833-63756a294046</td>
+      <td>[58.693]</td>
+      <td>meam</td>
+      <td>2018--Etesami-S-A-Asadi-E--Ni</td>
+      <td>f69c42dc-75b2-4a1b-abf0-bab1a0e9c778</td>
+      <td>active</td>
+      <td>[Ni]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>253</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[Pb, Sn]</td>
+      <td>2018--Etesami-S-A--Pb-Sn--LAMMPS--ipr1</td>
+      <td>912cd0e2-8060-4859-a1fd-be62f67d7a80</td>
+      <td>[207.2, 118.71]</td>
+      <td>meam</td>
+      <td>2018--Etesami-S-A-Baskes-M-I-Laradji-M-Asadi-E...</td>
+      <td>7fda11d2-b6e8-4ffa-9083-fdb702cc5fab</td>
+      <td>active</td>
+      <td>[Pb, Sn]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>254</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0, 0.0, 0.0, 0.0]</td>
+      <td>[Fe, Ni, Cr, Co, Cu]</td>
+      <td>2018--Farkas-D--Fe-Ni-Cr-Co-Cu--LAMMPS--ipr2</td>
+      <td>ffc7b5b2-8c0a-4c80-a576-6345050944b5</td>
+      <td>[55.8, 58.7, 52.0, 59.0, 63.0]</td>
+      <td>eam/alloy</td>
+      <td>2018--Farkas-D-Caro-A--Fe-Ni-Cr-Co-Cu</td>
+      <td>78392771-83e9-491c-bf4c-39175befd072</td>
+      <td>active</td>
+      <td>[Fe, Ni, Cr, Co, Cu]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>255</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Cr]</td>
+      <td>2018--Howells-C-A--Cr--LAMMPS--ipr1</td>
+      <td>16c5d68c-bf58-41e2-bd1e-22ab7c7436e1</td>
+      <td>[51.9961]</td>
+      <td>adp</td>
+      <td>2018--Howells-C-A-Mishin-Y--Cr</td>
+      <td>c6620af7-cfe4-4086-b9cf-8198d56e1d30</td>
+      <td>active</td>
+      <td>[Cr]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>256</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[Cr, Ni]</td>
+      <td>2018--Howells-C-A--Cr-Ni--LAMMPS--ipr1</td>
+      <td>0da50c21-0b24-4ed0-be9b-eb9f508217b1</td>
+      <td>[51.9961, 58.6934]</td>
+      <td>adp</td>
+      <td>2018--Howells-C-A-Mishin-Y--Cr-Ni</td>
+      <td>ee6e7c54-fd7d-4459-96ca-5898e93053c6</td>
+      <td>active</td>
+      <td>[Cr, Ni]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>257</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Sn]</td>
+      <td>2018--Ko-W-S--Sn--LAMMPS--ipr1</td>
+      <td>d94cf624-b84c-42dd-8cd0-b81e12a76a7a</td>
+      <td>[118.71]</td>
+      <td>meam</td>
+      <td>2018--Ko-W-S-Kim-D-H-Kwon-Y-J-Lee-M--Sn</td>
+      <td>101a3154-12c2-4dce-8f4a-2e1b1ffc1541</td>
+      <td>active</td>
+      <td>[Sn]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>258</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Tb]</td>
+      <td>2018--Mendelev-M-I--Tb--LAMMPS--ipr1</td>
+      <td>c0aa8f35-ddfc-48aa-8737-655dacc46e95</td>
+      <td>[158.92534]</td>
+      <td>eam/fs</td>
+      <td>2018--Mendelev-M-I-Zhang-F-Song-H-et-al--Tb</td>
+      <td>ed3a1bb7-3c6c-47f6-b3ca-e05870435610</td>
+      <td>active</td>
+      <td>[Tb]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>259</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[Ag, Ni]</td>
+      <td>2018--Pan-Z--Ag-Ni--LAMMPS--ipr1</td>
+      <td>5c6b90da-f02e-4980-8e24-ee957c28c1a7</td>
+      <td>[107.8682, 58.6934]</td>
+      <td>eam/fs</td>
+      <td>2018--Pan-Z-Borovikov-V-Mendelev-M-I-Sansoz-F-...</td>
+      <td>173f2416-dd88-403e-8b0a-8ac993c27205</td>
+      <td>active</td>
+      <td>[Ag, Ni]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>260</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[W, Re]</td>
+      <td>2018--Setyawan-W--W-Re--LAMMPS--ipr1</td>
+      <td>5293e68a-6194-4d7c-a9e4-16426f51d9a9</td>
+      <td>[183.5, 186.207]</td>
+      <td>eam/alloy</td>
+      <td>2018--Setyawan-W-Gao-N-Kurtz-R-J--W-Re</td>
+      <td>4054e2cb-fe2c-4bc4-84db-8448ad4bb7f4</td>
+      <td>active</td>
+      <td>[W, Re]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>261</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[Mg, H]</td>
+      <td>2018--Smirnova-D-E--Mg-H--LAMMPS--ipr1</td>
+      <td>1c89550d-d2e0-4777-bd13-98cd3cb3c620</td>
+      <td>[24.305, 1.008]</td>
+      <td>adp</td>
+      <td>2018--Smirnova-D-E-Starikov-S-V-Vlasova-A-M--Mg-H</td>
+      <td>9b94d565-98d8-4a45-ba5b-f45944960751</td>
+      <td>active</td>
+      <td>[Mg, H]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>262</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[Si, Au]</td>
+      <td>2018--Starikov-S-V--Si-Au--LAMMPS--ipr2</td>
+      <td>c6a02263-d6f5-47cd-9e45-c85ce4c017b2</td>
+      <td>[28.085, 196.966569]</td>
+      <td>adp</td>
+      <td>2018--Starikov-S-V-Lopanitsyna-N-Y-Smirnova-D-...</td>
+      <td>a467c165-fb49-40e6-88ff-644eb1b639bd</td>
+      <td>active</td>
+      <td>[Si, Au]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>263</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[U, Mo]</td>
+      <td>2018--Starikov-S-V--U-Mo--LAMMPS--ipr2</td>
+      <td>e302c10f-298b-4618-9444-007b0fb6eb72</td>
+      <td>[238.03, 95.96]</td>
+      <td>adp</td>
+      <td>2018--Starikov-S-V-Kolotova-L-N-Kuksin-A-Y-et-...</td>
+      <td>0363c268-9d42-4d82-9cc7-5a610c707c6c</td>
+      <td>active</td>
+      <td>[U, Mo]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>264</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Pb]</td>
+      <td>2018--Wang-K--Pb-II--LAMMPS--ipr1</td>
+      <td>38e8d0ca-534c-464c-bb20-c1e5c1341d7e</td>
+      <td>[207.2]</td>
+      <td>eam/alloy</td>
+      <td>2018--Wang-K-Zhu-W-Xiang-M-et-al--Pb-II</td>
+      <td>8ded9172-8e27-478a-b8f9-eea237d2e830</td>
+      <td>active</td>
+      <td>[Pb]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>265</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0, 0.0]</td>
+      <td>[Al, Cu, H]</td>
+      <td>2018--Zhou-X-W--Al-Cu-H--LAMMPS--ipr1</td>
+      <td>5f0b07da-04e8-40ba-a193-47c2a79883c5</td>
+      <td>[26.98, 63.55, 1.01]</td>
+      <td>bop</td>
+      <td>2018--Zhou-X-W-Ward-D-K-Foster-M-E--Al-Cu-H</td>
+      <td>0dcce013-aa73-49bc-bb6d-d1ec28a31b52</td>
+      <td>active</td>
+      <td>[Al, Cu, H]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>266</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0, 0.0]</td>
+      <td>[Fe, Ni, Cr]</td>
+      <td>2018--Zhou-X-W--Fe-Ni-Cr--LAMMPS--ipr1</td>
+      <td>8535559d-9943-4487-ae89-966ac759240e</td>
+      <td>[55.85, 58.69, 52.0]</td>
+      <td>eam/alloy</td>
+      <td>2018--Zhou-X-W-Foster-M-E-Sills-R-B--Fe-Ni-Cr</td>
+      <td>7d63cde1-4ef1-499b-84bf-cfbd63a8acec</td>
+      <td>active</td>
+      <td>[Fe, Ni, Cr]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>267</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0, 0.0]</td>
+      <td>[Fe, Ni, Cr]</td>
+      <td>2018--Zhou-X-W--Fe-Ni-Cr--LAMMPS--ipr2</td>
+      <td>3ce61fa3-46f5-4fe7-9d0b-d50812ea814e</td>
+      <td>[55.85, 58.69, 52.0]</td>
+      <td>eam/fs</td>
+      <td>2018--Zhou-X-W-Foster-M-E-Sills-R-B--Fe-Ni-Cr</td>
+      <td>7d63cde1-4ef1-499b-84bf-cfbd63a8acec</td>
+      <td>active</td>
+      <td>[Fe, Ni, Cr]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>268</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0, 0.0, 0.0]</td>
+      <td>[Fe, Mn, Si, C]</td>
+      <td>2019--Aslam-I--Fe-Mn-Si-C--LAMMPS--ipr1</td>
+      <td>7e0ed24c-5ad9-4a3a-a5c9-19f6be618bb1</td>
+      <td>[55.847, 54.938, 28.0855, 12.0111]</td>
+      <td>meam</td>
+      <td>2019--Aslam-I-Baskes-M-I-Dickel-D-E-et-al--Fe-...</td>
+      <td>2f94611f-e4a3-4cf5-a2f1-fa15673a5ad7</td>
+      <td>active</td>
+      <td>[Fe, Mn, Si, C]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>269</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[Fe, O]</td>
+      <td>2019--Byggmastar-J--Fe-O--LAMMPS--ipr1</td>
+      <td>957b3de5-bc9d-413f-a117-4a5f929431e8</td>
+      <td>[55.845, 15.9994]</td>
+      <td>tersoff/zbl</td>
+      <td>2019--Byggmastar-J-Nagel-M-Albe-K-et-al--Fe-O</td>
+      <td>521acab0-00b4-4534-884b-218db3cb92ff</td>
+      <td>active</td>
+      <td>[Fe, O]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>270</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[W, Ta]</td>
+      <td>2019--Chen-Y--W-Ta--LAMMPS--ipr1</td>
+      <td>57b83115-a25b-4f20-b99c-97f4d98ba951</td>
+      <td>[183.85, 180.9479]</td>
+      <td>eam/fs</td>
+      <td>2019--Chen-Y-Fang-J-Liu-L-et-al--W-Ta</td>
+      <td>04391ce1-60cb-4f77-a20b-33c133e2f594</td>
+      <td>active</td>
+      <td>[W, Ta]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>271</th>
+      <td>True</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[Ta, He]</td>
+      <td>2019--Duan-X--Ta-He--LAMMPS--ipr1</td>
+      <td>d6608123-3432-453e-ab94-b55822e7df12</td>
+      <td>[180.94788, 4.002602]</td>
+      <td>hybrid</td>
+      <td>2019--Duan-X-Xie-F-Guo-X-et-al--Ta-He</td>
+      <td>278faa04-d121-4744-875d-e085f0b0e5da</td>
+      <td>active</td>
+      <td>[Ta, He]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>272</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[Cu, Ni]</td>
+      <td>2019--Fischer-F--Cu-Ni--LAMMPS--ipr1</td>
+      <td>9cfcf68d-6306-4116-9cb9-40298353fadc</td>
+      <td>[63.546, 58.689]</td>
+      <td>eam/alloy</td>
+      <td>2019--Fischer-F-Schmitz-G-Eich-S-M--Cu-Ni</td>
+      <td>25b0b3dd-4911-495a-8a5c-f95eb0a9d7ae</td>
+      <td>active</td>
+      <td>[Cu, Ni]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>273</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[Cu, Ni]</td>
+      <td>2019--Fischer-F--Cu-Ni--LAMMPS--ipr2</td>
+      <td>0cdc699f-e78a-49db-8606-7a33c98c2184</td>
+      <td>[63.546, 58.689]</td>
+      <td>eam/alloy</td>
+      <td>2019--Fischer-F-Schmitz-G-Eich-S-M--Cu-Ni</td>
+      <td>25b0b3dd-4911-495a-8a5c-f95eb0a9d7ae</td>
+      <td>active</td>
+      <td>[Cu, Ni]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>274</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[Cu, Zr]</td>
       <td>2019--Mendelev-M-I--Cu-Zr--LAMMPS--ipr1</td>
       <td>73d03486-1b34-4a24-b1d2-4da253abdda0</td>
+      <td>[63.546, 91.224]</td>
+      <td>eam/fs</td>
       <td>2019--Mendelev-M-I--Cu-Zr</td>
       <td>2e5ed18c-5fb4-46e4-ae7a-5f50d9429d95</td>
-      <td>metal</td>
-      <td>atomic</td>
-      <td>False</td>
-      <td>eam/fs</td>
       <td>active</td>
       <td>[Cu, Zr]</td>
-      <td>[Cu, Zr]</td>
-      <td>[63.546, 91.224]</td>
-      <td>[0.0, 0.0]</td>
+      <td>metal</td>
     </tr>
     <tr>
-      <td>275</td>
+      <th>275</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0, 0.0]</td>
+      <td>[Fe, Ni, Cr]</td>
       <td>2019--Mendelev-M-I--Fe-Ni-Cr--LAMMPS--ipr1</td>
       <td>43aa1b40-dce4-48cf-8e4f-fb0e079180b6</td>
+      <td>[55.845, 58.6934, 51.9961]</td>
+      <td>eam/fs</td>
       <td>2019--Mendelev-M-I--Fe-Ni-Cr</td>
       <td>6c5d342a-7e25-467f-a234-d937301f6bc4</td>
-      <td>metal</td>
-      <td>atomic</td>
-      <td>False</td>
-      <td>eam/fs</td>
       <td>active</td>
       <td>[Fe, Ni, Cr]</td>
-      <td>[Fe, Ni, Cr]</td>
-      <td>[55.845, 58.6934, 51.9961]</td>
-      <td>[0.0, 0.0, 0.0]</td>
+      <td>metal</td>
     </tr>
     <tr>
-      <td>276</td>
+      <th>276</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0]</td>
+      <td>[Fe]</td>
       <td>2020--Byggmastar-J--Fe--LAMMPS--ipr1</td>
       <td>a1d123a0-eba2-4271-962c-720d9d564a9b</td>
+      <td>[55.845]</td>
+      <td>tersoff/zbl</td>
       <td>2020--Byggmastar-J-Granberg-F--Fe</td>
       <td>114b0f72-8f6d-4ac1-82fb-ac15fd6b7bde</td>
-      <td>metal</td>
-      <td>atomic</td>
-      <td>False</td>
-      <td>tersoff/zbl</td>
       <td>active</td>
       <td>[Fe]</td>
-      <td>[Fe]</td>
-      <td>[55.845]</td>
-      <td>[0.0]</td>
+      <td>metal</td>
     </tr>
     <tr>
-      <td>277</td>
+      <th>277</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0, 0.0]</td>
+      <td>[Cu, N, Ti]</td>
+      <td>2020--Miraz-A-S-M--Cu-N-Ti--LAMMPS--ipr1</td>
+      <td>2ba28fde-d5be-460f-8434-8a1e5d5a4372</td>
+      <td>[63.546, 14.007, 47.88]</td>
+      <td>meam</td>
+      <td>2020--Miraz-A-S-M-Dhariwal-N-Meng-W-J-et-al--C...</td>
+      <td>0d7cef74-4ff2-41a8-96c9-290a351cf116</td>
+      <td>active</td>
+      <td>[Cu, N, Ti]</td>
+      <td>metal</td>
+    </tr>
+    <tr>
+      <th>278</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0, 0.0]</td>
+      <td>[Si, Au, Al]</td>
       <td>2020--Starikov-S--Si-Au-Al--LAMMPS--ipr1</td>
       <td>6ea50417-2147-4d53-871c-0a289656f794</td>
+      <td>[28.084, 196.967, 26.98]</td>
+      <td>adp</td>
       <td>2020--Starikov-S-Gordeev-I-Lysogorskiy-Y-et-al...</td>
       <td>e5d06433-937f-4deb-916a-531f6cbb9ed6</td>
-      <td>metal</td>
-      <td>atomic</td>
-      <td>False</td>
-      <td>adp</td>
       <td>active</td>
       <td>[Si, Au, Al]</td>
-      <td>[Si, Au, Al]</td>
-      <td>[28.084, 196.967, 26.98]</td>
-      <td>[0.0, 0.0, 0.0]</td>
+      <td>metal</td>
     </tr>
     <tr>
-      <td>278</td>
+      <th>279</th>
+      <td>False</td>
+      <td>atomic</td>
+      <td>[0.0, 0.0]</td>
+      <td>[Au, Rh]</td>
       <td>2021--Wang-G--Au-Rh--LAMMPS--ipr1</td>
       <td>f8f52d2e-597d-435a-926a-09f38094b1da</td>
+      <td>[196.9666, 102.9055]</td>
+      <td>adp</td>
       <td>2021--Wang-G-Xu-Y-Qian-P-Su-Y--Au-Rh</td>
       <td>ccd7fceb-a257-40df-812b-b1326955bff1</td>
-      <td>metal</td>
-      <td>atomic</td>
-      <td>False</td>
-      <td>adp</td>
       <td>active</td>
       <td>[Au, Rh]</td>
-      <td>[Au, Rh]</td>
-      <td>[196.9666, 102.9055]</td>
-      <td>[0.0, 0.0]</td>
+      <td>metal</td>
     </tr>
   </tbody>
 </table>
-<p>279 rows × 13 columns</p>
+<p>280 rows × 13 columns</p>
 </div></div>
 </div>
 </div>
@@ -2796,12 +3609,12 @@ pair_coeff * * Ag-custom.eam.alloy Ag
         <li class="right" >
           <a href="02._LAMMPS_functionality.html" title="Introduction to atomman: LAMMPS functionality"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

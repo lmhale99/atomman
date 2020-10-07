@@ -1,6 +1,17 @@
 Updates
 =======
 
+Version 1.3.5
+-------------
+
+- **atomman.defect.GammaSurface** updates and fixes related to the units
+  parameters for the plotting methods.
+
+- **atomman.defect.SDVPN** bug fixes related to model() generation, loading,
+  and the units parameters for the plotting methods.
+
+- **atomman.Settings** is now a renaming/import of potentials.Settings. 
+
 Version 1.3.4
 -------------
 
@@ -53,9 +64,9 @@ Version 1.3.2
   the Cartesian normal associated with a crystallographic plane.
 
 - **atomman.lammps.Potential** made consistent with
-  potentials.LAMMPSPotential.  Version 1.4 of atomman will have potentials
-  as a requirement eliminating the duplication: (this class will simply be
-  a renaming of the class from potentials).
+  potentials.LAMMPSPotential.  Upcoming versions of atomman will have
+  potentials as a requirement eliminating the duplication: (this class will
+  simply be a renaming of the class from potentials).
 
 - **atomman.lammps.LammpsError** error type added.
 

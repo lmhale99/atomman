@@ -10,17 +10,18 @@ Tutorials
    01.2. Atoms class <01.2._Atoms_class>
    01.3. System class <01.3._System_class>
    01.4. Load and dump conversions <01.4._Load_and_dump_conversions>
-   01.4.1. system_model conversions <01.4.1._system_model_conversions>
-   01.4.2. POSCAR conversions <01.4.2._POSCAR_conversions>
-   01.4.3. CIF conversions <01.4.3._CIF_conversions>
-   01.4.4. table conversions <01.4.4._table_conversions>
-   01.4.5. LAMMPS data file conversions <01.4.5._LAMMPS_data_file_conversions>
-   01.4.6. LAMMPS dump file conversions <01.4.6._LAMMPS_dump_file_conversions>
-   01.4.7. ase and phonopy conversions <01.4.7._ase_and_phonopy_conversions>
-   01.4.8. pymatgen conversions <01.4.8._pymatgen_conversions>
-   01.4.9. spglib conversions <01.4.9._spglib_conversions>
+   01.4.01. system_model conversions <01.4.01._system_model_conversions>
+   01.4.02. POSCAR conversions <01.4.02._POSCAR_conversions>
+   01.4.03. CIF conversions <01.4.03._CIF_conversions>
+   01.4.04. table conversions <01.4.04._table_conversions>
+   01.4.05. LAMMPS data file conversions <01.4.05._LAMMPS_data_file_conversions>
+   01.4.06. LAMMPS dump file conversions <01.4.06._LAMMPS_dump_file_conversions>
+   01.4.07. ase and phonopy conversions <01.4.07._ase_and_phonopy_conversions>
+   01.4.08. pymatgen conversions <01.4.08._pymatgen_conversions>
+   01.4.09. spglib conversions <01.4.09._spglib_conversions>
    01.4.10. prototype loading <01.4.10._prototype_loading>
    01.4.11. crystal loading <01.4.11._crystal_loading>
+   01.5. Settings and Library classes <01.5._Settings_and_Library_classes>
    02. LAMMPS functionality <02._LAMMPS_functionality>
    02.1. Potential class <02.1._Potential_class>
    02.2. Running LAMMPS and the Log class <02.2._Running_LAMMPS_and_the_Log_class>

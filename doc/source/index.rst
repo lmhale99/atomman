@@ -35,11 +35,15 @@ Features:
 Installation
 ============
 
-As of version 1.2, the atomman package is Python 2/3 compatible.
+The atomman package is Python 3.6+ compatible.
 
 The latest release can be installed using pip::
 
     pip install atomman
+
+or, alternatively using conda and conda-forge::
+
+    conda install atomman -c conda-forge
 
 For Windows users, it is recommended to use an Anaconda distribution and use
 conda to install numpy, scipy, matplotlib, pandas and cython prior to
