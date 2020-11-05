@@ -221,6 +221,9 @@ def info_content(system, f, atom_style=None, units=None, potential=None,
     """
     Return appropriate units, atom_style, boundary, and read_data LAMMPS commands
     """
+    if potential is not None and potential.pair_style == 'kim' and return_pair_info is True:
+        return kim_info_content(system, f, potential)
+
     # Add comment line
     info = '# Script and atom data file prepared using atomman Python package\n\n'
 
@@ -245,5 +248,25 @@ def info_content(system, f, atom_style=None, units=None, potential=None,
         info += '\n'
         info += potential.pair_info(symbols=system.symbols,
                                     masses=system.masses)
+
+    return info
+
+def kim_info_content(system, f, potential):
+    """
+    Return appropriate units, atom_style, boundary, and read_data LAMMPS commands
+    """
+    # Add comment line
+    info = '# Script and atom data file prepared using atomman Python package\n\n'
+
+    info += potential.pair_info(symbols=system.symbols) +'\n'
+
+    # Set boundary flags to p or m based on pbc values
+    bflags = np.array(['m','m','m'])
+    bflags[system.pbc] = 'p'
+    info += f'boundary {bflags[0]} {bflags[1]} {bflags[2]}\n'
+    
+    # Set read_data command 
+    if isinstance(f, str):
+        info += f'read_data {f}\n'
 
     return info
