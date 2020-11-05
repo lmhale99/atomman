@@ -33,11 +33,17 @@ Features:
 Installation
 ------------
 
-As of version 1.2, the atomman package is Python 2/3 compatible.
+The atomman package is compatible with Python 3.6+.
 
 The latest release can be installed using pip::
 
     pip install atomman
+
+or using conda from the conda-forge channel::
+
+    conda config --add channels conda-forge
+    conda config --set channel_priority strict
+    conda install <package-name>
 
 For Windows users, it is recommended to use an Anaconda distribution and use
 conda to install numpy, scipy, matplotlib, pandas and cython prior to
@@ -64,8 +70,7 @@ files and as unformatted HTML. If you download a copy, you can view the HTML
 version offline by
 
     cd {atomman_path}/doc/html
-    python -m http.server (for python 3)
-    python -m SimpleHttpServer (for python 2)
+    python -m http.server
 
 Then, opening localhost:8000 in a web browser.
 
@@ -84,35 +89,12 @@ The documentation consists of two main components:
    This provides a rendering of the Python docstrings for the included
    functions and classes.
 
-Required packages
------------------
-
-This is a list of the required Python packages
-
-- `xmltodict <https://github.com/martinblech/xmltodict>`__
-
-- `DataModelDict <https://github.com/usnistgov/DataModelDict>`__
-
-- `numericalunits <https://pypi.python.org/pypi/numericalunits>`__
-
-- `numpy <http://www.numpy.org/>`__
-
-- `scipy <https://www.scipy.org/>`__
-
-- `pandas <http://pandas.pydata.org/>`__
-
-- `matplotlib <http://matplotlib.org/>`__
-
-- `cython <http://cython.org/>`__
-
-- `requests <https://2.python-requests.org/en/master/>`__
-
-- `toolz <https://github.com/pytoolz/toolz>`__
 
 Optional packages
 -----------------
 
-This is a list of additional Python packages that can add functionality
+This is a list of additional Python packages that are needed for some of the
+optional features of the package.
 
 - `diffpy.Structure <http://www.diffpy.org/diffpy.Structure/>`__:
   CIF reader. Required for loading systems from CIF files.
@@ -130,8 +112,3 @@ This is a list of additional Python packages that can add functionality
   A Python interface to the spglib spacegroup analysis code.  spglib
   can be used to analyze and determine the spacegroup for an atomic system.
   Required for converting to/from spglib.cell objects.
-
-- `lammps <https://lammps.sandia.gov/doc/Python_library.html>`__:
-  The Python library interface for the LAMMPS molecular dynamics simulation
-  code that allows for a LAMMPS session to be controlled directly from Python.
-  Required for direct loading/dumping of a system to/from a LAMMPS session.

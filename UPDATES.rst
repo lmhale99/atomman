@@ -1,6 +1,18 @@
 Updates
 =======
 
+Version 1.3.6
+-------------
+
+- **atomman.tools.atomic_info** updated for recently assigned element names
+  and to be more lenient for isotopes.
+
+- **atomman.dump.atom_data** updated to support using kim commands for kim
+  model potentials.
+
+- **atomman.dump.lammps_commands** added - NOT DEBUGGED FOR 
+  NON-CUBIC/ORTHORHOMBIC SYSTEMS!
+
 Version 1.3.5
 -------------
 
