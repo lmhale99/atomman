@@ -9,10 +9,12 @@ from .atom_data import dump as dump_atom_data
 from .atom_dump import dump as dump_atom_dump
 from .spglib_cell import dump as dump_spglib_cell
 from .phonopy_Atoms import dump as dump_phonopy_Atoms
+from .lammps_commands import dump as dump_lammps_commands
 
 __all__ = ['dump', 'dump_ase_Atoms', 'dump_pymatgen_Structure', 'dump_table',
            'dump_system_model', 'dump_poscar', 'dump_atom_data',
-           'dump_atom_dump', 'dump_spglib_cell', 'dump_phonopy_Atoms']
+           'dump_atom_dump', 'dump_spglib_cell', 'dump_phonopy_Atoms',
+           'dump_lammps_commands']
 
 def dump(style, system, **kwargs):
     """
@@ -59,6 +61,9 @@ def dump(style, system, **kwargs):
     
     elif style == 'spglib_cell':
         return dump_spglib_cell(system, **kwargs)
+
+    elif style == 'lammps_commands':
+        return dump_lammps_commands(system, **kwargs)
         
     else:
         raise ValueError('Unsupported style')
