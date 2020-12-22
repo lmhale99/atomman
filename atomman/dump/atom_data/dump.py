@@ -258,7 +258,12 @@ def kim_info_content(system, f, potential):
     # Add comment line
     info = '# Script and atom data file prepared using atomman Python package\n\n'
 
-    info += potential.pair_info(symbols=system.symbols) +'\n'
+    # Generate pair_info
+    pair_info_lines = potential.pair_info(symbols=system.symbols,
+                                          masses=system.masses).split('\n')
+    
+    # Add kim init
+    info += pair_info_lines[0] + '\n'
 
     # Set boundary flags to p or m based on pbc values
     bflags = np.array(['m','m','m'])
@@ -268,5 +273,8 @@ def kim_info_content(system, f, potential):
     # Set read_data command 
     if isinstance(f, str):
         info += f'read_data {f}\n'
+
+    # Add remaining pair info lines
+    info += '\n'.join(pair_info_lines[1:]) + '\n'
 
     return info
