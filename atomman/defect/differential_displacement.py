@@ -17,7 +17,7 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
                               neighbors=None, cutoff=None,
                               component='standard', axes=None,
                               plot_scale=1, atom_color=None, atom_cmap=None,
-                              display_final_pos=False, return_data=False):
+                              display_final_pos=False, return_data=False, plot_axes=None):
     """
     Generates a differential displacement plot for characterizing dislocations.
     
@@ -98,6 +98,12 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
         If True, will return a dict containing the differential displacement
         vectors and vector positions.  Default is False.  Note: returned values
         are oriented relative to the plotting axes.
+    plot_axes : matplotlib.Axes.axes object
+        Existing axes to plot on, allows to pass existing matplotlib axes
+        have full control of the graph outside the function.
+        Makes possible to plot multiple differential displacement
+        maps using subplots.
+        Default is None, then new graph is created by plt.subplots()
 
     Returns
     -------
@@ -175,8 +181,13 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
                  (pos_0[:,2] > zlim[0]) & # pylint: disable=invalid-sequence-index
                  (pos_0[:,2] < zlim[1])) # pylint: disable=invalid-sequence-index
 
-    # Initial plot setup and parameters
-    fig, ax1, = plt.subplots(1, 1, squeeze=True, figsize=(7,7), dpi=72)
+    # if plot_axes are passed do not create new
+    if plot_axes is not None:
+        ax1 = plot_axes
+    else:
+        # Initial plot setup and parameters
+        fig, ax1, = plt.subplots(1, 1, squeeze=True, figsize=(7,7), dpi=72)
+
     ax1.axis([xlim[0], xlim[1], ylim[0], ylim[1]])
     atom_circle_radius = burgers_mag / 10
     arrow_width_scale = 1. / 200.
@@ -287,10 +298,12 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
                 if width > 1e-7:
                     ax1.quiver(center[0], center[1], length[0], length[1], width=width,
                                pivot='middle', angles='xy', scale_units='xy', scale=1)
-    
-    if return_data:
-        data['centers'] = np.concatenate(data['centers'])
-        data['vectors'] = np.concatenate(data['vectors'])
-        return fig, data
+    if plot_axes is None:
+        if return_data:
+            data['centers'] = np.concatenate(data['centers'])
+            data['vectors'] = np.concatenate(data['vectors'])
+            return fig, data
+        else:
+            return fig
     else:
-        return fig
+        return None
