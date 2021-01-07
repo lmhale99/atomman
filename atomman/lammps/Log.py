@@ -14,7 +14,54 @@ from DataModelDict import DataModelDict as DM
 # atomman imports
 from ..tools import uber_open_rmode
 
-class Log(object):
+class Simulation():
+    """
+    Object for representing the LAMMPS log output for a single MS/MD run
+    """
+
+    def __init__(self, thermo=None):
+        """
+        Initializes a Simulation object
+        """
+        self.__thermo = None
+        self.__keys = []
+        if thermo is not None:
+            self.thermo = thermo
+
+    def keys(self):
+        """List of attribute keys that have been set"""
+        return tuple(self.__keys)
+
+    def __getitem__(self, key):
+        """Accesses class attributes as dict keys""" 
+
+        if key not in self.keys():
+            raise KeyError(key)
+
+        return getattr(self, key)
+
+    def __iter__(self):
+        """Iterates over set attribute keys"""
+        for key in self.keys():
+            yield(key)
+
+    @property
+    def thermo(self):
+        """pandas.DataFrame: The Simulation's thermo data"""
+        return self.__thermo
+
+    @thermo.setter
+    def thermo(self, value):
+        if isinstance(value, pd.DataFrame):
+            self.__thermo = value
+        else:
+            self.__thermo = pd.DataFrame(value)
+        if 'thermo' not in self.keys():
+            self.__keys.append('thermo')
+
+
+
+class Log():
     """Object for representing a LAMMPS log output"""
     
     def __init__(self, log_info=None):
@@ -73,18 +120,14 @@ class Log(object):
             # For all lines in file/output
             for line in log_info:
                 line = line.decode('UTF-8')
+                
                 # Skip blank lines
                 if len(line.split()) == 0:
                     continue
                 
                 # Save the LAMMPS version information
                 if line[:8] == 'LAMMPS (' and self.lammps_version is None:
-                    month = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 
-                             'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8,
-                             'Sep': 9, 'Oct': 10,'Nov': 11,'Dec': 12}
-                    self.__lammps_version = line.strip()[8:-1]
-                    d = self.lammps_version.split('-')[0].split()
-                    self.__lammps_date = datetime.date(int(d[2]), month[d[1]], int(d[0]))
+                    self.__read_lammps_version(line)
                 
                 # Check for strings listed prior to run and minimize simulations
                 if any([trigger in line for trigger in sim_start_trigger]):
@@ -102,24 +145,40 @@ class Log(object):
             # Reset file pointer
             log_info.seek(0)
             
-            # For all lines in file/output
+            # Read data from all simulations
             for header, footer in zip(headers, footers):
-                
-                # Initialize simulation data dictionary
-                sim = {}
-                
-                # Use pandas to read all thermo data at once
-                sim['thermo'] = pd.read_csv(log_info, header=header,
-                                            nrows=footer-header,
-                                            delim_whitespace=True,
-                                            skip_blank_lines=True)
-                
-                # Reset file pointer
-                log_info.seek(0)
-                
-                # Append simulation results
-                self.__simulations.append(sim)
+                self.__read_simulation(log_info, header, footer)
     
+    def __read_lammps_version(self, line):
+        """
+        Subfunction for reading the LAMMPS version from the log file
+        """
+        month = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 
+                    'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8,
+                    'Sep': 9, 'Oct': 10,'Nov': 11,'Dec': 12}
+        self.__lammps_version = line.strip()[8:-1]
+        d = self.lammps_version.split('-')[0].split()
+        self.__lammps_date = datetime.date(int(d[2]), month[d[1]], int(d[0]))
+
+    def __read_simulation(self, log_info, header, footer):
+        """
+        Subfunction for reading the log data associated with a simulation run.
+        """
+        # Use pandas to read all thermo data at once
+        thermo = pd.read_csv(log_info, header=header,
+                                nrows=footer-header,
+                                delim_whitespace=True,
+                                skip_blank_lines=True)
+        
+        # Extract any other simulation information
+        # ...
+        
+        # Reset file pointer
+        log_info.seek(0)
+        
+        # Append simulation results
+        self.__simulations.append(Simulation(thermo=thermo))
+
     @property
     def simulations(self):
         """list of dict: parsed data for each separate LAMMPS run/minimize action"""
@@ -148,14 +207,14 @@ class Log(object):
         """
         # Check that all simulations with thermo data have step values
         for sim in self.simulations:
-            if 'thermo' in sim and len(sim['thermo']) > 0:
-                assert 'Step' in sim['thermo'], 'All simulation thermos must have Step key in order to flatten'
+            if sim.thermo is not None and len(sim.thermo) > 0:
+                assert 'Step' in sim.thermo, 'All simulation thermos must have Step key in order to flatten'
         
         # Combine the data into merged_df
-        merged_df = self.simulations[0]['thermo']
+        merged_df = self.simulations[0].thermo
         for i in range(1, len(self.simulations)):
-            if 'thermo' in self.simulations[i]:
-                thermo = self.simulations[i]['thermo']
+            if self.simulations[i].thermo is not None:
+                thermo = self.simulations[i].thermo
                 if style == 'first':
                     merged_df = pd.concat([merged_df, thermo[thermo.Step > merged_df.Step.max()]], ignore_index=True)
                 elif style == 'last':
@@ -163,7 +222,10 @@ class Log(object):
                 else:
                     raise ValueError('Unsupported style')
         
-        self.__simulations = [{'thermo':merged_df}]
+        self.__simulations = [Simulation(thermo = merged_df)]
+        
+        # Safe version
+        # return Simulation(thermo=merged_df)
     
     def model(self, flatten=None):
         """
@@ -196,7 +258,7 @@ class Log(object):
             
             # Convert to DataModelDict
             sim_model['thermo'] = DM()
-            thermo = sim['thermo']
+            thermo = sim.thermo
             for j in thermo:
                 sim_model['thermo'][str(j)] = thermo[j].values.tolist()
             
