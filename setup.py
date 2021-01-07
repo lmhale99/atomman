@@ -41,6 +41,7 @@ setup(name = 'atomman',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Topic :: Scientific/Engineering :: Physics'
       ],
       keywords = [
@@ -56,12 +57,13 @@ setup(name = 'atomman',
       install_requires = [
         'xmltodict',
         'DataModelDict',
+        'numericalunits',
         'numpy>=1.15', 
         'matplotlib',
         'scipy',
         'pandas',
         'cython',
-        'numericalunits',
+        'requests',
         'toolz',
         'potentials==0.2.8'
       ],
