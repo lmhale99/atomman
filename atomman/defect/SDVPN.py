@@ -601,14 +601,20 @@ class SDVPN(object):
     def stress_energy(self, x=None, disregistry=None):
         """
         Computes the stress energy due to the applied stress, tau.
-        If fullstress is True:
+        If fullstress is True, the original stress expression by
+        Bulatov and Kaxiras will be used:
         
             E_stress = -1/2 Σ_i (x[i]² - x[i-1]²) ρ_l τ_2l
         
-        If fullstress is False:
+        If fullstress is False, the alternate stress expression by
+        Shen and Cheng 10.1016/j.scriptamat.2009.04.047 will be used:
         
             E_stress = -1/2 Σ_i τ_2l (δ_l[i] + δ_l[i+1]) Δx
         
+        Note that the Shen and Cheng expression will have a constant
+        error associated with it giving an incorrect overall energy, but
+        should apply a similar force on the dislocation.
+
         Parameters
         ----------
         x : numpy.ndarray, optional
