@@ -76,6 +76,9 @@ class SDVPN(object):
         min_method : str, optional
             The scipy.optimize.minimize method to use.  Default value is
             'Powell'.
+        min_kwargs : dict, optional
+            Any keyword arguments to pass on to scipy.optimize.minimize besides
+            the coordinates, method and options.
         min_options : dict, optional
             Any options to pass on to scipy.optimize.minimize. Default value
             is {}.
@@ -431,9 +434,9 @@ class SDVPN(object):
         # Solve disregistry
         d13, first, last = decompose(self.disregistry)
         res = minimize(min_func, d13, args=(first, last),
-                       method=self.min_method, options=self.min_options, **self.min_kwargs)
+                    method=self.min_method, options=self.min_options, **self.min_kwargs)
         self.disregistry = recompose(res.x, first, last)
-        
+
         self.__res = res
     
     def disldensity(self, x=None, disregistry=None, cdiff=False):
@@ -1086,7 +1089,8 @@ class SDVPN(object):
         self.cdiffsurface = params['cdiffsurface']
         self.cdiffstress = params['cdiffstress']
         self.min_method = params['min_method']
-        self.__min_options = params['min_options']
+        self.min_options = params['min_options']
+        self.min_kwargs = params.get('min_kwargs', None)
         
         # Load gamma
         if gamma is None:
@@ -1146,6 +1150,8 @@ class SDVPN(object):
         params['fullstress'] = self.fullstress
         params['min_method'] = self.min_method
         params['min_options'] = self.min_options
+        if len(self.min_kwargs) > 0:
+            params['min_kwargs'] = self.min_kwargs
         
         if include_gamma is True:
             sdpn['generalized-stacking-fault'] = self.gamma.model(
