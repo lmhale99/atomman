@@ -92,7 +92,6 @@ class Log():
         
         # Initialize simulation properties
         self.__simulations = []
-        self.__performance_data = []
         self.__lammps_version = None
         self.__lammps_date = None
         
@@ -117,7 +116,6 @@ class Log():
         # Reset properties and values if append is False
         if append is False:
             self.__simulations = []
-            self.__performance_data = []
             self.__lammps_version = None
             self.__lammps_date = None
         
