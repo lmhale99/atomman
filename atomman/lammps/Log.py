@@ -14,14 +14,12 @@ from DataModelDict import DataModelDict as DM
 # atomman imports
 from ..tools import uber_open_rmode
 
-
-
 class Simulation():
     """
     Object for representing the LAMMPS log output for a single MS/MD run
     """
 
-    def __init__(self, thermo=None, perfo=None):
+    def __init__(self, thermo=None, performance=None):
         """
         Initializes a Simulation object with performance information
         """
@@ -30,8 +28,8 @@ class Simulation():
         self.__keys = []
         if thermo is not None:
             self.thermo = thermo
-        if perfo is not None:
-            self.performance = perfo
+        if performance is not None:
+            self.performance = performance
 
     def keys(self):
         """List of attribute keys that have been set"""
@@ -78,7 +76,6 @@ class Simulation():
         if 'performance' not in self.keys():
             self.__keys.append('performance')
 
-
 class Log():
     """Object for representing a LAMMPS log output"""
     
@@ -124,24 +121,25 @@ class Log():
             self.__lammps_version = None
             self.__lammps_date = None
         
-        # Strings found directly before and after run and minimize simulations
-        sim_start_trigger = ['Memory usage per processor =',
+        # Strings found directly before and after run and minimize thermo data
+        thermo_start_trigger = ['Memory usage per processor =',
                              'Per MPI rank memory allocation (min/avg/max) =']
-        sim_end_trigger = ['Loop time of']
+        thermo_end_trigger = ['Loop time of']
         
-        perf_start_trigger = ['MPI task timing breakdown']
-        perf_start_trigger_old_version = ['Pair  time (%)']
-        perf_end_trigger = ['Nlocal:']
+        # Strings found directly before and after run and minimize performance data
+        performance_start_trigger = ['MPI task timing breakdown']
+        performance_start_trigger_old_version = ['Pair  time (%)']
+        performance_end_trigger = ['Nlocal:']
         is_old_version = False
 
         # Handle file names, strings and open file-like objects equivalently
         with uber_open_rmode(log_info) as log_info:
             
             # Initialize parameters
-            headers = []
-            footers = []
-            headers_perf = []
-            footers_perf = []
+            thermo_headers = []
+            thermo_footers = []
+            performance_headers = []
+            performance_footers = []
             i = 0
             
             # For all lines in file/output
@@ -157,75 +155,90 @@ class Log():
                     self.__read_lammps_version(line)
                 
                 # Check for strings listed prior to run and minimize simulations
-                if any([trigger in line for trigger in sim_start_trigger]):
-                    headers.append(i+1)
+                if any([trigger in line for trigger in thermo_start_trigger]):
+                    thermo_headers.append(i+1)
                 
                 # Check for strings listed after run and minimize simulations
-                elif any([trigger in line for trigger in sim_end_trigger]):
-                    footers.append(i-1)
+                elif any([trigger in line for trigger in thermo_end_trigger]):
+                    thermo_footers.append(i-1)
 
-                # Check for strings listed prior to  perfomance data
-                if any([trigger in line for trigger in perf_start_trigger]):
-                    headers_perf.append(i+1)
-                if any([trigger in line for trigger in perf_start_trigger_old_version]):
-                    headers_perf.append(i)
+                # Check for strings listed prior to  performance data
+                if any([trigger in line for trigger in performance_start_trigger]):
+                    performance_headers.append(i+1)
+                if any([trigger in line for trigger in performance_start_trigger_old_version]):
+                    performance_headers.append(i)
                     is_old_version = True
                 
                 # Check for strings listed after performance data
-                elif any([trigger in line for trigger in perf_end_trigger]):
-                    footers_perf.append(i-1)
+                elif any([trigger in line for trigger in performance_end_trigger]):
+                    performance_footers.append(i-1)
                 
                 i += 1
             
             # Add last line to footers for incomplete logs
-            footers.append(i)
+            thermo_footers.append(i)
             
             # Reset file pointer
             log_info.seek(0)
             
-            # Read data from all simulations
-            for header, footer, header_perf, footer_perf in zip(headers, footers, headers_perf, footers_perf):
-                self.__read_simulation(log_info, header, footer, header_perf, footer_perf, is_old_version)
-           
-    
+            # Read thermo data and create Simulations
+            for header, footer in zip(thermo_headers, thermo_footers):
+                self.__read_thermo(log_info, header, footer)
+
+            # Read performance data for each Simulation
+            for i in range(len(performance_footers)):
+                header = performance_headers[i]
+                footer = performance_footers[i]
+                performance = self.__read_performance(log_info, header, footer, is_old_version)
+                self.simulations[i].performance = performance
+            
     def __read_lammps_version(self, line):
         """
         Subfunction for reading the LAMMPS version from the log file
         """
         month = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 
-                    'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8,
-                    'Sep': 9, 'Oct': 10,'Nov': 11,'Dec': 12}
+                 'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8,
+                 'Sep': 9, 'Oct': 10,'Nov': 11,'Dec': 12}
         self.__lammps_version = line.strip()[8:-1]
         d = self.lammps_version.split('-')[0].split()
         self.__lammps_date = datetime.date(int(d[2]), month[d[1]], int(d[0]))
 
-    def __read_simulation(self, log_info, header, footer, header_perf, footer_perf, is_old_version):
+    def __read_thermo(self, log_info, header, footer):
         """
-        Subfunction for reading the log data associated with a simulation run.
+        Subfunction for reading the thermo data associated with a simulation run.
         """
         # Use pandas to read all thermo data at once
-        
         thermo = pd.read_csv(log_info, header=header,
                                 nrows=footer-header,
                                 delim_whitespace=True,
-                                skip_blank_lines=True)
-                          
+                                skip_blank_lines=True)      
+        
+        # Reset file pointer
         log_info.seek(0)
+
+        # Append simulation results
+        self.__simulations.append(Simulation(thermo=thermo))
+
+    def __read_performance(self, log_info, header, footer, is_old_version):
+        """
+        Subfunction for reading the performance data associated with a simulation run.
+        """
 
         # Use pandas to read all performance data at once        
         if not is_old_version:
-            performance = pd.read_csv(log_info, header=header_perf,
-                                nrows=footer_perf-header_perf,
+            performance = pd.read_csv(log_info, header=header,
+                                nrows=footer-header,
                                 sep = '|',
                                 skip_blank_lines=True)  
             performance = performance.drop([0])
             performance.rename(columns=lambda x: x.strip(), inplace=True)
             performance = performance.set_index('Section')
             performance = performance.replace(r'^\s*$',0.0,regex=True)
-            performance=performance.astype(float) 
+            performance = performance.astype(float) 
+        
         else: 
-            performance = pd.read_csv(log_info, header=header_perf,
-                                nrows=footer_perf-header_perf,
+            performance = pd.read_csv(log_info, header=header,
+                                nrows=footer-header,
                                 sep = '=',
                                 skip_blank_lines=True)
             performance = performance.columns.to_frame().T.append(performance,ignore_index=True)
@@ -233,27 +246,17 @@ class Log():
             performance = performance.replace(')','')
             performance.columns = ['Section','time']
             performance = performance.set_index('Section')
-            #performance['time'].replace(')','',inplace=True)
             performance[['avg. Time','percentage']] = performance.time.str.split('(',expand=True)
             performance[['%','symbol']] = performance.percentage.str.split(')',expand=True)
             del performance['time']
             del performance['symbol']
             del performance['percentage']
 
-
-
-                           
-
-        # Extract any other simulation information
-        # ...
-        
         # Reset file pointer
         log_info.seek(0)
         
-        # Append simulation results
-        self.__simulations.append(Simulation(thermo=thermo, perfo=performance))
-
-
+        # Return performance data
+        return performance
 
     @property
     def simulations(self):
@@ -299,49 +302,4 @@ class Log():
                 else:
                     raise ValueError('Unsupported style')
         
-        #This would add the flattened data as a new simulation
-        #self.__simulations.append(Simulation(thermo = merged_df))
-        
         return Simulation(thermo=merged_df)
-    
-    def model(self, flatten=None):
-        """
-        Returns an XML/JSON equivalent data mode of the thermo information
-        
-        Parameters
-        ----------
-        flatten : str or None, optional
-            Specifies if the simulations are to be flattened, and which
-            flatten style to use:
-            - None does not flatten the simulations (default).
-            - 'first' uses the values from the earliest simulation.
-            - 'last' uses the values from the latest simulation.
-            
-        Returns
-        -------
-        DataModelDict
-            The Log content in data model form.
-        """
-        if flatten is not None:
-            simulations=[self.flatten(flatten)]
-        else:
-            simulations=self.simulations
-        
-        # Create DataModelDict root
-        log_model = DM()
-        log_model['LAMMPS-log-thermo-data'] = DM()
-        
-        # Loop over all simulations
-        for sim in simulations:
-            sim_model = DM()
-            
-            # Convert to DataModelDict
-            sim_model['thermo'] = DM()
-            thermo = sim.thermo
-            for j in thermo:
-                sim_model['thermo'][str(j)] = thermo[j].values.tolist()
-            
-            # Append simulation results to DataModelDict root
-            log_model['LAMMPS-log-thermo-data'].append('simulation', sim_model)
-            
-        return log_model
