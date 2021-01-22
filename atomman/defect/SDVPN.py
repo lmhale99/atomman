@@ -28,7 +28,7 @@ class SDVPN(object):
                  tau=np.zeros((3,3)), alpha=0.0, beta=np.zeros((3,3)),
                  cutofflongrange=None, fullstress=True, cdiffelastic=False,
                  cdiffsurface=True, cdiffstress=False, min_method='Powell',
-                 min_options=None):
+                 min_kwargs=None, min_options=None):
         """
         Initializes an SDVPN object.
         
@@ -135,10 +135,8 @@ class SDVPN(object):
             self.cdiffsurface = cdiffsurface
             self.cdiffstress = cdiffstress
             self.min_method = min_method
-            if min_options is None:
-                self.__min_options = {}
-            else:
-                self.__min_options = min_options
+            self.min_options = min_options
+            self.min_kwargs = min_kwargs
 
         else:
             raise ValueError('either dislsol or model must be given')
@@ -291,7 +289,30 @@ class SDVPN(object):
     def min_options(self):
         """dict : scipy.optimize.minimize options used."""
         return self.__min_options
-        
+
+    @min_options.setter
+    def min_options(self, value):
+        if value is None:
+            self.__min_options = {}
+        elif isinstance(value, dict):
+            self.__min_options = value
+        else:
+            raise TypeError('min_options must be a dict')
+
+    @property
+    def min_kwargs(self):
+        """dict : scipy.optimize.minimize keywords used."""
+        return self.__min_kwargs
+    
+    @min_kwargs.setter
+    def min_kwargs(self, value):
+        if value is None:
+            self.__min_kwargs = {}
+        elif isinstance(value, dict):
+            self.__min_kwargs = value
+        else:
+            raise TypeError('min_kwargs must be a dict')
+
     @property
     def res(self):
         """OptimizeResult : scipy.optimize.minimize result."""
@@ -303,7 +324,7 @@ class SDVPN(object):
     def solve(self, x=None, disregistry=None, tau=None, alpha=None, beta=None,
               cutofflongrange=None, fullstress=None, cdiffelastic=None,
               cdiffsurface=None, cdiffstress=None, min_method=None,
-              min_options=None):
+              min_kwargs=None, min_options=None):
         """
         Solves the semidiscrete variational Peierls-Nabarro dislocation
         disregistry through energy minimization using the set class
@@ -345,6 +366,9 @@ class SDVPN(object):
             neighboring values (False).  Only matters if fullstress is True.
         min_method : str, optional
             The scipy.optimize.minimize method to use.
+        min_kwargs : dict, optional
+            Any keyword arguments to pass on to scipy.optimize.minimize besides
+            the coordinates, method and options.
         min_options : dict, optional
             Any options to pass on to scipy.optimize.minimize.
         """
@@ -374,6 +398,8 @@ class SDVPN(object):
             self.min_method = min_method
         if min_options is not None:
             self.min_options = min_options
+        if min_kwargs is not None:
+            self.min_kwargs = min_kwargs
 
         # Check that x and disregistry exist and are of the same length
         if len(self.x) != len(self.disregistry):
@@ -405,7 +431,7 @@ class SDVPN(object):
         # Solve disregistry
         d13, first, last = decompose(self.disregistry)
         res = minimize(min_func, d13, args=(first, last),
-                       method=self.min_method, options=self.min_options)
+                       method=self.min_method, options=self.min_options, **self.min_kwargs)
         self.disregistry = recompose(res.x, first, last)
         
         self.__res = res

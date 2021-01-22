@@ -57,6 +57,68 @@ Alternatively, all code and documentation can be downloaded from GitHub.
 - The working development versions are at
   `https://github.com/lmhale99/atomman <https://github.com/lmhale99/atomman>`__.
 
+Library setup
+-------------
+Starting with version 1.3.3 atomman uses the potentials Python package to
+interact with the potentials.nist.gov database.  This allows for users to
+easily search, discover and use the NIST-hosted interatomic potentials as well
+as some computed properties associated with the potentials.  There are a few
+setup options that can help you get the most out of this feature.
+
+Note: the Python packages potentials, atomman and iprPy all share the same
+settings file.  Updating the library settings in one package will carry over
+to the other packages.
+
+Changing the library directory
+``````````````````````````````
+Potential files and database records associated with the potentials can be
+saved locally to a library directory.  The default location of the library
+directory is <HOME>/.NISTPotentials/library. You can easily change the path
+to a more accessible location if you wish::
+
+    import atomman as am
+    settings = am.Settings()
+    settings.set_library_directory("NEWPATH")
+
+Default behavior
+````````````````
+The atomman.Library class serves as the central means of interacting with the
+records database.  By default, the class will search for matching records
+first from the local library directory, then from the remote
+potentials.nist.gov.  If records with the same name are found in both
+locations, the local copy will be taken over the remote.  This makes it
+possible for users to modify existing records and add their own user-defined
+records. 
+
+All of the Library methods that retrieve/load records and the load function
+options that use the Library class have the following parameters
+
+- **remote** (*bool*) indicates if the remote potentials.nist.gov will be
+  searched.
+- **local** (*bool*) indicates if the local library directory will be searched.
+- **localpath** (*str*) allows for an alternate local library directory path
+   to be searched.
+
+Heavy-usage/offline behavior
+````````````````````````````
+For users who plan on extensive interactions with the database or who are
+running on systems with limited internet availability, the following steps are
+recommended:
+
+1. Download/clone the github repository at
+   https://github.com/lmhale99/potentials-library to the library directory.
+   This github repository is a snapshot copy of all potential records at
+   potentials.nist.gov and is kept (mostly) up to date.
+2. In Python, load atomman.Settings() and set the default remote behavior to
+   False::
+ 
+    settings.set_remote(False)
+
+   With this setting, the default value of remote parameter (above) for the
+   Library class methods will be False. This eliminates the need for an
+   internet connection (after step 1) and is typically much faster at
+   retrieving records.
+    
 Documentation
 -------------
 
