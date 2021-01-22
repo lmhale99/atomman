@@ -17,7 +17,8 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
                               neighbors=None, cutoff=None,
                               component='standard', axes=None,
                               plot_scale=1, atom_color=None, atom_cmap=None,
-                              display_final_pos=False, return_data=False, plot_axes=None):
+                              display_final_pos=False, return_data=False,
+                              matplotlib_axes=None):
     """
     Generates a differential displacement plot for characterizing dislocations.
     
@@ -98,17 +99,15 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
         If True, will return a dict containing the differential displacement
         vectors and vector positions.  Default is False.  Note: returned values
         are oriented relative to the plotting axes.
-    plot_axes : matplotlib.Axes.axes object
-        Existing axes to plot on, allows to pass existing matplotlib axes
-        have full control of the graph outside the function.
-        Makes possible to plot multiple differential displacement
-        maps using subplots.
-        Default is None, then new graph is created by plt.subplots()
+    matplotlib_axes : matplotlib.Axes.axes, optional
+        An existing matplotlib axes object. If given, the differential displacement
+        plot will be added to the specified axes of an existing figure.  This
+        allows for subplots to be constructed.
 
     Returns
     -------
     fig : matplotlib.figure
-        The generated figure.
+        The generated figure. Not returned if matplotlib_axes is given.
     data : dict
         Contains differential displacement vectors and arrow plotting information.
         Returned if return_data is True.
@@ -181,9 +180,9 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
                  (pos_0[:,2] > zlim[0]) & # pylint: disable=invalid-sequence-index
                  (pos_0[:,2] < zlim[1])) # pylint: disable=invalid-sequence-index
 
-    # if plot_axes are passed do not create new
-    if plot_axes is not None:
-        ax1 = plot_axes
+    # if matplotlib_axes are passed do not create new
+    if matplotlib_axes is not None:
+        ax1 = matplotlib_axes
     else:
         # Initial plot setup and parameters
         fig, ax1, = plt.subplots(1, 1, squeeze=True, figsize=(7,7), dpi=72)
@@ -298,12 +297,18 @@ def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
                 if width > 1e-7:
                     ax1.quiver(center[0], center[1], length[0], length[1], width=width,
                                pivot='middle', angles='xy', scale_units='xy', scale=1)
-    if plot_axes is None:
-        if return_data:
-            data['centers'] = np.concatenate(data['centers'])
-            data['vectors'] = np.concatenate(data['vectors'])
-            return fig, data
-        else:
-            return fig
-    else:
-        return None
+    
+    returns = []
+    if matplotlib_axes is None:
+        returns.append(fig)
+    
+    if return_data:
+        data['centers'] = np.concatenate(data['centers'])
+        data['vectors'] = np.concatenate(data['vectors'])
+        returns.append(data)
+
+    if len(returns) == 1:
+        return returns[0]
+    
+    elif len(returns) > 1:
+        return tuple(returns)

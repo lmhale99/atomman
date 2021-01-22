@@ -184,9 +184,10 @@ class DifferentialDisplacement():
     def plot(self, component, ddmax, plotxaxis='x', plotyaxis='y',
              xlim=None, ylim=None, zlim=None,
              arrowscale=1, arrowwidth=0.005,  use0z=False,
-             atomcolor=None, atomcmap=None, atomsize=0.5, figsize=10):
+             atomcolor=None, atomcmap=None, atomsize=0.5, figsize=10,
+             matplotlib_axes=None):
 
-        """
+        r"""
         Creates a matplotlib figure of a differential displacement map.  Atom
         positions are represented as circles, while the selected components of the
         differential displacement vectors are plotted as arrows.
@@ -272,10 +273,17 @@ class DifferentialDisplacement():
             scaled based on the xlim and ylim values.  Alternatively, both the width
             and height can be set by passing a tuple of two values, but the plot will
             not be guaranteed to be "regular" with respect to length dimensions.
+        matplotlib_axes : matplotlib.Axes.axes, optional
+            An existing matplotlib axes object. If given, the differential displacement
+            plot will be added to the specified axes of an existing figure.  This
+            allows for subplots to be constructed.  Note that figsize will be ignored
+            as the figure would have to be created beforehand and no automatic
+            optimum scaling of the figure's dimensions will occur.
             
         Returns
         -------
         matplotlib.Figure
+            The generated figure.  Not returned if matplotlib_axes is given.
         """
 
         ###################### Parameter and plot setup ########################
@@ -318,8 +326,11 @@ class DifferentialDisplacement():
             figsize = (figsize, figsize * dy / dx)
 
         # Initial plot setup and parameters
-        fig = plt.figure(figsize=figsize, dpi=72)
-        ax1 = fig.add_subplot(111)
+        if matplotlib_axes is None:
+            fig = plt.figure(figsize=figsize, dpi=72)
+            ax1 = fig.add_subplot(111)
+        else:
+            ax1 = matplotlib_axes
         ax1.axis([xlim[0], xlim[1], ylim[0], ylim[1]])
         
         # Handle atomcolor and atomcmap values
@@ -358,9 +369,10 @@ class DifferentialDisplacement():
             if width > 1e-7:
                 ax1.quiver(center[0], center[1], length[0], length[1],
                            pivot='middle', angles='xy', scale_units='xy',
-                           scale=1, width=width, minshaft=2)                       
-
-        return fig
+                           scale=1, width=width, minshaft=2)
+        
+        if matplotlib_axes is None:
+            return fig
     
     def __plotaxisoptions(self, plotaxis):
         """Internal method for handling plotxaxis and plotyaxis values"""

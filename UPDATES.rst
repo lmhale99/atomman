@@ -1,6 +1,19 @@
 Updates
 =======
 
+Version 1.3.7
+-------------
+
+- **atomman.dump.atom_data** bug fix for kim model potentials (now they work).
+
+- **atomman.defect.differential_displacement** option added to pass an existing
+  matplotlib axes object to plot on rather than generating a new figure.  This
+  allows for subplots to be constructed.
+
+- **atomman.defect.DifferentialDisplacement** option added to pass an existing
+  matplotlib axes object to plot on rather than generating a new figure.  This
+  allows for subplots to be constructed.
+
 Version 1.3.6
 -------------
 
