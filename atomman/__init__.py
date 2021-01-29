@@ -16,6 +16,7 @@ from potentials import build_lammps_potential, Settings
 # atomman imports
 from . import unitconvert
 from . import tools
+from . import mep
 from . import region
 from . import lammps
 from .dump import *
