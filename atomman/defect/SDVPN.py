@@ -676,6 +676,9 @@ class SDVPN(object):
             return -0.5 * np.sum((x[1:]**2 - x[:-1]**2) * np.inner(ρ, τ[1,:]))
             
         else:
+            # Flip sign on tau so energies match full=True
+            τ = -τ
+            
             # -1/2 Σ_i τ_2l (δ_l[i] + δ_l[i+1]) Δx
             return -0.5 * np.sum(np.inner(τ[1,:], (δ[:-1] + δ[1:]) * Δx))
     
