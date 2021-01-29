@@ -22,6 +22,7 @@ from DataModelDict import DataModelDict as DM
 from .. import Box
 from .. import unitconvert as uc
 from ..tools import miller
+from ..mep import create_path
 
 class GammaSurface(object):
     """
@@ -1159,3 +1160,75 @@ class GammaSurface(object):
         plt.ylim(dmin, dmax)
         
         return fig
+
+    def build_path(self, pos, npoints=31, style='ISM', gradientfxn='cdiff',
+                   gradientkwargs=None, integratorfxn='rk'):
+        """
+        Builds a subclass of atomman.mep.BasePath as one or two line segments
+        along a gamma surface. The energy function along the path will be
+        properly set using E_gsf.
+        
+        Parameters
+        ----------
+        pos : array-like object
+            2x3 or 3x3 array of Miller vector points that defines the end points of the path's
+            line segment(s).
+        npoints : int, optional
+            The number of points to include along the path. Must be odd if three pos are used.
+            Default value is 31.
+        style : str
+            The path/relaxer style to use.  Default value of 'ISM' will use improved string method.
+        gradientfxn : function, optional
+            The function to use to estimate the gradient of the energy.  Default
+            value of 'cdiff' will use atomman.mep.gradient.central_difference
+        gradientkwargs : dict or None, optional
+            The keyword arguments (i.e. settings) to use with the gradientfxn.
+            Default value of None will use {'shift':1e-7}.
+        integratorfxn : str or function, optional
+            The function to use to integrate relaxation steps.  Default value of
+            'rk' will use atomman.mep.integrator.rungekutta.
+            
+        Returns
+        -------
+        subclass of atomman.mep.BasePath
+            Specific class dictated by style: style=='ISM' -> ISMPath (only style currently).    
+        """
+        # Handle default values
+        if gradientkwargs is None:
+            gradientkwargs = {'shift':1e-7}
+        
+        # Define energyfxn for the path
+        def energyfxn(xy):
+            return self.E_gsf(x=xy[..., 0], y=xy[..., 1])
+        
+        # Define path coordinate builder
+        def build_coords(startpos, endpos, npoints):
+
+            box = self.box
+            x, y = self.pos_to_xy(miller.vector_crystal_to_cartesian(startpos, box))
+            start_xy = np.array([x, y])
+
+            x, y = self.pos_to_xy(miller.vector_crystal_to_cartesian(endpos, box))
+            end_xy = np.array([x, y])
+
+            return np.vstack([np.linspace(start_xy[0], end_xy[0], npoints),
+                              np.linspace(start_xy[1], end_xy[1], npoints)]).T
+        
+        # Construct single segment path coordinates
+        if len(pos) == 2:
+            coords = build_coords(pos[0], pos[1], npoints)
+        
+        # Construct double segment path coordinates
+        elif len(pos) == 3:
+            assert npoints % 2 == 1, 'npoints must be odd'
+            npoints_2 = int(npoints + 1 / 2)
+            coordsa = build_coords(pos[0], pos[1], npoints_2)
+            coordsb = build_coords(pos[1], pos[2], npoints_2)
+            coords = np.vstack([coordsa, coordsb[1:]])
+            
+        else:
+            raise ValueError('pos must have 2 or 3 coordinates')
+        
+        return create_path(coords, energyfxn, style=style, gradientfxn=gradientfxn,
+                           gradientkwargs=gradientkwargs, integratorfxn=integratorfxn)
+    
