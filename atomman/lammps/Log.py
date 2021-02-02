@@ -273,7 +273,8 @@ class Log():
     
     def flatten(self, style='last'):
         """
-        Combines all simulations into one.
+        Combines all simulations into one.  The style options allow for
+        duplicate timesteps to be overwritten.
         
         Parameters
         ----------
@@ -281,6 +282,8 @@ class Log():
             Specifies which values to use for duplicate time steps:
             - 'first' uses the values from the earliest simulation.
             - 'last' uses the values from the latest simulation (default).
+            - 'all' uses all reported lines including ones with duplicate time
+              steps.
         """
         # Check that all simulations with thermo data have step values
         for sim in self.simulations:
@@ -297,6 +300,8 @@ class Log():
                     merged_df = pd.concat([merged_df, thermo[thermo.Step > merged_df.Step.max()]], ignore_index=True)
                 elif style == 'last':
                     merged_df = pd.concat([merged_df[merged_df.Step < thermo.Step.min()], thermo], ignore_index=True)
+                elif style == 'all':
+                    merged_df = pd.concat([merged_df, thermo], ignore_index=True)
                 else:
                     raise ValueError('Unsupported style')
         
