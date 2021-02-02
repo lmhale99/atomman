@@ -1161,6 +1161,44 @@ class GammaSurface(object):
         
         return fig
 
+    def path(self, coord, style='ISM', gradientfxn='cdiff',
+             gradientkwargs=None, integratorfxn='rk'):
+        """
+        Creates an mep Path object mapping for the gamma surface based on
+        supplied xy coordinates along the path line.
+        
+        Parameters
+        ----------
+        coord : array-like object
+            The xy coordinates of the points along the path.
+        style : str
+            The path/relaxer style to use.  Default value of 'ISM' will use improved string method.
+        gradientfxn : function, optional
+            The function to use to estimate the gradient of the energy.  Default
+            value of 'cdiff' will use atomman.mep.gradient.central_difference
+        gradientkwargs : dict or None, optional
+            The keyword arguments (i.e. settings) to use with the gradientfxn.
+            Default value of None will use {'shift':1e-7}.
+        integratorfxn : str or function, optional
+            The function to use to integrate relaxation steps.  Default value of
+            'rk' will use atomman.mep.integrator.rungekutta.
+            
+        Returns
+        -------
+        subclass of atomman.mep.BasePath
+            Specific class dictated by style: style=='ISM' -> ISMPath (only style currently).    
+        """
+        # Handle default values
+        if gradientkwargs is None:
+            gradientkwargs = {'shift':1e-7}
+        
+        # Define energyfxn for the path
+        def energyfxn(xy):
+            return self.E_gsf(x=xy[..., 0], y=xy[..., 1])
+
+        return create_path(coord, energyfxn, style=style, gradientfxn=gradientfxn,
+                           gradientkwargs=gradientkwargs, integratorfxn=integratorfxn)
+
     def build_path(self, pos, npoints=31, style='ISM', gradientfxn='cdiff',
                    gradientkwargs=None, integratorfxn='rk'):
         """
@@ -1193,16 +1231,9 @@ class GammaSurface(object):
         subclass of atomman.mep.BasePath
             Specific class dictated by style: style=='ISM' -> ISMPath (only style currently).    
         """
-        # Handle default values
-        if gradientkwargs is None:
-            gradientkwargs = {'shift':1e-7}
-        
-        # Define energyfxn for the path
-        def energyfxn(xy):
-            return self.E_gsf(x=xy[..., 0], y=xy[..., 1])
         
         # Define path coordinate builder
-        def build_coords(startpos, endpos, npoints):
+        def build_coord(startpos, endpos, npoints):
 
             box = self.box
             x, y = self.pos_to_xy(miller.vector_crystal_to_cartesian(startpos, box))
@@ -1216,19 +1247,19 @@ class GammaSurface(object):
         
         # Construct single segment path coordinates
         if len(pos) == 2:
-            coords = build_coords(pos[0], pos[1], npoints)
+            coord = build_coord(pos[0], pos[1], npoints)
         
         # Construct double segment path coordinates
         elif len(pos) == 3:
             assert npoints % 2 == 1, 'npoints must be odd'
             npoints_2 = int(npoints + 1 / 2)
-            coordsa = build_coords(pos[0], pos[1], npoints_2)
-            coordsb = build_coords(pos[1], pos[2], npoints_2)
-            coords = np.vstack([coordsa, coordsb[1:]])
+            coorda = build_coord(pos[0], pos[1], npoints_2)
+            coordb = build_coord(pos[1], pos[2], npoints_2)
+            coord = np.vstack([coorda, coordb[1:]])
             
         else:
             raise ValueError('pos must have 2 or 3 coordinates')
         
-        return create_path(coords, energyfxn, style=style, gradientfxn=gradientfxn,
-                           gradientkwargs=gradientkwargs, integratorfxn=integratorfxn)
+        return self.path(coord, style=style, gradientfxn=gradientfxn,
+                        gradientkwargs=gradientkwargs, integratorfxn=integratorfxn)
     
