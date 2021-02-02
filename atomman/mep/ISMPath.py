@@ -193,7 +193,7 @@ class ISMPath(BasePath):
         if verbose:
             print(f'timestep =  {timestep}')
             print(f'tolerance = {tolerance}')
-            print()
+            print(flush=True)
         
         # Set current path
         currentpath = self
@@ -201,7 +201,7 @@ class ISMPath(BasePath):
         # ----------------- Relaxation steps ---------------- #
 
         if verbose and relaxsteps > 0:
-            print('Starting relaxation steps')
+            print('Starting relaxation steps', flush=True)
         
         # Perform the relaxation steps
         s = time.time()
@@ -225,7 +225,7 @@ class ISMPath(BasePath):
             print(f'Number of relax steps performed: {i+1}')
             print(f'Final max displacement: {d}')
             print(f'Run time: {e-s} seconds')
-            print()
+            print(flush=True)
         
         # --------- Identify climb coordiates(s) -------- #
         
@@ -238,8 +238,7 @@ class ISMPath(BasePath):
             climbindex = climbindex[:climbpoints]
         
         if verbose and climbsteps > 0:
-            print(f'Starting climbing steps with {len(climbindex)} climbing points')
-            print(f'Max energy before climb = {energy.max()}')
+            print(f'Starting climbing steps with {len(climbindex)} climbing points', flush=True)
         
         # ----------------- Climbing steps ---------------- #
         
@@ -265,7 +264,8 @@ class ISMPath(BasePath):
             print(f'Number of climb steps performed: {i+1}')
             print(f'Final max displacement: {d}')
             print(f'Run time: {e-s} seconds')
+            print(f'Max energy before climb = {energy.max()}', flush=True)
             print(f'Max energy after climb = {currentpath.energy().max()}')
-            print()
+            print(flush=True)
         
         return currentpath
