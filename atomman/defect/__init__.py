@@ -10,6 +10,7 @@ from .disregistry import disregistry
 from .slip_vector import slip_vector # pylint: disable=no-name-in-module
 from .nye_tensor import nye_tensor
 from .nye_tensor_p import nye_tensor_p
+from .Strain import Strain # pylint: disable=no-name-in-module
 
 from .VolterraDislocation import VolterraDislocation
 from .Stroh import Stroh
@@ -27,7 +28,7 @@ from .SDVPN import SDVPN
 
 __all__ = ['differential_displacement', 'disregistry', 'dislocation_array',
            'slip_vector', 'nye_tensor', 'nye_tensor_p', 'Stroh', 'FreeSurface',
-           'StackingFault', 'Dislocation',
+           'StackingFault', 'Dislocation', 'Strain',
            'GammaSurface', 'free_surface_basis', 'pn_arctan_disregistry',
            'SDVPN']
 __all__.extend(point_all)
