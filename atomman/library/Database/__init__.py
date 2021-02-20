@@ -19,9 +19,45 @@ class Database(potentials.Database):
                             download_relaxed_crystals)
 
     def __init__(self, host=None, username=None, password=None, certification=None,
-                 localpath=None, verbose=False, local=True, remote=True, 
+                 localpath=None, verbose=False, local=None, remote=None, 
                  load=False, status='active'):
-
+        """
+        Parameters
+        ----------
+        host : str, optional
+            CDCS site to access.  Default value is 'https://potentials.nist.gov/'.
+        username : str, optional 
+            User name to use to access the host site.  Default value of '' will
+            access the site as an anonymous visitor.
+        password : str, optional
+            Password associated with the given username.  Not needed for
+            anonymous access.
+        certification : str, optional
+            File path to certification file if needed for host.
+        localpath : str, optional
+            Path to the local library directory to use.  If not given, will use
+            the set library_directory setting.
+        verbose : bool, optional
+            If True, info messages will be printed during operations.  Default
+            value is False.
+        local : bool, optional
+            Indicates if the load operations will check localpath for records.
+            Default value is controlled by settings.
+        remote : bool, optional
+            Indicates if the load operations will download records from the
+            remote database.  Default value is controlled by settings.  If a
+            local copy exists, then setting this to False is considerably
+            faster.
+        load : bool, str or list, optional
+            If True, citations, potentials and lammps_potentials will all be
+            loaded during initialization. If False (default), none will be
+            loaded.  Alternatively, a str or list can be given to specify which
+            of the three record types to load.
+        status : str, list or None, optional
+            Only potential_LAMMPS records with the given status(es) will be
+            loaded.  Allowed values are 'active' (default), 'superseded', and
+            'retracted'.  If None is given, then all potentials will be loaded.
+        """
         # Extract extra loads options
         newoptions = ['crystal_prototype', 'relaxed_crystal']
         if load is True:

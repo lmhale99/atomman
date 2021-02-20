@@ -239,9 +239,9 @@ def get_relaxed_crystals(self, key=None, method='dynamic', standing='good',
                 if val is None:
                     return True
                 
-                elif isinstance(series[key], list):
+                elif isinstance(series[name], (list, tuple)):
                     for v in aslist(val):
-                        if v not in series[key]:
+                        if v not in series[name]:
                             return False
                     return True
                 else:

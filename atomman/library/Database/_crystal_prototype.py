@@ -134,7 +134,7 @@ def get_crystal_prototypes(self, id=None, key=None, name=None, prototype=None,
         UUID4 key.
     name : str or list, optional
         Common name(s) to limit the search by.
-    prototype : str or list, optionypeal
+    prototype : str or list, optional
         Prototype identifying composition(s) to limit the search by.
     pearson : str or list, optional
         The Pearson symbol(s) to limit the search by.
