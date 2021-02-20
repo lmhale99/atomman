@@ -6,6 +6,12 @@ Version 1.3.7
 
 - **atomman.dump.atom_data** bug fix for kim model potentials (now they work).
 
+- **atomman.lammps.Log** now captures performance output.  A Simulation class
+  is added to better represent each run/simulation.  The flatten method is 
+  updated to return a new Simulation rather than overwriting the current data.
+  New 'all' style added to flatten that will merge all runs without filtering
+  out duplicate timesteps. 
+
 - **atomman.defect.differential_displacement** option added to pass an existing
   matplotlib axes object to plot on rather than generating a new figure.  This
   allows for subplots to be constructed.
@@ -13,6 +19,22 @@ Version 1.3.7
 - **atomman.defect.DifferentialDisplacement** option added to pass an existing
   matplotlib axes object to plot on rather than generating a new figure.  This
   allows for subplots to be constructed.
+
+- **atomman.mep** subpackage added for performing minimum energy pathway
+  calculations. The contained Path classes represent an energy path and have
+  built-in iteration methods.  The ISMPath uses the improved string method.
+
+  **atomman.defect.GammaSurface** updated with path and build_path methods
+  that help build mep Path objects for the GammaSurface.
+
+  **atomman.defect.Strain** class added that improves upon the nye_tensor
+  function.  The new class uses Cython for roughly a 2X speedup and is
+  designed to be easier to use.  
+
+  **atomman.defect.SDVPN** The sign of tau used by stress_energy with
+  fullstress=False is flipped to correspond to the behavior of 
+  stress_energy with fullstress=True.  New parameter added allowing for
+  additional kwargs to be passed to the underlying scipy.optimize.minimize(). 
 
 Version 1.3.6
 -------------
