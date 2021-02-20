@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>SDVPN &#8212; atomman 1.3.5 documentation</title>
+    <title>SDVPN &#8212; atomman 1.3.7 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="atomman.defect.DifferentialDisplacement.html" title="DifferentialDisplacement"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="atomman.defect.html" accesskey="U">defect</a> &#187;</li> 
       </ul>
@@ -50,7 +50,7 @@
 <h1>SDVPN<a class="headerlink" href="#sdvpn" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="atomman.defect.SDVPN">
-<em class="property">class </em><code class="sig-prename descclassname">atomman.defect.</code><code class="sig-name descname">SDVPN</code><span class="sig-paren">(</span><em class="sig-param">volterra=None, gamma=None, model=None, tau=array([[0., 0., 0.],        [0., 0., 0.],        [0., 0., 0.]]), alpha=0.0, beta=array([[0., 0., 0.],        [0., 0., 0.],        [0., 0., 0.]]), cutofflongrange=None, fullstress=True, cdiffelastic=False, cdiffsurface=True, cdiffstress=False, min_method='Powell', min_options=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">atomman.defect.</code><code class="sig-name descname">SDVPN</code><span class="sig-paren">(</span><em class="sig-param">volterra=None, gamma=None, model=None, tau=array([[0., 0., 0.],        [0., 0., 0.],        [0., 0., 0.]]), alpha=0.0, beta=array([[0., 0., 0.],        [0., 0., 0.],        [0., 0., 0.]]), cutofflongrange=None, fullstress=True, cdiffelastic=False, cdiffsurface=True, cdiffstress=False, min_method='Powell', min_kwargs=None, min_options=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class representation of the semidiscrete variational Peierls-Nabarro
 dislocation model.</p>
@@ -399,6 +399,17 @@ configuration-independent and thus the method takes no parameters.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="atomman.defect.SDVPN.min_kwargs">
+<em class="property">property </em><code class="sig-name descname">min_kwargs</code><a class="headerlink" href="#atomman.defect.SDVPN.min_kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>scipy.optimize.minimize keywords used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="atomman.defect.SDVPN.min_method">
 <em class="property">property </em><code class="sig-name descname">min_method</code><a class="headerlink" href="#atomman.defect.SDVPN.min_method" title="Permalink to this definition">¶</a></dt>
 <dd><p>scipy.optimize.minimize method used.</p>
@@ -508,7 +519,7 @@ Default value is the stored disregistry values.</p></li>
 
 <dl class="method">
 <dt id="atomman.defect.SDVPN.solve">
-<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">disregistry=None</em>, <em class="sig-param">tau=None</em>, <em class="sig-param">alpha=None</em>, <em class="sig-param">beta=None</em>, <em class="sig-param">cutofflongrange=None</em>, <em class="sig-param">fullstress=None</em>, <em class="sig-param">cdiffelastic=None</em>, <em class="sig-param">cdiffsurface=None</em>, <em class="sig-param">cdiffstress=None</em>, <em class="sig-param">min_method=None</em>, <em class="sig-param">min_options=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.solve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">disregistry=None</em>, <em class="sig-param">tau=None</em>, <em class="sig-param">alpha=None</em>, <em class="sig-param">beta=None</em>, <em class="sig-param">cutofflongrange=None</em>, <em class="sig-param">fullstress=None</em>, <em class="sig-param">cdiffelastic=None</em>, <em class="sig-param">cdiffsurface=None</em>, <em class="sig-param">cdiffstress=None</em>, <em class="sig-param">min_method=None</em>, <em class="sig-param">min_kwargs=None</em>, <em class="sig-param">min_options=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.solve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Solves the semidiscrete variational Peierls-Nabarro dislocation
 disregistry through energy minimization using the set class
 properties.  All parameters are optional keyword arguments that
@@ -538,6 +549,8 @@ neighboring values (False).</p></li>
 component is computed with central difference (True) or simply
 neighboring values (False).  Only matters if fullstress is True.</p></li>
 <li><p><strong>min_method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The scipy.optimize.minimize method to use.</p></li>
+<li><p><strong>min_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>, </em><em>optional</em>) – Any keyword arguments to pass on to scipy.optimize.minimize besides
+the coordinates, method and options.</p></li>
 <li><p><strong>min_options</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>, </em><em>optional</em>) – Any options to pass on to scipy.optimize.minimize.</p></li>
 </ul>
 </dd>
@@ -548,14 +561,19 @@ neighboring values (False).  Only matters if fullstress is True.</p></li>
 <dt id="atomman.defect.SDVPN.stress_energy">
 <code class="sig-name descname">stress_energy</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">disregistry=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.defect.SDVPN.stress_energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the stress energy due to the applied stress, tau.
-If fullstress is True:</p>
+If fullstress is True, the original stress expression by
+Bulatov and Kaxiras will be used:</p>
 <blockquote>
 <div><p>E_stress = -1/2 Σ_i (x[i]² - x[i-1]²) ρ_l τ_2l</p>
 </div></blockquote>
-<p>If fullstress is False:</p>
+<p>If fullstress is False, the alternate stress expression by
+Shen and Cheng 10.1016/j.scriptamat.2009.04.047 will be used:</p>
 <blockquote>
 <div><p>E_stress = -1/2 Σ_i τ_2l (δ_l[i] + δ_l[i+1]) Δx</p>
 </div></blockquote>
+<p>Note that the Shen and Cheng expression will have a constant
+error associated with it giving an incorrect overall energy, but
+should apply a similar force on the dislocation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -690,13 +708,13 @@ Default value is the stored disregistry values.</p></li>
         <li class="right" >
           <a href="atomman.defect.DifferentialDisplacement.html" title="DifferentialDisplacement"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="atomman.defect.html" >defect</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

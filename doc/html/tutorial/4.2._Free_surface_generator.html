@@ -1,0 +1,1033 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Introduction to atomman: Free surface generator &#8212; atomman 1.3.7 documentation</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction to atomman: Stacking fault generator" href="4.3._Stacking_fault_generator.html" />
+    <link rel="prev" title="Introduction to atomman: Point defect generation" href="4.1._Point_defect_generation.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="4.3._Stacking_fault_generator.html" title="Introduction to atomman: Stacking fault generator"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="4.1._Point_defect_generation.html" title="Introduction to atomman: Point defect generation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<div class="section" id="Introduction-to-atomman:-Free-surface-generator">
+<h1>Introduction to atomman: Free surface generator<a class="headerlink" href="#Introduction-to-atomman:-Free-surface-generator" title="Permalink to this headline">¶</a></h1>
+<p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
+<p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
+<div class="section" id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<p>This Notebook outlines the FreeSurface class that allows for the easy generation of planar-sliced free surface atomic configurations based on a unit cell and Miller (hkl) or Miller-Bravais (hkil) crystal plane indices for any crystal unit cell.</p>
+<p><em>New as of version 1.3.2</em></p>
+<p><strong>Library imports</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Standard Python libraries</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="c1"># http://www.numpy.org/</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># https://github.com/usnistgov/atomman</span>
+<span class="kn">import</span> <span class="nn">atomman</span> <span class="k">as</span> <span class="nn">am</span>
+<span class="kn">import</span> <span class="nn">atomman.unitconvert</span> <span class="k">as</span> <span class="nn">uc</span>
+
+<span class="c1"># Show atomman version</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+atomman version = 1.3.7
+Notebook executed on 2021-02-19
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="2.-Theory">
+<h2>2. Theory<a class="headerlink" href="#2.-Theory" title="Permalink to this headline">¶</a></h2>
+<p>A planar-sliced free surface atomic system can be constructed by</p>
+<ol class="arabic simple">
+<li><p>Generating a bulk crystalline system with all periodic boundaries.</p></li>
+<li><p>Slicing the system along a geometrical plane creating two ideal planar-sliced free surfaces.</p></li>
+</ol>
+<p>While these steps are conceptually simple, it is still tricky to create a routine that can successfully work for any crystal plane in any crystal. The main challenge in developing a generalized free surface routine is working with the multiple different axes systems that describe the defect and the atomic configurations.</p>
+<p>Planar free surfaces are typically defined as crystallographic <span class="math notranslate nohighlight">\((hkl)\)</span> Miller or <span class="math notranslate nohighlight">\((hkil)\)</span> Miller-Bravais planes relative to conventional unit cells with lattice box vectors of <span class="math notranslate nohighlight">\(a_{unit}\)</span>, <span class="math notranslate nohighlight">\(b_{unit}\)</span>, and <span class="math notranslate nohighlight">\(c_{unit}\)</span>. <a class="reference external" href="https://doi.org/10.1016/j.susc.2013.05.016">Sun and Cedar</a> showed an algorithm that can be easily used to identify the Cartesian slip plane normal for any <span class="math notranslate nohighlight">\((hkl)\)</span> plane in any crystal. In atomman, this is handled by
+atomman.tools.miller.plane_crystal_to_cartesian.</p>
+<p>Using the Cartesian plane normal, a search is then performed to identify three <span class="math notranslate nohighlight">\([uvw]\)</span> crystal vectors corresponding to</p>
+<ul class="simple">
+<li><p>The crystal vector with absolute <span class="math notranslate nohighlight">\(h\)</span>, <span class="math notranslate nohighlight">\(k\)</span>, and <span class="math notranslate nohighlight">\(l\)</span> values less than some search maximum that is closest to the plane normal.</p></li>
+<li><p>A crystal vector in the slip plane that has the shortest length.</p></li>
+<li><p>A second crystal vector in the slip plane that has the shortest length without being parallel to the previous vector.</p></li>
+</ul>
+<p>Uniqueness is supported by only picking vectors that form a right-handed system and which have the smallest angle between the two in-plane vectors.</p>
+<p>A rotated cell is then constructed in which the rotated cell’s box vectors <span class="math notranslate nohighlight">\(a_{rot}\)</span>, <span class="math notranslate nohighlight">\(b_{rot}\)</span>, and <span class="math notranslate nohighlight">\(c_{rot}\)</span> correspond to the three <span class="math notranslate nohighlight">\([uvw]\)</span> Miller vectors of the unit cell. The specific alignment of the rotated cell depends on which box vector the free surface cut will be made along, i.e. the “cut box vector”</p>
+<ul class="simple">
+<li><p>The cut box vector is aligned with the out-of-plane crystal vector.</p></li>
+<li><p>The Cartesian system for the rotated cell is defined such that the cut box vector is the only box vector with a component along one of the three x, y, or z Cartesian axes.</p></li>
+</ul>
+<p>This choice means that the free surface can be inserted into the system easily by making the boundary conditions along the cut box vector non-periodic. As the other two box vectors are in-plane vectors, the resulting free surface plane is the plane of interest. Also, the choice of Cartesian system mentioned will result in the plane normal coinciding with one of the three Cartesian axes.</p>
+<p><strong>Note</strong>: Rotations in atomman create systems that are compatible with the box vector limitations imposed by LAMMPS</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(a = [lx, 0, 0]\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(b = [xy, ly, 0]\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(c = [xz, yz, lz]\)</span></p></li>
+</ul>
+<p>As such, <span class="math notranslate nohighlight">\(c\)</span> is the preferred cut box vector as it is the only one with a component in the z direction, and therefore will work for any crystal system.</p>
+<p>The resulting free surface system can be constructed from the rotated cell by</p>
+<ol class="arabic simple">
+<li><p>Creating a supercell by replicating along the rotated cell box vectors</p></li>
+<li><p>Rigidly shifting all atoms in the system so that the box edge where the cut will occur falls between two atomic planes</p></li>
+<li><p>Creating the free surface by either making the cut box vector boundary condition non-periodic, or by increasing the cut box vector to effectively insert a region of vacuum.</p></li>
+</ol>
+</div>
+<div class="section" id="3.-Class-basics">
+<h2>3. Class basics<a class="headerlink" href="#3.-Class-basics" title="Permalink to this headline">¶</a></h2>
+<p>The class is set up to generate a free surface system in two steps:</p>
+<ol class="arabic simple">
+<li><p>Initialize the class and specify the (hkl) surface and unit cell structure to use. The proper rotated cell will be generated as well as a list of shifts that can be applied.</p></li>
+<li><p>Build the free surface system by selecting the shift value corresponding to the termination planes of interest and the size of the final system.</p></li>
+</ol>
+<div class="section" id="3.1.-FreeSurface-initialization">
+<h3>3.1. FreeSurface initialization<a class="headerlink" href="#3.1.-FreeSurface-initialization" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><strong>hkl</strong> (<em>array-like object</em>) The free surface plane to generate expressed in either 3 indices Miller (hkl) format or 4 indices Miller-Bravais (hkil) format.</p></li>
+<li><p><strong>ucell</strong> (<em>atomman.System</em>) The unit cell to use in generating the system.</p></li>
+<li><p><strong>cutboxvector</strong> (<em>str, optional</em>) Specifies which of the three box vectors corresponds to the out-of-plane vector. Default value is c.</p></li>
+<li><p><strong>maxindex</strong> (<em>int, optional</em>) Max uvw index value to use in identifying the best uvw set for the out-of-plane vector. If not given, will use the largest absolute index between the given hkl and the initial in-plane vector guesses.</p></li>
+<li><p><strong>conventional_setting</strong> (<em>str, optional</em>) Allows for rotations of a primitive unit cell to be determined from (hkl) indices specified relative to a conventional unit cell. Allowed settings: ‘p’ for primitive (no conversion), ‘f’ for face-centered, ‘i’ for body-centered, and ‘a’, ‘b’, or ‘c’ for side-centered. Default behavior is to perform no conversion, i.e. take (hkl) relative to the given ucell.</p></li>
+<li><p><strong>tol</strong> (<em>float, optional</em>) Tolerance parameter used to round off near-zero values. Default value is 1e-8.</p></li>
+</ul>
+</div>
+<div class="section" id="3.2.-FreeSurface.surface()">
+<h3>3.2. FreeSurface.surface()<a class="headerlink" href="#3.2.-FreeSurface.surface()" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><strong>shift</strong> (<em>array-like object, optional</em>) Applies a shift to all atoms. Different values allow for free surfaces with different termination planes to be selected.</p></li>
+<li><p><strong>vacuumwidth</strong> (<em>float, optional</em>) If given, the free surface is created by modifying the system’s box to insert a region of vacuum with this width. This is typically used for DFT calculations where it is computationally preferable to insert a vacuum region and keep all dimensions periodic.</p></li>
+<li><p><strong>sizemults</strong> (<em>list or tuple, optional</em>) The three System.supersize multipliers [a_mult, b_mult, c_mult] to use on the rotated cell to build the final system. Note that the cutboxvector sizemult must be an integer and not a tuple. Default value is [1, 1, 1].</p></li>
+<li><p><strong>minwidth</strong> (<em>float, optional</em>) If given, the sizemult along the cutboxvector will be selected such that the width of the resulting final system in that direction will be at least this value. If both sizemults and minwidth are given, then the larger of the two in the cutboxvector direction will be used.</p></li>
+<li><p><strong>even</strong> (<em>bool, optional</em>) A True value means that the sizemult for cutboxvector will be made an even number by adding 1 if it is odd. Default value is False.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="4.-Examples">
+<h2>4. Examples<a class="headerlink" href="#4.-Examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="4.1.-Conventional-bcc-unit-cell">
+<h3>4.1. Conventional bcc unit cell<a class="headerlink" href="#4.1.-Conventional-bcc-unit-cell" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="4.1.1.-Define-a-bcc-conventional-cell-and-initialize-a-FreeSurface">
+<h4>4.1.1. Define a bcc conventional cell and initialize a FreeSurface<a class="headerlink" href="#4.1.1.-Define-a-bcc-conventional-cell-and-initialize-a-FreeSurface" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">2.866</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">cubic</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]])</span>
+
+<span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Fe&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plane_hkl</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">fs</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">FreeSurface</span><span class="p">(</span><span class="n">plane_hkl</span><span class="p">,</span> <span class="n">ucell</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="4.1.2.-Check-the-identified-rotated-system">
+<h4>4.1.2. Check the identified rotated system<a class="headerlink" href="#4.1.2.-Check-the-identified-rotated-system" title="Permalink to this headline">¶</a></h4>
+<p>The FreeSurface class has a number of attributes that can be used to check the solution.</p>
+<ul class="simple">
+<li><p><strong>uvws</strong> are the three conventional Miller vectors used as the box vectors of the rotated system.</p></li>
+<li><p><strong>rcell</strong> is the rotated cell.</p></li>
+<li><p><strong>transform</strong> is the Cartesian transformation matrix associated with going from ucell to rcell.</p></li>
+<li><p><strong>rcellwidth</strong> is the width of the rotated cell in the direction normal to the hkl plane.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">uvws</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[ 0.  0.  1.]
+ [ 1. -1.  0.]
+ [ 1.  1.  0.]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">rcell</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 2.866,  0.000,  0.000]
+bvect =  [ 0.000,  4.053,  0.000]
+cvect =  [ 0.000,  0.000,  4.053]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 4
+natypes = 1
+symbols = (&#39;Fe&#39;,)
+pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   1.433 |   2.027 |   0.000
+      1 |       1 |   0.000 |   0.000 |   0.000
+      2 |       1 |   1.433 |   0.000 |   2.027
+      3 |       1 |   0.000 |   2.027 |   2.027
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[ 0.00000000e+00  4.46536745e-18  1.00000000e+00]
+ [ 7.07106781e-01 -7.07106781e-01  3.19640147e-16]
+ [ 7.07106781e-01  7.07106781e-01 -9.73839539e-18]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">rcellwidth</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+4.05313606976129
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="4.1.3.-Build-the-free-surface-configuration">
+<h4>4.1.3. Build the free surface configuration<a class="headerlink" href="#4.1.3.-Build-the-free-surface-configuration" title="Permalink to this headline">¶</a></h4>
+<p>Building the final free surface configuration requires specifying an atomic shift to position the fault plane between two atomic planes. The FreeSurface.shifts attribute lists all identified shift positions for rcell that will place the geometrical plane halfway between atomic planes. A shift value is not automatically used as a default as different shifts can result in distinctly different termination planes being created.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">shifts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[0.         0.         1.01328403]
+ [0.         0.         3.03985207]]
+</pre></div></div>
+</div>
+<p>For a given shift, a free surface configuration can then be retrieved using the surface method.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">shift</span><span class="o">=</span><span class="n">fs</span><span class="o">.</span><span class="n">shifts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">minwidth</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 2.866,  0.000,  0.000]
+bvect =  [ 0.000,  4.053,  0.000]
+cvect =  [ 0.000,  0.000, 12.159]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 12
+natypes = 1
+symbols = (&#39;Fe&#39;,)
+pbc = [ True  True False]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   1.433 |   2.027 |   1.013
+      1 |       1 |   0.000 |   0.000 |   1.013
+      2 |       1 |   1.433 |   0.000 |   3.040
+      3 |       1 |   0.000 |   2.027 |   3.040
+      4 |       1 |   1.433 |   2.027 |   5.066
+      5 |       1 |   0.000 |   0.000 |   5.066
+      6 |       1 |   1.433 |   0.000 |   7.093
+      7 |       1 |   0.000 |   2.027 |   7.093
+      8 |       1 |   1.433 |   2.027 |   9.120
+      9 |       1 |   0.000 |   0.000 |   9.120
+     10 |       1 |   1.433 |   0.000 |  11.146
+     11 |       1 |   0.000 |   2.027 |  11.146
+</pre></div></div>
+</div>
+<p>After a free surface configuration has been created, the FreeSurface object will also have a <strong>surfacearea</strong> attribute which gives the surface area for one of the two free surfaces created.</p>
+<p>Note: For free surface formation energy calculations you must divide by 2*surfacearea as two free surfaces are created.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">surfacearea</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+11.616287975935858
+</pre></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="4.2.-Primitive-bcc-unit-cell">
+<h3>4.2. Primitive bcc unit cell<a class="headerlink" href="#4.2.-Primitive-bcc-unit-cell" title="Permalink to this headline">¶</a></h3>
+<p>The algorithm relies on identifying the smallest in-plane Miller vectors related to the unit cell given. If the conventional unit cell is not primitive, then the identified vectors may not be the smallest lattice vectors possible, and therefore the system may be larger than needed. Alternately, the primitive unit cell can be used to construct the free surface configuration by specifying the conventional_setting parameter</p>
+<ul class="simple">
+<li><p>Give ucell as the primitive unit cell.</p></li>
+<li><p>Use conventional_setting to indicate the Bravais lattie centering: ‘p’ for primitive (no conversion), ‘f’ for face-centered, ‘i’ for body-centered, and ‘a’, ‘b’, or ‘c’ for side-centered.</p></li>
+<li><p>Then, (hkl) can be specified relative to the conventional unit cell, but used to operate on the primitive unit cell.</p></li>
+</ul>
+<div class="section" id="4.2.1.-Define-a-primitive-bcc-unit-cell-and-initialize-a-FreeSurface">
+<h4>4.2.1. Define a primitive bcc unit cell and initialize a FreeSurface<a class="headerlink" href="#4.2.1.-Define-a-primitive-bcc-unit-cell-and-initialize-a-FreeSurface" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">trigonal</span><span class="p">(</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="mi">3</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">109.47122063449069</span><span class="p">)</span>
+
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]])</span>
+
+<span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Fe&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Note we are giving the same plane_hkl value as above (relative to the conventional cubic cell), but specifying the conventional setting.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plane_hkl</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">setting</span> <span class="o">=</span> <span class="s1">&#39;i&#39;</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">FreeSurface</span><span class="p">(</span><span class="n">plane_hkl</span><span class="p">,</span> <span class="n">ucell</span><span class="p">,</span> <span class="n">conventional_setting</span><span class="o">=</span><span class="n">setting</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id1">
+<h4>4.1.2. Check the identified rotated system<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<p>Using the primitive unit cell allows for the algorithm to find shorter lattice vectors than can be identified with the conventional unit cell. The identified uvws (relative to the conventional cell) may then be fractions instead of integers.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">uvws</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[-0.5  0.5 -0.5]
+ [-0.5  0.5  0.5]
+ [ 1.   1.   0. ]]
+</pre></div></div>
+</div>
+<p>For rcell, the system is half the size but still has the same width.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">rcell</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 2.482,  0.000,  0.000]
+bvect =  [ 0.827,  2.340,  0.000]
+cvect =  [ 0.000,  0.000,  4.053]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 2
+natypes = 1
+symbols = (&#39;Fe&#39;,)
+pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   0.000 |   0.000 |   0.000
+      1 |       1 |   1.655 |   1.170 |   2.027
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h4>4.1.3. Build the free surface configuration<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<p>The resulting system is then more friendly to DFT by having fewer atoms in the periodic directions. Here, we also use the vacuumwidth parameter to insert a region of vacuum as that is also computationally favorable for DFT calculations.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">shift</span><span class="o">=</span><span class="n">fs</span><span class="o">.</span><span class="n">shifts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">minwidth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">vacuumwidth</span><span class="o">=</span><span class="mi">15</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 2.482,  0.000,  0.000]
+bvect =  [ 0.827,  2.340,  0.000]
+cvect =  [ 0.000,  0.000, 27.159]
+origin = [ 0.000,  0.000, -7.500]
+natoms = 6
+natypes = 1
+symbols = (&#39;Fe&#39;,)
+pbc = [ True  True False]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   0.000 |   0.000 |   1.013
+      1 |       1 |   1.655 |   1.170 |   3.040
+      2 |       1 |   0.000 |   0.000 |   5.066
+      3 |       1 |   1.655 |   1.170 |   7.093
+      4 |       1 |   0.000 |   0.000 |   9.120
+      5 |       1 |   1.655 |   1.170 |  11.146
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">surfacearea</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+5.808143987967931
+</pre></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="4.3.-hcp-unit-cell">
+<h3>4.3. hcp unit cell<a class="headerlink" href="#4.3.-hcp-unit-cell" title="Permalink to this headline">¶</a></h3>
+<p>Hexagonal systems can also be worked with using Miller-Bravais planes and vectors.</p>
+<div class="section" id="4.3.1.-Define-an-hcp-unit-cell-and-initialize-a-FreeSurface">
+<h4>4.3.1. Define an hcp unit cell and initialize a FreeSurface<a class="headerlink" href="#4.3.1.-Define-an-hcp-unit-cell-and-initialize-a-FreeSurface" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">3.1853</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">5.1853</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">hexagonal</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">pos</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]])</span>
+
+<span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Mg&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ucell</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 3.185,  0.000,  0.000]
+bvect =  [-1.593,  2.759,  0.000]
+cvect =  [ 0.000,  0.000,  5.185]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 2
+natypes = 1
+symbols = (&#39;Mg&#39;,)
+pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   0.000 |   0.000 |   0.000
+      1 |       1 |   0.000 |   1.839 |   2.593
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plane_hkl</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">FreeSurface</span><span class="p">(</span><span class="n">plane_hkl</span><span class="p">,</span> <span class="n">ucell</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id3">
+<h4>4.1.2. Check the identified rotated system<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<p>If the plane is defined using Miller-Bravais indices, then the uvws will be converted to them as well.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">uvws</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[-0.33333333  0.66666667 -0.33333333  0.        ]
+ [ 0.          0.         -0.          1.        ]
+ [ 0.66666667 -0.33333333 -0.33333333  0.        ]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">rcell</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 3.185,  0.000,  0.000]
+bvect =  [ 0.000,  5.185,  0.000]
+cvect =  [-1.593,  0.000,  2.759]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 2
+natypes = 1
+symbols = (&#39;Mg&#39;,)
+pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   1.593 |   0.000 |   2.759
+      1 |       1 |   1.593 |   2.593 |   0.920
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">shifts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[0.         0.         0.91951692]
+ [0.         0.         2.29879228]]
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h4>4.1.3. Build the free surface configuration<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<p>If you give both sizemults and minwidth, then the larger of the two will be used for the determining the final system width.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">shift</span><span class="o">=</span><span class="n">fs</span><span class="o">.</span><span class="n">shifts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sizemults</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">minwidth</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 3.185,  0.000,  0.000]
+bvect =  [ 0.000,  5.185,  0.000]
+cvect =  [-9.556,  0.000, 16.551]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 12
+natypes = 1
+symbols = (&#39;Mg&#39;,)
+pbc = [ True  True False]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |  -1.593 |   0.000 |   3.678
+      1 |       1 |   1.593 |   2.593 |   1.839
+      2 |       1 |  -3.185 |   0.000 |   6.437
+      3 |       1 |   0.000 |   2.593 |   4.598
+      4 |       1 |  -4.778 |   0.000 |   9.195
+      5 |       1 |  -1.593 |   2.593 |   7.356
+      6 |       1 |  -6.371 |   0.000 |  11.954
+      7 |       1 |  -3.185 |   2.593 |  10.115
+      8 |       1 |  -7.963 |   0.000 |  14.712
+      9 |       1 |  -4.778 |   2.593 |  12.873
+     10 |       1 |   0.000 |   0.000 |   0.920
+     11 |       1 |  -6.371 |   2.593 |  15.632
+</pre></div></div>
+</div>
+<p>Also, note that the two shifts result in different termination planes. Both can be retrived from the same FreeSurface object by simply giving surface() a different shift value.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">shift</span><span class="o">=</span><span class="n">fs</span><span class="o">.</span><span class="n">shifts</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sizemults</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">minwidth</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 3.185,  0.000,  0.000]
+bvect =  [ 0.000,  5.185,  0.000]
+cvect =  [-9.556,  0.000, 16.551]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 12
+natypes = 1
+symbols = (&#39;Mg&#39;,)
+pbc = [ True  True False]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |  -1.593 |   0.000 |   5.057
+      1 |       1 |  -1.593 |   2.593 |   3.218
+      2 |       1 |  -3.185 |   0.000 |   7.816
+      3 |       1 |  -3.185 |   2.593 |   5.977
+      4 |       1 |  -4.778 |   0.000 |  10.574
+      5 |       1 |  -4.778 |   2.593 |   8.735
+      6 |       1 |  -6.371 |   0.000 |  13.333
+      7 |       1 |  -6.371 |   2.593 |  11.494
+      8 |       1 |  -7.963 |   0.000 |  16.092
+      9 |       1 |  -7.963 |   2.593 |  14.253
+     10 |       1 |   0.000 |   0.000 |   2.299
+     11 |       1 |   0.000 |   2.593 |   0.460
+</pre></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction to atomman: Free surface generator</a><ul>
+<li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
+<li><a class="reference internal" href="#2.-Theory">2. Theory</a></li>
+<li><a class="reference internal" href="#3.-Class-basics">3. Class basics</a><ul>
+<li><a class="reference internal" href="#3.1.-FreeSurface-initialization">3.1. FreeSurface initialization</a></li>
+<li><a class="reference internal" href="#3.2.-FreeSurface.surface()">3.2. FreeSurface.surface()</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#4.-Examples">4. Examples</a><ul>
+<li><a class="reference internal" href="#4.1.-Conventional-bcc-unit-cell">4.1. Conventional bcc unit cell</a><ul>
+<li><a class="reference internal" href="#4.1.1.-Define-a-bcc-conventional-cell-and-initialize-a-FreeSurface">4.1.1. Define a bcc conventional cell and initialize a FreeSurface</a></li>
+<li><a class="reference internal" href="#4.1.2.-Check-the-identified-rotated-system">4.1.2. Check the identified rotated system</a></li>
+<li><a class="reference internal" href="#4.1.3.-Build-the-free-surface-configuration">4.1.3. Build the free surface configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#4.2.-Primitive-bcc-unit-cell">4.2. Primitive bcc unit cell</a><ul>
+<li><a class="reference internal" href="#4.2.1.-Define-a-primitive-bcc-unit-cell-and-initialize-a-FreeSurface">4.2.1. Define a primitive bcc unit cell and initialize a FreeSurface</a></li>
+<li><a class="reference internal" href="#id1">4.1.2. Check the identified rotated system</a></li>
+<li><a class="reference internal" href="#id2">4.1.3. Build the free surface configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#4.3.-hcp-unit-cell">4.3. hcp unit cell</a><ul>
+<li><a class="reference internal" href="#4.3.1.-Define-an-hcp-unit-cell-and-initialize-a-FreeSurface">4.3.1. Define an hcp unit cell and initialize a FreeSurface</a></li>
+<li><a class="reference internal" href="#id3">4.1.2. Check the identified rotated system</a></li>
+<li><a class="reference internal" href="#id4">4.1.3. Build the free surface configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="4.1._Point_defect_generation.html"
+                        title="previous chapter">Introduction to atomman: Point defect generation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="4.3._Stacking_fault_generator.html"
+                        title="next chapter">Introduction to atomman: Stacking fault generator</a></p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="4.3._Stacking_fault_generator.html" title="Introduction to atomman: Stacking fault generator"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="4.1._Point_defect_generation.html" title="Introduction to atomman: Point defect generation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

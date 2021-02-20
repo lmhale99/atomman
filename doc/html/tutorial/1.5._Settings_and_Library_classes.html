@@ -1,0 +1,1383 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Introduction to atomman: Settings and Library &#8212; atomman 1.3.7 documentation</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction to atomman: LAMMPS functionality" href="2._LAMMPS_functionality.html" />
+    <link rel="prev" title="Introduction to atomman: crystal loading" href="1.4.11._crystal_loading.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="2._LAMMPS_functionality.html" title="Introduction to atomman: LAMMPS functionality"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="1.4.11._crystal_loading.html" title="Introduction to atomman: crystal loading"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<div class="section" id="Introduction-to-atomman:-Settings-and-Library">
+<h1>Introduction to atomman: Settings and Library<a class="headerlink" href="#Introduction-to-atomman:-Settings-and-Library" title="Permalink to this headline">¶</a></h1>
+<p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
+<p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
+<div class="section" id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<p><em>Added version 1.3.3</em></p>
+<p>The atomman package inherits Settings and Library from the <a class="reference external" href="https://github.com/usnistgov/potentials">potentials package</a>. The associated classes can be used to manage interactions with the NIST potentials reference library.</p>
+<p><strong>Library Imports</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Standard libraries</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="c1"># https://github.com/usnistgov/atomman</span>
+<span class="kn">import</span> <span class="nn">atomman</span> <span class="k">as</span> <span class="nn">am</span>
+
+<span class="c1"># Show atomman version</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+atomman version = 1.3.7
+Notebook executed on 2021-02-19
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="2.-Settings">
+<h2>2. Settings<a class="headerlink" href="#2.-Settings" title="Permalink to this headline">¶</a></h2>
+<p>The atomman.Settings class is a shortcut to the potentials.Settings class. This allows for atomman, potentials, and iprPy to all share the same settings and local reference library.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">settings</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Settings</span><span class="p">()</span>
+
+<span class="c1"># Show that atomman.Settings == potentials.Settings</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">settings</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;potentials.Settings.Settings object at 0x0000011DB1FEEB88&gt;
+</pre></div></div>
+</div>
+<div class="section" id="2.1.-Set-directory-locations">
+<h3>2.1. Set directory locations<a class="headerlink" href="#2.1.-Set-directory-locations" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><strong>directory</strong> is the location where the settings.json file is to be found. The default directory is .NISTpotentials in the user’s home directory. This can be changed with Settings.set_directory(), but should only be done if multiple users/environments with different home directories are sharing settings.</p></li>
+<li><p><strong>library_directory</strong> is the location where the local library of reference records is located. By default, this is inside the directory above. It is recommended that it be set to somewhere more accessible if you wish to examine, modify or add to the reference records.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Settings directory is&#39;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Library directory is&#39;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">library_directory</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Settings directory is C:\Users\lmh1\.NISTpotentials
+Library directory is C:\Users\lmh1\Documents\library
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Change the settings directory - Not recommended</span>
+<span class="c1">#settings.set_directory(&lt;PATH&gt;)</span>
+
+<span class="c1"># Change the library directory - Recommended</span>
+<span class="c1">#settings.set_library_directory(&lt;PATH&gt;)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Settings directory is&#39;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Library directory is&#39;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">library_directory</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Settings directory is C:\Users\lmh1\.NISTpotentials
+Library directory is C:\Users\lmh1\Documents\library
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="2.2.-Set-default-database-parameters">
+<h3>2.2. Set default database parameters<a class="headerlink" href="#2.2.-Set-default-database-parameters" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><strong>local</strong> indicates the default value for the local parameter to use when initializing a Library object (below), with a value of True indicating that the local library directory will be searched for matching records.</p></li>
+<li><p><strong>remote</strong> indicates the default value for the remote parameter to use when initializing a Library object (below), with a value of True indicating that the remote database <a class="reference external" href="https://potentials.nist.gov/">https://potentials.nist.gov/</a> will be searched for matching records.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Default local parameter is&#39;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">local</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Default remote parameter is&#39;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">remote</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Default local parameter is True
+Default remote parameter is True
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Change the local and remote parameters</span>
+<span class="c1">#settings.set_local(True)</span>
+<span class="c1">#settings.set_remote(False)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Default local parameter is&#39;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">local</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Default remote parameter is&#39;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">remote</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Default local parameter is True
+Default remote parameter is True
+</pre></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="3.-Database-interface">
+<h2>3. Database interface<a class="headerlink" href="#3.-Database-interface" title="Permalink to this headline">¶</a></h2>
+<p>The atomman.library.Database class is a subclass of potentials.Database and extends it to provide support for crystal structure references in addition to the potentials references. The class is used by atomman.load() for <a class="reference external" href="1.4.10._prototype_loading.html">‘prototype’</a> and <a class="reference external" href="1.4.11._crystal_loading.html">‘crystal’</a> styles and by <a class="reference external" href="2.1._Potential_class.html">atomman.load_lammps_potential</a>. The class can also be directly accessed and used to explore the database for more involved
+investigations.</p>
+<p>See the documentation notebooks for the <a class="reference external" href="https://github.com/usnistgov/potentials">potentials package</a> for more details on interacting with the potentials records.</p>
+<div class="section" id="3.1.-Initialize-a-Database-object">
+<h3>3.1. Initialize a Database object<a class="headerlink" href="#3.1.-Initialize-a-Database-object" title="Permalink to this headline">¶</a></h3>
+<p>Access parameters. Only change these if you are accessing an alternate database and/or have permission to add content.</p>
+<ul class="simple">
+<li><p><strong>host</strong> (<em>str, optional</em>) CDCS site to access. Default value is ‘<a class="reference external" href="https://potentials.nist.gov/">https://potentials.nist.gov/</a>’.</p></li>
+<li><p><strong>username</strong> (<em>str, optional</em>) User name to use to access the host site. Default value of ’’ will access the site as an anonymous visitor.</p></li>
+<li><p><strong>password</strong> (<em>str, optional</em>) Password associated with the given username. Not needed for anonymous access.</p></li>
+<li><p><strong>certification</strong> (<em>str, optional</em>) File path to certification file if needed for host.</p></li>
+</ul>
+<p>Settings options. These allow the default settings from above to be overridden.</p>
+<ul class="simple">
+<li><p><strong>localpath</strong> (<em>str, optional</em>) Path to the local library directory to use. If not given, will use the set library_directory setting.</p></li>
+<li><p><strong>local</strong> (<em>bool, optional</em>) Indicates if the load operations will check localpath for records. Default value is controlled by settings.</p></li>
+<li><p><strong>remote</strong> (<em>bool, optional</em>) Indicates if the load operations will download records from the remote database. Default value is controlled by settings. If a local copy exists, then setting this to False is considerably faster.</p></li>
+</ul>
+<p>Other options</p>
+<ul class="simple">
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) If True, info messages will be printed during operations. Default value is False.</p></li>
+<li><p><strong>load</strong> (<em>bool, str or list, optional</em>) If True, citations, potentials and lammps_potentials will all be loaded during initialization. If False (default), none will be loaded. Alternatively, a str or list can be given to specify which of the three record types to load.</p></li>
+<li><p><strong>status</strong> (<em>str, list or None, optional</em>) Only potential_LAMMPS records with the given status(es) will be loaded. Allowed values are ‘active’ (default), ‘superseded’, and ‘retracted’. If None is given, then all potentials will be loaded.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Load Database with default settings</span>
+<span class="n">potdb</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">library</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;localpath =&#39;</span><span class="p">,</span> <span class="n">potdb</span><span class="o">.</span><span class="n">localpath</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;local =&#39;</span><span class="p">,</span> <span class="n">potdb</span><span class="o">.</span><span class="n">local</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;remote =&#39;</span><span class="p">,</span> <span class="n">potdb</span><span class="o">.</span><span class="n">remote</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+localpath = C:\Users\lmh1\Documents\library
+local = True
+remote = True
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="3.2.-Exploring-crystal-prototypes">
+<h3>3.2. Exploring crystal prototypes<a class="headerlink" href="#3.2.-Exploring-crystal-prototypes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="3.2.1.-Load-crystal-prototypes">
+<h4>3.2.1. Load crystal prototypes<a class="headerlink" href="#3.2.1.-Load-crystal-prototypes" title="Permalink to this headline">¶</a></h4>
+<p>The current prototypes in the local and/or remote database can be loaded into memory using the load_crystal_prototypes() method.</p>
+<ul class="simple">
+<li><p><strong>localpath</strong> (<em>str, optional</em>) Path to a local directory to check for records first. If not given, will check localpath value set during object initialization. If not given or set during initialization, then only the remote database will be loaded.</p></li>
+<li><p><strong>local</strong> (<em>bool, optional</em>) Indicates if records in localpath are to be loaded. If not given, will use the local value set during initialization.</p></li>
+<li><p><strong>remote</strong> (<em>bool, optional</em>) Indicates if the records in the remote database are to be loaded. Setting this to be False is useful/faster if a local copy of the database exists. If not given, will use the local value set during initialization.</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) If True, info messages will be printed during operations. Default value is False.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">potdb</span><span class="o">.</span><span class="n">load_crystal_prototypes</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Loaded 19 local crystal prototypes
+Loaded 19 remote crystal prototypes
+ - 0 new
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="3.2.2.-Get-crystal-prototype(s)">
+<h4>3.2.2. Get crystal prototype(s)<a class="headerlink" href="#3.2.2.-Get-crystal-prototype(s)" title="Permalink to this headline">¶</a></h4>
+<p>The get_crystal_prototype() and get_crystal_prototypes() methods can be used to find one or all crystal prototypes that match the given parameters.</p>
+<p>Note that how the get methods work depends on if the associated records have been loaded. If not loaded, then the get methods will query the remote database. If loaded, then the get methods will search the set of loaded local+remote entries. The two variations should, but are not guaranteed, to behave identically.</p>
+<ul class="simple">
+<li><p><strong>id</strong> (<em>str or list, optional</em>) Prototype ID(s) to search for. These are unique identifiers for each prototype based on comm.</p></li>
+<li><p><strong>key</strong> (<em>str or list, optional</em>) UUID4 key(s) to search for. Each entry has a unique random-generated UUID4 key.</p></li>
+<li><p><strong>name</strong> (<em>str or list, optional</em>) Common name(s) to limit the search by.</p></li>
+<li><p><strong>prototype</strong> (<em>str or list, optional</em>) Prototype identifying composition(s) to limit the search by.</p></li>
+<li><p><strong>pearson</strong> (<em>str or list, optional</em>) The Pearson symbol(s) to limit the search by.</p></li>
+<li><p><strong>strukturbericht</strong> (<em>str or list, optional</em>) The strukturbericht identifier(s) to limit the search by.</p></li>
+<li><p><strong>sg_number</strong> (<em>int or list, optional</em>) The space group number(s) to limit the search by.</p></li>
+<li><p><strong>sg_hm</strong> (<em>str or list, optional</em>) The space group Hermann-Maguin identifier(s) to limit the search by.</p></li>
+<li><p><strong>sg_schoenflies</strong> (<em>str or list, optional</em>) The space group Schoenflies identifier(s) to limit the search by.</p></li>
+<li><p><strong>keyword</strong> (<em>str, optional</em>) If given, will limit the search to all records that contain the keyword substring. Cannot be combined with any of the above parameters.</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) If True, info messages will be printed during operations. Default value is False.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">prototype</span> <span class="o">=</span> <span class="n">potdb</span><span class="o">.</span><span class="n">get_crystal_prototype</span><span class="p">(</span><span class="n">keyword</span><span class="o">=</span><span class="s1">&#39;hcp&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Multiple matching crystal prototypes found.
+1 A3&#39;--alpha-La--double-hcp
+2 A3--Mg--hcp
+Select which one: 2
+</pre></div></div>
+</div>
+<p>The returned CrystalPrototype object(s) have attributes associated with their metadata information as well as an atomman.System of the unit cell.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">prototype</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prototype</span><span class="o">.</span><span class="n">ucell</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+A3--Mg--hcp
+avect =  [ 1.000,  0.000,  0.000]
+bvect =  [-0.500,  0.866,  0.000]
+cvect =  [ 0.000,  0.000,  1.633]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 2
+natypes = 1
+symbols = (None,)
+pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   0.000 |   0.000 |   0.000
+      1 |       1 |   0.000 |   0.577 |   0.816
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="3.2.3.-download_crystal_prototypes">
+<h4>3.2.3. download_crystal_prototypes<a class="headerlink" href="#3.2.3.-download_crystal_prototypes" title="Permalink to this headline">¶</a></h4>
+<p>The download_crystal_prototypes method will download all entries in the remote to the local.</p>
+<ul class="simple">
+<li><p><strong>localpath</strong> (<em>path-like object, optional</em>) Path to a local directory where the files will be saved to. If not given, will use the localpath value set during object initialization.</p></li>
+<li><p><strong>prototypes</strong> (<em>list of CrystalPrototype, optional</em>) A list of crystal prototypes to download. If not given, all prototypes will be downloaded.</p></li>
+<li><p><strong>format</strong> (<em>str, optional</em>) The file format to save the record files as. Allowed values are ‘xml’ and ‘json’ (default).</p></li>
+<li><p><strong>indent</strong> (<em>int, optional</em>) The indentation spacing size to use for the locally saved record files. If not given, the JSON/XML content will be compact.</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) If True, info messages will be printed during operations. Default value is False.</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">#potdb.download_crystal_prototypes(format=&#39;json&#39;, indent=4, verbose=True)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="3.2.4.-crystal_prototypes-and-crystal_prototypes_df">
+<h4>3.2.4. crystal_prototypes and crystal_prototypes_df<a class="headerlink" href="#3.2.4.-crystal_prototypes-and-crystal_prototypes_df" title="Permalink to this headline">¶</a></h4>
+<p>Calling load_crystal_prototypes builds crystal_prototypes, a numpy array containing all CrystalPrototype objects, and crystal_prototypes_df, a pandas DataFrame of the prototype metadata. Combined, these allow for more involved custom explorations of the loaded prototypes.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Display the metadata for all prototypes</span>
+<span class="n">potdb</span><span class="o">.</span><span class="n">crystal_prototypes_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>key</th>
+      <th>id</th>
+      <th>name</th>
+      <th>prototype</th>
+      <th>pearson</th>
+      <th>strukturbericht</th>
+      <th>sg_number</th>
+      <th>sg_hm</th>
+      <th>sg_schoenflies</th>
+      <th>ucell</th>
+      <th>crystal_family</th>
+      <th>natypes</th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>alpha</th>
+      <th>beta</th>
+      <th>gamma</th>
+      <th>natoms</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>d30980ad-ae18-425d-84cb-abf08577bdc8</td>
+      <td>A1--Cu--fcc</td>
+      <td>face-centered cubic</td>
+      <td>Cu</td>
+      <td>cF4</td>
+      <td>A1</td>
+      <td>225</td>
+      <td>F m -3 m</td>
+      <td>Oh^5</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>cubic</td>
+      <td>1</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.000000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>f4101896-1e17-4736-a4d1-308b8934e8ce</td>
+      <td>A15--Cr3Si</td>
+      <td>beta-tungsten</td>
+      <td>Cr3Si</td>
+      <td>cP8</td>
+      <td>A15</td>
+      <td>223</td>
+      <td>P m -3 n</td>
+      <td>Oh^3</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>cubic</td>
+      <td>2</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.000000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>e0126715-c7db-4d79-be80-707c572bebd6</td>
+      <td>A15--beta-W</td>
+      <td>beta-tungsten</td>
+      <td>b-W</td>
+      <td>cP8</td>
+      <td>A15</td>
+      <td>223</td>
+      <td>P m -3 n</td>
+      <td>Oh^3</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>cubic</td>
+      <td>1</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.000000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>bc13827d-e1e6-4d70-8c3a-59399ad78b0f</td>
+      <td>A2--W--bcc</td>
+      <td>body-centered cubic</td>
+      <td>W</td>
+      <td>cI2</td>
+      <td>A2</td>
+      <td>229</td>
+      <td>I m -3 m</td>
+      <td>Oh^9</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>cubic</td>
+      <td>1</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.000000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>154d1a2b-04da-4477-8962-a0ca0c17c8fc</td>
+      <td>A3'--alpha-La--double-hcp</td>
+      <td>double hcp</td>
+      <td>La</td>
+      <td>hP4</td>
+      <td>A3'</td>
+      <td>194</td>
+      <td>P 6_3/m m c</td>
+      <td>D6h^4</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [-...</td>
+      <td>hexagonal</td>
+      <td>1</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>3.265986</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>120.0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>4dab7fbb-108a-425e-8adb-d55de7b1134b</td>
+      <td>A3--Mg--hcp</td>
+      <td>hexagonal close-packed</td>
+      <td>Mg</td>
+      <td>hP2</td>
+      <td>A3</td>
+      <td>194</td>
+      <td>P 6_3/m m c</td>
+      <td>D6h^4</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [-...</td>
+      <td>hexagonal</td>
+      <td>1</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.632993</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>120.0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>12654c83-c153-4b58-8805-f6dce43b7842</td>
+      <td>A4--C--dc</td>
+      <td>diamond cubic</td>
+      <td>C</td>
+      <td>cF8</td>
+      <td>A4</td>
+      <td>227</td>
+      <td>F d -3 m</td>
+      <td>Oh^7</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>cubic</td>
+      <td>1</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.000000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>821526c5-561e-4f09-8a04-680419dc1495</td>
+      <td>A5--beta-Sn</td>
+      <td>white tin</td>
+      <td>b-Sn</td>
+      <td>tI4</td>
+      <td>A5</td>
+      <td>141</td>
+      <td>I 4_1/a m d</td>
+      <td>D4h^19</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>tetragonal</td>
+      <td>1</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>0.550000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>76cbf2c1-fa86-41c4-85ae-c24f55c9f13a</td>
+      <td>A6--In--bct</td>
+      <td>body-centered tetragonal</td>
+      <td>In</td>
+      <td>tI2</td>
+      <td>A6</td>
+      <td>139</td>
+      <td>I 4/m m m</td>
+      <td>D4h^17</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>tetragonal</td>
+      <td>1</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.500000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>c1e15cf8-6998-40ce-afbd-0b1cb6271a1f</td>
+      <td>A7--alpha-As</td>
+      <td>alpha As</td>
+      <td>a-As</td>
+      <td>hR6</td>
+      <td>A7</td>
+      <td>166</td>
+      <td>R -3 m</td>
+      <td>D3d^5</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [-...</td>
+      <td>hexagonal</td>
+      <td>1</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>2.777000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>120.0</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>ceb6d7cc-b20e-4878-8b2b-1e62185d16af</td>
+      <td>Ah--alpha-Po--sc</td>
+      <td>simple cubic</td>
+      <td>a-Po</td>
+      <td>cP1</td>
+      <td>Ah</td>
+      <td>221</td>
+      <td>P m -3 m</td>
+      <td>Oh^1</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>cubic</td>
+      <td>1</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.000000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td>133ca871-c927-4073-ae46-b8a27e035f4b</td>
+      <td>B1--NaCl--rock-salt</td>
+      <td>rock salt</td>
+      <td>NaCl</td>
+      <td>cF8</td>
+      <td>B1</td>
+      <td>225</td>
+      <td>F m -3 m</td>
+      <td>Oh^5</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>cubic</td>
+      <td>2</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.000000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td>7398b231-fd55-4378-b6b2-6607262d3090</td>
+      <td>B2--CsCl</td>
+      <td>cesium chloride</td>
+      <td>CsCl</td>
+      <td>cP2</td>
+      <td>B2</td>
+      <td>221</td>
+      <td>P m -3 m</td>
+      <td>Oh^1</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>cubic</td>
+      <td>2</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.000000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td>ce517a32-6bca-47d0-82a2-2ee48956cff9</td>
+      <td>B3--ZnS--cubic-zinc-blende</td>
+      <td>cubic zinc-blende</td>
+      <td>c-ZnS</td>
+      <td>cF8</td>
+      <td>B3</td>
+      <td>216</td>
+      <td>F -4 3 m</td>
+      <td>Td^2</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>cubic</td>
+      <td>2</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.000000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td>74171ba0-6605-4956-b8d5-0059672ee7e2</td>
+      <td>C1--CaF2--fluorite</td>
+      <td>fluorite</td>
+      <td>CaF2</td>
+      <td>cF12</td>
+      <td>C1</td>
+      <td>225</td>
+      <td>F m -3 m</td>
+      <td>Oh^5</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>cubic</td>
+      <td>2</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.000000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td>8a2eb4b8-1302-46d9-992d-4296c227d966</td>
+      <td>D0_3--BiF3</td>
+      <td>BiF3</td>
+      <td>BiF3</td>
+      <td>cF16</td>
+      <td>D0_3</td>
+      <td>225</td>
+      <td>F m -3 m</td>
+      <td>Oh^5</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>cubic</td>
+      <td>2</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.000000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>f7b8d5d9-b0eb-401a-9cc3-038170e3ac1c</td>
+      <td>L1_0--AuCu</td>
+      <td>AuCu</td>
+      <td>AuCu</td>
+      <td>tP2</td>
+      <td>L1_0</td>
+      <td>123</td>
+      <td>P 4/m m m</td>
+      <td>D4h^1</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>tetragonal</td>
+      <td>2</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.309600</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>17</td>
+      <td>942ce385-85ab-4cb9-8adc-4bdaaf145831</td>
+      <td>L1_2--AuCu3</td>
+      <td>AuCu3</td>
+      <td>AuCu3</td>
+      <td>cP4</td>
+      <td>L1_2</td>
+      <td>221</td>
+      <td>P m -3 m</td>
+      <td>Oh^1</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>cubic</td>
+      <td>2</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.000000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>18</td>
+      <td>0fb6d590-5ce5-4476-a1bf-7130f96f2af1</td>
+      <td>L2_1--AlCu2Mn--heusler</td>
+      <td>heusler</td>
+      <td>AlCu2Mn</td>
+      <td>cF16</td>
+      <td>L2_1</td>
+      <td>225</td>
+      <td>F m -3 m</td>
+      <td>Oh^5</td>
+      <td>avect =  [ 1.000,  0.000,  0.000]\nbvect =  [ ...</td>
+      <td>cubic</td>
+      <td>3</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.000000</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>16</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Find the listings in df that are tetragonal</span>
+<span class="n">is_tetragonal</span> <span class="o">=</span> <span class="n">potdb</span><span class="o">.</span><span class="n">crystal_prototypes_df</span><span class="o">.</span><span class="n">crystal_family</span> <span class="o">==</span> <span class="s1">&#39;tetragonal&#39;</span>
+
+<span class="c1"># Use is_tetragonal mask to retrieve the associated prototypes</span>
+<span class="k">for</span> <span class="n">prototype</span> <span class="ow">in</span> <span class="n">potdb</span><span class="o">.</span><span class="n">crystal_prototypes</span><span class="p">[</span><span class="n">is_tetragonal</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">prototype</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+A5--beta-Sn
+A6--In--bct
+L1_0--AuCu
+</pre></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="3.3.-Exploring-relaxed-crystals">
+<h3>3.3. Exploring relaxed crystals<a class="headerlink" href="#3.3.-Exploring-relaxed-crystals" title="Permalink to this headline">¶</a></h3>
+<p>The Database object has built-in methods for exploring the relaxed crystals in a similar manner as the crystal prototypes:</p>
+<ul class="simple">
+<li><p>load_relaxed_crystals() builds listings for all relaxed crystals from local and/or remote</p></li>
+<li><p>relaxed_crystals and relaxed_crystals_df are the listings built by load_relaxed_crystals()</p></li>
+<li><p>get_relaxed_crystals() and get_relaxed_crystal() retrieve matching entries</p></li>
+<li><p>download_relaxed_crystals() downloads all remote entries to local</p></li>
+</ul>
+<p><strong>HOWEVER</strong>, many of these operations are incredibly slow due to the large number of relaxed crystal entries. There are two suggested methods to best reduce the processing time, which are listed below.</p>
+<div class="section" id="3.3.1.-Remote-only-searches">
+<h4>3.3.1. Remote-only searches<a class="headerlink" href="#3.3.1.-Remote-only-searches" title="Permalink to this headline">¶</a></h4>
+<p>The simplest method is to call get_relaxed_crystals() or get_relaxed_crystal() without calling load_relaxed_crystals(). This will send queries to the remote database to retrieve matching records. Giving parameters that limit the search to as few entries as possible will reduce the amount of information that needs to be downloaded.</p>
+<p>Limitations: Requires internet access, no user-defined local entries will be included, and each search involves a separate internet request.</p>
+<p>Parameters for get_relaxed_crystals and get_relaxed_crystal</p>
+<ul class="simple">
+<li><p><strong>key</strong> (<em>str or list, optional</em>) UUID4 key(s) to search for. Each entry has a unique random-generated UUID4 key.</p></li>
+<li><p><strong>method</strong> (<em>str or list or None, optional</em>) The relaxation method used. Allowed values are dynamic, static and box. Default value is dynamic (the most rigorous relaxation method). All will be loaded if set to None.</p></li>
+<li><p><strong>standing</strong> (<em>str or list or None, optional</em>) “good” records are the unique crystals found with the most rigorous relaxation, and with known prototypes over DFT structures. “bad” are records filtered out, usually for being duplicates. Default value is “good”. All will be loaded if set to None.</p></li>
+<li><p><strong>family</strong> (<em>str or atomman.library.CrystalPrototype or list, optional</em>) The crystal family associated with the relaxed crystal - either crystal prototype name or MP/OQMD database entry name.</p></li>
+<li><p><strong>parent_key</strong> (<em>str or list, optional</em>) The UUID4 key(s) assigned to the calculation that the record is based on.</p></li>
+<li><p><strong>potential</strong> (<em>atomman.lammps.Potential or list, optional</em>) A loaded LAMMPS potential object to limit the search by.</p></li>
+<li><p><strong>potential_LAMMPS_id</strong> (<em>str or list, optional</em>) The id for a LAMMPS implemented potential to limit the search by.</p></li>
+<li><p><strong>potential_LAMMPS_key</strong> (<em>str or list, optional</em>) The UUID4 for a LAMMPS implemented potential to limit the search by.</p></li>
+<li><p><strong>potential_id</strong> (<em>str or list, optional</em>) The id for a potential to limit the search by.</p></li>
+<li><p><strong>potential_key</strong> (<em>str or list, optional</em>) The UUID4 for a potential to limit the search by.</p></li>
+<li><p><strong>symbols</strong> (<em>str or list, optional</em>) Element symbols in the crystal to limit the search by.</p></li>
+<li><p><strong>natypes</strong> (<em>int or list, optional</em>) The number of unique element model symbols in the crystal to limit the search by.</p></li>
+<li><p><strong>natoms</strong> (<em>int or list, optional</em>) The number of unique atoms in the crystal’s unit cell to limit the search by.</p></li>
+<li><p><strong>keyword</strong> (<em>str, optional</em>) If given, will limit the search to all records that contain the keyword substring. Cannot be combined with any of the above parameters.</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) If True, info messages will be printed during operations. Default value is False.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Fetch all records for fcc gold</span>
+<span class="n">fcc_gold</span> <span class="o">=</span> <span class="n">potdb</span><span class="o">.</span><span class="n">get_relaxed_crystals</span><span class="p">(</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;A1--Cu--fcc&#39;</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Au&#39;</span><span class="p">])</span>
+
+<span class="c1"># List the matches, the a lattice constant and the associated potential</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;alat    Ecoh   potential_LAMMPS_id&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">crystal</span> <span class="ow">in</span> <span class="n">fcc_gold</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{crystal.ucell.box.a:.4f}</span><span class="s1"> </span><span class="si">{crystal.cohesive_energy:.4f}</span><span class="s1"> </span><span class="si">{crystal.potential_LAMMPS_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+alat    Ecoh   potential_LAMMPS_id
+4.0685 -4.2994 2012--Norman-G-E--Au--LAMMPS--ipr1
+4.0801 -3.9300 2004--Zhou-X-W--Cu-Ag-Au--LAMMPS--ipr2
+4.0801 -3.9300 2004--Zhou-X-W--Au--LAMMPS--ipr2
+4.0801 -3.9300 2004--Zhou-X-W--Cu-Ag-Au--LAMMPS--ipr1
+4.0798 -3.9300 2004--Zhou-X-W--Au--LAMMPS--ipr1
+4.0800 -3.9300 1986--Foiles-S-M--Au--LAMMPS--ipr1
+4.0800 -3.9300 1986--Foiles-S-M--Ag-Au-Cu-Ni-Pd-Pt--LAMMPS--ipr1
+4.0780 -3.9300 2017--Purja-Pun-G-P--Au--LAMMPS--ipr1
+4.0800 -3.9300 1989--Adams-J-B--Au--LAMMPS--ipr1
+4.0800 -3.9300 1989--Adams-J-B--Ag-Au-Cu-Ni-Pd-Pt--LAMMPS--ipr1
+4.0701 -3.9242 2005--Grochola-G--Au--LAMMPS--ipr1
+4.1820 -3.9024 2018--Starikov-S-V--Si-Au--LAMMPS--ipr1
+4.1820 -3.9024 2018--Starikov-S-V--Si-Au--LAMMPS--ipr2
+4.0800 -3.8100 2010--Olsson-P-A-T--Au--LAMMPS--ipr1
+4.0780 -3.7890 1987--Ackland-G-J--Au--LAMMPS--ipr2
+4.0780 -3.7890 1987--Ackland-G-J--Au--LAMMPS--ipr1
+4.1529 -3.0332 2017--OBrien-C-J--Pt-Au--LAMMPS--ipr1
+6.2107 -0.6133 2012--Norman-G-E--Au--LAMMPS--ipr1
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="3.3.2.-Local-only-searches">
+<h4>3.3.2. Local-only searches<a class="headerlink" href="#3.3.2.-Local-only-searches" title="Permalink to this headline">¶</a></h4>
+<p>The other recommended method is to load only records from the local and then perform the get searches. Doing this, of course, requires that any relaxed crystal records first be downloaded to the local library directory, which can be done one of two ways</p>
+<ol class="arabic simple">
+<li><p>First performing a remote-only search as mentioned above, then passing the list of matching records as parameters to the download_relaxed_crystals() method. This allows for records of interest to be saved for accessing later.</p></li>
+<li><p>If you want all available entries in the local copy, download or clone the git repository at <a class="reference external" href="https://github.com/lmhale99/potentials-library">https://github.com/lmhale99/potentials-library</a> to the local library directory. While all the entries can be downloaded using download_relaxed_crystals(), doing so is incredibly slow.</p></li>
+</ol>
+<p>Either way, once the crystal records are in the local directory they can be loaded with load_relaxed_crystals(remote=False), and then the get_relaxed_crystals() and get_relaxed_crystal() methods will work without needing internet access.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">potdb</span><span class="o">.</span><span class="n">load_relaxed_crystals</span><span class="p">(</span><span class="n">remote</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Loaded 59326 local relaxed crystals
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Fetch all records for fcc gold</span>
+<span class="n">fcc_gold</span> <span class="o">=</span> <span class="n">potdb</span><span class="o">.</span><span class="n">get_relaxed_crystals</span><span class="p">(</span><span class="n">family</span><span class="o">=</span><span class="s1">&#39;A1--Cu--fcc&#39;</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Au&#39;</span><span class="p">])</span>
+
+<span class="c1"># List the matches, the a lattice constant and the associated potential</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;alat    Ecoh   potential_LAMMPS_id&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">crystal</span> <span class="ow">in</span> <span class="n">fcc_gold</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{crystal.ucell.box.a:.4f}</span><span class="s1"> </span><span class="si">{crystal.cohesive_energy:.4f}</span><span class="s1"> </span><span class="si">{crystal.potential_LAMMPS_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+alat    Ecoh   potential_LAMMPS_id
+4.0800 -3.9300 1989--Adams-J-B--Ag-Au-Cu-Ni-Pd-Pt--LAMMPS--ipr1
+4.0800 -3.8100 2010--Olsson-P-A-T--Au--LAMMPS--ipr1
+7.8429 -0.8357 2020--Starikov-S--Si-Au-Al--LAMMPS--ipr1
+4.0701 -3.9242 2005--Grochola-G--Au--LAMMPS--ipr1
+4.0800 -3.9300 1986--Foiles-S-M--Au--LAMMPS--ipr1
+4.1820 -3.9024 2018--Starikov-S-V--Si-Au--LAMMPS--ipr1
+4.0685 -4.2994 2012--Norman-G-E--Au--LAMMPS--ipr1
+4.1499 -3.8612 2020--Starikov-S--Si-Au-Al--LAMMPS--ipr1
+4.0780 -3.9300 2017--Purja-Pun-G-P--Au--LAMMPS--ipr1
+4.1529 -3.0332 2017--OBrien-C-J--Pt-Au--LAMMPS--ipr1
+4.0801 -3.9300 2004--Zhou-X-W--Cu-Ag-Au--LAMMPS--ipr2
+4.0798 -3.9300 2004--Zhou-X-W--Au--LAMMPS--ipr1
+4.0800 -3.9300 1986--Foiles-S-M--Ag-Au-Cu-Ni-Pd-Pt--LAMMPS--ipr1
+4.0780 -3.7890 1987--Ackland-G-J--Au--LAMMPS--ipr1
+4.0780 -3.7890 1987--Ackland-G-J--Au--LAMMPS--ipr2
+4.0801 -3.9300 2004--Zhou-X-W--Au--LAMMPS--ipr2
+4.0800 -3.9300 1989--Adams-J-B--Au--LAMMPS--ipr1
+6.1962 -1.4338 2020--Starikov-S--Si-Au-Al--LAMMPS--ipr1
+6.2107 -0.6133 2012--Norman-G-E--Au--LAMMPS--ipr1
+4.0650 -3.8100 2009--Zhakhovskii-V-V--Au--LAMMPS--ipr2
+4.0801 -3.9300 2004--Zhou-X-W--Cu-Ag-Au--LAMMPS--ipr1
+4.1820 -3.9024 2018--Starikov-S-V--Si-Au--LAMMPS--ipr2
+</pre></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="3.4.-Exploring-potentials">
+<h3>3.4. Exploring potentials<a class="headerlink" href="#3.4.-Exploring-potentials" title="Permalink to this headline">¶</a></h3>
+<p>The Database object allows for searching potential entries by citation and searching lammps implementations of the potentials.</p>
+<p>Methods and attributes for exploring potential listings:</p>
+<ul class="simple">
+<li><p><strong>widget_search_potentials</strong> provides a Jupyter GUI for exploring potential entries.</p></li>
+<li><p><strong>potentials</strong> is a list of the entries as objects. This is generated if load_potentials() is called.</p></li>
+<li><p><strong>potentials_df</strong> is a pandas.DataFrame containing the content of the listings. This is generated if load_potentials() is called.</p></li>
+<li><p><strong>load_potentials()</strong> builds potentials and potentials_df based on entries found in the local and/or remote databases.</p></li>
+<li><p><strong>get_potentials() and get_potential()</strong> retrieves all potentials or one potential, respectively, that match with any given parameters.</p></li>
+<li><p><strong>download_potentials</strong> will download all potential entries from remote to local.</p></li>
+<li><p><strong>save_potentials</strong> saves user-defined entries to local.</p></li>
+<li><p><strong>upload_potential</strong> uploads a new/updated potential listing to remote. Requires write permission for the remote database.</p></li>
+<li><p><strong>delete_potential</strong> will delete a listing from local and/or remote (if permissions are allowed).</p></li>
+</ul>
+<p>Methods and attributes for exploring LAMMPS potential listings:</p>
+<ul class="simple">
+<li><p><strong>widget_lammps_potential</strong> provides a Jupyter GUI for exploring LAMMPS potential entries and retrieving any associated parameter files.</p></li>
+<li><p><strong>lammps_potentials</strong> is a list of the entries as objects. This is generated if load_lammps_potentials() is called.</p></li>
+<li><p><strong>lammps_potentials_df</strong> is a pandas.DataFrame containing the content of the listings. This is generated if load_lammps_potentials() is called.</p></li>
+<li><p><strong>load_lammps_potentials</strong> builds lammps_potentials and lammps_potentials_df based on entries found in the local and/or remote databases.</p></li>
+<li><p><strong>get_lammps_potentials and get_lammps_potential</strong> retrieves all LAMMPS potentials or one LAMMPS potential, respectively, that match with any given parameters.</p></li>
+<li><p><strong>download_lammps_potentials</strong> will download all LAMMPS potential entries from remote to local.</p></li>
+<li><p><strong>get_lammps_potentials_files</strong> will download any parameter files associated with one or more LAMMPS potentials to local.</p></li>
+<li><p><strong>save_lammps_potentials</strong> saves user-defined entries to local.</p></li>
+<li><p><strong>upload_lammps_potential</strong> uploads a new/updated LAMMPS potential listing to remote. Requires write permission for the remote database.</p></li>
+<li><p><strong>delete_lammps_potential</strong> will delete a listing from local and/or remote (if permissions are allowed).</p></li>
+</ul>
+<p>See the documentation notebooks for the <a class="reference external" href="https://github.com/usnistgov/potentials">potentials package</a> for more details on interacting with the potentials records.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction to atomman: Settings and Library</a><ul>
+<li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
+<li><a class="reference internal" href="#2.-Settings">2. Settings</a><ul>
+<li><a class="reference internal" href="#2.1.-Set-directory-locations">2.1. Set directory locations</a></li>
+<li><a class="reference internal" href="#2.2.-Set-default-database-parameters">2.2. Set default database parameters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#3.-Database-interface">3. Database interface</a><ul>
+<li><a class="reference internal" href="#3.1.-Initialize-a-Database-object">3.1. Initialize a Database object</a></li>
+<li><a class="reference internal" href="#3.2.-Exploring-crystal-prototypes">3.2. Exploring crystal prototypes</a><ul>
+<li><a class="reference internal" href="#3.2.1.-Load-crystal-prototypes">3.2.1. Load crystal prototypes</a></li>
+<li><a class="reference internal" href="#3.2.2.-Get-crystal-prototype(s)">3.2.2. Get crystal prototype(s)</a></li>
+<li><a class="reference internal" href="#3.2.3.-download_crystal_prototypes">3.2.3. download_crystal_prototypes</a></li>
+<li><a class="reference internal" href="#3.2.4.-crystal_prototypes-and-crystal_prototypes_df">3.2.4. crystal_prototypes and crystal_prototypes_df</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#3.3.-Exploring-relaxed-crystals">3.3. Exploring relaxed crystals</a><ul>
+<li><a class="reference internal" href="#3.3.1.-Remote-only-searches">3.3.1. Remote-only searches</a></li>
+<li><a class="reference internal" href="#3.3.2.-Local-only-searches">3.3.2. Local-only searches</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#3.4.-Exploring-potentials">3.4. Exploring potentials</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="1.4.11._crystal_loading.html"
+                        title="previous chapter">Introduction to atomman: crystal loading</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="2._LAMMPS_functionality.html"
+                        title="next chapter">Introduction to atomman: LAMMPS functionality</a></p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="2._LAMMPS_functionality.html" title="Introduction to atomman: LAMMPS functionality"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="1.4.11._crystal_loading.html" title="Introduction to atomman: crystal loading"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

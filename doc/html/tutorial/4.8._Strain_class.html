@@ -1,0 +1,957 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Introduction to atomman: Strain class &#8212; atomman 1.3.7 documentation</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="atomman package" href="../atomman.html" />
+    <link rel="prev" title="Introduction to atomman: Semidiscrete variational Peierls-Nabarro model" href="4.7._Semidiscrete_variational_Peierls-Nabarro_model.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../atomman.html" title="atomman package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="4.7._Semidiscrete_variational_Peierls-Nabarro_model.html" title="Introduction to atomman: Semidiscrete variational Peierls-Nabarro model"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<div class="section" id="Introduction-to-atomman:-Strain-class">
+<h1>Introduction to atomman: Strain class<a class="headerlink" href="#Introduction-to-atomman:-Strain-class" title="Permalink to this headline">¶</a></h1>
+<p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
+<p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
+<div class="section" id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<p>This Notebook outlines the Strain class which provides a convenient interface for computing a per-atom strain estimate and related properties.</p>
+<p><em>New version 1.3.7</em>: The Strain class has been added that provides a faster, more user-friendly interface for computing the same properties as the older nye_tensor function.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Standard Python libraries</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="c1"># http://www.numpy.org/</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># https://github.com/usnistgov/atomman</span>
+<span class="kn">import</span> <span class="nn">atomman</span> <span class="k">as</span> <span class="nn">am</span>
+<span class="kn">import</span> <span class="nn">atomman.unitconvert</span> <span class="k">as</span> <span class="nn">uc</span>
+
+<span class="c1"># https://matplotlib.org/</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="c1"># Show atomman version</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+atomman version = 1.3.7
+Notebook executed on 2021-02-19
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="2.-Theory">
+<h2>2. Theory<a class="headerlink" href="#2.-Theory" title="Permalink to this headline">¶</a></h2>
+<p>The Strain class computes the elastic strain correspondence tensor on a per-atom basis by comparing the local environment around each atom in a current state to the corresponding local environment around the same atom in a reference state.</p>
+<div class="section" id="2.1.-Strain-correspodence-tensor">
+<h3>2.1. Strain correspodence tensor<a class="headerlink" href="#2.1.-Strain-correspodence-tensor" title="Permalink to this headline">¶</a></h3>
+<p>The algorithm used here follows the one outlined in <a class="reference external" href="http://dx.doi.org/10.1016/j.actamat.2004.11.027">Hartley, C. &amp; Mishin, Y. (2005). Acta Materialia 53, 1313-1321.</a> and <a class="reference external" href="http://dx.doi.org/10.1016/j.msea.2005.03.076">Hartley, C. S. &amp; Mishin, Y. (2005). Materials Science and Engineering: A 400-401, 18-21.</a>, as well as code obtained from Yuri Mishin.</p>
+<p>The local environment around each atom <span class="math notranslate nohighlight">\(\alpha\)</span> is characterized by finding the relative position vectors between atom <span class="math notranslate nohighlight">\(\alpha\)</span> and all neighboring atoms within a set cutoff distance of atom <span class="math notranslate nohighlight">\(\alpha\)</span>. This is done separately for both the reference and current states, leading to two lists of vectors per atom:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p_{i \alpha \beta}\)</span> is the neighbor vector between atom <span class="math notranslate nohighlight">\(\alpha\)</span> and a neighboring atom <span class="math notranslate nohighlight">\(\beta\)</span> in the reference system.</p></li>
+<li><p><span class="math notranslate nohighlight">\(q_{i \alpha \gamma}\)</span> is the neighbor vector between atom <span class="math notranslate nohighlight">\(\alpha\)</span> and a neighboring atom <span class="math notranslate nohighlight">\(\gamma\)</span> in the current system.</p></li>
+</ul>
+<p>For each atom <span class="math notranslate nohighlight">\(\alpha\)</span>, the sets of neighbors <span class="math notranslate nohighlight">\(\beta\)</span> and <span class="math notranslate nohighlight">\(\gamma\)</span> are not necessarily the same. Computing the strain correspondence tensor requires that new sets of vectors <span class="math notranslate nohighlight">\(P_{i \alpha \delta}\)</span> and <span class="math notranslate nohighlight">\(Q_{i \alpha \delta}\)</span> are identified by best matching as many <span class="math notranslate nohighlight">\(q_{i \alpha \gamma}\)</span> to a <span class="math notranslate nohighlight">\(p_{i \alpha \beta}\)</span> as possible</p>
+<ul class="simple">
+<li><p>For each <span class="math notranslate nohighlight">\(q_{i \alpha \gamma}\)</span>, find the <span class="math notranslate nohighlight">\(p_{i \alpha \beta}\)</span> that is closest to it in angle. If no <span class="math notranslate nohighlight">\(p_{i \alpha \beta}\)</span> is found within <span class="math notranslate nohighlight">\(\theta_{max}\)</span> of <span class="math notranslate nohighlight">\(q_{i \alpha \gamma}\)</span>, then ignore that <span class="math notranslate nohighlight">\(q_{i \alpha \gamma}\)</span>.</p></li>
+<li><p>Check if the best <span class="math notranslate nohighlight">\(p_{i \alpha \beta}\)</span> has already been paired with another <span class="math notranslate nohighlight">\(q_{i \alpha \gamma}\)</span>. If so, compare the lengths of the two <span class="math notranslate nohighlight">\(q_{i \alpha \gamma}\)</span> vectors and keep the one closest to the length of <span class="math notranslate nohighlight">\(p_{i \alpha \beta}\)</span>.</p></li>
+</ul>
+<p>This method means that the number of <span class="math notranslate nohighlight">\(\delta\)</span> sets of <span class="math notranslate nohighlight">\(P_{i \alpha \delta}\)</span> and <span class="math notranslate nohighlight">\(Q_{i \alpha \delta}\)</span> will always be equal to or smaller than <span class="math notranslate nohighlight">\(\beta\)</span> and <span class="math notranslate nohighlight">\(\gamma\)</span>.</p>
+<p>The strain correspondence tensor, <span class="math notranslate nohighlight">\(G_{ij \alpha}\)</span>, is computed as a least squares solution across all <span class="math notranslate nohighlight">\(\delta\)</span> of the linear matrix equation</p>
+<div class="math notranslate nohighlight">
+\[Q_{i \alpha \delta} G_{ij \alpha} = P_{j \alpha \delta}\]</div>
+</div>
+<div class="section" id="2.2.-Derived-properties">
+<h3>2.2. Derived properties<a class="headerlink" href="#2.2.-Derived-properties" title="Permalink to this headline">¶</a></h3>
+<p>Various strain properties can then be computed using <span class="math notranslate nohighlight">\(G_{ij \alpha}\)</span>:</p>
+<ul class="simple">
+<li><p>strain tensor</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[E_{ij \alpha} = \frac{(\delta_{ij} - G_{ij \alpha}) + (\delta_{ij} - G_{ji \alpha})}{2}\]</div>
+<ul class="simple">
+<li><p>strain invariants</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[I_{1 \alpha} = E_{11 \alpha} + E_{22 \alpha} + E_{33 \alpha}\]</div>
+<div class="math notranslate nohighlight">
+\[I_{2 \alpha} = E_{11 \alpha} E_{22 \alpha} + E_{11 \alpha} E_{33 \alpha} + E_{22 \alpha} E_{33 \alpha} - E_{12 \alpha}^2 - E_{13 \alpha}^2 - E_{23 \alpha}^2\]</div>
+<div class="math notranslate nohighlight">
+\[I_{3 \alpha} = \det{E_{ij \alpha}}\]</div>
+<ul class="simple">
+<li><p>rotation tensor</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[R_{ij \alpha} = \frac{(\delta_{ij} - G_{ij \alpha}) - (\delta_{ij} - G_{ji \alpha})}{2}\]</div>
+<ul class="simple">
+<li><p>angular velocity</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\omega_{\alpha} = \sqrt{R_{12 \alpha}^2 + R_{13 \alpha}^2 + R_{23 \alpha}^2}\]</div>
+</div>
+<div class="section" id="2.3.-Nye-tensor">
+<h3>2.3. Nye tensor<a class="headerlink" href="#2.3.-Nye-tensor" title="Permalink to this headline">¶</a></h3>
+<p>The Nye tensor, <span class="math notranslate nohighlight">\(N_{ij \alpha}\)</span>, is related to <span class="math notranslate nohighlight">\(G_{i j \alpha}\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[N_{km \alpha} = - \epsilon_{ijk} \partial_i G_{m j \alpha},\]</div>
+<p>where <span class="math notranslate nohighlight">\(\epsilon_{ijk}\)</span> is the permutation symbol.</p>
+<p>The derivatives of <span class="math notranslate nohighlight">\(G_{i j \alpha}\)</span> are obtained numerically by comparing the change in the strain correspondence tensor between each atom <span class="math notranslate nohighlight">\(\alpha\)</span> and its neighbors <span class="math notranslate nohighlight">\(\gamma\)</span>. A single value for each derivative is obtained by least squares fits of the following equations</p>
+<div class="math notranslate nohighlight">
+\[G_{i j \gamma} - G_{i j \alpha} = q_{k \alpha \gamma} \partial_k G_{i j \alpha}\]</div>
+<p><strong>Note</strong> that the equations in the original papers on the atomistic Nye tensor method had a typo with indicies. This function has been verified as producing comparable results as the original calculation code used by the authors.</p>
+</div>
+</div>
+<div class="section" id="3.-Calculation-parameter-options">
+<h2>3. Calculation parameter options<a class="headerlink" href="#3.-Calculation-parameter-options" title="Permalink to this headline">¶</a></h2>
+<p>The strain predictions using this algorithm will vary depending on how some of the input parameters are set.</p>
+<div class="section" id="3.1.-Reference-state-selection">
+<h3>3.1. Reference state selection<a class="headerlink" href="#3.1.-Reference-state-selection" title="Permalink to this headline">¶</a></h3>
+<p>Ideally, the choice of reference state should correspond to a perfect bulk crystal at zero pressure. This reference will result in the calculation finding the elastic component of the strain as any plastic effects are ingored due to crystal symmetry translations. However, identifying the ideal reference state may be challenging for complex systems. Some possible issues being</p>
+<ul class="simple">
+<li><p>The reference state corresponds to a specific crystal structure. If the deformation leads to a phase transformation, then the atoms in question will have different strains depending on which reference phase is used for which atom.</p></li>
+<li><p>The matching algorithm pairs the current neighbor vectors to the reference ones based on angle. This assumes that the rotational component of the deformation is small, and may give poor predictions if the orientation of the two systems are not close.</p></li>
+<li><p>There is some ambiguity associated with defining the reference state for atoms that are part of a large crystal defect, such as grain and phase boundaries. The defects themselves can consist of atomic structures, or can be composed of amorphous regions. Thus, specifying the atoms as relative to a bulk crystal state may arguably not be correct.</p></li>
+</ul>
+<p>For these reasons, atomman allows for the reference state to be defined in one of two ways:</p>
+<ul class="simple">
+<li><p>The sets of p vectors can be directly specified for each atom. This is convenient for simple systems where a single bulk crystal can be used as the reference for all atoms. Alternatively, an algorithm could be used to determine the optimum crystal and orientation to use on an individual atom basis, then the associated p vectors can be fed in.</p></li>
+<li><p>The p vectors can be determined by supplying a base reference system that represents the current system at an earlier time, i.e. before a defect is inserted and/or deformations are applied. If the base reference system is a bulk single crystal, then this is effectively the same as specifying the individual p vectors for the crystal, but it computes these for you. Alternatively, for highly complex systems, specifying the base reference system amounts to estimating the elastic strain in the
+current system relative to the reference system.</p></li>
+</ul>
+</div>
+<div class="section" id="3.2.-Neighbor-cutoff">
+<h3>3.2. Neighbor cutoff<a class="headerlink" href="#3.2.-Neighbor-cutoff" title="Permalink to this headline">¶</a></h3>
+<p>The cutoff distance used for identifying the p/q vectors does influence the results. If the cutoff distance is too large, then the calculated strain for a given point will be averaged over a larger region. This could result in less pronounced strain peaks near defects. If the cutoff distance is too small, then the number of p/q vectors may be too small to give a good estimate of strain. From practical experience, a good cutoff seems to be one that encompasses the fewest number of neighbor shells
+necessary to capture 8 neighbor atoms. Be sure to place the cutoff roughly halfway between neighbor shells to help keep the number of neighbor atoms close to the same for deformed configurations. These are practical suggestions and not hard rules, so it is recommended to try a few different cutoffs to see how they affect predictions.</p>
+</div>
+<div class="section" id="3.3.-Angle-cutoff">
+<h3>3.3. Angle cutoff<a class="headerlink" href="#3.3.-Angle-cutoff" title="Permalink to this headline">¶</a></h3>
+<p>The <span class="math notranslate nohighlight">\(\theta_{max}\)</span> parameter can also influence the calculated strain properties. As the p-q matching algorithm is based on angles, the <span class="math notranslate nohighlight">\(\theta_{max}\)</span> parameter helps avoid false matches by ignoring q vectors oriented far from any p vectors. The choice of <span class="math notranslate nohighlight">\(\theta_{max}\)</span> has the biggest influence on deformations and defects with large rotational components. For guidance, the original choice for fcc is 27 degrees, which is close to half of the 60 degree angle between p vectors.</p>
+</div>
+</div>
+<div class="section" id="4.-Strain-class">
+<h2>4. Strain class<a class="headerlink" href="#4.-Strain-class" title="Permalink to this headline">¶</a></h2>
+<p>The Strain class provides a convenient and fast means of computing the various strain properties. In design, it offers an improvement over the old nye_tensor function in that:</p>
+<ul class="simple">
+<li><p>Constructing p_vectors from a reference system is now built in (rather than calling nye_tensor_p).</p></li>
+<li><p>The calculation functions have been rewritten using cython for about a 2x speedup.</p></li>
+<li><p>Each strain property is computed only as needed offering for additional speedup when not all properties are needed.</p></li>
+</ul>
+<p>Primary parameters</p>
+<ul class="simple">
+<li><p><strong>system</strong> (<em>atomman.System</em>) The atomic system to compute the per-atom strain properties and Nye tensor for.</p></li>
+<li><p><strong>neighbors</strong> (<em>atomman.NeighborList, optional</em>) The neighbor list associated with system to use. Either neighbors or cutoff must be given, or system must have a neighbors attribute.</p></li>
+<li><p><strong>cutoff</strong> (<em>float</em>) Cutoff distance for computing a neighbor list for system. Either neighbors or cutoff must be given, or system have a neighbors attribute.</p></li>
+<li><p><strong>theta_max</strong> (<em>float, optional</em>) The maximum theta angle in degrees to use when searching for matches between p vectors and q vectors. Optimum values are dependent on the crystal structure. Default value is 27, which is the original value used for fcc crystals.</p></li>
+</ul>
+<p>Reference state option 1: explicit p vectors</p>
+<ul class="simple">
+<li><p><strong>p_vectors</strong> (<em>array-like object, optional</em>) List(s) of radial distance vectors between each atom and its nearest neighbors in a perfect crystal setting. If one list of p_vectors is given, then it is applied to all atoms.</p></li>
+<li><p><strong>axes</strong> (<em>array-like object, optional</em>) 3x3 array of right-handed orthogonal axes to transform the given p vectors. Only needed if the orientation of the p vectors differs from the system’s orientation.</p></li>
+</ul>
+<p>Reference state option 2: reference system</p>
+<ul class="simple">
+<li><p><strong>basesystem</strong> (<em>atomman.System, optional</em>) A reference atomic system to use for constructing the p vectors.</p></li>
+<li><p><strong>baseneighbors</strong> (<em>atomman.NeighborList, optional</em>) The neighbor list associated with basesystem to use. If basesystem is given, then either baseneighbors or cutoff must be given, or basesystem must have a neighbors attribute.</p></li>
+</ul>
+<div class="section" id="4.1.-Load-systems">
+<h3>4.1. Load systems<a class="headerlink" href="#4.1.-Load-systems" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">base_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;atom_dump&#39;</span><span class="p">,</span> <span class="s1">&#39;files/fcc_Al_base.dump&#39;</span><span class="p">)</span>
+<span class="n">disl_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;atom_dump&#39;</span><span class="p">,</span> <span class="s1">&#39;files/fcc_Al_disl.dump&#39;</span><span class="p">)</span>
+
+<span class="n">alat</span> <span class="o">=</span> <span class="mf">4.05</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="4.2.-Initialize-strain-class">
+<h3>4.2. Initialize strain class<a class="headerlink" href="#4.2.-Initialize-strain-class" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Example #1: Give base and disl systems with a cutoff</span>
+<span class="n">strain</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">Strain</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="n">basesystem</span><span class="o">=</span><span class="n">base_system</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">)</span>
+<span class="n">strain</span><span class="o">.</span><span class="n">p_vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[ 0.        ,  2.86378576,  0.        ],
+       [-2.48011122,  1.43189288,  0.        ],
+       [ 2.48011122, -1.43189288,  0.        ],
+       [ 2.48011122,  1.43189288,  0.        ],
+       [ 1.65340748,  0.        , -2.33827128],
+       [-0.82670374, -1.43189288, -2.33827128],
+       [-0.82670374,  1.43189288, -2.33827128],
+       [ 0.        , -2.86378576,  0.        ],
+       [-2.48011122, -1.43189288,  0.        ],
+       [-1.65340748,  0.        ,  2.33827128],
+       [ 0.82670374,  1.43189288,  2.33827128],
+       [ 0.82670374, -1.43189288,  2.33827128]])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Example #2: Compute neighbors beforehand, and give p_vectors explicitly</span>
+
+<span class="c1"># Compute neighbors for current system</span>
+<span class="n">neighbors</span> <span class="o">=</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">neighborlist</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">)</span>
+
+<span class="c1"># Define p_vectors for fcc cubic (standard reference frame)</span>
+<span class="n">p_vectors</span> <span class="o">=</span> <span class="n">alat</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+                             <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span> <span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+                             <span class="p">[</span> <span class="mf">0.5</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">],</span>
+                             <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span> <span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">]])</span>
+
+<span class="c1"># Define the transformation axes</span>
+<span class="n">xaxis</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">yaxis</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">zaxis</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">axes_check</span><span class="p">([</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">])</span>
+
+<span class="n">strain</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">Strain</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">=</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">p_vectors</span><span class="o">=</span><span class="n">p_vectors</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">)</span>
+<span class="n">strain</span><span class="o">.</span><span class="n">p_vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[-1.65340558,  0.        ,  2.33826859],
+       [ 0.82670279,  1.43189123,  2.33826859],
+       [ 0.82670279, -1.43189123,  2.33826859],
+       [ 0.        , -2.86378246,  0.        ],
+       [ 2.48010836, -1.43189123,  0.        ],
+       [ 2.48010836,  1.43189123,  0.        ],
+       [ 0.        ,  2.86378246,  0.        ],
+       [-2.48010836,  1.43189123,  0.        ],
+       [-2.48010836, -1.43189123,  0.        ],
+       [ 1.65340558,  0.        , -2.33826859],
+       [-0.82670279, -1.43189123, -2.33826859],
+       [-0.82670279,  1.43189123, -2.33826859]])
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="4.3.-Class-properties">
+<h3>4.3. Class properties<a class="headerlink" href="#4.3.-Class-properties" title="Permalink to this headline">¶</a></h3>
+<p>All of the strain-related properties can be retrieved as class attributes. Each property is computed the first time that it is retrieved and the values are retained.</p>
+<ul class="simple">
+<li><p><strong>G</strong> is the strain correspondence tensor for each atom. As all the other properties depend on this, it will be first computed when any property is called.</p></li>
+<li><p><strong>strain</strong> is the strain tensor for each atom.</p></li>
+<li><p><strong>invariant1</strong> is the first strain invariant for each atom.</p></li>
+<li><p><strong>invariant2</strong> is the second strain invariant for each atom.</p></li>
+<li><p><strong>invariant3</strong> is the third strain invariant for each atom.</p></li>
+<li><p><strong>rotation</strong> is the rotation tensor for each atom.</p></li>
+<li><p><strong>angularvelocity</strong> is the angular velocity for each atom.</p></li>
+<li><p><strong>nye</strong> is the Nye tensor for each atom.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">s</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">strain</span><span class="o">.</span><span class="n">G</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;First call for G took&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">-</span><span class="n">s</span><span class="p">,</span> <span class="s1">&#39;seconds&#39;</span><span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">strain</span><span class="o">.</span><span class="n">G</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Second call for G took&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">-</span><span class="n">s</span><span class="p">,</span> <span class="s1">&#39;seconds&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">strain</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+First call for G took 3.795015573501587 seconds
+Second call for G took 0.0 seconds
+[[[ 9.99998842e-01 -6.52065142e-08 -5.86211320e-08]
+  [-1.08196712e-04  9.97999349e-01 -1.94600556e-03]
+  [ 8.50971890e-05  2.07595184e-03  1.00097862e+00]]
+
+ [[ 9.99998842e-01 -6.61154251e-08 -6.29769634e-08]
+  [-1.05914368e-04  9.97987653e-01 -1.97956797e-03]
+  [ 7.95194344e-05  2.03782456e-03  1.00096836e+00]]
+
+ [[ 9.99998842e-01 -6.56904838e-08 -6.07762374e-08]
+  [-1.07308439e-04  9.97994580e-01 -1.95945363e-03]
+  [ 8.23419310e-05  2.05716840e-03  1.00097375e+00]]
+
+ ...
+
+ [[ 9.99998313e-01  3.20052517e-06 -6.00119553e-07]
+  [ 8.99265087e-05  9.98118463e-01  1.91607768e-03]
+  [ 6.26711158e-05 -1.81836851e-03  1.00087732e+00]]
+
+ [[ 9.99998918e-01  1.91549000e-07 -7.28492610e-07]
+  [ 8.95165793e-05  9.98111963e-01  1.92753409e-03]
+  [ 6.18320365e-05 -1.80755118e-03  1.00086855e+00]]
+
+ [[ 9.99998925e-01  1.59876036e-07 -7.21262376e-07]
+  [ 8.63555184e-05  9.98108179e-01  1.95376192e-03]
+  [ 5.63474077e-05 -1.76849561e-03  1.00085334e+00]]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">i</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;properties for atom </span><span class="si">{i}</span><span class="s1">:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;G =&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">strain</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;strain =&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">strain</span><span class="o">.</span><span class="n">strain</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;invariant1 =&#39;</span><span class="p">,</span> <span class="n">strain</span><span class="o">.</span><span class="n">invariant1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;invariant2 =&#39;</span><span class="p">,</span> <span class="n">strain</span><span class="o">.</span><span class="n">invariant2</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;invariant3 =&#39;</span><span class="p">,</span> <span class="n">strain</span><span class="o">.</span><span class="n">invariant3</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rotation =&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">strain</span><span class="o">.</span><span class="n">rotation</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;angularvelocity =&#39;</span><span class="p">,</span> <span class="n">strain</span><span class="o">.</span><span class="n">angularvelocity</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;nye =&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">strain</span><span class="o">.</span><span class="n">nye</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+properties for atom 50:
+G =
+[[ 9.99998844e-01 -6.69765111e-08 -7.91966166e-08]
+ [-9.31157725e-05  9.97950746e-01 -2.11905039e-03]
+ [ 5.79882631e-05  1.88665063e-03  1.00091457e+00]]
+strain =
+[[ 1.15574139e-06  4.65913745e-05 -2.89545333e-05]
+ [ 4.65913745e-05  2.04925444e-03  1.16199882e-04]
+ [-2.89545333e-05  1.16199882e-04 -9.14566547e-04]]
+invariant1 = 0.0011358436297309593
+invariant2 = -1.889379681164363e-06
+invariant3 = -2.227908990769343e-12
+rotation =
+[[ 0.00000000e+00 -4.65243980e-05  2.90337299e-05]
+ [ 4.65243980e-05  0.00000000e+00  2.00285051e-03]
+ [-2.90337299e-05 -2.00285051e-03  0.00000000e+00]]
+angularvelocity = 0.002003601166364519
+nye =
+[[ 2.74910901e-12  3.53212874e-12 -6.31473821e-12]
+ [ 6.05100668e-13  3.60957916e-12  2.03563634e-12]
+ [-2.03543889e-13 -2.93069820e-12 -1.46702428e-12]]
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="4.4.-Save-to-system">
+<h3>4.4. Save to system<a class="headerlink" href="#4.4.-Save-to-system" title="Permalink to this headline">¶</a></h3>
+<p>The save_to_system() method will calculate the properties, if needed, and save the values as per-atom properties of the current system.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><p><strong>properties</strong> (<em>str or list, optional</em>) One or more properties. If not given, will include strain, invariant1, invariant2, invariant3, angularvelocity and nye.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">strain</span><span class="o">.</span><span class="n">save_to_system</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">angularvelocity</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[0.00201216 0.00200979 0.00200945 ... 0.00186799 0.00186834 0.00186185]
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="4.5.-asdict">
+<h3>4.5. asdict<a class="headerlink" href="#4.5.-asdict" title="Permalink to this headline">¶</a></h3>
+<p>The asdict() method will return the computed properties in the form of a dictionary. This directly corresponds to the results of calling the old nye_tensor() function except that the property names have changed slightly.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><p><strong>properties</strong> (<em>str or list, optional</em>) One or more properties. If not given, will include strain, invariant1, invariant2, invariant3, angularvelocity and nye.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">straindict</span> <span class="o">=</span> <span class="n">strain</span><span class="o">.</span><span class="n">asdict</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">straindict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+dict_keys([&#39;strain&#39;, &#39;invariant1&#39;, &#39;invariant2&#39;, &#39;invariant3&#39;, &#39;angularvelocity&#39;, &#39;nye&#39;])
+</pre></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="5.-Plotting">
+<h2>5. Plotting<a class="headerlink" href="#5.-Plotting" title="Permalink to this headline">¶</a></h2>
+<p>All of the properties computed with the Strain class are done so on a per-atom basis, but they represent discrete measurements of continuum properties. The atomman.plot.interpolate_contour() function interpolates the measured discrete per-atom values into a continuum contour plot estimate. This provides a mapping of the per-atom properties as pseudo-continuum properties.</p>
+<p>Basic parameters</p>
+<ul class="simple">
+<li><p><strong>system</strong> (<em>atomman.System</em>) The system with the per-atom property that you want to plot.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) The name of the per-atom property that you want to plot.</p></li>
+<li><p><strong>property</strong> (<em>array-like object, optional</em>) Values for the per-atom property to plot. If not given, values will be taken as the “name” property of system.</p></li>
+<li><p><strong>index</strong> (<em>int or tuple, optional</em>) Specifies which component of a multidimensional property to plot. Not needed if the property is scalar.</p></li>
+<li><p><strong>magnitude</strong> (<em>bool, optional</em>) If True, plots the per-atom magnitude of a vector property. Cannot be combined with index. Default value is False.</p></li>
+</ul>
+<p>Plot orientation and range limits</p>
+<ul class="simple">
+<li><p><strong>plotxaxis</strong> (<em>str or array-like object, optional</em>) Indicates the Cartesian direction associated with the system’s atomic coordinates to align with the plotting x-axis. Values are either 3D unit vectors, or strings ‘x’, ‘y’, or ‘z’ for the Cartesian axes directions. plotxaxis and plotyaxis must be orthogonal. Default value is ‘x’ = [1, 0, 0].</p></li>
+<li><p><strong>plotyaxis</strong> (<em>str or array-like object, optional</em>) Indicates the Cartesian direction associated with the system’s atomic coordinates to align with the plotting y-axis. Values are either 3D unit vectors, or strings ‘x’, ‘y’, or ‘z’ for the Cartesian axes directions. plotxaxis and plotyaxis must be orthogonal. Default value is ‘y’ = [0, 1, 0].</p></li>
+<li><p><strong>xlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting x-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the plotting axis.</p></li>
+<li><p><strong>ylim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting y-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the plotting axis.</p></li>
+<li><p><strong>zlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates normal to the plotting axes (i.e. plotxaxis X plotyaxis) to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the axis.</p></li>
+</ul>
+<p>Interpolation grid size</p>
+<ul class="simple">
+<li><p><strong>xbins</strong> (<em>int, optional</em>) Specifies the number of interpolation bins to use along the plotting x-axis. Default value is 200.</p></li>
+<li><p><strong>ybins</strong> (<em>int, optional</em>) Specifies the number of interpolation bins to use along the plotting y-axis. Default value is 200.</p></li>
+</ul>
+<p>Additional options</p>
+<ul class="simple">
+<li><p><strong>dots</strong> (<em>bool, optional</em>) If True, then the positions of the atoms are shown as circles. Default value is True.</p></li>
+<li><p><strong>czero</strong> (<em>bool, optional</em>) If True, the range of property values will be centered around zero, i.e. cmax = -cmin. If False, cmax and cmin will be independently selected using the property values. Default value is True.</p></li>
+<li><p><strong>save</strong> (<em>bool, optional</em>) If True, the generated plot will be saved to “name.png”. Default value is False.</p></li>
+<li><p><strong>show</strong> (<em>bool, optional</em>) If True, matplotlib.pyplot.show() is called. Default value is True.</p></li>
+<li><p><strong>length_unit</strong> (<em>str, optional</em>) The units of length to use for the plotting x- and y-axes. Default value is ‘angstrom’.</p></li>
+<li><p><strong>property_unit</strong> (<em>str or None, optional</em>) The units to use for the property value being plotted. Default value is None, in which no unit conversion is applied.</p></li>
+<li><p><strong>cmap</strong> (<em>str, optional</em>) The name of the matplotlib colormap to use. Default value is ‘jet’.</p></li>
+</ul>
+<p>Returns</p>
+<ul class="simple">
+<li><p><strong>intsum</strong> (<em>float</em>) The area integrated sum of the property over the plotted region.</p></li>
+<li><p><strong>avsum</strong> (<em>float</em>) The average property value taken across all plotting bins.</p></li>
+</ul>
+<div class="section" id="5.1.-Plot-settings">
+<h3>5.1. Plot settings<a class="headerlink" href="#5.1.-Plot-settings" title="Permalink to this headline">¶</a></h3>
+<p>The plotting function has a large number of parameters that can alter and affect the final plot. Here, a number of the common values are pulled out and defined separately for clarity.</p>
+<p>Notes:</p>
+<ul class="simple">
+<li><p>The interpolation scheme does not do extrapolation, so the plotting range (xlim and ylim) must be inside the range of atomic positions along the two plotting directions.</p></li>
+<li><p>zlim controls the position and thickness of the slice of atoms normal to the plotting axes that are included in the interpolation. The interpolation only considers the 2D positions relative to the plotting axes. If the strain is not invariant to the normal direction, then atoms with the same or similar 2D plotting positions can have different values which will affect the interpolation. For those cases, the slice should correspond to roughly 1 periodic thickness.</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">settings</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">settings</span><span class="p">[</span><span class="s1">&#39;plotxaxis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Set the plotting x-axis to be aligned with the system&#39;s Cartesian y-axis</span>
+<span class="n">settings</span><span class="p">[</span><span class="s1">&#39;plotyaxis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># Set the plotting y-axis to be aligned with the system&#39;s Cartesian z-axis</span>
+<span class="n">settings</span><span class="p">[</span><span class="s1">&#39;xlim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>    <span class="c1"># Sets the range limits along the plotting x-axis</span>
+<span class="n">settings</span><span class="p">[</span><span class="s1">&#39;ylim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>    <span class="c1"># Sets the range limits along the plotting y-axis</span>
+<span class="c1">#settings[&#39;zlim&#39;] = ()           # Restricts the size of the out-of-plane slice over which atoms are interpolated from.</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="5.2.-Examples">
+<h3>5.2. Examples<a class="headerlink" href="#5.2.-Examples" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Make contour plots for the strain invariants</span>
+<span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;invariant1&#39;</span><span class="p">,</span> <span class="n">dots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
+<span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;invariant2&#39;</span><span class="p">,</span> <span class="n">dots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
+<span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;invariant3&#39;</span><span class="p">,</span> <span class="n">dots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.8._Strain_class_22_0.png" src="../_images/tutorial_4.8._Strain_class_22_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.8._Strain_class_22_1.png" src="../_images/tutorial_4.8._Strain_class_22_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.8._Strain_class_22_2.png" src="../_images/tutorial_4.8._Strain_class_22_2.png" />
+</div>
+</div>
+</div>
+<div class="section" id="5.3.-Nye-tensor-plots">
+<h3>5.3. Nye tensor plots<a class="headerlink" href="#5.3.-Nye-tensor-plots" title="Permalink to this headline">¶</a></h3>
+<p>The Nye tensor provides information about the dislocation content within a system. For a single straight dislocation, the first component of the Nye tensor should correspond to the dislocation’s line direction. The second component then determines if the plots are for the screw component, the edge component, or the slip-plane normal component.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># plot Nye tensor components related to dislocations</span>
+<span class="n">intsum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">intsum</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;nye&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
+<span class="n">intsum</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;nye&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
+<span class="n">intsum</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">avsum</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;nye&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.8._Strain_class_24_0.png" src="../_images/tutorial_4.8._Strain_class_24_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.8._Strain_class_24_1.png" src="../_images/tutorial_4.8._Strain_class_24_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.8._Strain_class_24_2.png" src="../_images/tutorial_4.8._Strain_class_24_2.png" />
+</div>
+</div>
+<p>The area integrated sum (intsum) for the different Nye tensor plots provides an estimate of the cumulative Burgers vector of dislocations in the plotted region.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">burgers</span> <span class="o">=</span> <span class="n">alat</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mf">0.5</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;actual Burgers vector:    [</span><span class="si">{burgers[0]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers[1]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers[2]: 7.4f}</span><span class="s1">]&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;estimated Burgers vector: [</span><span class="si">{intsum[0]: 7.4f}</span><span class="s1">, </span><span class="si">{intsum[1]: 7.4f}</span><span class="s1">, </span><span class="si">{intsum[2]: 7.4f}</span><span class="s1">]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+actual Burgers vector:    [ 0.0000,  2.8638,  0.0000]
+estimated Burgers vector: [-0.0041,  2.9144,  0.0015]
+</pre></div></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction to atomman: Strain class</a><ul>
+<li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
+<li><a class="reference internal" href="#2.-Theory">2. Theory</a><ul>
+<li><a class="reference internal" href="#2.1.-Strain-correspodence-tensor">2.1. Strain correspodence tensor</a></li>
+<li><a class="reference internal" href="#2.2.-Derived-properties">2.2. Derived properties</a></li>
+<li><a class="reference internal" href="#2.3.-Nye-tensor">2.3. Nye tensor</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#3.-Calculation-parameter-options">3. Calculation parameter options</a><ul>
+<li><a class="reference internal" href="#3.1.-Reference-state-selection">3.1. Reference state selection</a></li>
+<li><a class="reference internal" href="#3.2.-Neighbor-cutoff">3.2. Neighbor cutoff</a></li>
+<li><a class="reference internal" href="#3.3.-Angle-cutoff">3.3. Angle cutoff</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#4.-Strain-class">4. Strain class</a><ul>
+<li><a class="reference internal" href="#4.1.-Load-systems">4.1. Load systems</a></li>
+<li><a class="reference internal" href="#4.2.-Initialize-strain-class">4.2. Initialize strain class</a></li>
+<li><a class="reference internal" href="#4.3.-Class-properties">4.3. Class properties</a></li>
+<li><a class="reference internal" href="#4.4.-Save-to-system">4.4. Save to system</a></li>
+<li><a class="reference internal" href="#4.5.-asdict">4.5. asdict</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#5.-Plotting">5. Plotting</a><ul>
+<li><a class="reference internal" href="#5.1.-Plot-settings">5.1. Plot settings</a></li>
+<li><a class="reference internal" href="#5.2.-Examples">5.2. Examples</a></li>
+<li><a class="reference internal" href="#5.3.-Nye-tensor-plots">5.3. Nye tensor plots</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="4.7._Semidiscrete_variational_Peierls-Nabarro_model.html"
+                        title="previous chapter">Introduction to atomman: Semidiscrete variational Peierls-Nabarro model</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../atomman.html"
+                        title="next chapter">atomman package</a></p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../atomman.html" title="atomman package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="4.7._Semidiscrete_variational_Peierls-Nabarro_model.html" title="Introduction to atomman: Semidiscrete variational Peierls-Nabarro model"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

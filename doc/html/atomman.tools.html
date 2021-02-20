@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>tools &#8212; atomman 1.3.5 documentation</title>
+    <title>tools &#8212; atomman 1.3.7 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="atomman.unitconvert.html" title="unitconvert"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" accesskey="U">atomman package</a> &#187;</li> 
       </ul>
     </div>  
@@ -69,15 +69,15 @@ item.</p>
 
 <dl class="function">
 <dt id="atomman.tools.atomic_mass">
-<code class="sig-prename descclassname">atomman.tools.</code><code class="sig-name descname">atomic_mass</code><span class="sig-paren">(</span><em class="sig-param">term</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.tools.atomic_mass" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the atomic mass of an element or isotope.  Isotopes are specified
-using symbols followed by -#, where # is the mass number (eg. ‘He-3’).
-Deuterium and tritium can alternatively be specified using D and T
-respectively.  Values obtained from NIST reference database:
-<a class="reference external" href="http://www.nist.gov/pml/data/comp.cfm">http://www.nist.gov/pml/data/comp.cfm</a></p>
+<code class="sig-prename descclassname">atomman.tools.</code><code class="sig-name descname">atomic_mass</code><span class="sig-paren">(</span><em class="sig-param">atomic_info</em>, <em class="sig-param">mass_number=None</em>, <em class="sig-param">prompt=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.tools.atomic_mass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns either the median standard atomic weight for an element or the relative
+atomic mass for an isotope.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>term</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The atomic number or atomic/isotope symbol to retrieve the mass for.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atomic_info</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The atomic symbol or number identifying the element/isotopes.</p></li>
+<li><p><strong>mass_number</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – An isotope mass number.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The average standard atomic weight of an element or the relative
@@ -91,11 +91,11 @@ atomic mass of an isotope.</p>
 
 <dl class="function">
 <dt id="atomman.tools.atomic_number">
-<code class="sig-prename descclassname">atomman.tools.</code><code class="sig-name descname">atomic_number</code><span class="sig-paren">(</span><em class="sig-param">symbol</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.tools.atomic_number" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">atomman.tools.</code><code class="sig-name descname">atomic_number</code><span class="sig-paren">(</span><em class="sig-param">atomic_symbol</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.tools.atomic_number" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the corresponding atomic number for a given atomic symbol.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>symbol</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – An atomic symbol.</p>
+<dd class="field-odd"><p><strong>atomic_symbol</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – An atomic symbol.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The corresponding atomic number.</p>
@@ -108,11 +108,11 @@ atomic mass of an isotope.</p>
 
 <dl class="function">
 <dt id="atomman.tools.atomic_symbol">
-<code class="sig-prename descclassname">atomman.tools.</code><code class="sig-name descname">atomic_symbol</code><span class="sig-paren">(</span><em class="sig-param">number</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.tools.atomic_symbol" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">atomman.tools.</code><code class="sig-name descname">atomic_symbol</code><span class="sig-paren">(</span><em class="sig-param">atomic_number</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.tools.atomic_symbol" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the corresponding atomic symbol for a given atomic number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>number</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – An atomic number.</p>
+<dd class="field-odd"><p><strong>atomic_number</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – An atomic number.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The corresponding atomic symbol.</p>
@@ -737,12 +737,12 @@ relative to the primitive cell</p>
         <li class="right" >
           <a href="atomman.unitconvert.html" title="unitconvert"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>
