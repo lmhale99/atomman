@@ -9,8 +9,7 @@ import subprocess as sp
 from . import Log, LammpsError
 
 def run(lammps_command, script_name, mpi_command=None,
-        restart_script_name=None, return_style='object', logfile='log.lammps',
-        flatten=None):
+        restart_script_name=None, logfile='log.lammps'):
     """
     Calls LAMMPS to run. Returns data model containing LAMMPS output.
     
@@ -26,29 +25,15 @@ def run(lammps_command, script_name, mpi_command=None,
     restart_script_name : str or None, optional
         Alternative script to use for restarting if logfile already exists.
         Default value is None (no restarting).
-    return_style :str, optional
-        The format for the returned data. Default value is 'object'.
-        'object' -- returns an atomman.lammps.Log object.
-        'model' -- returns a DataModelDict.
     logfile : str, optional
         Specifies the path to the logfile to write to.  Default value is
         'log.lammps'.
-    flatten : str or None, optional
-        Specifies if the simulations are to be flattened, and which flatten
-        style to use:
-        - None does not flatten the simulations (default).
-        - 'first' uses the values from the earliest simulation.
-        - 'last' uses the values from the latest simulation.
     
     Returns
     -------
     atomman.lammps.Log or DataModelDict
         The content either as a Log object or in data model format.
     """
-    
-    assert return_style in ['object', 'model'], 'Invalid return_style value'
-    if flatten is not None:
-        assert flatten in ['first', 'last'], 'Invalid flatten value'
     
     # Check if restart_script_name is given
     if restart_script_name is not None:
@@ -121,10 +106,4 @@ def run(lammps_command, script_name, mpi_command=None,
     # Read in from current logfile
     log.read(logfile)
     
-    if flatten is not None:
-        log.flatten(flatten)
-    
-    if return_style == 'model':
-        return log.model()
-    else:
-        return log
+    return log
