@@ -16,6 +16,7 @@ Classes
    atomman.defect.Dislocation
    atomman.defect.DifferentialDisplacement
    atomman.defect.SDVPN
+   atomman.defect.Strain
 
 Functions and attributes
 ------------------------

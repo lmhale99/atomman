@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>BasePath &#8212; atomman 1.3.7 documentation</title>
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="lammps" href="atomman.lammps.html" />
+    <link rel="prev" title="ISMPath" href="atomman.mep.ISMPath.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atomman.lammps.html" title="lammps"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="atomman.mep.ISMPath.html" title="ISMPath"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="atomman.mep.html" accesskey="U">mep</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="basepath">
+<h1>BasePath<a class="headerlink" href="#basepath" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="atomman.mep.BasePath">
+<em class="property">class </em><code class="sig-prename descclassname">atomman.mep.</code><code class="sig-name descname">BasePath</code><span class="sig-paren">(</span><em class="sig-param">coord</em>, <em class="sig-param">energyfxn</em>, <em class="sig-param">gradientfxn='cdiff'</em>, <em class="sig-param">gradientkwargs=None</em>, <em class="sig-param">integratorfxn='rk'</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.mep.BasePath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Generic class representing an energy path.</p>
+<dl class="method">
+<dt id="atomman.mep.BasePath.arccoord">
+<em class="property">property </em><code class="sig-name descname">arccoord</code><a class="headerlink" href="#atomman.mep.BasePath.arccoord" title="Permalink to this definition">¶</a></dt>
+<dd><p>The arc length coordinates for each point along the path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.mep.BasePath.coord">
+<em class="property">property </em><code class="sig-name descname">coord</code><a class="headerlink" href="#atomman.mep.BasePath.coord" title="Permalink to this definition">¶</a></dt>
+<dd><p>The coordinates for each point along the path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.mep.BasePath.energy">
+<code class="sig-name descname">energy</code><span class="sig-paren">(</span><em class="sig-param">coord=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.mep.BasePath.energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates energy values associated with either the path points or
+given coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>coord</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – Coordinates to evaluate the energies at.  If not given, will use
+the object’s coord values.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The evaluated energies.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.NDArray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.mep.BasePath.energyfxn">
+<em class="property">property </em><code class="sig-name descname">energyfxn</code><a class="headerlink" href="#atomman.mep.BasePath.energyfxn" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function for evaluating the energy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.mep.BasePath.force">
+<em class="property">property </em><code class="sig-name descname">force</code><a class="headerlink" href="#atomman.mep.BasePath.force" title="Permalink to this definition">¶</a></dt>
+<dd><p>The computed force associated with moving along the path at each point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.mep.BasePath.grad_energy">
+<code class="sig-name descname">grad_energy</code><span class="sig-paren">(</span><em class="sig-param">coord=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.mep.BasePath.grad_energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates the gradient of the energy associated with either the path
+points or given coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>coord</strong> (<em>array-like object</em><em>, </em><em>optional</em>) – Coordinates to evaluate the energy gradients at.  If not given,
+will use the object’s coord values.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The evaluated energies.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.NDArray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.mep.BasePath.gradientfxn">
+<em class="property">property </em><code class="sig-name descname">gradientfxn</code><a class="headerlink" href="#atomman.mep.BasePath.gradientfxn" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function for evaluating the energy gradients</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.mep.BasePath.gradientkwargs">
+<em class="property">property </em><code class="sig-name descname">gradientkwargs</code><a class="headerlink" href="#atomman.mep.BasePath.gradientkwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>The keyword arguments to use when calling gradientfxn</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.mep.BasePath.integratorfxn">
+<em class="property">property </em><code class="sig-name descname">integratorfxn</code><a class="headerlink" href="#atomman.mep.BasePath.integratorfxn" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function to use for integrating minimization steps</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.mep.BasePath.plot_energy">
+<code class="sig-name descname">plot_energy</code><span class="sig-paren">(</span><em class="sig-param">energy_unit=None</em>, <em class="sig-param">length_unit=None</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.mep.BasePath.plot_energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a plot of the energies along the path as a function of the
+arc coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>energy_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – If given, the energy values will be converted from atomman’s
+working units to the specified units.  Default value of None will
+do no conversions, which is useful if the energyfxn is not reporting
+in atomman’s working units.</p></li>
+<li><p><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – If given, the arc coordinates will be converted from atomman’s
+working units to the specified units.  Default value of None will
+do no conversions, which is useful if the coords are not given
+in atomman’s working units.</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib.pyplot.axis</em>) – A pre-existing plotting axis.  Allows for more control and the
+use of subplots.</p></li>
+<li><p><strong>**kwargs</strong> (<em>any</em><em>, </em><em>optional</em>) – All additional keyword arguments will be passed to
+matplotlib.pyplot.figure().</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The generated figure allowing for further modifications.  Returned
+if ax is None.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib.pyplot.figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.mep.BasePath.plot_force">
+<code class="sig-name descname">plot_force</code><span class="sig-paren">(</span><em class="sig-param">force_unit=None</em>, <em class="sig-param">length_unit=None</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.mep.BasePath.plot_force" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a plot of the force to move along the path as a function of the
+arc coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>force_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – If given, the force values will be converted from atomman’s
+working units to the specified units.  Default value of None will
+do no conversions, which is useful if the energyfxn is not reporting
+in atomman’s working units.</p></li>
+<li><p><strong>length_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – If given, the arc coordinates will be converted from atomman’s
+working units to the specified units.  Default value of None will
+do no conversions, which is useful if the coords are not given
+in atomman’s working units.</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib.pyplot.axis</em>) – A pre-existing plotting axis.  Allows for more control and the
+use of subplots.</p></li>
+<li><p><strong>**kwargs</strong> (<em>any</em><em>, </em><em>optional</em>) – All additional keyword arguments will be passed to
+matplotlib.pyplot.figure().</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The generated figure allowing for further modifications.  Returned
+if ax is None.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib.pyplot.figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.mep.BasePath.relax">
+<code class="sig-name descname">relax</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.mep.BasePath.relax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform multiple relaxation and/or climb steps until either the
+maximum coordinate displacement per step drops below a tolerance or
+the maximum number of steps is reached.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>newpath</strong> – A Path with coordinates evolved forward from the relaxation.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.mep.BasePath.step">
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.mep.BasePath.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single relaxation step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>newpath</strong> – A Path with coordinates evolved forward by one timestep.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.mep.BasePath.unittangent">
+<em class="property">property </em><code class="sig-name descname">unittangent</code><a class="headerlink" href="#atomman.mep.BasePath.unittangent" title="Permalink to this definition">¶</a></dt>
+<dd><p>The tangent vectors along the path at each point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.NDArray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="atomman.mep.ISMPath.html"
+                        title="previous chapter">ISMPath</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="atomman.lammps.html"
+                        title="next chapter">lammps</a></p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atomman.lammps.html" title="lammps"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="atomman.mep.ISMPath.html" title="ISMPath"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="atomman.mep.html" >mep</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

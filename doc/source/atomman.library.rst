@@ -1,10 +1,12 @@
 library
 =======
 
-Functions and attributes
-------------------------
+Classes
+-------
 
-.. automodule:: atomman.library
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. toctree::
+   :maxdepth: 1
+   
+   atomman.library.Database
+   atomman.library.CrystalPrototype
+   atomman.library.RelaxedCrystal

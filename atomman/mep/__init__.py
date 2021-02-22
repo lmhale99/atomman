@@ -3,6 +3,8 @@ from .BasePath import BasePath
 
 from .ISMPath import ISMPath
 
+__all__ = ['gradient', 'integrator', 'BasePath', 'ISMPath', 'create_path']
+
 def create_path(coord, energyfxn, style='ISM', gradientfxn='cdiff',
                 gradientkwargs=None, integratorfxn='rk'):
     """
