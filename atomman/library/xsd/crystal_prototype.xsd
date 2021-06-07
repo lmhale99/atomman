@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="unqualified">
+  <xsd:element name="crystal-prototype">
+    <xsd:complexType>
+      <xsd:sequence>
+        
+        <!-- Alternate identifiers -->
+        <xsd:element name="key" type="xsd:string"/>
+        <xsd:element name="id" type="xsd:string"/>
+        <xsd:element name="name" type="xsd:string"/>
+        <xsd:element name="prototype" type="xsd:string"/>
+        <xsd:element name="Pearson-symbol" type="xsd:string"/>
+        <xsd:element name="Strukturbericht"  minOccurs="0" maxOccurs="1" type="xsd:string"/>
+        
+        <!-- Space group details -->
+        <xsd:element name="space-group">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="number" type="xsd:integer"/>
+              <xsd:element name="Hermann-Maguin" type="xsd:string"/>
+              <xsd:element name="Schoenflies" type="xsd:string"/>
+              <xsd:element name="Wykoff" minOccurs="1" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="letter" type="xsd:string"/>
+                    <xsd:element name="multiplicity" type="xsd:integer"/>
+                   </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+             </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        
+        <!-- System info -->
+        <xsd:element name="system-info" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="family" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+              <xsd:element name="parent_key" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+              <xsd:element name="artifact" minOccurs="0" maxOccurs="1">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="file" type="xsd:string"/>
+                    <xsd:element name="format" type="xsd:string"/>
+                    <xsd:element name="load_options" type="xsd:string"/>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="symbol" minOccurs="0" maxOccurs="unbounded" type="xsd:string"/>
+              <xsd:element name="composition" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+              <xsd:element name="cell" minOccurs="0" maxOccurs="1">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="crystal-family" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+                    <xsd:element name="natypes" minOccurs="0" maxOccurs="1" type="xsd:integer"/>
+                    <xsd:element name="a" minOccurs="0" maxOccurs="1" type="xsd:float"/>
+                    <xsd:element name="b" minOccurs="0" maxOccurs="1" type="xsd:float"/>
+                    <xsd:element name="c" minOccurs="0" maxOccurs="1" type="xsd:float"/>
+                    <xsd:element name="alpha" minOccurs="0" maxOccurs="1" type="xsd:float"/>
+                    <xsd:element name="beta" minOccurs="0" maxOccurs="1" type="xsd:float"/>
+                    <xsd:element name="gamma" minOccurs="0" maxOccurs="1" type="xsd:float"/>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+
+        <!-- Atomic system -->
+        <xsd:element name="atomic-system">
+          <xsd:complexType>
+            <xsd:sequence>
+              
+              <!-- Atomic system box -->
+              <xsd:element name="box">
+                <xsd:complexType>
+                  <xsd:sequence>
+                  
+                    <xsd:element name="avect">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="value" minOccurs="3" maxOccurs="3" type="xsd:float"/>
+                          <xsd:element name="unit" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="bvect">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="value" minOccurs="3" maxOccurs="3" type="xsd:float"/>
+                          <xsd:element name="unit" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="cvect">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="value" minOccurs="3" maxOccurs="3" type="xsd:float"/>
+                          <xsd:element name="unit" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="origin">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="value" minOccurs="3" maxOccurs="3" type="xsd:float"/>
+                          <xsd:element name="unit" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              
+              <!-- pbc and symbols -->
+              <xsd:element name="periodic-boundary-condition" minOccurs="3" maxOccurs="3" type="xsd:boolean"/>
+              <xsd:element name="atom-type-symbol" minOccurs="1" maxOccurs="unbounded" type="xsd:string"/>
+              
+              <!-- Atomic system atoms -->
+              <xsd:element name="atoms">
+                <xsd:complexType>
+                  <xsd:sequence>
+                  
+                    <xsd:element name="natoms" type="xsd:integer"/>
+                    <xsd:element name="property" minOccurs="2" maxOccurs="unbounded">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="name" type="xsd:string"/>
+                          
+                          <xsd:element name="data">
+                            <xsd:complexType>
+                              <xsd:sequence>
+                                <xsd:element name="value" minOccurs="1" maxOccurs="unbounded"/>
+                                <xsd:element name="shape" minOccurs="0" maxOccurs="unbounded" type="xsd:integer"/>
+                                <xsd:element name="unit" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+                              </xsd:sequence>
+                            </xsd:complexType>
+                          </xsd:element>
+                          
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

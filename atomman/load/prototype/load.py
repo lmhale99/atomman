@@ -1,15 +1,14 @@
 # coding: utf-8
  
 # atomman imports
-from .. import load_system_model
 from ...library import Database
 from ...tools import identifyfamily, screen_input
 
-def load(id=None, key=None, name=None, prototype=None,
+def load(name=None, id=None, key=None, commonname=None, prototype=None,
          pearson=None, strukturbericht=None, sg_number=None,
-         sg_hm=None, sg_schoenflies=None, keyword=None,
+         sg_hm=None, sg_schoenflies=None, 
          a=None, b=None, c=None, alpha=None, beta=None, gamma=None, symbols=None,
-         database=None, localpath=None, local=True, remote=True, verbose=False):
+         database=None, local=True, remote=True, prompt=True, verbose=False):
     """
     Loads a crystal prototype record from the library. If multiple matches
     are found based on inputs a selection menu will appear.
@@ -22,7 +21,7 @@ def load(id=None, key=None, name=None, prototype=None,
         UUID4 key.
     name : str or list, optional
         Common name(s) to limit the search by.
-    prototype : str or list, optionypeal
+    prototype : str or list, optional
         Prototype identifying composition(s) to limit the search by.
     pearson : str or list, optional
         The Pearson symbol(s) to limit the search by.
@@ -69,15 +68,16 @@ def load(id=None, key=None, name=None, prototype=None,
         A pre-defined Database object to use.  If not given, will initialize
         a new Database object.  Passing in a database can save time if multiple
         calls are made for the same record type. 
-    localpath : str, optional
-        The local library path to use when initializing a new Database.  IF not
-        given, will use the default localpath.  Ignored if database is given. 
     local : bool, optional
         Indicates if the Database object is to look for local records.  Default
         is True.  Ignored if database is given.
     remote : bool, optional
         Indicates if the Database object is to look for remote records.  Default
         is True.  Ignored if database is given.
+    prompt : bool
+        If prompt=True (default) then a screen input will ask for a selection
+        if multiple matching potentials are found.  If prompt=False, then an
+        error will be thrown if multiple matches are found.
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
@@ -90,16 +90,14 @@ def load(id=None, key=None, name=None, prototype=None,
 
     # Create Database object and load if needed
     if database is None:
-        if local is True:
-            database = Database(load='crystal_prototype', localpath=localpath,
-                                local=local, remote=remote, verbose=verbose)
-        else:
-            database = Database(local=local, remote=remote, verbose=verbose)
+        database = Database()
     
     # Get crystal prototype record
-    prototype = database.get_crystal_prototype(id=id, key=key, name=name, prototype=prototype,
-         pearson=pearson, strukturbericht=strukturbericht, sg_number=sg_number,
-         sg_hm=sg_hm, sg_schoenflies=sg_schoenflies, keyword=keyword, verbose=verbose)
+    prototype = database.get_crystal_prototype(local=local, remote=remote, name=name,
+                            id=id, key=key, commonname=commonname, prototype=prototype,
+                            pearson=pearson, strukturbericht=strukturbericht,
+                            sg_number=sg_number, sg_hm=sg_hm, sg_schoenflies=sg_schoenflies,
+                            prompt=prompt, verbose=verbose)
     
     # Retrieve unit cell information and set symbols
     ucell = prototype.ucell

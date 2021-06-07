@@ -1,2 +1,2 @@
 # coding: utf-8
-from potentials import PotentialLAMMPS as Potential
+from potentials.record import PotentialLAMMPS as Potential
