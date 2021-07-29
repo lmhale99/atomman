@@ -821,11 +821,13 @@ class GammaSurface(object):
         a2vect = np.asarray(a2vect)
 
         # Generate grids of a1, a2 values from numx, numy
-        x_grid, y_grid = np.meshgrid(np.linspace(0, 1, numx),
-                                     np.linspace(0, 1, numy))
+        xvals = np.linspace(0, 1, numx)
+        yvals = np.linspace(0, 1, numy)
+        x_grid, y_grid = np.meshgrid(xvals, yvals)
+        x_gridc, y_gridc = np.meshgrid(xvals[:-1], yvals[:-1])
         
         # Generate grid of values either with or without interpolation
-        C = self.E_gsf(a1=x_grid, a2=y_grid, a1vect=a1vect, a2vect=a2vect, smooth=smooth)
+        C = self.E_gsf(a1=x_gridc, a2=y_gridc, a1vect=a1vect, a2vect=a2vect, smooth=smooth)
         
         # Convert units of C using energyperarea_unit
         C = uc.get_in_units(C, energyperarea_unit)
