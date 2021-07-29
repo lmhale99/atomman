@@ -90,7 +90,7 @@ def load(name=None, id=None, key=None, commonname=None, prototype=None,
 
     # Create Database object and load if needed
     if database is None:
-        database = Database()
+        database = Database.Database()
     
     # Get crystal prototype record
     prototype = database.get_crystal_prototype(local=local, remote=remote, name=name,

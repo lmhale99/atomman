@@ -1,4 +1,6 @@
 from copy import deepcopy
+
+# https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
 
 from datamodelbase.record import Record
@@ -22,7 +24,7 @@ class CrystalPrototype(Record):
 
     @property
     def xsd_filename(self):
-        return ('atomman.library.xsd', 'crystal_prototype.xsd')
+        return ('atomman.library.xsd', f'{self.style}.xsd')
 
     def load_model(self, model, name=None):
         super().load_model(model, name=name)        
@@ -100,7 +102,7 @@ class CrystalPrototype(Record):
         return self.__ucell
 
     def build_model(self):
-        return deepcopy(self.model)
+        return self.model
 
     def metadata(self):
         """Returns the simple metadata fields of the record as a flat dict."""

@@ -50,8 +50,7 @@ def get_relaxed_crystals(self, local=None, remote=None, name=None, key=None,
     symbols : str or list, optional
         Element symbols in the crystal to limit the search by.
     natypes : int or list, optional
-        The number of unique element model symbols in the crystal to limit
-        the search by.
+        The number(s) of unique atom types to limit the search by.
     natoms : int or list, optional
         The number of unique atoms in the crystal's unit cell to limit the
         search by.
@@ -123,9 +122,8 @@ def get_relaxed_crystal(self, local=None, remote=None, name=None,
     natypes : int or list, optional
         The number of unique element model symbols in the crystal to limit
         the search by.
-    natoms : int or list, optional
-        The number of unique atoms in the crystal's unit cell to limit the
-        search by.
+    natypes : int or list, optional
+        The number(s) of unique atom types to limit the search by.
     prompt : bool
         If prompt=True (default) then a screen input will ask for a selection
         if multiple matching potentials are found.  If prompt=False, then an

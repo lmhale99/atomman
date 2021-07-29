@@ -16,7 +16,8 @@ from .. import dump_table
 
 def dump(system, f=None, atom_style=None, units=None, natypes=None,
          potential=None, float_format='%.13f', return_info=True,
-         return_pair_info=False, safecopy=False):
+         return_pair_info=False, prompt=True, comments=True,
+         safecopy=False):
     """
     Write a LAMMPS-style atom data file from a System.
     
@@ -52,6 +53,14 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
         pair_style and pair_coeff are included in the returned info.  If True,
         potential must be given and return_info must be True.  Default value is
         False.
+    prompt : bool, optional
+        Used if return_pair_info is True. If prompt is True (default), then a
+        screen prompt will ask for more details if masses are not unique for
+        the elements.  If False, an error will be thrown for non-unique masses.
+    comments : bool, optional
+        Used if return_pair_info is True. If comments is True (default), then
+        metadata comments associated with the potential will be included in the
+        pair_info.
     safecopy : bool, optional
         The LAMMPS data format requires all atoms to be inside box bounds, i.e.
         "wrapped".  If safecopy is True then a copy of the system is made to
@@ -132,9 +141,12 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
     
     # Generate LAMMPS input lines
     if return_info is True:
-        read_info = info_content(system, f, atom_style=atom_style, units=units,
-                                 potential=potential,
-                                 return_pair_info=return_pair_info)
+        #read_info = info_content(system, f, atom_style=atom_style, units=units,
+        #                         potential=potential,
+        #                         return_pair_info=return_pair_info)
+        read_info = potential.pair_data_info(f, system.pbc, symbols=system.symbols,
+                                             masses=system.masses,atom_style=atom_style,
+                                             units=units, prompt=prompt, comments=comments)
         returns.append(read_info)
     elif return_pair_info is True:
         raise ValueError('return_pair_info = True requires that return_info = True')
@@ -246,6 +258,7 @@ def info_content(system, f, atom_style=None, units=None, potential=None,
             raise ValueError('return_pair_info = True requires that potential be given')
         
         info += '\n'
+        print(system.masses)
         info += potential.pair_info(symbols=system.symbols,
                                     masses=system.masses)
 

@@ -617,7 +617,7 @@ class System(object):
         spos = self.atoms_prop('pos', scale=True)
 
         # Initialize wrapflags
-        imageflags = np.zeros_like(spos, dtype=np.int)
+        imageflags = np.zeros_like(spos, dtype=int)
         
         # Loop over three pbc directions
         for i in range(3):

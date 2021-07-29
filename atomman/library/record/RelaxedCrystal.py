@@ -1,4 +1,6 @@
 from copy import deepcopy
+
+# https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
 
 from datamodelbase.record import Record
@@ -23,7 +25,7 @@ class RelaxedCrystal(Record):
 
     @property
     def xsd_filename(self):
-        return ('atomman.library.xsd', 'relaxed_crystal.xsd')
+        return ('atomman.library.xsd', f'{self.style}.xsd')
 
     def load_model(self, model, name=None):
         super().load_model(model, name=name)        
@@ -105,6 +107,10 @@ class RelaxedCrystal(Record):
         return self.__cohesive_energy
 
     @property
+    def potential_energy(self):
+        return self.__potential_energy
+
+    @property
     def composition(self):
         return self.__composition
 
@@ -155,8 +161,7 @@ class RelaxedCrystal(Record):
         return self.__ucell
 
     def build_model(self):
-        
-        return deepcopy(self.model)
+        return self.model
 
     def metadata(self):
         """
@@ -204,6 +209,7 @@ class RelaxedCrystal(Record):
                      family=None, parent_key=None, 
                      potential_LAMMPS_id=None, potential_LAMMPS_key=None,
                      potential_id=None, potential_key=None,
+                     crystalfamily=None, composition=None,
                      symbols=None, natoms=None, natypes=None):
 
         matches = (
@@ -218,6 +224,8 @@ class RelaxedCrystal(Record):
             &query.str_match.pandas(dataframe, 'potential_id', potential_id)
             &query.str_match.pandas(dataframe, 'potential_key', potential_key)
             &query.str_match.pandas(dataframe, 'potential_key', potential_key)
+            &query.str_match.pandas(dataframe, 'crystalfamily', crystalfamily)
+            &query.str_match.pandas(dataframe, 'composition', composition)
             &query.in_list.pandas(dataframe, 'symbols', symbols)
             &query.str_match.pandas(dataframe, 'natoms', natoms)
             &query.str_match.pandas(dataframe, 'natypes', natypes)
@@ -230,6 +238,7 @@ class RelaxedCrystal(Record):
                    family=None, parent_key=None, 
                    potential_LAMMPS_id=None, potential_LAMMPS_key=None,
                    potential_id=None, potential_key=None,
+                   crystalfamily=None, composition=None,
                    symbols=None, natoms=None, natypes=None):
 
         mquery = {}
@@ -245,6 +254,8 @@ class RelaxedCrystal(Record):
         query.str_match.mongo(mquery, f'{root}.potential-LAMMPS.key', potential_LAMMPS_key)
         query.str_match.mongo(mquery, f'{root}.potential-LAMMPS.potential.id', potential_id)
         query.str_match.mongo(mquery, f'{root}.potential-LAMMPS.potential.key', potential_key)
+        query.str_match.mongo(mquery, f'{root}.system-info.cell.crystal-family', crystalfamily)
+        query.str_match.mongo(mquery, f'{root}.system-info.cell.composition', composition)
         query.in_list.mongo(mquery, f'{root}.system-info.symbol', symbols)
         query.str_match.mongo(mquery, f'{root}.atomic-system.atoms.natoms', natoms)
         query.str_match.mongo(mquery, f'{root}.system-info.cell.natypes', natypes)
@@ -256,6 +267,7 @@ class RelaxedCrystal(Record):
                   family=None, parent_key=None, 
                   potential_LAMMPS_id=None, potential_LAMMPS_key=None,
                   potential_id=None, potential_key=None,
+                  crystalfamily=None, composition=None, 
                   symbols=None, natoms=None, natypes=None):
 
         mquery = {}
@@ -270,6 +282,8 @@ class RelaxedCrystal(Record):
         query.str_match.mongo(mquery, f'{root}.potential-LAMMPS.key', potential_LAMMPS_key)
         query.str_match.mongo(mquery, f'{root}.potential-LAMMPS.potential.id', potential_id)
         query.str_match.mongo(mquery, f'{root}.potential-LAMMPS.potential.key', potential_key)
+        query.str_match.mongo(mquery, f'{root}.system-info.cell.crystal-family', crystalfamily)
+        query.str_match.mongo(mquery, f'{root}.system-info.cell.composition', composition)
         query.in_list.mongo(mquery, f'{root}.system-info.symbol', symbols)
         query.str_match.mongo(mquery, f'{root}.atomic-system.atoms.natoms', natoms)
         query.str_match.mongo(mquery, f'{root}.system-info.cell.natypes', natypes)

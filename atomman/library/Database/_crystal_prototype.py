@@ -98,9 +98,9 @@ def get_crystal_prototype(self, local=None, remote=None, name=None, id=None,
         The space group Hermann-Maguin identifier(s) to limit the search by.
     sg_schoenflies : str or list, optional
         The space group Schoenflies identifier(s) to limit the search by.
-    crystalfamily : str, optional
+    crystalfamily : str or list, optional
         The crystal system family to limit the search by. 
-    natypes : int, optional
+    natypes : int or list, optional
         The number(s) of unique atom types to limit the search by.
     prompt : bool
         If prompt=True (default) then a screen input will ask for a selection
@@ -153,9 +153,9 @@ def download_crystal_prototypes(self, name=None, id=None, key=None,
         The space group Hermann-Maguin identifier(s) to limit the search by.
     sg_schoenflies : str or list, optional
         The space group Schoenflies identifier(s) to limit the search by.
-    crystalfamily : str, optional
-        The crystal system family to limit the search by. 
-    natypes : int, optional
+    crystalfamily : str or list, optional
+        The crystal system families to limit the search by. 
+    natypes : int or list, optional
         The number(s) of unique atom types to limit the search by.
     overwrite : bool, optional
         Flag indicating if any existing local records with names matching

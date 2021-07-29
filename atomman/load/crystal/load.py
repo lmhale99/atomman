@@ -82,7 +82,7 @@ def load(name=None, key=None, method='dynamic', standing='good',
     """
     # Create Database object and load if needed
     if database is None:
-        database = Database()
+        database = Database.Database()
     
     if potential is not None:
         try:

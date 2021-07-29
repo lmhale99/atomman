@@ -14,6 +14,9 @@ class Database(potentials.Database):
     from ._relaxed_crystal import (get_relaxed_crystals, get_relaxed_crystal,
                                    download_relaxed_crystals)
 
+    from ._reference_crystal import (get_reference_crystals, get_reference_crystal,
+                                     download_reference_crystals)
+
     def download_all(self, status=None, downloadfiles=True, overwrite=False,
                      verbose=False):
         """
@@ -42,3 +45,4 @@ class Database(potentials.Database):
 
         self.download_crystal_prototypes(overwrite=overwrite, verbose=verbose)
         self.download_relaxed_crystals(overwrite=overwrite, verbose=verbose)
+        self.download_reference_crystals(overwrite=overwrite, verbose=verbose)
