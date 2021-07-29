@@ -38,7 +38,6 @@ setup(name = 'atomman',
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
@@ -65,7 +64,7 @@ setup(name = 'atomman',
         'cython',
         'requests',
         'toolz',
-        'potentials==0.2.8'
+        'potentials==0.3.0'
       ],
       include_package_data = True,
       zip_safe = False)
