@@ -1,17 +1,16 @@
 # coding: utf-8
 
 # atomman imports
-from .. import load_system_model
 from ...library import Database
-from ...tools import screen_input
+from ...tools import screen_input, aslist
 
 import pandas as pd
 
-def load(key=None, method='dynamic', standing='good',
-                   family=None, parent_key=None, potential=None,
-                   potential_LAMMPS_id=None, potential_LAMMPS_key=None, potential_id=None, potential_key=None,
-                   symbols=None, natoms=None, natypes=None, keyword=None,
-                   verbose=False, database=None, localpath=None, local=False, remote=True):
+def load(name=None, key=None, method='dynamic', standing='good',
+         family=None, parent_key=None, potential=None,
+         potential_LAMMPS_id=None, potential_LAMMPS_key=None, potential_id=None, potential_key=None,
+         symbols=None, natoms=None, natypes=None, prompt=True,
+         verbose=False, database=None, local=False, remote=True):
 
     """
     Loads a potential-dependent relaxed crystal record from the library.  If
@@ -19,6 +18,9 @@ def load(key=None, method='dynamic', standing='good',
 
     Parameters
     ----------
+    name : str or list
+        The record name(s) to parse by.  For relaxed crystal records, the
+        names should correspond to the key.
     key : str or list, optional
         UUID4 key(s) to search for.  Each entry has a unique random-generated
         UUID4 key.
@@ -55,22 +57,20 @@ def load(key=None, method='dynamic', standing='good',
     natoms : int or list, optional
         The number of unique atoms in the crystal's unit cell to limit the
         search by.
-    keyword : str, optional
-        If given, will limit the search to all records that contain the keyword
-        substring.  Cannot be combined with any of the above parameters.
     database : atomman.library.Database, optional
         A pre-defined Database object to use.  If not given, will initialize
         a new Database object.  Passing in a database can save time if multiple
         calls are made for the same record type. 
-    localpath : str, optional
-        The local library path to use when initializing a new Database.  IF not
-        given, will use the default localpath.  Ignored if database is given. 
     local : bool, optional
         Indicates if the Database object is to look for local records.  Default
         is True.  Ignored if database is given.
     remote : bool, optional
         Indicates if the Database object is to look for remote records.  Default
         is True.  Ignored if database is given.
+    prompt : bool
+        If prompt=True (default) then a screen input will ask for a selection
+        if multiple matching potentials are found.  If prompt=False, then an
+        error will be thrown if multiple matches are found.
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
@@ -82,19 +82,28 @@ def load(key=None, method='dynamic', standing='good',
     """
     # Create Database object and load if needed
     if database is None:
-        if local is True:
-            database = Database(load='relaxed_crystal', localpath=localpath,
-                                local=local, remote=remote, verbose=verbose)
-        else:
-            database = Database(local=local, remote=remote, verbose=verbose)
+        database = Database.Database()
     
+    if potential is not None:
+        try:
+            assert potential_LAMMPS_id is None
+            assert potential_LAMMPS_key is None
+            assert potential_id is None
+            assert potential_key is None
+        except:
+            raise ValueError('potential cannot be given with the other potential parameters')
+        potential_LAMMPS_key = []
+        for pot in aslist(potential):
+            potential_LAMMPS_key.append(pot.key)
+
     # Get crystal prototype record
-    crystal = database.get_relaxed_crystal(key=key, method=method, standing=standing,
-                   family=family, parent_key=parent_key, potential=potential,
-                   potential_LAMMPS_id=potential_LAMMPS_id, potential_LAMMPS_key=potential_LAMMPS_key,
-                   potential_id=potential_id, potential_key=potential_key,
-                   symbols=symbols, natoms=natoms, natypes=natypes, keyword=keyword,
-                   verbose=verbose)
+    crystal = database.get_relaxed_crystal(local=local, remote=remote, name=name,
+                           key=key, method=method, standing=standing, family=family,
+                           parent_key=parent_key, potential_LAMMPS_id=potential_LAMMPS_id,
+                           potential_LAMMPS_key=potential_LAMMPS_key,
+                           potential_id=potential_id, potential_key=potential_key,
+                           symbols=symbols, natoms=natoms, natypes=natypes,
+                           prompt=prompt, verbose=verbose)
     
     # Retrieve unit cell information and set symbols
     return crystal.ucell

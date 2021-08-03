@@ -1,5 +1,7 @@
-from .CrystalPrototype import CrystalPrototype
-from .RelaxedCrystal import RelaxedCrystal
+
+# Import records and load local record styles
+from .record import recordmanager, load_record
+
 from .Database import Database
 from .load_lammps_potential import load_lammps_potential
 
