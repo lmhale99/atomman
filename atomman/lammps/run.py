@@ -1,109 +1,139 @@
 # coding: utf-8
 # Standard Python libraries
-import os
-import glob
-import shutil
-import subprocess as sp
+from pathlib import Path
+import shlex
+import subprocess
 
 # atomman imports
 from . import Log, LammpsError
 
-def run(lammps_command, script_name, mpi_command=None,
-        restart_script_name=None, logfile='log.lammps'):
+def run(lammps_command, script_name=None, script=None, mpi_command=None,
+        restart_script_name=None, logfile='log.lammps', screen=True,
+        suffix=None):
     """
-    Calls LAMMPS to run. Returns data model containing LAMMPS output.
+    Calls LAMMPS to run. Returns a Log object of the screen/logfile output.
     
     Parameters
     ----------
     lammps_command : str
         The LAMMPS inline run command (sans -in script_name).
-    script_name : str
-        Path of the LAMMPS input script to use.
+    script_name : str, optional
+        Path of the LAMMPS input script to use.  Either script_name or script
+        must be given.
+    script : str, optional
+        The LAMMPS input script command lines to use.  Either script_name or
+        script must be given.
     mpi_command : str or None, optional
         The MPI inline command to run LAMMPS in parallel. Default value is 
         None (no mpi).
     restart_script_name : str or None, optional
         Alternative script to use for restarting if logfile already exists.
         Default value is None (no restarting).
-    logfile : str, optional
+    logfile : str or None, optional
         Specifies the path to the logfile to write to.  Default value is
-        'log.lammps'.
+        'log.lammps'.  If set to None, then no logfile will be created.
+    screen : bool, optional
+        If True (default), then the resulting Log object is built from the
+        LAMMPS screen output.  If False, then LAMMPS outputs no screen info
+        and the Log object will be built by reading logfile.
+    suffix : str, optional
+        Allows for the LAMMPS suffix option to be specified to use any of the
+        accelerated versions of pair styles if available.
     
     Returns
     -------
-    atomman.lammps.Log or DataModelDict
-        The content either as a Log object or in data model format.
+    atomman.lammps.Log 
+        Contains the processed screen/logfile contents.  Will not be returned
+        if logfile is None and screen is False as there would be no means to
+        capture the LAMMPS output.
     """
-    
+
     # Check if restart_script_name is given
     if restart_script_name is not None:
+        if logfile is None:
+            raise ValueError('logfile must be given to automatically determine restart status')
+        else:
+            logfile = Path(logfile)
         
-        # Check if simulation was previously started by looking for log.lammps
-        if os.path.isfile(logfile):
-            logname, logext = os.path.splitext(logfile)
+        # Check if simulation was previously started by looking for the logfile
+        if logfile.is_file():
+            logname = logfile.stem
+            logext = logfile.suffix
+            
             # Replace script_name with restart_script_name
             script_name = restart_script_name
             
             # Search for any earlier log files with the name log-*.lammps
-            logids = []
-            for oldlog in glob.iglob(logname + '-*' + logext):
-                logids.append(int(os.path.splitext(os.path.basename(oldlog))[0][len(logname)+1:]))
+            maxlogid = 0
+            for oldlog in Path().glob(f'{logname}-*{logext}'):
+                logid = int(oldlog.stem.split('-')[-1])
+                if logid > maxlogid:
+                    maxlogid = logid
             
             # Rename old logfile to keep it from being overwritten
-            if len(logids) == 0:
-                lognum = 1
-            else:
-                lognum = max(logids)+1
-            shutil.move(logfile, logname + '-' + str(lognum) + logext)
+            lognum = maxlogid + 1
+            logfile.rename(f'{logname}-{lognum}{logext}')
         else:
             lognum = 0
     else:
         lognum = 0
     
-    # Convert lammps_command into list of terms
-    if isinstance(lammps_command, str):
-        lammps_command = lammps_command.split(' ')
-    elif not isinstance(lammps_command, list):
-        lammps_command = [lammps_command]
+
+    # Initialize the run command
+    command = ''
+
+    # Add mpi_command
+    if mpi_command is not None:
+        command += mpi_command + ' '
     
-    # Convert script_name into list of terms
-    if isinstance(script_name, str):
-        script_name = script_name.split(' ')
-    elif not isinstance(script_name, list):
-        script_name = [script_name]
-    
-    # Convert mpi_command into list of terms
-    if mpi_command is None:
-        mpi_command = []
-    elif isinstance(mpi_command, str):
-        mpi_command = mpi_command.split(' ')
-    elif not isinstance(mpi_command, list):
-        mpi_command = [mpi_command]
-    
-    # Extra terms
-    extra = []
-    
-    # Check if logfile is not log.lammps
+    # Add lammps_command
+    command += lammps_command + ' '
+
+    # Add logfile
+    if logfile is None:
+        logfile = 'none'
     if logfile != 'log.lammps':
-        # Convert logfile into list of terms
-        extra += ['-log'] + logfile.split(' ')
+        command += f'-log {logfile} '
+
+    # Add script_name
+    if script_name is not None:
+        if script is not None:
+            raise  ValueError('Cannot give script and script_name')
+        command += f'-in {script_name} '
+    elif script is None:
+        raise ValueError('script or script_name must be given')
+
+    # Add screen
+    if screen is False:
+        command += f'-screen none '
+
+    # Add suffix
+    if suffix is not None:
+        command += f'-suffix {suffix} '
+
+    # Use shlex to split command
+    command = shlex.split(command)
     
     # Try to run lammps as a subprocess
     try:
-        output = sp.check_output(mpi_command + lammps_command + extra + ['-in'] + script_name)
+        output = subprocess.run(command, input=script, check=True,
+                                capture_output=True, text=True)
     
     # Convert LAMMPS error to a Python error if failed
-    except sp.CalledProcessError as e:
-        raise LammpsError(e.output.decode('UTF-8'))
+    except subprocess.CalledProcessError as e:
+        raise LammpsError(e.output)
     
     # Initialize Log object
     log = Log()
     
-    # Read in from all old log files
+    # Read in all old runs
     for i in range(1, lognum+1):
-        log.read(logname + '-' + str(i) + logext)
+        log.read(f'{logname}-{i}{logext}')
     
-    # Read in from current logfile
-    log.read(logfile)
+    # Read in current run
+    if screen:
+        log.read(output.stdout)
+    else:
+        log.read(logfile)
     
     return log

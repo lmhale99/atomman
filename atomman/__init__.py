@@ -23,6 +23,7 @@ from .dump import *
 from .dump import __all__ as dump_all
 from .core import *
 from .core import __all__ as core_all
+from . import cluster
 from . import library
 from .library import load_lammps_potential
 from .load import *
