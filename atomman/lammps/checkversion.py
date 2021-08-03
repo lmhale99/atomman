@@ -1,8 +1,4 @@
 # coding: utf-8
-# Standard Python libraries
-import os
-import shutil
-import tempfile
 
 # atomman imports
 from . import run
@@ -28,23 +24,12 @@ def checkversion(lammps_command):
     ValueError
         If lammps fails to run
     """
-    # Define emptyscript and logfile paths
-    tempdir = tempfile.mkdtemp()
-    emptyscript = os.path.join(tempdir, 'empty.in')
-    logfile = os.path.join(tempdir, 'empty.lammps')
-    
-    # Create emptyscript
-    with open(emptyscript, 'w') as f:
-        f.write('')
-    
-    # Run lammps_command with emptyscript
+    # Run lammps_command with empty script and no log file
     try:
-        log = run(lammps_command, emptyscript, logfile=logfile)
+        log = run(lammps_command, script='', logfile=None)
     except:
-        raise ValueError('Failed to run simulation with lammps_command '+lammps_command)
-    finally:
-        shutil.rmtree(tempdir)
-    
+        raise ValueError(f'Failed to run simulation with lammps_command {lammps_command}')
+        
     # Extract lammps version and date info
     version_info = {}
     version_info['version'] = log.lammps_version
