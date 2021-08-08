@@ -8,8 +8,8 @@ import subprocess
 from . import Log, LammpsError
 
 def run(lammps_command, script_name=None, script=None, mpi_command=None,
-        restart_script_name=None, logfile='log.lammps', screen=True,
-        suffix=None):
+        restart_script_name=None, restart_script=None, logfile='log.lammps',
+        screen=True, suffix=None):
     """
     Calls LAMMPS to run. Returns a Log object of the screen/logfile output.
     
@@ -18,17 +18,22 @@ def run(lammps_command, script_name=None, script=None, mpi_command=None,
     lammps_command : str
         The LAMMPS inline run command (sans -in script_name).
     script_name : str, optional
-        Path of the LAMMPS input script to use.  Either script_name or script
-        must be given.
+        Path of the LAMMPS input script file to use.  Either script_name or
+        script must be given.
     script : str, optional
         The LAMMPS input script command lines to use.  Either script_name or
         script must be given.
-    mpi_command : str or None, optional
+    mpi_command : str, optional
         The MPI inline command to run LAMMPS in parallel. Default value is 
         None (no mpi).
-    restart_script_name : str or None, optional
-        Alternative script to use for restarting if logfile already exists.
-        Default value is None (no restarting).
+    restart_script_name : str, optional
+        Path to an alternate LAMMPS input script file to use for restart runs.
+        If given, the restart script will be used if the specified logfile
+        already exists.  Requires logfile to not be None.
+    restart_script : str, optional
+        Alternate LAMMPS script command lines to use for restart runs.
+        If given, the restart script will be used if the specified logfile
+        already exists.  Requires logfile to not be None.
     logfile : str or None, optional
         Specifies the path to the logfile to write to.  Default value is
         'log.lammps'.  If set to None, then no logfile will be created.
@@ -48,8 +53,10 @@ def run(lammps_command, script_name=None, script=None, mpi_command=None,
         capture the LAMMPS output.
     """
 
-    # Check if restart_script_name is given
-    if restart_script_name is not None:
+    # Check if either restart_script_name or restart_script is given
+    if restart_script_name is not None or restart_script is not None:
+        if restart_script_name is not None and restart_script is not None:
+            raise  ValueError('Cannot give both restart_script and restart_script_name')
         if logfile is None:
             raise ValueError('logfile must be given to automatically determine restart status')
         else:
@@ -60,7 +67,8 @@ def run(lammps_command, script_name=None, script=None, mpi_command=None,
             logname = logfile.stem
             logext = logfile.suffix
             
-            # Replace script_name with restart_script_name
+            # Replace script parameters with restart_script parameters
+            script = restart_script
             script_name = restart_script_name
             
             # Search for any earlier log files with the name log-*.lammps
@@ -98,7 +106,7 @@ def run(lammps_command, script_name=None, script=None, mpi_command=None,
     # Add script_name
     if script_name is not None:
         if script is not None:
-            raise  ValueError('Cannot give script and script_name')
+            raise  ValueError('Cannot give both script and script_name')
         command += f'-in {script_name} '
     elif script is None:
         raise ValueError('script or script_name must be given')
