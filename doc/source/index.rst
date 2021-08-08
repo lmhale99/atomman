@@ -35,7 +35,7 @@ Features:
 Installation
 ============
 
-The atomman package is Python 3.6+ compatible.
+The atomman package is Python 3.7+ compatible.
 
 The latest release can be installed using pip::
 
