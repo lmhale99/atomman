@@ -7,11 +7,13 @@ def euler(ratefxn, coord, timestep, **kwargs):
     Parameters
     ----------
     ratefxn : function
-        The rate function to use.
+        The rate function to use.  Should be a function of coord.
     coord : array-like object
         The coordinate(s) of the last timestep.
     timestep : float
         The timestep value to use.
+    **kwargs : any
+        Any extra keyword parameters to pass on to ratefxn.
     
     Returns
     -------

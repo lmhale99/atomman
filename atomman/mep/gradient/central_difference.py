@@ -16,8 +16,9 @@ def central_difference(fxn, coord, shift=1e-5):
         derivatives calculated will be based on the size of the
         coordinate's final dimension, i.e. if coord is (10, 3), then three
         derivatives will be computed for each of the ten coordinates.
-    shift : float
+    shift : float, optional
         The shift step size to use when evaluating the derivatives.
+        Default value is 1e-5.
     
     Returns
     -------

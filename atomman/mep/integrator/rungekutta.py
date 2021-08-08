@@ -7,7 +7,7 @@ def rungekutta(ratefxn, coord, timestep, **kwargs):
     Parameters
     ----------
     ratefxn : function
-        The rate function to use.
+        The rate function to use.  Should be a function of coord.
     coord : array-like object
         The coordinate(s) of the last timestep.
     timestep : float

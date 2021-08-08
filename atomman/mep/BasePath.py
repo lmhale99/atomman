@@ -26,14 +26,16 @@ class BasePath():
             The function that evaluates the energy associated with the different
             point coordinates.
         gradientfxn : str or function, optional
-            The function to use to estimate the gradient of the energy.  Default
-            value of 'cdiff' will use atomman.mep.gradient.central_difference
+            The function to use to estimate the gradient of the energy.  A str
+            value of 'central_difference' or 'cdiff' (default) will use
+            atomman.mep.gradient.central_difference.
         gradientkwargs : dict, optional
             The keyword arguments (i.e. settings) to use with the gradientfxn.
             Default is an empty dictionary, i.e. default settings of gradientfxn.
         integratorfxn : str or function, optional
-            The function to use to integrate relaxation steps.  Default value of
-            'rk' will use atomman.mep.integrator.rungekutta.
+            The function to use to integrate relaxation steps.  A str value of
+            'euler' will use atomman.mep.integrator.euler, while a str value of
+            'rungekutta' or 'rk' (default) will use atomman.mep.integrator.rungekutta.
         """
         
         if isinstance(coord, BasePath):
