@@ -280,10 +280,10 @@ class Log():
         ----------
         style : str, optional
             Specifies which values to use for duplicate time steps:
-            - 'first' uses the values from the earliest simulation.
-            - 'last' uses the values from the latest simulation (default).
-            - 'all' uses all reported lines including ones with duplicate time
-              steps.
+            'first' uses the values from the earliest simulation.
+            'last' uses the values from the latest simulation (default).
+            'all' uses all reported lines including ones with duplicate time
+            steps.
         """
         # Check that all simulations with thermo data have step values
         for sim in self.simulations:

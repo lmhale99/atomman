@@ -6,7 +6,7 @@ def get_relaxed_crystals(self, local=None, remote=None, name=None, key=None,
                          potential_LAMMPS_id=None, potential_LAMMPS_key=None,
                          potential_id=None, potential_key=None,
                          symbols=None, natoms=None, natypes=None,
-                         return_df=False, verbose=False):
+                         refresh_cache=False, return_df=False, verbose=False):
     """
     Get all matching relaxed crystals from the database.
     
@@ -54,6 +54,13 @@ def get_relaxed_crystals(self, local=None, remote=None, name=None, key=None,
     natoms : int or list, optional
         The number of unique atoms in the crystal's unit cell to limit the
         search by.
+    refresh_cache : bool, optional
+        If the local database is of style "local", indicates if the metadata
+        cache file is to be refreshed.  If False,
+        metadata for new records will be added but the old record metadata
+        fields will not be updated.  If True, then the metadata for all
+        records will be regenerated, which is needed to update the metadata
+        for modified records.
     return_df : bool, optional
         If True, then the corresponding pandas.Dataframe of metadata
         will also be returned.
@@ -68,7 +75,7 @@ def get_relaxed_crystals(self, local=None, remote=None, name=None, key=None,
                             potential_LAMMPS_key=potential_LAMMPS_key,
                             potential_id=potential_id, potential_key=potential_key,
                             symbols=symbols, natoms=natoms, natypes=natypes,
-                            return_df=return_df, verbose=verbose)
+                            refresh_cache=refresh_cache, return_df=return_df, verbose=verbose)
 
 def get_relaxed_crystal(self, local=None, remote=None, name=None,
                         key=None, method='dynamic', standing='good',
@@ -76,7 +83,7 @@ def get_relaxed_crystal(self, local=None, remote=None, name=None,
                         potential_LAMMPS_id=None, potential_LAMMPS_key=None,
                         potential_id=None, potential_key=None,
                         symbols=None, natoms=None, natypes=None, keyword=None,
-                        prompt=True, verbose=False):
+                        prompt=True, refresh_cache=False, verbose=False):
     """
     Retrieves exactly one matching relaxed crystal from the database.
     
@@ -128,6 +135,13 @@ def get_relaxed_crystal(self, local=None, remote=None, name=None,
         If prompt=True (default) then a screen input will ask for a selection
         if multiple matching potentials are found.  If prompt=False, then an
         error will be thrown if multiple matches are found.
+    refresh_cache : bool, optional
+        If the local database is of style "local", indicates if the metadata
+        cache file is to be refreshed.  If False,
+        metadata for new records will be added but the old record metadata
+        fields will not be updated.  If True, then the metadata for all
+        records will be regenerated, which is needed to update the metadata
+        for modified records.
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
@@ -159,7 +173,8 @@ def get_relaxed_crystal(self, local=None, remote=None, name=None,
                            potential_LAMMPS_key=potential_LAMMPS_key,
                            potential_id=potential_id, potential_key=potential_key,
                            symbols=symbols, natoms=natoms, natypes=natypes,
-                           prompt=prompt, promptfxn=promptfxn, verbose=verbose)
+                           prompt=prompt, promptfxn=promptfxn, refresh_cache=refresh_cache, 
+                           verbose=verbose)
 
 def download_relaxed_crystals(self, name=None, key=None, method='dynamic',
                               standing='good', family=None, parent_key=None, 

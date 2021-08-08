@@ -4,7 +4,8 @@ def get_crystal_prototypes(self, local=None, remote=None, name=None, id=None,
                            key=None, commonname=None, prototype=None,
                            pearson=None, strukturbericht=None, sg_number=None,
                            sg_hm=None, sg_schoenflies=None, crystalfamily=None,
-                           natypes=None, return_df=False, verbose=False):
+                           natypes=None, refresh_cache=False, return_df=False,
+                           verbose=False):
     """
     Get all matching crystal prototypes from the database.
     
@@ -25,7 +26,7 @@ def get_crystal_prototypes(self, local=None, remote=None, name=None, id=None,
     key : str or list, optional
         UUID4 key(s) to search for.  Each entry has a unique random-generated
         UUID4 key.
-    name : str or list, optional
+    commonname : str or list, optional
         Common name(s) to limit the search by.
     prototype : str or list, optional
         Prototype identifying composition(s) to limit the search by.
@@ -43,6 +44,13 @@ def get_crystal_prototypes(self, local=None, remote=None, name=None, id=None,
         The crystal system family to limit the search by. 
     natypes : int, optional
         The number(s) of unique atom types to limit the search by.
+    refresh_cache : bool, optional
+        If the local database is of style "local", indicates if the metadata
+        cache file is to be refreshed.  If False,
+        metadata for new records will be added but the old record metadata
+        fields will not be updated.  If True, then the metadata for all
+        records will be regenerated, which is needed to update the metadata
+        for modified records.
     return_df : bool, optional
         If True, then the corresponding pandas.Dataframe of metadata
         will also be returned.
@@ -56,13 +64,14 @@ def get_crystal_prototypes(self, local=None, remote=None, name=None, id=None,
                             pearson=pearson, strukturbericht=strukturbericht,
                             sg_number=sg_number, sg_hm=sg_hm, sg_schoenflies=sg_schoenflies,
                             crystalfamily=crystalfamily, natypes=natypes,
+                            refresh_cache=refresh_cache, 
                             return_df=return_df, verbose=verbose)    
 
 def get_crystal_prototype(self, local=None, remote=None, name=None, id=None,
                           key=None, commonname=None, prototype=None,
                           pearson=None, strukturbericht=None, sg_number=None,
                           sg_hm=None, sg_schoenflies=None, crystalfamily=None,
-                          natypes=None, prompt=True, verbose=False):
+                          natypes=None, prompt=True, refresh_cache=False, verbose=False):
     
     """
     Retrieves exactly one matching crystal prototype from the database.
@@ -106,6 +115,13 @@ def get_crystal_prototype(self, local=None, remote=None, name=None, id=None,
         If prompt=True (default) then a screen input will ask for a selection
         if multiple matching potentials are found.  If prompt=False, then an
         error will be thrown if multiple matches are found.
+    refresh_cache : bool, optional
+        If the local database is of style "local", indicates if the metadata
+        cache file is to be refreshed.  If False,
+        metadata for new records will be added but the old record metadata
+        fields will not be updated.  If True, then the metadata for all
+        records will be regenerated, which is needed to update the metadata
+        for modified records.
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
@@ -116,7 +132,7 @@ def get_crystal_prototype(self, local=None, remote=None, name=None, id=None,
                            strukturbericht=strukturbericht, sg_number=sg_number,
                            sg_hm=sg_hm, sg_schoenflies=sg_schoenflies,
                            crystalfamily=crystalfamily, natypes=natypes,
-                           prompt=prompt, verbose=verbose)
+                           prompt=prompt, refresh_cache=refresh_cache, verbose=verbose)
         
 
 def download_crystal_prototypes(self, name=None, id=None, key=None,

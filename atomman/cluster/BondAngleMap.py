@@ -447,6 +447,16 @@ class BondAngleMap():
                 yield system
             
     def save_table(self, filename, include_header=True):
+        """
+        Saves a tabulated representation of the coordinates and energy values to a file.
+
+        Parameters
+        ----------
+        filename : str
+            The path to the file where the table will be saved.
+        include_header : bool
+            If True (default) then header comments will be listed at the top of the file.
+        """
         with open(filename, 'w') as f:
 
             if include_header:
@@ -552,7 +562,7 @@ class BondAngleMap():
         matplotlib_axes : matplotlib.Axes.axes, optional, optional
             An existing plotting axis to add the pdf plot to.  If not given,
             a new figure object will be generated.
-        *kwargs : any, optional
+        **kwargs : any, optional
             Any additional key word arguments will be passed to
             matplotlib.pyplot.figure for generating a new figure object (if
             axis is not given).
@@ -597,7 +607,7 @@ class BondAngleMap():
         matplotlib_axes : matplotlib.Axes.axes, optional, optional
             An existing plotting axis to add the pdf plot to.  If not given,
             a new figure object will be generated.
-        *kwargs : any, optional
+        **kwargs : any, optional
             Any additional key word arguments will be passed to
             matplotlib.pyplot.figure for generating a new figure object (if
             axis is not given).

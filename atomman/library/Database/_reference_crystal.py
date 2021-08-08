@@ -1,8 +1,8 @@
 # coding: utf-8
-
+from pathlib import Path
 import requests
 
-from ... import load
+from ...load import load_pymatgen_Structure, load_poscar
 from ..record import ReferenceCrystal
 from ...tools import aslist
 
@@ -10,7 +10,7 @@ def get_reference_crystals(self, local=None, remote=None, name=None, key=None,
                            id=None, sourcename=None, sourcelink=None,
                            crystalfamily=None, composition=None,
                            symbols=None, natoms=None, natypes=None,
-                           return_df=False, verbose=False):
+                           refresh_cache=False, return_df=False, verbose=False):
     """
     Get all matching reference crystals from the database.
     
@@ -49,6 +49,13 @@ def get_reference_crystals(self, local=None, remote=None, name=None, key=None,
         search by.
     natypes : int or list, optional
         The number(s) of unique atom types to limit the search by.
+    refresh_cache : bool, optional
+        If the local database is of style "local", indicates if the metadata
+        cache file is to be refreshed.  If False,
+        metadata for new records will be added but the old record metadata
+        fields will not be updated.  If True, then the metadata for all
+        records will be regenerated, which is needed to update the metadata
+        for modified records.
     return_df : bool, optional
         If True, then the corresponding pandas.Dataframe of metadata
         will also be returned.
@@ -61,13 +68,14 @@ def get_reference_crystals(self, local=None, remote=None, name=None, key=None,
                             key=key, id=id, sourcename=sourcename, sourcelink=sourcelink,
                             crystalfamily=crystalfamily, composition=composition,
                             symbols=symbols, natoms=natoms, natypes=natypes,
+                            refresh_cache=refresh_cache, 
                             return_df=return_df, verbose=verbose)
 
 def get_reference_crystal(self, local=None, remote=None, name=None,
                         key=None, id=None, sourcename=None, sourcelink=None,
                         crystalfamily=None, composition=None,
                         symbols=None, natoms=None, natypes=None,
-                        prompt=True, verbose=False):
+                        prompt=True, refresh_cache=False, verbose=False):
     """
     Retrieves exactly one matching reference crystal from the database.
     
@@ -110,6 +118,13 @@ def get_reference_crystal(self, local=None, remote=None, name=None,
         If prompt=True (default) then a screen input will ask for a selection
         if multiple matching potentials are found.  If prompt=False, then an
         error will be thrown if multiple matches are found.
+    refresh_cache : bool, optional
+        If the local database is of style "local", indicates if the metadata
+        cache file is to be refreshed.  If False,
+        metadata for new records will be added but the old record metadata
+        fields will not be updated.  If True, then the metadata for all
+        records will be regenerated, which is needed to update the metadata
+        for modified records.
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
@@ -138,7 +153,8 @@ def get_reference_crystal(self, local=None, remote=None, name=None,
                            key=key, id=id, sourcename=sourcename, sourcelink=sourcelink,
                            crystalfamily=crystalfamily, composition=composition,
                            symbols=symbols, natoms=natoms, natypes=natypes,
-                           prompt=prompt, promptfxn=promptfxn, verbose=verbose)
+                           prompt=prompt, promptfxn=promptfxn, refresh_cache=refresh_cache, 
+                           verbose=verbose)
 
 def download_reference_crystals(self, name=None, key=None, id=None,
                                 sourcename=None, sourcelink=None,
@@ -192,7 +208,8 @@ def download_reference_crystals(self, name=None, key=None, id=None,
                           symbols=symbols, natoms=natoms, natypes=natypes,
                           overwrite=overwrite, verbose=verbose)
 
-def fetch_reference_crystal(self, id, api_key=None, local=None, remote=None, verbose=False):
+def fetch_reference_crystal(self, id, api_key=None, local=None, remote=None, 
+                            refresh_cache=False, verbose=False):
     """
     Retrieves a single reference crystal.  First, the database is checked
     for matches with the DOI, then with the record name.  If no matches are found
@@ -202,16 +219,25 @@ def fetch_reference_crystal(self, id, api_key=None, local=None, remote=None, ver
     Parameters
     ----------
     id : str
-        The reference crystal's unique id.
+        The reference crystal's unique id.  Combines a database tag "mp-" or
+        "oqmd-" and the DFT database's entry id.
     api_key : str, optional
-        The user's Materials Project API key. If not given, will use "MAPI_KEY"
-        environment variable to fetch records from Materials Project if needed.
+        The user's Materials Project API key or path to a file containing the
+        key. Only needed for fetching structures from Materials Project and if
+        the key is not set to the "MAPI_KEY" environment variable.
     local : bool, optional
         Indicates if the local location is to be searched.  Default value
         matches the value set when the database was initialized.
     remote : bool, optional
         Indicates if the remote location is to be searched.  Default value
         matches the value set when the database was initialized.
+    refresh_cache : bool, optional
+        If the local database is of style "local", indicates if the metadata
+        cache file is to be refreshed.  If False,
+        metadata for new records will be added but the old record metadata
+        fields will not be updated.  If True, then the metadata for all
+        records will be regenerated, which is needed to update the metadata
+        for modified records.
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
@@ -219,7 +245,8 @@ def fetch_reference_crystal(self, id, api_key=None, local=None, remote=None, ver
     if local is not False or remote is not False:
         # Try fetching based on doi
         try:
-            return self.get_referene_crystal(id=id, local=local, remote=remote, verbose=verbose)
+            return self.get_reference_crystal(id=id, local=local, remote=remote,
+                                              refresh_cache=refresh_cache, verbose=verbose)
         except:
             pass
 
@@ -244,8 +271,8 @@ def fetch_mp_crystals(self, id, api_key=None):
     id : str or list
         The structure id(s) of the crystals to retrieve.
     api_key : str, optional
-        The user's Materials Project API key. If not given, will use "MAPI_KEY"
-        environment variable.
+        The user's Materials Project API key or path to a file containing the key.
+        If not given, will use the "MAPI_KEY" environment variable.
     """
 
     # Function-specific imports
@@ -273,7 +300,7 @@ def fetch_mp_crystals(self, id, api_key=None):
                 record = ReferenceCrystal(name=entry_id)
                 record.sourcename = "Materials Project"
                 record.sourcelink = "https://materialsproject.org/"
-                record.ucell = load('pymatgen_Structure', struct).normalize()
+                record.ucell = load_pymatgen_Structure(struct).normalize()
                 records.append(record)
     
     return records
@@ -290,7 +317,12 @@ def fetch_mp_crystal(self, id, api_key=None):
         The user's Materials Project API key. If not given, will use "MAPI_KEY"
         environment variable.
     """
-    records = fetch_mp_crystals(id, api_key=api_key)
+    # Read api_key from a file
+    if Path(api_key).is_file():
+        with open(api_key) as f:
+            api_key = f.read().strip()
+
+    records = self.fetch_mp_crystals(id, api_key=api_key)
     if len(records) == 1:
         return records[0]
     else:
@@ -333,7 +365,7 @@ def fetch_oqmd_crystal(self, id):
             raise ValueError('Failed to find the poscar file for the structure')
             
     # Load ucell
-    record.ucell = load('poscar', structure_r.text).normalize()
+    record.ucell = load_poscar(structure_r.text).normalize()
     
     return record
 

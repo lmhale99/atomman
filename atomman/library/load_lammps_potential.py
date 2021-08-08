@@ -1,12 +1,12 @@
 # coding: utf-8
 
 from . import Database
-def load_lammps_potential(local=None, remote=None, database=None,
-                          name=None, key=None, id=None,
+def load_lammps_potential(name=None, key=None, id=None,
                           potid=None, potkey=None, units=None,
                           atom_style=None, pair_style=None, status='active',
                           symbols=None, elements=None, pot_dir_style=None,
                           kim_models=None, kim_api_directory=None, kim_models_file=None, 
+                          local=None, remote=None, database=None,
                           getfiles=False, prompt=True, verbose=False):
     """
     Loads a LAMMPS potential from the NIST Interatomic Potentials Repository
@@ -15,16 +15,6 @@ def load_lammps_potential(local=None, remote=None, database=None,
     
     Parameters
     ----------
-    local : bool, optional
-        Indicates if the local location is to be searched.  Default value
-        matches the value set when the database was initialized.
-    remote : bool, optional
-        Indicates if the remote location is to be searched.  Default value
-        matches the value set when the database was initialized.
-    database : potentials.Database, optional
-        Allows for a previously defined Database object to be used to find
-        the potential.  If not given, a new Database object will be used with
-        the default local and remote interaction settings.
     name : str or list
         The record name(s) to parse by.  For potential records, the names
         should correspond to the id with a prefix of "potentials." added to it.
@@ -71,6 +61,16 @@ def load_lammps_potential(local=None, remote=None, database=None,
     kim_models_file : str
         The path to a file containing a list of full KIM model ids to build
         LAMMPS potentials for.
+    local : bool, optional
+        Indicates if the local location is to be searched.  Default value
+        matches the value set when the database was initialized.
+    remote : bool, optional
+        Indicates if the remote location is to be searched.  Default value
+        matches the value set when the database was initialized.
+    database : potentials.Database, optional
+        Allows for a previously defined Database object to be used to find
+        the potential.  If not given, a new Database object will be used with
+        the default local and remote interaction settings.
     getfiles : bool, optional
         If True, then the parameter files for the matching potentials
         will also be copied/downloaded to the potential directory.

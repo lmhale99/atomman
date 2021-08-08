@@ -15,12 +15,14 @@ class Database(potentials.Database):
                                    download_relaxed_crystals)
 
     from ._reference_crystal import (get_reference_crystals, get_reference_crystal,
-                                     download_reference_crystals)
+                                     download_reference_crystals, fetch_mp_crystal,
+                                     fetch_oqmd_crystal, fetch_mp_crystals,
+                                     fetch_reference_crystal)
 
     def download_all(self, status=None, downloadfiles=True, overwrite=False,
                      verbose=False):
         """
-        Downloads all potential and structure-related records from the remote
+        Downloads potential and structure-related records from the remote
         location to the local location.
 
         Parameters
@@ -45,4 +47,4 @@ class Database(potentials.Database):
 
         self.download_crystal_prototypes(overwrite=overwrite, verbose=verbose)
         self.download_relaxed_crystals(overwrite=overwrite, verbose=verbose)
-        self.download_reference_crystals(overwrite=overwrite, verbose=verbose)
+        #self.download_reference_crystals(overwrite=overwrite, verbose=verbose)
