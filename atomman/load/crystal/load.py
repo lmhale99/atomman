@@ -2,14 +2,14 @@
 
 # atomman imports
 from ...library import Database
-from ...tools import screen_input, aslist
+from ...tools import aslist
 
 import pandas as pd
 
 def load(name=None, key=None, method='dynamic', standing='good',
          family=None, parent_key=None, potential=None,
          potential_LAMMPS_id=None, potential_LAMMPS_key=None, potential_id=None, potential_key=None,
-         symbols=None, natoms=None, natypes=None, prompt=True,
+         symbols=None, natoms=None, natypes=None, prompt=True, refresh_cache=False,
          verbose=False, database=None, local=False, remote=True):
 
     """
@@ -71,6 +71,13 @@ def load(name=None, key=None, method='dynamic', standing='good',
         If prompt=True (default) then a screen input will ask for a selection
         if multiple matching potentials are found.  If prompt=False, then an
         error will be thrown if multiple matches are found.
+    refresh_cache : bool, optional
+        If the local database is of style "local", indicates if the metadata
+        cache file is to be refreshed.  If False,
+        metadata for new records will be added but the old record metadata
+        fields will not be updated.  If True, then the metadata for all
+        records will be regenerated, which is needed to update the metadata
+        for modified records.
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
@@ -103,7 +110,7 @@ def load(name=None, key=None, method='dynamic', standing='good',
                            potential_LAMMPS_key=potential_LAMMPS_key,
                            potential_id=potential_id, potential_key=potential_key,
                            symbols=symbols, natoms=natoms, natypes=natypes,
-                           prompt=prompt, verbose=verbose)
+                           prompt=prompt, refresh_cache=refresh_cache, verbose=verbose)
     
     # Retrieve unit cell information and set symbols
     return crystal.ucell

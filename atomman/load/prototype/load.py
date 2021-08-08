@@ -2,24 +2,27 @@
  
 # atomman imports
 from ...library import Database
-from ...tools import identifyfamily, screen_input
+from ...tools import identifyfamily
 
 def load(name=None, id=None, key=None, commonname=None, prototype=None,
          pearson=None, strukturbericht=None, sg_number=None,
          sg_hm=None, sg_schoenflies=None, 
          a=None, b=None, c=None, alpha=None, beta=None, gamma=None, symbols=None,
-         database=None, local=True, remote=True, prompt=True, verbose=False):
+         database=None, local=True, remote=True, prompt=True, refresh_cache=False,
+         verbose=False):
     """
     Loads a crystal prototype record from the library. If multiple matches
     are found based on inputs a selection menu will appear.
     
+    name : str or list, optional.
+        Record names to search for.  These should be the same values as id.
     id : str or list, optional
         Prototype ID(s) to search for.  These are unique identifiers for each
         prototype based on comm.
     key : str or list, optional
         UUID4 key(s) to search for.  Each entry has a unique random-generated
         UUID4 key.
-    name : str or list, optional
+    commonname : str or list, optional
         Common name(s) to limit the search by.
     prototype : str or list, optional
         Prototype identifying composition(s) to limit the search by.
@@ -33,9 +36,6 @@ def load(name=None, id=None, key=None, commonname=None, prototype=None,
         The space group Hermann-Maguin identifier(s) to limit the search by.
     sg_schoenflies : str or list, optional
         The space group Schoenflies identifier(s) to limit the search by.
-    keyword : str, optional
-        If given, will limit the search to all records that contain the keyword
-        substring.  Cannot be combined with any of the above parameters.
     a : float, optional
         The a lattice parameter to scale the prototype by. Can only be given
         if it is a unique lattice parameter for the prototype's crystal family,
@@ -62,8 +62,6 @@ def load(name=None, id=None, key=None, commonname=None, prototype=None,
         and if all other unique lattice parameters are given.
     symbols : tuple, optional
         Allows the list of element symbols to be assigned during loading.
-        Useful if the symbols for the model differ from the standard element
-        tags or if the poscar file has no elemental information.
     database : atomman.library.Database, optional
         A pre-defined Database object to use.  If not given, will initialize
         a new Database object.  Passing in a database can save time if multiple
@@ -74,10 +72,17 @@ def load(name=None, id=None, key=None, commonname=None, prototype=None,
     remote : bool, optional
         Indicates if the Database object is to look for remote records.  Default
         is True.  Ignored if database is given.
-    prompt : bool
+    prompt : bool, optional
         If prompt=True (default) then a screen input will ask for a selection
         if multiple matching potentials are found.  If prompt=False, then an
         error will be thrown if multiple matches are found.
+    refresh_cache : bool, optional
+        If the local database is of style "local", indicates if the metadata
+        cache file is to be refreshed.  If False,
+        metadata for new records will be added but the old record metadata
+        fields will not be updated.  If True, then the metadata for all
+        records will be regenerated, which is needed to update the metadata
+        for modified records.
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
@@ -97,7 +102,7 @@ def load(name=None, id=None, key=None, commonname=None, prototype=None,
                             id=id, key=key, commonname=commonname, prototype=prototype,
                             pearson=pearson, strukturbericht=strukturbericht,
                             sg_number=sg_number, sg_hm=sg_hm, sg_schoenflies=sg_schoenflies,
-                            prompt=prompt, verbose=verbose)
+                            prompt=prompt, refresh_cache=refresh_cache, verbose=verbose)
     
     # Retrieve unit cell information and set symbols
     ucell = prototype.ucell

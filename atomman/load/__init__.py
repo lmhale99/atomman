@@ -11,6 +11,7 @@ from .system_model import load as load_system_model
 from .prototype import load as load_prototype
 from .crystal import load as load_crystal
 from .poscar import load as load_poscar
+from .dft_reference import load as load_dft_reference
 from .atom_data import load as load_atom_data
 from .atom_dump import load as load_atom_dump
 from .spglib_cell import load as load_spglib_cell
@@ -49,6 +50,9 @@ def load(style, *args, **kwargs):
 
     elif style == 'crystal':
         return load_crystal(*args, **kwargs)
+
+    elif style == 'dft_reference':
+        return load_dft_reference(*args, **kwargs)
 
     elif style == 'cif':
         return load_cif(*args, **kwargs)
