@@ -1,6 +1,27 @@
 Updates
 =======
 
+Version 1.4.0
+-------------
+
+- **atomman.library** and **atomman.settings** modules updated to reflect
+  the reworked potentials package version 0.3.0.
+
+- **atomman.load_lammps_potential** and **atomman.load** options 'prototype'
+  and 'crystal' updated for the new library module.  load style
+  'dft_reference' added.
+
+- **atomman.lammps.Potential** now is a function that returns either a 
+  potentials.record.PotentialLAMMPS or potentials.record.PotentialLAMMPSKIM
+  object.
+
+- **atomman.lammps.run** now has options for passing string input scripts
+  rather than reading from files, and for turning off log file output.
+  **atomman.lammps.checkversion** simplified due to the changes to run.
+
+- **atomman.cluster.BondAngleMap** added for characterizing the three-body
+  interactions as predicted by interatomic potentials.  
+
 Version 1.3.7
 -------------
 
