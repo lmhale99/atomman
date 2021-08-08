@@ -16,8 +16,7 @@ from .. import dump_table
 
 def dump(system, f=None, atom_style=None, units=None, natypes=None,
          potential=None, float_format='%.13f', return_info=True,
-         return_pair_info=False, prompt=True, comments=True,
-         safecopy=False):
+         prompt=True, comments=True, safecopy=False):
     """
     Write a LAMMPS-style atom data file from a System.
     
@@ -47,12 +46,9 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
         '%.13f'.
     return_info : bool, optional
         Indicates if the LAMMPS command lines associated with reading in the
-        file are to be returned as a str.  Default value is True.
-    return_pair_info : bool, optional
-        Indicates if the LAMMPS command lines associated with setting mass,
-        pair_style and pair_coeff are included in the returned info.  If True,
-        potential must be given and return_info must be True.  Default value is
-        False.
+        file are to be returned as a str.  If potential is given, then the 
+        commands associated with the potential will be included. Default value
+        is True.
     prompt : bool, optional
         Used if return_pair_info is True. If prompt is True (default), then a
         screen prompt will ask for more details if masses are not unique for
@@ -141,12 +137,14 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
     
     # Generate LAMMPS input lines
     if return_info is True:
-        read_info = potential.pair_data_info(f, system.pbc, symbols=system.symbols,
-                                             masses=system.masses,atom_style=atom_style,
-                                             units=units, prompt=prompt, comments=comments)
+        if potential is not None:
+            read_info = potential.pair_data_info(f, system.pbc, symbols=system.symbols,
+                                                masses=system.masses,atom_style=atom_style,
+                                                units=units, prompt=prompt, comments=comments)
+        else:
+            read_info = info_content(system, f, atom_style=None, units=None)
+
         returns.append(read_info)
-    elif return_pair_info is True:
-        raise ValueError('return_pair_info = True requires that return_info = True')
     
     if len(returns) == 1:
         return returns[0]
@@ -224,3 +222,26 @@ def velocities_content(system, atom_style, units, float_format):
         content += dump_table(system, prop_info=prop_info, float_format=float_format)
 
     return content
+
+def info_content(system, f, atom_style=None, units=None):
+    """
+    Return appropriate units, atom_style, boundary, and read_data LAMMPS commands
+    """
+
+    # Add comment line
+    info = '# Script and atom data file prepared using atomman Python package\n\n'
+
+    # Add units and atom_style values
+    info += f'units {units}\n'
+    info += f'atom_style {atom_style}\n\n'
+
+    # Set boundary flags to p or m based on pbc values
+    bflags = np.array(['m','m','m'])
+    bflags[system.pbc] = 'p'
+    info += f'boundary {bflags[0]} {bflags[1]} {bflags[2]}\n'
+    
+    # Set read_data command 
+    if isinstance(f, str):
+        info += f'read_data {f}\n'
+
+    return info
