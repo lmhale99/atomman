@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>CrystalPrototype &#8212; atomman 1.4.0 documentation</title>
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="RelaxedCrystal" href="atomman.library.record.RelaxedCrystal.html" />
+    <link rel="prev" title="Database" href="atomman.library.Database.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atomman.library.record.RelaxedCrystal.html" title="RelaxedCrystal"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="atomman.library.Database.html" title="Database"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.4.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="atomman.library.html" accesskey="U">library</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="crystalprototype">
+<h1>CrystalPrototype<a class="headerlink" href="#crystalprototype" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="atomman.library.record.CrystalPrototype">
+<em class="property">class </em><code class="sig-prename descclassname">atomman.library.record.</code><code class="sig-name descname">CrystalPrototype</code><span class="sig-paren">(</span><em class="sig-param">model=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.record.CrystalPrototype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datamodelbase.record.Record.Record</span></code></p>
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.build_model">
+<code class="sig-name descname">build_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.record.CrystalPrototype.build_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates and returns model content based on the values set to object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.cdcsquery">
+<em class="property">static </em><code class="sig-name descname">cdcsquery</code><span class="sig-paren">(</span><em class="sig-param">id=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">commonname=None</em>, <em class="sig-param">prototype=None</em>, <em class="sig-param">pearson=None</em>, <em class="sig-param">strukturbericht=None</em>, <em class="sig-param">sg_number=None</em>, <em class="sig-param">sg_hm=None</em>, <em class="sig-param">sg_schoenflies=None</em>, <em class="sig-param">crystalfamily=None</em>, <em class="sig-param">natypes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.record.CrystalPrototype.cdcsquery" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds a Mongo-style query based on kwargs values for the record style.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Any extra model root(s) to prefix the model paths with.  Used by the
+different database styles.</p></li>
+<li><p><strong>**kwargs</strong> (<em>any</em>) – Any of the record style-specific search parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The Mongo-style query</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.commonname">
+<em class="property">property </em><code class="sig-name descname">commonname</code><a class="headerlink" href="#atomman.library.record.CrystalPrototype.commonname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.crystalfamily">
+<em class="property">property </em><code class="sig-name descname">crystalfamily</code><a class="headerlink" href="#atomman.library.record.CrystalPrototype.crystalfamily" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.id">
+<em class="property">property </em><code class="sig-name descname">id</code><a class="headerlink" href="#atomman.library.record.CrystalPrototype.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.key">
+<em class="property">property </em><code class="sig-name descname">key</code><a class="headerlink" href="#atomman.library.record.CrystalPrototype.key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.load_model">
+<code class="sig-name descname">load_model</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.record.CrystalPrototype.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads model contents</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.metadata">
+<code class="sig-name descname">metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.record.CrystalPrototype.metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the simple metadata fields of the record as a flat dict.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.modelroot">
+<em class="property">property </em><code class="sig-name descname">modelroot</code><a class="headerlink" href="#atomman.library.record.CrystalPrototype.modelroot" title="Permalink to this definition">¶</a></dt>
+<dd><p>The root element of the content</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.mongoquery">
+<em class="property">static </em><code class="sig-name descname">mongoquery</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">id=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">commonname=None</em>, <em class="sig-param">prototype=None</em>, <em class="sig-param">pearson=None</em>, <em class="sig-param">strukturbericht=None</em>, <em class="sig-param">sg_number=None</em>, <em class="sig-param">sg_hm=None</em>, <em class="sig-param">sg_schoenflies=None</em>, <em class="sig-param">crystalfamily=None</em>, <em class="sig-param">natypes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.record.CrystalPrototype.mongoquery" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds a Mongo-style query based on kwargs values for the record style.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Any extra model root(s) to prefix the model paths with.  Used by the
+different database styles.</p></li>
+<li><p><strong>**kwargs</strong> (<em>any</em>) – Any of the record style-specific search parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The Mongo-style query</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.natypes">
+<em class="property">property </em><code class="sig-name descname">natypes</code><a class="headerlink" href="#atomman.library.record.CrystalPrototype.natypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.pandasfilter">
+<em class="property">static </em><code class="sig-name descname">pandasfilter</code><span class="sig-paren">(</span><em class="sig-param">dataframe</em>, <em class="sig-param">name=None</em>, <em class="sig-param">id=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">commonname=None</em>, <em class="sig-param">prototype=None</em>, <em class="sig-param">pearson=None</em>, <em class="sig-param">strukturbericht=None</em>, <em class="sig-param">sg_number=None</em>, <em class="sig-param">sg_hm=None</em>, <em class="sig-param">sg_schoenflies=None</em>, <em class="sig-param">crystalfamily=None</em>, <em class="sig-param">natypes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.record.CrystalPrototype.pandasfilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters a pandas.DataFrame based on kwargs values for the record style.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataframe</strong> (<em>pandas.DataFrame</em>) – A table of metadata for multiple records of the record style.</p></li>
+<li><p><strong>**kwargs</strong> (<em>any</em>) – Any of the record style-specific search parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Boolean map of matching values</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.Series, numpy.NDArray?</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.pearson">
+<em class="property">property </em><code class="sig-name descname">pearson</code><a class="headerlink" href="#atomman.library.record.CrystalPrototype.pearson" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.prototype">
+<em class="property">property </em><code class="sig-name descname">prototype</code><a class="headerlink" href="#atomman.library.record.CrystalPrototype.prototype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.sg_hm">
+<em class="property">property </em><code class="sig-name descname">sg_hm</code><a class="headerlink" href="#atomman.library.record.CrystalPrototype.sg_hm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.sg_number">
+<em class="property">property </em><code class="sig-name descname">sg_number</code><a class="headerlink" href="#atomman.library.record.CrystalPrototype.sg_number" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.sg_schoenflies">
+<em class="property">property </em><code class="sig-name descname">sg_schoenflies</code><a class="headerlink" href="#atomman.library.record.CrystalPrototype.sg_schoenflies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.strukturbericht">
+<em class="property">property </em><code class="sig-name descname">strukturbericht</code><a class="headerlink" href="#atomman.library.record.CrystalPrototype.strukturbericht" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.style">
+<em class="property">property </em><code class="sig-name descname">style</code><a class="headerlink" href="#atomman.library.record.CrystalPrototype.style" title="Permalink to this definition">¶</a></dt>
+<dd><p>The record style</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.ucell">
+<em class="property">property </em><code class="sig-name descname">ucell</code><a class="headerlink" href="#atomman.library.record.CrystalPrototype.ucell" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.record.CrystalPrototype.xsd_filename">
+<em class="property">property </em><code class="sig-name descname">xsd_filename</code><a class="headerlink" href="#atomman.library.record.CrystalPrototype.xsd_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>The module path and file name of the record’s xsd schema</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="atomman.library.Database.html"
+                        title="previous chapter">Database</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="atomman.library.record.RelaxedCrystal.html"
+                        title="next chapter">RelaxedCrystal</a></p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="atomman.library.record.RelaxedCrystal.html" title="RelaxedCrystal"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="atomman.library.Database.html" title="Database"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.4.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="atomman.library.html" >library</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

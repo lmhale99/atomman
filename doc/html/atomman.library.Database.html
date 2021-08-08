@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Database &#8212; atomman 1.3.7 documentation</title>
+    <title>Database &#8212; atomman 1.4.0 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="atomman.library.html" title="library"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="atomman.library.html" accesskey="U">library</a> &#187;</li> 
       </ul>
@@ -50,80 +50,92 @@
 <h1>Database<a class="headerlink" href="#database" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="atomman.library.Database">
-<em class="property">class </em><code class="sig-prename descclassname">atomman.library.</code><code class="sig-name descname">Database</code><span class="sig-paren">(</span><em class="sig-param">host=None</em>, <em class="sig-param">username=None</em>, <em class="sig-param">password=None</em>, <em class="sig-param">certification=None</em>, <em class="sig-param">localpath=None</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">local=None</em>, <em class="sig-param">remote=None</em>, <em class="sig-param">load=False</em>, <em class="sig-param">status='active'</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">atomman.library.</code><code class="sig-name descname">Database</code><span class="sig-paren">(</span><em class="sig-param">local=None</em>, <em class="sig-param">remote=None</em>, <em class="sig-param">localpath=None</em>, <em class="sig-param">local_name=None</em>, <em class="sig-param">local_database=None</em>, <em class="sig-param">local_style=None</em>, <em class="sig-param">local_host=None</em>, <em class="sig-param">local_terms=None</em>, <em class="sig-param">remote_name=None</em>, <em class="sig-param">remote_database=None</em>, <em class="sig-param">remote_style=None</em>, <em class="sig-param">remote_host=None</em>, <em class="sig-param">remote_terms=None</em>, <em class="sig-param">kim_models=None</em>, <em class="sig-param">kim_api_directory=None</em>, <em class="sig-param">kim_models_file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">potentials.Database.Database</span></code></p>
 <p>Child of potentials.Database extended for interacting with structure
 and defect reference records.</p>
 <dl class="method">
-<dt id="atomman.library.Database.crystal_prototypes">
-<em class="property">property </em><code class="sig-name descname">crystal_prototypes</code><a class="headerlink" href="#atomman.library.Database.crystal_prototypes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loaded CrystalPrototype objects</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="atomman.library.Database.crystal_prototypes_df">
-<em class="property">property </em><code class="sig-name descname">crystal_prototypes_df</code><a class="headerlink" href="#atomman.library.Database.crystal_prototypes_df" title="Permalink to this definition">¶</a></dt>
-<dd><p>Metadata for loaded CrystalPrototype objects</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>pandas.DataFrame or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
 <dt id="atomman.library.Database.download_all">
-<code class="sig-name descname">download_all</code><span class="sig-paren">(</span><em class="sig-param">localpath=None</em>, <em class="sig-param">format='json'</em>, <em class="sig-param">citeformat='bib'</em>, <em class="sig-param">indent=None</em>, <em class="sig-param">status='active'</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">getfiles=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.download_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Downloads all records from the remote to localhost.</p>
+<code class="sig-name descname">download_all</code><span class="sig-paren">(</span><em class="sig-param">status=None</em>, <em class="sig-param">downloadfiles=True</em>, <em class="sig-param">overwrite=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.download_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads potential and structure-related records from the remote
+location to the local location.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>localpath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Path to a local directory where the records are to be copied to.
-If not given, will check localpath value set during object
-initialization.</p></li>
-<li><p><strong>format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The file format to save the results locally as.  Allowed values are
-‘xml’ and ‘json’.  Default value is ‘json’.</p></li>
-<li><p><strong>citeformat</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The file format to save Citation records locally as.  Allowed
-values are ‘xml’, ‘json’, and ‘bib’.  Default value is ‘bib’.</p></li>
-<li><p><strong>indent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – The indentation spacing size to use for the locally saved record files.
-If not given, the JSON/XML content will be compact.</p></li>
+<li><p><strong>status</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – Only potential_LAMMPS records with the given status(es) will be
+downloaded.  Allowed values are ‘active’ , ‘superseded’, and ‘retracted’.
+If None (default) is given, then all potentials will be downloaded.</p></li>
+<li><p><strong>downloadfiles</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, the parameter files associated with the potential_LAMMPS
+record will also be downloaded.</p></li>
+<li><p><strong>overwrite</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if any existing local records with names matching
+remote records are updated (True) or left unchanged (False).  Default
+value is False.</p></li>
 <li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, info messages will be printed during operations.  Default
 value is False.</p></li>
-<li><p><strong>status</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – Only potential_LAMMPS records with the given status(es) will be
-downloaded.  Allowed values are ‘active’ (default), ‘superseded’, and
-‘retracted’.  If None is given, then all potentials will be downloaded.</p></li>
-<li><p><strong>getfiles</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, the parameter files associated with the potential_LAMMPS
-record will also be downloaded.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a> – If no localpath, no potentials, invalid format, or records in a
-    different format already exist in localpath.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.library.Database.download_crystal_prototypes">
-<code class="sig-name descname">download_crystal_prototypes</code><span class="sig-paren">(</span><em class="sig-param">localpath=None</em>, <em class="sig-param">prototypes=None</em>, <em class="sig-param">format='json'</em>, <em class="sig-param">indent=None</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.download_crystal_prototypes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Download citation records from the remote and save to localpath.</p>
+<code class="sig-name descname">download_crystal_prototypes</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">id=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">commonname=None</em>, <em class="sig-param">prototype=None</em>, <em class="sig-param">pearson=None</em>, <em class="sig-param">strukturbericht=None</em>, <em class="sig-param">sg_number=None</em>, <em class="sig-param">sg_hm=None</em>, <em class="sig-param">sg_schoenflies=None</em>, <em class="sig-param">crystalfamily=None</em>, <em class="sig-param">natypes=None</em>, <em class="sig-param">overwrite=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.download_crystal_prototypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads crystal prototypes from the remote to the local.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>localpath</strong> (<em>path-like object</em><em>, </em><em>optional</em>) – Path to a local directory where the files will be saved to.  If not
-given, will use the localpath value set during object initialization.</p></li>
-<li><p><strong>prototypes</strong> (<em>list of CrystalPrototype</em><em>, </em><em>optional</em>) – A list of crystal prototypes to download. If not given, all prototypes will
-be downloaded.</p></li>
-<li><p><strong>format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The file format to save the record files as.  Allowed values are
-‘xml’ and ‘json’ (default).</p></li>
-<li><p><strong>indent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – The indentation spacing size to use for the locally saved record files.
-If not given, the JSON/XML content will be compact.  Ignored if format
-is ‘bib’.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The record name(s) to parse by.  For crystal prototype records, the
+names should correspond to the id.</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – Prototype ID(s) to search for.  These are unique identifiers for each
+prototype based on comm.</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – UUID4 key(s) to search for.  Each entry has a unique random-generated
+UUID4 key.</p></li>
+<li><p><strong>name</strong> – Common name(s) to limit the search by.</p></li>
+<li><p><strong>prototype</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – Prototype identifying composition(s) to limit the search by.</p></li>
+<li><p><strong>pearson</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The Pearson symbol(s) to limit the search by.</p></li>
+<li><p><strong>strukturbericht</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The strukturbericht identifier(s) to limit the search by.</p></li>
+<li><p><strong>sg_number</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The space group number(s) to limit the search by.</p></li>
+<li><p><strong>sg_hm</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The space group Hermann-Maguin identifier(s) to limit the search by.</p></li>
+<li><p><strong>sg_schoenflies</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The space group Schoenflies identifier(s) to limit the search by.</p></li>
+<li><p><strong>crystalfamily</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The crystal system families to limit the search by.</p></li>
+<li><p><strong>natypes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number(s) of unique atom types to limit the search by.</p></li>
+<li><p><strong>overwrite</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if any existing local records with names matching
+remote records are updated (True) or left unchanged (False).  Default
+value is False.</p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, info messages will be printed during operations.  Default
+value is False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.Database.download_reference_crystals">
+<code class="sig-name descname">download_reference_crystals</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">id=None</em>, <em class="sig-param">sourcename=None</em>, <em class="sig-param">sourcelink=None</em>, <em class="sig-param">crystalfamily=None</em>, <em class="sig-param">composition=None</em>, <em class="sig-param">symbols=None</em>, <em class="sig-param">natoms=None</em>, <em class="sig-param">natypes=None</em>, <em class="sig-param">keyword=None</em>, <em class="sig-param">overwrite=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.download_reference_crystals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download reference records from the remote and save to localpath.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The record name(s) to parse by.  For reference crystal records, the
+names should correspond to the id.</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The record id(s) to parse by.  For reference crystal records, the
+id are letters identifying the source database “mp-“, “mvc-“, or “oqmd-“,
+followed by the source database’s identification number.</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – UUID4 key(s) to search for.  Each entry has a unique random-generated
+UUID4 key.</p></li>
+<li><p><strong>sourcename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The full name of source DFT databases to limit the search by.
+“Materials Project” or “Open Quantum Materials Database”.</p></li>
+<li><p><strong>sourcelink</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The web link of the source DFT databases to limit the search by.</p></li>
+<li><p><strong>crystalfamily</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The crystal system families to limit the search by.</p></li>
+<li><p><strong>composition</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The reduced compositions of the structures to limit the search by.
+Element symbols are sorted alphabetically.</p></li>
+<li><p><strong>symbols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – Element symbols in the crystal to limit the search by.</p></li>
+<li><p><strong>natoms</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number of unique atoms in the crystal’s unit cell to limit the
+search by.</p></li>
+<li><p><strong>natypes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number(s) of unique atom types to limit the search by.</p></li>
+<li><p><strong>overwrite</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if any existing local records with names matching
+remote records are updated (True) or left unchanged (False).  Default
+value is False.</p></li>
 <li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, info messages will be printed during operations.  Default
 value is False.</p></li>
 </ul>
@@ -133,22 +145,111 @@ value is False.</p></li>
 
 <dl class="method">
 <dt id="atomman.library.Database.download_relaxed_crystals">
-<code class="sig-name descname">download_relaxed_crystals</code><span class="sig-paren">(</span><em class="sig-param">localpath=None</em>, <em class="sig-param">crystals=None</em>, <em class="sig-param">standing='good'</em>, <em class="sig-param">format='json'</em>, <em class="sig-param">indent=None</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.download_relaxed_crystals" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">download_relaxed_crystals</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">method='dynamic'</em>, <em class="sig-param">standing='good'</em>, <em class="sig-param">family=None</em>, <em class="sig-param">parent_key=None</em>, <em class="sig-param">potential_LAMMPS_id=None</em>, <em class="sig-param">potential_LAMMPS_key=None</em>, <em class="sig-param">potential_id=None</em>, <em class="sig-param">potential_key=None</em>, <em class="sig-param">symbols=None</em>, <em class="sig-param">natoms=None</em>, <em class="sig-param">natypes=None</em>, <em class="sig-param">keyword=None</em>, <em class="sig-param">overwrite=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.download_relaxed_crystals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download citation records from the remote and save to localpath.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>localpath</strong> (<em>path-like object</em><em>, </em><em>optional</em>) – Path to a local directory where the files will be saved to.  If not
-given, will use the localpath value set during object initialization.</p></li>
-<li><p><strong>crystals</strong> (<em>list of RelaxedCrystals</em><em>, </em><em>optional</em>) – A list of relaxed crystals to download. If not given, all (good)
-crystals will be downloaded.</p></li>
-<li><p><strong>standing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – By default, only records with standing == good will be downloaded.
-Setting this to None will download all crystals.</p></li>
-<li><p><strong>format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The file format to save the record files as.  Allowed values are
-‘xml’ and ‘json’ (default).</p></li>
-<li><p><strong>indent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – The indentation spacing size to use for the locally saved record files.
-If not given, the JSON/XML content will be compact.  Ignored if format
-is ‘bib’.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – The record name(s) to parse by.  For relaxed crystal records, the
+names should correspond to the key.</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – UUID4 key(s) to search for.  Each entry has a unique random-generated
+UUID4 key.</p></li>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – The relaxation method used.  Allowed values are dynamic, static and box.
+Default value is dynamic (the most rigorous relaxation method).  All
+will be loaded if set to None.</p></li>
+<li><p><strong>standing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – “good” records are the unique crystals found with the most rigorous
+relaxation, and with known prototypes over DFT structures.  “bad” are
+records filtered out, usually for being duplicates.  Default value is
+“good”.  All will be loaded if set to None.</p></li>
+<li><p><strong>family</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><em>atomman.library.CrystalPrototype</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The crystal family associated with the relaxed crystal - either crystal
+prototype name or MP/OQMD database entry name.</p></li>
+<li><p><strong>parent_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The UUID4 key(s) assigned to the calculation that the record is based
+on.</p></li>
+<li><p><strong>potential_LAMMPS_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The id for a LAMMPS implemented potential to limit the search by.</p></li>
+<li><p><strong>potential_LAMMPS_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The UUID4 for a LAMMPS implemented potential to limit the search by.</p></li>
+<li><p><strong>potential_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The id for a potential to limit the search by.</p></li>
+<li><p><strong>potential_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The UUID4 for a potential to limit the search by.</p></li>
+<li><p><strong>symbols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – Element symbols in the crystal to limit the search by.</p></li>
+<li><p><strong>natypes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number of unique element model symbols in the crystal to limit
+the search by.</p></li>
+<li><p><strong>natoms</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number of unique atoms in the crystal’s unit cell to limit the
+search by.</p></li>
+<li><p><strong>overwrite</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Flag indicating if any existing local records with names matching
+remote records are updated (True) or left unchanged (False).  Default
+value is False.</p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, info messages will be printed during operations.  Default
+value is False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.Database.fetch_mp_crystal">
+<code class="sig-name descname">fetch_mp_crystal</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">api_key=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.fetch_mp_crystal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a single reference crystal from Materials Project based on id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The structure id of the crystal to retrieve.</p></li>
+<li><p><strong>api_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The user’s Materials Project API key. If not given, will use “MAPI_KEY”
+environment variable.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.Database.fetch_mp_crystals">
+<code class="sig-name descname">fetch_mp_crystals</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">api_key=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.fetch_mp_crystals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves reference crystals from Materials Project based on id(s).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – The structure id(s) of the crystals to retrieve.</p></li>
+<li><p><strong>api_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The user’s Materials Project API key or path to a file containing the key.
+If not given, will use the “MAPI_KEY” environment variable.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.Database.fetch_oqmd_crystal">
+<code class="sig-name descname">fetch_oqmd_crystal</code><span class="sig-paren">(</span><em class="sig-param">id</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.fetch_oqmd_crystal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a single reference crystal from OQMD based on id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The OQMD entry number with “oqmd-” prefix.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.Database.fetch_reference_crystal">
+<code class="sig-name descname">fetch_reference_crystal</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">api_key=None</em>, <em class="sig-param">local=None</em>, <em class="sig-param">remote=None</em>, <em class="sig-param">refresh_cache=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.fetch_reference_crystal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a single reference crystal.  First, the database is checked
+for matches with the DOI, then with the record name.  If no matches are found
+in the database, then the corresponding crystal structure is downloaded from
+the source database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The reference crystal’s unique id.  Combines a database tag “mp-” or
+“oqmd-” and the DFT database’s entry id.</p></li>
+<li><p><strong>api_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The user’s Materials Project API key or path to a file containing the
+key. Only needed for fetching structures from Materials Project and if
+the key is not set to the “MAPI_KEY” environment variable.</p></li>
+<li><p><strong>local</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the local location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>remote</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the remote location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>refresh_cache</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If the local database is of style “local”, indicates if the metadata
+cache file is to be refreshed.  If False,
+metadata for new records will be added but the old record metadata
+fields will not be updated.  If True, then the metadata for all
+records will be regenerated, which is needed to update the metadata
+for modified records.</p></li>
 <li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, info messages will be printed during operations.  Default
 value is False.</p></li>
 </ul>
@@ -158,50 +259,187 @@ value is False.</p></li>
 
 <dl class="method">
 <dt id="atomman.library.Database.get_crystal_prototype">
-<code class="sig-name descname">get_crystal_prototype</code><span class="sig-paren">(</span><em class="sig-param">id=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">prototype=None</em>, <em class="sig-param">pearson=None</em>, <em class="sig-param">strukturbericht=None</em>, <em class="sig-param">sg_number=None</em>, <em class="sig-param">sg_hm=None</em>, <em class="sig-param">sg_schoenflies=None</em>, <em class="sig-param">keyword=None</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.get_crystal_prototype" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="atomman.library.Database.get_crystal_prototypes">
-<code class="sig-name descname">get_crystal_prototypes</code><span class="sig-paren">(</span><em class="sig-param">id=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">prototype=None</em>, <em class="sig-param">pearson=None</em>, <em class="sig-param">strukturbericht=None</em>, <em class="sig-param">sg_number=None</em>, <em class="sig-param">sg_hm=None</em>, <em class="sig-param">sg_schoenflies=None</em>, <em class="sig-param">keyword=None</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.get_crystal_prototypes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all matching crystal prototypes from the database.</p>
+<code class="sig-name descname">get_crystal_prototype</code><span class="sig-paren">(</span><em class="sig-param">local=None</em>, <em class="sig-param">remote=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">id=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">commonname=None</em>, <em class="sig-param">prototype=None</em>, <em class="sig-param">pearson=None</em>, <em class="sig-param">strukturbericht=None</em>, <em class="sig-param">sg_number=None</em>, <em class="sig-param">sg_hm=None</em>, <em class="sig-param">sg_schoenflies=None</em>, <em class="sig-param">crystalfamily=None</em>, <em class="sig-param">natypes=None</em>, <em class="sig-param">prompt=True</em>, <em class="sig-param">refresh_cache=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.get_crystal_prototype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves exactly one matching crystal prototype from the database.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>local</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the local location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>remote</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the remote location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The record name(s) to parse by.  For crystal prototype records, the
+names should correspond to the id.</p></li>
 <li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – Prototype ID(s) to search for.  These are unique identifiers for each
 prototype based on comm.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – UUID4 key(s) to search for.  Each entry has a unique random-generated
 UUID4 key.</p></li>
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – Common name(s) to limit the search by.</p></li>
+<li><p><strong>name</strong> – Common name(s) to limit the search by.</p></li>
 <li><p><strong>prototype</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – Prototype identifying composition(s) to limit the search by.</p></li>
 <li><p><strong>pearson</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The Pearson symbol(s) to limit the search by.</p></li>
 <li><p><strong>strukturbericht</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The strukturbericht identifier(s) to limit the search by.</p></li>
 <li><p><strong>sg_number</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The space group number(s) to limit the search by.</p></li>
 <li><p><strong>sg_hm</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The space group Hermann-Maguin identifier(s) to limit the search by.</p></li>
 <li><p><strong>sg_schoenflies</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The space group Schoenflies identifier(s) to limit the search by.</p></li>
-<li><p><strong>keyword</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – If given, will limit the search to all records that contain the keyword
-substring.  Cannot be combined with any of the above parameters.</p></li>
+<li><p><strong>crystalfamily</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The crystal system family to limit the search by.</p></li>
+<li><p><strong>natypes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number(s) of unique atom types to limit the search by.</p></li>
+<li><p><strong>prompt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If prompt=True (default) then a screen input will ask for a selection
+if multiple matching potentials are found.  If prompt=False, then an
+error will be thrown if multiple matches are found.</p></li>
+<li><p><strong>refresh_cache</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If the local database is of style “local”, indicates if the metadata
+cache file is to be refreshed.  If False,
+metadata for new records will be added but the old record metadata
+fields will not be updated.  If True, then the metadata for all
+records will be regenerated, which is needed to update the metadata
+for modified records.</p></li>
 <li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, info messages will be printed during operations.  Default
 value is False.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The matching potentials</p>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.Database.get_crystal_prototypes">
+<code class="sig-name descname">get_crystal_prototypes</code><span class="sig-paren">(</span><em class="sig-param">local=None</em>, <em class="sig-param">remote=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">id=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">commonname=None</em>, <em class="sig-param">prototype=None</em>, <em class="sig-param">pearson=None</em>, <em class="sig-param">strukturbericht=None</em>, <em class="sig-param">sg_number=None</em>, <em class="sig-param">sg_hm=None</em>, <em class="sig-param">sg_schoenflies=None</em>, <em class="sig-param">crystalfamily=None</em>, <em class="sig-param">natypes=None</em>, <em class="sig-param">refresh_cache=False</em>, <em class="sig-param">return_df=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.get_crystal_prototypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all matching crystal prototypes from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>local</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the local location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>remote</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the remote location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – The record name(s) to parse by.  For crystal prototype records, the
+names should correspond to the id.</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – Prototype ID(s) to search for.  These are unique identifiers for each
+prototype based on comm.</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – UUID4 key(s) to search for.  Each entry has a unique random-generated
+UUID4 key.</p></li>
+<li><p><strong>commonname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – Common name(s) to limit the search by.</p></li>
+<li><p><strong>prototype</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – Prototype identifying composition(s) to limit the search by.</p></li>
+<li><p><strong>pearson</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The Pearson symbol(s) to limit the search by.</p></li>
+<li><p><strong>strukturbericht</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The strukturbericht identifier(s) to limit the search by.</p></li>
+<li><p><strong>sg_number</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The space group number(s) to limit the search by.</p></li>
+<li><p><strong>sg_hm</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The space group Hermann-Maguin identifier(s) to limit the search by.</p></li>
+<li><p><strong>sg_schoenflies</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The space group Schoenflies identifier(s) to limit the search by.</p></li>
+<li><p><strong>crystalfamily</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The crystal system family to limit the search by.</p></li>
+<li><p><strong>natypes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – The number(s) of unique atom types to limit the search by.</p></li>
+<li><p><strong>refresh_cache</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If the local database is of style “local”, indicates if the metadata
+cache file is to be refreshed.  If False,
+metadata for new records will be added but the old record metadata
+fields will not be updated.  If True, then the metadata for all
+records will be regenerated, which is needed to update the metadata
+for modified records.</p></li>
+<li><p><strong>return_df</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, then the corresponding pandas.Dataframe of metadata
+will also be returned.</p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, info messages will be printed during operations.  Default
+value is False.</p></li>
+</ul>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of Potential</p>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.Database.get_reference_crystal">
+<code class="sig-name descname">get_reference_crystal</code><span class="sig-paren">(</span><em class="sig-param">local=None</em>, <em class="sig-param">remote=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">id=None</em>, <em class="sig-param">sourcename=None</em>, <em class="sig-param">sourcelink=None</em>, <em class="sig-param">crystalfamily=None</em>, <em class="sig-param">composition=None</em>, <em class="sig-param">symbols=None</em>, <em class="sig-param">natoms=None</em>, <em class="sig-param">natypes=None</em>, <em class="sig-param">prompt=True</em>, <em class="sig-param">refresh_cache=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.get_reference_crystal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves exactly one matching reference crystal from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>local</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the local location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>remote</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the remote location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The record name(s) to parse by.  For reference crystal records, the
+names should correspond to the id.</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The record id(s) to parse by.  For reference crystal records, the
+id are letters identifying the source database “mp-“, “mvc-“, or “oqmd-“,
+followed by the source database’s identification number.</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – UUID4 key(s) to search for.  Each entry has a unique random-generated
+UUID4 key.</p></li>
+<li><p><strong>sourcename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The full name of source DFT databases to limit the search by.
+“Materials Project” or “Open Quantum Materials Database”.</p></li>
+<li><p><strong>sourcelink</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The web link of the source DFT databases to limit the search by.</p></li>
+<li><p><strong>crystalfamily</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The crystal system families to limit the search by.</p></li>
+<li><p><strong>composition</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The reduced compositions of the structures to limit the search by.
+Element symbols are sorted alphabetically.</p></li>
+<li><p><strong>symbols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – Element symbols in the crystal to limit the search by.</p></li>
+<li><p><strong>natoms</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number of unique atoms in the crystal’s unit cell to limit the
+search by.</p></li>
+<li><p><strong>natypes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number(s) of unique atom types to limit the search by.</p></li>
+<li><p><strong>prompt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If prompt=True (default) then a screen input will ask for a selection
+if multiple matching potentials are found.  If prompt=False, then an
+error will be thrown if multiple matches are found.</p></li>
+<li><p><strong>refresh_cache</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If the local database is of style “local”, indicates if the metadata
+cache file is to be refreshed.  If False,
+metadata for new records will be added but the old record metadata
+fields will not be updated.  If True, then the metadata for all
+records will be regenerated, which is needed to update the metadata
+for modified records.</p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, info messages will be printed during operations.  Default
+value is False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="atomman.library.Database.get_reference_crystals">
+<code class="sig-name descname">get_reference_crystals</code><span class="sig-paren">(</span><em class="sig-param">local=None</em>, <em class="sig-param">remote=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">id=None</em>, <em class="sig-param">sourcename=None</em>, <em class="sig-param">sourcelink=None</em>, <em class="sig-param">crystalfamily=None</em>, <em class="sig-param">composition=None</em>, <em class="sig-param">symbols=None</em>, <em class="sig-param">natoms=None</em>, <em class="sig-param">natypes=None</em>, <em class="sig-param">refresh_cache=False</em>, <em class="sig-param">return_df=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.get_reference_crystals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all matching reference crystals from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>local</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the local location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>remote</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the remote location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The record name(s) to parse by.  For reference crystal records, the
+names should correspond to the id.</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The record id(s) to parse by.  For reference crystal records, the
+id are letters identifying the source database “mp-“, “mvc-“, or “oqmd-“,
+followed by the source database’s identification number.</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – UUID4 key(s) to search for.  Each entry has a unique random-generated
+UUID4 key.</p></li>
+<li><p><strong>sourcename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The full name of source DFT databases to limit the search by.
+“Materials Project” or “Open Quantum Materials Database”.</p></li>
+<li><p><strong>sourcelink</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The web link of the source DFT databases to limit the search by.</p></li>
+<li><p><strong>crystalfamily</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The crystal system families to limit the search by.</p></li>
+<li><p><strong>composition</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The reduced compositions of the structures to limit the search by.
+Element symbols are sorted alphabetically.</p></li>
+<li><p><strong>symbols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – Element symbols in the crystal to limit the search by.</p></li>
+<li><p><strong>natoms</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number of unique atoms in the crystal’s unit cell to limit the
+search by.</p></li>
+<li><p><strong>natypes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number(s) of unique atom types to limit the search by.</p></li>
+<li><p><strong>refresh_cache</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If the local database is of style “local”, indicates if the metadata
+cache file is to be refreshed.  If False,
+metadata for new records will be added but the old record metadata
+fields will not be updated.  If True, then the metadata for all
+records will be regenerated, which is needed to update the metadata
+for modified records.</p></li>
+<li><p><strong>return_df</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, then the corresponding pandas.Dataframe of metadata
+will also be returned.</p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, info messages will be printed during operations.  Default
+value is False.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.library.Database.get_relaxed_crystal">
-<code class="sig-name descname">get_relaxed_crystal</code><span class="sig-paren">(</span><em class="sig-param">key=None</em>, <em class="sig-param">method='dynamic'</em>, <em class="sig-param">standing='good'</em>, <em class="sig-param">family=None</em>, <em class="sig-param">parent_key=None</em>, <em class="sig-param">potential=None</em>, <em class="sig-param">potential_LAMMPS_id=None</em>, <em class="sig-param">potential_LAMMPS_key=None</em>, <em class="sig-param">potential_id=None</em>, <em class="sig-param">potential_key=None</em>, <em class="sig-param">symbols=None</em>, <em class="sig-param">natoms=None</em>, <em class="sig-param">natypes=None</em>, <em class="sig-param">keyword=None</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.get_relaxed_crystal" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets a single matching relaxed crystal from the database. If multiple
-matches are found, a selection menu will appear.</p>
+<code class="sig-name descname">get_relaxed_crystal</code><span class="sig-paren">(</span><em class="sig-param">local=None</em>, <em class="sig-param">remote=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">method='dynamic'</em>, <em class="sig-param">standing='good'</em>, <em class="sig-param">family=None</em>, <em class="sig-param">parent_key=None</em>, <em class="sig-param">potential_LAMMPS_id=None</em>, <em class="sig-param">potential_LAMMPS_key=None</em>, <em class="sig-param">potential_id=None</em>, <em class="sig-param">potential_key=None</em>, <em class="sig-param">symbols=None</em>, <em class="sig-param">natoms=None</em>, <em class="sig-param">natypes=None</em>, <em class="sig-param">keyword=None</em>, <em class="sig-param">prompt=True</em>, <em class="sig-param">refresh_cache=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.get_relaxed_crystal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves exactly one matching relaxed crystal from the database.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>local</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the local location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>remote</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the remote location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – The record name(s) to parse by.  For relaxed crystal records, the
+names should correspond to the key.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – UUID4 key(s) to search for.  Each entry has a unique random-generated
 UUID4 key.</p></li>
 <li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – The relaxation method used.  Allowed values are dynamic, static and box.
@@ -211,11 +449,10 @@ will be loaded if set to None.</p></li>
 relaxation, and with known prototypes over DFT structures.  “bad” are
 records filtered out, usually for being duplicates.  Default value is
 “good”.  All will be loaded if set to None.</p></li>
-<li><p><strong>family</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference internal" href="atomman.library.CrystalPrototype.html#atomman.library.CrystalPrototype" title="atomman.library.CrystalPrototype"><em>atomman.library.CrystalPrototype</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The crystal family associated with the relaxed crystal - either crystal
+<li><p><strong>family</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><em>atomman.library.CrystalPrototype</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The crystal family associated with the relaxed crystal - either crystal
 prototype name or MP/OQMD database entry name.</p></li>
 <li><p><strong>parent_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The UUID4 key(s) assigned to the calculation that the record is based
 on.</p></li>
-<li><p><strong>potential</strong> (<em>atomman.lammps.Potential</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – A loaded LAMMPS potential object to limit the search by.</p></li>
 <li><p><strong>potential_LAMMPS_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The id for a LAMMPS implemented potential to limit the search by.</p></li>
 <li><p><strong>potential_LAMMPS_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The UUID4 for a LAMMPS implemented potential to limit the search by.</p></li>
 <li><p><strong>potential_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The id for a potential to limit the search by.</p></li>
@@ -223,33 +460,36 @@ on.</p></li>
 <li><p><strong>symbols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – Element symbols in the crystal to limit the search by.</p></li>
 <li><p><strong>natypes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number of unique element model symbols in the crystal to limit
 the search by.</p></li>
-<li><p><strong>natoms</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number of unique atoms in the crystal’s unit cell to limit the
-search by.</p></li>
-<li><p><strong>keyword</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – If given, will limit the search to all records that contain the keyword
-substring.  Cannot be combined with any of the above parameters.</p></li>
+<li><p><strong>natypes</strong> – The number(s) of unique atom types to limit the search by.</p></li>
+<li><p><strong>prompt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If prompt=True (default) then a screen input will ask for a selection
+if multiple matching potentials are found.  If prompt=False, then an
+error will be thrown if multiple matches are found.</p></li>
+<li><p><strong>refresh_cache</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If the local database is of style “local”, indicates if the metadata
+cache file is to be refreshed.  If False,
+metadata for new records will be added but the old record metadata
+fields will not be updated.  If True, then the metadata for all
+records will be regenerated, which is needed to update the metadata
+for modified records.</p></li>
 <li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, info messages will be printed during operations.  Default
 value is False.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A selected relaxed crystal record.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="atomman.mep.BasePath copy.html#atomman.library.RelaxedCrystal" title="atomman.library.RelaxedCrystal">RelaxedCrystal</a></p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a> – If no matching records are identified.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="atomman.library.Database.get_relaxed_crystals">
-<code class="sig-name descname">get_relaxed_crystals</code><span class="sig-paren">(</span><em class="sig-param">key=None</em>, <em class="sig-param">method='dynamic'</em>, <em class="sig-param">standing='good'</em>, <em class="sig-param">family=None</em>, <em class="sig-param">parent_key=None</em>, <em class="sig-param">potential=None</em>, <em class="sig-param">potential_LAMMPS_id=None</em>, <em class="sig-param">potential_LAMMPS_key=None</em>, <em class="sig-param">potential_id=None</em>, <em class="sig-param">potential_key=None</em>, <em class="sig-param">symbols=None</em>, <em class="sig-param">natoms=None</em>, <em class="sig-param">natypes=None</em>, <em class="sig-param">keyword=None</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.get_relaxed_crystals" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_relaxed_crystals</code><span class="sig-paren">(</span><em class="sig-param">local=None</em>, <em class="sig-param">remote=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">method='dynamic'</em>, <em class="sig-param">standing='good'</em>, <em class="sig-param">family=None</em>, <em class="sig-param">parent_key=None</em>, <em class="sig-param">potential_LAMMPS_id=None</em>, <em class="sig-param">potential_LAMMPS_key=None</em>, <em class="sig-param">potential_id=None</em>, <em class="sig-param">potential_key=None</em>, <em class="sig-param">symbols=None</em>, <em class="sig-param">natoms=None</em>, <em class="sig-param">natypes=None</em>, <em class="sig-param">refresh_cache=False</em>, <em class="sig-param">return_df=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.get_relaxed_crystals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all matching relaxed crystals from the database.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>local</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the local location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>remote</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the remote location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – The record name(s) to parse by.  For relaxed crystal records, the
+names should correspond to the key.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – UUID4 key(s) to search for.  Each entry has a unique random-generated
 UUID4 key.</p></li>
 <li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – The relaxation method used.  Allowed values are dynamic, static and box.
@@ -259,103 +499,29 @@ will be loaded if set to None.</p></li>
 relaxation, and with known prototypes over DFT structures.  “bad” are
 records filtered out, usually for being duplicates.  Default value is
 “good”.  All will be loaded if set to None.</p></li>
-<li><p><strong>family</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference internal" href="atomman.library.CrystalPrototype.html#atomman.library.CrystalPrototype" title="atomman.library.CrystalPrototype"><em>atomman.library.CrystalPrototype</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The crystal family associated with the relaxed crystal - either crystal
+<li><p><strong>family</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><em>atomman.library.CrystalPrototype</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The crystal family associated with the relaxed crystal - either crystal
 prototype name or MP/OQMD database entry name.</p></li>
 <li><p><strong>parent_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The UUID4 key(s) assigned to the calculation that the record is based
 on.</p></li>
-<li><p><strong>potential</strong> (<em>atomman.lammps.Potential</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – A loaded LAMMPS potential object to limit the search by.</p></li>
 <li><p><strong>potential_LAMMPS_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The id for a LAMMPS implemented potential to limit the search by.</p></li>
 <li><p><strong>potential_LAMMPS_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The UUID4 for a LAMMPS implemented potential to limit the search by.</p></li>
 <li><p><strong>potential_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The id for a potential to limit the search by.</p></li>
 <li><p><strong>potential_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The UUID4 for a potential to limit the search by.</p></li>
 <li><p><strong>symbols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – Element symbols in the crystal to limit the search by.</p></li>
-<li><p><strong>natypes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number of unique element model symbols in the crystal to limit
-the search by.</p></li>
+<li><p><strong>natypes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number(s) of unique atom types to limit the search by.</p></li>
 <li><p><strong>natoms</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number of unique atoms in the crystal’s unit cell to limit the
 search by.</p></li>
-<li><p><strong>keyword</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – If given, will limit the search to all records that contain the keyword
-substring.  Cannot be combined with any of the above parameters.</p></li>
+<li><p><strong>refresh_cache</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If the local database is of style “local”, indicates if the metadata
+cache file is to be refreshed.  If False,
+metadata for new records will be added but the old record metadata
+fields will not be updated.  If True, then the metadata for all
+records will be regenerated, which is needed to update the metadata
+for modified records.</p></li>
+<li><p><strong>return_df</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, then the corresponding pandas.Dataframe of metadata
+will also be returned.</p></li>
 <li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, info messages will be printed during operations.  Default
 value is False.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The matching relaxed crystal records.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of RelaxedCrystal</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="atomman.library.Database.load_crystal_prototypes">
-<code class="sig-name descname">load_crystal_prototypes</code><span class="sig-paren">(</span><em class="sig-param">localpath=None</em>, <em class="sig-param">local=None</em>, <em class="sig-param">remote=None</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.load_crystal_prototypes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads crystal prototypes from the database, first checking localpath, then
-trying to download from host.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>localpath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Path to a local directory to check for records first.  If not given,
-will check localpath value set during object initialization.  If not
-given or set during initialization, then only the remote database will
-be loaded.</p></li>
-<li><p><strong>local</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if records in localpath are to be loaded.  If not given,
-will use the local value set during initialization.</p></li>
-<li><p><strong>remote</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the records in the remote database are to be loaded.
-Setting this to be False is useful/faster if a local copy of the
-database exists.  If not given, will use the local value set during
-initialization.</p></li>
-<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, info messages will be printed during operations.  Default
-value is False.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="atomman.library.Database.load_relaxed_crystals">
-<code class="sig-name descname">load_relaxed_crystals</code><span class="sig-paren">(</span><em class="sig-param">localpath=None</em>, <em class="sig-param">local=None</em>, <em class="sig-param">remote=None</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.library.Database.load_relaxed_crystals" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads relaxed crystals from the database, first checking localpath, then
-trying to download from host.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>localpath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Path to a local directory to check for records first.  If not given,
-will check localpath value set during object initialization.  If not
-given or set during initialization, then only the remote database will
-be loaded.</p></li>
-<li><p><strong>local</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if records in localpath are to be loaded.  If not given,
-will use the local value set during initialization.</p></li>
-<li><p><strong>remote</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the records in the remote database are to be loaded.
-Setting this to be False is useful/faster if a local copy of the
-database exists.  If not given, will use the local value set during
-initialization.</p></li>
-<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, info messages will be printed during operations.  Default
-value is False.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="atomman.library.Database.relaxed_crystals">
-<em class="property">property </em><code class="sig-name descname">relaxed_crystals</code><a class="headerlink" href="#atomman.library.Database.relaxed_crystals" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loaded RelaxedCrystal objects</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="atomman.library.Database.relaxed_crystals_df">
-<em class="property">property </em><code class="sig-name descname">relaxed_crystals_df</code><a class="headerlink" href="#atomman.library.Database.relaxed_crystals_df" title="Permalink to this definition">¶</a></dt>
-<dd><p>Metadata for loaded RelaxedCrystal objects</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>pandas.DataFrame or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -395,7 +561,7 @@ value is False.</p></li>
         <li class="right" >
           <a href="atomman.library.html" title="library"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="atomman.library.html" >library</a> &#187;</li> 
       </ul>

@@ -21,7 +21,8 @@ Tutorials
    1.4.9. spglib conversions <1.4.9._spglib_conversions>
    1.4.10. prototype loading <1.4.10._prototype_loading>
    1.4.11. crystal loading <1.4.11._crystal_loading>
-   1.5. Settings and Library classes <1.5._Settings_and_Library_classes>
+   1.4.12. DFT reference crystal loading <1.4.12._DFT_reference_crystal_loading>
+   1.5. Settings and databases <1.5._Settings_and_databases>
    2. LAMMPS functionality <2._LAMMPS_functionality>
    2.1. Potential class <2.1._Potential_class>
    2.2. Running LAMMPS and the Log class <2.2._Running_LAMMPS_and_the_Log_class>
@@ -30,6 +31,7 @@ Tutorials
    3.2. NeighborList class <3.2._NeighborList_class>
    3.3. Region selectors <3.3._Region_selectors>
    3.4. Minimum energy paths <3.4._Minimum_energy_paths>
+   3.5. Cluster generators <3.5._Cluster_generators>
    4. Defect creation and analysis <4._Defect_creation_and_analysis>
    4.1. Point defect generation <4.1._Point_defect_generation>
    4.2. Free surface generator <4.2._Free_surface_generator>

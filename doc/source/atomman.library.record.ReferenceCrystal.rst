@@ -1,7 +1,7 @@
-RelaxedCrystal
+ReferenceCrystal
 ==============
 
-.. autoclass:: atomman.library.RelaxedCrystal
+.. autoclass:: atomman.library.record.ReferenceCrystal
     :members:
     :undoc-members:
     :show-inheritance:

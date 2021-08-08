@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: Dislocation analysis tools &#8212; atomman 1.3.7 documentation</title>
+    <title>Introduction to atomman: Dislocation analysis tools &#8212; atomman 1.4.0 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="4.5._Gamma_surface_plotting.html" title="Introduction to atomman: Gamma surface plotting"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -334,8 +334,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.7
-Notebook executed on 2021-02-19
+atomman version = 1.4.0
+Notebook executed on 2021-08-05
 </pre></div></div>
 </div>
 </div>
@@ -343,7 +343,7 @@ Notebook executed on 2021-02-19
 <h2>1.1. Load atomic systems<a class="headerlink" href="#1.1.-Load-atomic-systems" title="Permalink to this headline">¶</a></h2>
 <p>A system containing a single Al <span class="math notranslate nohighlight">\(\frac{a}{2}\)</span>&lt;111&gt; edge dislocation was created by</p>
 <ol class="arabic simple">
-<li><p>Using the Dislocation class to solve the elasticity solution for the dislocation</p></li>
+<li><p>Using the Dislocation class to solve the elasticity solution for the dislocation.</p></li>
 <li><p>Generating a dislocation monopole and base reference system using Dislocation’s monopole method.</p></li>
 <li><p>Performing a short low temerature anneal and energy minimization to relax the atomic configuration. During relaxation, the system is kept periodic along the dislocation line, but is non-periodic in the other two directions. Atoms at the edge of the non-periodic directions are held fixed.</p></li>
 </ol>
@@ -431,7 +431,7 @@ array([0.        , 2.86378246, 0.        ])
 \[S_{i \alpha} = -\sum_{\beta=1}^{n_{\alpha}} {\left( x_{i \alpha \beta} - X_{i \alpha \beta} \right)}\]</div>
 <p>where <span class="math notranslate nohighlight">\(n_{\alpha}\)</span> is the number of nearest neighbor atoms <span class="math notranslate nohighlight">\(\beta\)</span> of atom <span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(x_{i \alpha \beta}\)</span> is the vector difference between atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in the current configuration, and <span class="math notranslate nohighlight">\(X_{i \alpha \beta}\)</span> is the vector difference between atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in the reference configuration.</p>
 <p><strong>Note 1</strong>: To be general with any crystal and dislocation, the slip vector computed here is <em>not</em> scaled by the number of slipped neighbors like it is in the original formulation. This means that the value of the slip vector returned will be a multiple of the Burgers vector that caused the slip. To estimate the Burgers vector of a dislocation that moved along a slip plane, the slip vector value needs to be divided by the total number of neighbor atoms that are across the slip plane.</p>
-<p><strong>Note 2</strong>: The reference system does not need to be of a perfect crystal and can simply be an earlier state. With this choice, the slip vector will reveal the slip deformation that occured between the two states of the system. This can be useful for identifying how dislocations move in highly deformed/defective systems.</p>
+<p><strong>Note 2</strong>: The reference system does not need to be of a perfect crystal and can simply be an earlier state. With this choice, the slip vector will reveal the slip deformation that occurred between the two states of the system. This can be useful for identifying how dislocations move in highly deformed/defective systems.</p>
 <div class="section" id="2.1.-slip_vector()">
 <h3>2.1. slip_vector()<a class="headerlink" href="#2.1.-slip_vector()" title="Permalink to this headline">¶</a></h3>
 <p>Parameters</p>
@@ -678,7 +678,7 @@ in more detail below.</p>
 <li><p><strong>xlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting x-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the plotting axis.</p></li>
 <li><p><strong>ylim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting y-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the plotting axis.</p></li>
 <li><p><strong>zlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates normal to the plotting axes (i.e. plotxaxis X plotyaxis) to include in the fit. Values are taken in the specified length_unit. The optimum zlim should encompass only a single periodic slice. If not given, then the limits are set based on min and max atomic coordinates along the axis.</p></li>
-<li><p><strong>arrowscale</strong> (<em>float, optional</em>) Scaling factor for the magnitude of the differential displacement arrows. Default value is 1: no scaling, vectors are in units of length. For major components, this is often set such that the max differential displacement compoent after wrapping (see normfactor) is scaled to the distance between the atom pairs in the plot. For minor components, this is often set to a large value simply to make the components visible.</p></li>
+<li><p><strong>arrowscale</strong> (<em>float, optional</em>) Scaling factor for the magnitude of the differential displacement arrows. Default value is 1: no scaling, vectors are in units of length. For major components, this is often set such that the max differential displacement component after wrapping (see normfactor) is scaled to the distance between the atom pairs in the plot. For minor components, this is often set to a large value simply to make the components visible.</p></li>
 <li><p><strong>arrowwidth</strong> (<em>float, optional</em>) Scaling factor to use for the width of the plotted arrows. Default value is 0.005 = 1/200.</p></li>
 <li><p><strong>use0z</strong> (<em>bool, optional</em>) If False (default), the z coordinates from the reference system will be used for zlim and atomcmap colors. If True, the z coordinates will be used from system0 even if system1 is the reference system.</p></li>
 <li><p><strong>atomcolor</strong> (<em>str or list, optional</em>) Matplotlib color name(s) to use to display the atoms. If str, that color will be assigned to all atypes. If list, must give a color value or None for each atype. Default value (None) will use cmap instead. Note: atomcolor and atomcmap can be used together as long as exactly one color or cmap is given for each unique atype.</p></li>
@@ -701,11 +701,9 @@ in more detail below.</p>
 </ul>
 <div class="line-block">
 <div class="line">Values are typically normalized to be within a range of <span class="math notranslate nohighlight">\(\pm\)</span> ddmax by adding/subtracting 2*ddmax to values outside the range.</div>
-<div class="line">- ddmax = <span class="math notranslate nohighlight">\(\frac{|b_i|}{2}\)</span> is typically used for full compact dislocations. As a displacement of <span class="math notranslate nohighlight">\(b_i\)</span> corresponds to a full lattice shift back to a perfect crystal, this choice ensures that only the region associated with the dislocation core will have large differential displacement values.</div>
+<div class="line">- ddmax = <span class="math notranslate nohighlight">\(\frac{|b_i|}{2}\)</span> is typically used for full compact dislocations. As a displacement of <span class="math notranslate nohighlight">\(b_i\)</span> corresponds to a full lattice shift back to a perfect crystal, this choice ensures that only the region associated with the dislocation core will have large differential displacement values. - ddmax = <span class="math notranslate nohighlight">\(\frac{|b_i|}{4}\)</span> is typically used for fcc <span class="math notranslate nohighlight">\(\frac{a}{2}\)</span>&lt;<span class="math notranslate nohighlight">\(1\bar{1}0\)</span>&gt;{111} and hcp <span class="math notranslate nohighlight">\(\frac{a}{3}\)</span>&lt;<span class="math notranslate nohighlight">\(11\bar{2}0\)</span>&gt;{0001} dislocations. These
+dislocations tend to split into partials separated by a stacking fault width. This choice of ddmax means that the differential displacement parallel to the Burgers vector is near zero for the perfect crystal and the stacking fault, making it easy to see where the partial dislocation cores are located.</div>
 </div>
-<ul class="simple">
-<li><p>ddmax = <span class="math notranslate nohighlight">\(\frac{|b_i|}{4}\)</span> is typically used for fcc <span class="math notranslate nohighlight">\(\frac{a}{2}\)</span>&lt;<span class="math notranslate nohighlight">\(1\bar{1}0\)</span>&gt;{111} and hcp <span class="math notranslate nohighlight">\(\frac{a}{3}\)</span>&lt;<span class="math notranslate nohighlight">\(11\bar{2}0\)</span>&gt;{0001} dislocations. These dislocations tend to split into partials separated by a stacking fault width. This choice of ddmax means that the differential displacement parallel to the Burgers vector is near zero for the perfect crystal and the stacking fault, making it easy to see where the partial dislocation cores are located.</p></li>
-</ul>
 <p>Most of the other method parameters are associated with making the plots look good. The best suggestion is to create one plot, then tinker with the plotting parameters to improve how it looks.</p>
 <p>Define common plotting parameters.</p>
 <div class="nbinput nblast docutils container">
@@ -996,7 +994,7 @@ in more detail below.</p>
         <li class="right" >
           <a href="4.5._Gamma_surface_plotting.html" title="Introduction to atomman: Gamma surface plotting"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

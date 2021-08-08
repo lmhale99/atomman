@@ -10,6 +10,7 @@ Submodules
    atomman.unitconvert
    atomman.tools
    atomman.region
+   atomman.cluster
    atomman.mep
    atomman.lammps
    atomman.library

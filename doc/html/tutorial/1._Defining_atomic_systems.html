@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: Defining atomic systems &#8212; atomman 1.3.7 documentation</title>
+    <title>Introduction to atomman: Defining atomic systems &#8212; atomman 1.4.0 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="0._Unit_conversions.html" title="Introduction to atomman: Unit conversions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -331,8 +331,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.7
-Notebook executed on 2021-02-19
+atomman version = 1.4.0
+Notebook executed on 2021-08-03
 </pre></div></div>
 </div>
 </div>
@@ -682,12 +682,38 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="section" id="3.2.-Load-a-database-prototype">
 <h3>3.2. Load a database prototype<a class="headerlink" href="#3.2.-Load-a-database-prototype" title="Permalink to this headline">¶</a></h3>
 <p>The potentials database stores structure information for many crystal prototypes, i.e. space group + wykoff sites without elemental information. Crystals can easily be created from this by loading the prototype and specifying the element(s) and the necessary lattice constants.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">new_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;prototype&#39;</span><span class="p">,</span> <span class="s1">&#39;A1--Cu--fcc&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">4.05</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">)</span>
+<span></span><span class="n">potdb</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">library</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">potdb</span><span class="o">.</span><span class="n">local_database</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+database style local at C:\Users\lmh1\Documents\library
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">new_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;prototype&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;A1--Cu--fcc&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">4.05</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">new_system</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -718,7 +744,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <h3>3.3. Load a database crystal<a class="headerlink" href="#3.3.-Load-a-database-crystal" title="Permalink to this headline">¶</a></h3>
 <p>The potentials database also contains relaxed crystal structures for the hosted interatomic potentials. If you know which potential you want to use, then you can load the appropriate relaxed structure.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -758,7 +784,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <h3>4.1. System.rotate()<a class="headerlink" href="#4.1.-System.rotate()" title="Permalink to this headline">¶</a></h3>
 <p>The rotate() method transforms the system such that the new box vectors correspond to three integer [uvw] crystal vectors with respect to the current box vectors. This ensures that atomic compatibilities across all periodic boundaries.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -803,7 +829,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <h3>4.2. System.supersize()<a class="headerlink" href="#4.2.-System.supersize()" title="Permalink to this headline">¶</a></h3>
 <p>A larger System (i.e. supercell) can be generated using the supersize() method</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -975,7 +1001,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
         <li class="right" >
           <a href="0._Unit_conversions.html" title="Introduction to atomman: Unit conversions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

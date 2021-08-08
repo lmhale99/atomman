@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>atomman package &#8212; atomman 1.3.7 documentation</title>
+    <title>atomman package &#8212; atomman 1.4.0 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="tutorial/4.8._Strain_class.html" title="Introduction to atomman: Strain class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.7 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.4.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -53,6 +53,7 @@
 <li class="toctree-l1"><a class="reference internal" href="atomman.unitconvert.html">unitconvert</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atomman.tools.html">tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atomman.region.html">region</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atomman.cluster.html">cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atomman.mep.html">mep</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atomman.lammps.html">lammps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atomman.library.html">library</a></li>
@@ -167,7 +168,7 @@ Returned if return_prop is True.</p></li>
 
 <dl class="function">
 <dt id="atomman.dump_atom_data">
-<code class="sig-prename descclassname">atomman.</code><code class="sig-name descname">dump_atom_data</code><span class="sig-paren">(</span><em class="sig-param">system</em>, <em class="sig-param">f=None</em>, <em class="sig-param">atom_style=None</em>, <em class="sig-param">units=None</em>, <em class="sig-param">natypes=None</em>, <em class="sig-param">potential=None</em>, <em class="sig-param">float_format='%.13f'</em>, <em class="sig-param">return_info=True</em>, <em class="sig-param">return_pair_info=False</em>, <em class="sig-param">safecopy=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.dump_atom_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">atomman.</code><code class="sig-name descname">dump_atom_data</code><span class="sig-paren">(</span><em class="sig-param">system</em>, <em class="sig-param">f=None</em>, <em class="sig-param">atom_style=None</em>, <em class="sig-param">units=None</em>, <em class="sig-param">natypes=None</em>, <em class="sig-param">potential=None</em>, <em class="sig-param">float_format='%.13f'</em>, <em class="sig-param">return_info=True</em>, <em class="sig-param">prompt=True</em>, <em class="sig-param">comments=True</em>, <em class="sig-param">safecopy=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.dump_atom_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a LAMMPS-style atom data file from a System.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -188,11 +189,15 @@ individual values are given, the individual values will be used.</p></li>
 <li><p><strong>float_format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – c-style formatting string for floating point values.  Default value is
 ‘%.13f’.</p></li>
 <li><p><strong>return_info</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the LAMMPS command lines associated with reading in the
-file are to be returned as a str.  Default value is True.</p></li>
-<li><p><strong>return_pair_info</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the LAMMPS command lines associated with setting mass,
-pair_style and pair_coeff are included in the returned info.  If True,
-potential must be given and return_info must be True.  Default value is
-False.</p></li>
+file are to be returned as a str.  If potential is given, then the
+commands associated with the potential will be included. Default value
+is True.</p></li>
+<li><p><strong>prompt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Used if return_pair_info is True. If prompt is True (default), then a
+screen prompt will ask for more details if masses are not unique for
+the elements.  If False, an error will be thrown for non-unique masses.</p></li>
+<li><p><strong>comments</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Used if return_pair_info is True. If comments is True (default), then
+metadata comments associated with the potential will be included in the
+pair_info.</p></li>
 <li><p><strong>safecopy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – The LAMMPS data format requires all atoms to be inside box bounds, i.e.
 “wrapped”.  If safecopy is True then a copy of the system is made to
 keep the original unwrapped.  Default value is False.</p></li>
@@ -614,12 +619,14 @@ tags.</p></li>
 
 <dl class="function">
 <dt id="atomman.load_crystal">
-<code class="sig-prename descclassname">atomman.</code><code class="sig-name descname">load_crystal</code><span class="sig-paren">(</span><em class="sig-param">key=None</em>, <em class="sig-param">method='dynamic'</em>, <em class="sig-param">standing='good'</em>, <em class="sig-param">family=None</em>, <em class="sig-param">parent_key=None</em>, <em class="sig-param">potential=None</em>, <em class="sig-param">potential_LAMMPS_id=None</em>, <em class="sig-param">potential_LAMMPS_key=None</em>, <em class="sig-param">potential_id=None</em>, <em class="sig-param">potential_key=None</em>, <em class="sig-param">symbols=None</em>, <em class="sig-param">natoms=None</em>, <em class="sig-param">natypes=None</em>, <em class="sig-param">keyword=None</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">database=None</em>, <em class="sig-param">localpath=None</em>, <em class="sig-param">local=False</em>, <em class="sig-param">remote=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.load_crystal" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">atomman.</code><code class="sig-name descname">load_crystal</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">method='dynamic'</em>, <em class="sig-param">standing='good'</em>, <em class="sig-param">family=None</em>, <em class="sig-param">parent_key=None</em>, <em class="sig-param">potential=None</em>, <em class="sig-param">potential_LAMMPS_id=None</em>, <em class="sig-param">potential_LAMMPS_key=None</em>, <em class="sig-param">potential_id=None</em>, <em class="sig-param">potential_key=None</em>, <em class="sig-param">symbols=None</em>, <em class="sig-param">natoms=None</em>, <em class="sig-param">natypes=None</em>, <em class="sig-param">prompt=True</em>, <em class="sig-param">refresh_cache=False</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">database=None</em>, <em class="sig-param">local=False</em>, <em class="sig-param">remote=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.load_crystal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads a potential-dependent relaxed crystal record from the library.  If
 multiple matches are found based on inputs a selection menu will appear.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – The record name(s) to parse by.  For relaxed crystal records, the
+names should correspond to the key.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – UUID4 key(s) to search for.  Each entry has a unique random-generated
 UUID4 key.</p></li>
 <li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – The relaxation method used.  Allowed values are dynamic, static and box.
@@ -629,7 +636,7 @@ will be loaded if set to None.</p></li>
 relaxation, and with known prototypes over DFT structures.  “bad” are
 records filtered out, usually for being duplicates.  Default value is
 “good”.  All will be loaded if set to None.</p></li>
-<li><p><strong>family</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference internal" href="atomman.library.CrystalPrototype.html#atomman.library.CrystalPrototype" title="atomman.library.CrystalPrototype"><em>atomman.library.CrystalPrototype</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The crystal family associated with the relaxed crystal - either crystal
+<li><p><strong>family</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><em>atomman.library.CrystalPrototype</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The crystal family associated with the relaxed crystal - either crystal
 prototype name or MP/OQMD database entry name.</p></li>
 <li><p><strong>parent_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The UUID4 key(s) assigned to the calculation that the record is based
 on.</p></li>
@@ -643,17 +650,22 @@ on.</p></li>
 the search by.</p></li>
 <li><p><strong>natoms</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The number of unique atoms in the crystal’s unit cell to limit the
 search by.</p></li>
-<li><p><strong>keyword</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – If given, will limit the search to all records that contain the keyword
-substring.  Cannot be combined with any of the above parameters.</p></li>
 <li><p><strong>database</strong> (<a class="reference internal" href="atomman.library.Database.html#atomman.library.Database" title="atomman.library.Database"><em>atomman.library.Database</em></a><em>, </em><em>optional</em>) – A pre-defined Database object to use.  If not given, will initialize
 a new Database object.  Passing in a database can save time if multiple
 calls are made for the same record type.</p></li>
-<li><p><strong>localpath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The local library path to use when initializing a new Database.  IF not
-given, will use the default localpath.  Ignored if database is given.</p></li>
 <li><p><strong>local</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the Database object is to look for local records.  Default
 is True.  Ignored if database is given.</p></li>
 <li><p><strong>remote</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the Database object is to look for remote records.  Default
 is True.  Ignored if database is given.</p></li>
+<li><p><strong>prompt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If prompt=True (default) then a screen input will ask for a selection
+if multiple matching potentials are found.  If prompt=False, then an
+error will be thrown if multiple matches are found.</p></li>
+<li><p><strong>refresh_cache</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If the local database is of style “local”, indicates if the metadata
+cache file is to be refreshed.  If False,
+metadata for new records will be added but the old record metadata
+fields will not be updated.  If True, then the metadata for all
+records will be regenerated, which is needed to update the metadata
+for modified records.</p></li>
 <li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, info messages will be printed during operations.  Default
 value is False.</p></li>
 </ul>
@@ -669,44 +681,65 @@ value is False.</p></li>
 
 <dl class="function">
 <dt id="atomman.load_lammps_potential">
-<code class="sig-prename descclassname">atomman.</code><code class="sig-name descname">load_lammps_potential</code><span class="sig-paren">(</span><em class="sig-param">id=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">potid=None</em>, <em class="sig-param">potkey=None</em>, <em class="sig-param">status='active'</em>, <em class="sig-param">pair_style=None</em>, <em class="sig-param">elements=None</em>, <em class="sig-param">symbols=None</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">getfiles=False</em>, <em class="sig-param">database=None</em>, <em class="sig-param">localpath=None</em>, <em class="sig-param">local=True</em>, <em class="sig-param">remote=True</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.load_lammps_potential" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets a LAMMPS potential from the iprPy library or by downloading from
-potentials.nist.gov if a local copy is not found.  Will issue a prompt if
+<code class="sig-prename descclassname">atomman.</code><code class="sig-name descname">load_lammps_potential</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">id=None</em>, <em class="sig-param">potid=None</em>, <em class="sig-param">potkey=None</em>, <em class="sig-param">units=None</em>, <em class="sig-param">atom_style=None</em>, <em class="sig-param">pair_style=None</em>, <em class="sig-param">status='active'</em>, <em class="sig-param">symbols=None</em>, <em class="sig-param">elements=None</em>, <em class="sig-param">pot_dir_style=None</em>, <em class="sig-param">kim_models=None</em>, <em class="sig-param">kim_api_directory=None</em>, <em class="sig-param">kim_models_file=None</em>, <em class="sig-param">local=None</em>, <em class="sig-param">remote=None</em>, <em class="sig-param">database=None</em>, <em class="sig-param">getfiles=False</em>, <em class="sig-param">prompt=True</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.load_lammps_potential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a LAMMPS potential from the NIST Interatomic Potentials Repository
+or from a local copy of the repository.  Will issue a prompt if
 multiple LAMMPS potentials match the parameters given.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The id value(s) to limit the search by.</p></li>
-<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The key value(s) to limit the search by.</p></li>
-<li><p><strong>potid</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The potid value(s) to limit the search by.</p></li>
-<li><p><strong>potkey</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The potkey value(s) to limit the search by.</p></li>
-<li><p><strong>status</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The status value(s) to limit the search by.</p></li>
-<li><p><strong>pair_style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The pair_style value(s) to limit the search by.</p></li>
-<li><p><strong>elements</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The included elemental model(s) to limit the search by.</p></li>
-<li><p><strong>symbols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – The included symbol model(s) to limit the search by.</p></li>
-<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, informative print statements will be used.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – The record name(s) to parse by.  For potential records, the names
+should correspond to the id with a prefix of “potentials.” added to it.</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – The unique UUID4 record key(s) to parse by.</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – The unique record id(s) labeling the records to parse by.</p></li>
+<li><p><strong>potid</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – The unique UUID4 record key(s) for the associated potential records to
+parse by.</p></li>
+<li><p><strong>potkey</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – The unique record id(s) labeling the associated potential records to
+parse by.</p></li>
+<li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – LAMMPS units option(s) to parse by.</p></li>
+<li><p><strong>atom_style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – LAMMPS pair_style(s) to parse by.</p></li>
+<li><p><strong>pair_style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – LAMMPS pair_style(s) to parse by.</p></li>
+<li><p><strong>status</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – Limits the search by the status of the LAMMPS implementations:
+“active”, “superseded” and/or “retracted”.  By default, only active
+implementations are returned.  Giving a value of None will return
+implementations of all statuses.</p></li>
+<li><p><strong>symbols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – Model symbol(s) to parse by.  Typically correspond to elements for
+atomic potential models.</p></li>
+<li><p><strong>elements</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – Element(s) in the model to parse by.</p></li>
+<li><p><strong>pot_dir_style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Specifies how the pot_dir values will be set for the retrieved LAMMPS
+potentials.  Allowed values are ‘working’, ‘id’, and ‘local’.
+‘working’ will set all pot_dir = ‘’, meaning parameter files
+are expected in the working directory when the potential is accessed.
+‘id’ sets the pot_dir values to match the potential’s id.
+‘local’ sets the pot_dir values to the corresponding local database
+paths where the files are expected to be found.  Default value is
+controlled by settings.</p></li>
+<li><p><strong>kim_models</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – A list of full KIM model ids to build LAMMPS potentials for.</p></li>
+<li><p><strong>kim_api_directory</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The path to the directory containing a kim-api-collections-management
+executable to use to identify which KIM models are installed.</p></li>
+<li><p><strong>kim_models_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The path to a file containing a list of full KIM model ids to build
+LAMMPS potentials for.</p></li>
+<li><p><strong>local</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the local location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>remote</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the remote location is to be searched.  Default value
+matches the value set when the database was initialized.</p></li>
+<li><p><strong>database</strong> (<em>potentials.Database</em><em>, </em><em>optional</em>) – Allows for a previously defined Database object to be used to find
+the potential.  If not given, a new Database object will be used with
+the default local and remote interaction settings.</p></li>
 <li><p><strong>getfiles</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, then the parameter files for the matching potentials
-will also be retrieved and copied to the working directory.
-If False (default) and the parameter files are in the library,
-then the returned objects’ pot_dir path will be set appropriately.</p></li>
-<li><p><strong>database</strong> (<a class="reference internal" href="atomman.library.Database.html#atomman.library.Database" title="atomman.library.Database"><em>atomman.library.Database</em></a><em>, </em><em>optional</em>) – A pre-existing Database class to use for accessing the records.  Useful
-if multiple potentials are being retrieved as records can be pre-loaded
-for efficiency.  If not given, a new database object will be
-initialized based on the parameters below.</p></li>
-<li><p><strong>localpath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The path to the local database directory to use.  If not given,  will
-use the default potentials database path.  Ignored if database is
-given.</p></li>
-<li><p><strong>local</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the local version of the library should be searched.
-Default value is True.  Ignored if database is given.</p></li>
-<li><p><strong>remote</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates if the remote version of the library should be searched.
-Default value is True.  Ignored if database is given.</p></li>
+will also be copied/downloaded to the potential directory.</p></li>
+<li><p><strong>prompt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If prompt=True (default) then a screen input will ask for a selection
+if multiple matching potentials are found.  If prompt=False, then an
+error will be thrown if multiple matches are found.</p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, info messages will be printed during operations.  Default
+value is False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The potential object to use.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>potentials.PotentialLAMMPS</p>
+<dd class="field-odd"><p>potentials.record.PotentialLAMMPS</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a> – If no matching LAMMPS potentials are found.</p>
@@ -739,19 +772,21 @@ tags or if the poscar file has no elemental information.</p></li>
 
 <dl class="function">
 <dt id="atomman.load_prototype">
-<code class="sig-prename descclassname">atomman.</code><code class="sig-name descname">load_prototype</code><span class="sig-paren">(</span><em class="sig-param">id=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">prototype=None</em>, <em class="sig-param">pearson=None</em>, <em class="sig-param">strukturbericht=None</em>, <em class="sig-param">sg_number=None</em>, <em class="sig-param">sg_hm=None</em>, <em class="sig-param">sg_schoenflies=None</em>, <em class="sig-param">keyword=None</em>, <em class="sig-param">a=None</em>, <em class="sig-param">b=None</em>, <em class="sig-param">c=None</em>, <em class="sig-param">alpha=None</em>, <em class="sig-param">beta=None</em>, <em class="sig-param">gamma=None</em>, <em class="sig-param">symbols=None</em>, <em class="sig-param">database=None</em>, <em class="sig-param">localpath=None</em>, <em class="sig-param">local=True</em>, <em class="sig-param">remote=True</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.load_prototype" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">atomman.</code><code class="sig-name descname">load_prototype</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">id=None</em>, <em class="sig-param">key=None</em>, <em class="sig-param">commonname=None</em>, <em class="sig-param">prototype=None</em>, <em class="sig-param">pearson=None</em>, <em class="sig-param">strukturbericht=None</em>, <em class="sig-param">sg_number=None</em>, <em class="sig-param">sg_hm=None</em>, <em class="sig-param">sg_schoenflies=None</em>, <em class="sig-param">a=None</em>, <em class="sig-param">b=None</em>, <em class="sig-param">c=None</em>, <em class="sig-param">alpha=None</em>, <em class="sig-param">beta=None</em>, <em class="sig-param">gamma=None</em>, <em class="sig-param">symbols=None</em>, <em class="sig-param">database=None</em>, <em class="sig-param">local=True</em>, <em class="sig-param">remote=True</em>, <em class="sig-param">prompt=True</em>, <em class="sig-param">refresh_cache=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.load_prototype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads a crystal prototype record from the library. If multiple matches
 are found based on inputs a selection menu will appear.</p>
 <dl class="simple">
+<dt>name<span class="classifier">str or list, optional.</span></dt><dd><p>Record names to search for.  These should be the same values as id.</p>
+</dd>
 <dt>id<span class="classifier">str or list, optional</span></dt><dd><p>Prototype ID(s) to search for.  These are unique identifiers for each
 prototype based on comm.</p>
 </dd>
 <dt>key<span class="classifier">str or list, optional</span></dt><dd><p>UUID4 key(s) to search for.  Each entry has a unique random-generated
 UUID4 key.</p>
 </dd>
-<dt>name<span class="classifier">str or list, optional</span></dt><dd><p>Common name(s) to limit the search by.</p>
+<dt>commonname<span class="classifier">str or list, optional</span></dt><dd><p>Common name(s) to limit the search by.</p>
 </dd>
-<dt>prototype<span class="classifier">str or list, optionypeal</span></dt><dd><p>Prototype identifying composition(s) to limit the search by.</p>
+<dt>prototype<span class="classifier">str or list, optional</span></dt><dd><p>Prototype identifying composition(s) to limit the search by.</p>
 </dd>
 <dt>pearson<span class="classifier">str or list, optional</span></dt><dd><p>The Pearson symbol(s) to limit the search by.</p>
 </dd>
@@ -762,9 +797,6 @@ UUID4 key.</p>
 <dt>sg_hm<span class="classifier">str or list, optional</span></dt><dd><p>The space group Hermann-Maguin identifier(s) to limit the search by.</p>
 </dd>
 <dt>sg_schoenflies<span class="classifier">str or list, optional</span></dt><dd><p>The space group Schoenflies identifier(s) to limit the search by.</p>
-</dd>
-<dt>keyword<span class="classifier">str, optional</span></dt><dd><p>If given, will limit the search to all records that contain the keyword
-substring.  Cannot be combined with any of the above parameters.</p>
 </dd>
 <dt>a<span class="classifier">float, optional</span></dt><dd><p>The a lattice parameter to scale the prototype by. Can only be given
 if it is a unique lattice parameter for the prototype’s crystal family,
@@ -790,22 +822,28 @@ and if all other unique lattice parameters are given.</p>
 if it is a unique lattice parameter for the prototype’s crystal family,
 and if all other unique lattice parameters are given.</p>
 </dd>
-<dt>symbols<span class="classifier">tuple, optional</span></dt><dd><p>Allows the list of element symbols to be assigned during loading.
-Useful if the symbols for the model differ from the standard element
-tags or if the poscar file has no elemental information.</p>
+<dt>symbols<span class="classifier">tuple, optional</span></dt><dd><p>Allows the list of element symbols to be assigned during loading.</p>
 </dd>
 <dt>database<span class="classifier">atomman.library.Database, optional</span></dt><dd><p>A pre-defined Database object to use.  If not given, will initialize
 a new Database object.  Passing in a database can save time if multiple
 calls are made for the same record type.</p>
-</dd>
-<dt>localpath<span class="classifier">str, optional</span></dt><dd><p>The local library path to use when initializing a new Database.  IF not
-given, will use the default localpath.  Ignored if database is given.</p>
 </dd>
 <dt>local<span class="classifier">bool, optional</span></dt><dd><p>Indicates if the Database object is to look for local records.  Default
 is True.  Ignored if database is given.</p>
 </dd>
 <dt>remote<span class="classifier">bool, optional</span></dt><dd><p>Indicates if the Database object is to look for remote records.  Default
 is True.  Ignored if database is given.</p>
+</dd>
+<dt>prompt<span class="classifier">bool, optional</span></dt><dd><p>If prompt=True (default) then a screen input will ask for a selection
+if multiple matching potentials are found.  If prompt=False, then an
+error will be thrown if multiple matches are found.</p>
+</dd>
+<dt>refresh_cache<span class="classifier">bool, optional</span></dt><dd><p>If the local database is of style “local”, indicates if the metadata
+cache file is to be refreshed.  If False,
+metadata for new records will be added but the old record metadata
+fields will not be updated.  If True, then the metadata for all
+records will be regenerated, which is needed to update the metadata
+for modified records.</p>
 </dd>
 <dt>verbose<span class="classifier">bool, optional</span></dt><dd><p>If True, info messages will be printed during operations.  Default
 value is False.</p>
@@ -987,7 +1025,7 @@ The next c values are the atom’s neighbor ids.</p>
         <li class="right" >
           <a href="tutorial/4.8._Strain_class.html" title="Introduction to atomman: Strain class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.7 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.4.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

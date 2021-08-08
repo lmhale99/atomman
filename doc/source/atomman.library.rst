@@ -8,5 +8,6 @@ Classes
    :maxdepth: 1
    
    atomman.library.Database
-   atomman.library.CrystalPrototype
-   atomman.library.RelaxedCrystal
+   atomman.library.record.CrystalPrototype
+   atomman.library.record.RelaxedCrystal
+   atomman.library.record.ReferenceCrystal

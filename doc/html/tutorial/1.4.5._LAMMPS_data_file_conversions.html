@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: LAMMPS data file conversions &#8212; atomman 1.3.7 documentation</title>
+    <title>Introduction to atomman: LAMMPS data file conversions &#8212; atomman 1.4.0 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="1.4.4._table_conversions.html" title="Introduction to atomman: table conversions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -355,8 +355,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.7
-Notebook executed on 2021-02-19
+atomman version = 1.4.0
+Notebook executed on 2021-08-04
 </pre></div></div>
 </div>
 </div>
@@ -617,6 +617,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="section" id="3.-System.dump(‘atom_data’)">
 <h2>3. System.dump(‘atom_data’)<a class="headerlink" href="#3.-System.dump(‘atom_data’)" title="Permalink to this headline">¶</a></h2>
 <p><em>Updated version 1.3.0</em>: Parameters natypes, potential, and return_pair_info are added to provide better integration and compatibility across potentials with different pair_styles.</p>
+<p><em>Updated version 1.4.0</em>: The return_pair_info parameter has been removed and potential commands are included in the returned info simply if potential is given.</p>
 <p>Parameters</p>
 <ul class="simple">
 <li><p><strong>f</strong> (<em>str or file-like object, optional</em>) File path or file-like object to write the content to. If not given, then the content is returned as a str.</p></li>
@@ -625,8 +626,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <li><p><strong>natypes</strong> (<em>int, optional</em>) Allows the natypes value to be manually changed. This is needed if natypes needs to be greater than the current number of atypes. If neither natypes or potential is given, will use system.natypes.</p></li>
 <li><p><strong>potential</strong> (<em>atomman.lammps.Potential, optional</em>) Potential-specific values of atom_style, units, and natypes can be extracted from a Potential object. If both potential and any of the individual values are given, the individual values will be used.</p></li>
 <li><p><strong>float_format</strong> (<em>str, optional</em>) c-style formatting string for floating point values. Default value is ‘%.13f’.</p></li>
-<li><p><strong>return_info</strong> (<em>bool, optional</em>) Indicates if the LAMMPS command lines associated with reading in the file are to be returned as a str. Default value is True.</p></li>
-<li><p><strong>return_pair_info</strong> (<em>bool, optional</em>) Indicates if the LAMMPS command lines associated with setting mass, pair_style and pair_coeff are included in the returned info. If True, potential must be given and return_info must be True. Default value is False.</p></li>
+<li><p><strong>return_info</strong> (<em>bool, optional</em>) Indicates if the LAMMPS command lines associated with reading in the file are to be returned as a str. If potential is given, then the commands associated with the potential will be included. Default value is True.</p></li>
 <li><p><strong>safecopy</strong> (<em>bool, optional</em>) The LAMMPS data format requires all atoms to be inside box bounds, i.e. “wrapped”. If safecopy is True then a copy of the system is made to keep the original unwrapped. Default value is False.</p></li>
 </ul>
 <p>Returns</p>
@@ -641,6 +641,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="section" id="3.1.-Basic-example">
 <h3>3.1. Basic example<a class="headerlink" href="#3.1.-Basic-example" title="Permalink to this headline">¶</a></h3>
 <p>Show dump by loading a simple data file, then dumping it to a file.</p>
+<p><strong>NOTE:</strong> It is highly recommended that the potential be given (Section 3.3.) if you are using the generated LAMMPS command lines. Doing so ensures the proper options and order of command lines across all native LAMMPS and OpenKIM potentials currently in the NIST database.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
@@ -704,8 +705,8 @@ Atoms # atomic
 <div class="highlight"><pre>
 # Script and atom data file prepared using atomman Python package
 
-units metal
-atom_style atomic
+units None
+atom_style None
 
 boundary p p p
 read_data bccFe.dat
@@ -770,8 +771,8 @@ Atoms # charge
 <div class="highlight"><pre>
 # Script and atom data file prepared using atomman Python package
 
-units nano
-atom_style charge
+units None
+atom_style None
 
 boundary p p p
 read_data bccFe.dat
@@ -781,7 +782,7 @@ read_data bccFe.dat
 </div>
 <div class="section" id="3.3.-Integrated-potential-data-file-handling">
 <h3>3.3. Integrated potential-data file handling<a class="headerlink" href="#3.3.-Integrated-potential-data-file-handling" title="Permalink to this headline">¶</a></h3>
-<p>The generation of LAMMPS data files and associated input command lines depends on properties of both the atomic configuration and the choice of interatomic potential. To better support this fact, the atom_data dump style supports a more integrated means of generating the content. This is handled by passing dump(‘atom_style’) a Potential object and by specifying return_pair_info = True.</p>
+<p>The generation of LAMMPS data files and associated input command lines depends on properties of both the atomic configuration and the choice of interatomic potential. To better support this fact, the atom_data dump style supports a more integrated means of generating the content. This is handled by passing dump(‘atom_style’) a Potential object.</p>
 <p>Define an example potential with units=‘nano’ and atom_style=‘charge’</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
@@ -813,13 +814,13 @@ read_data bccFe.dat
 </pre></div>
 </div>
 </div>
-<p>Create data file and info by supplying potential and setting return_pair_info=True</p>
+<p>Create data file and info by supplying potential</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">info</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;atom_data&#39;</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="s1">&#39;bccFe.dat&#39;</span><span class="p">,</span> <span class="n">potential</span><span class="o">=</span><span class="n">potential</span><span class="p">,</span> <span class="n">return_pair_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span></span><span class="n">info</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;atom_data&#39;</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="s1">&#39;bccFe.dat&#39;</span><span class="p">,</span> <span class="n">potential</span><span class="o">=</span><span class="n">potential</span><span class="p">)</span>
 
 <span class="c1"># Show created file uses settings from potential</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;bccFe.dat&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -846,7 +847,7 @@ Atoms # charge
 
 </pre></div></div>
 </div>
-<p>Setting return_pair_info=True will include pair_info generated by potential in the returned info.</p>
+<p>The LAMMPS command lines for the potential are now included in the returned info.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
@@ -861,18 +862,16 @@ Atoms # charge
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-# Script and atom data file prepared using atomman Python package
-
 units nano
 atom_style charge
 
 boundary p p p
 read_data bccFe.dat
 
-mass 1 55.845
-
 pair_style eam/alloy
 pair_coeff * * FeDemo.eam.alloy Fe
+mass 1 55.845
+
 
 </pre></div></div>
 </div>
@@ -925,7 +924,7 @@ pair_coeff * * FeDemo.eam.alloy Fe
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Generate data and info</span>
-<span class="n">info</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;atom_data&#39;</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="s1">&#39;bccFe.dat&#39;</span><span class="p">,</span> <span class="n">potential</span><span class="o">=</span><span class="n">potential</span><span class="p">,</span> <span class="n">return_pair_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">info</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;atom_data&#39;</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="s1">&#39;bccFe.dat&#39;</span><span class="p">,</span> <span class="n">potential</span><span class="o">=</span><span class="n">potential</span><span class="p">)</span>
 
 <span class="c1"># Show that mass in info is now 55.85</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
@@ -937,18 +936,16 @@ pair_coeff * * FeDemo.eam.alloy Fe
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-# Script and atom data file prepared using atomman Python package
-
 units nano
 atom_style charge
 
 boundary p p p
 read_data bccFe.dat
 
-mass 1 55.85
-
 pair_style eam/alloy
 pair_coeff * * FeDemo.eam.alloy Fe
+mass 1 55.85
+
 
 </pre></div></div>
 </div>
@@ -962,7 +959,7 @@ pair_coeff * * FeDemo.eam.alloy Fe
 <span class="n">system</span><span class="o">.</span><span class="n">masses</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">atomic_mass</span><span class="p">(</span><span class="s1">&#39;Fe-58&#39;</span><span class="p">)</span>
 
 <span class="c1"># Generate data and info</span>
-<span class="n">info</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;atom_data&#39;</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="s1">&#39;bccFe.dat&#39;</span><span class="p">,</span> <span class="n">potential</span><span class="o">=</span><span class="n">potential</span><span class="p">,</span> <span class="n">return_pair_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">info</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;atom_data&#39;</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="s1">&#39;bccFe.dat&#39;</span><span class="p">,</span> <span class="n">potential</span><span class="o">=</span><span class="n">potential</span><span class="p">)</span>
 
 <span class="c1"># Show that mass in info is now 57.93327443</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
@@ -974,18 +971,16 @@ pair_coeff * * FeDemo.eam.alloy Fe
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-# Script and atom data file prepared using atomman Python package
-
 units nano
 atom_style charge
 
 boundary p p p
 read_data bccFe.dat
 
-mass 1 57.93327443
-
 pair_style eam/alloy
 pair_coeff * * FeDemo.eam.alloy Fe
+mass 1 57.93327443
+
 
 </pre></div></div>
 </div>
@@ -1055,7 +1050,7 @@ pair_coeff * * FeDemo.eam.alloy Fe
         <li class="right" >
           <a href="1.4.4._table_conversions.html" title="Introduction to atomman: table conversions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

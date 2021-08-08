@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: LAMMPS functionality &#8212; atomman 1.3.7 documentation</title>
+    <title>Introduction to atomman: LAMMPS functionality &#8212; atomman 1.4.0 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: LAMMPS Potentials" href="2.1._Potential_class.html" />
-    <link rel="prev" title="Introduction to atomman: Settings and Library" href="1.5._Settings_and_Library_classes.html" /> 
+    <link rel="prev" title="Introduction to atomman: Settings and Library" href="1.5._Settings_and_databases.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -33,9 +33,9 @@
           <a href="2.1._Potential_class.html" title="Introduction to atomman: LAMMPS Potentials"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="1.5._Settings_and_Library_classes.html" title="Introduction to atomman: Settings and Library"
+          <a href="1.5._Settings_and_databases.html" title="Introduction to atomman: Settings and Library"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -335,8 +335,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.7
-Notebook executed on 2021-02-19
+atomman version = 1.4.0
+Notebook executed on 2021-08-04
 </pre></div></div>
 </div>
 </div>
@@ -353,7 +353,7 @@ Notebook executed on 2021-02-19
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Load potential based on its unique ID</span>
 <span class="n">pot_id</span> <span class="o">=</span> <span class="s1">&#39;2015--Pascuet-M-I--Al--LAMMPS--ipr1&#39;</span>
-<span class="n">potential</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load_lammps_potential</span><span class="p">(</span><span class="n">pot_id</span><span class="p">,</span> <span class="n">getfiles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">potential</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load_lammps_potential</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">pot_id</span><span class="p">,</span> <span class="n">getfiles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -430,7 +430,7 @@ augt1 = 1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-str(potential) -&gt;        2015--Pascuet-M-I--Al--LAMMPS--ipr1
+str(potential) -&gt;        potential_LAMMPS record named 2015--Pascuet-M-I--Al--LAMMPS--ipr1
 potential.units -&gt;       metal
 potential.atom_style -&gt;  atomic
 potential.pair_style -&gt;  meam
@@ -456,10 +456,17 @@ potential.masses() -&gt;    [26.9815]
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 potential.pair_info() -&gt;
-mass 1 26.9815
-
+print &#34;Potential 2015--Pascuet-M-I--Al--LAMMPS--ipr1 listed in the NIST Interatomic Potentials Repository:&#34;
+print &#34;https://www.ctcms.nist.gov/potentials/entry/2015--Pascuet-M-I-Fernandez-J-R--Al/2015--Pascuet-M-I--Al--LAMMPS--ipr1.html&#34;
+print &#34;Publication(s) related to the potential:&#34;
+print &#34;https://doi.org/10.1016/j.jnucmat.2015.09.030&#34;
+print &#34;Parameter file(s) can be downloaded at:&#34;
+print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/Al.meam&#34;
+print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/library-Al.meam&#34;
 pair_style meam
 pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al
+mass 1 26.9815
+
 
 </pre></div></div>
 </div>
@@ -479,12 +486,19 @@ pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pasc
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 potential.pair_info([&#39;Al&#39;, &#39;Al&#39;, &#39;Al&#39;]) -&gt;
+print &#34;Potential 2015--Pascuet-M-I--Al--LAMMPS--ipr1 listed in the NIST Interatomic Potentials Repository:&#34;
+print &#34;https://www.ctcms.nist.gov/potentials/entry/2015--Pascuet-M-I-Fernandez-J-R--Al/2015--Pascuet-M-I--Al--LAMMPS--ipr1.html&#34;
+print &#34;Publication(s) related to the potential:&#34;
+print &#34;https://doi.org/10.1016/j.jnucmat.2015.09.030&#34;
+print &#34;Parameter file(s) can be downloaded at:&#34;
+print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/Al.meam&#34;
+print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/library-Al.meam&#34;
+pair_style meam
+pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al Al Al
 mass 1 26.9815
 mass 2 26.9815
 mass 3 26.9815
 
-pair_style meam
-pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al Al Al
 
 </pre></div></div>
 </div>
@@ -567,7 +581,7 @@ Supercell has 108 atoms
 <span class="n">system_pair_info</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;atom_data&#39;</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="s1">&#39;atom.dat&#39;</span><span class="p">,</span>
                           <span class="n">potential</span><span class="o">=</span><span class="n">potential</span><span class="p">,</span>
                           <span class="n">float_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%.4f</span><span class="s1">&#39;</span><span class="p">,</span>    <span class="c1"># Remove or make larger precision for real runs!</span>
-                          <span class="n">return_pair_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                          <span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -586,18 +600,23 @@ Supercell has 108 atoms
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-# Script and atom data file prepared using atomman Python package
-
 units metal
 atom_style atomic
 
 boundary p p p
 read_data atom.dat
 
-mass 1 26.9815
-
+print &#34;Potential 2015--Pascuet-M-I--Al--LAMMPS--ipr1 listed in the NIST Interatomic Potentials Repository:&#34;
+print &#34;https://www.ctcms.nist.gov/potentials/entry/2015--Pascuet-M-I-Fernandez-J-R--Al/2015--Pascuet-M-I--Al--LAMMPS--ipr1.html&#34;
+print &#34;Publication(s) related to the potential:&#34;
+print &#34;https://doi.org/10.1016/j.jnucmat.2015.09.030&#34;
+print &#34;Parameter file(s) can be downloaded at:&#34;
+print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/Al.meam&#34;
+print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/library-Al.meam&#34;
 pair_style meam
 pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al
+mass 1 26.9815
+
 
 </pre></div></div>
 </div>
@@ -811,18 +830,23 @@ OrderedDict([(&#39;mass&#39;, &#39;g/mol&#39;), (&#39;length&#39;, &#39;angstrom
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-# Script and atom data file prepared using atomman Python package
-
 units metal
 atom_style atomic
 
 boundary p p p
 read_data atom.dat
 
-mass 1 26.9815
-
+print &#34;Potential 2015--Pascuet-M-I--Al--LAMMPS--ipr1 listed in the NIST Interatomic Potentials Repository:&#34;
+print &#34;https://www.ctcms.nist.gov/potentials/entry/2015--Pascuet-M-I-Fernandez-J-R--Al/2015--Pascuet-M-I--Al--LAMMPS--ipr1.html&#34;
+print &#34;Publication(s) related to the potential:&#34;
+print &#34;https://doi.org/10.1016/j.jnucmat.2015.09.030&#34;
+print &#34;Parameter file(s) can be downloaded at:&#34;
+print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/Al.meam&#34;
+print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/library-Al.meam&#34;
 pair_style meam
 pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al
+mass 1 26.9815
+
 
 </pre></div></div>
 </div>
@@ -913,7 +937,7 @@ pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pasc
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;system_pair_info&#39;: &#39;# Script and atom data file prepared using atomman Python package\n\nunits metal\natom_style atomic\n\nboundary p p p\nread_data atom.dat\n\nmass 1 26.9815\n\npair_style meam\npair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\\Al.meam Al\n&#39;, &#39;timestep&#39;: 0.001, &#39;temperature&#39;: 100, &#39;pressure&#39;: 0.0}
+{&#39;system_pair_info&#39;: &#39;units metal\natom_style atomic\n\nboundary p p p\nread_data atom.dat\n\nprint &#34;Potential 2015--Pascuet-M-I--Al--LAMMPS--ipr1 listed in the NIST Interatomic Potentials Repository:&#34;\nprint &#34;https://www.ctcms.nist.gov/potentials/entry/2015--Pascuet-M-I-Fernandez-J-R--Al/2015--Pascuet-M-I--Al--LAMMPS--ipr1.html&#34;\nprint &#34;Publication(s) related to the potential:&#34;\nprint &#34;https://doi.org/10.1016/j.jnucmat.2015.09.030&#34;\nprint &#34;Parameter file(s) can be downloaded at:&#34;\nprint &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/Al.meam&#34;\nprint &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/library-Al.meam&#34;\npair_style meam\npair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\\Al.meam Al\nmass 1 26.9815\n\n&#39;, &#39;timestep&#39;: 0.001, &#39;temperature&#39;: 100, &#39;pressure&#39;: 0.0}
 </pre></div></div>
 </div>
 <p>Fill in template</p>
@@ -941,18 +965,23 @@ pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pasc
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 
-# Script and atom data file prepared using atomman Python package
-
 units metal
 atom_style atomic
 
 boundary p p p
 read_data atom.dat
 
-mass 1 26.9815
-
+print &#34;Potential 2015--Pascuet-M-I--Al--LAMMPS--ipr1 listed in the NIST Interatomic Potentials Repository:&#34;
+print &#34;https://www.ctcms.nist.gov/potentials/entry/2015--Pascuet-M-I-Fernandez-J-R--Al/2015--Pascuet-M-I--Al--LAMMPS--ipr1.html&#34;
+print &#34;Publication(s) related to the potential:&#34;
+print &#34;https://doi.org/10.1016/j.jnucmat.2015.09.030&#34;
+print &#34;Parameter file(s) can be downloaded at:&#34;
+print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/Al.meam&#34;
+print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/library-Al.meam&#34;
 pair_style meam
 pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al
+mass 1 26.9815
+
 
 
 # Define temperature and dependent variables
@@ -1316,7 +1345,7 @@ origin = [-0.021, -0.021, -0.021]
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="1.5._Settings_and_Library_classes.html"
+  <p class="topless"><a href="1.5._Settings_and_databases.html"
                         title="previous chapter">Introduction to atomman: Settings and Library</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="2.1._Potential_class.html"
@@ -1338,9 +1367,9 @@ origin = [-0.021, -0.021, -0.021]
           <a href="2.1._Potential_class.html" title="Introduction to atomman: LAMMPS Potentials"
              >next</a> |</li>
         <li class="right" >
-          <a href="1.5._Settings_and_Library_classes.html" title="Introduction to atomman: Settings and Library"
+          <a href="1.5._Settings_and_databases.html" title="Introduction to atomman: Settings and Library"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

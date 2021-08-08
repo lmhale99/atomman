@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>lammps &#8212; atomman 1.3.7 documentation</title>
+    <title>lammps &#8212; atomman 1.4.0 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -17,8 +17,8 @@
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Potential" href="atomman.lammps.Potential.html" />
-    <link rel="prev" title="region" href="atomman.region.html" /> 
+    <link rel="next" title="Log" href="atomman.lammps.Log.html" />
+    <link rel="prev" title="BasePath" href="atomman.mep.BasePath.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -30,12 +30,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="atomman.lammps.Potential.html" title="Potential"
+          <a href="atomman.lammps.Log.html" title="Log"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="atomman.region.html" title="region"
+          <a href="atomman.mep.BasePath.html" title="BasePath"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" accesskey="U">atomman package</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,7 +51,6 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="atomman.lammps.Potential.html">Potential</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atomman.lammps.Log.html">Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atomman.lammps.NEBLog.html">NEBLog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atomman.lammps.LammpsError.html">LammpsError</a></li>
@@ -84,26 +83,40 @@ version.</p>
 
 <dl class="function">
 <dt id="atomman.lammps.run">
-<code class="sig-prename descclassname">atomman.lammps.</code><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">lammps_command</em>, <em class="sig-param">script_name</em>, <em class="sig-param">mpi_command=None</em>, <em class="sig-param">restart_script_name=None</em>, <em class="sig-param">logfile='log.lammps'</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.lammps.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calls LAMMPS to run. Returns data model containing LAMMPS output.</p>
+<code class="sig-prename descclassname">atomman.lammps.</code><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">lammps_command</em>, <em class="sig-param">script_name=None</em>, <em class="sig-param">script=None</em>, <em class="sig-param">mpi_command=None</em>, <em class="sig-param">restart_script_name=None</em>, <em class="sig-param">restart_script=None</em>, <em class="sig-param">logfile='log.lammps'</em>, <em class="sig-param">screen=True</em>, <em class="sig-param">suffix=None</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.lammps.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls LAMMPS to run. Returns a Log object of the screen/logfile output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lammps_command</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The LAMMPS inline run command (sans -in script_name).</p></li>
-<li><p><strong>script_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Path of the LAMMPS input script to use.</p></li>
-<li><p><strong>mpi_command</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – The MPI inline command to run LAMMPS in parallel. Default value is
+<li><p><strong>script_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Path of the LAMMPS input script file to use.  Either script_name or
+script must be given.</p></li>
+<li><p><strong>script</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The LAMMPS input script command lines to use.  Either script_name or
+script must be given.</p></li>
+<li><p><strong>mpi_command</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The MPI inline command to run LAMMPS in parallel. Default value is
 None (no mpi).</p></li>
-<li><p><strong>restart_script_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – Alternative script to use for restarting if logfile already exists.
-Default value is None (no restarting).</p></li>
-<li><p><strong>logfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Specifies the path to the logfile to write to.  Default value is
-‘log.lammps’.</p></li>
+<li><p><strong>restart_script_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Path to an alternate LAMMPS input script file to use for restart runs.
+If given, the restart script will be used if the specified logfile
+already exists.  Requires logfile to not be None.</p></li>
+<li><p><strong>restart_script</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Alternate LAMMPS script command lines to use for restart runs.
+If given, the restart script will be used if the specified logfile
+already exists.  Requires logfile to not be None.</p></li>
+<li><p><strong>logfile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – Specifies the path to the logfile to write to.  Default value is
+‘log.lammps’.  If set to None, then no logfile will be created.</p></li>
+<li><p><strong>screen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True (default), then the resulting Log object is built from the
+LAMMPS screen output.  If False, then LAMMPS outputs no screen info
+and the Log object will be built by reading logfile.</p></li>
+<li><p><strong>suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Allows for the LAMMPS suffix option to be specified to use any of the
+accelerated versions of pair styles if available.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The content either as a Log object or in data model format.</p>
+<dd class="field-even"><p>Contains the processed screen/logfile contents.  Will not be returned
+if logfile is None and screen is False as there would be no means to
+capture the LAMMPS output.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="atomman.lammps.Log.html#atomman.lammps.Log" title="atomman.lammps.Log">atomman.lammps.Log</a> or DataModelDict</p>
+<dd class="field-odd"><p><a class="reference internal" href="atomman.lammps.Log.html#atomman.lammps.Log" title="atomman.lammps.Log">atomman.lammps.Log</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -139,7 +152,15 @@ if return_transform is True.</p></li>
 </dl>
 </dd></dl>
 
-<span class="target" id="module-atomman.lammps.style"></span><dl class="function">
+<span class="target" id="module-atomman.lammps.style"></span><span class="target" id="module-atomman.lammps.Potential"></span><dl class="field-list simple">
+<dt class="field-odd">members</dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">undoc-members</dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">show-inheritance</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<dl class="function">
 <dt id="atomman.lammps.style.timestep">
 <code class="sig-prename descclassname">atomman.lammps.style.</code><code class="sig-name descname">timestep</code><span class="sig-paren">(</span><em class="sig-param">units='metal'</em><span class="sig-paren">)</span><a class="headerlink" href="#atomman.lammps.style.timestep" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the default timestep value for a LAMMPS unit style option.</p>
@@ -193,11 +214,11 @@ units to use.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="atomman.region.html"
-                        title="previous chapter">region</a></p>
+  <p class="topless"><a href="atomman.mep.BasePath.html"
+                        title="previous chapter">BasePath</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="atomman.lammps.Potential.html"
-                        title="next chapter">Potential</a></p>
+  <p class="topless"><a href="atomman.lammps.Log.html"
+                        title="next chapter">Log</a></p>
         </div>
       </div>
       <div class="clearer"></div>
@@ -212,12 +233,12 @@ units to use.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="atomman.lammps.Potential.html" title="Potential"
+          <a href="atomman.lammps.Log.html" title="Log"
              >next</a> |</li>
         <li class="right" >
-          <a href="atomman.region.html" title="region"
+          <a href="atomman.mep.BasePath.html" title="BasePath"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li> 
       </ul>
     </div>

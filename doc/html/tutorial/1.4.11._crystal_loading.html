@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: crystal loading &#8212; atomman 1.3.7 documentation</title>
+    <title>Introduction to atomman: crystal loading &#8212; atomman 1.4.0 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -17,7 +17,7 @@
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction to atomman: Settings and Library" href="1.5._Settings_and_Library_classes.html" />
+    <link rel="next" title="Introduction to atomman: DFT reference crystal loading" href="1.4.12._DFT_reference_crystal_loading.html" />
     <link rel="prev" title="Introduction to atomman: prototype loading" href="1.4.10._prototype_loading.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -30,12 +30,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="1.5._Settings_and_Library_classes.html" title="Introduction to atomman: Settings and Library"
+          <a href="1.4.12._DFT_reference_crystal_loading.html" title="Introduction to atomman: DFT reference crystal loading"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="1.4.10._prototype_loading.html" title="Introduction to atomman: prototype loading"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -300,6 +300,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
 <p>The relaxed_crystal records found in the NIST Interatomic Potentials Repository database (<a class="reference external" href="https://potentials.nist.gov/">https://potentials.nist.gov/</a>) define unit cells for crystal structures that have been relaxed on a per-potential basis. The ‘crystal’ load option allows Systems to be constructed based on the information in these records. The information can be loaded either from a local copy of the database or the remote database.</p>
+<p><em>Updated version 1.4.0.</em> Query parameters and database options updated to be in line with potentials version 0.3.0.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -328,8 +329,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.7
-Notebook executed on 2021-02-19
+atomman version = 1.4.0
+Notebook executed on 2021-08-04
 </pre></div></div>
 </div>
 </div>
@@ -338,6 +339,7 @@ Notebook executed on 2021-02-19
 <p>Accesses the potentials database to retrieve a relaxed_crystal record and generate a unit cell System based on it.</p>
 <p>Query parameters</p>
 <ul class="simple">
+<li><p><strong>name</strong> (<em>str or list</em>) The record name(s) to parse by. For relaxed crystal records, the names should correspond to key.</p></li>
 <li><p><strong>key</strong> (<em>str or list, optional</em>) UUID4 key(s) to search for. Each entry has a unique random-generated UUID4 key.</p></li>
 <li><p><strong>method</strong> (<em>str or list or None, optional</em>) The relaxation method used. Allowed values are dynamic, static and box. Default value is dynamic (the most rigorous relaxation method). All will be loaded if set to None.</p></li>
 <li><p><strong>standing</strong> (<em>str or list or None, optional</em>) “good” records are the unique crystals found with the most rigorous relaxation, and with known prototypes over DFT structures. “bad” are records filtered out, usually for being duplicates. Default value is “good”. All will be loaded if set to None.</p></li>
@@ -351,7 +353,6 @@ Notebook executed on 2021-02-19
 <li><p><strong>symbols</strong> (<em>str or list, optional</em>) Element symbols in the crystal to limit the search by.</p></li>
 <li><p><strong>natypes</strong> (<em>int or list, optional</em>) The number of unique element model symbols in the crystal to limit the search by.</p></li>
 <li><p><strong>natoms</strong> (<em>int or list, optional</em>) The number of unique atoms in the crystal’s unit cell to limit the search by.</p></li>
-<li><p><strong>keyword</strong> (<em>str, optional</em>) If given, will limit the search to all records that contain the keyword substring. Cannot be combined with any of the above parameters.</p></li>
 </ul>
 <p>Database option parameters</p>
 <ul class="simple">
@@ -359,6 +360,7 @@ Notebook executed on 2021-02-19
 <li><p><strong>localpath</strong> (<em>str, optional</em>) The local library path to use when initializing a new Database. IF not given, will use the default localpath. Ignored if database is given.</p></li>
 <li><p><strong>local</strong> (<em>bool, optional</em>) Indicates if the Database object is to look for local records. Default is True. Ignored if database is given.</p></li>
 <li><p><strong>remote</strong> (<em>bool, optional</em>) Indicates if the Database object is to look for remote records. Default is True. Ignored if database is given.</p></li>
+<li><p><strong>refresh_cache</strong> (<em>bool, optional</em>) If the local database is of style “local”, indicates if the metadata cache file is to be refreshed. If False, metadata for new records will be added but the old record metadata fields will not be updated. If True, then the metadata for all records will be regenerated, which is needed to update the metadata for modified records.</p></li>
 <li><p><strong>verbose</strong> (<em>bool, optional</em>) If True, info messages will be printed during operations. Default value is False.</p></li>
 </ul>
 <p>Returns</p>
@@ -374,6 +376,25 @@ Notebook executed on 2021-02-19
 <span class="nb">print</span><span class="p">(</span><span class="n">ucell</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Multiple matching record retrieved from remote
+#  family               symbols  alat    Ecoh    method  standing
+ 1 A1--Cu--fcc          Al        4.0500 -3.3539 dynamic good
+ 2 A1--Cu--fcc          Al        4.0500 -3.3539 dynamic good
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Please select one: 1
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
@@ -418,8 +439,8 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
   <p class="topless"><a href="1.4.10._prototype_loading.html"
                         title="previous chapter">Introduction to atomman: prototype loading</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="1.5._Settings_and_Library_classes.html"
-                        title="next chapter">Introduction to atomman: Settings and Library</a></p>
+  <p class="topless"><a href="1.4.12._DFT_reference_crystal_loading.html"
+                        title="next chapter">Introduction to atomman: DFT reference crystal loading</a></p>
         </div>
       </div>
       <div class="clearer"></div>
@@ -434,12 +455,12 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="1.5._Settings_and_Library_classes.html" title="Introduction to atomman: Settings and Library"
+          <a href="1.4.12._DFT_reference_crystal_loading.html" title="Introduction to atomman: DFT reference crystal loading"
              >next</a> |</li>
         <li class="right" >
           <a href="1.4.10._prototype_loading.html" title="Introduction to atomman: prototype loading"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: ElasticConstants class &#8212; atomman 1.3.7 documentation</title>
+    <title>Introduction to atomman: ElasticConstants class &#8212; atomman 1.4.0 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="3._Basic_support_and_analysis_tools.html" title="Introduction to atomman: Basic support and analysis tools"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -334,8 +334,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.7
-Notebook executed on 2021-02-19
+atomman version = 1.4.0
+Notebook executed on 2021-08-05
 </pre></div></div>
 </div>
 </div>
@@ -628,7 +628,7 @@ True
 <h3>3.2. Setting using crystal-specific constants<a class="headerlink" href="#3.2.-Setting-using-crystal-specific-constants" title="Permalink to this headline">¶</a></h3>
 <p>Alternatively, the elastic constants can be defined by supplying a full set of unique constants for a given crystal structure in the standard reference frame. During initialization, the specific form is inferred from the given parameters. After initialization, the functions corresponding to a specific crystal family can be called.</p>
 <ul class="simple">
-<li><p><strong>isotropic</strong> (two of the following)</p>
+<li><p><strong>isotropic</strong> (two unique values required)</p>
 <ul>
 <li><p><strong>C11</strong></p></li>
 <li><p><strong>C12</strong></p></li>
@@ -641,14 +641,14 @@ True
 <li><p><strong>K</strong> Bulk modulus</p></li>
 </ul>
 </li>
-<li><p><strong>cubic</strong></p>
+<li><p><strong>cubic</strong> (all three values required)</p>
 <ul>
 <li><p><strong>C11</strong></p></li>
 <li><p><strong>C12</strong></p></li>
 <li><p><strong>C44</strong></p></li>
 </ul>
 </li>
-<li><p><strong>hexagonal</strong> (five of the following)</p>
+<li><p><strong>hexagonal</strong> (five unique values required)</p>
 <ul>
 <li><p><strong>C11</strong></p></li>
 <li><p><strong>C12</strong></p></li>
@@ -658,7 +658,7 @@ True
 <li><p><strong>C66</strong> (2*C66 = C11-C12)</p></li>
 </ul>
 </li>
-<li><p><strong>tetragonal</strong></p>
+<li><p><strong>tetragonal</strong> (six values required, one optional)</p>
 <ul>
 <li><p><strong>C11</strong></p></li>
 <li><p><strong>C12</strong></p></li>
@@ -669,7 +669,7 @@ True
 <li><p><strong>C66</strong></p></li>
 </ul>
 </li>
-<li><p><strong>rhombohedral</strong> (six or seven of the following)</p>
+<li><p><strong>rhombohedral</strong> (six unique values required, one optional)</p>
 <ul>
 <li><p><strong>C11</strong></p></li>
 <li><p><strong>C12</strong></p></li>
@@ -681,7 +681,7 @@ True
 <li><p><strong>C66</strong> (2*C66 = C11-C12)</p></li>
 </ul>
 </li>
-<li><p><strong>orthorhombic</strong></p>
+<li><p><strong>orthorhombic</strong> (all nine values required)</p>
 <ul>
 <li><p><strong>C11</strong></p></li>
 <li><p><strong>C12</strong></p></li>
@@ -694,7 +694,7 @@ True
 <li><p><strong>C66</strong></p></li>
 </ul>
 </li>
-<li><p><strong>monoclinic</strong></p>
+<li><p><strong>monoclinic</strong> (all thirteen values required)</p>
 <ul>
 <li><p><strong>C11</strong></p></li>
 <li><p><strong>C12</strong></p></li>
@@ -711,9 +711,9 @@ True
 <li><p><strong>C66</strong></p></li>
 </ul>
 </li>
-<li><p><strong>triclinic</strong></p>
+<li><p><strong>triclinic</strong> (all twenty-one values required)</p>
 <ul>
-<li><p><strong>all 21 Cij where i &lt;= j</strong></p></li>
+<li><p><strong>all Cij where i &lt;= j</strong></p></li>
 </ul>
 </li>
 </ul>
@@ -1002,20 +1002,20 @@ Hill shear modulus estimate =  51.47596549573894 GPa
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 C_with_v:
-[[176.2037 124.9008 124.8958   0.0029   0.004   -0.0013]
- [124.9008 176.2001 124.9021  -0.0002  -0.0037   0.0002]
- [124.8958 124.9021 176.1961  -0.0019   0.0016   0.0012]
- [  0.0029  -0.0002  -0.0019  81.8014   0.0037   0.0008]
- [  0.004   -0.0037   0.0016   0.0037  81.7975  -0.0001]
- [ -0.0013   0.0002   0.0012   0.0008  -0.0001  81.8029]]
+[[176.1993 124.9016 124.9004   0.0036  -0.0042   0.003 ]
+ [124.9016 176.1998 124.9007   0.0003   0.      -0.0041]
+ [124.9004 124.9007 176.2035  -0.0011  -0.0004   0.0012]
+ [  0.0036   0.0003  -0.0011  81.7983   0.0027   0.0006]
+ [ -0.0042   0.      -0.0004   0.0027  81.7951   0.0015]
+ [  0.003   -0.0041   0.0012   0.0006   0.0015  81.8033]]
 
 C_norm
-[[176.1999 124.8996 124.8996   0.       0.       0.    ]
- [124.8996 176.1999 124.8996   0.       0.       0.    ]
- [124.8996 124.8996 176.1999   0.       0.       0.    ]
- [  0.       0.       0.      81.8006   0.       0.    ]
- [  0.       0.       0.       0.      81.8006   0.    ]
- [  0.       0.       0.       0.       0.      81.8006]]
+[[176.2009 124.9009 124.9009   0.       0.       0.    ]
+ [124.9009 176.2009 124.9009   0.       0.       0.    ]
+ [124.9009 124.9009 176.2009   0.       0.       0.    ]
+ [  0.       0.       0.      81.7989   0.       0.    ]
+ [  0.       0.       0.       0.      81.7989   0.    ]
+ [  0.       0.       0.       0.       0.      81.7989]]
 </pre></div></div>
 </div>
 </div>
@@ -1276,7 +1276,7 @@ C_norm.is_normal(&#39;hexagonal&#39;) -&gt; False
         <li class="right" >
           <a href="3._Basic_support_and_analysis_tools.html" title="Introduction to atomman: Basic support and analysis tools"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

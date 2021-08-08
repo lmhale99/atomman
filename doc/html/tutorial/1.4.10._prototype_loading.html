@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: prototype loading &#8212; atomman 1.3.7 documentation</title>
+    <title>Introduction to atomman: prototype loading &#8212; atomman 1.4.0 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="1.4.9._spglib_conversions.html" title="Introduction to atomman: Load and dump"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -300,6 +300,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="1.-Introduction">
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
 <p>The crystal_prototype records found in the NIST Interatomic Potentials Repository database (<a class="reference external" href="https://potentials.nist.gov/">https://potentials.nist.gov/</a>) define a number of unit cells for standard crystal prototypes. The ‘prototype’ load option allows Systems to be constructed based on the information in these records. The information can be loaded either from a local copy of the database or the remote database.</p>
+<p><em>Updated version 1.4.0.</em> Query parameters and database options updated to be in line with potentials version 0.3.0.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -328,27 +329,17 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.3.7
-Notebook executed on 2021-02-19
+atomman version = 1.4.0
+Notebook executed on 2021-08-04
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="2.-atomman.load(‘prototype’)">
 <h2>2. atomman.load(‘prototype’)<a class="headerlink" href="#2.-atomman.load(‘prototype’)" title="Permalink to this headline">¶</a></h2>
 <p>Accesses the potentials database to retrieve a crystal_prototype record and generate a unit cell System based on it.</p>
-<p>Query parameters</p>
-<ul class="simple">
-<li><p><strong>id</strong> (<em>str or list, optional</em>) Prototype ID(s) to search for. These are unique identifiers for each prototype based on comm.</p></li>
-<li><p><strong>key</strong> (<em>str or list, optional</em>) UUID4 key(s) to search for. Each entry has a unique random-generated UUID4 key.</p></li>
-<li><p><strong>name</strong> (<em>str or list, optional</em>) Common name(s) to limit the search by.</p></li>
-<li><p><strong>prototype</strong> (<em>str or list, optional</em>) Prototype identifying composition(s) to limit the search by.</p></li>
-<li><p><strong>pearson</strong> (<em>str or list, optional</em>) The Pearson symbol(s) to limit the search by.</p></li>
-<li><p><strong>strukturbericht</strong> (<em>str or list, optional</em>) The strukturbericht identifier(s) to limit the search by.</p></li>
-<li><p><strong>sg_number</strong> (<em>int or list, optional</em>) The space group number(s) to limit the search by.</p></li>
-<li><p><strong>sg_hm</strong> (<em>str or list, optional</em>) The space group Hermann-Maguin identifier(s) to limit the search by.</p></li>
-<li><p><strong>sg_schoenflies</strong> (<em>str or list, optional</em>) The space group Schoenflies identifier(s) to limit the search by.</p></li>
-<li><p><strong>keyword</strong> (<em>str, optional</em>) If given, will limit the search to all records that contain the keyword substring. Cannot be combined with any of the above parameters.</p></li>
-</ul>
+<p>Query parameters - <strong>name</strong> (<em>str or list, optional</em>) Record names to search for. These should be the same values as id. - <strong>id</strong> (<em>str or list, optional</em>) Prototype ID(s) to search for. These are unique identifiers for each prototype based on comm. - <strong>key</strong> (<em>str or list, optional</em>) UUID4 key(s) to search for. Each entry has a unique random-generated UUID4 key. - <strong>commonname</strong> (<em>str or list, optional</em>) Common name(s) to limit the search by. - <strong>prototype</strong> (<em>str or list, optional</em>) Prototype
+identifying composition(s) to limit the search by. - <strong>pearson</strong> (<em>str or list, optional</em>) The Pearson symbol(s) to limit the search by. - <strong>strukturbericht</strong> (<em>str or list, optional</em>) The strukturbericht identifier(s) to limit the search by. - <strong>sg_number</strong> (<em>int or list, optional</em>) The space group number(s) to limit the search by. - <strong>sg_hm</strong> (<em>str or list, optional</em>) The space group Hermann-Maguin identifier(s) to limit the search by. - <strong>sg_schoenflies</strong> (<em>str or list, optional</em>) The space
+group Schoenflies identifier(s) to limit the search by.</p>
 <p>Modification parameters</p>
 <ul class="simple">
 <li><p><strong>a</strong> (<em>float, optional</em>) The a lattice parameter to scale the prototype by. Can only be given if it is a unique lattice parameter for the prototype’s crystal family, and if all other unique lattice parameters are given.</p></li>
@@ -357,7 +348,7 @@ Notebook executed on 2021-02-19
 <li><p><strong>alpha</strong> (<em>float, optional</em>) The alpha lattice angle to scale the prototype by. Can only be given if it is a unique lattice parameter for the prototype’s crystal family, and if all other unique lattice parameters are given.</p></li>
 <li><p><strong>beta</strong> (<em>float, optional</em>) The beta lattice angle to scale the prototype by. Can only be given if it is a unique lattice parameter for the prototype’s crystal family, and if all other unique lattice parameters are given.</p></li>
 <li><p><strong>gamma</strong> (<em>gamma, optional</em>) The alpha lattice angle to scale the prototype by. Can only be given if it is a unique lattice parameter for the prototype’s crystal family, and if all other unique lattice parameters are given.</p></li>
-<li><p><strong>symbol</strong> (<em>tuple, optional</em>) Allows the list of element symbols to be assigned during loading. Useful if the symbols for the model differ from the standard element tags or if the poscar file has no elemental information.</p></li>
+<li><p><strong>symbols</strong> (<em>tuple, optional</em>) Allows the list of element symbols to be assigned during loading.</p></li>
 </ul>
 <p>Database option parameters</p>
 <ul class="simple">
@@ -365,6 +356,8 @@ Notebook executed on 2021-02-19
 <li><p><strong>localpath</strong> (<em>str, optional</em>) The local library path to use when initializing a new Database. IF not given, will use the default localpath. Ignored if database is given.</p></li>
 <li><p><strong>local</strong> (<em>bool, optional</em>) Indicates if the Database object is to look for local records. Default is True. Ignored if database is given.</p></li>
 <li><p><strong>remote</strong> (<em>bool, optional</em>) Indicates if the Database object is to look for remote records. Default is True. Ignored if database is given.</p></li>
+<li><p><strong>prompt</strong> (<em>bool, optional</em>) If prompt=True (default) then a screen input will ask for a selection if multiple matching potentials are found. If prompt=False, then an error will be thrown if multiple matches are found.</p></li>
+<li><p><strong>refresh_cache</strong> (<em>bool, optional</em>) If the local database is of style “local”, indicates if the metadata cache file is to be refreshed. If False, metadata for new records will be added but the old record metadata fields will not be updated. If True, then the metadata for all records will be regenerated, which is needed to update the metadata for modified records.</p></li>
 <li><p><strong>verbose</strong> (<em>bool, optional</em>) If True, info messages will be printed during operations. Default value is False.</p></li>
 </ul>
 <p>Returns</p>
@@ -373,7 +366,7 @@ Notebook executed on 2021-02-19
 </ul>
 <div class="section" id="2.1.-Query-parameters">
 <h3>2.1. Query parameters<a class="headerlink" href="#2.1.-Query-parameters" title="Permalink to this headline">¶</a></h3>
-<p>Prototypes can be selected based on a number of alternate names, or by using the keyword parameter which will do a string comparision with the record content.</p>
+<p>Prototypes can be selected based on a number of different ids.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -405,15 +398,51 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       3 |       1 |   0.500 |   0.500 |   0.000
 </pre></div></div>
 </div>
+<p>Or, if you give no extra keyword arguments you will get a prompt selection of all prototypes in the database.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;prototype&quot;</span><span class="p">,</span> <span class="n">keyword</span><span class="o">=</span><span class="s1">&#39;fcc&#39;</span><span class="p">)</span>
+<span></span><span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;prototype&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ucell</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Multiple matching record retrieved from local
+1 A1--Cu--fcc
+2 A15--Cr3Si
+3 A15--beta-W
+4 A2--W--bcc
+5 A3&#39;--alpha-La--double-hcp
+6 A3--Mg--hcp
+7 A4--C--dc
+8 A5--beta-Sn
+9 A6--In--bct
+10 A7--alpha-As
+11 Ah--alpha-Po--sc
+12 B1--NaCl--rock-salt
+13 B2--CsCl
+14 B3--ZnS--cubic-zinc-blende
+15 C1--CaF2--fluorite
+16 D0_3--BiF3
+17 L1_0--AuCu
+18 L1_2--AuCu3
+19 L2_1--AlCu2Mn--heusler
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Please select one: 1
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
@@ -436,52 +465,17 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       3 |       1 |   0.500 |   0.500 |   0.000
 </pre></div></div>
 </div>
-<p>If no query parameters are given or multiple matches are found, then a list and prompt will be given for you to select from.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># hcp and double-hcp are both in the database</span>
-<span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;prototype&quot;</span><span class="p">,</span> <span class="n">keyword</span><span class="o">=</span><span class="s1">&#39;hcp&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">ucell</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Multiple matching crystal prototypes found.
-1 A3&#39;--alpha-La--double-hcp
-2 A3--Mg--hcp
-Select which one: 2
-avect =  [ 1.000,  0.000,  0.000]
-bvect =  [-0.500,  0.866,  0.000]
-cvect =  [ 0.000,  0.000,  1.633]
-origin = [ 0.000,  0.000,  0.000]
-natoms = 2
-natypes = 1
-symbols = (None,)
-pbc = [ True  True  True]
-per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
-     id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.000 |   0.000 |   0.000
-      1 |       1 |   0.000 |   0.577 |   0.816
-</pre></div></div>
-</div>
 </div>
 <div class="section" id="2.2.-Modification-parameters">
 <h3>2.2. Modification parameters<a class="headerlink" href="#2.2.-Modification-parameters" title="Permalink to this headline">¶</a></h3>
 <p>The nature of a crystal prototype is that it is stripped of element-specific information: there are no elements/symbols assigned to the atom types and all lattice constants are scaled based on a=1 and the “ideal” ratios for the reference crystal. Because of this, the lattice constants and symbols can be set within the load method.</p>
 <p><strong>NOTE</strong>: The allowed lattice constants for this method depend on the independent lattice constants associated with the prototype’s crystal family (cubic, hexagonal, etc.). Either all or none of the independent lattice constants can be set during load.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;prototype&quot;</span><span class="p">,</span> <span class="n">keyword</span><span class="o">=</span><span class="s1">&#39;fcc&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">4.05</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">)</span>
+<span></span><span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;prototype&quot;</span><span class="p">,</span> <span class="s1">&#39;A1--Cu--fcc&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">4.05</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ucell</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -508,7 +502,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -537,76 +531,6 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="2.3.-Database-parameters">
-<h3>2.3. Database parameters<a class="headerlink" href="#2.3.-Database-parameters" title="Permalink to this headline">¶</a></h3>
-<p>The last parameters are associated with the settings for accessing the database where the crystal_prototype records are stored. An existing atomman.library.Database object can be used to access the data according to pre-defined settings, or the function can be called with database settings given so that a new Database object can be properly initialized.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Initialize a database object beforehand with remote searches turned off</span>
-<span class="n">db</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">library</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">remote</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="s1">&#39;crystal_prototype&#39;</span><span class="p">)</span>
-
-<span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;prototype&quot;</span><span class="p">,</span> <span class="n">keyword</span><span class="o">=</span><span class="s1">&#39;fcc&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">4.05</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">ucell</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-avect =  [ 4.050,  0.000,  0.000]
-bvect =  [ 0.000,  4.050,  0.000]
-cvect =  [ 0.000,  0.000,  4.050]
-origin = [ 0.000,  0.000,  0.000]
-natoms = 4
-natypes = 1
-symbols = (&#39;Al&#39;,)
-pbc = [ True  True  True]
-per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
-     id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.000 |   0.000 |   0.000
-      1 |       1 |   0.000 |   2.025 |   2.025
-      2 |       1 |   2.025 |   0.000 |   2.025
-      3 |       1 |   2.025 |   2.025 |   0.000
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Alternatively, set the database parameter remote=False during the load call</span>
-<span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;prototype&quot;</span><span class="p">,</span> <span class="n">keyword</span><span class="o">=</span><span class="s1">&#39;fcc&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">4.05</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">remote</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">ucell</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-avect =  [ 4.050,  0.000,  0.000]
-bvect =  [ 0.000,  4.050,  0.000]
-cvect =  [ 0.000,  0.000,  4.050]
-origin = [ 0.000,  0.000,  0.000]
-natoms = 4
-natypes = 1
-symbols = (&#39;Al&#39;,)
-pbc = [ True  True  True]
-per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
-     id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.000 |   0.000 |   0.000
-      1 |       1 |   0.000 |   2.025 |   2.025
-      2 |       1 |   2.025 |   0.000 |   2.025
-      3 |       1 |   2.025 |   2.025 |   0.000
-</pre></div></div>
-</div>
-</div>
 </div>
 </div>
 
@@ -623,7 +547,6 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <li><a class="reference internal" href="#2.-atomman.load(‘prototype’)">2. atomman.load(‘prototype’)</a><ul>
 <li><a class="reference internal" href="#2.1.-Query-parameters">2.1. Query parameters</a></li>
 <li><a class="reference internal" href="#2.2.-Modification-parameters">2.2. Modification parameters</a></li>
-<li><a class="reference internal" href="#2.3.-Database-parameters">2.3. Database parameters</a></li>
 </ul>
 </li>
 </ul>
@@ -655,7 +578,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
         <li class="right" >
           <a href="1.4.9._spglib_conversions.html" title="Introduction to atomman: Load and dump"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>

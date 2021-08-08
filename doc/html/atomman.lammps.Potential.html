@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Potential &#8212; atomman 1.3.7 documentation</title>
+    <title>Potential &#8212; atomman 1.4.0 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="atomman.lammps.html" title="lammps"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="atomman.lammps.html" accesskey="U">lammps</a> &#187;</li> 
       </ul>
@@ -48,10 +48,32 @@
             
   <div class="section" id="potential">
 <h1>Potential<a class="headerlink" href="#potential" title="Permalink to this headline">¶</a></h1>
-<dl class="attribute">
+<dl class="class">
 <dt id="atomman.lammps.Potential">
-<code class="sig-prename descclassname">atomman.lammps.</code><code class="sig-name descname">Potential</code><a class="headerlink" href="#atomman.lammps.Potential" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">potentials.PotentialLAMMPS.PotentialLAMMPS</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">atomman.lammps.</code><code class="sig-name descname">Potential</code><a class="headerlink" href="#atomman.lammps.Potential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class initializer switch for PotentialLAMMPS or PotentialLAMMPSKIM objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><em>file-like object</em>) – A JSON/XML data model containing a potential-LAMMPS or a
+potential-LAMMPS-KIM branch.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The record name to use.  If not given, this will be set to the
+potential’s id.</p></li>
+<li><p><strong>pot_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The path to a directory containing any artifacts associated with
+the potential.  Default value is None, which assumes any required
+files will be in the working directory when LAMMPS is executed.</p></li>
+<li><p><strong>kim_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The full KIM model id indicating the version of a KIM model to use.
+If not given, then the newest known version will be used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>potentials.record.PotentialLAMMPS</em> – Returned if model contains potential-LAMMPS content.</p></li>
+<li><p><em>potentials.record.PotentialLAMMPSKIM</em> – Returned if model contains potential-LAMMPS-KIM content.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -87,7 +109,7 @@
         <li class="right" >
           <a href="atomman.lammps.html" title="lammps"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.3.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">atomman 1.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="atomman.html" >atomman package</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="atomman.lammps.html" >lammps</a> &#187;</li> 
       </ul>
