@@ -179,6 +179,9 @@ class Log():
             # Reset file pointer
             log_info.seek(0)
             
+            # Get number of Simulations already read
+            j = len(self.simulations)
+            
             # Read thermo data and create Simulations
             for header, footer in zip(thermo_headers, thermo_footers):
                 self.__read_thermo(log_info, header, footer)
@@ -188,7 +191,7 @@ class Log():
                 header = performance_headers[i]
                 footer = performance_footers[i]
                 performance = self.__read_performance(log_info, header, footer, is_old_version)
-                self.simulations[i].performance = performance
+                self.simulations[i+j].performance = performance
             
     def __read_lammps_version(self, line):
         """
