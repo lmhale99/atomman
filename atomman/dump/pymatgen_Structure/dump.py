@@ -5,8 +5,15 @@ import numpy as np
 
 # http://pymatgen.org
 try:
-    import pymatgen as pmg
+    import pymatgen
     has_pmg = True
+    
+    # Import switch based on pymatgen version
+    try:
+        from pymatgen.core import Lattice, Structure
+    except:
+        from pymatgen import Lattice, Structure
+    
 except:
     has_pmg = False
 
@@ -32,7 +39,7 @@ def dump(system, symbols=None):
     assert has_pmg, 'pymatgen not imported'
     
     # Get box/lattice information
-    lattice = pmg.Lattice(system.box.vects)
+    lattice = Lattice(system.box.vects)
     
     # Get symbols information
     if symbols is None:
@@ -53,6 +60,6 @@ def dump(system, symbols=None):
             prop[p] = system.atoms_prop(key=p)
     
     # Build structure
-    structure = pmg.Structure(lattice, species, sites, site_properties=prop)
+    structure = Structure(lattice, species, sites, site_properties=prop)
     
     return structure
