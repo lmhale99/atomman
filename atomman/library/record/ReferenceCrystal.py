@@ -10,10 +10,11 @@ from datamodelbase import query
 from ... import System
 from ...tools import crystalsystem
 
-modelroot = 'reference-crystal'
-
 class ReferenceCrystal(Record):
-    
+    """
+    Class for representing reference_crystal records that provide the structure
+    information for DFT relaxed crystal structures obtained from DFT databases.
+    """
     @property
     def style(self):
         """str: The record style"""
@@ -22,10 +23,11 @@ class ReferenceCrystal(Record):
     @property
     def modelroot(self):
         """str: The root element of the content"""
-        return modelroot
+        return 'reference-crystal'
 
     @property
     def xsd_filename(self):
+        """tuple: The module path and file name of the record's xsd schema"""
         return ('atomman.library.xsd', f'{self.style}.xsd')
 
     @property
@@ -112,7 +114,7 @@ class ReferenceCrystal(Record):
 
     @property
     def natypes(self):
-        """int : The number of unique elements in the unit cell"""
+        """int : The number of atom types in the unit cell"""
         if self.__natypes is None:
             self.__natypes = self.ucell.natypes
         return self.__natypes
@@ -263,8 +265,19 @@ class ReferenceCrystal(Record):
         return model
         
     def load_model(self, model, name=None):
+        """
+        Loads record contents from a given model.
+
+        Parameters
+        ----------
+        model : str or DataModelDict
+            The model contents of the record to load.
+        name : str, optional
+            The name to assign to the record.  Often inferred from other
+            attributes if not given.
+        """
         super().load_model(model, name=name)        
-        crystal = self.model[modelroot]
+        crystal = self.model[self.modelroot]
         
         self.__key = crystal['key']
         self.__id = crystal['id']
@@ -294,12 +307,9 @@ class ReferenceCrystal(Record):
 
     def metadata(self):
         """
-        Converts the structured content to a simpler dictionary.
-        
-        Returns
-        -------
-        dict
-            A dictionary representation of the record's content.
+        Generates a dict of simple metadata values associated with the record.
+        Useful for quickly comparing records and for building pandas.DataFrames
+        for multiple records of the same style.
         """
         params = {}
         params['name'] = self.name
@@ -323,12 +333,43 @@ class ReferenceCrystal(Record):
 
         return params
 
-    @staticmethod
-    def pandasfilter(dataframe, name=None, key=None,
+    def pandasfilter(self, dataframe, name=None, key=None,
                      id=None, sourcename=None,
                      sourcelink=None, crystalfamily=None, composition=None,
                      symbols=None, natoms=None, natypes=None):
-
+        """
+        Filters a pandas.DataFrame based on kwargs values for the record style.
+        
+        Parameters
+        ----------
+        dataframe : pandas.DataFrame
+            A table of metadata for multiple records of the record style.
+        name : str or list
+            The record name(s) to parse by.
+        id : str or list
+            The record id(s) to parse by.
+        key : str or list
+            The record key(s) to parse by.
+        sourcename : str or list
+            The name(s) of source databases to parse by.
+        sourcelink : str or list
+            The URL(s) of source databases to parse by.
+        crystalfamily : str or list
+            Crystal structure families to parse by.
+        composition : str or list
+            Compositions to parse by.
+        symbols : str or list
+            Element model symbol(s) to parse by.
+        natoms : int or list
+            Number of atoms in the unit cell to parse by.
+        natypes : int or list
+            Number of atom types to parse by.
+        
+        Returns
+        -------
+        pandas.Series, numpy.NDArray
+            Boolean map of matching values
+        """
         matches = (
             query.str_match.pandas(dataframe, 'name', name)
             &query.str_match.pandas(dataframe, 'key', key)
@@ -343,15 +384,44 @@ class ReferenceCrystal(Record):
         )
         return matches
 
-    @staticmethod
-    def mongoquery(name=None, key=None,
+    def mongoquery(self, name=None, key=None,
                    id=None, sourcename=None,
                    sourcelink=None, crystalfamily=None, composition=None,
                    symbols=None, natoms=None, natypes=None):
-
+        """
+        Builds a Mongo-style query based on kwargs values for the record style.
+        
+        Parameters
+        ----------
+        name : str or list
+            The record name(s) to parse by.
+        id : str or list
+            The record id(s) to parse by.
+        key : str or list
+            The record key(s) to parse by.
+        sourcename : str or list
+            The name(s) of source databases to parse by.
+        sourcelink : str or list
+            The URL(s) of source databases to parse by.
+        crystalfamily : str or list
+            Crystal structure families to parse by.
+        composition : str or list
+            Compositions to parse by.
+        symbols : str or list
+            Element model symbol(s) to parse by.
+        natoms : int or list
+            Number of atoms in the unit cell to parse by.
+        natypes : int or list
+            Number of atom types to parse by.
+        
+        Returns
+        -------
+        dict
+            The Mongo-style query
+        """     
         mquery = {}
         query.str_match.mongo(mquery, f'name', name)
-        root = f'content.{modelroot}'
+        root = f'content.{self.modelroot}'
 
         query.str_match.mongo(mquery, f'{root}.key', key)
         query.str_match.mongo(mquery, f'{root}.id', id)
@@ -365,13 +435,40 @@ class ReferenceCrystal(Record):
 
         return mquery
 
-    @staticmethod
-    def cdcsquery(key=None, id=None, sourcename=None,
+    def cdcsquery(self, key=None, id=None, sourcename=None,
                   sourcelink=None, crystalfamily=None, composition=None,
                   symbols=None, natoms=None, natypes=None):
-
+        """
+        Builds a CDCS-style query based on kwargs values for the record style.
+        
+        Parameters
+        ----------
+        id : str or list
+            The record id(s) to parse by.
+        key : str or list
+            The record key(s) to parse by.
+        sourcename : str or list
+            The name(s) of source databases to parse by.
+        sourcelink : str or list
+            The URL(s) of source databases to parse by.
+        crystalfamily : str or list
+            Crystal structure families to parse by.
+        composition : str or list
+            Compositions to parse by.
+        symbols : str or list
+            Element model symbol(s) to parse by.
+        natoms : int or list
+            Number of atoms in the unit cell to parse by.
+        natypes : int or list
+            Number of atom types to parse by.
+        
+        Returns
+        -------
+        dict
+            The CDCS-style query
+        """
         mquery = {}
-        root = modelroot
+        root = self.modelroot
         
         query.str_match.mongo(mquery, f'{root}.key', key)
         query.str_match.mongo(mquery, f'{root}.id', id)
