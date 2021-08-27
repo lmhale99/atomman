@@ -151,7 +151,7 @@ class Atoms(object):
         
         # Check atype parameter values
         if atype is not None:
-            atype = np.asarray(atype, dtype='uint64')
+            atype = np.asarray(atype)
             
             # Handle single atype
             if atype.ndim == 0:
@@ -168,7 +168,7 @@ class Atoms(object):
         
         # Check pos parameter values
         if pos is not None:
-            pos = np.asarray(pos, dtype='float64')
+            pos = np.asarray(pos)
             
             # Handle single pos
             if pos.ndim == 1:
