@@ -401,30 +401,34 @@ class DifferentialDisplacement():
         if atomcolor is None and atomcmap is None:
             atomcmap = 'hsv'
 
-        # Transform single color/cmap values to lists
-        if isinstance(atomcmap, str):
-            if atomcolor is not None:
-                raise TypeError('atomcmap and atomcolor cannot be str if both are given')
-            atomcmap = [atomcmap for i in range(natypes)]
-            atomcolor = [None for i in range(natypes)]
-        elif isinstance(atomcolor, str):
-            if atomcmap is not None:
-                raise TypeError('atomcmap and atomcolor cannot be str if both are given')
+        # Normalize atomcolor values
+        if isinstance(atomcolor, str):
             atomcolor = [atomcolor for i in range(natypes)]
-            atomcmap = [None for i in range(natypes)]
+        elif atomcolor is None:
+            atomcolor = [None for i in range(natypes)]
         else:
             atomcolor = list(atomcolor)
-            atomcmap = list(atomcmap)
+            if len(atomcolor) != natypes:
+                raise ValueError('Invalid number of atomcolor values')
 
-        # Check atomcolor, atomcmap list compatibility
-        if len(atomcmap) != natypes:
-            raise ValueError('Invalid number of atomcmap values')
-        if len(atomcolor) != natypes:
-            raise ValueError('Invalid number of atomcolor values')
-        for ic in range(len(atomcmap)):
-            if atomcmap[ic] is not None:
-                if atomcolor[ic] is not None:
-                    raise ValueError('atomcmap and atomcolor cannot both be given for same atype')
+        # Normalize atomcmap values
+        if isinstance(atomcmap, str):
+            atomcmap = [atomcmap for i in range(natypes)]
+        elif atomcmap is None:
+            atomcmap = [None for i in range(natypes)]
+        else:
+            atomcmap = list(atomcmap)
+            if len(atomcmap) != natypes:
+                raise ValueError('Invalid number of atomcmap values')
+        
+        # Check that no atype has both atomcmap and atomcolor
+        for color, cmap in zip(atomcolor, atomcmap):
+            if color is not None and cmap is not None:
+                raise ValueError('atomcmap and atomcolor cannot both be given for the same atype')
+        
+        # Convert atomcmap str values to color map objects
+        for ic in range(natypes):
+            if atomcmap[ic] is not None:    
                 atomcmap[ic] = cm.get_cmap(atomcmap[ic])
         
         return atomcolor, atomcmap
