@@ -304,7 +304,7 @@ class RelaxedCrystal(Record):
         return params
 
     def pandasfilter(self, dataframe, name=None, key=None,
-                     method='dynamic', standing='good',
+                     method=None, standing=None,
                      family=None, parent_key=None, 
                      potential_LAMMPS_id=None, potential_LAMMPS_key=None,
                      potential_id=None, potential_key=None,
@@ -377,7 +377,7 @@ class RelaxedCrystal(Record):
         return matches
 
     def mongoquery(self, name=None, key=None,
-                   method='dynamic', standing='good',
+                   method=None, standing=None,
                    family=None, parent_key=None, 
                    potential_LAMMPS_id=None, potential_LAMMPS_key=None,
                    potential_id=None, potential_key=None,
@@ -429,7 +429,7 @@ class RelaxedCrystal(Record):
         """     
         mquery = {}
         query.str_match.mongo(mquery, f'name', name)
-        root = f'content.{self,modelroot}'
+        root = f'content.{self.modelroot}'
 
         query.str_match.mongo(mquery, f'{root}.key', key)
         query.str_match.mongo(mquery, f'{root}.method', method)
@@ -448,7 +448,7 @@ class RelaxedCrystal(Record):
 
         return mquery
 
-    def cdcsquery(self, key=None, method='dynamic', standing='good',
+    def cdcsquery(self, key=None, method=None, standing=None,
                   family=None, parent_key=None, 
                   potential_LAMMPS_id=None, potential_LAMMPS_key=None,
                   potential_id=None, potential_key=None,

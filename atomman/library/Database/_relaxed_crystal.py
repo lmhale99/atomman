@@ -1,7 +1,7 @@
 # coding: utf-8
         
 def get_relaxed_crystals(self, local=None, remote=None, name=None, key=None,
-                         method='dynamic', standing='good',
+                         method=None, standing=None,
                          family=None, parent_key=None, 
                          potential_LAMMPS_id=None, potential_LAMMPS_key=None,
                          potential_id=None, potential_key=None,
@@ -26,13 +26,10 @@ def get_relaxed_crystals(self, local=None, remote=None, name=None, key=None,
         UUID4 key.
     method : str or list or None, optional
         The relaxation method used.  Allowed values are dynamic, static and box.
-        Default value is dynamic (the most rigorous relaxation method).  All
-        will be loaded if set to None.
     standing : str or list or None, optional
         "good" records are the unique crystals found with the most rigorous
         relaxation, and with known prototypes over DFT structures.  "bad" are
-        records filtered out, usually for being duplicates.  Default value is
-        "good".  All will be loaded if set to None.
+        records filtered out, usually for being duplicates.
     family : str or atomman.library.CrystalPrototype or list, optional
         The crystal family associated with the relaxed crystal - either crystal
         prototype name or MP/OQMD database entry name.
@@ -78,7 +75,7 @@ def get_relaxed_crystals(self, local=None, remote=None, name=None, key=None,
                             refresh_cache=refresh_cache, return_df=return_df, verbose=verbose)
 
 def get_relaxed_crystal(self, local=None, remote=None, name=None,
-                        key=None, method='dynamic', standing='good',
+                        key=None, method=None, standing=None,
                         family=None, parent_key=None, 
                         potential_LAMMPS_id=None, potential_LAMMPS_key=None,
                         potential_id=None, potential_key=None,
@@ -103,13 +100,10 @@ def get_relaxed_crystal(self, local=None, remote=None, name=None,
         UUID4 key.
     method : str or list or None, optional
         The relaxation method used.  Allowed values are dynamic, static and box.
-        Default value is dynamic (the most rigorous relaxation method).  All
-        will be loaded if set to None.
     standing : str or list or None, optional
         "good" records are the unique crystals found with the most rigorous
         relaxation, and with known prototypes over DFT structures.  "bad" are
-        records filtered out, usually for being duplicates.  Default value is
-        "good".  All will be loaded if set to None.
+        records filtered out, usually for being duplicates.
     family : str or atomman.library.CrystalPrototype or list, optional
         The crystal family associated with the relaxed crystal - either crystal
         prototype name or MP/OQMD database entry name.
@@ -176,8 +170,8 @@ def get_relaxed_crystal(self, local=None, remote=None, name=None,
                            prompt=prompt, promptfxn=promptfxn, refresh_cache=refresh_cache, 
                            verbose=verbose)
 
-def download_relaxed_crystals(self, name=None, key=None, method='dynamic',
-                              standing='good', family=None, parent_key=None, 
+def download_relaxed_crystals(self, name=None, key=None, method=None,
+                              standing=None, family=None, parent_key=None, 
                               potential_LAMMPS_id=None, potential_LAMMPS_key=None,
                               potential_id=None, potential_key=None,
                               symbols=None, natoms=None, natypes=None, keyword=None,
@@ -195,13 +189,10 @@ def download_relaxed_crystals(self, name=None, key=None, method='dynamic',
         UUID4 key.
     method : str or list or None, optional
         The relaxation method used.  Allowed values are dynamic, static and box.
-        Default value is dynamic (the most rigorous relaxation method).  All
-        will be loaded if set to None.
     standing : str or list or None, optional
         "good" records are the unique crystals found with the most rigorous
         relaxation, and with known prototypes over DFT structures.  "bad" are
-        records filtered out, usually for being duplicates.  Default value is
-        "good".  All will be loaded if set to None.
+        records filtered out, usually for being duplicates.
     family : str or atomman.library.CrystalPrototype or list, optional
         The crystal family associated with the relaxed crystal - either crystal
         prototype name or MP/OQMD database entry name.
