@@ -16,7 +16,7 @@ from .. import dump_table
 
 def dump(system, f=None, atom_style=None, units=None, natypes=None,
          potential=None, float_format='%.13f', return_info=True,
-         prompt=True, comments=True, safecopy=False):
+         prompt=False, comments=True, safecopy=False):
     """
     Write a LAMMPS-style atom data file from a System.
     
@@ -50,9 +50,9 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
         commands associated with the potential will be included. Default value
         is True.
     prompt : bool, optional
-        Used if return_pair_info is True. If prompt is True (default), then a
-        screen prompt will ask for more details if masses are not unique for
-        the elements.  If False, an error will be thrown for non-unique masses.
+        If True, then a screen prompt will appear for radioactive elements
+        with no standard mass to ask for the isotope to use. If False
+        (default), then the most stable isotope will be automatically used.
     comments : bool, optional
         Used if return_pair_info is True. If comments is True (default), then
         metadata comments associated with the potential will be included in the
