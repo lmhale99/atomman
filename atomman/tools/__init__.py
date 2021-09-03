@@ -1,14 +1,15 @@
 # coding: utf-8
+
+# Shared tools from potentials
+from potentials.tools import aslist, iaslist, screen_input, uber_open_rmode
+from potentials.tools.atomic_info import *
+from potentials.tools.atomic_info import __all__ as atomic_info_all
+
 # atomman imports
-from .aslist import aslist, iaslist
-from .screen_input import screen_input
 from .axes_check import axes_check
-from .atomic_info import *
-from .atomic_info import __all__ as atomic_info_all
 from .compositionstr import compositionstr
 from .duplicates_allclose import duplicates_allclose
 from .vect_angle import vect_angle
-from .uber_open_rmode import uber_open_rmode
 from .indexstr import indexstr
 from .filltemplate import filltemplate
 from .crystalsystem import *
