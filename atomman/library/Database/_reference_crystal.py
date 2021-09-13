@@ -6,22 +6,16 @@ from ...load import load_pymatgen_Structure, load_poscar
 from ..record import ReferenceCrystal
 from ...tools import aslist
 
-def get_reference_crystals(self, local=None, remote=None, name=None, key=None,
-                           id=None, sourcename=None, sourcelink=None,
-                           crystalfamily=None, composition=None,
-                           symbols=None, natoms=None, natypes=None,
+def get_reference_crystals(self, name=None, key=None, id=None, sourcename=None,
+                           sourcelink=None, crystalfamily=None,
+                           composition=None, symbols=None, natoms=None,
+                           natypes=None, local=None, remote=None, 
                            refresh_cache=False, return_df=False, verbose=False):
     """
-    Get all matching reference crystals from the database.
+    Gets all matching reference crystals from the database.
     
     Parameters
     ----------
-    local : bool, optional
-        Indicates if the local location is to be searched.  Default value
-        matches the value set when the database was initialized.
-    remote : bool, optional
-        Indicates if the remote location is to be searched.  Default value
-        matches the value set when the database was initialized.
     name : str or list, optional
         The record name(s) to parse by.  For reference crystal records, the
         names should correspond to the id.
@@ -49,6 +43,12 @@ def get_reference_crystals(self, local=None, remote=None, name=None, key=None,
         search by.
     natypes : int or list, optional
         The number(s) of unique atom types to limit the search by.
+    local : bool, optional
+        Indicates if the local location is to be searched.  Default value
+        matches the value set when the database was initialized.
+    remote : bool, optional
+        Indicates if the remote location is to be searched.  Default value
+        matches the value set when the database was initialized.
     refresh_cache : bool, optional
         If the local database is of style "local", indicates if the metadata
         cache file is to be refreshed.  If False,
@@ -64,20 +64,43 @@ def get_reference_crystals(self, local=None, remote=None, name=None, key=None,
         value is False.
     """
 
-    return self.get_records('reference_crystal', local=local, remote=remote, name=name,
-                            key=key, id=id, sourcename=sourcename, sourcelink=sourcelink,
-                            crystalfamily=crystalfamily, composition=composition,
-                            symbols=symbols, natoms=natoms, natypes=natypes,
-                            refresh_cache=refresh_cache, 
-                            return_df=return_df, verbose=verbose)
+    return self.get_records(
+        style='reference_crystal', name=name, local=local, remote=remote, 
+        refresh_cache=refresh_cache, return_df=return_df, verbose=verbose,
+        key=key, id=id, sourcename=sourcename, sourcelink=sourcelink,
+        crystalfamily=crystalfamily, composition=composition,
+        symbols=symbols, natoms=natoms, natypes=natypes)
 
-def get_reference_crystal(self, local=None, remote=None, name=None,
-                        key=None, id=None, sourcename=None, sourcelink=None,
-                        crystalfamily=None, composition=None,
-                        symbols=None, natoms=None, natypes=None,
-                        prompt=True, refresh_cache=False, verbose=False):
+def promptfxn(df):
     """
-    Retrieves exactly one matching reference crystal from the database.
+    promptfxn for reference crystals
+    """
+    header = '#  id           comp     c-family     natoms alat'
+    print(header)
+    
+    js = df.sort_values(['composition', 'natoms', 'crystalfamily', 'a']).index
+    for i, j in enumerate(js):
+        crystal = df.loc[j]
+        row =  f'{i+1:2} {crystal.id:12.12} '
+        row += f'{crystal.composition:8.8} '
+        row += f'{crystal.crystalfamily:12.12} '
+        row += f'{crystal.natoms:5d} '
+        row += f'{crystal.a:7.4f}'
+        print(row)
+    
+    i = int(input('Please select one:')) - 1
+    if i < 0 or i >= len(js):
+        raise ValueError('Invalid selection')
+
+    return js[i]
+
+def get_reference_crystal(self, name=None, key=None, id=None, sourcename=None,
+                          sourcelink=None, crystalfamily=None, composition=None,
+                          symbols=None, natoms=None, natypes=None, local=None,
+                          remote=None, prompt=True, refresh_cache=False,
+                          verbose=False):
+    """
+    Gets exactly one matching reference crystal from the database.
     
     Parameters
     ----------
@@ -129,38 +152,103 @@ def get_reference_crystal(self, local=None, remote=None, name=None,
         If True, info messages will be printed during operations.  Default
         value is False.
     """
-    def promptfxn(df):
-        header = '#  id           comp     c-family     natoms alat'
-        print(header)
-        
-        js = df.sort_values(['composition', 'natoms', 'crystalfamily', 'a']).index
-        for i, j in enumerate(js):
-            crystal = df.loc[j]
-            row =  f'{i+1:2} {crystal.id:12.12} '
-            row += f'{crystal.composition:8.8} '
-            row += f'{crystal.crystalfamily:12.12} '
-            row += f'{crystal.natoms:5d} '
-            row += f'{crystal.a:7.4f}'
-            print(row)
-        
-        i = int(input('Please select one:')) - 1
-        if i < 0 or i >= len(js):
-            raise ValueError('Invalid selection')
+    return self.get_record(
+        style='reference_crystal', name=name, local=local, remote=remote, prompt=prompt,
+        promptfxn=promptfxn, refresh_cache=refresh_cache, verbose=verbose,
+        key=key, id=id, sourcename=sourcename, sourcelink=sourcelink,
+        crystalfamily=crystalfamily, composition=composition,
+        symbols=symbols, natoms=natoms, natypes=natypes)
 
-        return js[i]
+def retrieve_reference_crystal(self, name=None, dest=None, key=None, id=None, sourcename=None,
+                               sourcelink=None, crystalfamily=None, composition=None,
+                               symbols=None, natoms=None, natypes=None,
+                               local=None, remote=None, prompt=True,
+                               format='json', indent=4, refresh_cache=False,
+                               verbose=False):
+    """
+    Gets a single matching relaxed crystal from the database and saves it to a
+    file based on the record's name.
 
-    return self.get_record('reference_crystal', local=local, remote=remote, name=name,
-                           key=key, id=id, sourcename=sourcename, sourcelink=sourcelink,
-                           crystalfamily=crystalfamily, composition=composition,
-                           symbols=symbols, natoms=natoms, natypes=natypes,
-                           prompt=prompt, promptfxn=promptfxn, refresh_cache=refresh_cache, 
-                           verbose=verbose)
+    Parameters
+    ----------
+    name : str or list, optional
+        The name(s) of records to limit the search by.
+    dest : path, optional
+        The parent directory where the record will be saved to.  If not given,
+        will use the current working directory.
+    id : str or list, optional
+        The record id(s) to parse by.  For reference crystal records, the
+        id are letters identifying the source database "mp-", "mvc-", or "oqmd-",
+        followed by the source database's identification number.
+    key : str or list, optional
+        UUID4 key(s) to search for.  Each entry has a unique random-generated
+        UUID4 key.
+    sourcename : str or list, optional
+        The full name of source DFT databases to limit the search by.
+        "Materials Project" or "Open Quantum Materials Database".            
+    sourcelink : str or list, optional
+        The web link of the source DFT databases to limit the search by.
+    crystalfamily : str or list, optional
+        The crystal system families to limit the search by.
+    composition : str or list, optional
+        The reduced compositions of the structures to limit the search by.
+        Element symbols are sorted alphabetically.
+    symbols : str or list, optional
+        Element symbols in the crystal to limit the search by.
+    natoms : int or list, optional
+        The number of unique atoms in the crystal's unit cell to limit the
+        search by.
+    natypes : int or list, optional
+        The number(s) of unique atom types to limit the search by.
+    local : bool, optional
+        Indicates if the local location is to be searched.  Default value
+        matches the value set when the database was initialized.
+    remote : bool, optional
+        Indicates if the remote location is to be searched.  Default value
+        matches the value set when the database was initialized.
+    prompt : bool, optional
+        If prompt=True (default) then a screen input will ask for a selection
+        if multiple matching potentials are found.  If prompt=False, then an
+        error will be thrown if multiple matches are found.
+    format : str, optional
+        The file format to save the record in: 'json' or 'xml'.  Default
+        is 'json'.
+    indent : int, optional
+        The number of space indentation spacings to use in the saved
+        record for the different tiered levels.  Default is 4.  Giving None
+        will create a compact record.
+    refresh_cache : bool, optional
+        If the local database is of style "local", indicates if the metadata
+        cache file is to be refreshed.  If False,
+        metadata for new records will be added but the old record metadata
+        fields will not be updated.  If True, then the metadata for all
+        records will be regenerated, which is needed to update the metadata
+        for modified records.
+    verbose : bool, optional
+        If True, info messages will be printed during operations.  Default
+        value is False.
+    
+    Raises
+    ------
+    ValueError
+        If local or remote is set to True when the corresponding database
+        interaction has not been set.
+    ValueError
+        If multiple or no matching records are discovered.
+    """
+    self.retrieve_record(
+        style='reference_crystal', name=name, dest=dest, local=local,
+        remote=remote, prompt=prompt, promptfxn=promptfxn, format=format,
+        indent=indent, refresh_cache=refresh_cache, verbose=verbose,
+        key=key, id=id, sourcename=sourcename, sourcelink=sourcelink,
+        crystalfamily=crystalfamily, composition=composition,
+        symbols=symbols, natoms=natoms, natypes=natypes)
 
 def download_reference_crystals(self, name=None, key=None, id=None,
                                 sourcename=None, sourcelink=None,
                                 crystalfamily=None, composition=None,
                                 symbols=None, natoms=None, natypes=None, keyword=None,
-                                overwrite=False, verbose=False):
+                                overwrite=False, return_records=False, verbose=False):
     """
     Download reference records from the remote and save to localpath.
     
@@ -197,16 +285,20 @@ def download_reference_crystals(self, name=None, key=None, id=None,
         Flag indicating if any existing local records with names matching
         remote records are updated (True) or left unchanged (False).  Default
         value is False.
+    return_records : bool, optional
+        If True, the retrieved record objects are also returned.  Default
+        value is False.
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
     """
 
-    self.download_records('relaxed_crystal', name=name,
-                          key=key, id=id, sourcename=sourcename, sourcelink=sourcelink,
-                          crystalfamily=crystalfamily, composition=composition,
-                          symbols=symbols, natoms=natoms, natypes=natypes,
-                          overwrite=overwrite, verbose=verbose)
+    return self.download_records(
+        style='relaxed_crystal', name=name, overwrite=overwrite,
+        return_records=return_records, verbose=verbose,
+        key=key, id=id, sourcename=sourcename, sourcelink=sourcelink,
+        crystalfamily=crystalfamily, composition=composition,
+        symbols=symbols, natoms=natoms, natypes=natypes)
 
 def fetch_reference_crystal(self, id, api_key=None, local=None, remote=None, 
                             refresh_cache=False, verbose=False):
