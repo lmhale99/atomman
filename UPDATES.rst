@@ -1,10 +1,8 @@
 Updates
 =======
 
-Version 1.4.1
+Version 1.4.2
 -------------
-
-- **atomman.lammps.Log** bug fix relating to capturing the performance data.
 
 - **atomman.dump.pymatgen_Structure** updated for new pymatgen versions.
 
@@ -16,6 +14,12 @@ Version 1.4.1
 
 - **atomman.library** various updates related to keeping record handling
   consistent with updates in potentials version 0.3.1.
+
+Version 1.4.1
+-------------
+
+- **atomman.lammps.Log** bug fix for properly reading performance data
+  for restart runs.
 
 Version 1.4.0
 -------------
