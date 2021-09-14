@@ -64,7 +64,7 @@ setup(name = 'atomman',
         'cython',
         'requests',
         'toolz',
-        'potentials==0.3.0'
+        'potentials==0.3.1'
       ],
       include_package_data = True,
       zip_safe = False)

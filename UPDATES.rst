@@ -1,6 +1,22 @@
 Updates
 =======
 
+Version 1.4.1
+-------------
+
+- **atomman.lammps.Log** bug fix relating to capturing the performance data.
+
+- **atomman.dump.pymatgen_Structure** updated for new pymatgen versions.
+
+- **atomman.defect.DifferentialDisplacement** bug fix related to handling
+  the atomcolor and atomcmap parameters.
+
+- **atomman.tools** now imports aslist, iaslist, screen_input, uber_open_rmode,
+  and atomic_info from potentials to remove duplicate code. 
+
+- **atomman.library** various updates related to keeping record handling
+  consistent with updates in potentials version 0.3.1.
+
 Version 1.4.0
 -------------
 
