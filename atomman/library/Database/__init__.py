@@ -9,12 +9,15 @@ class Database(potentials.Database):
     """
     # Class imports
     from ._crystal_prototype import (get_crystal_prototypes, get_crystal_prototype,
+                                     retrieve_crystal_prototype,
                                      download_crystal_prototypes)
 
     from ._relaxed_crystal import (get_relaxed_crystals, get_relaxed_crystal,
+                                   retrieve_relaxed_crystal,
                                    download_relaxed_crystals)
 
     from ._reference_crystal import (get_reference_crystals, get_reference_crystal,
+                                     retrieve_reference_crystal,
                                      download_reference_crystals, fetch_mp_crystal,
                                      fetch_oqmd_crystal, fetch_mp_crystals,
                                      fetch_reference_crystal)
