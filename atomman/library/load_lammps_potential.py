@@ -19,7 +19,7 @@ def load_lammps_potential(name=None, key=None, id=None,
         The record name(s) to parse by.  For potential records, the names
         should correspond to the id with a prefix of "potentials." added to it.
     key : str or list
-        The unique UUID4 record key(s) to parse by. 
+        The unique UUID4 record key(s) to parse by.
     id : str or list
         The unique record id(s) labeling the records to parse by.
     potid : str or list
