@@ -1,6 +1,18 @@
 Updates
 =======
 
+Version 1.4.3
+-------------
+
+- **atomman.library.Database** query options better ordered and default values
+  updated.  retrieve methods added to allow for database records to be copied
+  to local files.
+
+- Bug fix for composition queries of relaxed and reference crystal records.
+
+- Updates for KIM model handling due to updates with the potentials package.
+
+
 Version 1.4.2
 -------------
 
