@@ -1011,63 +1011,68 @@ class System(object):
         else:
             raise ValueError('Rotation uvws must be integer values')
         
-        # Get natoms and volume of system
-        natoms = self.natoms
-        volume = self.box.volume
+        # No rotation shortcut
+        if np.all(uvws == np.eye(3, dtype='int64')):
+            newsystem = deepcopy(self)
         
-        # Convert uvws to Cartesian units and compute new volume and natoms
-        newvects = miller.vector_crystal_to_cartesian(uvws, box=self.box)
-        newvolume = np.abs(newvects[0].dot(np.cross(newvects[1], newvects[2])))
-        newnatoms = int(round(newvolume / volume) * natoms)
-        
-        # Check new values
-        if newnatoms == 0:
-            raise ValueError('New box has no atoms/volume: vectors are parallel or planar')
-        
-        # Identify box corners of new system wrt uvws
-        corners = np.empty((8,3), dtype='int64')
-        corners[0] = np.zeros(3)
-        corners[1] = uvws[0]
-        corners[2] = uvws[1]
-        corners[3] = uvws[2]
-        corners[4] = uvws[0] + uvws[1]
-        corners[5] = uvws[0] + uvws[2]
-        corners[6] = uvws[1] + uvws[2]
-        corners[7] = uvws[0] + uvws[1] + uvws[2]
-        
-        # Create a supercell of system that contains all box corners
-        a_mults = (corners[:,0].min()-1, corners[:,0].max()+1)
-        b_mults = (corners[:,1].min()-1, corners[:,1].max()+1)
-        c_mults = (corners[:,2].min()-1, corners[:,2].max()+1)
-        system2 = self.supersize(a_mults, b_mults, c_mults)
-        
-        # Change system.box.vects to newvects
-        system2.box_set(vects=newvects, scale=False)
-        
-        search_success = False
-        for atol in tol:
+        else:
+            # Get natoms and volume of system
+            natoms = self.natoms
+            volume = self.box.volume
             
-            spos = system2.atoms_prop('pos', scale=True)
+            # Convert uvws to Cartesian units and compute new volume and natoms
+            newvects = miller.vector_crystal_to_cartesian(uvws, box=self.box)
+            newvolume = np.abs(newvects[0].dot(np.cross(newvects[1], newvects[2])))
+            newnatoms = int(round(newvolume / volume) * natoms)
             
-            # Round atom positions near box boundaries to the boundaries
-            spos[np.isclose(spos, 0.0, atol=atol)] = 0.0
-            spos[np.isclose(spos, 1.0, atol=atol)] = 1.0
-        
-            # Identify all atoms whose positions are 0 <= x < 1
-            aindex = np.where(((spos[:, 0] >= 0.0) & (spos[:, 0] < 1.0)
-                             & (spos[:, 1] >= 0.0) & (spos[:, 1] < 1.0)
-                             & (spos[:, 2] >= 0.0) & (spos[:, 2] < 1.0)))
+            # Check new values
+            if newnatoms == 0:
+                raise ValueError('New box has no atoms/volume: vectors are parallel or planar')
             
-            # Check if number of atoms identified matches the expected number
-            if len(aindex[0]) == newnatoms:
-                search_success = True
-                break
-        
-        if not search_success:
-            raise ValueError(f'Filtering failed: {newnatoms} atoms expected, {len(aindex[0])} found')
-        
-        # Make newsystem by cutting out all atoms in system2 outside boundaries
-        newsystem = System(atoms=system2.atoms[aindex], box=system2.box, symbols=self.symbols)
+            # Identify box corners of new system wrt uvws
+            corners = np.empty((8,3), dtype='int64')
+            corners[0] = np.zeros(3)
+            corners[1] = uvws[0]
+            corners[2] = uvws[1]
+            corners[3] = uvws[2]
+            corners[4] = uvws[0] + uvws[1]
+            corners[5] = uvws[0] + uvws[2]
+            corners[6] = uvws[1] + uvws[2]
+            corners[7] = uvws[0] + uvws[1] + uvws[2]
+            
+            # Create a supercell of system that contains all box corners
+            a_mults = (corners[:,0].min()-1, corners[:,0].max()+1)
+            b_mults = (corners[:,1].min()-1, corners[:,1].max()+1)
+            c_mults = (corners[:,2].min()-1, corners[:,2].max()+1)
+            system2 = self.supersize(a_mults, b_mults, c_mults)
+            
+            # Change system.box.vects to newvects
+            system2.box_set(vects=newvects, scale=False)
+            
+            search_success = False
+            for atol in tol:
+                
+                spos = system2.atoms_prop('pos', scale=True)
+                
+                # Round atom positions near box boundaries to the boundaries
+                spos[np.isclose(spos, 0.0, atol=atol)] = 0.0
+                spos[np.isclose(spos, 1.0, atol=atol)] = 1.0
+            
+                # Identify all atoms whose positions are 0 <= x < 1
+                aindex = np.where(((spos[:, 0] >= 0.0) & (spos[:, 0] < 1.0)
+                                 & (spos[:, 1] >= 0.0) & (spos[:, 1] < 1.0)
+                                 & (spos[:, 2] >= 0.0) & (spos[:, 2] < 1.0)))
+                
+                # Check if number of atoms identified matches the expected number
+                if len(aindex[0]) == newnatoms:
+                    search_success = True
+                    break
+            
+            if not search_success:
+                raise ValueError(f'Filtering failed: {newnatoms} atoms expected, {len(aindex[0])} found')
+            
+            # Make newsystem by cutting out all atoms in system2 outside boundaries
+            newsystem = System(atoms=system2.atoms[aindex], box=system2.box, symbols=self.symbols)
         
         # Return normalized system
         return newsystem.normalize(return_transform=return_transform)
