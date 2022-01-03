@@ -11,6 +11,8 @@ import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
+from warnings import warn
+
 # atomman imports
 import atomman.unitconvert as uc
 from ..tools import axes_check, vect_angle
@@ -163,41 +165,43 @@ def interpolate_contour(system, name, property=None, index=None, magnitude=False
                  (pos[:,1] < ylim[1] + 5.) &
                  (pos[:,2] > zlim[0]) &
                  (pos[:,2] < zlim[1]))
-    
+
     # Extract plotting coordinates and values
     x = pos[in_bounds, 0]
     y = pos[in_bounds, 1]
     v = uc.get_in_units(property[in_bounds], property_unit)
-    
+
     # Generate interpolation grid
     grid, xedges, yedges = grid_interpolate_2d(x, y, v, xbins=xbins, ybins=ybins, range=[xlim, ylim])
-    
+    if np.any(np.isnan(grid)):
+        warn("Given xlim and ylim are too broad to interpolate. Consider shrinking xlim and ylim.")
+
     # Compute intsum and avsum values
     intsum = np.sum(grid)
     avsum = intsum / (xbins-1) / (ybins-1)
     intsum = intsum * (xlim[1] - xlim[0]) / (xbins-1) * (ylim[1] - ylim[0]) / (ybins-1)
-    
+
     # Generate a pretty figure of the grid
     fig = prettygrid(grid, xedges, yedges, cmap=cmap, propname=name, czero=czero)
-    
+
     # Add dots
     if dots:
         adddots(x, y, xedges, yedges)
-    
+
     # Save, show and close figure
     if save is True:
         plt.savefig(name + '.png', dpi=800)
     if show is True:
         plt.show()
     plt.close(fig)
-    
+
     return intsum, avsum
-    
+
 def grid_interpolate_2d(x, y, v, xbins=50, ybins=50, range=None):
     """
     Generates 2D grid of property values by interpolating between measured
     values.
-    
+
     Parameters
     ----------
     x : array-like object
@@ -228,24 +232,24 @@ def grid_interpolate_2d(x, y, v, xbins=50, ybins=50, range=None):
     # Handle range and bins options
     if range is None:
         range=[[x.min() ,x.max()], [y.min(), y.max()]]
-    
+
     # Generate 1D interpolation points
     xi = np.linspace(range[0][0], range[0][1], num=xbins)
     yi = np.linspace(range[1][0], range[1][1], num=ybins)
-    
+
     # Generate 2D grid points
     x0, y0 = np.meshgrid(xi, yi)
-    
+
     # Interpolate values to grid points
-    grid = griddata((x, y), v, (x0, y0))
-    
+    grid = griddata((x, y), v, (x0, y0), fill_value=np.nan)
+
     return grid, range[0], range[1]
 
 def prettygrid(grid, xedges, yedges, cmap='jet', propname='', czero=True,
                scale=1):
     """
     Generates pretty-looking 2D image maps for grid data using matplotlib.
-    
+
     Parameters
     ----------
     grid : array-like object
