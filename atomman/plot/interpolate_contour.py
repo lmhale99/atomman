@@ -23,11 +23,11 @@ def interpolate_contour(system, name, property=None, index=None, magnitude=False
                         plotxaxis='x', plotyaxis='y', xlim=None, ylim=None,
                         zlim=None, xbins=200, ybins=200, dots=True, czero=True,
                         save=False, show=True, length_unit='angstrom',
-                        property_unit=None, cmap='jet'):
+                        property_unit=None, cmap='jet', fill_value=np.nan):
     """
     Creates a contour plot of a system's per-atom properties by interpolating
     properties between atoms.
-    
+
     Parameters
     ----------
     system : atomman.System
@@ -96,7 +96,10 @@ def interpolate_contour(system, name, property=None, index=None, magnitude=False
         is None, in which no unit conversion is applied.
     cmap : str, optional
         The name of the matplotlib colormap to use.  Default value is 'jet'.
-    
+    fill_value: float, optinal
+        Value used to fill in for grid points failed to interpolate in the fit.
+        If not given, then the default is np.nan, which may cause an error in
+        plotting for too narrow xlim and ylim settings.
     Returns
     -------
     intsum : float
@@ -172,9 +175,12 @@ def interpolate_contour(system, name, property=None, index=None, magnitude=False
     v = uc.get_in_units(property[in_bounds], property_unit)
 
     # Generate interpolation grid
-    grid, xedges, yedges = grid_interpolate_2d(x, y, v, xbins=xbins, ybins=ybins, range=[xlim, ylim])
+    grid, xedges, yedges = grid_interpolate_2d(x, y, v,
+                                               xbins=xbins, ybins=ybins,
+                                               range=[xlim, ylim],
+                                               fill_value=fill_value)
     if np.any(np.isnan(grid)):
-        warn("Given xlim and ylim are too broad to interpolate. Consider shrinking xlim and ylim.")
+        warn("Given xlim and ylim are too broad to interpolate. Consider shrinking xlim and ylim or set an appropriate value in fill_value.")
 
     # Compute intsum and avsum values
     intsum = np.sum(grid)
@@ -197,7 +203,7 @@ def interpolate_contour(system, name, property=None, index=None, magnitude=False
 
     return intsum, avsum
 
-def grid_interpolate_2d(x, y, v, xbins=50, ybins=50, range=None):
+def grid_interpolate_2d(x, y, v, xbins=50, ybins=50, range=None, fill_value=np.nan):
     """
     Generates 2D grid of property values by interpolating between measured
     values.
@@ -219,7 +225,10 @@ def grid_interpolate_2d(x, y, v, xbins=50, ybins=50, range=None):
     range : list, tuple or array-like object
         2x2 list of the [[xmin, xmax], [ymin, ymax]] coordinates for the bins.
         If not given, will use [[x.min(), x.max()], [y.min(), y.max()]].
-    
+    fill_value: float, optinal
+        Value used to fill in for grid points failed to interpolate in the fit.
+        If not given, then the default is np.nan.
+
     Returns
     -------
     grid : numpy.ndarray
@@ -241,7 +250,7 @@ def grid_interpolate_2d(x, y, v, xbins=50, ybins=50, range=None):
     x0, y0 = np.meshgrid(xi, yi)
 
     # Interpolate values to grid points
-    grid = griddata((x, y), v, (x0, y0), fill_value=np.nan)
+    grid = griddata((x, y), v, (x0, y0), fill_value=fill_value)
 
     return grid, range[0], range[1]
 
