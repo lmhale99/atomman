@@ -16,6 +16,33 @@ def bcc_Fe() -> System:
 
 
 @pytest.fixture
+def anatase_TiO2() -> System:
+    # mp-390
+    a = uc.set_in_units(3.80271000, "angstrom")
+    c = uc.set_in_units(9.74775200, "angstrom")
+    box = Box.tetragonal(a, c)
+    pos = [
+        [0.00000000, 0.50000000, 0.25000000],
+        [0.00000000, 0.00000000, 0.00000000],
+        [0.50000000, 0.00000000, 0.75000000],
+        [0.50000000, 0.50000000, 0.50000000],
+        [0.00000000, 0.50000000, 0.45616300],
+        [0.50000000, 0.50000000, 0.29383700],
+        [0.00000000, 0.50000000, 0.04383700],
+        [0.00000000, 0.00000000, 0.20616300],
+        [0.50000000, 0.00000000, 0.95616300],
+        [0.00000000, 0.00000000, 0.79383700],
+        [0.50000000, 0.00000000, 0.54383700],
+        [0.50000000, 0.50000000, 0.70616300],
+    ]
+    atype = [1] * 4 + [2] * 8
+    atoms = Atoms(pos=pos, atype=atype)
+    symbols = ['Ti'] * 4 + ['O'] * 8
+    system = System(atoms=atoms, box=box, scale=True, symbols=symbols)
+    return system
+
+
+@pytest.fixture
 def alpha_Fe2O3() -> System:
     """
     Working example from W. Sun and G. Cedar, Surface Science, 617, 53-59 (2013).
@@ -76,7 +103,7 @@ def test_free_surface_basis_cubic(bcc_Fe):
     _test_free_surface_basis(box, [1, 2, -3])
 
 
-def test_free_surface_basis_hexagonal(alpha_Fe2O3):
+def test_free_surface_basis_rhombohedroal(alpha_Fe2O3):
     box = alpha_Fe2O3.box
     _test_free_surface_basis(box, [1, 0, -1, 4])
     _test_free_surface_basis(box, [1, 0, 0])
@@ -109,3 +136,24 @@ def _test_free_surface_basis(box: Box, hkl):
 
     # check if v3 is out of (hkl) plane
     assert np.dot(v3, planenormal) > 0
+
+
+def test_unique_shifts_elemental(bcc_Fe):
+    pytest.importorskip("spglib")
+
+    hkl = [1, 1, 0]
+    surface = FreeSurface(hkl, ucell=bcc_Fe)
+    unique_shifts = surface.unique_shifts()
+    assert len(unique_shifts) == 1
+
+
+def test_unique_shifts_binary(anatase_TiO2):
+    # Example from Section 2.4 of W. Sun and G. Cedar, Surface Science, 617, 53-59 (2013)
+    # The two possible shifts (terminations) are identical under a glide operation.
+    pytest.importorskip("spglib")
+
+    hkl = [1, 0, 0]
+    surface = FreeSurface(hkl, ucell=anatase_TiO2)
+    unique_shifts = surface.unique_shifts()
+    assert len(surface.shifts) == 2
+    assert len(unique_shifts) == 1
