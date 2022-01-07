@@ -20,7 +20,7 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', maxindex=None,
     vector close to the plane normal.  The second in-plane vector is then
     selected to be a shortest in-plane vector that is not parallel to the
     first.
-    
+
     Parameters
     ----------
     hkl : array-like object
@@ -54,14 +54,14 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', maxindex=None,
         'i' for body-centered, and 'a', 'b', or 'c' for side-centered.  Default
         behavior is to perform no conversion, i.e. take (hkl) relative to the
         given box.
-    
+
     Returns
     -------
     uvws : numpy.ndarray
         3x3 array of Miller [uvw] vectors or 3x4 array of Miller-Bravais [uvtw] vectors to rotate the unit cell for a free surface configuration.
     planenormal : numpy.ndarray
         The Cartesian plane normal vector.  Only returned if return_planenormal is True.
-        
+
     Raises
     ------
     ValueError
@@ -72,10 +72,10 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', maxindex=None,
     # Set default box to be cubic
     if box is None:
         box = Box()
-    
+
     # Check hkl values
     hkl = np.asarray(hkl)
-    
+
     # Convert hkil to hkl
     if hkl.shape == (4,):
         if ishexagonal(box):
@@ -91,21 +91,21 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', maxindex=None,
             raise ValueError('cannot return Miller-Bravais indices for non-hexagonal box')
     else:
         raise ValueError('Invalid hkl indices: must be 3 values or 4')
-    
+
     if np.allclose(hkl, np.asarray(hkl, dtype=int)):
         hkl = np.asarray(hkl, dtype=int)
     else:
         raise ValueError('hkl indices must be integers')
-    
+
     # Build conventional box if conventional_setting is given
     if conventional_setting is not None:
         primitive_box = box
         p2c_uvws = miller.vector_conventional_to_primitive(np.identity(3),
                                                            setting=conventional_setting)
-        
+
         conventional_box = System(box=primitive_box).rotate(p2c_uvws).box
         box = conventional_box
-    
+
     # Find two in-plane box vectors
     if hkl[0] != 0:
         if hkl[1] != 0:
@@ -141,7 +141,7 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', maxindex=None,
             s = np.sign(hkl[1] * hkl[2])
             a_uvw = np.array([0, -m / hkl[1], m / hkl[2]], dtype=int)
             b_uvw = np.array([1, 0, 0], dtype=int)
-        else:    
+        else:
             # 0k0 solution
             m = 1
             s = np.sign(hkl[1])
@@ -155,21 +155,20 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', maxindex=None,
         b_uvw = np.array([0, 1, 0], dtype=int)
     else:
         raise ValueError('hkl cannot be all zeros')
-    
+
     # Convert in-plane box vectors to primitive cell vectors if needed
     if conventional_setting is not None:
         a_uvw = miller.vector_conventional_to_primitive(a_uvw, setting=conventional_setting)
         b_uvw = miller.vector_conventional_to_primitive(b_uvw, setting=conventional_setting)
         box = primitive_box
-    
+
     # Set default n if needed
     if maxindex is None:
         maxindex = int(np.max([np.abs(a_uvw), np.abs(b_uvw), np.abs(hkl)]))
-    
+
     # Compute Cartesian plane normal
-    planenormal = s * np.cross(np.inner(a_uvw, box.vects.T),
-                               np.inner(b_uvw, box.vects.T))
-    
+    planenormal = s * np.cross(box.cart(a_uvw), box.cart(b_uvw))
+
     # Build gen_vector iterator for testing vectors
     def gen_vector(n):
         for kk in range(0, n+1):
@@ -184,58 +183,58 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', maxindex=None,
                                 if i==0 and j==0 and k==0:
                                     continue
                                 yield np.array([i, j, k], dtype=int)
-    
+
     # First search
-    a_mag = np.linalg.norm(np.inner([maxindex, maxindex, maxindex], box.vects.T))
+    a_mag = np.linalg.norm(box.cart([maxindex, maxindex, maxindex]))
     c_angle = 90
     a_uvw = None
     c_uvw = None
     for uvw in gen_vector(maxindex):
-        cart = np.inner(uvw, box.vects.T)
+        cart = box.cart(uvw)
         mag = np.linalg.norm(cart)
         angle = vect_angle(cart, planenormal)
-        
+
         # Find shortest vector in the plane
         if np.isclose(np.dot(cart, planenormal), 0.0):
             if mag < a_mag:
                 a_uvw = uvw
                 a_mag = mag
-        
-        # Find vector closest to plane normal 
+
+        # Find vector closest to plane normal
         elif angle < c_angle:
             c_angle = angle
             c_uvw = uvw
-    
+
     assert a_uvw is not None, 'Failed to find first vector in slip plane'
     assert c_uvw is not None, 'Failed to find vector near slip plane normal'
-    
+
     # Reduce c_uvw if possible
     c_uvw = c_uvw / np.gcd.reduce(np.asarray(c_uvw, dtype=int)) # pylint: disable=no-member
-    
+
     # Second search
-    a_cart = np.inner(a_uvw, box.vects.T)
-    b_mag = np.linalg.norm(np.inner([maxindex, maxindex, maxindex], box.vects.T))
+    a_cart = box.cart(a_uvw)
+    b_mag = np.linalg.norm(box.cart([maxindex, maxindex, maxindex]))
     b_uvw = None
     min_angle = 180.0
     for uvw in gen_vector(maxindex):
-        cart = np.inner(uvw, box.vects.T)
+        cart = box.cart(uvw)
         angle = vect_angle(a_cart, cart)
-        
+
         # Check that vector is in plane and not parallel to a_uvw
         if np.isclose(np.dot(cart, planenormal), 0.0) and not np.isclose(angle, 0.0) and not np.isclose(angle, 180.0):
-            
+
             # Check if right-handed
             if np.dot(np.cross(a_cart, cart), planenormal) > 0:
-                
+
                 # Find b_uvw with smallest magnitude and smallest angle
                 mag = np.linalg.norm(cart)
                 if (np.isclose(mag, b_mag) and angle < min_angle) or mag < b_mag:
                     b_uvw = uvw
                     b_mag = mag
                     min_angle = angle
-    
+
     assert b_uvw is not None, 'Failed to find second vector in slip plane'
-    
+
     # Orient the uvw sets based on cutboxvector
     if cutboxvector == 'c':
         uvws = np.array([a_uvw, b_uvw, c_uvw])
@@ -243,10 +242,10 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', maxindex=None,
         uvws = np.array([b_uvw, c_uvw, a_uvw])
     elif cutboxvector == 'a':
         uvws = np.array([c_uvw, a_uvw, b_uvw])
-        
+
     if return_hexagonal:
         uvws = miller.vector3to4(uvws)
-        
+
     if return_planenormal:
         return uvws, planenormal
     else:
