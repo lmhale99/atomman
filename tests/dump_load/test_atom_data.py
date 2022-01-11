@@ -11,14 +11,15 @@ from atomman.load import FileFormatError
 
 class Test_atom_data:
 
-    def load_dump(self, system1, atom_style=None, units=None):
+    def load_dump(self, system1, atom_style=None, units=None, potential=None):
         """
         Utility function that dumps, loads, and dumps, then asserts two dumps
         are equivalent
         """
         # dump system1 to content1
         content1 = system1.dump('atom_data', atom_style=atom_style,
-                                units=units, return_info=False)
+                                units=units, potential=potential,
+                                return_info=False)
 
         # load content1 to system2
         system2 = am.load('atom_data', content1, pbc=system1.pbc,
@@ -27,7 +28,8 @@ class Test_atom_data:
 
         # dump system2 to content2
         content2 = system2.dump('atom_data', atom_style=atom_style,
-                                units=units, return_info=False)
+                                units=units, potential=potential,
+                                return_info=False)
 
         # Check that the two dumps are equivalent
         assert content1 == content2
