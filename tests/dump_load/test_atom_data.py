@@ -11,26 +11,24 @@ from atomman.load import FileFormatError
 
 class Test_atom_data:
 
-    def load_dump(self, system1, atom_style=None, units=None, potential=None):
+    def load_dump(self, system1, atom_style=None, units=None):
         """
         Utility function that dumps, loads, and dumps, then asserts two dumps
         are equivalent
         """
         # dump system1 to content1
         content1 = system1.dump('atom_data', atom_style=atom_style,
-                                units=units, potential=potential,
-                                return_info=False)
+                                units=units, return_info=False)
 
         # load content1 to system2
         system2 = am.load('atom_data', content1, pbc=system1.pbc,
                           symbols=system1.symbols, atom_style=atom_style,
-                          units=units, potential=potential)
+                          units=units)
 
         # dump system2 to content2
         content2 = system2.dump('atom_data', atom_style=atom_style,
-                                units=units, potential=potential,
-                                return_info=False)
-        
+                                units=units, return_info=False)
+
         # Check that the two dumps are equivalent
         assert content1 == content2
 
@@ -56,7 +54,7 @@ class Test_atom_data:
                 '2 1 2.3982049184958 4.0169567962790 0.4422255026206',
                 '3 1 1.6332403214635 1.8356166738031 0.3819388814516',
                 '4 1 1.2352186803268 0.3081624624139 0.5885979440072']
-    
+
     def test_goodfile(self):
         """Test that full data_lines is valid"""
         content = '\n'.join(self.data_lines)
@@ -71,7 +69,7 @@ class Test_atom_data:
 
     def test_badfile_no_box(self):
         """Raise FileFormatError if any *lo *hl lines are missing"""
-        
+
         # missing xlo xhi
         content = '\n'.join(self.data_lines[:3] + self.data_lines[4:])
         with pytest.raises(FileFormatError):
@@ -95,7 +93,7 @@ class Test_atom_data:
             am.load('atom_data', content)
 
     def test_atomic_no_imageflags(self):
-        
+
         box = am.Box(vects=[[1.25694013, 0.        , 0.        ],
                             [1.17551244, 4.01690452, 0.        ],
                             [0.23122344, 0.0768582 , 0.76391945]])
@@ -107,13 +105,13 @@ class Test_atom_data:
         symbols = 'Al'
         pbc = (True, True, True)
 
-        system = am.System(atoms=atoms, box=box, scale=True, 
+        system = am.System(atoms=atoms, box=box, scale=True,
                            symbols=symbols, pbc=pbc)
 
         self.load_dump(system, atom_style='atomic', units='metal')
 
     def test_atomic_imageflags(self):
-        
+
         box = am.Box(vects=[[1.25694013, 0.        , 0.        ],
                             [1.17551244, 4.01690452, 0.        ],
                             [0.23122344, 0.0768582 , 0.76391945]])
@@ -125,7 +123,7 @@ class Test_atom_data:
         symbols = 'Al'
         pbc = (True, True, True)
 
-        system = am.System(atoms=atoms, box=box, scale=True, 
+        system = am.System(atoms=atoms, box=box, scale=True,
                            symbols=symbols, pbc=pbc)
-        
+
         self.load_dump(system, atom_style='atomic', units='metal')
