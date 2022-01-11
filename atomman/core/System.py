@@ -170,7 +170,7 @@ class System(object):
         if model is not None:
             for prop in model['atoms'].aslist('property'):
                 if prop['data'].get('unit', None) == 'scaled':
-                    self.atoms.view[prop['name']] = self.unscale(self.atoms.view[prop['name']]) 
+                    self.atoms.view[prop['name']] = self.box.position_relative_to_cartesian(self.atoms.view[prop['name']]) 
         
         # Set atoms indexer
         self.__atoms_ix = System._AtomsIndexer(self)
@@ -381,7 +381,7 @@ class System(object):
                         newatoms = deepcopy(self.atoms)
                     else:
                         newatoms = deepcopy(self.atoms[index])
-                    newatoms.pos = self.scale(newatoms.pos)
+                    newatoms.pos = self.box.position_cartesian_to_relative(newatoms.pos)
                     return newatoms
                 
                 # If key is given, return scaled property values
@@ -390,7 +390,7 @@ class System(object):
                         value = self.atoms.view[key]
                     else:
                         value = self.atoms.view[key][index]
-                    return self.scale(value)
+                    return self.box.position_cartesian_to_relative(value)
             
             # Set values if value is given
             else:
@@ -399,7 +399,7 @@ class System(object):
                     if not isinstance(value, Atoms):
                         raise TypeError('If key is None, value must be instance of atomman.Atoms')
                     
-                    value.pos = self.unscale(value.pos)
+                    value.pos = self.box.position_relative_to_cartesian(value.pos)
                     if index is None:
                         self.atoms[:] = value
                     else:
@@ -407,7 +407,7 @@ class System(object):
                 
                 # If key is given, unscale value and set to property
                 else:
-                    value = self.unscale(value)
+                    value = self.box.position_relative_to_cartesian(value)
                     if index is None:
                         self.atoms.view[key] = value
                     else:
@@ -444,7 +444,7 @@ class System(object):
             
             value = self.atoms.view[key]
             if key in scale:
-                value = self.scale(value)
+                value = self.box.position_cartesian_to_relative(value)
             
             # Flatten multidimensional arrays
             for index, istr in indexstr(self.atoms.view[key].shape[1:]):
@@ -520,7 +520,7 @@ class System(object):
         
         # Unscale pos from Atoms value if needed
         if scale:
-            atoms.pos[value.natoms:] = self.unscale(value.pos)
+            atoms.pos[value.natoms:] = self.box.position_relative_to_cartesian(value.pos)
 
         # Generate and return new System
         return System(atoms=atoms, box=box, pbc=self.pbc, symbols=symbols)
@@ -563,16 +563,22 @@ class System(object):
         value : numpy.ndarray
             Values to scale.
         """
+        warnmsg = "System.scale() will likely be depreciated in the next big version update "
+        warnmsg += "as the method name is not informative.  It is being replaced by the "
+        warnmsg += "equivalent Box.position_cartesian_to_relative() method."
+        warnings.warn(warnmsg, PendingDeprecationWarning)
         
         # Retrieve parameters
-        value = np.asarray(value, dtype=float)
-        vects = self.box.vects
-        inverse = np.linalg.inv(vects)
-        origin = self.box.origin
+        #value = np.asarray(value, dtype=float)
+        #vects = self.box.vects
+        #inverse = np.linalg.inv(vects)
+        #origin = self.box.origin
         
         # Convert
-        return (value - origin).dot(inverse)
-          
+        #return (value - origin).dot(inverse)
+
+        return self.box.position_cartesian_to_relative(value)
+
     def unscale(self, value):
         """
         Unscales 3D vectors from relative box coordinates to absolute
@@ -583,14 +589,20 @@ class System(object):
         value : numpy.ndarray
             Values to unscale.
         """
+        warnmsg = "System.unscale() will likely be depreciated in the next big version update "
+        warnmsg += "as the method name is not informative.  It is being replaced by the "
+        warnmsg += "equivalent Box.position_relative_to_cartesian() method."
+        warnings.warn(warnmsg, PendingDeprecationWarning)
         
         # Retrieve parameters
-        value = np.asarray(value, dtype=float)
-        vects = self.box.vects
-        origin = self.box.origin
+        #value = np.asarray(value, dtype=float)
+        #vects = self.box.vects
+        #origin = self.box.origin
         
         # Convert
-        return value.dot(vects) + origin
+        #return value.dot(vects) + origin
+
+        return self.box.position_relative_to_cartesian(value)
         
     def wrap(self, return_imageflags=False):
         """
@@ -1182,6 +1194,6 @@ class System(object):
         # Scale properties if needed
         for prop in amodel.aslist('property'):
             if prop['data'].get('unit', None) == 'scaled':
-                prop['data'] = uc.model(self.scale(uc.value_unit(prop['data'])), units='scaled') 
+                prop['data'] = uc.model(self.box.position_cartesian_to_relative(uc.value_unit(prop['data'])), units='scaled') 
         
         return model
