@@ -10,7 +10,7 @@ from DataModelDict import DataModelDict as DM
 
 # atomman imports
 import atomman.unitconvert as uc
-from ..tools import vect_angle
+from ..tools import vect_angle, miller
 from ..region import Shape, Plane
 
 class Box(Shape, object):
@@ -653,7 +653,22 @@ class Box(Shape, object):
             and self.__vects[2,2] > 0.0)
 
     def inside(self, pos, inclusive=True):
-
+        """
+        Indicates if position(s) are inside the shape.
+        
+        Parameters
+        ----------
+        pos : array-like object
+            Nx3 array of coordinates. 
+        inclusive : bool, optional
+            Indicates if points on the shape's boundaries are to be included.
+            Default value is True.
+        
+        Returns
+        -------
+        numpy.NDArray
+            N array of bool values: True if inside shape
+        """
         # Retrieve the Box's planes
         planes = self.planes
 
@@ -665,8 +680,111 @@ class Box(Shape, object):
                & planes[4].below(pos, inclusive=inclusive)
                & planes[5].below(pos, inclusive=inclusive))
 
-    def cart(self, pos):
+    def vector_crystal_to_cartesian(self, indices):
         """
-        Return the cartesian coordinates of given fractional coordinates
+        Converts crystal indices to Cartesian vectors relative
+        to the box's lattice vectors. 
+        
+        Parameters
+        ----------
+        indices : np.ndarray
+            (..., 3) array of [uvw] Miller crystallographic indices or 
+            (..., 4) array of [uvtw] Miller-Bravais crystallographic indices.
+    
+        Returns
+        -------
+        np.ndarray of float
+            (..., 3) array of Cartesian vectors.
+            
+        Raises
+        ------
+        ValueError
+            If indices dimensions are not (..., 3) or (..., 4), or if
+            hexagonal indices given with non-hexagonal box.
         """
-        return np.inner(pos, self.vects.T)
+        return miller.vector_crystal_to_cartesian(indices, self)
+
+    def plane_crystal_to_cartesian(self, indices):
+        """
+        Converts crystal planar indices to Cartesian plane normal vectors based
+        on the box's lattice vectors.  Note: the algorithm used requires that the
+        planar indices be integers.
+        
+        Parameters
+        ----------
+        indices : np.ndarray
+            (..., 3) array of [hkl] Miller crystallographic indices or 
+            (..., 4) array of [hkil] Miller-Bravais crystallographic indices.
+        box : atomman.Box
+            Box that defines the lattice cell vectors to use. 
+    
+        Returns
+        -------
+        np.ndarray of float
+            (..., 3) array of Cartesian vectors corresponding to plane normals.
+            
+        Raises
+        ------
+        ValueError
+            If indices dimensions are not (..., 3) or (..., 4), or if
+            hexagonal indices given with non-hexagonal box.
+        """
+        return miller.plane_crystal_to_cartesian(indices, self)
+
+    def position_relative_to_cartesian(self, relpos):
+        """
+        Converts position vectors from relative box coordinates to absolute
+        Cartesian coordinates based on the box's vects and origin.
+
+        Parameters
+        ----------
+        relpos : numpy.ndarray
+            (..., 3) array of relative position vectors.
+
+        Returns
+        -------
+        numpy.ndarray
+            (..., 3) array of the absolute Cartesian positions corresponding
+            to relpos. 
+
+        Raises
+        ------
+        ValueError
+            If relpos dimensions are not (..., 3).
+        """
+        # Check/convert relpos
+        relpos = np.asarray(relpos, dtype=float)
+        if relpos.shape[-1] != 3:
+            raise ValueError('Invalid position dimensions')
+
+        # Convert and return
+        return relpos.dot(self.vects) + self.origin
+
+    def position_cartesian_to_relative(self, cartpos):
+        """
+        Converts position vectors from absolute Cartesian coordinates to
+        relative box coordinates based on the box's vects and origin.
+
+        Parameters
+        ----------
+        cartpos : numpy.ndarray
+            (..., 3) array of Cartesian position vectors.
+
+        Returns
+        -------
+        numpy.ndarray
+            (..., 3) array of the relative positions corresponding
+            to cartpos. 
+
+        Raises
+        ------
+        ValueError
+            If cartpos dimensions are not (..., 3).
+        """
+        # Check/convert cartpos
+        value = np.asarray(cartpos, dtype=float)
+        if cartpos.shape[-1] != 3:
+            raise ValueError('Invalid position dimensions')
+        
+        # Convert and return
+        return (value - self.origin).dot(np.linalg.inv(self.vects))
