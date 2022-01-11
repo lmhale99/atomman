@@ -120,7 +120,7 @@ def vacancy(system, pos=None, ptd_id=None, scale=False, atol=None):
             raise ValueError('pos and ptd_id cannot both be supplied')
         
         if scale:
-            pos = system.unscale(pos)
+            pos = system.box.position_relative_to_cartesian(pos)
         
         dist = np.linalg.norm(system.dvect(pos, system.atoms.pos), axis=1)
         ptd_id = np.where(np.isclose(dist, 0.0, atol=atol))
@@ -193,7 +193,7 @@ def interstitial(system, pos, scale=False, atol=None, **kwargs):
         atol = uc.set_in_units(0.01, 'angstrom')
     
     if scale:
-        pos = system.unscale(pos)
+        pos = system.box.position_relative_to_cartesian(pos)
     
     # Check that no atoms are already at pos
     dist = np.linalg.norm(system.dvect(pos, system.atoms.pos), axis=1)
@@ -278,7 +278,7 @@ def substitutional(system, pos=None, ptd_id=None, atype=1,scale=False,
             raise ValueError('pos and ptd_id cannot both be supplied')
         
         if scale:
-            pos = system.unscale(pos)
+            pos = system.box.position_relative_to_cartesian(pos)
         
         dist = np.linalg.norm(system.dvect(pos, system.atoms.pos), axis=1)
         ptd_id = np.where(np.isclose(dist, 0.0, atol=atol))
@@ -376,7 +376,7 @@ def dumbbell(system, pos=None, ptd_id=None, db_vect=None, scale=False,
             raise ValueError('pos and ptd_id cannot both be supplied')
         
         if scale:
-            pos = system.unscale(pos)
+            pos = system.box.position_relative_to_cartesian(pos)
         
         dist = np.linalg.norm(system.dvect(pos, system.atoms.pos), axis=1)
         ptd_id = np.where(np.isclose(dist, 0.0, atol=atol))
@@ -396,7 +396,7 @@ def dumbbell(system, pos=None, ptd_id=None, db_vect=None, scale=False,
         
     # Unscale db_vect
     if scale:
-        db_vect = system.unscale(db_vect)
+        db_vect = system.box.position_relative_to_cartesian(db_vect)
     
     # Generate atomic index list for defect
     index = list(range(system.natoms))

@@ -102,7 +102,7 @@ def load(table, box, symbols=None, system=None, prop_name=None, table_name=None,
         
         if prop['unit'] is not None:
             if prop['unit'] == "scaled":
-                value = system.unscale(value)
+                value = system.box.position_relative_to_cartesian(value)
             else:
                 value = uc.set_in_units(value, prop['unit'])
         value = np.asarray(value, dtype=prop['dtype'])
