@@ -4,6 +4,7 @@ import pytest
 import atomman.unitconvert as uc
 from atomman import Box, Atoms, System
 from atomman.defect import FreeSurface, free_surface_basis
+from atomman.tools.miller import vector_crystal_to_cartesian
 
 
 @pytest.fixture
@@ -123,9 +124,9 @@ def _test_free_surface_basis(box: Box, hkl):
         return_planenormal=True,
     )
 
-    v1 = box.cart(uvws[0])
-    v2 = box.cart(uvws[1])
-    v3 = box.cart(uvws[2])
+    v1 = vector_crystal_to_cartesian(uvws[0], box)
+    v2 = vector_crystal_to_cartesian(uvws[1], box)
+    v3 = vector_crystal_to_cartesian(uvws[2], box)
 
     # check if v1 and v2 are on (hkl) plane
     np.testing.assert_almost_equal(np.dot(v1, planenormal), 0)

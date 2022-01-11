@@ -6,6 +6,7 @@ import numpy as np
 # atomman imports
 from .. import Box, System
 from ..tools import vect_angle, miller, ishexagonal
+from ..tools.miller import vector_crystal_to_cartesian
 
 def free_surface_basis(hkl, box=None, cutboxvector='c', maxindex=None,
                        return_hexagonal=None, return_planenormal=False,
@@ -167,7 +168,8 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', maxindex=None,
         maxindex = int(np.max([np.abs(a_uvw), np.abs(b_uvw), np.abs(hkl)]))
 
     # Compute Cartesian plane normal
-    planenormal = s * np.cross(box.cart(a_uvw), box.cart(b_uvw))
+    planenormal = s * np.cross(vector_crystal_to_cartesian(a_uvw, box),
+                               vector_crystal_to_cartesian(b_uvw, box))
 
     # Build gen_vector iterator for testing vectors
     def gen_vector(n):
@@ -185,12 +187,12 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', maxindex=None,
                                 yield np.array([i, j, k], dtype=int)
 
     # First search
-    a_mag = np.linalg.norm(box.cart([maxindex, maxindex, maxindex]))
+    a_mag = np.linalg.norm(vector_crystal_to_cartesian([maxindex, maxindex, maxindex], box))
     c_angle = 90
     a_uvw = None
     c_uvw = None
     for uvw in gen_vector(maxindex):
-        cart = box.cart(uvw)
+        cart = vector_crystal_to_cartesian(uvw, box)
         mag = np.linalg.norm(cart)
         angle = vect_angle(cart, planenormal)
 
@@ -212,12 +214,12 @@ def free_surface_basis(hkl, box=None, cutboxvector='c', maxindex=None,
     c_uvw = c_uvw / np.gcd.reduce(np.asarray(c_uvw, dtype=int)) # pylint: disable=no-member
 
     # Second search
-    a_cart = box.cart(a_uvw)
-    b_mag = np.linalg.norm(box.cart([maxindex, maxindex, maxindex]))
+    a_cart = vector_crystal_to_cartesian(a_uvw, box)
+    b_mag = np.linalg.norm(vector_crystal_to_cartesian([maxindex, maxindex, maxindex], box))
     b_uvw = None
     min_angle = 180.0
     for uvw in gen_vector(maxindex):
-        cart = box.cart(uvw)
+        cart = vector_crystal_to_cartesian(uvw, box)
         angle = vect_angle(a_cart, cart)
 
         # Check that vector is in plane and not parallel to a_uvw
