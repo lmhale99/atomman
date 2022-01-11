@@ -274,7 +274,7 @@ class FreeSurface():
 
         return self.system
 
-    def unique_shifts(self, symprec: float = 1e-5, rtol: float = 1e-5, atol: float = 1e-8) -> np.ndarray:
+    def unique_shifts(self, symprec: float = 1e-5, trial_image_range: int = 1, rtol: float = 1e-5, atol: float = 1e-8) -> np.ndarray:
         """
         Return symmetrically nonequivalent shifts
 
@@ -282,6 +282,10 @@ class FreeSurface():
         ----------
         symprec: float
             the tolerance value used in spglib
+        trial_image_range: int, more than or equal to 1.
+            Maximum cell images searched in finding translationally equivalent planes.
+            The default value is one, which corresponds to search the 27 neighbor images, [-1, 1]^3.
+            The default value may not be sufficient for largely distorted lattice.
         rtol: float
             the relative tolerance used in comparing two crystal planes
         atol: float
@@ -293,6 +297,8 @@ class FreeSurface():
         """
         if not spglib_loaded:
             raise ImportError("FreeSurface.unique_shifts requires spglib. Use `pip install spglib`")
+        if (not isinstance(trial_image_range, int)) or (trial_image_range <= 0):
+            raise ValueError("trial_image_range should be positive integer.")
 
         # Get symmetry operations of rotated ucell
         lattice, positions, numbers = self.ucell.dump('spglib_cell')
@@ -315,7 +321,7 @@ class FreeSurface():
 
         # List of trial displacements to search for a translation between two planes
         # The range [-1, 1] may not be sufficient for largely distorted lattice.
-        trial_images = list(product(range(-1, 2), repeat=3))
+        trial_images = list(product(range(-trial_image_range, trial_image_range + 1), repeat=3))
 
         def is_equivalent_by_primitive_vects(plane1, plane2):
             # Check if two planes can be transformed to each other by lattice vectors
