@@ -126,12 +126,38 @@ class Plane():
         return Plane(new_normal, new_point)
 
     def __eq__(self, other: Plane) -> bool:
+        """
+        Compare with a given plane within default tolerance parameters
+        """
         if self is other:
             return True
 
+        return self.isclose(other)
+
+    def isclose(self, other: Plane, rtol: float = 1e-5, atol: float = 1e-8):
+        """
+        Check the plane and a given one represent the same.
+        Note that if the normal vectors of the two planes are antiparallel, they are considered to be different.
+
+        Parameters
+        ----------
+        other: Plane
+            a plane to be compared with
+        rtol: float
+            the relative tolerance parameter used in numpy.isclose
+        atol: float
+            the absolute tolerance parameter used in numpy.isclose
+
+        Returns
+        -------
+        bool:
+            Return true if the plane and a given one represent the same within tolerance.
+        """
         # check if normals are parallel
-        if not np.isclose(vect_angle(self.normal, other.normal), 0):
+        angle = vect_angle(self.normal, other.normal, unit='radian')
+        if not np.isclose(angle, 0.0, rtol=rtol, atol=atol):
             return False
 
         # check if the point is contained in the other plane
-        return np.isclose(np.dot(other.normal, self.point - other.point), 0)
+        projected = np.dot(other.normal, self.point - other.point)
+        return np.isclose(projected, 0.0, rtol=rtol, atol=atol)

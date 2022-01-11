@@ -274,9 +274,22 @@ class FreeSurface():
 
         return self.system
 
-    def unique_shifts(self, symprec: float = 1e-5):
+    def unique_shifts(self, symprec: float = 1e-5, rtol: float = 1e-5, atol: float = 1e-8) -> np.ndarray:
         """
         Return symmetrically nonequivalent shifts
+
+        Parameters
+        ----------
+        symprec: float
+            the tolerance value used in spglib
+        rtol: float
+            the relative tolerance used in comparing two crystal planes
+        atol: float
+            the absolute tolerance used in comparing two crystal planes
+
+        Returns
+        -------
+        unique_shifts: np.ndarray, (# of unique shifts, 3)
         """
         if not spglib_loaded:
             raise ImportError("FreeSurface.unique_shifts requires spglib. Use `pip install spglib`")
@@ -310,7 +323,7 @@ class FreeSurface():
                 rotation = np.eye(3)
                 translation = np.inner(image, primitive_vects.T)
                 new_plane1 = plane1.operate(rotation, translation)
-                if new_plane1 == plane2:
+                if new_plane1.isclose(plane2, rtol=rtol, atol=atol):
                     return True
             return False
 
@@ -321,8 +334,16 @@ class FreeSurface():
             equivalent_planes = []
             for rotation, translation in operations:
                 new_plane = plane_i.operate(rotation, translation)
-                if np.allclose(new_plane.normal, normal) and (new_plane not in equivalent_planes):
-                    equivalent_planes.append(new_plane)
+
+                # new plane should preserve the normal vector
+                if not np.allclose(new_plane.normal, normal):
+                    continue
+
+                # If the new plane is already found, skip it.
+                if any([new_plane.isclose(plane, rtol=rtol, atol=atol) for plane in equivalent_planes]):
+                    continue
+
+                equivalent_planes.append(new_plane)
 
             # Compare with remained shifts
             is_unique = True
@@ -340,4 +361,5 @@ class FreeSurface():
             if is_unique:
                 unique_shifts.append(plane_i.point)
 
-        return np.array(unique_shifts)
+        unique_shifts = np.array(unique_shifts)
+        return unique_shifts
