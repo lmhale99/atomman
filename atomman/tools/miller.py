@@ -176,7 +176,7 @@ def vector_crystal_to_cartesian(indices, box):
     indices = np.array(indices)
     
     # Convert 4-term Miller-Bravais to standard 3-term indices
-    if indices.shape[-1] == 4: # pylint: disable=unsubscriptable-object
+    if indices.shape[-1] == 4: 
         if not ishexagonal(box):
             raise ValueError('Hexagonal indices given with non-hexagonal box')
         indices = vector4to3(indices)
@@ -184,9 +184,7 @@ def vector_crystal_to_cartesian(indices, box):
     if indices.shape[-1] != 3:
         raise ValueError('Invalid index dimensions')
 
-    return (np.outer(indices[...,0], box.vects[0]) 
-          + np.outer(indices[...,1], box.vects[1]) 
-          + np.outer(indices[...,2], box.vects[2])).reshape(indices.shape)
+    return indices.dot(box.vects)
     
 def vector_primitive_to_conventional(indices, setting='p'):
     """
@@ -211,7 +209,7 @@ def vector_primitive_to_conventional(indices, setting='p'):
         
     Raises
     ------
-    ValuenError
+    ValueError
         If indices dimensions are not (..., 3) or if an unknown setting
         value is given.
     """
@@ -246,8 +244,7 @@ def vector_primitive_to_conventional(indices, setting='p'):
     except:
         raise ValueError('Unknown lattice setting. Allowed values are: p, a, b, c, i, and f')
     
-    return np.inner(indices, lat.T)
-
+    return indices.dot(lat)
 
 def vector_conventional_to_primitive(indices, setting='p'):
     """
@@ -306,7 +303,7 @@ def vector_conventional_to_primitive(indices, setting='p'):
     except:
         raise ValueError('Unknown lattice setting. Allowed values are: p, a, b, c, i, and f')
     
-    return np.inner(indices, lat.T)
+    return indices.dot(lat)
 
 def plane_crystal_to_cartesian(indices, box):
     """
@@ -317,8 +314,8 @@ def plane_crystal_to_cartesian(indices, box):
     Parameters
     ----------
     indices : np.ndarray
-        (3,) array of [hkl] Miller crystallographic indices or 
-        (4,) array of [hkil] Miller-Bravais crystallographic indices.
+        (..., 3) array of [hkl] Miller crystallographic indices or 
+        (..., 4) array of [hkil] Miller-Bravais crystallographic indices.
     box : atomman.Box
         Box that defines the lattice cell vectors to use. 
    
@@ -337,72 +334,81 @@ def plane_crystal_to_cartesian(indices, box):
     indices = np.asarray(indices)
     
     # Convert hkil to hkl
-    if indices.shape == (4,):
+    if indices.shape[-1] == 4:
         if ishexagonal(box):
             indices = plane4to3(indices)
         else:
             raise ValueError('Hexagonal indices given with non-hexagonal box')
-    if indices.shape != (3,):
+    if indices.shape[-1] != 3:
         raise ValueError('Invalid index dimensions')
     
+    # Verify values are int
     if np.allclose(indices, np.asarray(indices, dtype=int)):
         indices = np.asarray(indices, dtype=int)
     else:
         raise ValueError('Indices must be integers')
     
-    # Find two in-plane box vectors
-    if indices[0] != 0:
-        if indices[1] != 0:
-            if indices[2] != 0:
-                # indices solution
-                m = np.lcm.reduce([indices[0], indices[1], indices[2]]) # pylint: disable=no-member
-                s = np.sign(indices[0] * indices[1] * indices[2])
-                a_uvw = np.array([-m / indices[0], m / indices[1], 0], dtype=int)
-                b_uvw = np.array([-m / indices[0], 0, m / indices[2]], dtype=int)
-            else:
-                # hk0 solution
-                m = np.lcm(indices[0], indices[1]) # pylint: disable=no-member
-                s = np.sign(indices[0] * indices[1])
-                a_uvw = np.array([-m / indices[0], m / indices[1], 0], dtype=int)
-                b_uvw = np.array([0, 0, 1], dtype=int)
-        else:
-            if indices[2] != 0:
-                # h0l solution
-                m = np.lcm(indices[0], indices[2]) # pylint: disable=no-member
-                s = np.sign(indices[0] * indices[2])
-                a_uvw = np.array([m / indices[0], 0, -m / indices[2]], dtype=int)
-                b_uvw = np.array([0, 1, 0], dtype=int)
-            else:
-                # h00 solution
-                m = 1
-                s = np.sign(indices[0])
-                a_uvw = np.array([0, 1, 0], dtype=int)
-                b_uvw = np.array([0, 0, 1], dtype=int)
-    elif indices[1] != 0:
-        if indices[2] != 0:
-            # 0kl solution
-            m = np.lcm(indices[1], indices[2]) # pylint: disable=no-member
-            s = np.sign(indices[1] * indices[2])
-            a_uvw = np.array([0, -m / indices[1], m / indices[2]], dtype=int)
-            b_uvw = np.array([1, 0, 0], dtype=int)
-        else:    
-            # 0k0 solution
-            m = 1
-            s = np.sign(indices[1])
-            a_uvw = np.array([0, 0, 1], dtype=int)
-            b_uvw = np.array([1, 0, 0], dtype=int)
-    elif indices[2] != 0:
-        # 00l solution
-        m = 1
-        s = np.sign(indices[2])
-        a_uvw = np.array([1, 0, 0], dtype=int)
-        b_uvw = np.array([0, 1, 0], dtype=int)
-    else:
-        raise ValueError('indices cannot be all zeros')
     
-    # Compute Cartesian plane normal
-    planenormal = s * np.cross(np.inner(a_uvw, box.vects.T),
-                               np.inner(b_uvw, box.vects.T))
+    def plane_cryst_2_cart(indices, box):
+        """
+        Finds the Cartesian plane normal for a single 3 index Miller crystal
+        plane and a box.        
+        """
+        # Find two in-plane box vectors
+        if indices[0] != 0:
+            if indices[1] != 0:
+                if indices[2] != 0:
+                    # indices solution
+                    m = np.lcm.reduce([indices[0], indices[1], indices[2]])
+                    s = np.sign(indices[0] * indices[1] * indices[2])
+                    a_uvw = np.array([-m / indices[0], m / indices[1], 0], dtype=int)
+                    b_uvw = np.array([-m / indices[0], 0, m / indices[2]], dtype=int)
+                else:
+                    # hk0 solution
+                    m = np.lcm(indices[0], indices[1])
+                    s = np.sign(indices[0] * indices[1])
+                    a_uvw = np.array([-m / indices[0], m / indices[1], 0], dtype=int)
+                    b_uvw = np.array([0, 0, 1], dtype=int)
+            else:
+                if indices[2] != 0:
+                    # h0l solution
+                    m = np.lcm(indices[0], indices[2])
+                    s = np.sign(indices[0] * indices[2])
+                    a_uvw = np.array([m / indices[0], 0, -m / indices[2]], dtype=int)
+                    b_uvw = np.array([0, 1, 0], dtype=int)
+                else:
+                    # h00 solution
+                    m = 1
+                    s = np.sign(indices[0])
+                    a_uvw = np.array([0, 1, 0], dtype=int)
+                    b_uvw = np.array([0, 0, 1], dtype=int)
+        elif indices[1] != 0:
+            if indices[2] != 0:
+                # 0kl solution
+                m = np.lcm(indices[1], indices[2]) 
+                s = np.sign(indices[1] * indices[2])
+                a_uvw = np.array([0, -m / indices[1], m / indices[2]], dtype=int)
+                b_uvw = np.array([1, 0, 0], dtype=int)
+            else:    
+                # 0k0 solution
+                m = 1
+                s = np.sign(indices[1])
+                a_uvw = np.array([0, 0, 1], dtype=int)
+                b_uvw = np.array([1, 0, 0], dtype=int)
+        elif indices[2] != 0:
+            # 00l solution
+            m = 1
+            s = np.sign(indices[2])
+            a_uvw = np.array([1, 0, 0], dtype=int)
+            b_uvw = np.array([0, 1, 0], dtype=int)
+        else:
+            raise ValueError('indices cannot be all zeros')
+        
+        # Compute Cartesian plane normal
+        planenormal = s * np.cross(a_uvw.dot(box.vects), b_uvw.dot(box.vects))
 
-    # Return the unit vector normal
-    return planenormal / np.linalg.norm(planenormal)
+        # Return the unit vector normal
+        return planenormal / np.linalg.norm(planenormal)
+
+    # Apply plane_cryst_2_cart to each given set of indices
+    return np.apply_along_axis(plane_cryst_2_cart, -1, indices, box)
