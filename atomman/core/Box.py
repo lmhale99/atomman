@@ -45,6 +45,7 @@ class Box(Shape, object):
         """
         self.__vects = np.eye(3, dtype='float64')
         self.__origin = np.zeros(3, dtype='float64')
+        self.__inverse_vects = None
 
         if len(kwargs) > 0:
             if 'model' in kwargs:
@@ -244,8 +245,11 @@ class Box(Shape, object):
     def vects(self, value):
         self.__vects[:] = value
 
-        #Zero out near zero terms
+        # Zero out near zero terms
         self.__vects[np.isclose(self.__vects/abs(self.__vects).max(), 0.0, atol=1e-9)] = 0.0
+
+        # Reset inverse_vects
+        self.__inverse_vects = None
 
     @property
     def origin(self):
@@ -786,5 +790,9 @@ class Box(Shape, object):
         if cartpos.shape[-1] != 3:
             raise ValueError('Invalid position dimensions')
         
+        # Compute inverse_vects if needed
+        if self.__inverse_vects is None:
+            self.__inverse_vects = np.linalg.inv(self.vects)
+
         # Convert and return
-        return (value - self.origin).dot(np.linalg.inv(self.vects))
+        return (value - self.origin).dot(self.__inverse_vects)
