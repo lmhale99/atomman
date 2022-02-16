@@ -4,8 +4,8 @@ import uuid
 # https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
 
-from datamodelbase.record import Record
-from datamodelbase import query
+from yabadaba.record import Record
+from yabadaba import query
 
 from ... import System
 from ...tools import crystalsystem
