@@ -1,9 +1,15 @@
 # coding: utf-8
 
+# Standard Python imports
+from __future__ import annotations
+from typing import Callable, Optional, Union
+
+#https://matplotlib.org/
 import matplotlib.pyplot as plt
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 from . import gradient, integrator
 import atomman.unitconvert as uc
@@ -13,8 +19,12 @@ class BasePath():
     Generic class representing an energy path.
     """
     
-    def __init__(self, coord, energyfxn, gradientfxn='cdiff',
-                gradientkwargs=None, integratorfxn='rk'):
+    def __init__(self,
+                 coord: npt.ArrayLike,
+                 energyfxn: Callable,
+                 gradientfxn: str = 'cdiff',
+                 gradientkwargs: Optional[dict] = None,
+                 integratorfxn: str = 'rk'):
         """
         Class initializer.
         
@@ -58,16 +68,16 @@ class BasePath():
             raise TypeError('gradientkwargs must be None or a dict')
     
     @property
-    def coord(self):
+    def coord(self) -> np.ndarray:
         """numpy.NDArray : The coordinates for each point along the path."""
         return self.__coord
     
     @coord.setter
-    def coord(self, value):
+    def coord(self, value: npt.ArrayLike):
         self.__coord = np.asarray(value)
     
     @property
-    def arccoord(self):
+    def arccoord(self) -> np.ndarray:
         """numpy.NDArray : The arc length coordinates for each point along the path."""
         
         # Compute the arc length distance between each point
@@ -82,17 +92,17 @@ class BasePath():
         return α
 
     @property
-    def energyfxn(self):
+    def energyfxn(self) -> Callable:
         """function : The function for evaluating the energy"""
         return self.__energyfxn
     
     @property
-    def gradientfxn(self):
+    def gradientfxn(self) -> Callable:
         """function : The function for evaluating the energy gradients"""
         return self.__gradientfxn
     
     @gradientfxn.setter
-    def gradientfxn(self, value):
+    def gradientfxn(self, value: Union[str, Callable]):
         if isinstance(value, str):
             if value == 'central_difference' or value == 'cdiff':
                 self.__gradientfxn = gradient.central_difference
@@ -104,17 +114,17 @@ class BasePath():
             raise TypeError('gradientfxn must be a str of a known style or a callable object')
 
     @property
-    def gradientkwargs(self):
+    def gradientkwargs(self) -> dict:
         """dict : The keyword arguments to use when calling gradientfxn"""
         return self.__gradientkwargs
     
     @property
-    def integratorfxn(self):
+    def integratorfxn(self) -> Callable:
         """function : The function to use for integrating minimization steps"""
         return self.__integratorfxn
     
     @integratorfxn.setter
-    def integratorfxn(self, value):
+    def integratorfxn(self, value: Union[str, Callable]):
         if isinstance(value, str):
             if value == 'rungekutta' or value == 'rk':
                 self.__integratorfxn = integrator.rungekutta
@@ -128,11 +138,12 @@ class BasePath():
             raise TypeError('integratorfxn must be a str of a known style or a callable object')
 
     @property
-    def unittangent(self):
+    def unittangent(self) -> np.ndarray:
         """numpy.NDArray : The tangent vectors along the path at each point."""
         raise NotImplementedError('Defined by subclasses')
     
-    def energy(self, coord=None):
+    def energy(self,
+               coord: Optional[npt.ArrayLike] = None) -> np.ndarray:
         """
         Evaluates energy values associated with either the path points or
         given coordinates.
@@ -153,7 +164,8 @@ class BasePath():
         
         return self.energyfxn(coord)
     
-    def grad_energy(self, coord=None):
+    def grad_energy(self,
+                    coord: Optional[npt.ArrayLike] = None) -> np.ndarray:
         """
         Evaluates the gradient of the energy associated with either the path
         points or given coordinates.
@@ -171,25 +183,25 @@ class BasePath():
         """
         if coord is None:
              coord = self.coord
-        return self.gradientfxn(self.energyfxn, coord, **self.gradientkwargs) #pylint: disable=not-callable
+        return self.gradientfxn(self.energyfxn, coord, **self.gradientkwargs)
     
     @property
-    def force(self):
+    def force(self) -> np.ndarray:
         """numpy.NDArray : The computed force associated with moving along the path at each point."""
         return np.einsum('ij,ij->i', self.grad_energy(), self.unittangent)
 
-    def step(self, *args, **kwargs):
+    def step(self, *args, **kwargs) -> BasePath:
         """
         Performs a single relaxation step.
         
         Returns
         -------
-        newpath : Path
+        newpath : BasePath
             A Path with coordinates evolved forward by one timestep.
         """
         raise NotImplementedError('Defined by subclasses')
 
-    def relax(self, *args, **kwargs):
+    def relax(self, *args, **kwargs) -> BasePath:
         """
         Perform multiple relaxation and/or climb steps until either the
         maximum coordinate displacement per step drops below a tolerance or
@@ -197,12 +209,16 @@ class BasePath():
 
         Returns
         -------
-        newpath : Path
+        newpath : BasePath
             A Path with coordinates evolved forward from the relaxation.
         """
         raise NotImplementedError('Defined by subclasses')
 
-    def plot_energy(self, energy_unit=None, length_unit=None, ax=None, **kwargs):
+    def plot_energy(self,
+                    energy_unit: Optional[str] = None,
+                    length_unit: Optional[str] = None,
+                    ax: Optional[plt.axes] = None,
+                    **kwargs) -> Optional[plt.figure]:
         """
         Creates a plot of the energies along the path as a function of the
         arc coordinates.
@@ -262,7 +278,11 @@ class BasePath():
         if returnfig:
             return fig
 
-    def plot_force(self, force_unit=None, length_unit=None, ax=None, **kwargs):
+    def plot_force(self,
+                   force_unit: Optional[str] = None,
+                   length_unit: Optional[str] = None,
+                   ax: Optional[plt.axes] = None,
+                   **kwargs) -> Optional[plt.figure]:
         """
         Creates a plot of the force to move along the path as a function of the
         arc coordinates.

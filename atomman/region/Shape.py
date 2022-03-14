@@ -1,5 +1,9 @@
 # coding: utf-8
 
+# http://www.numpy.org/
+import numpy as np
+import numpy.typing as npt
+
 class Shape():
     """
     Template class for defining geometric regions in space.
@@ -11,7 +15,9 @@ class Shape():
         """
         raise NotImplementedError('Base shape class cannot be directly used')
         
-    def inside(self, pos, inclusive=True):
+    def inside(self,
+               pos: npt.ArrayLike,
+               inclusive: bool = True) -> np.ndarray:
         """
         Indicates if position(s) are inside the shape.
         
@@ -30,7 +36,9 @@ class Shape():
         """
         raise NotImplementedError('Base shape class cannot be directly used')
         
-    def outside(self, pos, inclusive=False):
+    def outside(self,
+                pos: npt.ArrayLike,
+                inclusive: bool = False) -> np.ndarray:
         """
         Indicates if position(s) are inside the shape.
         
@@ -47,5 +55,6 @@ class Shape():
         numpy.NDArray
             N array of bool values: True if outside shape
         """
+        # Call inverse of inside
         return ~self.inside(pos, inclusive=not inclusive)
         

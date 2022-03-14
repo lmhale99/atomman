@@ -1,4 +1,5 @@
 # coding: utf-8
+
 # Standard Python imports
 from importlib import resources
 

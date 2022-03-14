@@ -1,7 +1,11 @@
 # coding: utf-8
 
+# Standard Python imports
+from typing import Union, List
+
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 from . import Shape, Plane
 
@@ -9,25 +13,25 @@ class PlaneSet(Shape):
     """
     Class consisting of a shape defined by a set of planes
     """
-    def __init__(self, planes):
+    def __init__(self, planes: Union[Plane, List[Plane]]):
         """
         Defines a shape based on a list of Plane objects
         
         Parameters
         ----------
-        planes : list of atomman.region.Plane
+        planes : atomman.region.Plane or list of atomman.region.Plane
             The planes to use in constructing the shape.  Points "below" all
             planes are considered inside the shape.
         """
         self.planes = planes
     
     @property 
-    def planes(self):
+    def planes(self) -> List[Plane]:
         """list of atomman.region.Plane : The planes that make up the shape"""
         return self.__planes
     
     @planes.setter
-    def planes(self, value):
+    def planes(self, value: Union[Plane, List[Plane]]):
         if isinstance(value, Plane):
             value = [value]
         else:
@@ -36,7 +40,9 @@ class PlaneSet(Shape):
                 assert isinstance(v, Plane)
         self.__planes = value
 
-    def inside(self, pos, inclusive=True):
+    def inside(self,
+               pos: npt.ArrayLike,
+               inclusive: bool = True) -> np.ndarray:
         """
         Indicates if position(s) are inside the shape.
         

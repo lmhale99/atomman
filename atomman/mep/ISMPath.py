@@ -1,9 +1,13 @@
 # coding: utf-8
+
 # Standard Python imports
+from __future__ import annotations
 import time
+from typing import Optional, Union
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 from scipy.interpolate import CubicSpline
 
@@ -16,21 +20,21 @@ class ISMPath(BasePath):
     """
     
     @property
-    def default_timestep(self):
+    def default_timestep(self) -> float:
         """float : The default relaxation timestep"""
         
         # 0.05 * min(0.2, N^-1)
         return 0.05 * np.min([0.2, len(self.coord)**-1])
     
     @property
-    def default_tolerance(self):
+    def default_tolerance(self) -> float:
         """float : The default relaxation tolerance"""
         
         # max(N^-4, 1e-10)
         return np.max([len(self.coord)**-4, 1e-10])
     
     @property
-    def unittangent(self):
+    def unittangent(self) -> np.ndarray:
         """numpy.NDArray : The tangent vectors along the path at each point."""
         
         τ = np.empty_like(self.coord)
@@ -51,7 +55,8 @@ class ISMPath(BasePath):
         
         return τ
     
-    def interpolate_path(self, arccoord):
+    def interpolate_path(self,
+                         arccoord: npt.ArrayLike) -> ISMPath:
         """
         Uses cubic spline interpolation to interpolate a new path from intermediate
         arc length coordinates along the current path.
@@ -64,7 +69,7 @@ class ISMPath(BasePath):
             
         Returns
         -------
-        Path
+        ISMPath
             A new path with the interpolated coordinates.
         """
         α = self.arccoord
@@ -77,7 +82,9 @@ class ISMPath(BasePath):
         return ISMPath(newcoord, self.energyfxn, gradientfxn=self.gradientfxn,
                     gradientkwargs=self.gradientkwargs)
 
-    def step(self, timestep=None, climbindex=None):
+    def step(self,
+             timestep: Optional[float] = None,
+             climbindex: Union[int, list, None] = None) -> ISMPath:
         """
         Performs a single string relaxation step.
         
@@ -92,7 +99,7 @@ class ISMPath(BasePath):
         
         Returns
         -------
-        newpath : Path
+        newpath : ISMPath
             A Path with coordinates evolved forward by one timestep.
         """
         
@@ -153,8 +160,13 @@ class ISMPath(BasePath):
         
         return newpath
     
-    def relax(self, relaxsteps=0, climbsteps=0, timestep=None,
-              tolerance=None, climbpoints=1, verbose=True):
+    def relax(self,
+              relaxsteps: int = 0,
+              climbsteps: int = 0,
+              timestep: Optional[float] = None,
+              tolerance: Optional[float] = None,
+              climbpoints: int = 1,
+              verbose: bool = True) -> ISMPath:
         """
         Perform multiple relaxation and/or climb steps until either the
         maximum coordinate displacement per step drops below a tolerance or
@@ -180,6 +192,11 @@ class ISMPath(BasePath):
         verbose : bool, optional
             If True (default), informative statements about the relaxation are
             printed.
+        
+        Returns
+        -------
+        newpath : ISMPath
+            A Path with coordinates evolved forward from the relaxation.
         """
         
         # Set default timestep

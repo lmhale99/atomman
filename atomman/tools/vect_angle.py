@@ -12,9 +12,9 @@ def vect_angle(vect1: npt.ArrayLike,
     
     Parameters
     ----------
-    vect1 : list or numpy.ndarray
+    vect1 : array-like object
         First vector.
-    vect2 : list or numpy.ndarray
+    vect2 : array-like object
         Second vector.
     unit : str
         Specifies unit of returned angle: 'degree' or 'radian'. Default value

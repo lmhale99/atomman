@@ -2,6 +2,7 @@
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 from . import Shape
 
@@ -9,7 +10,9 @@ class Sphere(Shape):
     """
     Class representing a sphere in space.
     """
-    def __init__(self, center, radius):
+    def __init__(self,
+                 center: npt.ArrayLike,
+                 radius: float):
         """
         Defines a sphere
 
@@ -24,12 +27,12 @@ class Sphere(Shape):
         self.radius = radius
     
     @property 
-    def center(self):
+    def center(self) -> np.ndarray:
         """numpy.NDArray : 3D vector position of sphere's center"""
         return self.__center
     
     @center.setter
-    def center(self, value):
+    def center(self, value: npt.ArrayLike):
         # Check that value is proper
         value = np.asarray(value)
         assert value.shape == (3,), "center must be a 3D vector"
@@ -38,12 +41,12 @@ class Sphere(Shape):
         self.__center = value
     
     @property
-    def radius(self):
+    def radius(self) -> float:
         """float : the sphere's radius"""
         return self.__radius
 
     @radius.setter
-    def radius(self, value):
+    def radius(self, value: float):
         # Check that value is proper
         value = float(value)
         assert value > 0, "radius must be positive"
@@ -51,7 +54,9 @@ class Sphere(Shape):
         # Save
         self.__radius = value
         
-    def inside(self, pos, inclusive=True):
+    def inside(self,
+               pos: npt.ArrayLike,
+               inclusive: bool = True) -> np.ndarray:
         """
         Indicates if position(s) are inside the shape.
         

@@ -1,9 +1,15 @@
 # coding: utf-8
 
+# Standard Python imports
+from typing import Callable
+
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
-def central_difference(fxn, coord, shift=1e-5):
+def central_difference(fxn: Callable,
+                       coord: npt.ArrayLike,
+                       shift: float = 1e-5) -> np.ndarray:
     """
     Computes the gradient of a function at a set of coordinates.
     
@@ -22,7 +28,7 @@ def central_difference(fxn, coord, shift=1e-5):
     
     Returns
     -------
-    gradient : array-like object
+    gradient : numpy.ndarray
         The gradient array with the same shape as coord.
     """
     coord = np.asarray(coord)

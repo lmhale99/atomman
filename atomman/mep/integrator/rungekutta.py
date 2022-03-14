@@ -1,6 +1,16 @@
 # coding: utf-8
 
-def rungekutta(ratefxn, coord, timestep, **kwargs):
+# Standard Python imports
+from typing import Callable, Union
+
+# http://www.numpy.org/
+import numpy as np
+import numpy.typing as npt
+
+def rungekutta(ratefxn: Callable,
+               coord: npt.ArrayLike,
+               timestep: float,
+               **kwargs) -> Union[float, np.ndarray]:
     """
     Performs Runge-Kutta ODE integration for a timestep.
     
@@ -17,7 +27,7 @@ def rungekutta(ratefxn, coord, timestep, **kwargs):
     
     Returns
     -------
-    array-like object
+    float or numpy.ndarray
         The coordinate(s) moved forward by timestep.
     """
     

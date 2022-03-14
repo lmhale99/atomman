@@ -3,6 +3,7 @@ from __future__ import annotations
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 from ..tools import vect_angle
 
@@ -10,7 +11,9 @@ class Plane():
     """
     Class representing a plane in space. Useful for making slices.
     """
-    def __init__(self, normal, point):
+    def __init__(self,
+                 normal: npt.ArrayLike,
+                 point: npt.ArrayLike):
         """
         Defines a plane in space.
 
@@ -27,12 +30,12 @@ class Plane():
         self.point = point
 
     @property
-    def normal(self):
+    def normal(self) -> np.ndarray:
         """numpy.NDArray : 3D normal unit vector of the plane."""
         return self.__normal
 
     @normal.setter
-    def normal(self, value):
+    def normal(self, value: npt.ArrayLike):
 
         # Check that value is proper
         value = np.asarray(value)
@@ -42,12 +45,12 @@ class Plane():
         self.__normal = value / np.linalg.norm(value)
 
     @property
-    def point(self):
+    def point(self) -> np.ndarray:
         """numpy.NDArray : a 3D vector position on the plane."""
         return self.__point
 
     @point.setter
-    def point(self, value):
+    def point(self, value: npt.ArrayLike):
 
         # Check that value is proper
         value = np.asarray(value)
@@ -56,7 +59,9 @@ class Plane():
         # Save
         self.__point = value
 
-    def below(self, pos, inclusive=True):
+    def below(self,
+              pos: npt.ArrayLike,
+              inclusive: bool = True) -> np.ndarray:
         """
         Indicates if position(s) are below the plane.  Note that identifying
         points as above or below is dependent on the sign of the plane normal.
@@ -87,7 +92,9 @@ class Plane():
         else:
             return normpos < normpoint
 
-    def above(self, pos, inclusive=False):
+    def above(self,
+              pos: npt.ArrayLike,
+              inclusive: bool = False) -> np.ndarray:
         """
         Indicates if position(s) are above the plane.  Note that identifying
         points as above or below is dependent on the sign of the plane normal.
@@ -107,7 +114,9 @@ class Plane():
         """
         return ~self.below(pos, inclusive=not inclusive)
 
-    def operate(self, rotation, translation) -> Plane:
+    def operate(self,
+                rotation: npt.ArrayLike,
+                translation: npt.ArrayLike) -> Plane:
         """
         Return a new plane transformed by given symmetry operation
 
@@ -117,6 +126,11 @@ class Plane():
             rotation matrix in cartedian coordinates
         translation: array-like, (3, )
             translation matrix in cartedian coordinates
+        
+        Returns
+        -------
+        Plane
+            A new plane transformed by the specified operations.
         """
         rotation = np.array(rotation)
         translation = np.array(translation)
@@ -134,7 +148,10 @@ class Plane():
 
         return self.isclose(other)
 
-    def isclose(self, other: Plane, rtol: float = 1e-5, atol: float = 1e-8):
+    def isclose(self,
+                other: Plane,
+                rtol: float = 1e-5,
+                atol: float = 1e-8) -> bool:
         """
         Check the plane and a given one represent the same.
         Note that if the normal vectors of the two planes are antiparallel, they are considered to be different.

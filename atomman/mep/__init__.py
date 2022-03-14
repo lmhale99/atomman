@@ -1,12 +1,24 @@
+# coding: utf-8
+
+# Standard Python imports
+from typing import Callable, Optional
+
+# http://www.numpy.org/
+import numpy.typing as npt
+
+# atomman imports
 from . import gradient, integrator
 from .BasePath import BasePath
-
 from .ISMPath import ISMPath
 
 __all__ = ['gradient', 'integrator', 'BasePath', 'ISMPath', 'create_path']
 
-def create_path(coord, energyfxn, style='ISM', gradientfxn='cdiff',
-                gradientkwargs=None, integratorfxn='rk'):
+def create_path(coord: npt.ArrayLike,
+                energyfxn: Callable,
+                style: str = 'ISM',
+                gradientfxn: str = 'cdiff',
+                gradientkwargs: Optional[dict] = None,
+                integratorfxn: str = 'rk') -> BasePath:
     """
     Generic function call for initializing a Path object.
     
@@ -17,7 +29,7 @@ def create_path(coord, energyfxn, style='ISM', gradientfxn='cdiff',
     energyfxn : function
         The function that evaluates the energy associated with the different
         point coordinates.
-    style : str
+    style : str, optional
         The relaxation style to associate with the path.  Determines the
         subclass to build.  Default value is "ISM" for the improved
         string method.
@@ -30,6 +42,16 @@ def create_path(coord, energyfxn, style='ISM', gradientfxn='cdiff',
     integratorfxn : str or function, optional
         The function to use to integrate relaxation steps.  Default value of
         'rk' will use atomman.mep.integrator.rungekutta.
+
+    Returns
+    -------
+    BasePath
+        A Path object.
+
+    Raises
+    ------
+    ValueError
+        If the given style is invalid.
     """
     if style == 'ISM' or style == 'improved_string_method':
         return ISMPath(coord, energyfxn, gradientfxn=gradientfxn,
