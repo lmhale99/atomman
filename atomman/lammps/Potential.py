@@ -2,7 +2,7 @@
 
 from DataModelDict import DataModelDict as DM
 
-from potentials.record import PotentialLAMMPS, PotentialLAMMPSKIM
+from potentials import load_record
 
 def Potential(model, name=None, pot_dir=None, kim_id=None, potkey=None,
               potid=None, symbolset=None):
@@ -53,10 +53,10 @@ def Potential(model, name=None, pot_dir=None, kim_id=None, potkey=None,
         try:
             # Search for potential-LAMMPS-KIM branch
             model.find('potential-LAMMPS-KIM')
-        except ValueError:
-            raise ValueError('Failed to find either potential-LAMMPS or potential-LAMMPS-KIM content')
+        except ValueError as err:
+            raise ValueError('Failed to find either potential-LAMMPS or potential-LAMMPS-KIM content') from err
         else:
-            return PotentialLAMMPSKIM(model=model, name=name, id=kim_id,
-                                      potkey=potkey, potid=potid, symbolset=symbolset)
+            return load_record('potential_LAMMPS_KIM', model=model, name=name, id=kim_id,
+                               potkey=potkey, potid=potid, symbolset=symbolset)
     else:
-        return PotentialLAMMPS(model=model, name=name, pot_dir=pot_dir)
+        return load_record('potential_LAMMPS', model=model, name=name, pot_dir=pot_dir)
