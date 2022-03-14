@@ -10,42 +10,43 @@ from DataModelDict import DataModelDict as DM
 
 # atomman imports
 import atomman.unitconvert as uc
-from ..tools import vect_angle
+from ..tools import vect_angle, miller
 from ..region import Shape, Plane
 
 class Box(Shape, object):
     """
     A representation of a triclinic (parallelepiped) box.
     """
-    
+
     def __init__(self, **kwargs):
         """
         Initializes a Box.  If parameters besides origin are given they
         must completely define the box.  Allowed parameter sets are:
-        
+
         - no parameters -> box is set to square unit box with origin = [0,0,0].
-        
+
         - origin. -> Only origin is changed (same as setting origin directly).
-        
+
         - vects, (and origin).
-        
+
         - avect, bvect, cvect, (and origin).
-        
+
         - a, b, c, (alpha, beta, gamma, and origin).
-        
+
         - lx, ly, lz, (xy, xz, yz, and origin).
-        
+
         - xlo, xhi, ylo, yhi, zlo, zhi, (xy, xz, and yz).
 
         - model
-        
+
         See the description of class methods and attributes for more details
         on the allowed parameters.
-        
+
         """
         self.__vects = np.eye(3, dtype='float64')
         self.__origin = np.zeros(3, dtype='float64')
-        
+        self.__reciprocal_vects = None
+
         if len(kwargs) > 0:
             if 'model' in kwargs:
                 if len(kwargs) > 1:
@@ -53,12 +54,12 @@ class Box(Shape, object):
                 self.model(kwargs['model'])
             else:
                 self.set(**kwargs)
-    
+
     @classmethod
     def cubic(cls, a):
         """
         Initializes a Box in standard cubic setting using only cubic lattice
-        parameters.  
+        parameters.
 
         a = b = c, alpha = beta = gamma = 90
 
@@ -77,7 +78,7 @@ class Box(Shape, object):
     def hexagonal(cls, a, c):
         """
         Initializes a Box in standard hexagonal setting using only hexagonal lattice
-        parameters.  
+        parameters.
 
         a = b != c, alpha = beta = 90, gamma = 120
 
@@ -101,7 +102,7 @@ class Box(Shape, object):
     def tetragonal(cls, a, c):
         """
         Initializes a Box in standard tetragonal setting using only tetragonal lattice
-        parameters.  
+        parameters.
 
         a = b != c, alpha = beta = gamma = 90
 
@@ -125,7 +126,7 @@ class Box(Shape, object):
     def trigonal(cls, a, alpha):
         """
         Initializes a Box in standard trigonal setting using only trigonal lattice
-        parameters.  
+        parameters.
 
         a = b = c, alpha = beta = gamma < 120
 
@@ -141,7 +142,7 @@ class Box(Shape, object):
         atomman.Box
         """
         if alpha >= 120.0:
-            raise ValueError('trigonal alpha angle must be less than 120 degrees')        
+            raise ValueError('trigonal alpha angle must be less than 120 degrees')
 
         return cls(a=a, b=a, c=a, alpha=alpha, beta=alpha, gamma=alpha)
 
@@ -149,7 +150,7 @@ class Box(Shape, object):
     def orthorhombic(cls, a, b, c):
         """
         Initializes a Box in standard orthorhombic setting using only orthorhombic lattice
-        parameters.  
+        parameters.
 
         a != b != c, alpha = beta = gamma = 90
 
@@ -175,7 +176,7 @@ class Box(Shape, object):
     def monoclinic(cls, a, b, c, beta):
         """
         Initializes a Box in standard monoclinic setting using only monoclinic lattice
-        parameters.  
+        parameters.
 
         a != b != c, alpha = gamma = 90, beta > 90
 
@@ -205,9 +206,9 @@ class Box(Shape, object):
     def triclinic(cls, a, b, c, alpha, beta, gamma):
         """
         Initializes a Box in standard triclinic setting using only triclinic lattice
-        parameters.  
+        parameters.
 
-        a != b != c, alpha != beta != gamma 
+        a != b != c, alpha != beta != gamma
 
         Parameters
         ----------
@@ -239,140 +240,154 @@ class Box(Shape, object):
     def vects(self):
         """numpy.ndarray : Array containing all three box vectors.  Can be set directly."""
         return deepcopy(self.__vects)
-    
+
     @vects.setter
     def vects(self, value):
         self.__vects[:] = value
-        
-        #Zero out near zero terms
+
+        # Zero out near zero terms
         self.__vects[np.isclose(self.__vects/abs(self.__vects).max(), 0.0, atol=1e-9)] = 0.0
-    
+
+        # Reset reciprocal_vects
+        self.__reciprocal_vects = None
+
+    @property
+    def reciprocal_vects(self):
+        """
+        numpy.ndarray : Array of the crystallographic reciprocal box vectors.
+        These have not been scaled by the factor of 2 pi.
+        """
+        if self.__reciprocal_vects is None:
+            self.__reciprocal_vects = np.linalg.inv(self.vects).T
+        
+        return self.__reciprocal_vects
+
     @property
     def origin(self):
         """numpy.ndarray : Box origin position where vects are added to define the box.  Can be set directly."""
         return deepcopy(self.__origin)
-    
+
     @origin.setter
     def origin(self, value):
         self.__origin[:] = value
-    
+
     @property
     def avect(self):
         """numpy.ndarray : Vector associated with the a box dimension."""
         return self.vects[0]
-    
+
     @property
     def bvect(self):
         """numpy.ndarray : Vector associated with the b box dimension."""
         return self.vects[1]
-    
+
     @property
     def cvect(self):
         """numpy.ndarray : Vector associated with the c box dimension."""
         return self.vects[2]
-    
+
     @property
     def a(self):
         """float : The a lattice parameter (magnitude of avect)."""
         return (self.__vects[0,0]**2 + self.__vects[0,1]**2 + self.__vects[0,2]**2)**0.5
-    
+
     @property
     def b(self):
         """float : The b lattice parameter (magnitude of avect)."""
         return (self.__vects[1,0]**2 + self.__vects[1,1]**2 + self.__vects[1,2]**2)**0.5
-    
+
     @property
     def c(self):
         """float : The c lattice parameter (magnitude of avect)."""
-        return (self.__vects[2,0]**2 + self.__vects[2,1]**2 + self.__vects[2,2]**2)**0.5 
-    
+        return (self.__vects[2,0]**2 + self.__vects[2,1]**2 + self.__vects[2,2]**2)**0.5
+
     @property
     def alpha(self):
         """float : The alpha lattice angle in degrees (angle between bvect and cvect)."""
         return vect_angle(self.__vects[1], self.__vects[2])
-    
+
     @property
     def beta(self):
         """float : The beta lattice angle in degrees (angle between avect and cvect)."""
         return vect_angle(self.__vects[0], self.__vects[2])
-    
+
     @property
     def gamma(self):
         """float : The gamma lattice angle in degrees (angle between avect and bvect)."""
         return vect_angle(self.__vects[0], self.__vects[1])
-    
+
     @property
     def lx(self):
         """float : LAMMPS lx box length (avect[0] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__vects[0,0]
-    
+
     @property
     def ly(self):
         """float : LAMMPS ly box length (bvect[1] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__vects[1,1]
-    
+
     @property
     def lz(self):
         """float : LAMMPS lz box length (cvect[2] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__vects[2,2]
-    
+
     @property
     def xy(self):
         """float : LAMMPS xy box tilt factor (bvect[0] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__vects[1,0]
-    
+
     @property
     def xz(self):
         """float : LAMMPS xz box tilt factor (cvect[0] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__vects[2,0]
-    
+
     @property
     def yz(self):
         """float : LAMMPS yz box tilt factor (cvect[1] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__vects[2,1]
-    
+
     @property
     def xlo(self):
         """float : LAMMPS xlo box lo term (origin[0] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__origin[0]
-    
+
     @property
     def ylo(self):
         """float : LAMMPS ylo box lo term (origin[1] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__origin[1]
-    
+
     @property
     def zlo(self):
         """float : LAMMPS zlo box lo term (origin[2] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__origin[2]
-    
+
     @property
     def xhi(self):
         """float : LAMMPS xhi box hi term (origin[0] + lx for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__origin[0] + self.__vects[0,0]
-    
+
     @property
     def yhi(self):
         """float : LAMMPS yhi box hi term (origin[1] + ly for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__origin[1] + self.__vects[1,1]
-    
+
     @property
     def zhi(self):
         """float : LAMMPS zhi box hi term (origin[2] + lz for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__origin[2] + self.__vects[2,2]
-    
+
     @property
     def volume(self):
         """float : The volume of the box."""
@@ -396,7 +411,7 @@ class Box(Shape, object):
                           'bvect =  [%6.3f, %6.3f, %6.3f]' % (self.__vects[1,0], self.__vects[1,1], self.__vects[1,2]),
                           'cvect =  [%6.3f, %6.3f, %6.3f]' % (self.__vects[2,0], self.__vects[2,1], self.__vects[2,2]),
                           'origin = [%6.3f, %6.3f, %6.3f]' % (self.__origin[0],  self.__origin[1],  self.__origin[2])])
-    
+
     def model(self, model=None, length_unit='angstrom'):
         """
         Reads or generates a data model for the box.
@@ -418,7 +433,7 @@ class Box(Shape, object):
         """
         # Set values if model given
         if model is not None:
-            
+
             # Find box element
             model = DM(model).find('box')
             avect = uc.value_unit(model['avect'])
@@ -426,7 +441,7 @@ class Box(Shape, object):
             cvect = uc.value_unit(model['cvect'])
             origin = uc.value_unit(model['origin'])
             self.set(avect=avect, bvect=bvect, cvect=cvect, origin=origin)
-        
+
         # Return DataModelDict if model not given
         else:
             model = DM()
@@ -442,30 +457,30 @@ class Box(Shape, object):
         """
         Sets a Box's dimensions.  If parameters besides origin are given they
         must completely define the box.  Allowed parameter sets are:
-        
+
         - no parameters -> box is set to square unit box with origin = [0,0,0].
-        
+
         - origin. -> Only origin is changed (same as setting origin directly).
-        
+
         - vects, (and origin).
-        
+
         - avect, bvect, cvect, (and origin).
-        
+
         - a, b, c, (alpha, beta, gamma, and origin).
-        
+
         - lx, ly, lz, (xy, xz, yz, and origin).
-        
+
         - xlo, xhi, ylo, yhi, zlo, zhi, (xy, xz, and yz).
-        
+
         See the description of class methods and attributes for more details
         on the allowed parameters.
         """
-        
+
         # Set default values if no kwargs given
         if len(kwargs) == 0:
             self.vects = np.eye(3)
             self.origin = np.zeros(3)
-        
+
         # Set directly if vects given
         elif 'vects' in kwargs:
             vects = kwargs.pop('vects')
@@ -473,36 +488,36 @@ class Box(Shape, object):
             assert len(kwargs) == 0, 'Invalid arguments'
             self.vects = vects
             self.origin = origin
-        
+
         # Call set_vectors if vect inputs given
         elif 'avect' in kwargs:
             self.set_vectors(**kwargs)
-        
+
         # Call set_lengths if length inputs given
         elif 'lx' in kwargs:
             self.set_lengths(**kwargs)
-        
+
         # Call set_hi_los if hi/lo inputs given
         elif 'xlo' in kwargs:
             self.set_hi_los(**kwargs)
-        
+
         # Call set_abc if vector magnitudes are given
         elif 'a' in kwargs:
             self.set_abc(**kwargs)
-        
+
         # Set only origin if given alone
         elif 'origin' in kwargs:
             origin = kwargs.pop('origin')
             assert len(kwargs) == 0, 'Invalid arguments'
             self.origin = origin
-        
+
         else:
             raise TypeError('Invalid arguments')
-    
+
     def set_vectors(self, avect, bvect, cvect, origin=None):
         """
         Set the box using the three box vectors.
-        
+
         Parameters
         ----------
         avect : numpy.ndarray
@@ -518,15 +533,15 @@ class Box(Shape, object):
         # Set default origin
         if origin is None:
             origin = [0.0, 0.0, 0.0]
-        
+
         # Combine avect, bvect and cvect into vects and set directly
         self.vects = [avect, bvect, cvect]
         self.origin = origin
-        
+
     def set_abc(self, a, b, c, alpha=90.0, beta=90.0, gamma=90.0, origin=None):
         """
         Set the box using crystal cell lattice parameters and angles.
-        
+
         Parameters
         ----------
         a : float
@@ -562,11 +577,11 @@ class Box(Shape, object):
 
         # Call set_lengths
         self.set_lengths(lx=lx, ly=ly, lz=lz, xy=xy, xz=xz, yz=yz, origin=origin)
-        
+
     def set_lengths(self, lx, ly, lz, xy=0.0, xz=0.0, yz=0.0, origin=None):
         """
         Set the box using LAMMPS box lengths and tilt factors.
-        
+
         Parameters
         ----------
         lx : float
@@ -576,21 +591,21 @@ class Box(Shape, object):
         lz : float
             The LAMMPS box length in the z direction.
         xy : float, optional
-            The LAMMPS box tilt factor in the xy direction.  Default value is 
+            The LAMMPS box tilt factor in the xy direction.  Default value is
             0.0.
         xz : float, optional
-            The LAMMPS box tilt factor in the xz direction.  Default value is 
+            The LAMMPS box tilt factor in the xz direction.  Default value is
             0.0.
         yz : float, optional
-            The LAMMPS box tilt factor in the yz direction.  Default value is 
+            The LAMMPS box tilt factor in the yz direction.  Default value is
             0.0.
         origin : numpy.ndarray, optional
             The 3D vector for the box origin position.  Default value is
             (0,0,0).
         """
-        
+
         assert lx > 0 and ly > 0 and lz > 0, 'box lengths must be positive'
-        
+
         # Set default origin
         if origin is None:
             origin = [0.0, 0.0, 0.0]
@@ -600,11 +615,11 @@ class Box(Shape, object):
                       [xy, ly,  0.0],
                       [xz, yz,  lz]]
         self.origin = origin
-    
+
     def set_hi_los(self, xlo, xhi, ylo, yhi, zlo, zhi, xy=0.0, xz=0.0, yz=0.0):
         """
         Set the box using LAMMPS box hi's, lo's and tilt factors.
-        
+
         Parameters
         ----------
         xlo : float
@@ -620,25 +635,25 @@ class Box(Shape, object):
         zhi : float
             The LAMMPS zhi box hi term.
         xy : float, optional
-            The LAMMPS box tilt factor in the xy direction.  Default value is 
+            The LAMMPS box tilt factor in the xy direction.  Default value is
             0.0.
         xz : float, optional
-            The LAMMPS box tilt factor in the xz direction.  Default value is 
+            The LAMMPS box tilt factor in the xz direction.  Default value is
             0.0.
         yz : float, optional
-            The LAMMPS box tilt factor in the yz direction.  Default value is 
+            The LAMMPS box tilt factor in the yz direction.  Default value is
             0.0.
         """
-        
+
         # Convert to hi and lo term to lengths and origin
         lx = xhi - xlo
         ly = yhi - ylo
         lz = zhi - zlo
         origin = [xlo, ylo, zlo]
-        
+
         # Call set_lengths
         self.set_lengths(lx=lx, ly=ly, lz=lz, xy=xy, xz=xz, yz=yz, origin=origin)
-    
+
     def is_lammps_norm(self):
         """
         Tests if box is compatible with LAMMPS.
@@ -653,7 +668,22 @@ class Box(Shape, object):
             and self.__vects[2,2] > 0.0)
 
     def inside(self, pos, inclusive=True):
+        """
+        Indicates if position(s) are inside the shape.
         
+        Parameters
+        ----------
+        pos : array-like object
+            Nx3 array of coordinates. 
+        inclusive : bool, optional
+            Indicates if points on the shape's boundaries are to be included.
+            Default value is True.
+        
+        Returns
+        -------
+        numpy.NDArray
+            N array of bool values: True if inside shape
+        """
         # Retrieve the Box's planes
         planes = self.planes
 
@@ -664,3 +694,112 @@ class Box(Shape, object):
                & planes[3].below(pos, inclusive=inclusive)
                & planes[4].below(pos, inclusive=inclusive)
                & planes[5].below(pos, inclusive=inclusive))
+
+    def vector_crystal_to_cartesian(self, indices):
+        """
+        Converts crystal indices to Cartesian vectors relative
+        to the box's lattice vectors. 
+        
+        Parameters
+        ----------
+        indices : np.ndarray
+            (..., 3) array of [uvw] Miller crystallographic indices or 
+            (..., 4) array of [uvtw] Miller-Bravais crystallographic indices.
+    
+        Returns
+        -------
+        np.ndarray of float
+            (..., 3) array of Cartesian vectors.
+            
+        Raises
+        ------
+        ValueError
+            If indices dimensions are not (..., 3) or (..., 4), or if
+            hexagonal indices given with non-hexagonal box.
+        """
+        return miller.vector_crystal_to_cartesian(indices, self)
+
+    def plane_crystal_to_cartesian(self, indices):
+        """
+        Converts crystal planar indices to Cartesian plane normal vectors based
+        on the box's lattice vectors.  Note: the algorithm used requires that the
+        planar indices be integers.
+        
+        Parameters
+        ----------
+        indices : np.ndarray
+            (..., 3) array of [hkl] Miller crystallographic indices or 
+            (..., 4) array of [hkil] Miller-Bravais crystallographic indices.
+        box : atomman.Box
+            Box that defines the lattice cell vectors to use. 
+    
+        Returns
+        -------
+        np.ndarray of float
+            (..., 3) array of Cartesian vectors corresponding to plane normals.
+            
+        Raises
+        ------
+        ValueError
+            If indices dimensions are not (..., 3) or (..., 4), or if
+            hexagonal indices given with non-hexagonal box.
+        """
+        return miller.plane_crystal_to_cartesian(indices, self)
+
+    def position_relative_to_cartesian(self, relpos):
+        """
+        Converts position vectors from relative box coordinates to absolute
+        Cartesian coordinates based on the box's vects and origin.
+
+        Parameters
+        ----------
+        relpos : numpy.ndarray
+            (..., 3) array of relative position vectors.
+
+        Returns
+        -------
+        numpy.ndarray
+            (..., 3) array of the absolute Cartesian positions corresponding
+            to relpos. 
+
+        Raises
+        ------
+        ValueError
+            If relpos dimensions are not (..., 3).
+        """
+        # Check/convert relpos
+        relpos = np.asarray(relpos, dtype=float)
+        if relpos.shape[-1] != 3:
+            raise ValueError('Invalid position dimensions')
+
+        # Convert and return
+        return relpos.dot(self.vects) + self.origin
+
+    def position_cartesian_to_relative(self, cartpos):
+        """
+        Converts position vectors from absolute Cartesian coordinates to
+        relative box coordinates based on the box's vects and origin.
+
+        Parameters
+        ----------
+        cartpos : numpy.ndarray
+            (..., 3) array of Cartesian position vectors.
+
+        Returns
+        -------
+        numpy.ndarray
+            (..., 3) array of the relative positions corresponding
+            to cartpos. 
+
+        Raises
+        ------
+        ValueError
+            If cartpos dimensions are not (..., 3).
+        """
+        # Check/convert cartpos
+        value = np.asarray(cartpos, dtype=float)
+        if cartpos.shape[-1] != 3:
+            raise ValueError('Invalid position dimensions')
+
+        # Convert and return
+        return np.inner((value - self.origin), self.reciprocal_vects)
