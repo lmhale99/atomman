@@ -2,14 +2,16 @@
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
-def axes_check(axes, tol=1e-8):
+def axes_check(axes: npt.ArrayLike, 
+               tol: float = 1e-8) -> np.ndarray:
     """
     Checks that given axes are orthogonal and right-handed.
     
     Parameters
     ----------
-    axes : list of list or np.ndarray
+    axes : array-like object
         A 3x3 array of axes vectors.
     tol : float, optional
         Tolerance to use in checking if axes are orthogonal and right-handed.
@@ -17,7 +19,7 @@ def axes_check(axes, tol=1e-8):
     
     Returns
     -------
-    np.ndarray
+    numpy.ndarray
         A 3x3 array of the corresponding unit vectors of axes.
     
     Raises

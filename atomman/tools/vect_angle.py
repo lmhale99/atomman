@@ -2,8 +2,11 @@
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
-def vect_angle(vect1, vect2, unit='degree'):
+def vect_angle(vect1: npt.ArrayLike,
+               vect2: npt.ArrayLike,
+               unit: str = 'degree') -> float:
     """
     Returns the angle between two vectors.
     

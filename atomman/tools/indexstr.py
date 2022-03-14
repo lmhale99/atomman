@@ -1,8 +1,11 @@
 # coding: utf-8
 
-def indexstr(shape):
+# Standard Python imports
+from typing import Generator, Tuple
+
+def indexstr(shape: Tuple[int]) -> Generator[Tuple[Tuple[int], str], None, None]:
     """
-    Iterates through all unique indicies of an array with a given shape.
+    Iterates through all unique indices of an array with a given shape.
     
     Parameters
     ----------
@@ -24,7 +27,7 @@ def indexstr(shape):
         # Loop over all values of the first index of shape
         for i in range(shape[0]):
             index1 = (i,)
-            istr1 = '['+str(i)+']'
+            istr1 = f'[{i}]'
             
             # Recursively go through other indicies of shape
             for index2, istr2 in indexstr(shape[1:]):

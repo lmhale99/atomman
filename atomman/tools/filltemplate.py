@@ -1,6 +1,13 @@
 # coding: utf-8
 
-def filltemplate(template, variable:dict, s_delimiter:str, e_delimiter:str) -> str:
+# Standard Python imports
+from typing import Union
+import io
+
+def filltemplate(template: Union[str, io.IOBase],
+                 variable: dict,
+                 s_delimiter: str,
+                 e_delimiter: str) -> str:
     """
     Takes a template and fills in values for delimited template variables.
 

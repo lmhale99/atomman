@@ -2,6 +2,7 @@
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 from .crystalsystem import ishexagonal
 
@@ -11,19 +12,19 @@ __all__ = ['plane3to4', 'plane4to3', 'vector3to4', 'vector4to3',
            'vector_primitive_to_conventional', 
            'vector_conventional_to_primitive']
 
-def plane3to4(indices):
+def plane3to4(indices: npt.ArrayLike) -> np.ndarray:
     """
     Converts 3-term Miller (hkl) plane indices to 4-term hexagonal (hkil)
     Miller-Bravias indices.
     
     Parameters
     ----------
-    indices : np.ndarray
+    indices : array-like object
         (..., 3) array of Miller crystallographic indices.
    
     Returns
     -------
-    np.ndarray
+    numpy.ndarray
         (..., 4) array of Miller-Bravais crystallographic indices.
     
     Raises
@@ -45,19 +46,19 @@ def plane3to4(indices):
     
     return newindices
 
-def plane4to3(indices):
+def plane4to3(indices: npt.ArrayLike) -> np.ndarray:
     """
     Converts 4-term hexagonal Miller-Bravias (hkil) plane indices to 3-term 
     Miller (hkl) indices.
     
     Parameters
     ----------
-    indices : np.ndarray of int
+    indices : array-like object
         (..., 4) array of Miller-Bravais crystallographic indices.
    
     Returns
     -------
-    np.ndarray of int
+    numpy.ndarray
         (..., 3) array of Miller crystallographic indices.
    
     Raises
@@ -80,19 +81,19 @@ def plane4to3(indices):
     
     return newindices
 
-def vector3to4(indices):
+def vector3to4(indices: npt.ArrayLike) -> np.ndarray:
     """
     Converts 3-term Miller [uvw] vector indices to 4-term hexagonal [uvtw]
     Miller-Bravias indices. 
     
     Parameters
     ----------
-    indices : np.ndarray
+    indices : array-like object
         (..., 3) array of Miller crystallographic indices.
    
     Returns
     -------
-    np.ndarray
+    numpy.ndarray
         (..., 4) array of Miller-Bravais crystallographic indices.
     
     Raises
@@ -114,19 +115,19 @@ def vector3to4(indices):
     
     return newindices
     
-def vector4to3(indices):
+def vector4to3(indices: npt.ArrayLike) -> np.ndarray:
     """
     Converts 4-term hexagonal Miller-Bravias [uvtw] vector indices to 3-term 
     Miller [uvw] indices.
     
     Parameters
     ----------
-    indices : np.ndarray of int
+    indices : array-like object
         (..., 4) array of Miller-Bravais crystallographic indices.
    
     Returns
     -------
-    np.ndarray of int
+    numpy.ndarray
         (..., 3) array of Miller crystallographic indices.
    
     Raises
@@ -149,14 +150,15 @@ def vector4to3(indices):
     
     return newindices
 
-def vector_crystal_to_cartesian(indices, box):
+def vector_crystal_to_cartesian(indices: npt.ArrayLike,
+                                box) -> np.ndarray:
     """
     Converts crystal indices to Cartesian vectors relative
     to a given lattice box. 
     
     Parameters
     ----------
-    indices : np.ndarray
+    indices : array-like object
         (..., 3) array of [uvw] Miller crystallographic indices or 
         (..., 4) array of [uvtw] Miller-Bravais crystallographic indices.
     box : atomman.Box
@@ -164,7 +166,7 @@ def vector_crystal_to_cartesian(indices, box):
    
     Returns
     -------
-    np.ndarray of float
+    numpy.ndarray
         (..., 3) array of Cartesian vectors.
         
     Raises
@@ -186,14 +188,15 @@ def vector_crystal_to_cartesian(indices, box):
 
     return indices.dot(box.vects)
     
-def vector_primitive_to_conventional(indices, setting='p'):
+def vector_primitive_to_conventional(indices: npt.ArrayLike,
+                                     setting: str = 'p') -> np.ndarray:
     """
     Converts crystal indices relative to a primitive cell 
     to indices relative to a conventional cell in a specified setting.
     
     Parameters
     ----------
-    indices : np.ndarray
+    indices : array-like object
         (..., 3) array of [uvw] Miller crystallographic indices
         relative to the primitive cell
     setting : str
@@ -203,7 +206,7 @@ def vector_primitive_to_conventional(indices, setting='p'):
    
     Returns
     -------
-    np.ndarray of float
+    numpy.ndarray
         (..., 3) array of [uvw] Miller crystallographic indices
         relative to the conventional cell
         
@@ -246,14 +249,15 @@ def vector_primitive_to_conventional(indices, setting='p'):
     
     return indices.dot(lat)
 
-def vector_conventional_to_primitive(indices, setting='p'):
+def vector_conventional_to_primitive(indices: npt.ArrayLike,
+                                     setting: str = 'p') -> np.ndarray:
     """
     Converts crystal indices relative to a conventional cell 
     in a specified setting to indices relative to a primitive cell.
     
     Parameters
     ----------
-    indices : np.ndarray
+    indices : array-like object
         (..., 3) array of [uvw] Miller crystallographic indices
         relative to the conventional cell
     setting : str
@@ -263,13 +267,13 @@ def vector_conventional_to_primitive(indices, setting='p'):
    
     Returns
     -------
-    np.ndarray of float
+    numpy.ndarray
         (..., 3) array of [uvw] Miller crystallographic indices
         relative to the primitive cell
         
     Raises
     ------
-    ValuenError
+    ValueError
         If indices dimensions are not (..., 3) or if an unknown setting
         value is given.
     """
@@ -305,7 +309,8 @@ def vector_conventional_to_primitive(indices, setting='p'):
     
     return indices.dot(lat)
 
-def plane_crystal_to_cartesian(indices, box):
+def plane_crystal_to_cartesian(indices: npt.ArrayLike,
+                               box) -> np.ndarray:
     """
     Converts crystal planar indices to Cartesian plane normal vectors relative
     to a given lattice box.  Note: the algorithm used requires that the planar
@@ -313,7 +318,7 @@ def plane_crystal_to_cartesian(indices, box):
     
     Parameters
     ----------
-    indices : np.ndarray
+    indices : array-like object
         (..., 3) array of [hkl] Miller crystallographic indices or 
         (..., 4) array of [hkil] Miller-Bravais crystallographic indices.
     box : atomman.Box
@@ -321,7 +326,7 @@ def plane_crystal_to_cartesian(indices, box):
    
     Returns
     -------
-    np.ndarray of float
+    numpy.ndarray
         (..., 3) array of Cartesian vectors corresponding to plane normals.
         
     Raises
@@ -353,6 +358,18 @@ def plane_crystal_to_cartesian(indices, box):
         """
         Finds the Cartesian plane normal for a single 3 index Miller crystal
         plane and a box.        
+
+        Parameters
+        ----------
+        indices : numpy.ndarray
+            The 3 index Miller crystal plane
+        box : atomman.Box
+            The unit cell box.
+
+        Returns
+        -------
+        numpy.ndarray
+            The Cartesian plane normal vector.
         """
         # Find two in-plane box vectors
         if indices[0] != 0:

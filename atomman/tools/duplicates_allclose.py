@@ -10,22 +10,27 @@ import numpy as np
 
 __all__ = ['duplicates_allclose']
 
-pdapply = curry(pd.DataFrame.apply)  # pylint: disable=invalid-name
-sort_values = curry(pd.DataFrame.sort_values)  # pylint: disable=invalid-name
-pdall = curry(pd.DataFrame.all)  # pylint: disable=invalid-name
-duplicated = curry(pd.DataFrame.duplicated)  # pylint: disable=invalid-name
-diff = curry(pd.DataFrame.diff)  # pylint: disable=invalid-name
-npappend = curry(np.append)  # pylint: disable=invalid-name
+# curry DataFrame methods
+pdapply = curry(pd.DataFrame.apply)  
+sort_values = curry(pd.DataFrame.sort_values)  
+pdall = curry(pd.DataFrame.all)  
+duplicated = curry(pd.DataFrame.duplicated)  
+diff = curry(pd.DataFrame.diff)
+npappend = curry(np.append)
 
 
 def sequence(*args):
     """Compose functions in order
 
-    Args:
-      args: the functions to compose
+    Parameters
+    ----------
+    args: functions
+      The functions to compose
 
-    Returns:
-      composed functions
+    Returns
+    -------
+    Functions
+    Composed functions
 
     >>> assert sequence(lambda x: x + 1, lambda x: x * 2)(3) == 8
     """
@@ -34,7 +39,8 @@ def sequence(*args):
 
 @curry
 def debug(statement, value):
-    """Useful debug for functional programming
+    """
+    Useful debug for functional programming
     """
     print()
     print(statement)
@@ -42,15 +48,20 @@ def debug(statement, value):
     return value
 
 
-def find_duplicates_col(dataframe):
-    """Find duplicates column by column.
+def find_duplicates_col(dataframe: pd.DataFrame) -> pd.DataFrame:
+    """
+    Find duplicates column by column.
 
-    Args:
-      dataframe: a dataframe
+    Parameters
+    ----------
+    dataframe: pandas.DataFrame
+        A dataframe to search.
 
-    Returns:
-      a dataframe of the same shape but with bool values indicating
-      neighboring duplicates in the same column
+    Returns
+    -------
+    pandas.DataFrame
+        a dataframe of the same shape as the input but with bool values
+        indicating neighboring duplicates in the same column
 
     >>> find_duplicates_col(pd.DataFrame(
     ...     dict(A=['a', 'a', 'd'],
@@ -71,18 +82,26 @@ def find_duplicates_col(dataframe):
 
 
 @curry
-def duplicate_if_close(dataframe, fcols):
-    """Find neighboring column duplicates based tolerances.
+def duplicate_if_close(dataframe: pd.DataFrame,
+                       fcols: dict) -> pd.DataFrame:
+    """
+    Find neighboring column duplicates based tolerances.
 
     This only works with data frames containing numbers.
 
-    Args:
-      dataframe: a dataframe
-      fcols: the absolute tolerances
+    Parameters
+    ----------
+    dataframe: pandas.DataFrame
+        A dataframe
+    fcols: dict
+        The column names (keys) that are tested using absolute tolerances
+        (values).
 
-    Returns:
-      a dataframe of the same shape but with bool values indicating
-      neighboring close values in the same column
+    Returns
+    -------
+    pandas.DataFrame
+        a dataframe of the same shape but with bool values indicating
+        neighboring close values in the same column
 
     >>> duplicate_if_close(pd.DataFrame(
     ...     dict(A=[1.01, 1.02, 1.03],
@@ -103,18 +122,27 @@ def duplicate_if_close(dataframe, fcols):
 
 
 @curry
-def fduplicates(dcols, fcols, dataframe):
-    """Check for mixture of exact duplicates and closeness
+def fduplicates(dcols: list,
+                fcols: dict,
+                dataframe: pd.DataFrame) -> pd.DataFrame:
+    """
+    Check for mixture of exact duplicates and closeness
 
-    Args:
-      dcols: the columns to check for exact duplicates
-      fcols: the columns to check for closeness, a dict with column names as
-       keys and tolerances as values
-      dataframe: the dataframe
+    Parameters
+    ----------
+    dcols: list
+        The column names that are tested for exact duplicates.
+    fcols: dict
+        The column names (keys) that are tested using absolute tolerances
+        (values).
+    dataframe: pandas.DataFrame
+        The dataframe being operated on
 
-    Returns:
-      a dataframe of the same shape but with bool values indicating
-      neighboring close values in the same column
+    Returns
+    -------
+    pandas.DataFrame
+        A dataframe of the same shape but with bool values indicating
+        neighboring close values in the same column
 
     >>> fduplicates(
     ...     dcols=['C', 'D', 'E'],
@@ -181,7 +209,7 @@ def duplicates_allclose(dataframe, dcols, fcols):
         duplicated(subset=dcols, keep=False) if dcols else alltrue,
         lambda x: dataframe[x],
         sort_values(by=dcols + list(fcols.keys())),
-        fduplicates(dcols, fcols), # pylint: disable=no-value-for-parameter
+        fduplicates(dcols, fcols),
         pdapply(func=pdall, axis=1),
     )
 

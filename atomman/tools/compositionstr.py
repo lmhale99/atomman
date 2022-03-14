@@ -3,7 +3,7 @@
 # http://www.numpy.org/
 import numpy as np
 
-def compositionstr(symbols, counts):
+def compositionstr(symbols: list, counts: list) -> str:
     """
     Generates a reduced composition string based on symbols and counts.
     
@@ -28,7 +28,7 @@ def compositionstr(symbols, counts):
         else:
             sym_dict[symbol] = count
     
-    gcd = np.gcd.reduce(list(sym_dict.values())) # pylint: disable=no-member
+    gcd = np.gcd.reduce(list(sym_dict.values()))
     
     composition =''
     for symbol in sorted(sym_dict):

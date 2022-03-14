@@ -1,12 +1,17 @@
 # coding: utf-8
 
+# Standard Python imports
+from typing import Optional
+
 # http://www.numpy.org/
 import numpy as np
 
 __all__ = ['iscubic', 'ishexagonal', 'istetragonal', 'isrhombohedral',
            'isorthorhombic', 'ismonoclinic', 'istriclinic', 'identifyfamily']
 
-def iscubic(box, rtol=1e-05, atol=1e-08):
+def iscubic(box, 
+            rtol: float = 1e-05,
+            atol: float = 1e-08) -> bool:
     """
     Tests if a box is consistent with a standard cubic cell:
     a = b = c
@@ -32,7 +37,9 @@ def iscubic(box, rtol=1e-05, atol=1e-08):
             and np.isclose(box.beta, 90.0, atol=atol, rtol=rtol)
             and np.isclose(box.gamma, 90.0, atol=atol, rtol=rtol))
 
-def ishexagonal(box, rtol=1e-05, atol=1e-08):
+def ishexagonal(box,
+                rtol: float = 1e-05,
+                atol: float = 1e-08) -> bool:
     """
     Tests if a box is consistent with a standard hexagonal cell:
     a = b != c
@@ -58,7 +65,9 @@ def ishexagonal(box, rtol=1e-05, atol=1e-08):
             and np.isclose(box.beta, 90.0, atol=atol, rtol=rtol)
             and np.isclose(box.gamma, 120.0, atol=atol, rtol=rtol))
 
-def istetragonal(box, rtol=1e-05, atol=1e-08):
+def istetragonal(box,
+                 rtol: float = 1e-05,
+                 atol: float = 1e-08) -> bool:
     """
     Tests if a box is consistent with a standard tetragonal cell:
     a = b != c
@@ -84,7 +93,9 @@ def istetragonal(box, rtol=1e-05, atol=1e-08):
             and np.isclose(box.beta, 90.0, atol=atol, rtol=rtol)
             and np.isclose(box.gamma, 90.0, atol=atol, rtol=rtol))
 
-def isrhombohedral(box, rtol=1e-05, atol=1e-08):
+def isrhombohedral(box,
+                   rtol: float = 1e-05,
+                   atol: float = 1e-08) -> bool:
     """
     Tests if a box is consistent with a standard rhombohedral cell:
     a = b = c
@@ -110,7 +121,9 @@ def isrhombohedral(box, rtol=1e-05, atol=1e-08):
             and np.isclose(box.alpha, box.gamma, atol=atol, rtol=rtol)
             and not np.isclose(box.alpha, 90.0, atol=atol, rtol=rtol))
 
-def isorthorhombic(box, rtol=1e-05, atol=1e-08):
+def isorthorhombic(box,
+                   rtol: float = 1e-05,
+                   atol: float = 1e-08) -> bool:
     """
     Tests if a box is consistent with a standard orthorhombic cell:
     a != b != c
@@ -136,7 +149,9 @@ def isorthorhombic(box, rtol=1e-05, atol=1e-08):
             and np.isclose(box.beta, 90.0, atol=atol, rtol=rtol)
             and np.isclose(box.gamma, 90.0, atol=atol, rtol=rtol))
 
-def ismonoclinic(box, rtol=1e-05, atol=1e-08):
+def ismonoclinic(box,
+                 rtol: float = 1e-05,
+                 atol: float = 1e-08) -> bool:
     """
     Tests if a box is consistent with a standard monoclinic cell:
     a != b != c
@@ -163,7 +178,9 @@ def ismonoclinic(box, rtol=1e-05, atol=1e-08):
             and not np.isclose(box.beta, 90.0, atol=atol, rtol=rtol)
             and np.isclose(box.gamma, 90.0, atol=atol, rtol=rtol))
 
-def istriclinic(box, rtol=1e-05, atol=1e-08):
+def istriclinic(box,
+                rtol: float = 1e-05,
+                atol: float = 1e-08) -> bool:
     """
     Tests if a box is consistent with a standard triclinic cell:
     a != b != c
@@ -190,7 +207,9 @@ def istriclinic(box, rtol=1e-05, atol=1e-08):
             and not np.isclose(box.alpha, box.beta, atol=atol, rtol=rtol)
             and not np.isclose(box.alpha, box.gamma, atol=atol, rtol=rtol))
 
-def identifyfamily(box, rtol=1e-05, atol=1e-08):
+def identifyfamily(box, 
+                   rtol: float = 1e-05,
+                   atol: float = 1e-08) -> Optional[str]:
     """
     Tests if a box is consistent with a standard representation
     of a crystal system cell.
@@ -215,19 +234,19 @@ def identifyfamily(box, rtol=1e-05, atol=1e-08):
     ValueError
         If box is not consistent with a standard cell.
     """
-    if iscubic(box, rtol=1e-05, atol=1e-08):
+    if iscubic(box, rtol=rtol, atol=atol):
         return 'cubic'
-    elif ishexagonal(box, rtol=1e-05, atol=1e-08):
+    elif ishexagonal(box, rtol=rtol, atol=atol):
         return 'hexagonal'
-    elif istetragonal(box, rtol=1e-05, atol=1e-08):
+    elif istetragonal(box, rtol=rtol, atol=atol):
         return 'tetragonal'
-    elif isrhombohedral(box, rtol=1e-05, atol=1e-08):
+    elif isrhombohedral(box, rtol=rtol, atol=atol):
         return 'rhombohedral'
-    elif isorthorhombic(box, rtol=1e-05, atol=1e-08):
+    elif isorthorhombic(box, rtol=rtol, atol=atol):
         return 'orthorhombic'
-    elif ismonoclinic(box, rtol=1e-05, atol=1e-08):
+    elif ismonoclinic(box, rtol=rtol, atol=atol):
         return 'monoclinic'
-    elif istriclinic(box, rtol=1e-05, atol=1e-08):
+    elif istriclinic(box, rtol=rtol, atol=atol):
         return 'triclinic'
     else:
         None

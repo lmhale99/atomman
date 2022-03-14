@@ -1,6 +1,8 @@
 # coding: utf-8
+
 # Standard Python libraries
 import ast
+from typing import Optional
 
 # https://pypi.python.org/pypi/numericalunits
 import numericalunits as nu
@@ -10,6 +12,7 @@ from DataModelDict import DataModelDict as DM
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 def build_unit():
     """
@@ -30,7 +33,7 @@ def build_unit():
         if key[:1] != '_' and isinstance(value, float):
             unit[key] = value
 
-def reset_units(seed=None, **kwargs):
+def reset_units(seed: Optional[int] = None, **kwargs):
     """
     Extends numericalunits.reset_units() by allowing for working units to be
     defined.  If no working units are specified, then random working units are
@@ -110,7 +113,7 @@ def reset_units(seed=None, **kwargs):
     else:
         raise ValueError('seed cannot be given with any other parameters')
 
-def set_literal(term):
+def set_literal(term: str) -> npt.ArrayLike:
     """
     Convert string 'value unit' to numbers in working units.
     
@@ -123,7 +126,7 @@ def set_literal(term):
         
     Returns
     -------
-    numpy.ndarray
+    float or numpy.ndarray
         The numerical value of term in working units.
         
     Raises
@@ -154,45 +157,47 @@ def set_literal(term):
             except: 
                 raise ValueError('Failed to parse term')
 
-def set_in_units(value, units):
+def set_in_units(value: npt.ArrayLike,
+                 units: str) -> npt.ArrayLike:
     """
     Convert value from specified units to working units.
     
     Parameters
     ----------
-    value : int, float, numpy.ndarray, etc.
+    value : array-like object
         A numerical value or list/array of values.
     units : str
         The units that value is in.
         
     Returns
     -------
-    numpy.ndarray
+    float or numpy.ndarray
         The given value converted from the specified units to working units.
     """
     units = parse(units)
     return np.asarray(value) * units
 
-def get_in_units(value, units):
+def get_in_units(value: npt.ArrayLike,
+                 units: str) -> npt.ArrayLike:
     """
     Convert value from working units to specified units.
     
     Parameters
     ----------
-    value : int, float, numpy.ndarray, etc.
+    value : array-like object
         A numerical value or list/array of values.
     units : str
         The units to convert value to (from working units).
         
     Returns
     -------
-    numpy.ndarray
+    float or numpy.ndarray
         The given value converted to the specified units from working units.
     """
     units = parse(units)
     return np.asarray(value) / units
 
-def value_unit(term):
+def value_unit(term: dict) -> npt.ArrayLike:
     """
     Reads numerical value from dictionary containing 'value' and 'unit' keys.
     
@@ -203,7 +208,7 @@ def value_unit(term):
         
     Returns
     -------
-    numpy.ndarray
+    float or numpy.ndarray
         The result of calling set_in_units() by passing the dictionary keys 
         'value' and 'unit' as parameters.
     
@@ -220,7 +225,7 @@ def value_unit(term):
     
     return value
     
-def error_unit(term):
+def error_unit(term: dict) -> npt.ArrayLike:
     """
     Reads numerical error from dictionary containing 'error' and 'unit' keys.
     
@@ -231,7 +236,7 @@ def error_unit(term):
         
     Returns
     -------
-    numpy.ndarray
+    float or numpy.ndarray
         The result of calling set_in_units() by passing the dictionary keys 
         'error' and 'unit' as parameters.
     
@@ -248,17 +253,19 @@ def error_unit(term):
     
     return error
     
-def model(value, units=None, error=None):
+def model(value: npt.ArrayLike,
+          units: Optional[str] = None,
+          error: Optional[npt.ArrayLike] = None) -> DM:
     """
     Generates DataModelDict representation of data.
     
     Parameters
     ----------
-    value : float, numpy.ndarray, etc.
+    value : array-like object
         A numerical value or list/array of values.
-    units : str
+    units : str, optional
         The units to convert value to (from working units).
-    error : float, numpy.ndarray, etc., optional
+    error : array-like object or None, optional
         A value error to include.  If given, must be the same
         size/shape as value.
     
@@ -300,7 +307,7 @@ def model(value, units=None, error=None):
         datamodel['unit'] = units
     return datamodel
 
-def parse(units):
+def parse(units: Optional[str]) -> float:
     """
     Convert units as strings (or None) into scaling numbers.  This function
     allows for complex unit definitions with operators:
