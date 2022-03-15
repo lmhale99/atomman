@@ -1,13 +1,35 @@
 # coding: utf-8
 
+# Standard Python imports
+from typing import Optional, Union
+
+# https://github.com/usnistgov/potentials
+from potentials.record import BasePotentalLAMMPS
+
+# atomman imports
 from . import Database
-def load_lammps_potential(name=None, key=None, id=None,
-                          potid=None, potkey=None, units=None,
-                          atom_style=None, pair_style=None, status='active',
-                          symbols=None, elements=None, pot_dir_style=None,
-                          kim_models=None, kim_api_directory=None, kim_models_file=None, 
-                          local=None, remote=None, database=None,
-                          getfiles=False, prompt=True, verbose=False):
+
+def load_lammps_potential(name: Union[str, list, None] = None,
+                          key: Union[str, list, None] = None,
+                          id: Union[str, list, None] = None,
+                          potid: Union[str, list, None] = None,
+                          potkey: Union[str, list, None] = None,
+                          units: Union[str, list, None] = None,
+                          atom_style: Union[str, list, None] = None,
+                          pair_style: Union[str, list, None] = None,
+                          status: Union[str, list, None] = 'active',
+                          symbols: Union[str, list, None] = None,
+                          elements: Union[str, list, None] = None,
+                          pot_dir_style: Optional[str] = None,
+                          kim_models: Optional[list] = None,
+                          kim_api_directory: Optional[str] = None,
+                          kim_models_file: Optional[str] = None, 
+                          local: Optional[bool] = None,
+                          remote: Optional[bool] = None,
+                          database: Optional[Database] = None,
+                          getfiles: bool = False,
+                          prompt: bool = True,
+                          verbose: bool = False) -> BasePotentalLAMMPS:
     """
     Loads a LAMMPS potential from the NIST Interatomic Potentials Repository
     or from a local copy of the repository.  Will issue a prompt if

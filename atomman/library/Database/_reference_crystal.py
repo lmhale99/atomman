@@ -1,16 +1,42 @@
 # coding: utf-8
+
+# Standard Python imports
 from pathlib import Path
+from typing import Optional, Union, Tuple
+
+from yabadaba.record import Record
+
+# http://www.numpy.org/
+import numpy as np
+
+# https://pandas.pydata.org/
+import pandas as pd
+
+# https://docs.python-requests.org/
 import requests
 
+# atomman imports
 from ...load import load_pymatgen_Structure, load_poscar
 from ..record import ReferenceCrystal
 from ...tools import aslist
 
-def get_reference_crystals(self, name=None, key=None, id=None, sourcename=None,
-                           sourcelink=None, crystalfamily=None,
-                           composition=None, symbols=None, natoms=None,
-                           natypes=None, local=None, remote=None, 
-                           refresh_cache=False, return_df=False, verbose=False):
+def get_reference_crystals(self,
+                           name: Union[str, list, None] = None,
+                           key: Union[str, list, None] = None,
+                           id: Union[str, list, None] = None,
+                           sourcename: Union[str, list, None] = None,
+                           sourcelink: Union[str, list, None] = None,
+                           crystalfamily: Union[str, list, None] = None,
+                           composition: Union[str, list, None] = None,
+                           symbols: Union[str, list, None] = None,
+                           natoms: Union[int, list, None] = None,
+                           natypes: Union[int, list, None] = None,
+                           local: Optional[bool] = None,
+                           remote: Optional[bool] = None, 
+                           refresh_cache: bool = False,
+                           return_df: bool = False,
+                           verbose: bool = False
+                           ) -> Union[np.ndarray, Tuple[np.ndarray, pd.DataFrame]]:
     """
     Gets all matching reference crystals from the database.
     
@@ -62,6 +88,13 @@ def get_reference_crystals(self, name=None, key=None, id=None, sourcename=None,
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
+    
+    Returns
+    -------
+    numpy.ndarray
+        The matching record objects
+    pandas.DataFrame
+        A table of the associated record metadata, returned if return_df = True.
     """
 
     return self.get_records(
@@ -94,11 +127,22 @@ def promptfxn(df):
 
     return js[i]
 
-def get_reference_crystal(self, name=None, key=None, id=None, sourcename=None,
-                          sourcelink=None, crystalfamily=None, composition=None,
-                          symbols=None, natoms=None, natypes=None, local=None,
-                          remote=None, prompt=True, refresh_cache=False,
-                          verbose=False):
+def get_reference_crystal(self, 
+                          name: Union[str, list, None] = None,
+                          key: Union[str, list, None] = None,
+                          id: Union[str, list, None] = None,
+                          sourcename: Union[str, list, None] = None,
+                          sourcelink: Union[str, list, None] = None,
+                          crystalfamily: Union[str, list, None] = None,
+                          composition: Union[str, list, None] = None,
+                          symbols: Union[str, list, None] = None,
+                          natoms: Union[int, list, None] = None,
+                          natypes: Union[int, list, None] = None,
+                          local: Optional[bool] = None,
+                          remote: Optional[bool] = None,
+                          prompt: bool = True,
+                          refresh_cache: bool = False,
+                          verbose: bool = False) -> Record:
     """
     Gets exactly one matching reference crystal from the database.
     
@@ -151,6 +195,11 @@ def get_reference_crystal(self, name=None, key=None, id=None, sourcename=None,
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
+
+    Returns
+    -------
+    yabadaba.record.Record
+        The matching record object
     """
     return self.get_record(
         style='reference_crystal', name=name, local=local, remote=remote, prompt=prompt,
@@ -159,12 +208,25 @@ def get_reference_crystal(self, name=None, key=None, id=None, sourcename=None,
         crystalfamily=crystalfamily, composition=composition,
         symbols=symbols, natoms=natoms, natypes=natypes)
 
-def retrieve_reference_crystal(self, name=None, dest=None, key=None, id=None, sourcename=None,
-                               sourcelink=None, crystalfamily=None, composition=None,
-                               symbols=None, natoms=None, natypes=None,
-                               local=None, remote=None, prompt=True,
-                               format='json', indent=4, refresh_cache=False,
-                               verbose=False):
+def retrieve_reference_crystal(self,
+                               name: Union[str, list, None] = None,
+                               dest: Optional[Path] = None,
+                               key: Union[str, list, None] = None,
+                               id: Union[str, list, None] = None,
+                               sourcename: Union[str, list, None] = None,
+                               sourcelink: Union[str, list, None] = None,
+                               crystalfamily: Union[str, list, None] = None,
+                               composition: Union[str, list, None] = None,
+                               symbols: Union[str, list, None] = None,
+                               natoms: Union[int, list, None] = None,
+                               natypes: Union[int, list, None] = None,
+                               local: Optional[bool] = None,
+                               remote: Optional[bool] = None, 
+                               prompt: bool = True,
+                               format: str = 'json',
+                               indent: int = 4,
+                               refresh_cache: bool = False,
+                               verbose: bool = False):
     """
     Gets a single matching relaxed crystal from the database and saves it to a
     file based on the record's name.
@@ -244,11 +306,20 @@ def retrieve_reference_crystal(self, name=None, dest=None, key=None, id=None, so
         crystalfamily=crystalfamily, composition=composition,
         symbols=symbols, natoms=natoms, natypes=natypes)
 
-def download_reference_crystals(self, name=None, key=None, id=None,
-                                sourcename=None, sourcelink=None,
-                                crystalfamily=None, composition=None,
-                                symbols=None, natoms=None, natypes=None, keyword=None,
-                                overwrite=False, return_records=False, verbose=False):
+def download_reference_crystals(self, 
+                                name: Union[str, list, None] = None,
+                                key: Union[str, list, None] = None,
+                                id: Union[str, list, None] = None,
+                                sourcename: Union[str, list, None] = None,
+                                sourcelink: Union[str, list, None] = None,
+                                crystalfamily: Union[str, list, None] = None,
+                                composition: Union[str, list, None] = None,
+                                symbols: Union[str, list, None] = None,
+                                natoms: Union[int, list, None] = None,
+                                natypes: Union[int, list, None] = None,
+                                overwrite: bool = False,
+                                return_records: bool = False,
+                                verbose: bool = False) -> Optional[np.ndarray]:
     """
     Download reference records from the remote and save to localpath.
     
@@ -291,6 +362,11 @@ def download_reference_crystals(self, name=None, key=None, id=None,
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
+    
+    Returns
+    -------
+    numpy.ndarray
+        The matching records - returned if return_records=True
     """
 
     return self.download_records(
@@ -300,8 +376,13 @@ def download_reference_crystals(self, name=None, key=None, id=None,
         crystalfamily=crystalfamily, composition=composition,
         symbols=symbols, natoms=natoms, natypes=natypes)
 
-def fetch_reference_crystal(self, id, api_key=None, local=None, remote=None, 
-                            refresh_cache=False, verbose=False):
+def fetch_reference_crystal(self,
+                            id: str,
+                            api_key: Optional[str] = None,
+                            local: Optional[bool] = None,
+                            remote: Optional[bool] = None, 
+                            refresh_cache: bool = False,
+                            verbose: bool = False) -> Record:
     """
     Retrieves a single reference crystal.  First, the database is checked
     for matches with the DOI, then with the record name.  If no matches are found
@@ -333,6 +414,11 @@ def fetch_reference_crystal(self, id, api_key=None, local=None, remote=None,
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
+    
+    Returns
+    -------
+    yabadaba.record.Record
+        The matching reference crystal record.
     """
     if local is not False or remote is not False:
         # Try fetching based on doi
@@ -354,7 +440,9 @@ def fetch_reference_crystal(self, id, api_key=None, local=None, remote=None,
 
     return record
 
-def fetch_mp_crystals(self, id, api_key=None):
+def fetch_mp_crystals(self,
+                      id: str,
+                      api_key: Optional[str] = None) -> list:
     """
     Retrieves reference crystals from Materials Project based on id(s).
 
@@ -365,6 +453,11 @@ def fetch_mp_crystals(self, id, api_key=None):
     api_key : str, optional
         The user's Materials Project API key or path to a file containing the key.
         If not given, will use the "MAPI_KEY" environment variable.
+    
+    Returns
+    -------
+    list
+        All matching reference crystals retrieved.
     """
 
     # Function-specific imports
@@ -397,7 +490,9 @@ def fetch_mp_crystals(self, id, api_key=None):
     
     return records
 
-def fetch_mp_crystal(self, id, api_key=None):
+def fetch_mp_crystal(self,
+                     id: str,
+                     api_key: Optional[str] = None) -> Record:
     """
     Retrieves a single reference crystal from Materials Project based on id.
 
@@ -408,6 +503,11 @@ def fetch_mp_crystal(self, id, api_key=None):
     api_key : str, optional
         The user's Materials Project API key. If not given, will use "MAPI_KEY"
         environment variable.
+    
+    Returns
+    -------
+    Record
+        The retrieved reference crystal.
     """
     # Read api_key from a file
     if Path(api_key).is_file():
@@ -420,7 +520,7 @@ def fetch_mp_crystal(self, id, api_key=None):
     else:
         raise ValueError('Exactly one record not found?')
 
-def fetch_oqmd_crystal(self, id):
+def fetch_oqmd_crystal(self, id: str) -> Record:
     """
     Retrieves a single reference crystal from OQMD based on id.
 
@@ -428,6 +528,11 @@ def fetch_oqmd_crystal(self, id):
     ----------
     id : str
         The OQMD entry number with "oqmd-" prefix.
+
+    Returns
+    -------
+    Record
+        The retrieved reference crystal.
     """
     
     # Build basic record content
@@ -461,9 +566,12 @@ def fetch_oqmd_crystal(self, id):
     
     return record
 
-def save_reference_crystal(self, crystal, overwrite=False, verbose=False):
+def save_reference_crystal(self,
+                           crystal: Record,
+                           overwrite: bool = False,
+                           verbose: bool = False):
     """
-    Saves a citation to the local database.
+    Saves a reference crystal to the local database.
     
     Parameters
     ----------

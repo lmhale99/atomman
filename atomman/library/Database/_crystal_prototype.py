@@ -1,11 +1,36 @@
 # coding: utf-8
 
-def get_crystal_prototypes(self, name=None, id=None, key=None, commonname=None,
-                           prototype=None, pearson=None, strukturbericht=None,
-                           sg_number=None, sg_hm=None, sg_schoenflies=None,
-                           crystalfamily=None, natypes=None, local=None,
-                           remote=None, refresh_cache=False, return_df=False,
-                           verbose=False):
+# Standard Python imports
+from typing import Optional, Union, Tuple
+from pathlib import Path
+
+from yabadaba.record import Record
+
+# http://www.numpy.org/
+import numpy as np
+
+# https://pandas.pydata.org/
+import pandas as pd
+
+def get_crystal_prototypes(self,
+                           name: Union[str, list, None] = None,
+                           id: Union[str, list, None] = None,
+                           key: Union[str, list, None] = None,
+                           commonname: Union[str, list, None] = None,
+                           prototype: Union[str, list, None] = None,
+                           pearson: Union[str, list, None] = None,
+                           strukturbericht: Union[str, list, None] = None,
+                           sg_number: Union[int, list, None] = None,
+                           sg_hm: Union[str, list, None] = None,
+                           sg_schoenflies: Union[str, list, None] = None,
+                           crystalfamily: Union[str, list, None] = None,
+                           natypes: Union[int, list, None] = None,
+                           local: Optional[bool] = None,
+                           remote: Optional[bool] = None,
+                           refresh_cache: bool = False,
+                           return_df: bool = False,
+                           verbose: bool = False
+                           ) -> Union[np.ndarray, Tuple[np.ndarray, pd.DataFrame]]:
     """
     Gets all matching crystal prototypes from the database.
     
@@ -57,6 +82,13 @@ def get_crystal_prototypes(self, name=None, id=None, key=None, commonname=None,
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
+    
+    Returns
+    -------
+    numpy.ndarray
+        The matching record objects
+    pandas.DataFrame
+        A table of the associated record metadata, returned if return_df = True.
     """
 
     return self.get_records(
@@ -67,12 +99,24 @@ def get_crystal_prototypes(self, name=None, id=None, key=None, commonname=None,
         sg_number=sg_number, sg_hm=sg_hm, sg_schoenflies=sg_schoenflies,
         crystalfamily=crystalfamily, natypes=natypes)    
 
-def get_crystal_prototype(self, name=None, id=None, key=None, commonname=None,
-                          prototype=None, pearson=None, strukturbericht=None,
-                          sg_number=None, sg_hm=None, sg_schoenflies=None,
-                          crystalfamily=None, natypes=None, local=None,
-                          remote=None, prompt=True, refresh_cache=False,
-                          verbose=False):
+def get_crystal_prototype(self, 
+                          name: Union[str, list, None] = None,
+                          id: Union[str, list, None] = None,
+                          key: Union[str, list, None] = None,
+                          commonname: Union[str, list, None] = None,
+                          prototype: Union[str, list, None] = None,
+                          pearson: Union[str, list, None] = None,
+                          strukturbericht: Union[str, list, None] = None,
+                          sg_number: Union[int, list, None] = None,
+                          sg_hm: Union[str, list, None] = None,
+                          sg_schoenflies: Union[str, list, None] = None,
+                          crystalfamily: Union[str, list, None] = None,
+                          natypes: Union[int, list, None] = None,
+                          local: Optional[bool] = None,
+                          remote: Optional[bool] = None,
+                          prompt: bool = True,
+                          refresh_cache: bool = False,
+                          verbose: bool = False) -> Record:
     
     """
     Gets exactly one matching crystal prototype from the database.
@@ -126,23 +170,41 @@ def get_crystal_prototype(self, name=None, id=None, key=None, commonname=None,
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
+    
+    Returns
+    -------
+    yabadaba.record.Record
+        The matching record object
     """
     return self.get_record(
-        style='crystal_prototype', name=name, local=True, remote=False,
+        style='crystal_prototype', name=name, local=local, remote=remote,
         prompt=prompt, refresh_cache=refresh_cache, verbose=verbose,
         id=id, key=key, commonname=commonname, prototype=prototype,
         pearson=pearson, strukturbericht=strukturbericht,
         sg_number=sg_number, sg_hm=sg_hm, sg_schoenflies=sg_schoenflies,
         crystalfamily=crystalfamily, natypes=natypes)
 
-def retrieve_crystal_prototype(self, name=None, dest=None, id=None, key=None,
-                               commonname=None, prototype=None, pearson=None,
-                               strukturbericht=None, sg_number=None,
-                               sg_hm=None, sg_schoenflies=None,
-                               crystalfamily=None, natypes=None,
-                               local=None, remote=None, prompt=True,
-                               format='json', indent=4, refresh_cache=False,
-                               verbose=False):
+def retrieve_crystal_prototype(self,
+                               name: Union[str, list, None] = None,
+                               dest: Optional[Path] = None,
+                               id: Union[str, list, None] = None,
+                               key: Union[str, list, None] = None,
+                               commonname: Union[str, list, None] = None,
+                               prototype: Union[str, list, None] = None,
+                               pearson: Union[str, list, None] = None,
+                               strukturbericht: Union[str, list, None] = None,
+                               sg_number: Union[int, list, None] = None,
+                               sg_hm: Union[str, list, None] = None,
+                               sg_schoenflies: Union[str, list, None] = None,
+                               crystalfamily: Union[str, list, None] = None,
+                               natypes: Union[int, list, None] = None,
+                               local: Optional[bool] = None,
+                               remote: Optional[bool] = None,
+                               prompt: bool = True,
+                               format: str = 'json',
+                               indent: int = 4,
+                               refresh_cache: bool = False,
+                               verbose: bool = False):
     """
     Gets a single matching crystal prototype from the database and saves it to a
     file based on the record's name.
@@ -223,13 +285,22 @@ def retrieve_crystal_prototype(self, name=None, dest=None, id=None, key=None,
         sg_number=sg_number, sg_hm=sg_hm, sg_schoenflies=sg_schoenflies,
         crystalfamily=crystalfamily, natypes=natypes)
 
-def download_crystal_prototypes(self, name=None, id=None, key=None,
-                                commonname=None, prototype=None,
-                                pearson=None, strukturbericht=None,
-                                sg_number=None, sg_hm=None, sg_schoenflies=None,
-                                crystalfamily=None, natypes=None,
-                                overwrite=False, return_records=False,
-                                verbose=False):
+def download_crystal_prototypes(self,
+                                name: Union[str, list, None] = None,
+                                id: Union[str, list, None] = None,
+                                key: Union[str, list, None] = None,
+                                commonname: Union[str, list, None] = None,
+                                prototype: Union[str, list, None] = None,
+                                pearson: Union[str, list, None] = None,
+                                strukturbericht: Union[str, list, None] = None,
+                                sg_number: Union[int, list, None] = None,
+                                sg_hm: Union[str, list, None] = None,
+                                sg_schoenflies: Union[str, list, None] = None,
+                                crystalfamily: Union[str, list, None] = None,
+                                natypes: Union[int, list, None] = None,
+                                overwrite: bool = False,
+                                return_records: bool = False,
+                                verbose: bool = False) -> Optional[np.ndarray]:
     """
     Downloads crystal prototypes from the remote to the local.
     
@@ -272,6 +343,11 @@ def download_crystal_prototypes(self, name=None, id=None, key=None,
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
+
+    Returns
+    -------
+    numpy.ndarray
+        The matching records - returned if return_records=True
     """
 
     return self.download_records(

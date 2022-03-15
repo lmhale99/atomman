@@ -1,6 +1,10 @@
-import potentials
+# coding: utf-8
 
-from ...tools import aslist
+# Standard Python imports
+from typing import Union
+
+# https://github.com/usnistgov/potentials
+import potentials
 
 class Database(potentials.Database):
     """
@@ -22,8 +26,11 @@ class Database(potentials.Database):
                                      fetch_oqmd_crystal, fetch_mp_crystals,
                                      fetch_reference_crystal)
 
-    def download_all(self, status=None, downloadfiles=True, overwrite=False,
-                     verbose=False):
+    def download_all(self,
+                     status: Union[str, list, None] = None,
+                     downloadfiles: bool = True,
+                     overwrite: bool = False,
+                     verbose: bool = False):
         """
         Downloads potential and structure-related records from the remote
         location to the local location.

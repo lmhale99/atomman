@@ -1,12 +1,38 @@
 # coding: utf-8
-        
-def get_relaxed_crystals(self, name=None, key=None, method=None, standing=None,
-                         family=None, parent_key=None, 
-                         potential_LAMMPS_id=None, potential_LAMMPS_key=None,
-                         potential_id=None, potential_key=None,
-                         symbols=None, natoms=None, natypes=None,
-                         local=None, remote=None, refresh_cache=False,
-                         return_df=False, verbose=False):
+
+# Standard Python imports
+from typing import Optional, Union, Tuple
+from pathlib import Path
+
+# https://github.com/usnistgov/yabadaba
+from yabadaba.record import Record
+
+# http://www.numpy.org/
+import numpy as np
+
+# https://pandas.pydata.org/
+import pandas as pd
+
+def get_relaxed_crystals(self,
+                         name: Union[str, list, None] = None,
+                         key: Union[str, list, None] = None,
+                         method: Union[str, list, None] = None,
+                         standing: Union[str, list, None] = None,
+                         family: Union[str, list, None] = None,
+                         parent_key: Union[str, list, None] = None, 
+                         potential_LAMMPS_id: Union[str, list, None] = None,
+                         potential_LAMMPS_key: Union[str, list, None] = None,
+                         potential_id: Union[str, list, None] = None,
+                         potential_key: Union[str, list, None] = None,
+                         symbols: Union[str, list, None] = None,
+                         natoms: Union[int, list, None] = None,
+                         natypes: Union[int, list, None] = None,
+                         local: Optional[bool] = None,
+                         remote: Optional[bool] = None,
+                         refresh_cache: bool = False,
+                         return_df: bool = False,
+                         verbose: bool = False
+                         ) -> Union[np.ndarray, Tuple[np.ndarray, pd.DataFrame]]:
     """
     Gets all matching relaxed crystals from the database.
     
@@ -64,6 +90,13 @@ def get_relaxed_crystals(self, name=None, key=None, method=None, standing=None,
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
+
+    Returns
+    -------
+    numpy.ndarray
+        The matching record objects
+    pandas.DataFrame
+        A table of the associated record metadata, returned if return_df = True.
     """
 
     return self.get_records(
@@ -99,13 +132,25 @@ def promptfxn(df):
 
     return js[i]
 
-def get_relaxed_crystal(self, name=None, key=None, method=None, standing=None,
-                        family=None, parent_key=None, 
-                        potential_LAMMPS_id=None, potential_LAMMPS_key=None,
-                        potential_id=None, potential_key=None,
-                        symbols=None, natoms=None, natypes=None, keyword=None,
-                        local=None, remote=None, prompt=True,
-                        refresh_cache=False, verbose=False):
+def get_relaxed_crystal(self,
+                        name: Union[str, list, None] = None,
+                        key: Union[str, list, None] = None,
+                        method: Union[str, list, None] = None,
+                        standing: Union[str, list, None] = None,
+                        family: Union[str, list, None] = None,
+                        parent_key: Union[str, list, None] = None, 
+                        potential_LAMMPS_id: Union[str, list, None] = None,
+                        potential_LAMMPS_key: Union[str, list, None] = None,
+                        potential_id: Union[str, list, None] = None,
+                        potential_key: Union[str, list, None] = None,
+                        symbols: Union[str, list, None] = None,
+                        natoms: Union[int, list, None] = None,
+                        natypes: Union[int, list, None] = None,
+                        local: Optional[bool] = None,
+                        remote: Optional[bool] = None,
+                        prompt: bool = True,
+                        refresh_cache: bool = False,
+                        verbose: bool = False) -> Record:
     """
     Gets exactly one matching relaxed crystal from the database.
     
@@ -164,6 +209,11 @@ def get_relaxed_crystal(self, name=None, key=None, method=None, standing=None,
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
+    
+    Returns
+    -------
+    yabadaba.record.Record
+        The matching record object
     """
 
     return self.get_record(
@@ -175,14 +225,28 @@ def get_relaxed_crystal(self, name=None, key=None, method=None, standing=None,
         potential_id=potential_id, potential_key=potential_key,
         symbols=symbols, natoms=natoms, natypes=natypes)
 
-def retrieve_relaxed_crystal(self, name=None, dest=None, key=None, method=None,
-                            standing=None, family=None, parent_key=None, 
-                            potential_LAMMPS_id=None, potential_LAMMPS_key=None,
-                            potential_id=None, potential_key=None,
-                            symbols=None, natoms=None, natypes=None, keyword=None,
-                            local=None, remote=None, prompt=True,
-                            format='json', indent=4, refresh_cache=False,
-                            verbose=False):
+def retrieve_relaxed_crystal(self,
+                             name: Union[str, list, None] = None,
+                             dest: Optional[Path] = None,
+                             key: Union[str, list, None] = None,
+                             method: Union[str, list, None] = None,
+                             standing: Union[str, list, None] = None,
+                             family: Union[str, list, None] = None,
+                             parent_key: Union[str, list, None] = None, 
+                             potential_LAMMPS_id: Union[str, list, None] = None,
+                             potential_LAMMPS_key: Union[str, list, None] = None,
+                             potential_id: Union[str, list, None] = None,
+                             potential_key: Union[str, list, None] = None,
+                             symbols: Union[str, list, None] = None,
+                             natoms: Union[int, list, None] = None,
+                             natypes: Union[int, list, None] = None,
+                             local: Optional[bool] = None,
+                             remote: Optional[bool] = None,
+                             prompt: bool = True,
+                             format: str = 'json',
+                             indent: int = 4,
+                             refresh_cache: bool = False,
+                             verbose: bool = False):
     """
     Gets a single matching relaxed crystal from the database and saves it to a
     file based on the record's name.
@@ -270,12 +334,23 @@ def retrieve_relaxed_crystal(self, name=None, dest=None, key=None, method=None,
         potential_id=potential_id, potential_key=potential_key,
         symbols=symbols, natoms=natoms, natypes=natypes)
 
-def download_relaxed_crystals(self, name=None, key=None, method=None,
-                              standing=None, family=None, parent_key=None, 
-                              potential_LAMMPS_id=None, potential_LAMMPS_key=None,
-                              potential_id=None, potential_key=None,
-                              symbols=None, natoms=None, natypes=None, keyword=None,
-                              overwrite=False, return_records=False, verbose=False):
+def download_relaxed_crystals(self, 
+                              name: Union[str, list, None] = None,
+                              key: Union[str, list, None] = None,
+                              method: Union[str, list, None] = None,
+                              standing: Union[str, list, None] = None,
+                              family: Union[str, list, None] = None,
+                              parent_key: Union[str, list, None] = None, 
+                              potential_LAMMPS_id: Union[str, list, None] = None,
+                              potential_LAMMPS_key: Union[str, list, None] = None,
+                              potential_id: Union[str, list, None] = None,
+                              potential_key: Union[str, list, None] = None,
+                              symbols: Union[str, list, None] = None,
+                              natoms: Union[int, list, None] = None,
+                              natypes: Union[int, list, None] = None,
+                              overwrite: bool = False,
+                              return_records: bool = False,
+                              verbose: bool = False) -> Optional[np.ndarray]:
     """
     Download citation records from the remote and save to localpath.
     
@@ -325,6 +400,11 @@ def download_relaxed_crystals(self, name=None, key=None, method=None,
     verbose : bool, optional
         If True, info messages will be printed during operations.  Default
         value is False.
+    
+    Returns
+    -------
+    numpy.ndarray
+        The matching records - returned if return_records=True
     """
 
     return self.download_records(

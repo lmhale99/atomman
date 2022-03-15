@@ -1,14 +1,22 @@
-from copy import deepcopy
+# coding: utf-8
+
+# Standard Python imports
+import io
+from typing import Optional, Union, Tuple
 import uuid
 
 # https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
 
+# https://github.com/usnistgov/yabadaba
 from yabadaba.record import Record
-from yabadaba import query
+from yabadaba import load_query
 
+# https://pandas.pydata.org/
+import pandas as pd
+
+# atomman imports
 from ... import System
-from ...tools import crystalsystem
 
 class ReferenceCrystal(Record):
     """
@@ -16,70 +24,70 @@ class ReferenceCrystal(Record):
     information for DFT relaxed crystal structures obtained from DFT databases.
     """
     @property
-    def style(self):
+    def style(self) -> str:
         """str: The record style"""
         return 'reference_crystal'
 
     @property
-    def modelroot(self):
+    def modelroot(self) -> str:
         """str: The root element of the content"""
         return 'reference-crystal'
 
     @property
-    def xsd_filename(self):
+    def xsd_filename(self) -> Tuple[str, str]:
         """tuple: The module path and file name of the record's xsd schema"""
         return ('atomman.library.xsd', f'{self.style}.xsd')
 
     @property
-    def id(self):
+    def id(self) -> str:
         """str : The unique id for the record"""
         return self.__id
 
     @id.setter
-    def id(self, value):
+    def id(self, value: str):
         if value is None:
             self.__id = None
         else:
             self.__id = str(value)
 
     @property
-    def key(self):
+    def key(self) -> str:
         """str : A UUID4 key assigned to the record"""
         return self.__key
 
     @key.setter
-    def key(self, value):
+    def key(self, value: str):
         if value is None:
             self.__key = str(uuid.uuid4())
         else:
             self.__key = str(value)
 
     @property
-    def sourcename(self):
+    def sourcename(self) -> str:
         """str : Name of the crystal's source database"""
         return self.__sourcename
 
     @sourcename.setter
-    def sourcename(self, value):
+    def sourcename(self, value: str):
         if value is None:
             self.__sourcename = None
         else:
             self.__sourcename = str(value)
 
     @property
-    def sourcelink(self):
+    def sourcelink(self) -> str:
         """str : URL for the crystal's source database"""
         return self.__sourcelink    
 
     @sourcelink.setter
-    def sourcelink(self, value):
+    def sourcelink(self, value: str):
         if value is None:
             self.__sourcelink = None
         else:
             self.__sourcelink = str(value)
 
     @property
-    def ucell(self):
+    def ucell(self) -> System:
         """atomman.System : The unit cell system for the crystal"""
         if self.__ucell is None:
             raise ValueError('ucell information not set')
@@ -88,88 +96,96 @@ class ReferenceCrystal(Record):
         return self.__ucell
 
     @ucell.setter
-    def ucell(self, value):        
-        self.__ucell = value
+    def ucell(self, value: System):
+        if isinstance(value, System):       
+            self.__ucell = value
+        else:
+            raise TypeError('ucell must be an atomman.System')
 
     @property
-    def composition(self):
+    def composition(self) -> str:
         """str : The crystal's composition"""
         if self.__composition is None:
             self.__composition = self.ucell.composition
         return self.__composition
 
     @property
-    def symbols(self):
+    def symbols(self) -> list:
         """list : The list of element model symbols"""
         if self.__symbols is None:
             self.__symbols = self.ucell.symbols
         return self.__symbols
 
     @property
-    def natoms(self):
+    def natoms(self) -> int:
         """int : The number of atoms in the unit cell"""
         if self.__natoms is None:
             self.__natoms = self.ucell.natoms
         return self.__natoms
 
     @property
-    def natypes(self):
+    def natypes(self) -> int:
         """int : The number of atom types in the unit cell"""
         if self.__natypes is None:
             self.__natypes = self.ucell.natypes
         return self.__natypes
 
     @property
-    def crystalfamily(self):
+    def crystalfamily(self) -> str:
         """str : The crystal's system family"""
         if self.__crystalfamily is None:
-            self.__crystalfamily = crystalsystem.identifyfamily(self.ucell.box)
+            self.__crystalfamily = self.ucell.box.identifyfamily()
         return self.__crystalfamily
 
     @property
-    def a(self):
+    def a(self) -> float:
         """float : The unit cell's a lattice parameter"""
         if self.__a is None:
             self.__a = self.ucell.box.a
         return self.__a
 
     @property
-    def b(self):
+    def b(self) -> float:
         """float : The unit cell's b lattice parameter"""
         if self.__b is None:
             self.__b = self.ucell.box.b
         return self.__b
 
     @property
-    def c(self):
+    def c(self) -> float:
         """float : The unit cell's c lattice parameter"""
         if self.__c is None:
             self.__c = self.ucell.box.c
         return self.__c
 
     @property
-    def alpha(self):
+    def alpha(self) -> float:
         """float : The unit cell's alpha lattice angle"""
         if self.__alpha is None:
             self.__alpha = self.ucell.box.alpha
         return self.__alpha
 
     @property
-    def beta(self):
+    def beta(self) -> float:
         """float : The unit cell's beta lattice angle"""
         if self.__beta is None:
             self.__beta = self.ucell.box.beta
         return self.__beta
 
     @property
-    def gamma(self):
+    def gamma(self) -> float:
         """float : The unit cell's gamma lattice angle"""
         if self.__gamma is None:
             self.__gamma = self.ucell.box.gamma
         return self.__gamma
 
-    def set_values(self, name=None, id=None, key=None, sourcename=None,
-                   sourcelink=None, ucell=None):
+    def set_values(self,
+                   name: Optional[str] = None,
+                   id: Optional[str] = None,
+                   key: Optional[str] = None,
+                   sourcename: Optional[str] = None,
+                   sourcelink: Optional[str] = None,
+                   ucell: Optional[System] = None):
         """
         Sets multiple object values.
 
@@ -221,7 +237,7 @@ class ReferenceCrystal(Record):
         self.__beta = None
         self.__gamma = None
 
-    def build_model(self):
+    def build_model(self) -> DM:
         """
         Returns the object info as data model content
         
@@ -264,7 +280,9 @@ class ReferenceCrystal(Record):
         self._set_model(model)
         return model
         
-    def load_model(self, model, name=None):
+    def load_model(self,
+                   model: Union[str, io.IOBase, DM],
+                   name: Optional[str] = None):
         """
         Loads record contents from a given model.
 
@@ -305,7 +323,7 @@ class ReferenceCrystal(Record):
         except:
             self.name = self.id
 
-    def metadata(self):
+    def metadata(self) -> dict:
         """
         Generates a dict of simple metadata values associated with the record.
         Useful for quickly comparing records and for building pandas.DataFrames
@@ -333,10 +351,60 @@ class ReferenceCrystal(Record):
 
         return params
 
-    def pandasfilter(self, dataframe, name=None, key=None,
-                     id=None, sourcename=None,
-                     sourcelink=None, crystalfamily=None, composition=None,
-                     symbols=None, natoms=None, natypes=None):
+    @property
+    def queries(self) -> dict:
+        """dict: Query objects and their associated parameter names."""
+        return {
+            'key': load_query(
+                style='str_match',
+                name='key', 
+                path=f'{self.modelroot}.key'),
+            'id': load_query(
+                style='str_match',
+                name='id',
+                path=f'{self.modelroot}.id'),
+            'sourcename': load_query(
+                style='str_match',
+                name='sourcename',
+                path=f'{self.modelroot}.source.name'),
+            'sourcelink': load_query(
+                style='str_match',
+                name='sourcelink',
+                path=f'{self.modelroot}.source.link'),
+            'crystalfamily': load_query(
+                style='str_match',
+                name='crystalfamily',
+                path=f'{self.modelroot}.system-info.cell.crystal-family'),
+            'composition': load_query(
+                style='str_match',
+                name='composition',
+                path=f'{self.modelroot}.system-info.composition'),
+            'symbols': load_query(
+                style='in_list',
+                name='symbols',
+                path=f'{self.modelroot}.system-info.symbol'),
+            'natoms': load_query(
+                style='int_match',
+                name='natoms',
+                path=f'{self.modelroot}.atomic-system.atoms.natoms'),
+            'natypes': load_query(
+                style='int_match',
+                name='natypes',
+                path=f'{self.modelroot}.system-info.cell.natypes'),
+        }
+
+    def pandasfilter(self,
+                     dataframe: pd.DataFrame,
+                     name: Union[str, list, None] = None,
+                     id: Union[str, list, None] = None,
+                     key: Union[str, list, None] = None,
+                     sourcename: Union[str, list, None] = None,
+                     sourcelink: Union[str, list, None] = None,
+                     crystalfamily: Union[str, list, None] = None,
+                     composition: Union[str, list, None] = None,
+                     symbols: Union[str, list, None] = None,
+                     natoms: Union[int, list, None] = None,
+                     natypes: Union[int, list, None] = None) -> pd.Series:
         """
         Filters a pandas.DataFrame based on kwargs values for the record style.
         
@@ -367,27 +435,27 @@ class ReferenceCrystal(Record):
         
         Returns
         -------
-        pandas.Series, numpy.NDArray
+        pandas.Series
             Boolean map of matching values
         """
-        matches = (
-            query.str_match.pandas(dataframe, 'name', name)
-            &query.str_match.pandas(dataframe, 'key', key)
-            &query.str_match.pandas(dataframe, 'id', id)
-            &query.str_match.pandas(dataframe, 'sourcename', sourcename)
-            &query.str_match.pandas(dataframe, 'sourcelink', sourcelink)
-            &query.str_match.pandas(dataframe, 'crystalfamily', crystalfamily)
-            &query.str_match.pandas(dataframe, 'composition', composition)
-            &query.in_list.pandas(dataframe, 'symbols', symbols)
-            &query.str_match.pandas(dataframe, 'natoms', natoms)
-            &query.str_match.pandas(dataframe, 'natypes', natypes)
-        )
+        matches = super().pandasfilter(dataframe, name=name, id=id, key=key,
+                                       sourcename=sourcename, sourcelink=sourcelink,
+                                       crystalfamily=crystalfamily,
+                                       composition=composition, symbols=symbols,
+                                       natoms=natoms, natypes=natypes)
         return matches
 
-    def mongoquery(self, name=None, key=None,
-                   id=None, sourcename=None,
-                   sourcelink=None, crystalfamily=None, composition=None,
-                   symbols=None, natoms=None, natypes=None):
+    def mongoquery(self,
+                   name: Union[str, list, None] = None,
+                   id: Union[str, list, None] = None,
+                   key: Union[str, list, None] = None,
+                   sourcename: Union[str, list, None] = None,
+                   sourcelink: Union[str, list, None] = None,
+                   crystalfamily: Union[str, list, None] = None,
+                   composition: Union[str, list, None] = None,
+                   symbols: Union[str, list, None] = None,
+                   natoms: Union[int, list, None] = None,
+                   natypes: Union[int, list, None] = None) -> dict:
         """
         Builds a Mongo-style query based on kwargs values for the record style.
         
@@ -419,25 +487,23 @@ class ReferenceCrystal(Record):
         dict
             The Mongo-style query
         """     
-        mquery = {}
-        query.str_match.mongo(mquery, f'name', name)
-        root = f'content.{self.modelroot}'
-
-        query.str_match.mongo(mquery, f'{root}.key', key)
-        query.str_match.mongo(mquery, f'{root}.id', id)
-        query.str_match.mongo(mquery, f'{root}.source.name', sourcename)
-        query.str_match.mongo(mquery, f'{root}.sourcelink', sourcelink)
-        query.str_match.mongo(mquery, f'{root}.system-info.cell.crystal-family', crystalfamily)
-        query.str_match.mongo(mquery, f'{root}.system-info.composition', composition)
-        query.in_list.mongo(mquery, f'{root}.system-info.symbol', symbols)
-        query.str_match.mongo(mquery, f'{root}.atomic-system.atoms.natoms', natoms)
-        query.str_match.mongo(mquery, f'{root}.system-info.cell.natypes', natypes)
-
+        mquery = super().mongoquery(name=name, id=id, key=key,
+                                    sourcename=sourcename, sourcelink=sourcelink,
+                                    crystalfamily=crystalfamily,
+                                    composition=composition, symbols=symbols,
+                                    natoms=natoms, natypes=natypes)
         return mquery
 
-    def cdcsquery(self, key=None, id=None, sourcename=None,
-                  sourcelink=None, crystalfamily=None, composition=None,
-                  symbols=None, natoms=None, natypes=None):
+    def cdcsquery(self,
+                  id: Union[str, list, None] = None,
+                  key: Union[str, list, None] = None,
+                  sourcename: Union[str, list, None] = None,
+                  sourcelink: Union[str, list, None] = None,
+                  crystalfamily: Union[str, list, None] = None,
+                  composition: Union[str, list, None] = None,
+                  symbols: Union[str, list, None] = None,
+                  natoms: Union[int, list, None] = None,
+                  natypes: Union[int, list, None] = None) -> dict:
         """
         Builds a CDCS-style query based on kwargs values for the record style.
         
@@ -467,17 +533,9 @@ class ReferenceCrystal(Record):
         dict
             The CDCS-style query
         """
-        mquery = {}
-        root = self.modelroot
-        
-        query.str_match.mongo(mquery, f'{root}.key', key)
-        query.str_match.mongo(mquery, f'{root}.id', id)
-        query.str_match.mongo(mquery, f'{root}.source.name', sourcename)
-        query.str_match.mongo(mquery, f'{root}.sourcelink', sourcelink)
-        query.str_match.mongo(mquery, f'{root}.system-info.cell.crystal-family', crystalfamily)
-        query.str_match.mongo(mquery, f'{root}.system-info.composition', composition)
-        query.in_list.mongo(mquery, f'{root}.system-info.symbol', symbols)
-        query.str_match.mongo(mquery, f'{root}.atomic-system.atoms.natoms', natoms)
-        query.str_match.mongo(mquery, f'{root}.system-info.cell.natypes', natypes)
-
+        mquery = super().cdcsquery(id=id, key=key,
+                                    sourcename=sourcename, sourcelink=sourcelink,
+                                    crystalfamily=crystalfamily,
+                                    composition=composition, symbols=symbols,
+                                    natoms=natoms, natypes=natypes)
         return mquery

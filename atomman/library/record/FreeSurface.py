@@ -1,17 +1,26 @@
+# coding: utf-8
 
+# Standard Python imports
+import io
+from typing import Optional, Union, Tuple
+
+# https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
 
-from yabadaba import query
+# https://github.com/usnistgov/yabadaba
+from yabadaba.record import Record
+from yabadaba import load_query
 
-# iprPy imports
-from . import Record
-
+# https://pandas.pydata.org/
+import pandas as pd
 class FreeSurface(Record):
     """
     Class for representing free_surface records, which collect the parameters
     necessary for atomman to generate a particular free surface.
     """
-    def __init__(self, model=None, name=None):
+    def __init__(self,
+                 model: Union[str, io.IOBase, DM, None] = None,
+                 name: Optional[str] = None):
         """
         Initializes a Record object for a given style.
         
@@ -30,61 +39,63 @@ class FreeSurface(Record):
             self.name = name
 
     @property
-    def style(self):
+    def style(self) -> str:
         """str: The record style"""
         return 'free_surface'
 
     @property
-    def xsd_filename(self):
+    def xsd_filename(self) -> Tuple[str, str]:
         """tuple: The module path and file name of the record's xsd schema"""
         return ('atomman.library.xsd', f'{self.style}.xsd')
 
     @property
-    def modelroot(self):
+    def modelroot(self) -> str:
         """str: The root element of the content"""
         return 'free-surface'
     
     @property
-    def key(self):
+    def key(self) -> str:
         """str : A UUID4 key assigned to the record"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__key
 
     @key.setter
-    def key(self, value):
+    def key(self, value: str):
         self.__key = str(value)
     
     @property
-    def id(self):
+    def id(self) -> str:
         """str : A unique id assigned to the record"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__id
 
     @id.setter
-    def id(self, value):
+    def id(self, value: str):
         self.__id = str(value)
 
     @property
-    def family(self):
+    def family(self) -> str:
         """str : The prototype/reference id the defect is defined for"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__family
 
     @family.setter
-    def family(self, value):
+    def family(self, value: str):
         self.__family = str(value)
 
     @property
-    def parameters(self):
+    def parameters(self) -> dict:
         """dict : Defect parameters for atomman structure generator"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__parameters
 
-    def load_model(self, model, name=None):
+    def load_model(self,
+                   model: Union[str, io.IOBase, DM],
+                   name: Optional[str] = None):
         """
         Loads record contents from a given model.
 
@@ -104,7 +115,7 @@ class FreeSurface(Record):
         self.family = content['system-family']
         self.__parameters = dict(content['calculation-parameter'])
 
-    def build_model(self):
+    def build_model(self) -> DM:
         """
         Returns the object info as data model content
         
@@ -124,7 +135,7 @@ class FreeSurface(Record):
         self._set_model(model)
         return model
 
-    def metadata(self):
+    def metadata(self) -> dict:
         """
         Generates a dict of simple metadata values associated with the record.
         Useful for quickly comparing records and for building pandas.DataFrames
@@ -141,9 +152,45 @@ class FreeSurface(Record):
         
         return meta
 
-    def pandasfilter(self, dataframe, name=None, key=None, id=None,
-                     family=None, hkl=None, shiftindex=None,
-                     cutboxvector=None):
+    @property
+    def queries(self) -> dict:
+        """dict: Query objects and their associated parameter names."""
+        return {
+            'key': load_query(
+                style='str_match',
+                name='key', 
+                path=f'{self.modelroot}.key'),
+            'id': load_query(
+                style='str_match',
+                name='id',
+                path=f'{self.modelroot}.id'),
+            'family': load_query(
+                style='str_match',
+                name='family',
+                path=f'{self.modelroot}.system-family'),
+            'hkl': load_query(
+                style='str_match',
+                name='hkl',
+                path=f'{self.modelroot}.calculation-parameter.hkl'),
+            'shiftindex': load_query(
+                style='int_match',
+                name='shiftindex',
+                path=f'{self.modelroot}.calculation-parameter.shiftindex'),
+            'cutboxvector': load_query(
+                style='str_match',
+                name='cutboxvector',
+                path=f'{self.modelroot}.calculation-parameter.cutboxvector'),
+        }
+
+    def pandasfilter(self,
+                     dataframe: pd.DataFrame,
+                     name: Union[str, list, None] = None,
+                     key: Union[str, list, None] = None,
+                     id: Union[str, list, None] = None,
+                     family: Union[str, list, None] = None,
+                     hkl: Union[str, list, None] = None,
+                     shiftindex: Union[int, list, None] = None,
+                     cutboxvector: Union[str, list, None] = None) -> pd.Series:
         """
         Filters a pandas.DataFrame based on kwargs values for the record style.
         
@@ -161,28 +208,29 @@ class FreeSurface(Record):
             Parent prototype/reference id(s) to parse by.
         hkl : str or list
             Space delimited plane(s) to parse by.
+        shiftindex : int or list
+            The shift index indicating the termination plane.
         cutboxvector : str or list
             cutboxvector value(s) to parse by.
         
         Returns
         -------
-        pandas.Series, numpy.NDArray
+        pandas.Series
             Boolean map of matching values
         """
-        matches = (
-            query.str_match.pandas(dataframe, 'name', name)
-            &query.str_match.pandas(dataframe, 'key', key)
-            &query.str_match.pandas(dataframe, 'id', id)
-            &query.str_match.pandas(dataframe, 'family', family)
-            &query.str_match.pandas(dataframe, 'hkl', hkl)
-            &query.str_match.pandas(dataframe, 'shiftindex', shiftindex)
-            &query.str_match.pandas(dataframe, 'cutboxvector', cutboxvector)
-        )
+        matches = super().pandasfilter(dataframe, name=name, key=key, id=id,
+                                       family=family, hkl=hkl, shiftindex=shiftindex,
+                                       cutboxvector=cutboxvector)
         return matches
 
-    def mongoquery(self, name=None, key=None, id=None,
-                   family=None, hkl=None, shiftindex=None,
-                     cutboxvector=None):
+    def mongoquery(self,
+                   name: Union[str, list, None] = None,
+                   key: Union[str, list, None] = None,
+                   id: Union[str, list, None] = None,
+                   family: Union[str, list, None] = None,
+                   hkl: Union[str, list, None] = None,
+                   shiftindex: Union[int, list, None] = None,
+                   cutboxvector: Union[str, list, None] = None) -> dict:
         """
         Builds a Mongo-style query based on kwargs values for the record style.
         
@@ -206,22 +254,18 @@ class FreeSurface(Record):
         dict
             The Mongo-style query
         """   
-        mquery = {}
-        root = f'content.{self.modelroot}'
-
-        query.str_match.mongo(mquery, f'name', name)
-
-        query.str_match.mongo(mquery, f'{root}.key', key)
-        query.str_match.mongo(mquery, f'{root}.id', id)
-        query.str_match.mongo(mquery, f'{root}.system-family', family)
-        query.str_match.mongo(mquery, f'{root}.calculation-parameter.hkl', hkl)
-        query.str_match.mongo(mquery, f'{root}.calculation-parameter.shiftindex', shiftindex)
-        query.str_match.mongo(mquery, f'{root}.calculation-parameter.cutboxvector', cutboxvector)
-        
+        mquery = super().mongoquery(name=name, key=key, id=id,
+                                    family=family, hkl=hkl, shiftindex=shiftindex,
+                                    cutboxvector=cutboxvector)
         return mquery
 
-    def cdcsquery(self, key=None, id=None, family=None, hkl=None, shiftindex=None,
-                  cutboxvector=None):
+    def cdcsquery(self,
+                  key: Union[str, list, None] = None,
+                  id: Union[str, list, None] = None,
+                  family: Union[str, list, None] = None,
+                  hkl: Union[str, list, None] = None,
+                  shiftindex: Union[int, list, None] = None,
+                  cutboxvector: Union[str, list, None] = None) -> dict:
         """
         Builds a CDCS-style query based on kwargs values for the record style.
         
@@ -243,14 +287,7 @@ class FreeSurface(Record):
         dict
             The CDCS-style query
         """
-        mquery = {}
-        root = self.modelroot
-
-        query.str_match.mongo(mquery, f'{root}.key', key)
-        query.str_match.mongo(mquery, f'{root}.id', id)
-        query.str_match.mongo(mquery, f'{root}.system-family', family)
-        query.str_match.mongo(mquery, f'{root}.calculation-parameter.hkl', hkl)
-        query.str_match.mongo(mquery, f'{root}.calculation-parameter.shiftindex', shiftindex)
-        query.str_match.mongo(mquery, f'{root}.calculation-parameter.cutboxvector', cutboxvector)
-
+        mquery = super().cdcsquery(key=key, id=id,
+                                    family=family, hkl=hkl, shiftindex=shiftindex,
+                                    cutboxvector=cutboxvector)
         return mquery

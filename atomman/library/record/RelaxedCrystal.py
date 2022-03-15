@@ -1,11 +1,20 @@
-from copy import deepcopy
+# coding: utf-8
+
+# Standard Python imports
+import io
+from typing import Optional, Union, Tuple
 
 # https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
 
+# https://github.com/usnistgov/yabadaba
 from yabadaba.record import Record
-from yabadaba import query
+from yabadaba import load_query
 
+# https://pandas.pydata.org/
+import pandas as pd
+
+# atomman imports
 import atomman.unitconvert as uc
 from ... import System
 
@@ -15,7 +24,9 @@ class RelaxedCrystal(Record):
     information for crystal structures relaxed using a specific interatomic
     potential.
     """
-    def __init__(self, model=None, name=None):
+    def __init__(self,
+                 model: Union[str, io.IOBase, DM, None] = None,
+                 name: Optional[str] = None):
         """
         Initializes a Record object for a given style.
         
@@ -34,21 +45,23 @@ class RelaxedCrystal(Record):
             self.name = name
 
     @property
-    def style(self):
+    def style(self) -> str:
         """str: The record style"""
         return 'relaxed_crystal'
 
     @property
-    def modelroot(self):
+    def modelroot(self) -> str:
         """str: The root element of the content"""
         return 'relaxed-crystal'
 
     @property
-    def xsd_filename(self):
+    def xsd_filename(self) -> Tuple[str, str]:
         """tuple: The module path and file name of the record's xsd schema"""
         return ('atomman.library.xsd', f'{self.style}.xsd')
 
-    def load_model(self, model, name=None):
+    def load_model(self,
+                   model: Union[str, io.IOBase, DM],
+                   name: Optional[str] = None):
         """
         Loads record contents from a given model.
 
@@ -99,161 +112,161 @@ class RelaxedCrystal(Record):
             self.name = self.key
 
     @property
-    def key(self):
+    def key(self) -> str:
         """str : A UUID4 key assigned to the record"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__key
 
     @property
-    def method(self):
+    def method(self) -> str:
         """str : Indicates the relaxation method used: box, static or dynamic"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__method
     
     @property
-    def standing(self):
+    def standing(self) -> str:
         """str : 'good' or 'bad', with bad indicating it to be a duplicate or transformation"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__standing
     
     @property
-    def family(self):
+    def family(self) -> str:
         """str : The associated prototype/reference crystal id that the relaxed crystal is based on"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__family
 
     @property
-    def parent_key(self):
+    def parent_key(self) -> str:
         """str : The key assigned to the record of the relaxation calculation used"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__parent_key
 
     @property
-    def potential_LAMMPS_id(self):
+    def potential_LAMMPS_id(self) -> str:
         """str : The id of the LAMMPS implementation used to relax the crystal"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__potential_LAMMPS_id
 
     @property
-    def potential_LAMMPS_key(self):
+    def potential_LAMMPS_key(self) -> str:
         """str : The key of the LAMMPS implementation used to relax the crystal"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__potential_LAMMPS_key
 
     @property
-    def potential_id(self):
+    def potential_id(self) -> str:
         """str : The id of the potential model used to relax the crystal"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__potential_id
 
     @property
-    def potential_key(self):
+    def potential_key(self) -> str:
         """str : The key of the potential model used to relax the crystal"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__potential_key
 
     @property
-    def cohesive_energy(self):
+    def cohesive_energy(self) -> float:
         """float : The computed per-atom cohesive energy"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__cohesive_energy
 
     @property
-    def potential_energy(self):
+    def potential_energy(self) -> float:
         """float : The measured per-atom potential energy"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__potential_energy
 
     @property
-    def composition(self):
+    def composition(self) -> str:
         """str : The crystal's composition"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__composition
 
     @property
-    def symbols(self):
+    def symbols(self) -> list:
         """list : The list of element model symbols"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__symbols
 
     @property
-    def natoms(self):
+    def natoms(self) -> int:
         """int : The number of atoms in the unit cell"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__natoms
 
     @property
-    def natypes(self):
+    def natypes(self) -> int:
         """int : The number of atom types in the unit cell"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__natypes
 
     @property
-    def crystalfamily(self):
+    def crystalfamily(self) -> str:
         """str : The crystal's system family"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__crystalfamily
 
     @property
-    def a(self):
+    def a(self) -> float:
         """float : The unit cell's a lattice parameter"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__a
 
     @property
-    def b(self):
+    def b(self) -> float:
         """float : The unit cell's b lattice parameter"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__b
 
     @property
-    def c(self):
+    def c(self) -> float:
         """float : The unit cell's c lattice parameter"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__c
 
     @property
-    def alpha(self):
+    def alpha(self) -> float:
         """float : The unit cell's alpha lattice angle"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__alpha
 
     @property
-    def beta(self):
+    def beta(self) -> float:
         """float : The unit cell's beta lattice angle"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__beta
 
     @property
-    def gamma(self):
+    def gamma(self) -> float:
         """float : The unit cell's gamma lattice angle"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__gamma
 
     @property
-    def ucell(self):
+    def ucell(self) -> System:
         """atomman.System : The unit cell system for the crystal"""
         if self.model is None:
             raise AttributeError('No model information loaded')
@@ -261,12 +274,12 @@ class RelaxedCrystal(Record):
             self.__ucell = System(model=self.model)
         return self.__ucell
 
-    def build_model(self):
+    def build_model(self) -> DM:
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.model
 
-    def metadata(self):
+    def metadata(self) -> dict:
         """
         Generates a dict of simple metadata values associated with the record.
         Useful for quickly comparing records and for building pandas.DataFrames
@@ -303,13 +316,81 @@ class RelaxedCrystal(Record):
 
         return params
 
-    def pandasfilter(self, dataframe, name=None, key=None,
-                     method=None, standing=None,
-                     family=None, parent_key=None, 
-                     potential_LAMMPS_id=None, potential_LAMMPS_key=None,
-                     potential_id=None, potential_key=None,
-                     crystalfamily=None, composition=None,
-                     symbols=None, natoms=None, natypes=None):
+    @property
+    def queries(self) -> dict:
+        """dict: Query objects and their associated parameter names."""
+        return {
+            'key': load_query(
+                style='str_match',
+                name='key', 
+                path=f'{self.modelroot}.key'),
+            'method': load_query(
+                style='str_match',
+                name='method',
+                path=f'{self.modelroot}.id'),
+            'standing': load_query(
+                style='str_match',
+                name='standing',
+                path=f'{self.modelroot}.name'),
+            'family': load_query(
+                style='str_match',
+                name='family',
+                path=f'{self.modelroot}.prototype'),
+            'parent_key': load_query(
+                style='str_match',
+                name='parent_key',
+                path=f'{self.modelroot}.Pearson-symbol'),
+            'potential_LAMMPS_id': load_query(
+                style='str_match',
+                name='potential_LAMMPS_id',
+                path=f'{self.modelroot}.Strukturbericht'),
+            'potential_LAMMPS_key': load_query(
+                style='str_match',
+                name='potential_LAMMPS_key',
+                path=f'{self.modelroot}.space-group.number'),
+            'potential_id': load_query(
+                style='str_match',
+                name='potential_id',
+                path=f'{self.modelroot}.space-group.Hermann-Maguin'),
+            'potential_key': load_query(
+                style='str_match',
+                name='potential_key',
+                path=f'{self.modelroot}.space-group.Schoenflies'),
+            'composition': load_query(
+                style='str_match',
+                name='composition',
+                path=f'{self.modelroot}.system-info.cell.crystal-family'),
+            'symbols': load_query(
+                style='in_list',
+                name='symbols',
+                path=f'{self.modelroot}.system-info.cell.natypes'),
+            'natoms': load_query(
+                style='int_match',
+                name='natoms',
+                path=f'{self.modelroot}.system-info.cell.natypes'),
+            'natypes': load_query(
+                style='int_match',
+                name='natypes',
+                path=f'{self.modelroot}.system-info.cell.natypes'),
+        }
+
+    def pandasfilter(self,
+                     dataframe: pd.DataFrame,
+                     name: Union[str, list, None] = None,
+                     key: Union[str, list, None] = None,
+                     method: Union[str, list, None] = None,
+                     standing: Union[str, list, None] = None,
+                     family: Union[str, list, None] = None,
+                     parent_key: Union[str, list, None] = None, 
+                     potential_LAMMPS_id: Union[str, list, None] = None,
+                     potential_LAMMPS_key: Union[str, list, None] = None,
+                     potential_id: Union[str, list, None] = None,
+                     potential_key: Union[str, list, None] = None,
+                     crystalfamily: Union[str, list, None] = None,
+                     composition: Union[str, list, None] = None,
+                     symbols: Union[str, list, None] = None,
+                     natoms: Union[int, list, None] = None,
+                     natypes: Union[int, list, None] = None) -> pd.Series:
         """
         Filters a pandas.DataFrame based on kwargs values for the record style.
         
@@ -356,33 +437,34 @@ class RelaxedCrystal(Record):
         pandas.Series, numpy.NDArray
             Boolean map of matching values
         """
-        matches = (
-            query.str_match.pandas(dataframe, 'name', name)
-            &query.str_match.pandas(dataframe, 'key', key)
-            &query.str_match.pandas(dataframe, 'method', method)
-            &query.str_match.pandas(dataframe, 'standing', standing)
-            &query.str_match.pandas(dataframe, 'family', family)
-            &query.str_match.pandas(dataframe, 'parent_key', parent_key)
-            &query.str_match.pandas(dataframe, 'potential_LAMMPS_id', potential_LAMMPS_id)
-            &query.str_match.pandas(dataframe, 'potential_LAMMPS_key', potential_LAMMPS_key)
-            &query.str_match.pandas(dataframe, 'potential_id', potential_id)
-            &query.str_match.pandas(dataframe, 'potential_key', potential_key)
-            &query.str_match.pandas(dataframe, 'potential_key', potential_key)
-            &query.str_match.pandas(dataframe, 'crystalfamily', crystalfamily)
-            &query.str_match.pandas(dataframe, 'composition', composition)
-            &query.in_list.pandas(dataframe, 'symbols', symbols)
-            &query.str_match.pandas(dataframe, 'natoms', natoms)
-            &query.str_match.pandas(dataframe, 'natypes', natypes)
-        )
+        matches = super().pandasfilter(dataframe, name=name, key=key,
+                                       method=method, standing=standing,
+                                       family=family, parent_key=parent_key, 
+                                       potential_LAMMPS_id=potential_LAMMPS_id,
+                                       potential_LAMMPS_key=potential_LAMMPS_key,
+                                       potential_id=potential_id,
+                                       potential_key=potential_key,
+                                       crystalfamily=crystalfamily,
+                                       composition=composition, symbols=symbols,
+                                       natoms=natoms, natypes=natypes)
         return matches
 
-    def mongoquery(self, name=None, key=None,
-                   method=None, standing=None,
-                   family=None, parent_key=None, 
-                   potential_LAMMPS_id=None, potential_LAMMPS_key=None,
-                   potential_id=None, potential_key=None,
-                   crystalfamily=None, composition=None,
-                   symbols=None, natoms=None, natypes=None):
+    def mongoquery(self,
+                   name: Union[str, list, None] = None,
+                   key: Union[str, list, None] = None,
+                   method: Union[str, list, None] = None,
+                   standing: Union[str, list, None] = None,
+                   family: Union[str, list, None] = None,
+                   parent_key: Union[str, list, None] = None, 
+                   potential_LAMMPS_id: Union[str, list, None] = None,
+                   potential_LAMMPS_key: Union[str, list, None] = None,
+                   potential_id: Union[str, list, None] = None,
+                   potential_key: Union[str, list, None] = None,
+                   crystalfamily: Union[str, list, None] = None,
+                   composition: Union[str, list, None] = None,
+                   symbols: Union[str, list, None] = None,
+                   natoms: Union[int, list, None] = None,
+                   natypes: Union[int, list, None] = None) -> dict:
         """
         Builds a Mongo-style query based on kwargs values for the record style.
         
@@ -427,33 +509,33 @@ class RelaxedCrystal(Record):
         dict
             The Mongo-style query
         """     
-        mquery = {}
-        query.str_match.mongo(mquery, f'name', name)
-        root = f'content.{self.modelroot}'
-
-        query.str_match.mongo(mquery, f'{root}.key', key)
-        query.str_match.mongo(mquery, f'{root}.method', method)
-        query.str_match.mongo(mquery, f'{root}.standing', standing)
-        query.str_match.mongo(mquery, f'{root}.system-info.family', family)
-        query.str_match.mongo(mquery, f'{root}.system-info.parent_key', parent_key)
-        query.str_match.mongo(mquery, f'{root}.potential-LAMMPS.id', potential_LAMMPS_id)
-        query.str_match.mongo(mquery, f'{root}.potential-LAMMPS.key', potential_LAMMPS_key)
-        query.str_match.mongo(mquery, f'{root}.potential-LAMMPS.potential.id', potential_id)
-        query.str_match.mongo(mquery, f'{root}.potential-LAMMPS.potential.key', potential_key)
-        query.str_match.mongo(mquery, f'{root}.system-info.cell.crystal-family', crystalfamily)
-        query.str_match.mongo(mquery, f'{root}.system-info.composition', composition)
-        query.in_list.mongo(mquery, f'{root}.system-info.symbol', symbols)
-        query.str_match.mongo(mquery, f'{root}.atomic-system.atoms.natoms', natoms)
-        query.str_match.mongo(mquery, f'{root}.system-info.cell.natypes', natypes)
-
+        mquery = super().mongoquery(name=name, key=key,
+                                    method=method, standing=standing,
+                                    family=family, parent_key=parent_key, 
+                                    potential_LAMMPS_id=potential_LAMMPS_id,
+                                    potential_LAMMPS_key=potential_LAMMPS_key,
+                                    potential_id=potential_id,
+                                    potential_key=potential_key,
+                                    crystalfamily=crystalfamily,
+                                    composition=composition, symbols=symbols,
+                                    natoms=natoms, natypes=natypes)
         return mquery
 
-    def cdcsquery(self, key=None, method=None, standing=None,
-                  family=None, parent_key=None, 
-                  potential_LAMMPS_id=None, potential_LAMMPS_key=None,
-                  potential_id=None, potential_key=None,
-                  crystalfamily=None, composition=None, 
-                  symbols=None, natoms=None, natypes=None):
+    def cdcsquery(self,
+                  key: Union[str, list, None] = None,
+                  method: Union[str, list, None] = None,
+                  standing: Union[str, list, None] = None,
+                  family: Union[str, list, None] = None,
+                  parent_key: Union[str, list, None] = None, 
+                  potential_LAMMPS_id: Union[str, list, None] = None,
+                  potential_LAMMPS_key: Union[str, list, None] = None,
+                  potential_id: Union[str, list, None] = None,
+                  potential_key: Union[str, list, None] = None,
+                  crystalfamily: Union[str, list, None] = None,
+                  composition: Union[str, list, None] = None,
+                  symbols: Union[str, list, None] = None,
+                  natoms: Union[int, list, None] = None,
+                  natypes: Union[int, list, None] = None) -> dict:
         """
         Builds a CDCS-style query based on kwargs values for the record style.
         
@@ -496,22 +578,14 @@ class RelaxedCrystal(Record):
         dict
             The CDCS-style query
         """
-        mquery = {}
-        root = self.modelroot
-        
-        query.str_match.mongo(mquery, f'{root}.key', key)
-        query.str_match.mongo(mquery, f'{root}.method', method)
-        query.str_match.mongo(mquery, f'{root}.standing', standing)
-        query.str_match.mongo(mquery, f'{root}.system-info.family', family)
-        query.str_match.mongo(mquery, f'{root}.system-info.parent_key', parent_key)
-        query.str_match.mongo(mquery, f'{root}.potential-LAMMPS.id', potential_LAMMPS_id)
-        query.str_match.mongo(mquery, f'{root}.potential-LAMMPS.key', potential_LAMMPS_key)
-        query.str_match.mongo(mquery, f'{root}.potential-LAMMPS.potential.id', potential_id)
-        query.str_match.mongo(mquery, f'{root}.potential-LAMMPS.potential.key', potential_key)
-        query.str_match.mongo(mquery, f'{root}.system-info.cell.crystal-family', crystalfamily)
-        query.str_match.mongo(mquery, f'{root}.system-info.composition', composition)
-        query.in_list.mongo(mquery, f'{root}.system-info.symbol', symbols)
-        query.str_match.mongo(mquery, f'{root}.atomic-system.atoms.natoms', natoms)
-        query.str_match.mongo(mquery, f'{root}.system-info.cell.natypes', natypes)
-
+        mquery = super().cdcsquery(key=key,
+                                    method=method, standing=standing,
+                                    family=family, parent_key=parent_key, 
+                                    potential_LAMMPS_id=potential_LAMMPS_id,
+                                    potential_LAMMPS_key=potential_LAMMPS_key,
+                                    potential_id=potential_id,
+                                    potential_key=potential_key,
+                                    crystalfamily=crystalfamily,
+                                    composition=composition, symbols=symbols,
+                                    natoms=natoms, natypes=natypes)
         return mquery

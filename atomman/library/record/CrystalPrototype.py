@@ -1,11 +1,20 @@
-from copy import deepcopy
+# coding: utf-8
+
+# Standard Python imports
+import io
+from typing import Optional, Union, Tuple
 
 # https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
 
+# https://github.com/usnistgov/yabadaba
 from yabadaba.record import Record
-from yabadaba import query
+from yabadaba import load_query
 
+# https://pandas.pydata.org/
+import pandas as pd
+
+# atomman imports
 from ... import System
 
 class CrystalPrototype(Record):
@@ -13,7 +22,9 @@ class CrystalPrototype(Record):
     Class for representing crystal_prototype records that describe common
     crystal prototypes.
     """
-    def __init__(self, model=None, name=None):
+    def __init__(self,
+                 model: Union[str, io.IOBase, DM, None] = None,
+                 name: Optional[str] = None):
         """
         Initializes a Record object for a given style.
         
@@ -32,21 +43,23 @@ class CrystalPrototype(Record):
             self.name = name
 
     @property
-    def style(self):
+    def style(self) -> str:
         """str: The record style"""
         return 'crystal_prototype'
 
     @property
-    def modelroot(self):
+    def modelroot(self) -> str:
         """str: The root element of the content"""
         return 'crystal-prototype'
 
     @property
-    def xsd_filename(self):
+    def xsd_filename(self) -> Tuple[str, str]:
         """tuple: The module path and file name of the record's xsd schema"""
         return ('atomman.library.xsd', f'{self.style}.xsd')
 
-    def load_model(self, model, name=None):
+    def load_model(self,
+                   model: Union[str, io.IOBase, DM],
+                   name: Optional[str] = None):
         """
         Loads record contents from a given model.
 
@@ -83,84 +96,84 @@ class CrystalPrototype(Record):
             self.name = self.id
 
     @property
-    def id(self):
+    def id(self) -> str:
         """str : A unique id assigned to the record"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__id
 
     @property
-    def key(self):
+    def key(self) -> str:
         """str : A UUID4 key assigned to the record"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__key
 
     @property
-    def commonname(self):
+    def commonname(self) -> str:
         """str : A common name associated with the prototype"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__commonname
     
     @property
-    def prototype(self):
+    def prototype(self) -> str:
         """str : A prototype composition associated with the prototype"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__prototype
     
     @property
-    def pearson(self):
+    def pearson(self) -> str:
         """str : The prototype's Pearson symbol"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__pearson
 
     @property
-    def strukturbericht(self):
+    def strukturbericht(self) -> str:
         """str : The prototype's Strukturbericht symbol"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__strukturbericht
 
     @property
-    def sg_number(self):
+    def sg_number(self) -> int:
         """int : The prototype's space group number"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__sg_number
 
     @property
-    def sg_hm(self):
+    def sg_hm(self) -> str:
         """str : The prototype's space group international symbol"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__sg_hm
 
     @property
-    def sg_schoenflies(self):
+    def sg_schoenflies(self) -> str:
         """str : The prototype's space group Schoenflies symbol"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__sg_schoenflies
 
     @property
-    def crystalfamily(self):
+    def crystalfamily(self) -> str:
         """str : The prototype's system family"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__crystalfamily
 
     @property
-    def natypes(self):
+    def natypes(self) -> int:
         """int : Number of atom types"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__natypes
 
     @property
-    def ucell(self):
+    def ucell(self) -> System:
         """atomman.System : The unit cell for the prototype""" 
         if self.model is None:
             raise AttributeError('No model information loaded')
@@ -168,12 +181,12 @@ class CrystalPrototype(Record):
             self.__ucell = System(model=self.model)
         return self.__ucell
 
-    def build_model(self):
+    def build_model(self) -> DM:
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.model
 
-    def metadata(self):
+    def metadata(self) -> dict:
         """
         Generates a dict of simple metadata values associated with the record.
         Useful for quickly comparing records and for building pandas.DataFrames
@@ -195,11 +208,70 @@ class CrystalPrototype(Record):
         
         return params
 
-    def pandasfilter(self, dataframe, name=None, id=None,
-                     key=None, commonname=None, prototype=None,
-                     pearson=None, strukturbericht=None, sg_number=None,
-                     sg_hm=None, sg_schoenflies=None, crystalfamily=None,
-                     natypes=None):
+    @property
+    def queries(self) -> dict:
+        """dict: Query objects and their associated parameter names."""
+        return {
+            'key': load_query(
+                style='str_match',
+                name='key', 
+                path=f'{self.modelroot}.key'),
+            'id': load_query(
+                style='str_match',
+                name='id',
+                path=f'{self.modelroot}.id'),
+            'commonname': load_query(
+                style='str_match',
+                name='commonname',
+                path=f'{self.modelroot}.name'),
+            'prototype': load_query(
+                style='str_match',
+                name='prototype',
+                path=f'{self.modelroot}.prototype'),
+            'pearson': load_query(
+                style='str_match',
+                name='pearson',
+                path=f'{self.modelroot}.Pearson-symbol'),
+            'strukturbericht': load_query(
+                style='str_match',
+                name='strukturbericht',
+                path=f'{self.modelroot}.Strukturbericht'),
+            'sg_number': load_query(
+                style='int_match',
+                name='sg_number',
+                path=f'{self.modelroot}.space-group.number'),
+            'strukturbericht': load_query(
+                style='str_match',
+                name='strukturbericht',
+                path=f'{self.modelroot}.space-group.Hermann-Maguin'),
+            'sg_hm': load_query(
+                style='str_match',
+                name='sg_hm',
+                path=f'{self.modelroot}.space-group.Schoenflies'),
+            'sg_schoenflies': load_query(
+                style='str_match',
+                name='sg_schoenflies',
+                path=f'{self.modelroot}.system-info.cell.crystal-family'),
+            'natypes': load_query(
+                style='int_match',
+                name='natypes',
+                path=f'{self.modelroot}.system-info.cell.natypes'),
+        }
+
+    def pandasfilter(self,
+                     dataframe: pd.DataFrame,
+                     name: Union[str, list, None] = None,
+                     id: Union[str, list, None] = None,
+                     key: Union[str, list, None] = None,
+                     commonname: Union[str, list, None] = None,
+                     prototype: Union[str, list, None] = None,
+                     pearson: Union[str, list, None] = None,
+                     strukturbericht: Union[str, list, None] = None,
+                     sg_number: Union[int, list, None] = None,
+                     sg_hm: Union[str, list, None] = None,
+                     sg_schoenflies: Union[str, list, None] = None,
+                     crystalfamily: Union[str, list, None] = None,
+                     natypes: Union[int, list, None] = None) -> pd.Series:
         """
         Filters a pandas.DataFrame based on kwargs values for the record style.
         
@@ -234,30 +306,30 @@ class CrystalPrototype(Record):
 
         Returns
         -------
-        pandas.Series, numpy.NDArray
+        pandas.Series
             Boolean map of matching values
         """
-        
-        matches = (
-            query.str_match.pandas(dataframe, 'name', name)
-            &query.str_match.pandas(dataframe, 'key', key)
-            &query.str_match.pandas(dataframe, 'id', id)
-            &query.str_match.pandas(dataframe, 'commonname', commonname)
-            &query.str_match.pandas(dataframe, 'prototype', prototype)
-            &query.str_match.pandas(dataframe, 'pearson', pearson)
-            &query.str_match.pandas(dataframe, 'strukturbericht', strukturbericht)
-            &query.str_match.pandas(dataframe, 'sg_number', sg_number)
-            &query.str_match.pandas(dataframe, 'sg_hm', sg_hm)
-            &query.str_match.pandas(dataframe, 'sg_schoenflies', sg_schoenflies)
-            &query.str_match.pandas(dataframe, 'crystalfamily', crystalfamily)
-            &query.str_match.pandas(dataframe, 'natypes', natypes)
-        )
+        matches = super().pandasfilter(dataframe, name=name, id=id, key=key,
+                                       commonname=commonname, prototype=prototype,
+                                       pearson=pearson, strukturbericht=strukturbericht,
+                                       sg_number=sg_number, sg_hm=sg_hm,
+                                       sg_schoenflies=sg_schoenflies,
+                                       crystalfamily=crystalfamily, natypes=natypes)
         return matches
 
-    def mongoquery(self, name=None, id=None, key=None, commonname=None,
-                   prototype=None, pearson=None, strukturbericht=None,
-                   sg_number=None, sg_hm=None, sg_schoenflies=None,
-                   crystalfamily=None, natypes=None):
+    def mongoquery(self, 
+                   name: Union[str, list, None] = None,
+                   id: Union[str, list, None] = None,
+                   key: Union[str, list, None] = None,
+                   commonname: Union[str, list, None] = None,
+                   prototype: Union[str, list, None] = None,
+                   pearson: Union[str, list, None] = None,
+                   strukturbericht: Union[str, list, None] = None,
+                   sg_number: Union[int, list, None] = None,
+                   sg_hm: Union[str, list, None] = None,
+                   sg_schoenflies: Union[str, list, None] = None,
+                   crystalfamily: Union[str, list, None] = None,
+                   natypes: Union[int, list, None] = None) -> dict:
         """
         Builds a Mongo-style query based on kwargs values for the record style.
         
@@ -293,28 +365,26 @@ class CrystalPrototype(Record):
         dict
             The Mongo-style query
         """     
-        mquery = {}
-        query.str_match.mongo(mquery, f'name', name)
-        root = f'content.{self.modelroot}'
-
-        query.str_match.mongo(mquery, f'{root}.key', key)
-        query.str_match.mongo(mquery, f'{root}.id', id)
-        query.str_match.mongo(mquery, f'{root}.name', commonname)
-        query.str_match.mongo(mquery, f'{root}.prototype', prototype)
-        query.str_match.mongo(mquery, f'{root}.Pearson-symbol', pearson)
-        query.str_match.mongo(mquery, f'{root}.Strukturbericht', strukturbericht)
-        query.str_match.mongo(mquery, f'{root}.space-group.number', sg_number)
-        query.str_match.mongo(mquery, f'{root}.space-group.Hermann-Maguin', sg_hm)
-        query.str_match.mongo(mquery, f'{root}.space-group.Schoenflies', sg_schoenflies)
-        query.str_match.mongo(mquery, f'{root}.system-info.cell.crystal-family', crystalfamily)
-        query.str_match.mongo(mquery, f'{root}.system-info.cell.natypes', natypes)
-
+        mquery = super().mongoquery(name=name, id=id, key=key,
+                                    commonname=commonname, prototype=prototype,
+                                    pearson=pearson, strukturbericht=strukturbericht,
+                                    sg_number=sg_number, sg_hm=sg_hm,
+                                    sg_schoenflies=sg_schoenflies,
+                                    crystalfamily=crystalfamily, natypes=natypes)
         return mquery
 
-    def cdcsquery(self, id=None, key=None, commonname=None,
-                  prototype=None, pearson=None, strukturbericht=None,
-                  sg_number=None, sg_hm=None, sg_schoenflies=None,
-                  crystalfamily=None, natypes=None):
+    def cdcsquery(self, 
+                  id: Union[str, list, None] = None,
+                  key: Union[str, list, None] = None,
+                  commonname: Union[str, list, None] = None,
+                  prototype: Union[str, list, None] = None,
+                  pearson: Union[str, list, None] = None,
+                  strukturbericht: Union[str, list, None] = None,
+                  sg_number: Union[int, list, None] = None,
+                  sg_hm: Union[str, list, None] = None,
+                  sg_schoenflies: Union[str, list, None] = None,
+                  crystalfamily: Union[str, list, None] = None,
+                  natypes: Union[int, list, None] = None) -> dict:
         """
         Builds a CDCS-style query based on kwargs values for the record style.
         
@@ -348,19 +418,10 @@ class CrystalPrototype(Record):
         dict
             The CDCS-style query
         """
-        mquery = {}
-        root = self.modelroot
-
-        query.str_match.mongo(mquery, f'{root}.key', key)
-        query.str_match.mongo(mquery, f'{root}.id', id)
-        query.str_match.mongo(mquery, f'{root}.name', commonname)
-        query.str_match.mongo(mquery, f'{root}.prototype', prototype)
-        query.str_match.mongo(mquery, f'{root}.Pearson-symbol', pearson)
-        query.str_match.mongo(mquery, f'{root}.Strukturbericht', strukturbericht)
-        query.str_match.mongo(mquery, f'{root}.space-group.number', sg_number)
-        query.str_match.mongo(mquery, f'{root}.space-group.Hermann-Maguin', sg_hm)
-        query.str_match.mongo(mquery, f'{root}.space-group.Schoenflies', sg_schoenflies)
-        query.str_match.mongo(mquery, f'{root}.system-info.cell.crystal-family', crystalfamily)
-        query.str_match.mongo(mquery, f'{root}.system-info.cell.natypes', natypes)
-        
+        mquery = super().cdcsquery(id=id, key=key,
+                                    commonname=commonname, prototype=prototype,
+                                    pearson=pearson, strukturbericht=strukturbericht,
+                                    sg_number=sg_number, sg_hm=sg_hm,
+                                    sg_schoenflies=sg_schoenflies,
+                                    crystalfamily=crystalfamily, natypes=natypes)
         return mquery
