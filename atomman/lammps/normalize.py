@@ -5,7 +5,7 @@ from copy import deepcopy
 # http://www.numpy.org/
 import numpy as np
 
-def normalize(system, return_transform=False):
+def normalize(system, return_transform: bool = False):
     """
     The normalize function takes any arbitrary system and transforms it to
     be compatible with LAMMPS.  In particular, LAMMPS systems must have:

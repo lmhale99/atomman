@@ -2,7 +2,7 @@
 # Standard Python libraries
 from collections import OrderedDict
 
-def unit(units='metal'):
+def unit(units: str = 'metal') -> dict:
     """
     Returns the units information associated with a LAMMPS units option.
     
@@ -146,14 +146,14 @@ def unit(units='metal'):
         params['density'] =             '1e-18*g/nm^3'
     
     else:
-        raise ValueError('units ' + units + ' not supported')
+        raise ValueError(f'units {units} not supported')
     
-    params['ang-mom'] = params['length'] + '*' + params['velocity'] + '*' + params['mass']
-    params['ang-vel'] = '1/' + params['time']
+    params['ang-mom'] = f"{params['length']}*{params['velocity']}*{params['mass']}"
+    params['ang-vel'] = f"1/{params['time']}"
     
     return params
 
-def timestep(units='metal'):
+def timestep(units: str = 'metal') -> float:
     """
     Returns the default timestep value for a LAMMPS unit style option.
     
@@ -184,4 +184,4 @@ def timestep(units='metal'):
     elif units == 'nano':
         return 0.00045
     else:
-        raise ValueError('units ' + units + ' not supported')
+        raise ValueError(f'units {units} not supported')

@@ -1,11 +1,24 @@
 # coding: utf-8
 
+# Standard Python libraries
+import io
+from typing import Optional, Union
+
+# https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
 
+# https://github.com/usnistgov/potentials
 from potentials import load_record
+from potentials.record import PotentialLAMMPS, PotentialLAMMPSKIM
 
-def Potential(model, name=None, pot_dir=None, kim_id=None, potkey=None,
-              potid=None, symbolset=None):
+def Potential(model: Union[str, io.IOBase],
+              name: Optional[str] = None,
+              pot_dir: Optional[str] = None,
+              kim_id: Optional[str] = None,
+              potkey: Optional[str] = None,
+              potid: Optional[str] = None,
+              symbolset: Union[str, list, None] = None
+              ) -> Union[PotentialLAMMPS, PotentialLAMMPSKIM]:
     """
     Class initializer switch for PotentialLAMMPS or PotentialLAMMPSKIM objects.
 

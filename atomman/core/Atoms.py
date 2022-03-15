@@ -1,10 +1,14 @@
 # coding: utf-8
 # Standard Python libraries
+from __future__ import annotations
+import io
 from copy import deepcopy
 from collections import OrderedDict
+from typing import Any, Optional, Union
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # https://pandas.pydata.org/
 import pandas as pd
@@ -24,12 +28,12 @@ class Atoms(object):
     class PropertyDict(OrderedDict):
         """Extends OrderedDict to work with Atoms"""
         
-        def __init__(self, host):
+        def __init__(self, host: Atoms):
             """PropertyDict needs to know its host Atoms object."""
             self.__host = host
             super(Atoms.PropertyDict, self).__init__()
         
-        def __setitem__(self, key, value):
+        def __setitem__(self, key: str, value: np.ndarray):
             """
             Modifies OrderedDict__setitem__() such that
             1. All values are converted to numpy.ndarrays.
@@ -82,8 +86,14 @@ class Atoms(object):
                 except:
                     pass
     
-    def __init__(self, natoms=None, atype=None, pos=None, prop=None, model=None, 
-                 safecopy=False, **kwargs):
+    def __init__(self,
+                 natoms: Optional[int] = None,
+                 atype: Union[int, npt.ArrayLike, None] = None,
+                 pos: Optional[npt.ArrayLike] = None,
+                 prop: Optional[dict] = None,
+                 model: Union[str, io.IOBase, DM, None] = None, 
+                 safecopy: bool = False,
+                 **kwargs):
         """
         Class initializer.
         
@@ -114,11 +124,6 @@ class Atoms(object):
             considerably slower for large numbers of atoms and/or properties.
         kwargs : any
             All additional key/value pairs are assigned as properties.
-        
-        Returns
-        =======
-        Atoms
-            The Atoms object.
         """
         
         # Check for model
@@ -224,7 +229,10 @@ class Atoms(object):
             for key, value in kwargs.items():
                 self.view[key] = value
     
-    def model(self, prop_name=None, unit=None, prop_unit=None):
+    def model(self,
+              prop_name: Optional[list] = None,
+              unit: Optional[list] = None,
+              prop_unit: Optional[dict] = None) -> DM:
         """
         Generates a data model for the Atoms object.
         
@@ -283,7 +291,7 @@ class Atoms(object):
         
         return model
 
-    def __str__(self):
+    def __str__(self) -> str:
         """string output of Atoms data"""
         atype = self.atype # pylint: disable=no-member
         pos = self.pos # pylint: disable=no-member
@@ -294,7 +302,7 @@ class Atoms(object):
         
         return '\n'.join(lines)
     
-    def __setattr__(self, name, value):
+    def __setattr__(self, name: str, value: Any):
         """Control setting of user-defined attributes"""
         if not hasattr(self, name) or name in self.view:
             self.view[name] = value
@@ -307,7 +315,7 @@ class Atoms(object):
         else:
             return slice(intnum, intnum+1)
     
-    def __deepcopy__(self, memo):
+    def __deepcopy__(self, memo) -> Atoms:
         """Properly handle deepcopy"""
         d = OrderedDict()
         atype = deepcopy(self.view['atype'])
@@ -317,7 +325,7 @@ class Atoms(object):
                 d[key] = deepcopy(self.view[key])
         return Atoms(atype=atype, pos=pos, **d)
     
-    def __getitem__(self, index):
+    def __getitem__(self, index) -> Atoms:
         """Index getting of Atoms."""
         view = OrderedDict()
         if isinstance(index, (int, np.integer)):
@@ -340,34 +348,39 @@ class Atoms(object):
         for key in self.view.keys():
             self.view[key][index] = value.view[key]
     
-    def __len__(self):
+    def __len__(self) -> int:
         """len of atoms = natoms."""
         return self.natoms
     
     @property
-    def natoms(self):
+    def natoms(self) -> int:
         """int : The number of atoms in the Atoms class."""
-        return self.__natoms # pylint: disable=no-member
+        return self.__natoms 
     
     @property
-    def atypes(self):
+    def atypes(self) -> tuple:
         """tuple : List of int atom types."""
         return tuple(range(1, self.natypes+1))
     
     @property
-    def natypes(self):
+    def natypes(self) -> int:
         """int : The number of atom types in the Atoms class."""
-        if np.min(self.atype) < 1: # pylint: disable=no-member
+        if np.min(self.atype) < 1: 
             raise ValueError('atype values < 1 not allowed')
 
-        return int(np.max(self.atype)) # pylint: disable=no-member
+        return int(np.max(self.atype)) 
         
     @property
-    def view(self):
+    def view(self) -> PropertyDict:
         """PropertyDict : All assigned per-atom properties."""
-        return self.__view # pylint: disable=no-member
+        return self.__view 
     
-    def prop(self, key=None, index=None, value=None, a_id=None):
+    def prop(self,
+             key: Optional[str] = None,
+             index: Union[int, list, slice, None] = None,
+             value: Optional[Any] = None,
+             a_id: Optional[int] = None
+             ) -> Union[list, Atoms, np.ndarray, None]:
         """
         Accesses the per-atom properties for controlled getting and setting.
         For getting values, prop() always returns a copy of the underlying
@@ -442,7 +455,10 @@ class Atoms(object):
                 else:
                     self.view[key][index] = value
     
-    def prop_atype(self, key, value, atype=None):
+    def prop_atype(self,
+                   key: str,
+                   value: Any,
+                   atype: Optional[int] = None):
         """
         Allows for per-atom properties to be assigned according to
         Atoms.atypes.
@@ -458,7 +474,7 @@ class Atoms(object):
         atype : int, optional
             A specific atype to assign value to.
 
-        raises
+        Raises
         ------
         ValueError
             If length of value does not match Atoms.natypes or atype is not in
@@ -482,7 +498,7 @@ class Atoms(object):
             else:
                 raise ValueError('atype not found')
     
-    def df(self):
+    def df(self) -> pd.DataFrame:
         """
         Returns a pandas.DataFrame of all atomic properties.  Multi-dimensional
         per-atom data will be converted into multiple table columns.
@@ -505,7 +521,7 @@ class Atoms(object):
         # Return DataFrame
         return pd.DataFrame(values)
     
-    def extend(self, value):
+    def extend(self, value: Union[Atoms, int]) -> Atoms:
         """
         Allows additional atoms to be added to the end of the atoms list.
         

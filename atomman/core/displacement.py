@@ -6,7 +6,7 @@ import numpy as np
 # atomman imports
 from . import dvect
 
-def displacement(system_0, system_1, box_reference='final'):
+def displacement(system_0, system_1, box_reference: str = 'final') -> np.ndarray:
     """
     Compute the displacement vectors between all matching atoms for two systems.
     

@@ -1,7 +1,7 @@
 # coding: utf-8
 # Standard Python libraries
 import os
-import glob
+from typing import Optional, List, Tuple
 
 # http://www.numpy.org/
 import numpy as np
@@ -13,8 +13,10 @@ from .Log import Log
 
 class NEBLog(object):
     
-    def __init__(self, neblog='log.lammps', replicalogs='log.lammps.*',
-                 rootdir=None):
+    def __init__(self,
+                 neblog: str = 'log.lammps',
+                 replicalogs: str = 'log.lammps.*',
+                 rootdir: Optional[str] = None):
         """
         Initializes reader for LAMMPS NEB calculation log files.
         
@@ -35,27 +37,29 @@ class NEBLog(object):
         self.load(neblog=neblog, replicalogs=replicalogs,  rootdir=rootdir)
 
     @property
-    def nreplicas(self):
+    def nreplicas(self) -> int:
         """int: The number of replicas"""
         return self.__nreplicas
     
     @property
-    def minrun(self):
+    def minrun(self) -> pd.DataFrame:
         """pandas.DataFrame: The NEB log data for the minimization steps."""
         return self.__minrun
     
     @property
-    def climbrun(self):
+    def climbrun(self) -> pd.DataFrame:
         """pandas.DataFrame: The NEB log data for the barrier climb steps."""
         return self.__climbrun
     
     @property
-    def logs(self):
+    def logs(self) -> List[Log]:
         """list of atomman.lammps.log: The LAMMPS log files for each replica."""
         return self.__logs
     
-    def load(self, neblog='log.lammps', replicalogs='log.lammps.*',
-             rootdir=None):
+    def load(self,
+             neblog: str = 'log.lammps',
+             replicalogs: str = 'log.lammps.*',
+             rootdir: Optional[str] = None):
         """
         Loads LAMMPS NEB calculation log file data.
         
@@ -105,7 +109,7 @@ class NEBLog(object):
         for i in range(self.nreplicas):
             self.__logs.append(Log(replicalogs % (i) ))
        
-    def get_neb_path(self, step):
+    def get_neb_path(self, step: int) -> Tuple[np.ndarray, np.ndarray]:
         """
         Retrieves the reaction coordinates and corresponding potential
         energies for a given simulation step.
@@ -152,7 +156,7 @@ class NEBLog(object):
 
         return reaction_coordinates, potential_energies
 
-    def get_barrier(self, reverse=False):
+    def get_barrier(self, reverse: bool = False) -> float:
         """
         Returns the barrier energy calculated from the final NEB simulation step.
         

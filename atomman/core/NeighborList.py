@@ -1,10 +1,14 @@
 # coding: utf-8
 
+# Standard Python imports
+import io
+from typing import Union
+
 # http://www.numpy.org/
 import numpy as np
 
 # atomman imports
-from .nlist import nlist # pylint: disable=no-name-in-module
+from .nlist import nlist
 from ..tools import uber_open_rmode
 
 class NeighborList(object):
@@ -43,16 +47,16 @@ class NeighborList(object):
             self.build(system, cutoff, **kwargs)
     
     @property
-    def coord(self):
-        """The atomic coordination numbers"""
+    def coord(self) -> np.ndarray:
+        """numpy.ndarray: The atomic coordination numbers"""
         return self.__coord
     
     @property
-    def nlist(self):
+    def nlist(self) -> np.ndarray:
         """numpy.ndarray: The underlying numpy array of coord + neighbor ids"""
         return self.__nlist
     
-    def __len__(self):
+    def __len__(self) -> int:
         """len returns the number of atoms"""
         return len(self.__coord)
     
@@ -60,7 +64,11 @@ class NeighborList(object):
         """Get returns the list of neighbors for the specified atom."""
         return self.__neighbors[key, :self.coord[key]]
     
-    def build(self, system, cutoff, initialsize=20, deltasize=10):
+    def build(self,
+              system,
+              cutoff: float,
+              initialsize: int = 20,
+              deltasize: int = 10):
         """
         Builds the neighbor list for a system.
         
@@ -86,7 +94,7 @@ class NeighborList(object):
         self.__coord = self.__nlist[:, 0]
         self.__neighbors = self.__nlist[:, 1:]
         
-    def load(self, model):
+    def load(self, model: Union[str, io.IOBase]):
         """
         Read in a neighbor list from a file.
         
@@ -124,7 +132,7 @@ class NeighborList(object):
                     for j in range(1, len(terms)):
                         self.__neighbors[i, j-1] = terms[j]
     
-    def dump(self, fname):
+    def dump(self, fname: str):
         """
         Saves the neighbor list to a file.
         

@@ -1,9 +1,14 @@
 # coding: utf-8
+
 # Standard Python libraries
+from __future__ import annotations
 from copy import deepcopy
+import io
+from typing import Any, Optional, Union, Tuple
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
@@ -56,7 +61,7 @@ class Box(Shape, object):
                 self.set(**kwargs)
 
     @classmethod
-    def cubic(cls, a):
+    def cubic(cls, a: float) -> Box:
         """
         Initializes a Box in standard cubic setting using only cubic lattice
         parameters.
@@ -75,7 +80,7 @@ class Box(Shape, object):
         return cls(a=a, b=a, c=a, alpha=90, beta=90, gamma=90)
 
     @classmethod
-    def hexagonal(cls, a, c):
+    def hexagonal(cls, a: float, c: float) -> Box:
         """
         Initializes a Box in standard hexagonal setting using only hexagonal lattice
         parameters.
@@ -99,7 +104,7 @@ class Box(Shape, object):
         return cls(a=a, b=a, c=c, alpha=90, beta=90, gamma=120)
 
     @classmethod
-    def tetragonal(cls, a, c):
+    def tetragonal(cls, a: float, c: float) -> Box:
         """
         Initializes a Box in standard tetragonal setting using only tetragonal lattice
         parameters.
@@ -123,7 +128,7 @@ class Box(Shape, object):
         return cls(a=a, b=a, c=c, alpha=90, beta=90, gamma=90)
 
     @classmethod
-    def trigonal(cls, a, alpha):
+    def trigonal(cls, a: float, alpha: float) -> Box:
         """
         Initializes a Box in standard trigonal setting using only trigonal lattice
         parameters.
@@ -147,7 +152,7 @@ class Box(Shape, object):
         return cls(a=a, b=a, c=a, alpha=alpha, beta=alpha, gamma=alpha)
 
     @classmethod
-    def orthorhombic(cls, a, b, c):
+    def orthorhombic(cls, a: float, b: float, c: float) -> Box:
         """
         Initializes a Box in standard orthorhombic setting using only orthorhombic lattice
         parameters.
@@ -173,7 +178,7 @@ class Box(Shape, object):
         return cls(a=a, b=b, c=c, alpha=90, beta=90, gamma=90)
 
     @classmethod
-    def monoclinic(cls, a, b, c, beta):
+    def monoclinic(cls, a: float, b: float, c: float, beta: float) -> Box:
         """
         Initializes a Box in standard monoclinic setting using only monoclinic lattice
         parameters.
@@ -203,7 +208,8 @@ class Box(Shape, object):
         return cls(a=a, b=b, c=c, alpha=90, beta=beta, gamma=90)
 
     @classmethod
-    def triclinic(cls, a, b, c, alpha, beta, gamma):
+    def triclinic(cls, a: float, b: float, c: float,
+                  alpha: float, beta: float, gamma: float) -> Box:
         """
         Initializes a Box in standard triclinic setting using only triclinic lattice
         parameters.
@@ -237,12 +243,12 @@ class Box(Shape, object):
         return cls(a=a, b=b, c=c, alpha=alpha, beta=beta, gamma=gamma)
 
     @property
-    def vects(self):
+    def vects(self) -> np.ndarray:
         """numpy.ndarray : Array containing all three box vectors.  Can be set directly."""
         return deepcopy(self.__vects)
 
     @vects.setter
-    def vects(self, value):
+    def vects(self, value: npt.ArrayLike):
         self.__vects[:] = value
 
         # Zero out near zero terms
@@ -252,7 +258,7 @@ class Box(Shape, object):
         self.__reciprocal_vects = None
 
     @property
-    def reciprocal_vects(self):
+    def reciprocal_vects(self) -> np.ndarray:
         """
         numpy.ndarray : Array of the crystallographic reciprocal box vectors.
         These have not been scaled by the factor of 2 pi.
@@ -263,138 +269,138 @@ class Box(Shape, object):
         return self.__reciprocal_vects
 
     @property
-    def origin(self):
+    def origin(self) -> np.ndarray:
         """numpy.ndarray : Box origin position where vects are added to define the box.  Can be set directly."""
         return deepcopy(self.__origin)
 
     @origin.setter
-    def origin(self, value):
+    def origin(self, value: npt.ArrayLike):
         self.__origin[:] = value
 
     @property
-    def avect(self):
+    def avect(self) -> np.ndarray:
         """numpy.ndarray : Vector associated with the a box dimension."""
         return self.vects[0]
 
     @property
-    def bvect(self):
+    def bvect(self) -> np.ndarray:
         """numpy.ndarray : Vector associated with the b box dimension."""
         return self.vects[1]
 
     @property
-    def cvect(self):
+    def cvect(self) -> np.ndarray:
         """numpy.ndarray : Vector associated with the c box dimension."""
         return self.vects[2]
 
     @property
-    def a(self):
+    def a(self) -> float:
         """float : The a lattice parameter (magnitude of avect)."""
         return (self.__vects[0,0]**2 + self.__vects[0,1]**2 + self.__vects[0,2]**2)**0.5
 
     @property
-    def b(self):
+    def b(self) -> float:
         """float : The b lattice parameter (magnitude of avect)."""
         return (self.__vects[1,0]**2 + self.__vects[1,1]**2 + self.__vects[1,2]**2)**0.5
 
     @property
-    def c(self):
+    def c(self) -> float:
         """float : The c lattice parameter (magnitude of avect)."""
         return (self.__vects[2,0]**2 + self.__vects[2,1]**2 + self.__vects[2,2]**2)**0.5
 
     @property
-    def alpha(self):
+    def alpha(self) -> float:
         """float : The alpha lattice angle in degrees (angle between bvect and cvect)."""
         return vect_angle(self.__vects[1], self.__vects[2])
 
     @property
-    def beta(self):
+    def beta(self) -> float:
         """float : The beta lattice angle in degrees (angle between avect and cvect)."""
         return vect_angle(self.__vects[0], self.__vects[2])
 
     @property
-    def gamma(self):
+    def gamma(self) -> float:
         """float : The gamma lattice angle in degrees (angle between avect and bvect)."""
         return vect_angle(self.__vects[0], self.__vects[1])
 
     @property
-    def lx(self):
+    def lx(self) -> float:
         """float : LAMMPS lx box length (avect[0] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__vects[0,0]
 
     @property
-    def ly(self):
+    def ly(self) -> float:
         """float : LAMMPS ly box length (bvect[1] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__vects[1,1]
 
     @property
-    def lz(self):
+    def lz(self) -> float:
         """float : LAMMPS lz box length (cvect[2] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__vects[2,2]
 
     @property
-    def xy(self):
+    def xy(self) -> float:
         """float : LAMMPS xy box tilt factor (bvect[0] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__vects[1,0]
 
     @property
-    def xz(self):
+    def xz(self) -> float:
         """float : LAMMPS xz box tilt factor (cvect[0] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__vects[2,0]
 
     @property
-    def yz(self):
+    def yz(self) -> float:
         """float : LAMMPS yz box tilt factor (cvect[1] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__vects[2,1]
 
     @property
-    def xlo(self):
+    def xlo(self) -> float:
         """float : LAMMPS xlo box lo term (origin[0] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__origin[0]
 
     @property
-    def ylo(self):
+    def ylo(self) -> float:
         """float : LAMMPS ylo box lo term (origin[1] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__origin[1]
 
     @property
-    def zlo(self):
+    def zlo(self) -> float:
         """float : LAMMPS zlo box lo term (origin[2] for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__origin[2]
 
     @property
-    def xhi(self):
+    def xhi(self) -> float:
         """float : LAMMPS xhi box hi term (origin[0] + lx for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__origin[0] + self.__vects[0,0]
 
     @property
-    def yhi(self):
+    def yhi(self) -> float:
         """float : LAMMPS yhi box hi term (origin[1] + ly for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__origin[1] + self.__vects[1,1]
 
     @property
-    def zhi(self):
+    def zhi(self) -> float:
         """float : LAMMPS zhi box hi term (origin[2] + lz for normalized boxes)."""
         assert self.is_lammps_norm(), 'Box is not normalized for LAMMPS style parameters'
         return self.__origin[2] + self.__vects[2,2]
 
     @property
-    def volume(self):
+    def volume(self) -> float:
         """float : The volume of the box."""
         return np.abs(np.dot(self.avect, np.cross(self.bvect, self.cvect)))
 
     @property
-    def planes(self):
+    def planes(self) -> Tuple[Plane]:
         """tuple : The box's planes represented as atomman.region.Plane objects."""
         return (Plane(np.cross(self.cvect, self.bvect), self.origin),
                 Plane(np.cross(self.avect, self.cvect), self.origin),
@@ -403,7 +409,7 @@ class Box(Shape, object):
                 Plane(np.cross(self.cvect, self.avect), self.origin + self.bvect),
                 Plane(np.cross(self.avect, self.bvect), self.origin + self.cvect))
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         The string representation of the box.  Lists the three vectors and origin.
         """
@@ -412,7 +418,10 @@ class Box(Shape, object):
                           'cvect =  [%6.3f, %6.3f, %6.3f]' % (self.__vects[2,0], self.__vects[2,1], self.__vects[2,2]),
                           'origin = [%6.3f, %6.3f, %6.3f]' % (self.__origin[0],  self.__origin[1],  self.__origin[2])])
 
-    def model(self, model=None, length_unit='angstrom'):
+    def model(self,
+              model: Union[str, io.IOBase, DM, None] = None,
+              length_unit: str = 'angstrom'
+              ) -> Optional[DM]:
         """
         Reads or generates a data model for the box.
 
@@ -514,19 +523,23 @@ class Box(Shape, object):
         else:
             raise TypeError('Invalid arguments')
 
-    def set_vectors(self, avect, bvect, cvect, origin=None):
+    def set_vectors(self,
+                    avect: npt.ArrayLike,
+                    bvect: npt.ArrayLike,
+                    cvect: npt.ArrayLike,
+                    origin: Optional[: npt.ArrayLike] = None):
         """
         Set the box using the three box vectors.
 
         Parameters
         ----------
-        avect : numpy.ndarray
+        avect : array-like object
             The 3D vector for the a box dimension.
-        bvect : numpy.ndarray
+        bvect : array-like object
             The 3D vector for the b box dimension.
-        cvect : numpy.ndarray
+        cvect : array-like object
             The 3D vector for the c box dimension.
-        origin : numpy.ndarray, optional
+        origin : array-like object, optional
             The 3D vector for the box origin position.  Default value is
             (0,0,0).
         """
@@ -538,7 +551,12 @@ class Box(Shape, object):
         self.vects = [avect, bvect, cvect]
         self.origin = origin
 
-    def set_abc(self, a, b, c, alpha=90.0, beta=90.0, gamma=90.0, origin=None):
+    def set_abc(self,
+                a: float, b: float, c: float,
+                alpha: float = 90.0,
+                beta: float = 90.0,
+                gamma: float = 90.0,
+                origin: Optional[npt.ArrayLike] = None):
         """
         Set the box using crystal cell lattice parameters and angles.
 
@@ -559,7 +577,7 @@ class Box(Shape, object):
         gamma : float, optional
             The gamma lattice angle in degrees (angle between a and b vectors).
             Default value is 90.0.
-        origin : numpy.ndarray, optional
+        origin : array-like object, optional
             The 3D vector for the box origin position.  Default value is
             (0,0,0).
         """
@@ -578,7 +596,10 @@ class Box(Shape, object):
         # Call set_lengths
         self.set_lengths(lx=lx, ly=ly, lz=lz, xy=xy, xz=xz, yz=yz, origin=origin)
 
-    def set_lengths(self, lx, ly, lz, xy=0.0, xz=0.0, yz=0.0, origin=None):
+    def set_lengths(self,
+                    lx: float, ly: float, lz: float,
+                    xy: float = 0.0, xz: float = 0.0, yz: float = 0.0,
+                    origin: Optional[npt.ArrayLike] = None):
         """
         Set the box using LAMMPS box lengths and tilt factors.
 
@@ -599,7 +620,7 @@ class Box(Shape, object):
         yz : float, optional
             The LAMMPS box tilt factor in the yz direction.  Default value is
             0.0.
-        origin : numpy.ndarray, optional
+        origin : array-like object, optional
             The 3D vector for the box origin position.  Default value is
             (0,0,0).
         """
@@ -616,7 +637,11 @@ class Box(Shape, object):
                       [xz, yz,  lz]]
         self.origin = origin
 
-    def set_hi_los(self, xlo, xhi, ylo, yhi, zlo, zhi, xy=0.0, xz=0.0, yz=0.0):
+    def set_hi_los(self,
+                   xlo: float, xhi: float,
+                   ylo: float, yhi: float,
+                   zlo: float, zhi: float,
+                   xy: float = 0.0, xz: float = 0.0, yz: float = 0.0):
         """
         Set the box using LAMMPS box hi's, lo's and tilt factors.
 
@@ -654,7 +679,7 @@ class Box(Shape, object):
         # Call set_lengths
         self.set_lengths(lx=lx, ly=ly, lz=lz, xy=xy, xz=xz, yz=yz, origin=origin)
 
-    def is_lammps_norm(self):
+    def is_lammps_norm(self) -> bool:
         """
         Tests if box is compatible with LAMMPS.
         Note: large box tilt factors not checked.  The LAMMPS command
@@ -667,7 +692,9 @@ class Box(Shape, object):
             and self.__vects[1,1] > 0.0
             and self.__vects[2,2] > 0.0)
 
-    def inside(self, pos, inclusive=True):
+    def inside(self,
+               pos: npt.ArrayLike,
+               inclusive: bool = True) -> np.ndarray:
         """
         Indicates if position(s) are inside the shape.
         
@@ -695,14 +722,14 @@ class Box(Shape, object):
                & planes[4].below(pos, inclusive=inclusive)
                & planes[5].below(pos, inclusive=inclusive))
 
-    def vector_crystal_to_cartesian(self, indices):
+    def vector_crystal_to_cartesian(self, indices: npt.ArrayLike) -> np.ndarray:
         """
         Converts crystal indices to Cartesian vectors relative
         to the box's lattice vectors. 
         
         Parameters
         ----------
-        indices : np.ndarray
+        indices : array-like object
             (..., 3) array of [uvw] Miller crystallographic indices or 
             (..., 4) array of [uvtw] Miller-Bravais crystallographic indices.
     
@@ -719,7 +746,7 @@ class Box(Shape, object):
         """
         return miller.vector_crystal_to_cartesian(indices, self)
 
-    def plane_crystal_to_cartesian(self, indices):
+    def plane_crystal_to_cartesian(self, indices: npt.ArrayLike) -> np.ndarray:
         """
         Converts crystal planar indices to Cartesian plane normal vectors based
         on the box's lattice vectors.  Note: the algorithm used requires that the
@@ -727,7 +754,7 @@ class Box(Shape, object):
         
         Parameters
         ----------
-        indices : np.ndarray
+        indices : array-like object
             (..., 3) array of [hkl] Miller crystallographic indices or 
             (..., 4) array of [hkil] Miller-Bravais crystallographic indices.
         box : atomman.Box
@@ -746,14 +773,14 @@ class Box(Shape, object):
         """
         return miller.plane_crystal_to_cartesian(indices, self)
 
-    def position_relative_to_cartesian(self, relpos):
+    def position_relative_to_cartesian(self, relpos: npt.ArrayLike) -> np.ndarray:
         """
         Converts position vectors from relative box coordinates to absolute
         Cartesian coordinates based on the box's vects and origin.
 
         Parameters
         ----------
-        relpos : numpy.ndarray
+        relpos : array-like object
             (..., 3) array of relative position vectors.
 
         Returns
@@ -775,14 +802,14 @@ class Box(Shape, object):
         # Convert and return
         return relpos.dot(self.vects) + self.origin
 
-    def position_cartesian_to_relative(self, cartpos):
+    def position_cartesian_to_relative(self, cartpos: npt.ArrayLike) -> np.ndarray:
         """
         Converts position vectors from absolute Cartesian coordinates to
         relative box coordinates based on the box's vects and origin.
 
         Parameters
         ----------
-        cartpos : numpy.ndarray
+        cartpos : array-like object
             (..., 3) array of Cartesian position vectors.
 
         Returns
@@ -803,3 +830,229 @@ class Box(Shape, object):
 
         # Convert and return
         return np.inner((value - self.origin), self.reciprocal_vects)
+
+    def iscubic(self, 
+                rtol: float = 1e-05,
+                atol: float = 1e-08) -> bool:
+        """
+        Tests if the box is consistent with a standard cubic cell:
+        a = b = c
+        alpha = beta = gamma = 90
+        
+        Parameters
+        ----------
+        rtol : float, optional
+            Relative tolerance for testing box parameters. Default value is 1e-5.
+        atol : float, optional
+            Absolute tolerance for testing box parameters. Default value is 1e-8.
+            
+        Returns
+        -------
+        bool
+            True if the box is a standard cubic cell, False otherwise.
+        """
+        return (np.isclose(self.a, self.b, atol=atol, rtol=rtol)
+                and np.isclose(self.a, self.c, atol=atol, rtol=rtol)
+                and np.isclose(self.alpha, 90.0, atol=atol, rtol=rtol)
+                and np.isclose(self.beta, 90.0, atol=atol, rtol=rtol)
+                and np.isclose(self.gamma, 90.0, atol=atol, rtol=rtol))
+
+    def ishexagonal(self,
+                    rtol: float = 1e-05,
+                    atol: float = 1e-08) -> bool:
+        """
+        Tests if the box is consistent with a standard hexagonal cell:
+        a = b != c
+        alpha = beta = 90
+        gamma = 120
+        
+        Parameters
+        ----------
+        rtol : float, optional
+            Relative tolerance for testing box parameters. Default value is 1e-5.
+        atol : float, optional
+            Absolute tolerance for testing box parameters. Default value is 1e-8.
+            
+        Returns
+        -------
+        bool
+            True if the box is a standard hexagonal cell, False otherwise.
+        """
+        return (np.isclose(self.a, self.b, atol=atol, rtol=rtol)
+                and np.isclose(self.alpha, 90.0, atol=atol, rtol=rtol)
+                and np.isclose(self.beta, 90.0, atol=atol, rtol=rtol)
+                and np.isclose(self.gamma, 120.0, atol=atol, rtol=rtol))
+
+    def istetragonal(self,
+                     rtol: float = 1e-05,
+                     atol: float = 1e-08) -> bool:
+        """
+        Tests if the box is consistent with a standard tetragonal cell:
+        a = b != c
+        alpha = beta = gamma = 90
+        
+        Parameters
+        ----------
+        rtol : float, optional
+            Relative tolerance for testing box parameters. Default value is 1e-5.
+        atol : float, optional
+            Absolute tolerance for testing box parameters. Default value is 1e-8.
+            
+        Returns
+        -------
+        bool
+            True if the box is a standard tetragonal cell, False otherwise.
+        """
+        return (np.isclose(self.a, self.b, atol=atol, rtol=rtol)
+                and not np.isclose(self.a, self.c, atol=atol, rtol=rtol)
+                and np.isclose(self.alpha, 90.0, atol=atol, rtol=rtol)
+                and np.isclose(self.beta, 90.0, atol=atol, rtol=rtol)
+                and np.isclose(self.gamma, 90.0, atol=atol, rtol=rtol))
+
+    def isrhombohedral(self,
+                       rtol: float = 1e-05,
+                       atol: float = 1e-08) -> bool:
+        """
+        Tests if the box is consistent with a standard rhombohedral cell:
+        a = b = c
+        alpha = beta = gamma != 90
+        
+        Parameters
+        ----------
+        rtol : float, optional
+            Relative tolerance for testing box parameters. Default value is 1e-5.
+        atol : float, optional
+            Absolute tolerance for testing box parameters. Default value is 1e-8.
+            
+        Returns
+        -------
+        bool
+            True if the box is a standard rhombohedral cell, False otherwise.
+        """
+        return (np.isclose(self.a, self.b, atol=atol, rtol=rtol)
+                and np.isclose(self.a, self.c, atol=atol, rtol=rtol)
+                and np.isclose(self.alpha, self.beta, atol=atol, rtol=rtol)
+                and np.isclose(self.alpha, self.gamma, atol=atol, rtol=rtol)
+                and not np.isclose(self.alpha, 90.0, atol=atol, rtol=rtol))
+
+    def isorthorhombic(self,
+                       rtol: float = 1e-05,
+                       atol: float = 1e-08) -> bool:
+        """
+        Tests if the box is consistent with a standard orthorhombic cell:
+        a != b != c
+        alpha = beta = gamma = 90
+        
+        Parameters
+        ----------
+        rtol : float, optional
+            Relative tolerance for testing box parameters. Default value is 1e-5.
+        atol : float, optional
+            Absolute tolerance for testing box parameters. Default value is 1e-8.
+            
+        Returns
+        -------
+        bool
+            True if the box is a standard orthorhombic cell, False otherwise.
+        """
+        return (not np.isclose(self.a, self.b, atol=atol, rtol=rtol)
+                and not np.isclose(self.a, self.c, atol=atol, rtol=rtol)
+                and np.isclose(self.alpha, 90.0, atol=atol, rtol=rtol)
+                and np.isclose(self.beta, 90.0, atol=atol, rtol=rtol)
+                and np.isclose(self.gamma, 90.0, atol=atol, rtol=rtol))
+
+    def ismonoclinic(self,
+                     rtol: float = 1e-05,
+                     atol: float = 1e-08) -> bool:
+        """
+        Tests if the box is consistent with a standard monoclinic cell:
+        a != b != c
+        alpha = gamma = 90
+        beta != 90
+        
+        Parameters
+        ----------
+        rtol : float, optional
+            Relative tolerance for testing box parameters. Default value is 1e-5.
+        atol : float, optional
+            Absolute tolerance for testing box parameters. Default value is 1e-8.
+            
+        Returns
+        -------
+        bool
+            True if box is a standard monoclinic cell, False otherwise.
+        """
+        return (not np.isclose(self.a, self.b, atol=atol, rtol=rtol)
+                and not np.isclose(self.a, self.c, atol=atol, rtol=rtol)
+                and np.isclose(self.alpha, 90.0, atol=atol, rtol=rtol)
+                and not np.isclose(self.beta, 90.0, atol=atol, rtol=rtol)
+                and np.isclose(self.gamma, 90.0, atol=atol, rtol=rtol))
+
+    def istriclinic(self,
+                    rtol: float = 1e-05,
+                    atol: float = 1e-08) -> bool:
+        """
+        Tests if the box is consistent with a standard triclinic cell:
+        a != b != c
+        alpha != 90
+        beta != 90
+        gamma != 90
+        
+        Parameters
+        ----------
+        rtol : float, optional
+            Relative tolerance for testing box parameters. Default value is 1e-5.
+        atol : float, optional
+            Absolute tolerance for testing box parameters. Default value is 1e-8.
+            
+        Returns
+        -------
+        bool
+            True if box is a standard triclinic cell, False otherwise.
+        """
+        return (not np.isclose(self.a, self.b, atol=atol, rtol=rtol)
+                and not np.isclose(self.a, self.c, atol=atol, rtol=rtol)
+                and not np.isclose(self.alpha, self.beta, atol=atol, rtol=rtol)
+                and not np.isclose(self.alpha, self.gamma, atol=atol, rtol=rtol))
+
+    def identifyfamily(self, 
+                       rtol: float = 1e-05,
+                       atol: float = 1e-08) -> Optional[str]:
+        """
+        Tests if the box is consistent with a standard representation
+        of a crystal system cell.
+        
+        Parameters
+        ----------
+        rtol : float, optional
+            Relative tolerance for testing box parameters. Default value is 1e-5.
+        atol : float, optional
+            Absolute tolerance for testing box parameters. Default value is 1e-8.
+            
+        Returns
+        -------
+        str or None
+            'cubic', 'hexagonal', 'tetragonal', 'rhombohedral', 'orthorhombic',
+            'monoclinic' or 'triclinic' if it matches any. None if no matches.
+            
+        Raises
+        ------
+        ValueError
+            If the box is not consistent with a standard cell.
+        """
+        if self.iscubic(rtol=rtol, atol=atol):
+            return 'cubic'
+        elif self.ishexagonal(rtol=rtol, atol=atol):
+            return 'hexagonal'
+        elif self.istetragonal(rtol=rtol, atol=atol):
+            return 'tetragonal'
+        elif self.isrhombohedral(rtol=rtol, atol=atol):
+            return 'rhombohedral'
+        elif self.isorthorhombic(rtol=rtol, atol=atol):
+            return 'orthorhombic'
+        elif self.ismonoclinic(rtol=rtol, atol=atol):
+            return 'monoclinic'
+        elif self.istriclinic(rtol=rtol, atol=atol):
+            return 'triclinic'
+        else:
+            None    

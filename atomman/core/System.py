@@ -1,11 +1,15 @@
 # coding: utf-8
 # Standard Python libraries
+from __future__ import annotations
+import io
 from collections import OrderedDict
 from copy import deepcopy
 import warnings
+from typing import Any, Optional, Union, Tuple
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # https://pandas.pydata.org/
 import pandas as pd
@@ -28,16 +32,19 @@ class System(object):
     
     class _AtomsIndexer(object):
         """Internal class for setitem / getitem acting on atoms"""
-        def __init__(self, host):
+        def __init__(self, host: System):
             self.__host = host
             
-        def __getitem__(self, index):
+        def __getitem__(self,
+                        index: Union[int, list, slice]) -> System:
             """Index getting of Atoms that operates on System."""
             host = self.__host
             return System(atoms=host.atoms[index], box=host.box, pbc=host.pbc,
                           symbols=host.symbols)
             
-        def __setitem__(self, index, value):
+        def __setitem__(self,
+                        index: Union[int, list, slice],
+                        value: Any):
             """Index setting of Atoms that operates on System."""
             host = self.__host
             if isinstance(value, Atoms):
@@ -52,8 +59,15 @@ class System(object):
             else:
                 raise ValueError('Can only set using Atoms or System objects')
     
-    def __init__(self, atoms=None, box=None, pbc=None, scale=False,
-                 symbols=None, masses=None, model=None, safecopy=False):
+    def __init__(self,
+                 atoms: Optional[Atoms] = None,
+                 box: Optional[Box] = None,
+                 pbc: Optional[Tuple[bool, bool, bool]] = None,
+                 scale: bool = False,
+                 symbols: Union[str, list, None] = None,
+                 masses: Union[float, list, None] = None,
+                 model: Union[str, io.IOBase, DM, None] = None,
+                 safecopy: bool = False):
         """
         Initialize a System by joining an am.Atoms and am.Box instance.
         
@@ -175,7 +189,7 @@ class System(object):
         # Set atoms indexer
         self.__atoms_ix = System._AtomsIndexer(self)
     
-    def __str__(self):
+    def __str__(self) -> str:
         """str : The string representation of a system."""
         return '\n'.join([str(self.box),
                           'natoms = ' + str(self.natoms),
@@ -184,26 +198,26 @@ class System(object):
                           'pbc = ' + str(self.pbc),
                           str(self.atoms)])
     
-    def __len__(self):
+    def __len__(self) -> int:
         return self.natoms
     
     @property
-    def atoms(self):
+    def atoms(self) -> Atoms:
         """atomman.Atoms : underlying Atoms object."""
         return self.__atoms
     
     @property
-    def natoms(self):
+    def natoms(self) -> int:
         """int : The number of atoms in the Atoms class."""
         return self.__atoms.natoms
     
     @property
-    def atypes(self):
+    def atypes(self) -> tuple:
         """tuple : List of int atom types."""
         return tuple(range(1, self.natypes+1))
     
     @property
-    def natypes(self):
+    def natypes(self) -> int:
         """int : The number of atom types/symbols."""
         
         # Check if more symbols than atypes
@@ -217,28 +231,28 @@ class System(object):
             return self.__atoms.natypes
     
     @property
-    def box(self):
+    def box(self) -> Box:
         """atommman.Box : underlying Box object."""
         return self.__box
     
     @property
-    def pbc(self):
-        """list of bool : The periodic boundary condition settings."""
+    def pbc(self) -> np.ndarray:
+        """numpy.ndarray of bool : The periodic boundary condition settings."""
         return self.__pbc
         
     @pbc.setter
-    def pbc(self, value):
+    def pbc(self, value: npt.ArrayLike):
         pbc = np.asarray(value, dtype=bool)
         assert pbc.shape == (3,), 'invalid pbc entry' 
         self.__pbc = pbc
     
     @property
-    def atoms_ix(self):
+    def atoms_ix(self) -> _AtomsIndexer:
         """Indexer for index slicing of Systems by per-atom properties."""
         return self.__atoms_ix
 
     @property
-    def symbols(self):
+    def symbols(self) -> tuple:
         """tuple : The element model symbols associated with each atype."""
         
         # Fill in missing values
@@ -247,7 +261,7 @@ class System(object):
         return self.__symbols
     
     @symbols.setter
-    def symbols(self, value):
+    def symbols(self, value: Union[str, list]):
         
         # Make value list if needed
         value = aslist(value)
@@ -262,7 +276,7 @@ class System(object):
         self.__symbols = tuple(value)
 
     @property
-    def masses(self):
+    def masses(self) -> tuple:
         """tuple : The masses associated with each atype if given."""
         
         # Fill in missing values
@@ -271,7 +285,7 @@ class System(object):
         return self.__masses
     
     @masses.setter
-    def masses(self, value):
+    def masses(self, value: Union[float, list]):
         
         # Make value list if needed
         value = aslist(value)
@@ -293,7 +307,7 @@ class System(object):
         self.__masses = tuple(value)
     
     @property
-    def composition(self):
+    def composition(self) -> Optional[str]:
         """
         The system's reduced and sorted symbols composition.
         
@@ -301,7 +315,7 @@ class System(object):
         -------
         str or None
             The system's reduced and sorted symbols composition.
-            Will return None if symbols are missing
+            Will return None if any symbols are missing
         """
         
         # Build total count of each symbol
@@ -333,7 +347,13 @@ class System(object):
         
         return composition
     
-    def atoms_prop(self, key=None, index=None, value=None, a_id=None, scale=False):
+    def atoms_prop(self,
+                   key: Optional[str] = None,
+                   index: Union[int, list, slice, None] = None,
+                   value: Optional[Any] = None,
+                   a_id: Optional[int] = None,
+                   scale: bool = False
+                   ) -> Union[list, Atoms, np.ndarray, None]:
         """
         Extends Atoms.prop() by adding a scale argument.
         
@@ -352,6 +372,18 @@ class System(object):
             - Values being retrieved are scaled from absolute Cartesian to box relative vectors.
             - Values being set are unscaled from box relative to absolute Cartesian vectors.
             Default value is False.
+        
+        Returns
+        -------
+        list
+            If no parameters given, returns a list of all assigned property
+            keys.
+        atomman.Atoms
+            If index or a_id is given without value or key, returns a new
+            Atoms instance for the specified atom indices.
+        numpy.ndarray
+            If key (and index/a_id) is given without value, returns a copy of
+            the data associated with that property key.
         """
         
         # Check that scale is bool
@@ -413,7 +445,8 @@ class System(object):
                     else:
                         self.atoms.view[key][index] = value
     
-    def atoms_df(self, scale=False):
+    def atoms_df(self,
+                 scale: bool = False) -> pd.DataFrame:
         """
         Extends Atoms.df() by adding a scale argument.
         
@@ -459,7 +492,11 @@ class System(object):
         # Return DataFrame
         return pd.DataFrame(values)
     
-    def atoms_extend(self, value, scale=False, symbols=None, safecopy=False):
+    def atoms_extend(self,
+                     value: Union[Atoms, int],
+                     scale: bool = False,
+                     symbols: Optional[list] = None,
+                     safecopy: bool = False) -> System:
         """
         Extends Atoms.extend() to the System level by adding scale and symbols
         arguments.
@@ -553,15 +590,20 @@ class System(object):
         else:
             self.box.set(**kwargs)
     
-    def scale(self, value):
+    def scale(self, value: npt.ArrayLike) -> np.ndarray:
         """
         Scales 3D vectors from absolute Cartesian coordinates to relative box
         coordinates.
         
         Parameters
         ----------
-        value : numpy.ndarray
-            Values to scale.
+        value : array-like object
+            Absolute Cartesian coordinates to scale.
+
+        Returns
+        -------
+        numpy.ndarray
+            The relative box coordinates associated with the given values.
         """
         warnmsg = "System.scale() will likely be depreciated in the next big version update "
         warnmsg += "as the method name is not informative.  It is being replaced by the "
@@ -579,7 +621,7 @@ class System(object):
 
         return self.box.position_cartesian_to_relative(value)
 
-    def unscale(self, value):
+    def unscale(self, value: npt.ArrayLike) -> np.ndarray:
         """
         Unscales 3D vectors from relative box coordinates to absolute
         Cartesian coordinates.
@@ -587,7 +629,12 @@ class System(object):
         Parameters
         ----------
         value : numpy.ndarray
-            Values to unscale.
+            Relative box coordinates to unscale.
+
+        Returns
+        -------
+        numpy.ndarray
+            Absolute Cartesian coordinates associated with the given values.
         """
         warnmsg = "System.unscale() will likely be depreciated in the next big version update "
         warnmsg += "as the method name is not informative.  It is being replaced by the "
@@ -604,7 +651,8 @@ class System(object):
 
         return self.box.position_relative_to_cartesian(value)
         
-    def wrap(self, return_imageflags=False):
+    def wrap(self,
+             return_imageflags: bool = False) -> Optional[np.ndarray]:
         """
         Wrap atoms around periodic boundaries and extend non-periodic
         boundaries such that all atoms are within the box.
@@ -618,7 +666,7 @@ class System(object):
         Returns
         -------
         numpy.NDarray of int
-            The imageflags array
+            The imageflags array - only returned if return_imageflags = True.
         """
         
         # mins and maxs are box dimensions relative to box vectors, i.e 0 to 1
@@ -663,18 +711,21 @@ class System(object):
         if return_imageflags:
             return imageflags
     
-    def dvect(self, pos_0, pos_1):
+    def dvect(self,
+              pos_0: Union[int, list, slice, npt.ArrayLike],
+              pos_1: Union[int, list, slice, npt.ArrayLike]
+              ) -> np.ndarray:
         """
         Computes the shortest vector between pos_0 and pos_1 using box 
         dimensions and accounting for periodic boundaries.
         
         Parameters
         ----------
-        pos_0 : numpy.ndarray or index
+        pos_0 : index or array-like object
             Absolute Cartesian vector position(s) to use as reference point(s).
             If the value can be used as an index, then self.atoms.pos[pos_0]
             is taken.
-        pos_1 : numpy.ndarray or index
+        pos_1 : index or array-like object
             Absolute Cartesian vector position(s) to find relative to pos_0.
             If the value can be used as an index, then self.atoms.pos[pos_1]
             is taken.
@@ -701,18 +752,21 @@ class System(object):
         else:
             return vects
 
-    def dmag(self, pos_0, pos_1):
+    def dmag(self,
+             pos_0: Union[int, list, slice, npt.ArrayLike],
+             pos_1: Union[int, list, slice, npt.ArrayLike]
+             ) -> np.ndarray:
         """
         Computes the shortest distance between pos_0 and pos_1 using box 
         dimensions and accounting for periodic boundaries.
         
         Parameters
         ----------
-        pos_0 : numpy.ndarray or index
+        pos_0 : index or array-like object
             Absolute Cartesian vector position(s) to use as reference point(s).
             If the value can be used as an index, then self.atoms.pos[pos_0]
             is taken.
-        pos_1 : numpy.ndarray or index
+        pos_1 : index or array-like object
             Absolute Cartesian vector position(s) to find relative to pos_0.
             If the value can be used as an index, then self.atoms.pos[pos_1]
             is taken.
@@ -739,7 +793,7 @@ class System(object):
         else:
             return vects
     
-    def neighborlist(self, **kwargs):
+    def neighborlist(self, **kwargs) -> NeighborList:
         """
         Builds a neighbor list for the system.  The resulting NeighborList
         object is saved to the object as attribute 'neighbors'.
@@ -771,7 +825,8 @@ class System(object):
             kwargs['system'] = self
         return NeighborList(**kwargs)
     
-    def r0(self, neighbors=None):
+    def r0(self,
+           neighbors: Optional[NeighborList] = None) -> float:
         """
         Identifies the shortest interatomic spacing between atoms in the
         system by comparing the shortest periodic box vector with the
@@ -834,7 +889,10 @@ class System(object):
         else:
             raise ValueError('No atoms to compare or periodic boundaries found!')
     
-    def supersize(self, a_size, b_size, c_size):
+    def supersize(self,
+                  a_size: Union[int, Tuple[int, int]],
+                  b_size: Union[int, Tuple[int, int]],
+                  c_size: Union[int, Tuple[int, int]]) -> System:
         """
         Creates a larger system from a given system by replicating it along the
         system's box vectors.
@@ -967,7 +1025,10 @@ class System(object):
         
         return System(box=box, atoms=atoms, scale=True, symbols=self.symbols)
     
-    def rotate(self, uvws, tol=None, return_transform=False):
+    def rotate(self,
+               uvws: npt.ArrayLike,
+               tol: Union[float, list, None] = None,
+               return_transform: bool = False) -> System:
         """
         Transforms a System representing a periodic crystal cell from a standard
         orientation to a specified orientation. Note: if hexagonal indices are
@@ -976,7 +1037,7 @@ class System(object):
         
         Parameters
         ----------
-        uvws : numpy.ndarray
+        uvws : array-like object
             A (3, 3) array of the Miller crystal vectors or a (3, 4) array of
             Miller-Bravais hexagonal crystal vectors to use in transforming the
             system.  Values must be integers.
@@ -1089,7 +1150,10 @@ class System(object):
         # Return normalized system
         return newsystem.normalize(return_transform=return_transform)
     
-    def normalize(self, style='lammps', return_transform=False):
+    def normalize(self,
+                  style: str = 'lammps',
+                  return_transform: bool = False
+                  ) -> Union[System, Tuple[System, np.ndarray]]:
         """
         Normalizes a system's box vectors and atom positions to be compatible
         with simulation codes.
@@ -1115,7 +1179,7 @@ class System(object):
         else:
             raise ValueError("Unknown style (only 'lammps' is currently supported)")
     
-    def dump(self, style, **kwargs):
+    def dump(self, style: str, **kwargs) -> Optional[Any]:
         """
         Convert a System to another format.
     
@@ -1133,7 +1197,11 @@ class System(object):
         """
         return dump(style, self, **kwargs)
 
-    def model(self, box_unit=None, prop_name=None, unit=None, prop_unit=None):
+    def model(self,
+              box_unit: Optional[str] = None,
+              prop_name: Optional[list] = None,
+              unit: Optional[list] = None,
+              prop_unit: Optional[dict] = None) -> DM:
         """
         Generates a data model for the System object.
 

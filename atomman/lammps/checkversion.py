@@ -3,7 +3,7 @@
 # atomman imports
 from . import run
 
-def checkversion(lammps_command):
+def checkversion(lammps_command: str) -> dict:
     """
     Gets the LAMMPS version and date information by testing lammps_command.
     

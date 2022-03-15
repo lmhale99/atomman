@@ -3,13 +3,20 @@
 from pathlib import Path
 import shlex
 import subprocess
+from typing import Optional
 
 # atomman imports
 from . import Log, LammpsError
 
-def run(lammps_command, script_name=None, script=None, mpi_command=None,
-        restart_script_name=None, restart_script=None, logfile='log.lammps',
-        screen=True, suffix=None):
+def run(lammps_command: str,
+        script_name: Optional[str] = None,
+        script: Optional[str] = None,
+        mpi_command: Optional[str] = None,
+        restart_script_name: Optional[str] = None,
+        restart_script: Optional[str] = None,
+        logfile: str = 'log.lammps',
+        screen: bool = True,
+        suffix: Optional[str] = None) -> Log:
     """
     Calls LAMMPS to run. Returns a Log object of the screen/logfile output.
     

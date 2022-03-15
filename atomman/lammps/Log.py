@@ -1,15 +1,11 @@
 # coding: utf-8
 # Standard Python libraries
 import datetime
-
-# http://www.numpy.org/
-import numpy as np
+from typing import Optional, Union, List
+import io
 
 # https://pandas.pydata.org/
 import pandas as pd
-
-# https://github.com/usnistgov/DataModelDict
-from DataModelDict import DataModelDict as DM
 
 # atomman imports
 from ..tools import uber_open_rmode
@@ -19,9 +15,18 @@ class Simulation():
     Object for representing the LAMMPS log output for a single MS/MD run
     """
 
-    def __init__(self, thermo=None, performance=None):
+    def __init__(self,
+                 thermo: Optional[pd.DataFrame] = None,
+                 performance: Optional[pd.DataFrame] = None):
         """
-        Initializes a Simulation object with performance information
+        Initializes a Simulation object with performance information.
+
+        Parameters
+        ----------
+        thermo : pandas.DataFrame, optional
+            The table of thermo data obtained from the simulation, if known.
+        performance : pandas.DataFrame, optional
+            The table of performance data obtained from the simulation, if known.
         """
         self.__thermo = None
         self.__performance = None
@@ -31,7 +36,7 @@ class Simulation():
         if performance is not None:
             self.performance = performance
 
-    def keys(self):
+    def keys(self) -> list:
         """List of attribute keys that have been set"""
         return tuple(self.__keys)
 
@@ -49,17 +54,17 @@ class Simulation():
             yield(key)
 
     @property
-    def thermo(self):
-        """pandas.DataFrame: The Simulation's thermo data"""
+    def thermo(self) -> Union[pd.DataFrame, None]:
+        """pandas.DataFrame or None: The Simulation's thermo data"""
         return self.__thermo
 
     @property
-    def performance(self):
-        """pandas.DataFrame: The Simulation's performance data"""
+    def performance(self) -> Union[pd.DataFrame, None]:
+        """pandas.DataFrame or None: The Simulation's performance data"""
         return self.__performance
 
     @thermo.setter
-    def thermo(self, value):
+    def thermo(self, value: pd.DataFrame):
         if isinstance(value, pd.DataFrame):
             self.__thermo = value
         else:
@@ -68,7 +73,7 @@ class Simulation():
             self.__keys.append('thermo')
             
     @performance.setter
-    def performance(self, value):
+    def performance(self, value: pd.DataFrame):
         if isinstance(value, pd.DataFrame):
             self.__performance = value
         else:
@@ -79,7 +84,8 @@ class Simulation():
 class Log():
     """Object for representing a LAMMPS log output"""
     
-    def __init__(self, log_info=None):
+    def __init__(self,
+                 log_info: Union[str, io.IOBase, None] = None):
         """
         Initializes a Log object.
         
@@ -99,7 +105,9 @@ class Log():
         if log_info is not None:
             self.read(log_info)
     
-    def read(self, log_info, append=True):
+    def read(self,
+             log_info: Union[str, io.IOBase],
+             append: bool = True):
         """
         Parses a LAMMPS screen output/log file.
         
@@ -260,21 +268,21 @@ class Log():
         return performance
 
     @property
-    def simulations(self):
+    def simulations(self) -> List[dict]:
         """list of dict: parsed data for each separate LAMMPS run/minimize action"""
         return self.__simulations
             
     @property
-    def lammps_version(self):
+    def lammps_version(self) -> str:
         """str : The LAMMPS version used."""
         return self.__lammps_version
     
     @property
-    def lammps_date(self):
+    def lammps_date(self) -> datetime.date:
         """datetime.date : The date associated with the LAMMPS version used."""
         return self.__lammps_date
     
-    def flatten(self, style='last'):
+    def flatten(self, style: str = 'last') -> Simulation:
         """
         Combines all simulations into one.  The style options allow for
         duplicate timesteps to be overwritten.
@@ -287,6 +295,11 @@ class Log():
             'last' uses the values from the latest simulation (default).
             'all' uses all reported lines including ones with duplicate time
             steps.
+        
+        Returns
+        -------
+        Simulation
+            A Simulation object containing the condensed thermo data.
         """
         # Check that all simulations with thermo data have step values
         for sim in self.simulations:

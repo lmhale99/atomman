@@ -1,9 +1,13 @@
 # coding: utf-8
 # Standard Python libraries
+from __future__ import annotations
 from copy import deepcopy
+import io
+from typing import Optional, Union
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
@@ -95,17 +99,17 @@ class ElasticConstants(object):
         else:
             raise TypeError('Invalid argument keywords')
     
-    def __str__(self):
+    def __str__(self)  -> str:
         """Calling string returns str(self.Cij)."""
         return str(self.Cij)
     
     @property
-    def Cij(self):
+    def Cij(self) -> np.ndarray:
         """The stiffness constants in Voigt 6x6 format"""
         return deepcopy(self.__c_ij)
     
     @Cij.setter
-    def Cij(self, value):
+    def Cij(self, value: npt.ArrayLike):
         value = np.asarray(value, dtype='float64')
         assert value.shape == (6,6),  'Cij must be 6x6'
         
@@ -120,18 +124,18 @@ class ElasticConstants(object):
         self.__c_ij = value
     
     @property
-    def Sij(self):
+    def Sij(self) -> np.ndarray:
         """The compliance constants in Voigt 6x6 format"""
         return np.linalg.inv(self.Cij)
     
     @Sij.setter
-    def Sij(self, value):
+    def Sij(self, value: npt.ArrayLike):
         value = np.asarray(value, dtype='float64')
         assert value.shape == (6,6),  'Sij must be 6x6'
         self.Cij = np.linalg.inv(value)
     
     @property
-    def Cij9(self):
+    def Cij9(self) -> np.ndarray:
         """The stiffness constants in 9x9 format"""
         c = self.Cij
         return np.array([[c[0,0],c[0,1],c[0,2],c[0,3],c[0,4],c[0,5],c[0,3],c[0,4],c[0,5]],
@@ -145,7 +149,7 @@ class ElasticConstants(object):
                          [c[5,0],c[5,1],c[5,2],c[5,3],c[5,4],c[5,5],c[5,3],c[5,4],c[5,5]]])
     
     @Cij9.setter
-    def Cij9(self, value):
+    def Cij9(self, value: npt.ArrayLike):
         value = np.asarray(value, dtype='float64')
         assert value.shape == (9,9), 'Cij9 must be 9x9'
         
@@ -157,7 +161,7 @@ class ElasticConstants(object):
         self.Cij = value[:6, :6]
     
     @property
-    def Cijkl(self):
+    def Cijkl(self) -> np.ndarray:
         """The stiffness constants in 3x3x3x3 format"""
         c = self.Cij
         return np.array([[[[c[0,0],c[0,5],c[0,4]], [c[0,5],c[0,1],c[0,3]], [c[0,4],c[0,3],c[0,2]]],
@@ -173,7 +177,7 @@ class ElasticConstants(object):
                           [[c[2,0],c[2,5],c[2,4]], [c[2,5],c[2,1],c[2,3]], [c[2,4],c[2,3],c[2,2]]]]])
     
     @Cijkl.setter
-    def Cijkl(self, value):
+    def Cijkl(self, value: npt.ArrayLike):
         c = np.asarray(value, dtype='float64')
         assert c.shape == (3,3,3,3),  'Cijkl must be 3x3x3x3'
         assert c.max() > 0.0, 'Cij values not valid'
@@ -198,7 +202,7 @@ class ElasticConstants(object):
                              [c[0,1,0,0], c[0,1,1,1], c[0,1,2,2], c[0,1,1,2], c[0,1,0,2], c[0,1,0,1]]])
     
     @property
-    def Sijkl(self):
+    def Sijkl(self) -> np.ndarray:
         """The compliance constants in 3x3x3x3 format"""
         s = self.Sij
         s[3:,:] = s[3:,:]/2.
@@ -216,7 +220,7 @@ class ElasticConstants(object):
                           [[s[2,0],s[2,5],s[2,4]], [s[2,5],s[2,1],s[2,3]], [s[2,4],s[2,3],s[2,2]]]]])
     
     @Sijkl.setter
-    def Sijkl(self, value):
+    def Sijkl(self, value: npt.ArrayLike):
         s = np.asarray(value, dtype='float64')
         assert s.shape == (3,3,3,3),  'Sijkl must be 3x3x3x3'
         
@@ -240,7 +244,9 @@ class ElasticConstants(object):
                              [2.*s[0,2,0,0], 2.*s[0,2,1,1], 2.*s[0,2,2,2], 4.*s[0,2,1,2], 4.*s[0,2,0,2], 4.*s[0,2,0,1]],
                              [2.*s[0,1,0,0], 2.*s[0,1,1,1], 2.*s[0,1,2,2], 4.*s[0,1,1,2], 4.*s[0,1,0,2], 4.*s[0,1,0,1]]])
     
-    def transform(self, axes, tol=1e-8):
+    def transform(self,
+                  axes: npt.ArrayLike,
+                  tol: float = 1e-8) -> ElasticConstants:
         """
         Transforms the elastic constant matrix based on the supplied axes.
         
@@ -823,7 +829,7 @@ class ElasticConstants(object):
                              [c15, c25, c35, c45, c55, c56],
                              [c16, c26, c36, c46, c56, c66]])
     
-    def normalized_as(self, crystal_system):
+    def normalized_as(self, crystal_system: str) -> ElasticConstants:
         """
         Returns a new ElasticConstants object where values of the current are
         averaged or zeroed out according to a standard crystal system setting.
@@ -900,7 +906,10 @@ class ElasticConstants(object):
             
             return ElasticConstants(**c_dict)
     
-    def is_normal(self, crystal_system, atol=1e-4, rtol=1e-4):
+    def is_normal(self,
+                  crystal_system: str,
+                  atol: float = 1e-4,
+                  rtol: float = 1e-4) -> bool:
         """
         Checks if current elastic constants agree with values normalized to
         a specified crystal family (within tolerances).
@@ -923,7 +932,10 @@ class ElasticConstants(object):
         return np.allclose(self.Cij, self.normalized_as(crystal_system).Cij,
                            atol=atol, rtol=rtol)
     
-    def model(self, model=None, unit=None, crystal_system='triclinic'):
+    def model(self,
+              model: Union[str, io.IOBase, DM, None] = None,
+              unit: Optional[str] = None,
+              crystal_system: str = 'triclinic') -> Optional[DM]:
         """
         Return or set DataModelDict representation of the elastic constants.
         
@@ -972,7 +984,7 @@ class ElasticConstants(object):
             
             return model
     
-    def bulk(self, style='Hill'):
+    def bulk(self, style: str = 'Hill') -> float:
         """
         Returns a bulk modulus estimate.
         
@@ -998,7 +1010,7 @@ class ElasticConstants(object):
         else:
             raise ValueError('Unknown estimate style')
     
-    def shear(self, style='Hill'):
+    def shear(self, style: str = 'Hill') -> float:
         """
         Returns a shear modulus estimate.
         
