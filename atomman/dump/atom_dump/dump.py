@@ -1,7 +1,8 @@
 # coding: utf-8
 # Standard Python libraries
-from io import open
+import io
 from collections import OrderedDict
+from typing import Optional, Union
 
 # atomman imports
 import atomman.unitconvert as uc
@@ -9,23 +10,32 @@ from ...lammps import style
 from .process_prop_info import process_prop_info
 from ...tools import indexstr
 
-def dump(system, f=None, lammps_units='metal', scale=False, prop_name=None,
-         table_name=None, shape=None, unit=None, dtype=None,
-         prop_info=None, float_format ='%.13f', return_prop_info=False):
+def dump(system,
+         f: Union[str, io.IOBase, None]=None,
+         lammps_units: str = 'metal',
+         #scale: bool = False,
+         prop_name: Optional[list] = None,
+         table_name: Optional[list] = None,
+         shape: Optional[list] = None,
+         unit: Optional[list] = None,
+         dtype: Optional[list] = None,
+         prop_info: Optional[list] = None,
+         float_format: str = '%.13f',
+         return_prop_info: bool = False):
     """
     Write a LAMMPS-style atom data file from a System.
     
     Parameters
     ----------
-    system : atomman.System 
+    system : atomman.System
         The system to write to the atom data file.
     f : str or file-like object, optional
         File path or file-like object to write the content to.  If not given,
         then the content is returned as a str.
     lammps_units : str, optional
         The LAMMPS units option associated with the table values.  This is used
-        for the box dimensions and default units for standard dump properties 
-        (not compute/fix definitions). 
+        for the box dimensions and default units for standard dump properties
+        (not compute/fix definitions).
     scale : bool, optional
         Flag indicating if atom positions are to be scaled relative to the box
         (True) or given in absolute Cartesian values (False, default).
@@ -44,7 +54,7 @@ def dump(system, f=None, lammps_units='metal', scale=False, prop_name=None,
         value of None, no conversion will be performed for that property.  For
         a value of 'scaled', the corresponding table values will be taken in
         box-scaled units.  If not given, unit values will be taken based on
-        lammps_units if prop_name corresponds to a standard LAMMPS property, 
+        lammps_units if prop_name corresponds to a standard LAMMPS property,
         otherwise will be set to None (no conversion).
     dtype : list, optional
         Allows for the data type of each property to be explicitly given.
@@ -67,7 +77,6 @@ def dump(system, f=None, lammps_units='metal', scale=False, prop_name=None,
     -------
     content : str
         The generated atom_data content.  Only returned if f is None.
-    
     prop_info : list of dict
         The filled-in prop_info structure. Only returned if
         return_prop_info is True.
@@ -175,7 +184,7 @@ def dump(system, f=None, lammps_units='metal', scale=False, prop_name=None,
     
     # Save to the file name
     elif f is not None:
-        with open(f, 'w') as fp:
+        with open(f, 'w', encoding='UTF-8') as fp:
             fp.write(content)
     
     # Return as a string
@@ -190,7 +199,10 @@ def dump(system, f=None, lammps_units='metal', scale=False, prop_name=None,
     elif len(returns) > 1:
         return tuple(returns)
         
-def table_dump(system, f=None, prop_info=None, float_format ='%.13f'):
+def table_dump(system,
+               f: Union[str, io.IOBase, None] = None,
+               prop_info: Optional[list] = None,
+               float_format: str = '%.13f') -> str:
     """
     Converts a system's atoms' values to a string table.  Modified from
     table.dump to handle alternate pos fields that dump files can use.

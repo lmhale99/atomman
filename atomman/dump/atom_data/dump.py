@@ -1,11 +1,15 @@
 # coding: utf-8
+
 # Standard Python libraries
-from io import open
+import io
 from collections import OrderedDict
 from copy import deepcopy
+from typing import Optional, Tuple, Union
 
 # http://www.numpy.org/
 import numpy as np
+
+from potentials.record import BasePotentalLAMMPS
 
 # atomman imports
 import atomman.unitconvert as uc
@@ -14,9 +18,17 @@ from .velocities_prop_info import velocities_prop_info
 from ...lammps import style
 from .. import dump_table
 
-def dump(system, f=None, atom_style=None, units=None, natypes=None,
-         potential=None, float_format='%.13f', return_info=True,
-         prompt=False, comments=True, safecopy=False):
+def dump(system,
+         f: Union[str, io.IOBase, None] = None,
+         atom_style: Optional[str] = None,
+         units: Optional[str] = None,
+         natypes: Optional[int] = None,
+         potential: BasePotentalLAMMPS = None,
+         float_format: str = '%.13f',
+         return_info: bool = True,
+         prompt: bool = False,
+         comments: bool = True,
+         safecopy: bool = False) -> Optional[Union[str, Tuple[str, str]]]:
     """
     Write a LAMMPS-style atom data file from a System.
     
@@ -128,7 +140,7 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
     
     # Save to the file name
     elif f is not None:
-        with open(f, 'w') as fp:
+        with open(f, 'w', encoding='UTF-8') as fp:
             fp.write(content)
     
     # Return as a string
@@ -152,7 +164,7 @@ def dump(system, f=None, atom_style=None, units=None, natypes=None,
     elif len(returns) > 1:
         return tuple(returns)
 
-def box_content(system, units, float_format):
+def box_content(system, units: str, float_format: str) -> str:
     """
     Generates the data file lines associated with box dimensions.
 
@@ -192,7 +204,7 @@ def box_content(system, units, float_format):
 
     return content
 
-def atoms_content(system, imageflags, atom_style, units, float_format):
+def atoms_content(system, imageflags, atom_style, units, float_format) -> str:
     
     content = ''
     content += f'\nAtoms # {atom_style}\n\n'

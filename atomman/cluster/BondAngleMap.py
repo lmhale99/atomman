@@ -1,15 +1,21 @@
 # coding: utf-8
+
 # Standard Python libraries
 import datetime
+import io
+from typing import Generator, Optional, Union, Tuple
 
+# https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
 
 # https://numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # https://pandas.pydata.org/
 import pandas as pd
 
+# https://matplotlib.org/
 import matplotlib.pyplot as plt
 
 # atomman imports 
@@ -24,9 +30,19 @@ class BondAngleMap():
     characterize the 3 atom bond nature of interatomic potentials.
     """
     
-    def __init__(self, model=None, rmin=None, rmax=None, rnum=None,
-                 thetamin=None, thetamax=None, thetanum=None,
-                 r_ij=None, r_ik=None, theta=None, energy=None, symbols=None):
+    def __init__(self,
+                 model: Union[str, io.IOBase, DM, None] = None,
+                 rmin: Optional[float] = None,
+                 rmax: Optional[float] = None,
+                 rnum: Optional[int] = None,
+                 thetamin: Optional[float] = None,
+                 thetamax: Optional[float] = None,
+                 thetanum: Optional[int] = None,
+                 r_ij: Optional[npt.ArrayLike] = None,
+                 r_ik: Optional[npt.ArrayLike] = None,
+                 theta: Optional[npt.ArrayLike] = None,
+                 energy: Optional[npt.ArrayLike] = None,
+                 symbols: Union[str, list, None] = None):
         """
         Class initializer.  The cluster coordinates (r distances and theta
         angles) are required and can be specified in one of three ways.
@@ -84,8 +100,8 @@ class BondAngleMap():
                 assert thetamin is None and thetamax is None and thetanum is None
                 assert r_ij is None and r_ik is None and theta is None
                 assert energy is None
-            except:
-                raise ValueError('model cannot be given energy or coordinate parameters')
+            except AssertionError as e:
+                raise ValueError('model cannot be given energy or coordinate parameters') from e
             self.model(model)
         else:
             self.set(energy=energy, rmin=rmin, rmax=rmax, rnum=rnum,
@@ -93,47 +109,47 @@ class BondAngleMap():
                      r_ij=r_ij, r_ik=r_ik, theta=theta)
 
     @property
-    def rmin(self):
+    def rmin(self) -> Optional[float]:
         """float or None: The minimum value used for the r_ij and r_ik spacings."""
         return self.__rmin
 
     @property
-    def rmax(self):
+    def rmax(self) -> Optional[float]:
         """float or None: The maximum value used for the r_ij and r_ik spacings."""
         return self.__rmax
 
     @property
-    def rnum(self):
+    def rnum(self) -> Optional[int]:
         """int or None: The number of values used for the r_ij and r_ik spacings."""
         return self.__rnum
 
     @property
-    def thetamin(self):
+    def thetamin(self) -> Optional[float]:
         """float or None: The minimum value used for the theta angles."""
         return self.__thetamin
 
     @property
-    def thetamax(self):
+    def thetamax(self) -> Optional[float]:
         """float or None: The maximum value used for the theta angles."""
         return self.__thetamax
 
     @property
-    def thetanum(self):
+    def thetanum(self) -> Optional[int]:
         """int or None: The number of values used for the theta angles."""
         return self.__thetanum
 
     @property
-    def df(self):
+    def df(self) -> pd.DataFrame:
         """pandas.Dataframe : The cluster coordinates and energies."""
         return self.__df
 
     @property
-    def symbols(self):
+    def symbols(self) -> Optional[list]:
         """list or None: the atomic symbols associated with the three atoms"""
         return self.__symbols
     
     @symbols.setter
-    def symbols(self, value):
+    def symbols(self, value: Union[str, list]):
         
         if value is not None:
             value = aslist(value)
@@ -142,7 +158,10 @@ class BondAngleMap():
         
         self.__symbols = value
 
-    def model(self, model=None, length_unit='angstrom', energy_unit='eV'):
+    def model(self,
+              model: Union[str, io.IOBase, DM, None] = None,
+              length_unit: str = 'angstrom',
+              energy_unit: str = 'eV') -> Optional[DM]:
         """
         Loads or generates a bond angle map data model.
 
@@ -215,9 +234,17 @@ class BondAngleMap():
 
             return model
 
-    def set(self, rmin=None, rmax=None, rnum=None,
-            thetamin=None, thetamax=None, thetanum=None,
-            r_ij=None, r_ik=None, theta=None, energy=None):
+    def set(self,
+            rmin: Optional[float] = None,
+            rmax: Optional[float] = None,
+            rnum: Optional[int] = None,
+            thetamin: Optional[float] = None,
+            thetamax: Optional[float] = None,
+            thetanum: Optional[int] = None,
+            r_ij: Optional[npt.ArrayLike] = None,
+            r_ik: Optional[npt.ArrayLike] = None,
+            theta: Optional[npt.ArrayLike] = None,
+            energy: Optional[npt.ArrayLike] = None):
         """
         Sets the bond angle coordinates and the associated energies, if given.
 
@@ -266,8 +293,8 @@ class BondAngleMap():
             try:
                 rvals = np.linspace(rmin, rmax, rnum)
                 tvals = np.linspace(thetamin, thetamax, thetanum)
-            except:
-                raise ValueError('Invalid range parameters')
+            except Exception as e:
+                raise ValueError('Invalid range parameters') from e
 
             # Set range parameters as class properties
             self.__rmin = rmin
@@ -288,13 +315,13 @@ class BondAngleMap():
             try:
                 assert rmax is None and rnum is  None
                 assert thetamin is None and thetamax is None and thetanum is None
-            except:
-                raise ValueError('range parameters and explicit values cannot be mixed') 
+            except AssertionError as e:
+                raise ValueError('range parameters and explicit values cannot be mixed') from e
             try:
                 if len(r_ij) != len(r_ik) or len(r_ij) != len(theta):
                     raise ValueError('Equal numbers of r_ij, r_ik, and theta values must be given')
-            except:
-                raise ValueError('Invalid parameters')
+            except Exception as e:
+                raise ValueError('Invalid parameters') from e
 
             r_ij = np.asarray(r_ij)
             r_ik = np.asarray(r_ik)
@@ -352,7 +379,7 @@ class BondAngleMap():
         df['energy'] = energy
         self.__df = pd.DataFrame(df)
 
-    def itercoords(self):
+    def itercoords(self) -> Generator[Tuple[float, float, float, float], None, None]:
         """
         Iterates through the three-body coordinates, which can be used as inputs for
         computing energies.
@@ -372,7 +399,10 @@ class BondAngleMap():
             series = self.df.loc[i]
             yield series.r_ij, series.r_ik, series.r_jk, series.theta
 
-    def itersystem(self, symbols=None, copy=False):
+    def itersystem(self,
+                   symbols: Union[str, list, None] = None,
+                   copy: bool = False
+                   ) -> Generator[System, None, None]:
         """
         Iterates through the three-body coordinates and returns a System for each.
         Useful for generating configuration files for simulators.  The atom
@@ -393,7 +423,7 @@ class BondAngleMap():
         Yields
         ------
         atomman.System
-            The atomic system containing the three-body cluster. 
+            The atomic system containing the three-body cluster.
         """
         # Set symbols
         if symbols is not None:
@@ -446,7 +476,9 @@ class BondAngleMap():
 
                 yield system
             
-    def save_table(self, filename, include_header=True):
+    def save_table(self,
+                   filename: str,
+                   include_header: bool = True):
         """
         Saves a tabulated representation of the coordinates and energy values to a file.
 
@@ -457,17 +489,17 @@ class BondAngleMap():
         include_header : bool
             If True (default) then header comments will be listed at the top of the file.
         """
-        with open(filename, 'w') as f:
+        with open(filename, 'w', encoding='UTF-8') as f:
 
             if include_header:
                 emin = self.df.energy.min()
 
                 # Create the header comment lines
                 f.write(f'# Comment: this is a file containing an r12, r13, theta - energy-block E(r12, r13, theta) E_min={emin:18.14} eV\n')
-                f.write(f'# File format: After 9 comment lines (starting with #) there are three lines with (angle in degrees):\n')
-                f.write(f'# r12_min, r12_max, n_bins_r12; r13_min, r13_max, n_bins_r13, theta_min, theta_max, n_bins_theta followed by\n')
-                f.write(f'# the data block in the format index_r12, index_r13_ index_theta, E(i_r12,i_r13,i_theta) [eV] one per line.\n')   
-                f.write(f'# Conversion from index to value: val = val_min + (index-1)*(val_max - val_min)/(n_bins-1)\n')
+                f.write('# File format: After 9 comment lines (starting with #) there are three lines with (angle in degrees):\n')
+                f.write('# r12_min, r12_max, n_bins_r12; r13_min, r13_max, n_bins_r13, theta_min, theta_max, n_bins_theta followed by\n')
+                f.write('# the data block in the format index_r12, index_r13_ index_theta, E(i_r12,i_r13,i_theta) [eV] one per line.\n')   
+                f.write('# Conversion from index to value: val = val_min + (index-1)*(val_max - val_min)/(n_bins-1)\n')
                 f.write(f'# file created by xxx via code atomman on date {datetime.date.today}\n')
                 #f.write(f'# This is an example for 3-body MD-potential C-W; Reference: J. Jones, CPPC 34, p.123-432 (2019)\n')
                 #f.write(f'# Atom 1: C, Atom 2: W, Atom 3: W\n')
@@ -483,7 +515,10 @@ class BondAngleMap():
                         f.write(f'{i+1:6} {j+1:6} {k+1:6} {self.df.energy.values[l]:18.14}\n')
                         l += 1
 
-    def pdf(self, nbins=301, energymin=-15.0, energymax=15.0):
+    def pdf(self,
+            nbins: int = 301,
+            energymin: float = -15.0,
+            energymax: float = 15.0) -> Tuple[np.ndarray, np.ndarray]:
         """
         Returns the probability density function for the energy
         
@@ -514,7 +549,10 @@ class BondAngleMap():
 
         return pdf, centers
 
-    def cumulative_pdf(self, nbins=301, energymin=-15.0, energymax=15.0):
+    def cumulative_pdf(self, 
+                       nbins: int = 301,
+                       energymin: float = -15.0,
+                       energymax: float = 15.0) -> Tuple[np.ndarray, np.ndarray]:
         """
         Returns the cumulative probability density function for the energy.
         
@@ -546,8 +584,12 @@ class BondAngleMap():
 
         return cum_pdf, centers
 
-    def plot_pdf(self, nbins=301, energymin=-15.0, energymax=15.0,
-                matplotlib_axes=None, **kwargs):
+    def plot_pdf(self,
+                 nbins: int = 301,
+                 energymin: float = -15.0,
+                 energymax: float = 15.0,
+                 matplotlib_axes: Optional[plt.axes] = None,
+                 **kwargs) -> Optional[plt.figure]:
         """
         Generates a plot of the probability density function of the energy.
 
@@ -591,8 +633,12 @@ class BondAngleMap():
         if matplotlib_axes is None:
             return fig
 
-    def plot_cumulative_pdf(self, nbins=301, energymin=-15.0, energymax=15.0,
-                            matplotlib_axes=None, **kwargs):
+    def plot_cumulative_pdf(self,
+                            nbins: int = 301,
+                            energymin: float = -15.0,
+                            energymax: float = 15.0,
+                            matplotlib_axes: Optional[plt.axes] = None,
+                            **kwargs) -> Optional[plt.figure]:
         """
         Generates a plot of the cumulative probability density function of the energy.
 

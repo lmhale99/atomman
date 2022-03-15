@@ -1,17 +1,28 @@
 # coding: utf-8
+
 # Standard Python libraries
 from copy import deepcopy
+from typing import Optional
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
+
+from potentials.record import BasePotentalLAMMPS
 
 # atomman imports
 from ...tools.crystalsystem import identifyfamily
 
-#Generates the LAMMPS script lines associated with having LAMMPS create the system
-def dump(system, atom_style=None, units=None, natypes=None, 
-         potential=None, uvws=None, shift=None, size_mults=None,
-         return_pair_info=False, safecopy=False):
+def dump(system,
+         atom_style: Optional[str] = None,
+         units: Optional[str] = None,
+         natypes: Optional[int] = None, 
+         potential: BasePotentalLAMMPS = None,
+         uvws: Optional[npt.ArrayLike] = None,
+         shift: Optional[npt.ArrayLike] = None,
+         size_mults: Optional[npt.ArrayLike] = None,
+         return_pair_info: bool = False,
+         safecopy: bool = False) -> str:
     """
     Write LAMMPS commands that result in LAMMPS generating an atomic configuration
     based on the supplied system.  
@@ -58,6 +69,7 @@ def dump(system, atom_style=None, units=None, natypes=None,
     
     Returns
     -------
+    str
         The LAMMPS input command lines to generate the system for itself.
         If return_pair_info is True and potential is given, the LAMMPS input
         command lines for the potential will also be included.
@@ -174,7 +186,7 @@ def dump(system, atom_style=None, units=None, natypes=None,
     
     # Create box and atoms
     info += f'create_box {natypes} box\n'
-    info += f'create_atoms 1 box '
+    info += 'create_atoms 1 box '
     for i in range(system.natoms):
         if system.atoms.atype[i] > 1:
             info += f' &\n             basis {i+1} {system.atoms.atype[i]}'

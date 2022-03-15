@@ -1,14 +1,62 @@
 # coding: utf-8
+
 # Standard Python libraries
 from copy import deepcopy
+from typing import Optional
 
 # atomman imports
 from ...lammps import style
 from ...tools import indexstr
 
-def process_prop_info(prop_name=None, table_name=None, shape=None, unit=None,
-                      dtype=None, prop_info=None, lammps_units='metal'):
-    """Handles common setting of prop_info terms"""
+def process_prop_info(prop_name: Optional[list] = None,
+                      table_name: Optional[list] = None,
+                      shape: Optional[list] = None,
+                      unit: Optional[list] = None,
+                      dtype: Optional[list] = None,
+                      prop_info: Optional[list] = None,
+                      lammps_units: str = 'metal') -> list:
+    """
+    Handles common setting of prop_info terms
+    
+    Parameters
+    ----------
+    prop_name : list, optional
+        The Atoms properties to include.  If neither prop_name or prop_info are
+        given, all system properties will be included.
+    table_name : list, optional
+        The dump table column name(s) that correspond to each prop_name.  If not
+        given, the table_name values will be based on the prop_name and shape
+        values.
+    shape : list, optional
+        The shape of each per-atom property.  If not given, will be inferred
+        from the length of each table_name value.
+    unit : list, optional
+        Lists the units for each prop_name as stored in the table.  For a
+        value of None, no conversion will be performed for that property.  For
+        a value of 'scaled', the corresponding table values will be taken in
+        box-scaled units.  If not given, unit values will be taken based on
+        lammps_units if prop_name corresponds to a standard LAMMPS property,
+        otherwise will be set to None (no conversion).
+    dtype : list, optional
+        Allows for the data type of each property to be explicitly given.
+        Values of None will infer the data type from the corresponding
+        property values.  If not given, all values will be None.
+    prop_info : list of dict, optional
+        Structured form of property conversion parameters, in which each
+        dictionary in the list corresponds to a single atoms property.  Each
+        dictionary must have a 'prop_name' field, and can optionally have
+        'table_name', 'shape', 'unit', and 'dtype' fields.
+    lammps_units : str, optional
+        The LAMMPS units option associated with the table values.  This is used
+        for the box dimensions and default units for standard dump properties
+        (not compute/fix definitions).
+
+    Returns
+    -------
+    prop_info : list of dict
+        The filled-in prop_info structure. Only returned if
+        return_prop_info is True.
+    """
     
     if prop_info is not None:
         # Check that competing parameters are not given
@@ -18,8 +66,8 @@ def process_prop_info(prop_name=None, table_name=None, shape=None, unit=None,
             assert shape is None
             assert unit is None
             assert dtype is None
-        except:
-            raise ValueError('prop_info cannot be given with prop_name, table_name, shape, unit, or dtype')
+        except AssertionError as e:
+            raise ValueError('prop_info cannot be given with prop_name, table_name, shape, unit, or dtype') from e
         prop_info = deepcopy(prop_info)
     
     # Combine list parameters into prop_info
@@ -36,14 +84,14 @@ def process_prop_info(prop_name=None, table_name=None, shape=None, unit=None,
             assert shape is None or len(shape) == numprops
             assert unit is None or len(unit) == numprops
             assert dtype is None or len(dtype) == numprops
-        except:
-            raise ValueError('any of prop_name, table_name, shape, unit, and dtype given must be the same length')
+        except AssertionError as e:
+            raise ValueError('any of prop_name, table_name, shape, unit, and dtype given must be the same length') from e
         
         # Build prop_info
         prop_info = []
         for i in range(len(prop_name)):
             
-            # Search for prop_name match 
+            # Search for prop_name match
             for sinfo in standard_conversions(lammps_units):
                 match = False
                 if sinfo['prop_name'] == prop_name[i]:
@@ -116,7 +164,7 @@ def process_prop_info(prop_name=None, table_name=None, shape=None, unit=None,
     
     return prop_info
 
-def standard_conversions(lammps_units='metal'):
+def standard_conversions(lammps_units: str = 'metal') -> list:
     """
     Gives pre-defined conversion information for standard LAMMPS variables.
     """

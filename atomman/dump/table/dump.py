@@ -1,15 +1,26 @@
 # coding: utf-8
+
 # Standard Python libraries
 from collections import OrderedDict
+from typing import Optional
 
 # atomman imports
 import atomman.unitconvert as uc
 from .process_prop_info import process_prop_info
 from ...tools import indexstr
 
-def dump(system, f=None, prop_name=None, table_name=None, shape=None,
-         unit=None, dtype=None, prop_info=None, header=False,
-         float_format ='%.13f', return_prop_info=False, extra=None):
+def dump(system,
+         f=None,
+         prop_name: Optional[list] = None,
+         table_name: Optional[list] = None,
+         shape: Optional[list] = None,
+         unit: Optional[list] = None,
+         dtype: Optional[list] = None,
+         prop_info: Optional[list] = None,
+         header: bool = False,
+         float_format: str = '%.13f',
+         return_prop_info: bool = False,
+         extra: Optional[dict] = None) -> Optional[str]:
     """
     Converts a system's atoms' values to a string table.
     

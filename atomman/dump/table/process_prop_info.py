@@ -1,12 +1,53 @@
 # coding: utf-8
+
 # Standard Python libraries
 from copy import deepcopy
+from typing import Optional
 
 # atomman imports
 from ...tools import indexstr
 
-def process_prop_info(prop_name=None, table_name=None, shape=None, unit=None, dtype=None, prop_info=None):
-    """Handles common setting of prop_info terms"""
+def process_prop_info(prop_name: Optional[list] = None,
+                      table_name: Optional[list] = None,
+                      shape: Optional[list] = None,
+                      unit: Optional[list] = None,
+                      dtype: Optional[list] = None,
+                      prop_info: Optional[list] = None) -> list:
+    """
+    Handles common setting of prop_info terms
+
+    Parameters
+    ----------
+    prop_name : list, optional
+        The Atoms properties to include.  Must be given if prop_info is not.
+    table_name : list, optional
+        The table column name(s) that correspond to each prop_name.  If not
+        given, the table_name values will be based on the prop_name values.
+    shape : list, optional
+        The shape of each per-atom property.  If not given, will be inferred
+        from the length of each table_name value.
+    unit : list, optional
+        Lists the units for each prop_name as stored in the table.  For a
+        value of None, no conversion will be performed for that property.  For
+        a value of 'scaled', the corresponding table values will be taken in
+        box-scaled units.  If not given, all unit values will be set to None
+        (i.e. no conversions).
+    dtype : list, optional
+        Allows for the data type of each property to be explicitly given.
+        Values of None will infer the data type from the corresponding
+        property values.  If not given, all values will be None.
+    prop_info : list of dict, optional
+        Structured form of property conversion parameters, in which each
+        dictionary in the list corresponds to a single atoms property.  Each
+        dictionary must have a 'prop_name' field, and can optionally have
+        'table_name', 'shape', 'unit', and 'dtype' fields.
+    
+    Returns
+    -------
+    prop_info : list of dict
+        The filled-in prop_info structure. Only returned if
+        return_prop_info is True.
+    """
     
     if prop_info is not None:
         # Check that competing parameters are not given
@@ -16,8 +57,8 @@ def process_prop_info(prop_name=None, table_name=None, shape=None, unit=None, dt
             assert shape is None
             assert unit is None
             assert dtype is None
-        except:
-            raise ValueError('prop_info cannot be given with prop_name, table_name, shape, unit, or dtype')
+        except AssertionError as e:
+            raise ValueError('prop_info cannot be given with prop_name, table_name, shape, unit, or dtype') from e
         prop_info = deepcopy(prop_info)
     
     # Combine list parameters into prop_info
@@ -34,8 +75,8 @@ def process_prop_info(prop_name=None, table_name=None, shape=None, unit=None, dt
             assert shape is None or len(shape) == numprops
             assert unit is None or len(unit) == numprops
             assert dtype is None or len(dtype) == numprops
-        except:
-            raise ValueError('any of prop_name, table_name, shape, unit, and dtype given must be the same length')
+        except AssertionError as e:
+            raise ValueError('any of prop_name, table_name, shape, unit, and dtype given must be the same length') from e
         
         # Build prop_info
         prop_info = []
@@ -63,7 +104,7 @@ def process_prop_info(prop_name=None, table_name=None, shape=None, unit=None, dt
         if 'table_name' not in prop:
             prop['shape'] = prop.get('shape', ())
             prop['table_name'] = []
-            for index, istr in indexstr(prop['shape']): # pylint: disable=unused-variable
+            for index, istr in indexstr(prop['shape']):
                 prop['table_name'].append(prop['prop_name'] + istr)
         # Make certain table_name is a list
         else:

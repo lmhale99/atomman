@@ -1,9 +1,21 @@
 # coding: utf-8
+
 # Standard Python libraries
 import os
+import io
+from typing import Optional, Union
 
-def dump(system, f=None, box_unit=None, prop_name=None, unit=None,
-         prop_unit=None, format=None, indent=None):
+# https://github.com/usnistgov/DataModelDict
+from DataModelDict import DataModelDict as DM
+
+def dump(system,
+         f: Union[str, io.IOBase, None] = None,
+         box_unit: Optional[list] = None,
+         prop_name: Optional[list] = None,
+         unit: Optional[list] = None,
+         prop_unit: Optional[dict] = None,
+         format: Optional[str] = None,
+         indent: Optional[int] = None) -> Union[str, DM, None]:
     """
     Dumps a JSON/XML System.model() representation of the system.
     
@@ -27,7 +39,7 @@ def dump(system, f=None, box_unit=None, prop_name=None, unit=None,
         given in Angstroms and all other values will not be converted.
     prop_unit : dict, optional
         dictionary where the keys are the property keys to include, and
-        the values are units to use. If neither unit nor prop_units given, 
+        the values are units to use. If neither unit nor prop_units given,
         pos will be given in Angstroms and all other values will not be
         converted.
     format : str, optional
@@ -75,7 +87,7 @@ def dump(system, f=None, box_unit=None, prop_name=None, unit=None,
                 return model.json(fp=f, indent=indent)
         
         else:
-            with open(f, 'w') as fp:
+            with open(f, 'w', encoding='UTF-8') as fp:
                 if format.lower() == 'xml':
                     return model.xml(fp=fp, indent=indent)
                 elif format.lower() == 'json':

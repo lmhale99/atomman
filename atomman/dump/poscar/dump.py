@@ -1,10 +1,17 @@
 # coding: utf-8
 
 # http://www.numpy.org/
+import io
+from typing import Optional, Union
 import numpy as np
 
-def dump(system, f=None, header='', symbols=None, coordstyle='direct',
-         box_scale=1.0, float_format='%.13e'):
+def dump(system,
+         f: Union[str, io.IOBase, None] = None,
+         header: str = '',
+         symbols: Optional[tuple] = None,
+         coordstyle: str = 'direct',
+         box_scale: float = 1.0,
+         float_format: str = '%.13e') -> Optional[str]:
     """
     Generates a poscar-style coordination file for the system.
     
@@ -21,9 +28,9 @@ def dump(system, f=None, header='', symbols=None, coordstyle='direct',
         List of the element symbols that correspond to the atom types.  If not
         given, will use system.symbols if set, otherwise no element content
         will be included.
-    coordstyle : str, optional 
+    coordstyle : str, optional
         The poscar coordinate style to use: 'cartesian' or 'direct' (i.e.
-        box relative).  Default value is 'direct'.  
+        box relative).  Default value is 'direct'.
     box_scale : float, optional
         A universal scaling constant applied to the box vectors. Default value
         is 1.0.
@@ -58,7 +65,8 @@ def dump(system, f=None, header='', symbols=None, coordstyle='direct',
     if symbols is not None:
         if not isinstance(symbols, (list, tuple)):
             symbols = [symbols]
-        assert len(symbols) == system.natypes, 'length of symbols differs from number of atom types'
+        if len(symbols) != system.natypes:
+            raise ValueError('length of symbols differs from number of atom types')
         poscar_string += '\n' + ' '.join(symbols)
     
     # Count how many atoms of each type
@@ -93,7 +101,7 @@ def dump(system, f=None, header='', symbols=None, coordstyle='direct',
     
     # Save to the file name
     elif f is not None:
-        with open(f, 'w') as fp:
+        with open(f, 'w', encoding='UTF-8') as fp:
             fp.write(poscar_string)
     
     # Return as a string

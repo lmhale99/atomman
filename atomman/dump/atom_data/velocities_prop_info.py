@@ -1,8 +1,10 @@
 # coding: utf-8
+
 # atomman imports
 from atomman.lammps import style
 
-def velocities_prop_info(atom_style='atomic', units='metal'):
+def velocities_prop_info(atom_style: str = 'atomic',
+                         units: str = 'metal') -> list:
     """
     Returns the prop_info associated with a Velocity section in a LAMMPS data file
     

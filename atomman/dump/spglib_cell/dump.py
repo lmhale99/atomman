@@ -1,6 +1,6 @@
 # coding: utf-8
 
-def dump(system):
+def dump(system) -> tuple:
     """
     Convert an atomman.System into the cell tuple used by spglib.
     

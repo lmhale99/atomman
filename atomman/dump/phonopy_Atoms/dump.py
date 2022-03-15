@@ -1,17 +1,22 @@
 # coding: utf-8
 
+# Standard Python imports
+from typing import Optional, Union, Tuple
+
 # http://www.numpy.org/
 import numpy as np
 
 # https://atztogo.github.io/phonopy/
 try:
-    import phonopy
     from phonopy.structure.atoms import PhonopyAtoms
     has_phonopy = True
-except:
+except ModuleNotFoundError:
     has_phonopy = False
 
-def dump(system, symbols=None, return_prop=False):
+def dump(system,
+         symbols: Optional[tuple] = None,
+         return_prop: bool = False
+         ) -> Union[PhonopyAtoms, Tuple[PhonopyAtoms, dict]]:
     """
     Convert an atomman.System into a phonopy.structure.atoms.PhonopyAtoms.
     
@@ -60,7 +65,8 @@ def dump(system, symbols=None, return_prop=False):
             prop[p] = system.atoms_prop(key=p)
     
     # Build Atoms
-    phonopyatoms = PhonopyAtoms(symbols=allsymbols, positions=positions, pbc=pbc, cell=cell)
+    phonopyatoms = PhonopyAtoms(symbols=allsymbols, positions=positions,
+                                pbc=pbc, cell=cell)
     
     if return_prop is True:
         return phonopyatoms, prop

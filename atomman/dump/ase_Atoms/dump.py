@@ -1,5 +1,8 @@
 # coding: utf-8
 
+# Standard Python imports
+from typing import Tuple, Union
+
 # http://www.numpy.org/
 import numpy as np
 
@@ -7,10 +10,13 @@ import numpy as np
 try:
     import ase
     has_ase = True
-except:
+except ModuleNotFoundError:
     has_ase = False
 
-def dump(system, symbols=None, return_prop=False):
+def dump(system,
+         symbols: Union[str, list, None] = None,
+         return_prop: bool = False
+         ) -> Union[ase.Atoms, Tuple[ase.Atoms, dict]]:
     """
     Convert an atomman.System into an ase.Atoms.
     
