@@ -1,5 +1,9 @@
 # coding: utf-8
 
+# Standard Python imports
+import io
+from typing import Optional, Union
+
 # http://www.numpy.org/
 import numpy as np
 
@@ -7,7 +11,9 @@ import numpy as np
 from ... import Atoms, Box, System
 from ...tools import uber_open_rmode
 
-def load(poscar, symbols=None, prop={}):
+def load(poscar: Union[str, io.IOBase], 
+         symbols: Optional[tuple] = None,
+         prop: Optional[dict] = None) -> System:
     """
     Reads a poscar-style coordination file for a system.
     

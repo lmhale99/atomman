@@ -1,5 +1,9 @@
 # coding: utf-8
 
+# Standard Python libraries
+import io
+from typing import Optional, Union
+
 # http://www.numpy.org/
 import numpy as np
 
@@ -9,12 +13,24 @@ import pandas as pd
 # atomman imports
 import atomman.unitconvert as uc
 from .process_prop_info import process_prop_info
-from ... import Atoms, System
+from ... import Atoms, Box, System
 from ...tools import uber_open_rmode
 
-def load(table, box, symbols=None, system=None, prop_name=None, table_name=None,
-         shape=None, unit=None, dtype=None, prop_info=None, skiprows=None,
-         nrows=None, comment=None, usecols=None, header='infer'):
+def load(table: Union[str, io.IOBase],
+         box: Box,
+         symbols: Optional[tuple] = None,
+         system: Optional[System] = None,
+         prop_name: Optional[list] = None,
+         table_name: Optional[list] = None,
+         shape: Optional[list] = None,
+         unit: Optional[list] = None,
+         dtype: Optional[list] = None,
+         prop_info: Optional[list] = None,
+         skiprows: Optional[int] = None,
+         nrows: Optional[int] = None,
+         comment: Optional[str] = None,
+         usecols: Optional[int] = None,
+         header: Union[int, list, str, None] = 'infer') -> System:
     """
     Reads in tabular data into atomic properties.
     
@@ -64,6 +80,9 @@ def load(table, box, symbols=None, system=None, prop_name=None, table_name=None,
         Specifies a character which indicates all text on a given line after
         is to be considered to be a comment and ignored by parser. This is
         often '#'.
+    header : int, list of int, str or None, optional
+        Indicates how to handle header info.  Will be passed to pandas.read_csv()
+        header option.
         
     Returns
     -------

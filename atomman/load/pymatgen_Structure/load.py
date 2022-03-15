@@ -1,19 +1,31 @@
 # coding: utf-8
 
+# Standard Python imports
+from typing import Optional
+
 # http://www.numpy.org/
 import numpy as np
 
 # atomman imports
 from ... import Atoms, Box, System
 
-#http://pymatgen.org
+# http://pymatgen.org
 try:
-    import pymatgen as pmg
+    # import from newer pymatgen
+    from pymatgen.core import Structure
     has_pmg = True
-except:
-    has_pmg = False
 
-def load(structure, symbols=None):
+except ModuleNotFoundError:
+    try:
+        # Import from older pymatgen
+        from pymatgen import Structure
+        has_pmg = True
+
+    except ModuleNotFoundError:
+        has_pmg = False
+
+def load(structure: Structure,
+         symbols: Optional[tuple] = None) -> System:
     """
     Convert a pymatgen.Structure into an atomman.System.
     

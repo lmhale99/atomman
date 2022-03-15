@@ -1,5 +1,8 @@
 # coding: utf-8
 
+# Standard Python imports
+from typing import Optional
+
 # http://www.numpy.org/
 import numpy as np
 
@@ -8,12 +11,14 @@ from ... import Atoms, Box, System
 
 # https://atztogo.github.io/phonopy/
 try:
-    import phonopy
+    from phonopy.structure.atoms import PhonopyAtoms
     has_phonopy = True
 except:
     has_phonopy = False
 
-def load(phonopyatoms, symbols=None, prop={}):
+def load(phonopyatoms: PhonopyAtoms,
+         symbols: Optional[tuple] = None,
+         prop: Optional[dict] = None) -> System:
     """
     Convert a phonopy.structure.atoms.PhonopyAtoms into an atomman.System.
     
@@ -36,6 +41,9 @@ def load(phonopyatoms, symbols=None, prop={}):
     
     assert has_phonopy, 'phonopy not imported'
     
+    if prop is None:
+        prop = {}
+
     # Get box/cell information
     box = Box(vects = phonopyatoms.get_cell())
     pbc = (True, True, True)

@@ -1,6 +1,8 @@
 # coding: utf-8
 # Standard Python libraries
+import io
 from collections import OrderedDict
+from typing import Optional, Tuple, Union
                         
 # atomman imports
 import atomman.unitconvert as uc
@@ -10,9 +12,17 @@ from ...lammps import style
 from .. import load_table
 from ...tools import uber_open_rmode
 
-def load(data, symbols=None, lammps_units='metal', prop_name=None,
-         table_name=None, shape=None, unit=None, dtype=None,
-         prop_info=None, return_prop_info=False):
+def load(data: Union[str, io.IOBase],
+         symbols: Optional[tuple] = None,
+         lammps_units: str = 'metal',
+         prop_name: Optional[list] = None,
+         table_name: Optional[list] = None,
+         shape: Optional[list] = None,
+         unit: Optional[list] = None,
+         dtype: Optional[list] = None,
+         prop_info: Optional[list] = None,
+         return_prop_info: bool = False
+         ) -> Union[System, Tuple[System, list]]:
     """
     Reads in a LAMMPS atomic dump file into a System.
     

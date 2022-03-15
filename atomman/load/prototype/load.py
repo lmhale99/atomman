@@ -1,15 +1,36 @@
 # coding: utf-8
  
-# atomman imports
-from ...library import Database
-from ...tools import identifyfamily
+# Standard Python imports
+from typing import Optional, Union, Tuple
+from pathlib import Path
 
-def load(name=None, id=None, key=None, commonname=None, prototype=None,
-         pearson=None, strukturbericht=None, sg_number=None,
-         sg_hm=None, sg_schoenflies=None, 
-         a=None, b=None, c=None, alpha=None, beta=None, gamma=None, symbols=None,
-         database=None, local=True, remote=True, prompt=True, refresh_cache=False,
-         verbose=False):
+# atomman imports
+from ... import System
+from ...library import Database
+
+def load(name: Union[str, list, None] = None,
+         id: Union[str, list, None] = None,
+         key: Union[str, list, None] = None,
+         commonname: Union[str, list, None] = None,
+         prototype: Union[str, list, None] = None,
+         pearson: Union[str, list, None] = None,
+         strukturbericht: Union[str, list, None] = None,
+         sg_number: Union[int, list, None] = None,
+         sg_hm: Union[str, list, None] = None,
+         sg_schoenflies: Union[str, list, None] = None,
+         a: Optional[float] = None,
+         b: Optional[float] = None,
+         c: Optional[float] = None,
+         alpha: Optional[float] = None,
+         beta: Optional[float] = None,
+         gamma: Optional[float] = None,
+         symbols: Optional[tuple] = None,
+         database: Optional[Database] = None,
+         local: Optional[bool] = True,
+         remote: Optional[bool] = True,
+         prompt: bool = True,
+         refresh_cache: bool = False,
+         verbose: bool = False) -> System:
     """
     Loads a crystal prototype record from the library. If multiple matches
     are found based on inputs a selection menu will appear.
@@ -109,7 +130,7 @@ def load(name=None, id=None, key=None, commonname=None, prototype=None,
     ucell.symbols = symbols
     
     # Allow lattice constants to be set based on crystal family
-    family = identifyfamily(ucell.box)
+    family = ucell.box.identifyfamily()
     if family == 'cubic':
         if a is not None:
             if b is not None or c is not None or alpha is not None or beta is not None or gamma is not None:

@@ -1,10 +1,19 @@
 # coding: utf-8
 
+# Standard Python imports
+from typing import Optional
+
 # atomman imports
+from ... import System
 from ...library import Database
 
-def load(id, api_key=None, database=None, local=None, remote=None,
-         refresh_cache=False, verbose=False):
+def load(id: str,
+         api_key: Optional[str] = None,
+         database: Optional[Database] = None,
+         local: Optional[bool] = True,
+         remote: Optional[bool] = True, 
+         refresh_cache: bool = False,
+         verbose: bool = False) -> System:
     """
     Loads a reference crystal structure from a DFT database.  Will first search
     the local database, then the remote NIST database to see if a matching

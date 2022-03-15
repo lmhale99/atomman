@@ -1,12 +1,13 @@
 # coding: utf-8
 
-# http://www.numpy.org/
-import numpy as np
+# Standard Python imports
+from typing import Optional
 
 # atomman imports
 from ... import Atoms, Box, System
 
-def load(cell, symbols=()):
+def load(cell: tuple,
+         symbols: Optional[tuple] = None) -> System:
     """
     Convert an spglib cell tuple into an atomman.System
     
@@ -15,7 +16,7 @@ def load(cell, symbols=()):
     cell : tuple
         A tuple containing 3x3 lattice vectors, 3XN box relative positions,
         and N numeric atomic types.
-    symbols : list
+    symbols : tuple, optional
         The elemental symbols to pair with the unique atom types/numbers.
     
     Returns

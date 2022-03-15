@@ -1,6 +1,7 @@
 # coding: utf-8
 # Standard Python libraries
-import os
+import io
+from typing import Optional, Union
 
 # http://www.numpy.org/
 import numpy as np
@@ -16,7 +17,8 @@ except:
 from ... import Atoms, Box, System
 from ...tools import uber_open_rmode
 
-def load(cif, symbols=None):
+def load(cif: Union[str, io.IOBase],
+         symbols: Optional[tuple] = None) -> System:
     """
     Reads in a CIF crystal file.  Requires diffpy.Structure.
     
@@ -47,6 +49,9 @@ def load(cif, symbols=None):
     all_atype += 1
     all_pos = dps.xyz
     
+    if symbols is None:
+        symbols = elements
+
     atype = []
     pos = []
     for a1, p1 in zip(all_atype, all_pos):
@@ -68,4 +73,4 @@ def load(cif, symbols=None):
               beta=dps.lattice.beta,
               gamma=dps.lattice.gamma)
     
-    return System(atoms=atoms, box=box, scale=True, symbols = elements)
+    return System(atoms=atoms, box=box, scale=True, symbols=symbols)

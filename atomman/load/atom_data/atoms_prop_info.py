@@ -3,7 +3,8 @@
 # atomman imports
 from ...lammps import style
 
-def atoms_prop_info(atom_style='atomic', units='metal'):
+def atoms_prop_info(atom_style: str = 'atomic',
+                    units: str = 'metal') -> list:
     """
     Returns the prop_info associated with an Atoms section in a LAMMPS data file
     

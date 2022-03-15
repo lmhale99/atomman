@@ -13,7 +13,6 @@ from ...tools import indexstr
 def dump(system,
          f: Union[str, io.IOBase, None]=None,
          lammps_units: str = 'metal',
-         #scale: bool = False,
          prop_name: Optional[list] = None,
          table_name: Optional[list] = None,
          shape: Optional[list] = None,
@@ -36,9 +35,6 @@ def dump(system,
         The LAMMPS units option associated with the table values.  This is used
         for the box dimensions and default units for standard dump properties
         (not compute/fix definitions).
-    scale : bool, optional
-        Flag indicating if atom positions are to be scaled relative to the box
-        (True) or given in absolute Cartesian values (False, default).
     prop_name : list, optional
         The Atoms properties to include.  If neither prop_name or prop_info are
         given, all system properties will be included.

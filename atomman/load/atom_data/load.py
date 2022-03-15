@@ -1,5 +1,9 @@
 # coding: utf-8
 
+# Standard Python imports
+import io
+from typing import Optional, Tuple, Union
+
 # https://pandas.pydata.org/
 import pandas as pd
 
@@ -12,8 +16,11 @@ from ...lammps import style
 from .. import load_table, FileFormatError
 from ...tools import uber_open_rmode
 
-def load(data, pbc=(True, True, True), symbols=None, atom_style=None,
-         units='metal'):
+def load(data: Union[str, io.IOBase],
+         pbc: Tuple[bool, bool, bool] = (True, True, True),
+         symbols: Optional[tuple] = None,
+         atom_style: Optional[str] = None,
+         units: str = 'metal') -> System:
     """
     Read a LAMMPS-style atom data file.
     

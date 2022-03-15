@@ -1,5 +1,8 @@
 # coding: utf-8
 
+# Standard Python imports
+from typing import Optional
+
 # http://www.numpy.org/
 import numpy as np
 
@@ -13,7 +16,9 @@ try:
 except:
     has_ase = False
 
-def load(aseatoms, symbols=None, prop={}):
+def load(aseatoms: ase.Atoms,
+         symbols: Optional[tuple] = None,
+         prop: Optional[dict] = None) -> System:
     """
     Convert an ase.Atoms into an atomman.System.
     
@@ -36,6 +41,9 @@ def load(aseatoms, symbols=None, prop={}):
     
     assert has_ase, 'ase not imported'
     
+    if prop is None:
+        prop = {}
+
     # Get box/cell information
     box = Box(vects = aseatoms.get_cell())
     pbc = aseatoms.get_pbc()

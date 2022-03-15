@@ -1,6 +1,9 @@
 # coding: utf-8
+
 # Standard Python libraries
 from collections import OrderedDict
+import io
+from typing import Optional, Union
 
 # http://www.numpy.org/
 import numpy as np
@@ -12,7 +15,10 @@ from DataModelDict import DataModelDict as DM
 import atomman.unitconvert as uc
 from ... import Atoms, Box, System
 
-def load(model, symbols=None, key='atomic-system', index=0):
+def load(model: Union[str, io.IOBase, DM],
+         symbols: Optional[tuple] = None,
+         key: str = 'atomic-system',
+         index: int = 0) -> System:
     """
     Read in a data model containing a crystal structure.
     

@@ -1,17 +1,36 @@
 # coding: utf-8
 
+# Standard Python imports
+from typing import Optional, Union
+
+# https://github.com/usnistgov/potentials
+from potentials.record import Record
+
 # atomman imports
+from ... import System
 from ...library import Database
 from ...tools import aslist
 
-import pandas as pd
-
-def load(name=None, key=None, method='dynamic', standing='good',
-         family=None, parent_key=None, potential=None,
-         potential_LAMMPS_id=None, potential_LAMMPS_key=None, potential_id=None, potential_key=None,
-         symbols=None, natoms=None, natypes=None, prompt=True, refresh_cache=False,
-         verbose=False, database=None, local=False, remote=True):
-
+def load(name: Union[str, list, None] = None,
+         key: Union[str, list, None] = None,
+         method: Union[str, list, None] = 'dynamic',
+         standing: Union[str, list, None] = 'good',
+         family: Union[str, list, None] = None,
+         parent_key: Union[str, list, None] = None, 
+         potential: Optional[Record] = None,
+         potential_LAMMPS_id: Union[str, list, None] = None,
+         potential_LAMMPS_key: Union[str, list, None] = None,
+         potential_id: Union[str, list, None] = None,
+         potential_key: Union[str, list, None] = None,
+         symbols: Union[str, list, None] = None,
+         natoms: Union[int, list, None] = None,
+         natypes: Union[int, list, None] = None,
+         prompt: bool = True,
+         refresh_cache: bool = False,
+         verbose: bool = False,
+         database: Optional[Database] = None,
+         local: bool = True,
+         remote: bool = True) -> System:
     """
     Loads a potential-dependent relaxed crystal record from the library.  If
     multiple matches are found based on inputs a selection menu will appear.
