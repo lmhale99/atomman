@@ -1,16 +1,18 @@
 # coding: utf-8
 # Standard Python imports
 from collections import OrderedDict
-import os
+import io
+from typing import Optional, Tuple, Union
 
 # http://pandas.pydata.org/
 import pandas as pd
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # https://www.scipy.org/
-from scipy.interpolate import griddata, Rbf, NearestNDInterpolator
+from scipy.interpolate import Rbf, NearestNDInterpolator
 
 # http://matplotlib.org/
 import matplotlib.pyplot as plt
@@ -22,15 +24,22 @@ from DataModelDict import DataModelDict as DM
 from .. import Box
 from .. import unitconvert as uc
 from ..tools import miller
-from ..mep import create_path
+from ..mep import create_path, BasePath
 
 class GammaSurface(object):
     """
     Class for representing gamma surfaces, i.e., generalized stacking faults.
     """
     
-    def __init__(self, model=None, a1vect=None, a2vect=None,
-                 a1=None, a2=None, E_gsf=None, box=None, delta=None):
+    def __init__(self,
+                 model: Union[str, io.IOBase, DM, None] = None,
+                 a1vect: Optional[npt.ArrayLike] = None,
+                 a2vect: Optional[npt.ArrayLike] = None,
+                 a1: Optional[npt.ArrayLike] = None,
+                 a2: Optional[npt.ArrayLike] = None,
+                 E_gsf: Optional[npt.ArrayLike] = None,
+                 box: Optional[Box] = None,
+                 delta: Optional[npt.ArrayLike] = None):
         """
         Class initializer. Parameter model must be given alone. Otherwise,
         all or none of a1vect, a2vect, a1, a2, and E_gsf must be given.
@@ -100,7 +109,7 @@ class GammaSurface(object):
             self.__hasdata = False
     
     @property
-    def data(self):
+    def data(self) -> pd.DataFrame:
         """pandas.DataFrame : The raw data."""
         if self.__hasdata:
             return self.__data
@@ -108,7 +117,7 @@ class GammaSurface(object):
             raise AttributeError('gamma surface data not set')
           
     @property
-    def a1vect(self):
+    def a1vect(self) -> np.ndarray:
         """numpy.ndarray : The a1 shifting vector."""
         if self.__hasdata:
             return self.__a1vect
@@ -116,7 +125,7 @@ class GammaSurface(object):
             raise AttributeError('gamma surface data not set')
     
     @property
-    def a2vect(self):
+    def a2vect(self) -> np.ndarray:
         """numpy.ndarray : The a2 shifting vector."""
         if self.__hasdata:
             return self.__a2vect
@@ -124,7 +133,7 @@ class GammaSurface(object):
             raise AttributeError('gamma surface data not set')
     
     @property
-    def planenormal(self):
+    def planenormal(self) -> np.ndarray:
         """numpy.ndarray : The Cartesian vector normal to the fault plane."""
         if self.__hasdata:
             return self.__planenormal
@@ -132,7 +141,7 @@ class GammaSurface(object):
             raise AttributeError('gamma surface data not set')
 
     @property
-    def box(self):
+    def box(self) -> Box:
         """
         atomman.Box : A unit cell box used for converting between
                       crystal lattice and Cartesian vectors.
@@ -142,7 +151,14 @@ class GammaSurface(object):
         else:
             raise AttributeError('gamma surface data not set')
     
-    def set(self, a1vect, a2vect, a1, a2, E_gsf,  box=None, delta=None):
+    def set(self,
+            a1vect: npt.ArrayLike,
+            a2vect: npt.ArrayLike,
+            a1: npt.ArrayLike,
+            a2: npt.ArrayLike,
+            E_gsf: npt.ArrayLike,
+            box: Optional[Box] = None,
+            delta: Optional[npt.ArrayLike] = None):
         """
         Sets generalized stacking fault data.
         
@@ -253,8 +269,10 @@ class GammaSurface(object):
             self.__delta_fit = Rbf(a1[ix], a2[ix], delta[ix])
             self.__delta_nearest = NearestNDInterpolator(np.array([a1[ix], a2[ix]]).T, delta[ix])
     
-    def model(self, model=None, length_unit='angstrom',
-              energyperarea_unit='mJ/m^2'):
+    def model(self,
+              model: Union[str, io.IOBase, DM, None] = None,
+              length_unit: str = 'angstrom',
+              energyperarea_unit: str = 'mJ/m^2') -> Optional[DM]:
         """
         Return or set DataModelDict representation of the gamma surface.
         
@@ -319,21 +337,25 @@ class GammaSurface(object):
             
             return model
     
-    def a12_to_pos(self, a1, a2, a1vect=None, a2vect=None):
+    def a12_to_pos(self,
+                   a1: npt.ArrayLike,
+                   a2: npt.ArrayLike,
+                   a1vect: Optional[npt.ArrayLike] = None,
+                   a2vect: Optional[npt.ArrayLike] = None) -> np.ndarray:
         """
         Conversion function from normalized a1, a2 coordinates to Cartesian
         positions.
         
         Parameters
         ----------
-        a1 : float(s)
+        a1 : array-like object
             Fractional distance(s) along a1 vector.
-        a2 : float(s)
+        a2 : array-like object
             Fractional distance(s) along a2 vector.
-        a1vect : np.array, optional
+        a1vect : array-like object, optional
             Crystal vector for the a1 vector.  Default value of None uses the
             saved a1vect.
-        a2vect : np.array, optional
+        a2vect : array-like object, optional
             Crystal vector for the a2 vector.  Default value of None uses the
             saved a2vect.
         
@@ -358,24 +380,28 @@ class GammaSurface(object):
         # Transform a1, a2 to Cartesian pos
         return np.outer(a1, a1vect) + np.outer(a2, a2vect)
         
-    def pos_to_xy(self, pos, xvect=None):
+    def pos_to_xy(self,
+                  pos: npt.ArrayLike,
+                  xvect: Optional[npt.ArrayLike] = None
+                  ) -> Union[Tuple[float, float],
+                             Tuple[np.ndarray, np.ndarray]]:
         """
         Conversion function from Cartesian positions to plotting x, y
         coordinates.
         
         Parameters
         ----------
-        pos: np.array
+        pos: array-like object
             3D Cartesian position vector(s).
-        xvect : np.array, optional
+        xvect : array-like object, optional
             Cartesian vector corresponding to the plotting x-axis. If None (default), this is
             taken as the Cartesian of a1vect.
         
         Returns
         -------
-        x : float(s)
+        x : float or numpy.ndarray
             Plotting x coordinate(s).
-        y : float(s)
+        y : float or numpy.ndarray
             Plotting y coordinate(s).
         """
         # Handle xvect
@@ -396,32 +422,39 @@ class GammaSurface(object):
         # Return x, y coordinates
         return pos[...,0], pos[...,1]
     
-    def a12_to_xy(self, a1, a2, a1vect=None, a2vect=None, xvect=None):
+    def a12_to_xy(self,
+                  a1: npt.ArrayLike,
+                  a2: npt.ArrayLike,
+                  a1vect: Optional[npt.ArrayLike] = None,
+                  a2vect: Optional[npt.ArrayLike] = None,
+                  xvect: Optional[npt.ArrayLike] = None
+                  ) -> Union[Tuple[float, float],
+                             Tuple[np.ndarray, np.ndarray]]:
         """
         Conversion function from normalized a1, a2 coordinates to plotting x, y
         coordinates.
         
         Parameters
         ----------
-        a1 : float(s)
+        a1 : array-like object
             Fractional distance(s) along a1 vector.
-        a2 : float(s)
+        a2 : array-like object
             Fractional distance(s) along a2 vector.
-        a1vect : np.array, optional
+        a1vect : array-like object, optional
             Crystal vector for the a1 vector.  Default value of None uses the
             saved a1vect.
-        a2vect : np.array, optional
+        a2vect : array-like object, optional
             Crystal vector for the a2 vector.  Default value of None uses the
             saved a2vect.
-        xvect : np.array, optional
+        xvect : array-like object, optional
             Cartesian vector corresponding to the plotting x-axis. If None (default), this is
             taken as the Cartesian of a1vect.
         
         Returns
         -------
-        x : float(s)
+        x : float or numpy.ndarray
             Plotting x coordinate(s).
-        y : float(s)
+        y : float or numpy.ndarray
             Plotting y coordinate(s).
         """
         # Set xvect as given a1vect if needed
@@ -434,19 +467,24 @@ class GammaSurface(object):
         # Transform from pos to x, y
         return self.pos_to_xy(pos, xvect=xvect)
     
-    def pos_to_a12(self, pos, a1vect=None, a2vect=None):
+    def pos_to_a12(self,
+                   pos: npt.ArrayLike,
+                   a1vect: Optional[npt.ArrayLike] = None,
+                   a2vect: Optional[npt.ArrayLike] = None
+                   ) -> Union[Tuple[float, float],
+                              Tuple[np.ndarray, np.ndarray]]:
         """
         Conversion function from Cartesian positions to normalized a1, a2
         coordinates.
         
         Parameters
         ----------
-        pos : np.array
+        pos : array-like object
             3D Cartesian position vector(s).
-        a1vect : np.array, optional
+        a1vect : array-like object, optional
             Crystal vector for the a1 vector.  Default value of None uses the
             saved a1vect.
-        a2vect : np.array, optional
+        a2vect : array-like object, optional
             Crystal vector for the a2 vector.  Default value of None uses the
             saved a2vect.
 
@@ -482,18 +520,21 @@ class GammaSurface(object):
         # Return a1, a2
         return a123[...,0], a123[...,1]
     
-    def xy_to_pos(self, x, y, xvect=None):
+    def xy_to_pos(self,
+                  x: npt.ArrayLike,
+                  y: npt.ArrayLike,
+                  xvect: Optional[npt.ArrayLike] = None) -> np.ndarray:
         """
         Conversion function from plotting x, y coordinates to Cartesian
         positions.
         
         Parameters
         ----------
-        x : float(s)
+        x : array-like object
             Plotting x coordinate(s).
-        y : float(s)
+        y : array-like object
             Plotting y coordinate(s).
-        xvect : np.array, optional
+        xvect : array-like object, optional
             Cartesian vector corresponding to the plotting x-axis. If None
             (default), this is taken as the Cartesian of a1vect.
         
@@ -522,24 +563,31 @@ class GammaSurface(object):
         # Return Cartesian pos
         return pos
     
-    def xy_to_a12(self, x, y, a1vect=None, a2vect=None, xvect=None):
+    def xy_to_a12(self,
+                  x: npt.ArrayLike,
+                  y: npt.ArrayLike,
+                  a1vect: Optional[npt.ArrayLike] = None,
+                  a2vect: Optional[npt.ArrayLike] = None,
+                  xvect: Optional[npt.ArrayLike] = None
+                  ) -> Union[Tuple[float, float],
+                             Tuple[np.ndarray, np.ndarray]]:
         """
         Conversion function from plotting x, y coordinates to normalized a1, a2
         coordinates.
         
         Parameters
         ----------
-        x : float(s)
+        x : array-like object
             Plotting x coordinate(s).
-        y : float(s)
+        y : array-like object
             Plotting y coordinate(s).
-        a1vect : np.array, optional
+        a1vect : array-like object, optional
             Crystal vector for the a1 vector.  Default value of None uses the
             saved a1vect.
-        a2vect : np.array, optional
+        a2vect : array-like object, optional
             Crystal vector for the a2 vector.  Default value of None uses the
             saved a2vect.
-        xvect : np.array, optional
+        xvect : array-like object, optional
             Cartesian vector corresponding to the plotting x-axis. If None
             (default), this is taken as the Cartesian of a1vect.
         
@@ -561,7 +609,7 @@ class GammaSurface(object):
         # Convert pos to a1, a2
         return self.pos_to_a12(pos, a1vect=a1vect, a2vect=a2vect)
     
-    def E_gsf(self, **kwargs):
+    def E_gsf(self, **kwargs) -> Union[float, np.ndarray]:
         """
         Returns values for generalized stacking fault energy interpolated from
         the raw data.  Values can be obtained relative to a1, a2 fractional
@@ -569,28 +617,33 @@ class GammaSurface(object):
         
         Parameters
         ----------
-        a1 : float(s), optional
+        a1 : array-like object, optional
             Fractional coordinate(s) along a1vect.
-        a2 : float(s), optional
+        a2 : array-like object, optional
             Fractional coordinate(s) along a2vect.
-        pos : np.array, optional
+        pos : array-like object, optional
             3D Cartesian position vector(s).
-        x : float(s), optional
+        x : array-like object, optional
             Plotting x coordinate(s).
-        y : float(s), optional
+        y : array-like object, optional
             Plotting y coordinate(s).
-        a1vect : np.array, optional
+        a1vect : array-like object, optional
             Vector for the a1 fractional coordinates.  Default value of None 
             uses the saved a1vect.
-        a2vect : np.array, optional
+        a2vect : array-like object, optional
             Vector for the a2 fractional coordinates.  Default value of None 
             uses the saved a2vect.
-        xvect : np.array, optional
+        xvect : array-like object, optional
             Cartesian vector corresponding to the plotting x-axis. If None
             (default), this is taken as the Cartesian of a1vect.
         smooth : bool, optional
             If True (default) the returned values are smoothed using a RBF fit.
             If False, the closest measured values are returned.
+        
+        Returns
+        -------
+        float or np.ndarray
+            The generalized stacking fault energy value(s).
         """
         if not self.__hasdata:
             raise AttributeError('gamma surface data not set')
@@ -673,36 +726,42 @@ class GammaSurface(object):
 
             return self.__E_gsf_nearest(np.array([a1.flatten(), a2.flatten()]).T).reshape(a1.shape)
     
-    def delta(self, **kwargs):
+    def delta(self, **kwargs) -> Union[float, np.ndarray]:
         """
-        Returns values for generalized stacking fault energy interpolated from
-        the raw data.  Values can be obtained relative to a1, a2 fractional
-        coordinates, x, y plotting coordinates, or pos Cartesian coordinates.
+        Returns values for generalized stacking fault relaxation distance
+        interpolated from the raw data.  Values can be obtained relative to
+        a1, a2 fractional coordinates, x, y plotting coordinates, or pos
+        Cartesian coordinates.
         
         Parameters
         ----------
-        a1 : float(s), optional
+        a1 : array-like object, optional
             Fractional coordinate(s) along a1vect.
-        a2 : float(s), optional
+        a2 : array-like object, optional
             Fractional coordinate(s) along a2vect.
-        pos : np.array, optional
+        pos : array-like object, optional
             3D Cartesian position vector(s).
-        x : float(s), optional
+        x : array-like object, optional
             Plotting x coordinate(s).
-        y : float(s), optional
+        y : array-like object, optional
             Plotting y coordinate(s).
-        a1vect : np.array, optional
+        a1vect : array-like object, optional
             Vector for the a1 fractional coordinates.  Default value of None 
             uses the saved a1vect.
-        a2vect : np.array, optional
+        a2vect : array-like object, optional
             Vector for the a2 fractional coordinates.  Default value of None 
             uses the saved a2vect.
-        xvect : np.array, optional
+        xvect : array-like object, optional
             Cartesian vector corresponding to the plotting x-axis. If None
             (default), this is taken as the Cartesian of a1vect.
         smooth : bool, optional
             If True (default) the returned values are smoothed using a RBF fit.
             If False, the closest measured values are returned.
+        
+        Returns
+        -------
+        float or np.ndarray
+            The generalized stacking fault planar shift value(s).
         """
         if not self.__hasdata:
             raise AttributeError('gamma surface data not set')
@@ -759,10 +818,18 @@ class GammaSurface(object):
         else:
             return self.__delta_nearest(np.array([a1.flatten(), a2.flatten()]).T).reshape(a1.shape)
     
-    def E_gsf_surface_plot(self, normalize=False, smooth=True, 
-                           a1vect=None, a2vect=None, xvect=None,
-                           length_unit='Å', energyperarea_unit='eV/Å^2',
-                           numx=100, numy=100, figsize=None, **kwargs):
+    def E_gsf_surface_plot(self,
+                           normalize: bool = False,
+                           smooth: bool = True, 
+                           a1vect: Optional[npt.ArrayLike] = None,
+                           a2vect: Optional[npt.ArrayLike] = None,
+                           xvect: Optional[npt.ArrayLike] = None,
+                           length_unit: str = 'Å',
+                           energyperarea_unit: str = 'eV/Å^2',
+                           numx: int = 100,
+                           numy: int = 100,
+                           figsize: Optional[tuple] = None,
+                           **kwargs) -> plt.figure:
         """
         Creates a 2D surface plot from the stacking fault energy values.
         
@@ -869,9 +936,15 @@ class GammaSurface(object):
         
         return fig
     
-    def E_gsf_line_plot(self, vect=None, num=None, smooth=True,
-                        length_unit='Å', energyperarea_unit='eV/Å^2',
-                        figsize=None, fig=None, **kwargs):
+    def E_gsf_line_plot(self,
+                        vect: Optional[npt.ArrayLike] = None,
+                        num: int = None,
+                        smooth: bool = True,
+                        length_unit: str = 'Å',
+                        energyperarea_unit: str = 'eV/Å^2',
+                        figsize: Optional[tuple] = None,
+                        fig: Optional[plt.figure] = None,
+                        **kwargs) -> plt.figure:
         """
         Generates a line plot for the interpolated generalized stacking fault
         energy along a specified crystallographic vector in the (a1, a2) plane.
@@ -963,10 +1036,17 @@ class GammaSurface(object):
         
         return fig
     
-    def delta_surface_plot(self, normalize=False, smooth=True, 
-                           a1vect=None, a2vect=None, xvect=None,
-                           length_unit='Å',
-                           numx=100, numy=100, figsize=None, **kwargs):
+    def delta_surface_plot(self,
+                           normalize: bool = False,
+                           smooth: bool = True, 
+                           a1vect: Optional[npt.ArrayLike] = None,
+                           a2vect: Optional[npt.ArrayLike] = None,
+                           xvect: Optional[npt.ArrayLike] = None,
+                           length_unit: str = 'Å',
+                           numx: int = 100,
+                           numy: int = 100,
+                           figsize: Optional[tuple] = None,
+                           **kwargs) -> plt.figure:
         """
         Creates a 2D surface plot from the delta planar displacement values.
         
@@ -1070,9 +1150,14 @@ class GammaSurface(object):
         
         return fig
     
-    def delta_line_plot(self, vect=None, num=None, smooth=True,
-                        length_unit='Å',
-                        figsize=None, fig=None, **kwargs):
+    def delta_line_plot(self,
+                        vect: Optional[npt.ArrayLike] = None,
+                        num: Optional[int] = None,
+                        smooth: bool = True,
+                        length_unit: str = 'Å',
+                        figsize: Optional[tuple] = None,
+                        fig: Optional[plt.figure] = None,
+                        **kwargs) -> plt.figure:
         """
         Generates a line plot for the interpolated delta planar shift values
         along a specified crystallographic vector in the (a1, a2) plane.
@@ -1163,8 +1248,12 @@ class GammaSurface(object):
         
         return fig
 
-    def path(self, coord, style='ISM', gradientfxn='cdiff',
-             gradientkwargs=None, integratorfxn='rk'):
+    def path(self,
+             coord: npt.ArrayLike,
+             style: str = 'ISM',
+             gradientfxn: str = 'cdiff',
+             gradientkwargs: Optional[dict] = None,
+             integratorfxn: str ='rk') -> BasePath:
         """
         Creates an mep Path object mapping for the gamma surface based on
         supplied xy coordinates along the path line.
@@ -1201,8 +1290,13 @@ class GammaSurface(object):
         return create_path(coord, energyfxn, style=style, gradientfxn=gradientfxn,
                            gradientkwargs=gradientkwargs, integratorfxn=integratorfxn)
 
-    def build_path(self, pos, npoints=31, style='ISM', gradientfxn='cdiff',
-                   gradientkwargs=None, integratorfxn='rk'):
+    def build_path(self,
+                   pos: npt.ArrayLike,
+                   npoints: int = 31,
+                   style: str = 'ISM',
+                   gradientfxn: str = 'cdiff',
+                   gradientkwargs: Optional[dict] = None,
+                   integratorfxn: str = 'rk') -> BasePath:
         """
         Builds a subclass of atomman.mep.BasePath as one or two line segments
         along a gamma surface. The energy function along the path will be

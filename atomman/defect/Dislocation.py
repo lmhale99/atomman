@@ -1,59 +1,39 @@
 # coding: utf-8
 # Standard Python libraries
 from copy import deepcopy
+import io
+from typing import Optional, Tuple, Union
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
 
+from atomman.defect.VolterraDislocation import VolterraDislocation
+
+# atomman imports
 from . import (dislocation_system_basis, solve_volterra_dislocation,
                dislocation_array)
-from ..tools import miller, vect_angle
+from .. import Box, System, ElasticConstants
+from ..tools import miller, vect_angle, boolean
 from ..region import PlaneSet, Cylinder
-
-def boolean(value):
-    """
-    Allows conversion of strings to Booleans.
-    
-    Parameters
-    ----------
-    value : str or bool
-        If str, then 'true' and 't' become True and 'false' and 'f' become
-        false. If bool, simply return the value.
-        
-    Returns
-    -------
-    bool
-        Equivalent bool of value.
-        
-    Raises
-    ------
-    ValueError
-        If value is unrecognized.
-    """
-    
-    # Pass Boolean values through without changing
-    if value is True:
-        return True
-    elif value is False:
-        return False
-    
-    # Convert strings
-    elif value.lower() in ['true', 't']:
-        return True
-    elif value.lower() in ['false', 'f']:
-        return False
-    
-    # Issue error for invalid string
-    else:
-        raise ValueError('Invalid Boolean string')
 
 class Dislocation():
     
-    def __init__(self, ucell, C, burgers, ξ_uvw, slip_hkl, m=[0,1,0],
-                 n=[0,0,1], shift=None, shiftindex=None, shiftscale=None, tol=1e-8):
+    def __init__(self,
+                 ucell: System,
+                 C: ElasticConstants,
+                 burgers: npt.ArrayLike,
+                 ξ_uvw: npt.ArrayLike,
+                 slip_hkl: npt.ArrayLike,
+                 m: Optional[npt.ArrayLike] = [0,1,0],
+                 n: Optional[npt.ArrayLike] = [0,0,1],
+                 shift: Optional[npt.ArrayLike] = None,
+                 shiftindex: Optional[int] = None,
+                 shiftscale: Optional[bool] = None,
+                 tol: float = 1e-8):
         """
         Class initializer.  Solves the dislocation solution and rotates the
         given unit cell to the proper orientation.
@@ -83,7 +63,7 @@ class Dislocation():
             The n unit vector for the dislocation solution.  m, n, and ξ
             (dislocation line) should be right-hand orthogonal.  Default value
             is [0,0,1] (z-axis). n is normal to the dislocation slip plane.
-        shift : float, optional
+        shift : array-like object, optional
             A rigid body shift to apply to the rotated cell prior to inserting
             the dislocation.  Should be selected such that the ideal slip plane
             does not correspond to any atomic planes.  Is taken as absolute if
@@ -191,7 +171,11 @@ class Dislocation():
         self.__disl_system = None
 
     @classmethod
-    def fromref(cls, ucell, C, model, tol=1e-8):
+    def fromref(cls,
+                ucell: System,
+                C: ElasticConstants,
+                model: Union[str, io.IOBase, DM],
+                tol: float = 1e-8):
         """
         Initializes a Dislocation object based on pre-defined dislocation
         parameters from a reference record.
@@ -235,52 +219,52 @@ class Dislocation():
                    shiftindex=shiftindex, shiftscale=shiftscale, tol=tol)
     
     @property
-    def dislsol(self):
+    def dislsol(self) -> VolterraDislocation:
         """atomman.defect.VolterraDislocation : The elastic dislocation solution"""
         return self.__dislsol
     
     @property
-    def uvws(self):
+    def uvws(self) -> np.ndarray:
         """numpy.NDArray : The 3x3 array of uvw Miller vectors used to rotate ucell to rcell"""
         return self.__uvws
     
     @property
-    def transform(self):
+    def transform(self) -> np.ndarray:
         """numpy.NDArray : The 3x3 Cartesian transformation matrix associated with rotating from ucell to rcell"""
         return self.__transform
     
     @property
-    def ucell(self):
+    def ucell(self) -> System:
         """atomman.System : The crystal unit cell used as the basis for constructing the dislocation system"""
         return self.__ucell
     
     @property
-    def rcell(self):
+    def rcell(self) -> System:
         """atomman.System : The cell associated with rotating ucell to coincide with the dislocation solution"""
         return self.__rcell
     
     @property
-    def lineindex(self):
+    def lineindex(self) -> int:
         """int : The index of the box vector that coincides with the dislocation line: 0=a, 1=b, 2=c"""
         return self.__lineindex
     
     @property
-    def cutindex(self):
+    def cutindex(self) -> int:
         """int : The index of the box vector that is not within the slip plane: 0=a, 1=b, 2=c"""
         return self.__cutindex
     
     @property
-    def shifts(self):
+    def shifts(self) -> list:
         """list : All identified shifts that will place the slip plane halfway between atomic planes"""
         return self.__shifts
     
     @property
-    def shift(self):
+    def shift(self) -> np.ndarray:
         """numpy.NDArray : The particular shift value that will be or was used to construct the dislocation system"""
         return self.__shift
 
     @property
-    def base_system(self):
+    def base_system(self) -> System:
         """atomman.System : The "perfect crystal" reference system associated with the dislocation system"""
         if self.__base_system is not None:
             return self.__base_system
@@ -288,14 +272,16 @@ class Dislocation():
             raise ValueError('base_system not built yet: must call monopole() or periodicarray() first')
 
     @property
-    def disl_system(self):
+    def disl_system(self) -> System:
         """atomman.System : The generated dislocation system"""
         if self.__disl_system is not None:
             return self.__disl_system
         else:
             raise ValueError('disl_system not built yet: must call monopole() or periodicarray() first')
 
-    def box_boundary(self, box, width):
+    def box_boundary(self,
+                     box: Box,
+                     width: float) -> PlaneSet:
         """
         Constructs a shape associated with the box-style boundary region.  Used
         by the monopole() generation method.  The returned shape will encompass
@@ -329,7 +315,9 @@ class Dislocation():
         # Create and return shape
         return PlaneSet(planes)
     
-    def array_boundary(self, box, width):
+    def array_boundary(self,
+                       box: Box,
+                       width: float) -> PlaneSet:
         """
         Constructs a shape associated with the boundary regions used by the
         periodicarray() generation method.  The returned shape will encompass
@@ -358,7 +346,9 @@ class Dislocation():
         # Create and return shape
         return PlaneSet(planes)
 
-    def cylinder_boundary(self, box, width):
+    def cylinder_boundary(self,
+                          box: Box,
+                          width: float) -> Cylinder:
         """
         Constructs a shape associated with the cylinder-style boundary region.
         Used by the monopole() generation method.  The returned shape will
@@ -440,10 +430,19 @@ class Dislocation():
 
         return Cylinder(center1, center2, radius, endcaps=False)
     
-    def monopole(self, sizemults=None, amin=0.0, bmin=0.0, cmin=0.0,
-                 shift=None, shiftindex=None, shiftscale=False,
-                 boundaryshape='cylinder', boundarywidth=0.0,
-                 boundaryscale=False, return_base_system=False):
+    def monopole(self,
+                 sizemults: Optional[tuple] = None,
+                 amin: float = 0.0,
+                 bmin: float = 0.0,
+                 cmin: float = 0.0,
+                 shift: Optional[npt.ArrayLike] = None,
+                 shiftindex: Optional[int] = None,
+                 shiftscale: bool = False,
+                 boundaryshape: str = 'cylinder',
+                 boundarywidth: float = 0.0,
+                 boundaryscale: bool = False,
+                 return_base_system: bool = False
+                 ) -> Union[System, Tuple[System, System]]:
         """
         Constructs a dislocation monopole atomic configuration containing a
         single perfectly straight dislocation. The resulting system will be
@@ -479,7 +478,7 @@ class Dislocation():
             directions, the resulting vector multiplier will be even.  If both
             cmin and sizemults is given, then the larger multiplier for the two
             will be used.
-        shift : float, optional
+        shift : array-like object, optional
             A rigid body shift to apply to the rotated cell prior to inserting
             the dislocation.  Should be selected such that the ideal slip plane
             does not correspond to any atomic planes.  Is taken as absolute if
@@ -623,10 +622,20 @@ class Dislocation():
         else:
             return disl_system
 
-    def periodicarray(self, sizemults=None, amin=0.0, bmin=0.0, cmin=0.0,
-                      shift=None, shiftindex=None, shiftscale=False,
-                      boundarywidth=0.0, boundaryscale=False, linear=False,
-                      cutoff=None, return_base_system=False):
+    def periodicarray(self,
+                      sizemults: Optional[tuple] = None,
+                      amin: float = 0.0,
+                      bmin: float = 0.0,
+                      cmin: float = 0.0,
+                      shift: Optional[npt.ArrayLike] = None,
+                      shiftindex: Optional[int] = None,
+                      shiftscale: bool = False,
+                      boundarywidth: float = 0.0,
+                      boundaryscale: bool = False,
+                      linear: bool = False,
+                      cutoff: Optional[float] = None,
+                      return_base_system: bool = False
+                      ) -> Union[System, Tuple[System, System]]:
         """
         Constructs a dislocation monopole atomic configuration containing a
         single perfectly straight dislocation. The resulting system will be

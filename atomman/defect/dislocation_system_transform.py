@@ -1,9 +1,20 @@
+# coding: utf-8
+# Standard Python libraries
+from typing import Optional
+
+# http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 from .. import Box
-from ..tools import miller, vect_angle
+from ..tools import miller
 
-def dislocation_system_transform(ξ_uvw, slip_hkl, m=None, n=None, box=None, tol=1e-8):
+def dislocation_system_transform(ξ_uvw: npt.ArrayLike,
+                                 slip_hkl: npt.ArrayLike,
+                                 m: Optional[npt.ArrayLike] = None,
+                                 n: Optional[npt.ArrayLike] = None,
+                                 box: Optional[Box] = None,
+                                 tol: float = 1e-8) -> np.ndarray:
     """
     Utility function for getting the transformation matrix to the dislocation system
     based on crystal orientation vectors.
@@ -28,6 +39,11 @@ def dislocation_system_transform(ξ_uvw, slip_hkl, m=None, n=None, box=None, tol
     tol : float, optional
         Tolerance parameter used to round off near-zero values.  Default
         value is 1e-8.
+    
+    Returns
+    -------
+    numpy.ndarray
+        The (3,3) transformation matrix.
     """
     # Set default box to be cubic
     if box is None:

@@ -1,12 +1,21 @@
 # coding: utf-8
 
+# Standard Python libraries
+from typing import Tuple
+
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
-from .. import displacement
+# atomman imports
+from .. import displacement, System
 
-def disregistry(basesystem, dislsystem, m=[1.0, 0.0, 0.0],
-                n=[0.0, 1.0, 0.0], planepos=[0.0, 0.0, 0.0]):
+def disregistry(basesystem: System,
+                dislsystem: System,
+                m: npt.ArrayLike = [1.0, 0.0, 0.0],
+                n: npt.ArrayLike = [0.0, 1.0, 0.0],
+                planepos: npt.ArrayLike = [0.0, 0.0, 0.0]
+                ) ->  Tuple[np.ndarray, np.ndarray]:
     """
     Computes the disregistry profile for a dislocation system.
     

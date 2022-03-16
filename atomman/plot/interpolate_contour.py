@@ -1,7 +1,12 @@
 # coding: utf-8
 
+# Standard Python libraries
+from warnings import warn
+from typing import Optional, Tuple, Union
+
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # https://www.scipy.org/
 from scipy.interpolate import griddata
@@ -11,19 +16,33 @@ import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
-from warnings import warn
-
 # atomman imports
 import atomman.unitconvert as uc
-from ..tools import axes_check, vect_angle
+from .. import System
+from ..tools import axes_check
 
 __all__ = ['interpolate_contour']
 
-def interpolate_contour(system, name, property=None, index=None, magnitude=False,
-                        plotxaxis='x', plotyaxis='y', xlim=None, ylim=None,
-                        zlim=None, xbins=200, ybins=200, dots=True, czero=True,
-                        save=False, show=True, length_unit='angstrom',
-                        property_unit=None, cmap='jet', fill_value=np.nan):
+def interpolate_contour(system: System,
+                        name: str,
+                        property: Optional[npt.ArrayLike] = None,
+                        index: Union[int, tuple, None] = None,
+                        magnitude: bool = False,
+                        plotxaxis: str = 'x',
+                        plotyaxis: str = 'y',
+                        xlim: Optional[tuple] = None,
+                        ylim: Optional[tuple] = None,
+                        zlim: Optional[tuple] = None,
+                        xbins: int = 200,
+                        ybins: int = 200,
+                        dots: bool = True,
+                        czero: bool = True,
+                        save=False,
+                        show=True,
+                        length_unit: str = 'angstrom',
+                        property_unit: Optional[str] = None,
+                        cmap: str = 'jet',
+                        fill_value: float = np.nan) -> Tuple[float, float]:
     """
     Creates a contour plot of a system's per-atom properties by interpolating
     properties between atoms.
@@ -96,10 +115,11 @@ def interpolate_contour(system, name, property=None, index=None, magnitude=False
         is None, in which no unit conversion is applied.
     cmap : str, optional
         The name of the matplotlib colormap to use.  Default value is 'jet'.
-    fill_value: float, optinal
+    fill_value: float, optional
         Value used to fill in for grid points failed to interpolate in the fit.
         If not given, then the default is np.nan, which may cause an error in
         plotting for too narrow xlim and ylim settings.
+    
     Returns
     -------
     intsum : float
@@ -203,7 +223,13 @@ def interpolate_contour(system, name, property=None, index=None, magnitude=False
 
     return intsum, avsum
 
-def grid_interpolate_2d(x, y, v, xbins=50, ybins=50, range=None, fill_value=np.nan):
+def grid_interpolate_2d(x: npt.ArrayLike,
+                        y: npt.ArrayLike,
+                        v: npt.ArrayLike,
+                        xbins: int = 50,
+                        ybins: int = 50,
+                        range: Optional[npt.ArrayLike] = None,
+                        fill_value: float = np.nan) -> Tuple:
     """
     Generates 2D grid of property values by interpolating between measured
     values.
@@ -222,10 +248,10 @@ def grid_interpolate_2d(x, y, v, xbins=50, ybins=50, range=None, fill_value=np.n
     ybins : int, optional
         The number of bins to use in interpolating between the y coordinates.
         Default value is 50.
-    range : list, tuple or array-like object
+    range : array-like object, optional
         2x2 list of the [[xmin, xmax], [ymin, ymax]] coordinates for the bins.
         If not given, will use [[x.min(), x.max()], [y.min(), y.max()]].
-    fill_value: float, optinal
+    fill_value: float, optional
         Value used to fill in for grid points failed to interpolate in the fit.
         If not given, then the default is np.nan.
 
@@ -254,8 +280,13 @@ def grid_interpolate_2d(x, y, v, xbins=50, ybins=50, range=None, fill_value=np.n
 
     return grid, range[0], range[1]
 
-def prettygrid(grid, xedges, yedges, cmap='jet', propname='', czero=True,
-               scale=1):
+def prettygrid(grid: npt.ArrayLike,
+               xedges: list,
+               yedges: list,
+               cmap: str = 'jet',
+               propname: str = '',
+               czero: bool = True,
+               scale: int = 1) -> plt.figure:
     """
     Generates pretty-looking 2D image maps for grid data using matplotlib.
 
@@ -343,7 +374,10 @@ def prettygrid(grid, xedges, yedges, cmap='jet', propname='', czero=True,
     
     return fig
     
-def adddots(x, y, xedges, yedges):
+def adddots(x: npt.ArrayLike,
+            y: npt.ArrayLike,
+            xedges: list,
+            yedges: list):
     """
     Overlays circles onto an active 2D plot to show actual atomic positions.
     

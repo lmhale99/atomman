@@ -1,13 +1,15 @@
 # coding: utf-8
+
 # Standard Python libraries
-from copy import deepcopy
+from typing import Optional
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # atomman imports
 from . import dislocation_system_transform
-from .. import Box
+from .. import Box, ElasticConstants
 from ..tools import axes_check, vect_angle, miller
 
 class VolterraDislocation(object):
@@ -15,8 +17,17 @@ class VolterraDislocation(object):
     Generic class for a Volterra solution of a straight dislocation.
     """
     
-    def __init__(self, C, burgers, ξ_uvw=None, slip_hkl=None, transform=None,
-                 axes=None, box=None, m=[1,0,0], n=[0,1,0], tol=1e-8):
+    def __init__(self,
+                 C: ElasticConstants,
+                 burgers: npt.ArrayLike,
+                 ξ_uvw: Optional[npt.ArrayLike] = None,
+                 slip_hkl: Optional[npt.ArrayLike] = None,
+                 transform: Optional[npt.ArrayLike] = None,
+                 axes: Optional[npt.ArrayLike] = None,
+                 box: Optional[Box] = None,
+                 m: npt.ArrayLike = [1,0,0],
+                 n: npt.ArrayLike = [0,1,0],
+                 tol: float = 1e-8):
         """
         Initializes the solution. Calls solve.
         
@@ -61,8 +72,17 @@ class VolterraDislocation(object):
         self.solve(C, burgers, ξ_uvw=ξ_uvw, slip_hkl=slip_hkl, transform=transform,
                    axes=axes, box=box, m=m, n=n, tol=tol)
         
-    def solve(self, C, burgers, ξ_uvw=None, slip_hkl=None, transform=None,
-              axes=None, box=None, m=[1,0,0], n=[0,1,0], tol=1e-8):
+    def solve(self,
+              C: ElasticConstants,
+              burgers: npt.ArrayLike,
+              ξ_uvw: Optional[npt.ArrayLike] = None,
+              slip_hkl: Optional[npt.ArrayLike] = None,
+              transform: Optional[npt.ArrayLike] = None,
+              axes: Optional[npt.ArrayLike] = None,
+              box: Optional[Box] = None,
+              m: npt.ArrayLike = [1,0,0],
+              n: npt.ArrayLike = [0,1,0],
+              tol: float = 1e-8):
         """
         Computes parameters for a dislocation solution.
         !!!!GENERIC CLASS ONLY HANDLES INPUT PARAMETERS AND DOES NOT SOLVE!!!!
@@ -153,34 +173,41 @@ class VolterraDislocation(object):
         self.__transform = transform
     
     @property
-    def m(self):
+    def m(self) -> np.ndarray:
+        """numpy.ndarray: The Cartesian vector for orienting the dislocation system's m vector"""
         return self.__m
     
     @property
-    def n(self):
+    def n(self) -> np.ndarray:
+        """numpy.ndarray: The Cartesian vector for orienting the dislocation system's n vector"""
         return self.__n
     
     @property
-    def ξ(self):
+    def ξ(self) -> np.ndarray:
+        """numpy.ndarray: The Cartesian vector for orienting the dislocation system's line vector"""
         return self.__ξ
     
     @property
-    def C(self):
+    def C(self) -> ElasticConstants:
+        """atomman.ElasticConstants: The associated elastic constants"""
         return self.__C
     
     @property
-    def burgers(self):
+    def burgers(self) -> np.ndarray:
+        """numpy.ndarray: The Cartesian Burgers vector"""
         return self.__burgers
     
     @property
-    def tol(self):
+    def tol(self) -> float:
+        """float: The tolerance value used to verify the solution"""
         return self.__tol
     
     @property
-    def transform(self):
+    def transform(self) -> np.ndarray:
+        """numpy.ndarray: The transformation matrix associated with the dislocation system's orientation"""
         return self.__transform
 
-    def characterangle(self, unit='degree'):
+    def characterangle(self, unit: str = 'degree') -> float:
         """
         Returns the dislocation's character angle.
         
@@ -198,7 +225,7 @@ class VolterraDislocation(object):
         return vect_angle(self.burgers, self.ξ, unit=unit)
     
     @property
-    def K_coeff(self):
+    def K_coeff(self) -> float:
         """float : The energy coefficient"""
         
         # K = b_i K_ij b_j / (b_k b_k)
@@ -206,17 +233,44 @@ class VolterraDislocation(object):
                 / self.burgers.dot(self.burgers))
     
     @property
-    def K_tensor(self):
+    def K_tensor(self) -> np.ndarray:
+        """numpy.ndarray : The energy coefficient tensor"""
         raise NotImplementedError('Needs to be defined by subclass')
     
     @property
-    def preln(self):
+    def preln(self) -> float:
         """float : The pre-ln strain energy factor"""
         # a = b_i K_ij b_j / (4 π)
         return self.burgers.dot(self.K_tensor.dot(self.burgers)) / (4 * np.pi)
     
-    def displacement(self, pos):
+    def displacement(self, pos: npt.ArrayLike) -> np.ndarray:
+        """
+        Compute the position-dependent isotropic displacements.
+        
+        Parameters
+        ----------
+        pos : array-like object
+            3D vector position(s).
+        
+        Returns
+        -------
+        numpy.ndarray
+            The computed 3D vector displacements at all given points.
+        """
         raise NotImplementedError('Needs to be defined by subclass')
     
-    def stress(self, pos):
+    def stress(self, pos: npt.ArrayLike) -> np.ndarray:
+        """
+        Compute the position-dependent isotropic stresses.
+        
+        Parameters
+        ----------
+        pos : array-like object
+            3D vector position(s).
+        
+        Returns
+        -------
+        numpy.ndarray
+            The computed 3x3 stress states at all given points.
+        """
         raise NotImplementedError('Needs to be defined by subclass')

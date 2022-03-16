@@ -1,10 +1,16 @@
+# coding: utf-8
+# Standard Python libraries
 from itertools import product
+from typing import Optional
 
+# http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 from . import free_surface_basis
 from ..tools import miller
 from ..region import Plane
+from .. import System
 
 try:
     from spglib import get_symmetry_dataset
@@ -18,8 +24,13 @@ class FreeSurface():
     Class for generating free surface atomic configurations using clean planar slices.
     """
 
-    def __init__(self, hkl, ucell, cutboxvector='c', maxindex=None,
-                 conventional_setting='p', tol=1e-7):
+    def __init__(self,
+                 hkl: npt.ArrayLike,
+                 ucell: System,
+                 cutboxvector: str = 'c',
+                 maxindex: Optional[int] = None,
+                 conventional_setting: str = 'p',
+                 tol: float = 1e-7):
         """
         Class initializer.  Identifies the proper rotations for the given hkl plane
         and cutboxvector, and creates the rotated cell.
@@ -113,47 +124,47 @@ class FreeSurface():
         self.__conventional_setting = conventional_setting
 
     @property
-    def hkl(self):
-        """list : Crystal plane in Miller or Miller-Bravais indices"""
+    def hkl(self) -> np.ndarray:
+        """numpy.ndarray : Crystal plane in Miller or Miller-Bravais indices"""
         return self.__hkl
 
     @property
-    def ucell(self):
+    def ucell(self) -> System:
         """atomman.System : The unit cell to use in building the defect system."""
         return self.__ucell
 
     @property
-    def rcell(self):
+    def rcell(self) -> System:
         """atomman.System : the rotated cell to use in building the defect system."""
         return self.__rcell
 
     @property
-    def cutboxvector(self):
+    def cutboxvector(self) -> str:
         """str : The box vector for the cut direction."""
         return self.__cutboxvector
 
     @property
-    def cutindex(self):
+    def cutindex(self) -> int:
         """int : The Cartesian index for the cut direction."""
         return self.__cutindex
 
     @property
-    def uvws(self):
+    def uvws(self) -> np.ndarray:
         """numpy.ndarray : The conventional Miller or Miller-Bravais crystal vectors associated with the rcell box vectors."""
         return self.__uvws
 
     @property
-    def rcellwidth(self):
+    def rcellwidth(self) -> float:
         """float : The width of rcell in the cutindex direction."""
         return self.__rcellwidth
 
     @property
-    def shifts(self):
+    def shifts(self) -> list:
         """list : All shift values that place the fault halfway between atomic layers in rcell."""
         return self.__shifts
 
     @property
-    def system(self):
+    def system(self) -> System:
         """atomman.System : The built free surface system."""
         try:
             return self.__system
@@ -161,7 +172,7 @@ class FreeSurface():
             raise AttributeError('system not yet built. Use build_system() or surface().')
 
     @property
-    def surfacearea(self):
+    def surfacearea(self) -> float:
         """float : The surface area of one of the hkl planes."""
         try:
             return self.__surfacearea
@@ -169,17 +180,21 @@ class FreeSurface():
             raise AttributeError('system not yet built. Use build_system() or surface().')
 
     @property
-    def transform(self):
+    def transform(self) -> np.ndarray:
         """numpy.ndarray : The Cartesian transformation tensor associated with rotating from ucell to rcell"""
         return self.__transform
 
     @property
-    def conventional_setting(self):
+    def conventional_setting(self) -> str:
         """str : The lattice setting/centering associated with the conventional cell (used if ucell is primitive)"""
         return self.__conventional_setting
 
-    def surface(self, shift=None, vacuumwidth=None, minwidth=None, sizemults=None,
-                even=False):
+    def surface(self,
+                shift: Optional[npt.ArrayLike] = None,
+                vacuumwidth: Optional[float] = None,
+                minwidth: Optional[float] = None,
+                sizemults: Optional[list] = None,
+                even: bool = False) -> System:
         """
         Generates and returns a free surface atomic system.
 
@@ -274,7 +289,11 @@ class FreeSurface():
 
         return self.system
 
-    def unique_shifts(self, symprec: float = 1e-5, trial_image_range: int = 1, rtol: float = 1e-5, atol: float = 1e-8) -> np.ndarray:
+    def unique_shifts(self,
+                      symprec: float = 1e-5,
+                      trial_image_range: int = 1,
+                      rtol: float = 1e-5,
+                      atol: float = 1e-8) -> np.ndarray:
         """
         Return symmetrically nonequivalent shifts
 

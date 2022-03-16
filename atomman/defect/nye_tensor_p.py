@@ -1,12 +1,17 @@
 # coding: utf-8
 
+# Standard Python libraries
+from typing import Optional
+
 # http://www.numpy.org/
 import numpy as np
 
 # atomman imports
-from .. import NeighborList
+from .. import NeighborList, System
 
-def nye_tensor_p(system, neighbors=None, cutoff=None):
+def nye_tensor_p(system: System,
+                 neighbors: Optional[NeighborList] = None,
+                 cutoff: Optional[float] = None) -> np.ndarray:
     """
     Generates a list of p vectors for each atom to be used by the nye_tensor()
     function.  The p vectors correspond to the radial distance vectors between

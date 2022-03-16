@@ -1,17 +1,31 @@
+# coding: utf-8
+# Standard Python libraries
 from copy import deepcopy
+from typing import Generator, Optional, Tuple
 
+# http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
+
+# atomman imports
 from ..tools import miller
 from . import FreeSurface
+from .. import System
 
 class StackingFault(FreeSurface):
     """
     Class for generating stacking fault atomic configurations. 
     """
     
-    def __init__(self, hkl, ucell, cutboxvector='c', maxindex=None,
-                 a1vect_uvw=None, a2vect_uvw=None,
-                 conventional_setting='p', tol=1e-8):
+    def __init__(self,
+                 hkl: npt.ArrayLike,
+                 ucell: System,
+                 cutboxvector: str = 'c',
+                 maxindex: Optional[int] = None,
+                 a1vect_uvw: Optional[npt.ArrayLike] = None,
+                 a2vect_uvw: Optional[npt.ArrayLike] = None,
+                 conventional_setting: str = 'p',
+                 tol: float = 1e-8):
         """
         Class initializer.  Identifies the proper rotations for the given hkl plane
         and cutboxvector, and creates the rotated cell.
@@ -75,17 +89,17 @@ class StackingFault(FreeSurface):
             raise ValueError('a1vect_uvw and a2vect_uvw either both need to be given or not given')
     
     @property
-    def a1vect_uvw(self):
+    def a1vect_uvw(self) -> np.ndarray:
         """numpy.ndarray : One of the two conventional lattice shift vectors in Miller or Miller-Bravais indices."""
         return self.__a1vect_uvw
     
     @property
-    def a2vect_uvw(self):
+    def a2vect_uvw(self) -> np.ndarray:
         """numpy.ndarray : One of the two conventional lattice shift vectors in Miller or Miller-Bravais indices."""
         return self.__a2vect_uvw
     
     @a1vect_uvw.setter
-    def a1vect_uvw(self, value):
+    def a1vect_uvw(self, value: npt.ArrayLike):
         
         value = np.asarray(value)
 
@@ -114,7 +128,7 @@ class StackingFault(FreeSurface):
         self.__a1vect_cart = cart
 
     @a2vect_uvw.setter
-    def a2vect_uvw(self, value):
+    def a2vect_uvw(self, value: npt.ArrayLike):
         
         value = np.asarray(value)
 
@@ -143,17 +157,17 @@ class StackingFault(FreeSurface):
         self.__a2vect_cart = cart
 
     @property
-    def a1vect_cart(self):
+    def a1vect_cart(self) -> np.ndarray:
         """numpy.ndarray : One of the two shift vectors in Cartesian relative to system."""
         return self.__a1vect_cart
     
     @property
-    def a2vect_cart(self):
+    def a2vect_cart(self) -> np.ndarray:
         """numpy.ndarray : One of the two shift vectors in Cartesian relative to system."""
         return self.__a2vect_cart
     
     @property
-    def faultpos_cart(self):
+    def faultpos_cart(self) -> float:
         """float : The Cartesian position of the slip plane."""
         try:
             return self.__faultpos_cart
@@ -161,7 +175,7 @@ class StackingFault(FreeSurface):
             raise AttributeError('system not yet built. Use build_system() or surface().')
         
     @property
-    def faultpos_rel(self):
+    def faultpos_rel(self) -> float:
         """float : The fractional position of the slip plane."""
         try:
             return self.__faultpos_rel
@@ -169,7 +183,7 @@ class StackingFault(FreeSurface):
             raise AttributeError('system not yet built. Use build_system() or surface().')
         
     @property
-    def abovefault(self):
+    def abovefault(self) -> list:
         """list : Indices of all atoms in system above the slip plane."""
         try:
             return self.__abovefault
@@ -177,7 +191,7 @@ class StackingFault(FreeSurface):
             raise AttributeError('system not yet built. Use build_system() or surface().')
         
     @faultpos_cart.setter
-    def faultpos_cart(self, value):
+    def faultpos_cart(self, value: float):
 
         # faultpos_rel = (faultpos_cart - origin) / width (for origin, width || cutindex)
         faultpos_rel = ((value - self.system.box.origin[self.cutindex])
@@ -192,7 +206,7 @@ class StackingFault(FreeSurface):
         self.__abovefault = self.system.atoms.pos[:, self.cutindex] > (self.faultpos_cart)
 
     @faultpos_rel.setter
-    def faultpos_rel(self, value):
+    def faultpos_rel(self, value: float):
         
         if value < 0.0 or value > 1.0:
             raise ValueError('faultpos is outside system')
@@ -207,8 +221,14 @@ class StackingFault(FreeSurface):
         # Identify atoms above fault plane position
         self.__abovefault = self.system.atoms.pos[:, self.cutindex] > (self.faultpos_cart)
 
-    def surface(self, shift=None, vacuumwidth=None, minwidth=None, sizemults=None,
-                even=False, faultpos_rel=None, faultpos_cart=None):
+    def surface(self,
+                shift: Optional[npt.ArrayLike] = None,
+                vacuumwidth: Optional[float] = None,
+                minwidth: Optional[float] = None,
+                sizemults: Optional[list] = None,
+                even: bool = False,
+                faultpos_rel: Optional[float] = None,
+                faultpos_cart: Optional[float] = None) -> System:
         """
         Generates the free surface atomic system, which is used as the basis for generating
         the stacking fault configuration(s).
@@ -244,6 +264,11 @@ class StackingFault(FreeSurface):
             The position to place the slip plane within the system given as a
             Cartesian coordinate along the out-of-plane direction.  faultpos_rel
             and faultpos_cart cannot both be given.
+        
+        Returns
+        -------
+        atomman.System
+            The free surface atomic system.
         """
         
         super().surface(shift=shift, vacuumwidth=vacuumwidth, minwidth=minwidth,
@@ -265,9 +290,16 @@ class StackingFault(FreeSurface):
 
         return self.system
     
-    def fault(self, a1=None, a2=None, outofplane=None, faultshift=None,
-              minimum_r=None, a1vect_uvw=None, a2vect_uvw=None,
-              faultpos_cart=None, faultpos_rel=None):
+    def fault(self,
+              a1: Optional[float] = None,
+              a2: Optional[float] = None,
+              outofplane: Optional[float] = None,
+              faultshift: Optional[npt.ArrayLike] = None,
+              minimum_r: Optional[float] = None,
+              a1vect_uvw: Optional[npt.ArrayLike] = None,
+              a2vect_uvw: Optional[npt.ArrayLike] = None,
+              faultpos_cart: Optional[float] = None,
+              faultpos_rel: Optional[float] = None) -> System:
         """
         Generates a fault configuration by displacing all atoms above the slip
         plane.
@@ -389,9 +421,16 @@ class StackingFault(FreeSurface):
         
         return sfsystem
     
-    def iterfaultmap(self, num_a1=None, num_a2=None, outofplane=None,
-                     minimum_r=None, a1vect_uvw=None, a2vect_uvw=None,
-                     faultpos_cart=None, faultpos_rel=None):
+    def iterfaultmap(self,
+                     num_a1: Optional[int] = None,
+                     num_a2: Optional[int] = None,
+                     outofplane: Optional[float] = None,
+                     minimum_r: Optional[float] = None,
+                     a1vect_uvw: Optional[npt.ArrayLike] = None,
+                     a2vect_uvw: Optional[npt.ArrayLike] = None,
+                     faultpos_cart: Optional[float] = None,
+                     faultpos_rel: Optional[float] = None
+                     ) -> Generator[Tuple[float, float, System], None, None]:
         """
         Iterates over generalized stacking fault configurations associated
         with a 2D map of equally spaced a1, a2 coordinates.

@@ -1,7 +1,10 @@
 # coding: utf-8
+# Standard Python libraries
+from typing import Optional, Tuple, Union
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # https://matplotlib.org/
 import matplotlib.pyplot as plt
@@ -10,15 +13,28 @@ from matplotlib import cm
 
 # atomman imports
 from ..tools import axes_check
-from .. import NeighborList
+from .. import Box, System, NeighborList
 
-def differential_displacement(system_0, system_1, burgers, plotxaxis='x',
-                              plotyaxis='y', xlim=None, ylim=None, zlim=None,
-                              neighbors=None, cutoff=None,
-                              component='standard', axes=None,
-                              plot_scale=1, atom_color=None, atom_cmap=None,
-                              display_final_pos=False, return_data=False,
-                              matplotlib_axes=None):
+def differential_displacement(system_0: System,
+                              system_1: System,
+                              burgers: npt.ArrayLike,
+                              plotxaxis: Union[str, npt.ArrayLike] = 'x',
+                              plotyaxis: Union[str, npt.ArrayLike] = 'y',
+                              xlim: Optional[tuple] = None,
+                              ylim: Optional[tuple] = None,
+                              zlim: Optional[tuple] = None,
+                              neighbors: Optional[NeighborList] = None,
+                              cutoff: Optional[float] = None,
+                              component: str = 'standard',
+                              axes: Optional[npt.ArrayLike] = None,
+                              plot_scale: float = 1,
+                              atom_color: Union[str, list, None] = None,
+                              atom_cmap: Union[str, list, None] = None,
+                              display_final_pos: bool = False,
+                              return_data: bool = False,
+                              matplotlib_axes: Optional[plt.axes] = None
+                              ) -> Union[plt.figure, dict,
+                                         Tuple[plt.figure, dict], None]:
     """
     Generates a differential displacement plot for characterizing dislocations.
     

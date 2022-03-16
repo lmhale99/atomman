@@ -1,21 +1,32 @@
 # coding: utf-8
 # Standard Python libraries
 import warnings
+from typing import Optional
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # atomman imports
 from . import VolterraDislocation
-from ..tools import vect_angle, axes_check
+from .. import Box, ElasticConstants
 
 class IsotropicVolterraDislocation(VolterraDislocation):
     """
     Class for representing the isotropic Volterra solution for a straight dislocation.
     """
     
-    def solve(self, C, burgers, ξ_uvw=None, slip_hkl=None, transform=None,
-              axes=None, box=None, m=[1,0,0], n=[0,1,0], tol=1e-8):
+    def solve(self,
+              C: ElasticConstants,
+              burgers: npt.ArrayLike,
+              ξ_uvw: Optional[npt.ArrayLike] = None,
+              slip_hkl: Optional[npt.ArrayLike] = None,
+              transform: Optional[npt.ArrayLike] = None,
+              axes: Optional[npt.ArrayLike] = None,
+              box: Optional[Box] = None,
+              m: npt.ArrayLike = [1,0,0],
+              n: npt.ArrayLike = [0,1,0],
+              tol: float = 1e-8):
         """
         Computes the elastic solution for an isotropic volterra dislocation.
         
@@ -72,16 +83,19 @@ class IsotropicVolterraDislocation(VolterraDislocation):
         self.__nu = (3 * bulk - 2 * self.mu) / (2 * (3 * bulk + self.mu))
     
     @property
-    def mu(self):
+    def mu(self) -> float:
+        """float: The isotropic shear modulus"""
         return self.__mu
     
     @property
-    def nu(self):
+    def nu(self) -> float:
+        """float: The isotropic Poisson's ratio"""
         return self.__nu
     
     @property
     def K_tensor(self):
-        
+        """numpy.ndarray : The energy coefficient tensor"""
+
         # Construct K_tensor in standard setting
         K_e = self.mu / (1 - self.nu)
         K_s = self.mu
@@ -97,7 +111,7 @@ class IsotropicVolterraDislocation(VolterraDislocation):
         K[np.isclose(K / K.max(), 0.0, atol=self.tol)] = 0.0
         return K
 
-    def theta(self, pos):
+    def theta(self, pos: npt.ArrayLike) -> np.ndarray:
         """
         Computes arctan(y / x) ranging from -π to π.
         
@@ -128,7 +142,7 @@ class IsotropicVolterraDislocation(VolterraDislocation):
         
         return theta
     
-    def displacement(self, pos):
+    def displacement(self, pos: npt.ArrayLike) -> np.ndarray:
         """
         Compute the position-dependent isotropic displacements.
         
@@ -168,7 +182,7 @@ class IsotropicVolterraDislocation(VolterraDislocation):
         else:
             return disp
 
-    def stress(self, pos):
+    def stress(self, pos: npt.ArrayLike) -> np.ndarray:
         """
         Compute the position-dependent isotropic stresses.
         

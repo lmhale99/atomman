@@ -1,16 +1,25 @@
 # coding: utf-8
 
+# Standard Python libraries
+from typing import Optional, Tuple, Union
+
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # atomman imports
 from .. import Box, System
 from ..tools import vect_angle, miller, ishexagonal
 from ..tools.miller import vector_crystal_to_cartesian
 
-def free_surface_basis(hkl, box=None, cutboxvector='c', maxindex=None,
-                       return_hexagonal=None, return_planenormal=False,
-                       conventional_setting=None):
+def free_surface_basis(hkl: npt.ArrayLike,
+                       box: Optional[Box] = None,
+                       cutboxvector: str = 'c',
+                       maxindex: Optional[int] = None,
+                       return_hexagonal: Optional[bool] = None,
+                       return_planenormal: bool = False,
+                       conventional_setting: Optional[str] = None
+                       ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
     """
     Generates the uvw box vector orientations for a free surface atomic
     system.  In determining the uvw sets, two sets will be in the specified

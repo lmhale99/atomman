@@ -1,13 +1,15 @@
 # coding: utf-8
 # Standard Python libraries
 from copy import deepcopy
+from typing import Optional
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # atomman imports
 from . import VolterraDislocation
-from ..tools import axes_check
+from .. import Box, ElasticConstants
 
 class Stroh(VolterraDislocation):
     """
@@ -15,8 +17,17 @@ class Stroh(VolterraDislocation):
     dislocation or crack using the Stroh method.
     """
     
-    def solve(self, C, burgers, ξ_uvw=None, slip_hkl=None, transform=None,
-              axes=None, box=None, m=[1,0,0], n=[0,1,0], tol=1e-8):
+    def solve(self,
+              C: ElasticConstants,
+              burgers: npt.ArrayLike,
+              ξ_uvw: Optional[npt.ArrayLike] = None,
+              slip_hkl: Optional[npt.ArrayLike] = None,
+              transform: Optional[npt.ArrayLike] = None,
+              axes: Optional[npt.ArrayLike] = None,
+              box: Optional[Box] = None,
+              m: npt.ArrayLike = [1,0,0],
+              n: npt.ArrayLike = [0,1,0],
+              tol: float = 1e-8):
         """
         Computes the elastic solution for an anisotropic volterra dislocation.
         
@@ -115,36 +126,28 @@ class Stroh(VolterraDislocation):
             raise ValueError('Solution not real: check elastic constants')
 
     @property
-    def p(self):
+    def p(self) -> np.ndarray:
         """numpy.ndarray : p eigenvalues"""
         return deepcopy(self.__p)
     
     @property
-    def A(self):
+    def A(self) -> np.ndarray:
         """numpy.ndarray : A eigenvectors"""
         return deepcopy(self.__A)
     
     @property
-    def L(self):
+    def L(self) -> np.ndarray:
         """numpy.ndarray : L eigenvectors"""
         return deepcopy(self.__L)
     
     @property
-    def k(self):
+    def k(self) -> np.ndarray:
         """numpy.ndarray : k normalization factors"""
         return deepcopy(self.__k)
     
     @property
-    def K_coeff(self):
-        """float : The energy coefficient"""
-        
-        # K = b_i K_ij b_j / (b_k b_k)
-        return (self.burgers.dot(self.K_tensor.dot(self.burgers))
-                / self.burgers.dot(self.burgers))
-    
-    @property
-    def K_tensor(self):
-        """numpy.ndarray : The anisotropic energy coefficient tensor"""
+    def K_tensor(self) -> np.ndarray:
+        """numpy.ndarray : The energy coefficient tensor"""
         
         # ii is imaginary unit
         ii = np.array([1.j])
@@ -161,13 +164,7 @@ class Stroh(VolterraDislocation):
         
         return K
     
-    @property
-    def preln(self):
-        """float : The pre-ln strain energy factor"""
-        # a = b_i K_ij b_j / (4 π)
-        return self.burgers.dot(self.K_tensor.dot(self.burgers)) / (4 * np.pi)
-    
-    def displacement(self, pos):
+    def displacement(self, pos: npt.ArrayLike) -> np.ndarray:
         """
         Compute the position-dependent anisotropic displacement.
         
@@ -207,7 +204,7 @@ class Stroh(VolterraDislocation):
         else:
             return disp
     
-    def stress(self, pos):
+    def stress(self, pos: npt.ArrayLike) -> np.ndarray:
         """
         Compute the position-dependent anisotropic stresses.
         
@@ -250,7 +247,7 @@ class Stroh(VolterraDislocation):
         else:
             return stress
     
-    def eta(self, pos):
+    def eta(self, pos: npt.ArrayLike) -> np.ndarray:
         """
         Compute the eta coordinates based on positions, p, m and n.  Used by
         displacement() and stress().

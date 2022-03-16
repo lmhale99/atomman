@@ -1,7 +1,11 @@
 # coding: utf-8
+# Standard Python libraries
+from re import A
+from typing import Optional, Tuple, Union
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # https://matplotlib.org/
 import matplotlib.pyplot as plt
@@ -10,18 +14,23 @@ from matplotlib import cm
 
 # atomman imports
 from ..tools import axes_check
-from .. import Box, NeighborList
+from .. import Box, System, NeighborList
 
 class DifferentialDisplacement():
-    def __init__(self, system_0, system_1, neighbors=None, cutoff=None, reference=1):
+    def __init__(self,
+                 system0: System,
+                 system1: System,
+                 neighbors: Optional[NeighborList] = None,
+                 cutoff: Optional[float] = None,
+                 reference: int = 1):
         """
         Class initializer.  Calls solve if either neighbors or cutoff are given.
         
         Parameters
         ----------
-        system_0 : atomman.system
+        system0 : atomman.system
             The base/reference system to use.
-        system_1 : atomman.system
+        system1 : atomman.system
             The defect/current system to use.
         neighbors : atomman.NeighborList, optional
             The neighbor list to use.  
@@ -38,12 +47,12 @@ class DifferentialDisplacement():
         """
         
         if neighbors is not None or cutoff is not None:
-            self.solve(system_0, system_1, neighbors=neighbors, cutoff=cutoff, reference=reference)
+            self.solve(system0, system1, neighbors=neighbors, cutoff=cutoff, reference=reference)
         else:
-            assert system_0.natoms == system_1.natoms
+            assert system0.natoms == system1.natoms
             
-            self.__system_0 = system_0
-            self.__system_1 = system_1
+            self.__system0 = system0
+            self.__system1 = system1
             self.reference = reference
             self.__neighbors = None
             self.__ddvectors = None
@@ -51,54 +60,59 @@ class DifferentialDisplacement():
             self.__arrowuvectors = None
     
     @property
-    def reference(self):
+    def reference(self) -> int:
         """int : Indicates which system (0 or 1) is used as the reference."""
         return self.__reference
 
     @reference.setter
-    def reference(self, value):
+    def reference(self, value: int):
         assert value == 0 or value == 1, 'reference must be 0 or 1'
         self.__reference = value    
     
     @property
-    def system0(self):
+    def system0(self) -> System:
         """atomman.System : The defect-free base system."""
         return self.__system0
     
     @property
-    def system1(self):
+    def system1(self) -> System:
         """atomman.System : The defect containing system."""
         return self.__system1
     
     @property
-    def neighbors(self):
+    def neighbors(self) -> NeighborList:
         """atomman.NeighborList : The list of neighbors identified for the reference system."""
         return self.__neighbors
     
     @property
-    def ddvectors(self):
+    def ddvectors(self) -> Optional[np.ndarray]:
         """numpy.array or None : The computed differential displacement vectors."""
         return self.__ddvectors
     
     @property
-    def arrowcenters(self):
+    def arrowcenters(self) -> Optional[np.ndarray]:
         """numpy.array or None : The identified center positions for the ddvectors."""
         return self.__arrowcenters
     
     @property
-    def arrowuvectors(self):
+    def arrowuvectors(self) -> Optional[np.ndarray]:
         """numpy.array or None : The unit vectors between all pairs of atoms for which the ddvectors have been computed."""
         return self.__arrowuvectors
     
-    def solve(self, system0=None, system1=None, neighbors=None, cutoff=None, reference=None):
+    def solve(self,
+              system0: Optional[System] = None,
+              system1: Optional[System] = None,
+              neighbors: Optional[NeighborList] = None,
+              cutoff: Optional[float] = None,
+              reference: Optional[int] = None):
         """
         Solves the differential displacement vectors.
         
         Parameters
         ----------
-        system0 : atomman.system
+        system0 : atomman.system, optional
             The base/reference system to use.
-        system1 : atomman.system
+        system1 : atomman.system, optional
             The defect/current system to use.
         neighbors : atomman.NeighborList, optional
             The neighbor list to use.  
@@ -108,9 +122,10 @@ class DifferentialDisplacement():
             used to generate the list.
         reference : int, optional
             Indicates which of the two systems should be used for the plotting reference: 0 or 1.
-            If 0 (default), then system0's atomic positions will be used for the calculation and
+            If 0, then system0's atomic positions will be used for the calculation and
             neighbors should be for system0.  If 1, then system1's atomic positions will be used
-            for the calculation and neighbors should be for system1.   
+            for the calculation and neighbors should be for system1.  Default value is
+            whatever was set when the object was initialized. 
         """
         # Handle parameters
         if system0 is not None:
@@ -181,11 +196,23 @@ class DifferentialDisplacement():
         self.__arrowcenters = np.concatenate(all_arrowcenters)
         self.__arrowuvectors = np.concatenate(all_arrowuvectors)
         
-    def plot(self, component, ddmax, plotxaxis='x', plotyaxis='y',
-             xlim=None, ylim=None, zlim=None,
-             arrowscale=1, arrowwidth=0.005,  use0z=False,
-             atomcolor=None, atomcmap=None, atomsize=0.5, figsize=10,
-             matplotlib_axes=None):
+    def plot(self,
+             component: Union[str, npt.ArrayLike],
+             ddmax: Optional[float],
+             plotxaxis: Union[str, npt.ArrayLike] = 'x',
+             plotyaxis: Union[str, npt.ArrayLike] = 'y',
+             xlim: Optional[tuple] = None,
+             ylim: Optional[tuple] = None,
+             zlim: Optional[tuple] = None,
+             arrowscale: float = 1,
+             arrowwidth: float = 0.005,
+             use0z: bool = False,
+             atomcolor: Union[str, list, None] = None,
+             atomcmap: Union[str, list, None] = None,
+             atomsize: float = 0.5,
+             figsize: int = 10,
+             matplotlib_axes: Optional[plt.axes] = None
+             ) -> Optional[plt.figure]:
 
         r"""
         Creates a matplotlib figure of a differential displacement map.  Atom

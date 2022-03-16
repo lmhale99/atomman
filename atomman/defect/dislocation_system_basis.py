@@ -1,12 +1,83 @@
+# coding: utf-8
+# Standard Python libraries
+from typing import Optional
+
+# http://www.numpy.org/
+import numpy as np
+import numpy.typing as npt
+
+# atomman imports
 from .. import Box, System
 from ..tools import vect_angle, miller
 from . import dislocation_system_transform
 
-import numpy as np
+def dislocation_system_basis(ξ_uvw: npt.ArrayLike,
+                             slip_hkl: npt.ArrayLike,
+                             m: Optional[npt.ArrayLike] = None,
+                             n: Optional[npt.ArrayLike] = None,
+                             box: Optional[Box] = None,
+                             tol: float = 1e-8,
+                             maxindex: int = 10,
+                             return_hexagonal: bool = False,
+                             return_transform: bool = False):
+    """
+    Generates the uvw box vector orientations for a dislocation atomic
+    configuration.  The three returned uvw vectors will coincide with
+    ξ_uvw - the line direction, an in-plane crystal vector close to m, and an
+    out-of-plane crystal vector close to n (the slip plane normal).
 
-def dislocation_system_basis(ξ_uvw, slip_hkl, m=None, n=None, box=None, tol=1e-8, maxindex=10,
-                             return_hexagonal=False, return_transform=False):
-    
+    Parameters
+    ----------
+    ξ_uvw : array-like object
+        The Miller crystal vector associated with the dislocation's line direction.
+    slip_hkl : array-like object
+        The Miller plane indices associated with the dislocation's slip plane.
+    m : array-like object, optional
+        The m unit vector for the solution.  m, n, and u (dislocation line)
+        should be right-hand orthogonal.  Default value is [1, 0, 0]
+        (x-axis).
+    n : array-like object, optional
+        The n unit vector for the solution.  m, n, and u (dislocation line)
+        should be right-hand orthogonal.  Default value is [0, 1, 0]
+        (y-axis).
+    box : atomman.Box, optional
+        The unit cell's box that the crystal vectors are taken with respect to. If
+        not given, will use a cubic box with a=1 (vects are taken as Cartesian).
+    tol : float, optional
+        Tolerance parameter used to round off near-zero values.  Default
+        value is 1e-8.
+    maxindex : int, optional
+        Max uvw index value to use in identifying the best uvw set for the
+        out-of-plane vector.  If not given, will use the largest absolute
+        index between the given hkl and the initial in-plane vector guesses.
+    return_hexagonal : bool, optional
+        Flag for indicating if the returned vectors are expressed in Miller
+        [uvw] format (False) or Miller-Bravais [uvtw] format (True).  The
+        Miller-Bravais format is only allowed if box is in the standard
+        hexagonal setting: a=b!=c, alpha=beta=90, gamma=120.  Default value is
+        False if hkl is given in the 3 indices Miller (hkl) format and True if
+        it is given in the 4 indices Miller-Bravais (hkil) format.
+    return_transform : bool, optional
+        If True, the associated Cartesian transformation matrix will also be
+        returned.  Default value is False.
+
+    Returns
+    -------
+    uvws : numpy.ndarray
+        3x3 array of Miller [uvw] vectors or 3x4 array of Miller-Bravais [uvtw]
+        vectors to rotate the unit cell for a dislocation configuration.
+    transform : numpy.ndarray
+        The Cartesian transformation matrix.  Only returned if return_transform
+        is True.
+
+    Raises
+    ------
+    ValueError
+        If invalid hkl indices values are given.
+    AssertionError
+        If the search fails to find any of the three [uvw] rotation vectors.
+    """
+
     # Set default box to be cubic
     if box is None:
         box = Box()
@@ -104,8 +175,8 @@ def dislocation_system_basis(ξ_uvw, slip_hkl, m=None, n=None, box=None, tol=1e-
     assert n_uvw is not None, 'Failed to find vector near slip plane normal'
     
     # Reduce m_uvw and n_uvw if possible
-    m_uvw = m_uvw / np.gcd.reduce(np.asarray(m_uvw, dtype=int)) # pylint: disable=no-member
-    n_uvw = n_uvw / np.gcd.reduce(np.asarray(n_uvw, dtype=int)) # pylint: disable=no-member
+    m_uvw = m_uvw / np.gcd.reduce(np.asarray(m_uvw, dtype=int)) 
+    n_uvw = n_uvw / np.gcd.reduce(np.asarray(n_uvw, dtype=int))
     
     # Orient the uvw sets based on cutboxvector and ξboxvector
     if cutboxvector == 'c':

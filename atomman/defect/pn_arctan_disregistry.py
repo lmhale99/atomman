@@ -1,11 +1,20 @@
 # coding: utf-8
 
+from typing import Optional, Tuple
+
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
-def pn_arctan_disregistry(xmax=None, xstep=None, xnum=None,
-                          burgers=None, center=0.0,
-                          halfwidth=1, normalize=True, shift=True):
+def pn_arctan_disregistry(xmax: Optional[float] = None,
+                          xstep: Optional[float] = None,
+                          xnum: Optional[int] = None,
+                          burgers: Optional[npt.ArrayLike] = None,
+                          center: float = 0.0,
+                          halfwidth: float = 1,
+                          normalize: bool = True,
+                          shift: bool = True
+                          ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Computes the classic Peierls-Nabarro arctan disregistry for an array of
     points x.

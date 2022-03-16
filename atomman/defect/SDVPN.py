@@ -1,13 +1,18 @@
 # coding: utf-8
+
 # Standard Python libraries
+import io
 import warnings
+from typing import Optional, Tuple, Union
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # https://www.scipy.org/
-from scipy.optimize import minimize
+from scipy.optimize import minimize, OptimizeResult
 
+# https://matplotlib.org/
 import matplotlib.pyplot as plt
 
 # https://github.com/usnistgov/DataModelDict
@@ -15,8 +20,7 @@ from DataModelDict import DataModelDict as DM
 
 # atomman imports
 import atomman.unitconvert as uc
-from ..tools import axes_check
-from .GammaSurface import GammaSurface
+from . import GammaSurface, VolterraDislocation
 
 class SDVPN(object):
     """
@@ -24,11 +28,21 @@ class SDVPN(object):
     dislocation model.
     """
     
-    def __init__(self, volterra=None, gamma=None, model=None, 
-                 tau=np.zeros((3,3)), alpha=0.0, beta=np.zeros((3,3)),
-                 cutofflongrange=None, fullstress=True, cdiffelastic=False,
-                 cdiffsurface=True, cdiffstress=False, min_method='Powell',
-                 min_kwargs=None, min_options=None):
+    def __init__(self,
+                 volterra: Optional[VolterraDislocation] = None,
+                 gamma: Optional[GammaSurface] = None,
+                 model: Union[str, io.IOBase, DM, None] = None, 
+                 tau: npt.ArrayLike = np.zeros((3,3)),
+                 alpha: float = 0.0,
+                 beta: npt.ArrayLike = np.zeros((3,3)),
+                 cutofflongrange: Optional[float] = None,
+                 fullstress: bool = True,
+                 cdiffelastic: bool = False,
+                 cdiffsurface: bool = True,
+                 cdiffstress: bool = False,
+                 min_method: str = 'Powell',
+                 min_kwargs: Optional[dict] = None,
+                 min_options: Optional[dict] = None):
         """
         Initializes an SDVPN object.
         
@@ -145,7 +159,7 @@ class SDVPN(object):
             raise ValueError('either dislsol or model must be given')
     
     @property
-    def x(self):
+    def x(self) -> np.ndarray:
         """numpy.ndarray : The x coordinates."""
         try:
             return self.__x
@@ -153,7 +167,7 @@ class SDVPN(object):
             raise AttributeError('x values not set yet')
     
     @x.setter
-    def x(self, value):
+    def x(self, value: npt.ArrayLike):
         value = np.asarray(value, dtype=float)
         assert value.ndim == 1
         diff = value[1:] - value[:-1]
@@ -162,7 +176,7 @@ class SDVPN(object):
         self.__x = value
 
     @property
-    def disregistry(self):
+    def disregistry(self) -> np.ndarray:
         """numpy.ndarray : The disregistry vector for each x coordinate."""
         try:
             return self.__disregistry
@@ -170,131 +184,131 @@ class SDVPN(object):
             raise AttributeError('disregistry values not set yet')
 
     @disregistry.setter
-    def disregistry(self, value):
+    def disregistry(self, value: npt.ArrayLike):
         value = np.asarray(value)
         assert value.ndim == 2 and value.shape[1] == 3, 'invalid disregistry dimensions'
         assert np.allclose(value[:,1], 0.0), 'y (i.e. out-of-plane) component of disregistry not supported'
         self.__disregistry = value
 
     @property
-    def K_tensor(self):
+    def K_tensor(self) -> np.ndarray:
         """numpy.ndarray : Dislocation energy coefficient tensor."""
         return self.__K_tensor
 
     @property
-    def burgers(self):
+    def burgers(self) -> np.ndarray:
         """numpy.ndarray : Burgers vector."""
         return self.__burgers
         
     @property
-    def transform(self):
+    def transform(self) -> np.ndarray:
         """numpy.ndarray : Transformation matrix from standard crystal setting to dislocation solution setting."""
         return self.__transform
     
     @property
-    def gamma(self):
+    def gamma(self) -> GammaSurface:
         """atomman.defect.GammaSurface : The stacking fault map."""
         return self.__gamma
     
     @property
-    def tau(self):
+    def tau(self) -> np.ndarray:
         """numpy.ndarray : The applied 3x3 stress tensor."""
         return self.__tau
 
     @tau.setter
-    def tau(self, value):
+    def tau(self, value: npt.ArrayLike):
         value = np.asarray(value, dtype=float)
         assert value.shape == (3,3)
         self.__tau = value
     
     @property
-    def alpha(self):
+    def alpha(self) -> tuple:
         """tuple of float : Coefficients for nonlocal energy correction."""
         return self.__alpha
     
     @alpha.setter
-    def alpha(self, value):
+    def alpha(self, value: Union[float, tuple]):
         try:
             self.__alpha = tuple(value)
         except:
             self.__alpha = (value,)
 
     @property
-    def beta(self):
+    def beta(self) -> np.ndarray:
         """numpy.ndarray : 3x3 coefficients for gradient energy correction."""
         return self.__beta
     
     @beta.setter
-    def beta(self, value):
+    def beta(self, value: npt.ArrayLike):
         value = np.asarray(value, dtype=float)
         assert value.shape == (3,3)
         self.__beta = value
 
     @property
-    def cutofflongrange(self):
+    def cutofflongrange(self) -> float:
         """float : Cutoff distance for long-range elastic energy."""
         return self.__cutofflongrange
     
     @cutofflongrange.setter
-    def cutofflongrange(self, value):
+    def cutofflongrange(self, value: float):
         self.__cutofflongrange = float(value)
 
     @property
-    def fullstress(self):
+    def fullstress(self) -> bool:
         """bool : Flag indicating which stress algorithm was used."""
         return self.__fullstress
 
     @fullstress.setter
-    def fullstress(self, value):
+    def fullstress(self, value: bool):
         assert isinstance(value, bool)
         self.__fullstress = value
     
     @property
-    def cdiffelastic(self):
+    def cdiffelastic(self) -> bool:
         """bool : Flag indicating if elastic energy used central difference for computing the dislocation density."""
         return self.__cdiffelastic
     
     @cdiffelastic.setter
-    def cdiffelastic(self, value):
+    def cdiffelastic(self, value: bool):
         assert isinstance(value, bool)
         self.__cdiffelastic = value
 
     @property
-    def cdiffsurface(self):
+    def cdiffsurface(self) -> bool:
         """bool : Flag indicating if surface energy used central difference for computing the dislocation density."""
         return self.__cdiffsurface
     
     @cdiffsurface.setter
-    def cdiffsurface(self, value):
+    def cdiffsurface(self, value: bool):
         assert isinstance(value, bool)
         self.__cdiffsurface = value
 
     @property
-    def cdiffstress(self):
+    def cdiffstress(self) -> bool:
         """bool : Flag indicating if stress energy used central difference for computing the dislocation density."""
         return self.__cdiffstress
     
     @cdiffstress.setter
-    def cdiffstress(self, value):
+    def cdiffstress(self, value: bool):
         assert isinstance(value, bool)
         self.__cdiffstress = value
 
     @property
-    def min_method(self):
+    def min_method(self) -> str:
         """str : scipy.optimize.minimize method used."""
         return self.__min_method
     
     @min_method.setter
-    def min_method(self, value):
+    def min_method(self, value: str):
         self.__min_method = str(value)
 
     @property
-    def min_options(self):
+    def min_options(self) -> dict:
         """dict : scipy.optimize.minimize options used."""
         return self.__min_options
 
     @min_options.setter
-    def min_options(self, value):
+    def min_options(self, value: Optional[dict]):
         if value is None:
             self.__min_options = {}
         elif isinstance(value, dict):
@@ -303,12 +317,12 @@ class SDVPN(object):
             raise TypeError('min_options must be a dict')
 
     @property
-    def min_kwargs(self):
+    def min_kwargs(self) -> dict:
         """dict : scipy.optimize.minimize keywords used."""
         return self.__min_kwargs
     
     @min_kwargs.setter
-    def min_kwargs(self, value):
+    def min_kwargs(self, value: Optional[dict]):
         if value is None:
             self.__min_kwargs = {}
         elif isinstance(value, dict):
@@ -317,17 +331,27 @@ class SDVPN(object):
             raise TypeError('min_kwargs must be a dict')
 
     @property
-    def res(self):
+    def res(self) -> OptimizeResult:
         """OptimizeResult : scipy.optimize.minimize result."""
         try:
             return self.__res
         except:
             return None
     
-    def solve(self, x=None, disregistry=None, tau=None, alpha=None, beta=None,
-              cutofflongrange=None, fullstress=None, cdiffelastic=None,
-              cdiffsurface=None, cdiffstress=None, min_method=None,
-              min_kwargs=None, min_options=None):
+    def solve(self,
+              x: Optional[npt.ArrayLike] = None,
+              disregistry: Optional[npt.ArrayLike] = None,
+              tau: Optional[npt.ArrayLike] = None,
+              alpha: Optional[list] = None,
+              beta: Optional[npt.ArrayLike] = None,
+              cutofflongrange: Optional[float] = None,
+              fullstress: Optional[bool] = None,
+              cdiffelastic: Optional[bool] = None,
+              cdiffsurface: Optional[bool] = None,
+              cdiffstress: Optional[bool] = None,
+              min_method: Optional[str] = None,
+              min_kwargs: Optional[dict] = None,
+              min_options: Optional[dict] = None):
         """
         Solves the semidiscrete variational Peierls-Nabarro dislocation
         disregistry through energy minimization using the set class
@@ -439,7 +463,11 @@ class SDVPN(object):
 
         self.__res = res
     
-    def disldensity(self, x=None, disregistry=None, cdiff=False):
+    def disldensity(self,
+                    x: Optional[npt.ArrayLike] = None,
+                    disregistry: Optional[npt.ArrayLike] = None,
+                    cdiff: bool = False
+                    ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Computes the dislocation density as the numerical derivative of
         disregistry with respect to x.  Uses either neighboring values
@@ -452,7 +480,12 @@ class SDVPN(object):
         
         Parameters
         ----------
-        cdiff : bool
+        x : array-like object, optional
+            x-coordinates.  Default value is the stored x-coordinates.
+        disregistry : array-like object, optional
+            (N, 3) shaped array of disregistry vectors at each x-coordinate.
+            Default value is the stored disregistry values.
+        cdiff : bool, optional
             Flag indicating how to compute the derivative.  A value of False
             (default) compares nearest values while a value of True compares
             next-nearest (i.e., central difference).
@@ -491,7 +524,9 @@ class SDVPN(object):
             
         return (newx, ρ)
     
-    def misfit_energy(self, x=None, disregistry=None):
+    def misfit_energy(self,
+                      x: Optional[npt.ArrayLike] = None,
+                      disregistry: Optional[npt.ArrayLike] = None) -> float:
         """
         Computes the misfit energy for the disregistry using the stored gamma
         surface
@@ -500,9 +535,9 @@ class SDVPN(object):
         
         Parameters
         ----------
-        x : numpy.ndarray, optional
+        x : array-like object, optional
             x-coordinates.  Default value is the stored x-coordinates.
-        disregistry : numpy.ndarray, optional
+        disregistry : array-like object, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.
             
@@ -530,7 +565,9 @@ class SDVPN(object):
         # Σ γ(δ)Δx
         return Δx * gamma.E_gsf(pos=pos).sum()
     
-    def elastic_energy(self, x=None, disregistry=None):
+    def elastic_energy(self,
+                       x: Optional[npt.ArrayLike] = None,
+                       disregistry: Optional[npt.ArrayLike] = None) -> float:
         r"""
         Computes the short-range configuration-dependent elastic energy term
         for the dislocation based on the dislocation density and K_tensor.
@@ -543,9 +580,9 @@ class SDVPN(object):
         
         Parameters
         ----------
-        x : numpy.ndarray, optional
+        x : array-like object, optional
             x-coordinates.  Default value is the stored x-coordinates.
-        disregistry : numpy.ndarray, optional
+        disregistry : array-like object, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.
         
@@ -605,7 +642,7 @@ class SDVPN(object):
         
         return energy
     
-    def longrange_energy(self):
+    def longrange_energy(self) -> float:
         """
         Computes the long-range elastic energy term for the dislocation using
         the K_tensor, Burgers vector and long-range cutoff.  This term is
@@ -627,7 +664,9 @@ class SDVPN(object):
         # 1/(2π) K_lm b_l b_m ln(L)
         return np.inner(b.dot(Kij), b) * np.log(L) / (2 * np.pi)
     
-    def stress_energy(self, x=None, disregistry=None):
+    def stress_energy(self, 
+                      x: Optional[npt.ArrayLike] = None,
+                      disregistry: Optional[npt.ArrayLike] = None) -> float:
         """
         Computes the stress energy due to the applied stress, tau.
         If fullstress is True, the original stress expression by
@@ -646,9 +685,9 @@ class SDVPN(object):
 
         Parameters
         ----------
-        x : numpy.ndarray, optional
+        x : array-like object, optional
             x-coordinates.  Default value is the stored x-coordinates.
-        disregistry : numpy.ndarray, optional
+        disregistry : array-like object, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.
         
@@ -682,7 +721,9 @@ class SDVPN(object):
             # -1/2 Σ_i τ_2l (δ_l[i] + δ_l[i+1]) Δx
             return -0.5 * np.sum(np.inner(τ[1,:], (δ[:-1] + δ[1:]) * Δx))
     
-    def surface_energy(self, x=None, disregistry=None):
+    def surface_energy(self, 
+                       x: Optional[npt.ArrayLike] = None,
+                       disregistry: Optional[npt.ArrayLike] = None) -> float:
         """
         Computes the gradient surface energy correction using beta
         coefficients.
@@ -691,9 +732,9 @@ class SDVPN(object):
         
         Parameters
         ----------
-        x : numpy.ndarray, optional
+        x : array-like object, optional
             x-coordinates.  Default value is the stored x-coordinates.
-        disregistry : numpy.ndarray, optional
+        disregistry : array-like object, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.
         
@@ -719,7 +760,9 @@ class SDVPN(object):
         # Σ_j β_lj / 4 Σ_i ρ_l[i]² Δx
         return np.sum( np.inner(ρ**2 * Δx, β) ) / 4
     
-    def nonlocal_energy(self, x=None, disregistry=None):
+    def nonlocal_energy(self, 
+                        x: Optional[npt.ArrayLike] = None,
+                        disregistry: Optional[npt.ArrayLike] = None) -> float:
         """
         Computes the nonlocal energy correction using alpha coefficient(s).
         
@@ -727,9 +770,9 @@ class SDVPN(object):
         
         Parameters
         ----------
-        x : numpy.ndarray, optional
+        x : array-like object, optional
             x-coordinates.  Default value is the stored x-coordinates.
-        disregistry : numpy.ndarray, optional
+        disregistry : array-like object, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.
         
@@ -759,7 +802,9 @@ class SDVPN(object):
             
         return energy
     
-    def total_energy(self, x=None, disregistry=None):
+    def total_energy(self, 
+                     x: Optional[npt.ArrayLike] = None,
+                     disregistry: Optional[npt.ArrayLike] = None) -> float:
         """
         Computes the total energy for the dislocation.
         
@@ -767,9 +812,9 @@ class SDVPN(object):
         
         Parameters
         ----------
-        x : numpy.ndarray, optional
+        x : array-like object, optional
             x-coordinates.  Default value is the stored x-coordinates.
-        disregistry : numpy.ndarray, optional
+        disregistry : array-like object, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.
         
@@ -791,16 +836,18 @@ class SDVPN(object):
                 + self.nonlocal_energy(x, disregistry)
                 + self.surface_energy(x, disregistry))
     
-    def check_energies(self, x=None, disregistry=None, 
-                       energyperlength_unit='eV/Å'):
+    def check_energies(self,
+                       x: Optional[npt.ArrayLike] = None,
+                       disregistry: Optional[npt.ArrayLike] = None,
+                       energyperlength_unit: str = 'eV/Å'):
         """
         Prints a summary string of all computed energy components.
 
         Parameters
         ----------
-        x : numpy.ndarray, optional
+        x : array-like object, optional
             x-coordinates.  Default value is the stored x-coordinates.
-        disregistry : numpy.ndarray, optional
+        disregistry : array-like object, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.
         energyperlength_unit : str, optional
@@ -832,16 +879,19 @@ class SDVPN(object):
         else:
             print('x and disregistry must be set/given to check energies')
     
-    def disregistry_plot(self, x=None, disregistry=None, figsize=None,
-                         length_unit='Å'):
+    def disregistry_plot(self, 
+                         x: Optional[npt.ArrayLike] = None,
+                         disregistry: Optional[npt.ArrayLike] = None,
+                         figsize: Optional[tuple] = None,
+                         length_unit: str = 'Å') -> plt.figure:
         """
         Creates a simple matplotlib figure showing the disregistry profiles.
 
         Parameters
         ----------
-        x : numpy.ndarray, optional
+        x : array-like object, optional
             x-coordinates.  Default value is the stored x-coordinates.
-        disregistry : numpy.ndarray, optional
+        disregistry : array-like object, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.
         figsize : tuple, optional
@@ -888,22 +938,32 @@ class SDVPN(object):
         else:
             print('x and disregistry must be set/given to plot')
 
-    def E_gsf_surface_plot(self, x=None, disregistry=None, fmt='ro-',
-                           normalize=False, smooth=True, 
-                           a1vect=None, a2vect=None, xvect=None,
-                           length_unit='Å', energyperarea_unit='eV/Å^2',
-                           numx=100, numy=100, figsize=None, **kwargs):
+    def E_gsf_surface_plot(self, 
+                           x: Optional[npt.ArrayLike] = None,
+                           disregistry: Optional[npt.ArrayLike] = None,
+                           fmt: str = 'ro-',
+                           normalize: Optional[bool] = False,
+                           smooth: bool = True, 
+                           a1vect: Optional[npt.ArrayLike] = None,
+                           a2vect: Optional[npt.ArrayLike] = None,
+                           xvect: Optional[npt.ArrayLike] = None,
+                           length_unit: str = 'Å',
+                           energyperarea_unit: str = 'eV/Å^2',
+                           numx: int = 100,
+                           numy: int = 100,
+                           figsize: Optional[tuple] = None,
+                           **kwargs) -> plt.figure:
         """
         Extends the GammaSurface.E_gsf_surface_plot() method to plot the
         disregistry path on top of it.
         
         Parameters
         ----------
-        x : numpy.ndarray, optional
+        x : array-like object, optional
             x-coordinates.  Default value is the stored x-coordinates. If x
             or disregistry are not set/given, then the disregistry path will
             not be added.
-        disregistry : numpy.ndarray, optional
+        disregistry : array-like object, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.  If x
             or disregistry are not set/given, then the disregistry path will
@@ -918,13 +978,13 @@ class SDVPN(object):
         smooth : bool, optional
             If True (default), then plot shows smooth interpolated values.
             If False, plot shows nearest raw data values.
-        a1vect : np.array, optional
+        a1vect : array-like object, optional
             Crystal vector for the a1 vector to use for plotting.  Default
             value of None uses the saved a1vect.
-        a2vect : np.array, optional
+        a2vect : array-like object, optional
             Crystal vector for the a2 vector to use for plotting.  Default
             value of None uses the saved a2vect.
-        xvect : numpy.array, optional
+        xvect : array-like object, optional
             Crystal vector to align with the plotting x-axis for 
             non-normalized plots.  If not given, this is taken as the Cartesian
             of a1vect.
@@ -993,19 +1053,23 @@ class SDVPN(object):
 
         return fig
 
-    def E_gsf_vs_x_plot(self, x=None, disregistry=None, figsize=None, 
-                        length_unit='Å', energyperarea_unit='eV/Å^2'):
+    def E_gsf_vs_x_plot(self, 
+                        x: Optional[npt.ArrayLike] = None,
+                        disregistry: Optional[npt.ArrayLike] = None,
+                        figsize: Optional[tuple] = None, 
+                        length_unit: str = 'Å',
+                        energyperarea_unit: str = 'eV/Å^2') -> plt.figure:
         """
         Generates a plot of the stacking fault energy, i.e. misfit energy,
         associated with the disregistry values for each x coordinate.
         
         Parameters
         ----------
-        x : numpy.ndarray, optional
+        x : array-like object, optional
             x-coordinates.  Default value is the stored x-coordinates. If x
             or disregistry are not set/given, then the disregistry path will
             not be added.
-        disregistry : numpy.ndarray, optional
+        disregistry : array-like object, optional
             (N, 3) shaped array of disregistry vectors at each x-coordinate.
             Default value is the stored disregistry values.  If x
             or disregistry are not set/given, then the disregistry path will
@@ -1056,13 +1120,15 @@ class SDVPN(object):
             print('x and disregistry must be set/given to check stacking fault energies')
 
 
-    def load(self, model, gamma=None):
+    def load(self, 
+             model: Union[str, io.IOBase, DM],
+             gamma: Optional[GammaSurface] = None):
         """
         Load solution from a data model.
         
         Parameters
         ----------
-        model : str or DataModelDict
+        model : str, file-like object or DataModelDict
             The semi-discrete-Peierls-Nabarro data model to load.
         gamma : atomman.defect.GammaSurface, optional
             The gamma surface to use.  If not given, will check to see if the
@@ -1116,8 +1182,11 @@ class SDVPN(object):
         self.x = uc.value_unit(solution['x'])
         self.disregistry = uc.value_unit(solution['disregistry'])
     
-    def model(self, length_unit='Å', energyperarea_unit='eV/Å^2',
-              pressure_unit='GPa', include_gamma=False):
+    def model(self, 
+              length_unit: str = 'Å',
+              energyperarea_unit: str = 'eV/Å^2',
+              pressure_unit: str = 'GPa',
+              include_gamma: bool = False) -> DM:
         """
         Generate a data model for the object.
         

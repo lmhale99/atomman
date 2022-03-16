@@ -1,17 +1,25 @@
 # coding: utf-8
+
 # Standard Python libraries
 from copy import deepcopy
-import warnings
+from typing import Optional
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # atomman imports
-from ..core import Atoms, Box, System
+from ..core import Box, System
+from . import VolterraDislocation
 import atomman.unitconvert as uc
 
-def dislocation_array(system, dislsol=None, m=None, n=None, burgers=None,
-                      bwidth=None, cutoff=None):
+def dislocation_array(system: System,
+                      dislsol: Optional[VolterraDislocation] = None,
+                      m: Optional[npt.ArrayLike] = None,
+                      n: Optional[npt.ArrayLike] = None,
+                      burgers: Optional[npt.ArrayLike] = None,
+                      bwidth: float = None,
+                      cutoff: float = None) -> System:
     """
     Method that converts a bulk crystal system into a periodic array of
     dislocations.  A single dislocation is inserted using a dislocation
@@ -24,7 +32,7 @@ def dislocation_array(system, dislsol=None, m=None, n=None, burgers=None,
     ----------
     system : atomman.System
         A perfect, bulk atomic system.
-    dislsol : atomman.defect.Stroh or atomman.defect.IsotropicVolterra, optional
+    dislsol : atomman.defect.VolterraDislocation, optional
         A dislocation solution to use to displace atoms by.  If not given,
         all atoms will be given linear displacements associated with the
         long-range limits.

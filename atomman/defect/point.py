@@ -1,18 +1,27 @@
 # coding: utf-8
+
 # Standard Python libraries
 from copy import deepcopy
+from typing import Optional
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # atomman imports
-from ..core import Atoms, System
+from ..core import System
 import atomman.unitconvert as uc
 
 __all__ = ['point', 'vacancy', 'interstitial', 'substitutional', 'dumbbell']
 
-def point(system, ptd_type='v', pos=None, ptd_id=None,
-          db_vect=None, scale=False, atol=None, **kwargs):
+def point(system: System,
+          ptd_type: str = 'v',
+          pos: Optional[npt.ArrayLike] = None,
+          ptd_id: Optional[int] = None,
+          db_vect: Optional[npt.ArrayLike] = None,
+          scale: bool = False,
+          atol: Optional[float] = None,
+          **kwargs) -> System:
     """
     Generates a new System where a point defect has been inserted.
     
@@ -82,7 +91,11 @@ def point(system, ptd_type='v', pos=None, ptd_id=None,
     else:
         raise ValueError('Invalid ptd_type. Options are: v, i, s, or db')
 
-def vacancy(system, pos=None, ptd_id=None, scale=False, atol=None):
+def vacancy(system: System,
+            pos: Optional[npt.ArrayLike] = None,
+            ptd_id: Optional[int] = None,
+            scale: bool = False,
+            atol: Optional[float] = None) -> System:
     """
     Generates a new system by adding a vacancy point defect.
     1. Removes the indicated atom from the system
@@ -156,7 +169,11 @@ def vacancy(system, pos=None, ptd_id=None, scale=False, atol=None):
     
     return d_system
 
-def interstitial(system, pos, scale=False, atol=None, **kwargs):
+def interstitial(system: System,
+                 pos: npt.ArrayLike,
+                 scale: bool = False,
+                 atol: Optional[float] = None,
+                 **kwargs) -> System:
     """
     Generates a new system by adding an interstitial point defect.
     1. Adds a new atom to the end of the Atoms list.
@@ -229,8 +246,13 @@ def interstitial(system, pos, scale=False, atol=None, **kwargs):
     
     return d_system
 
-def substitutional(system, pos=None, ptd_id=None, atype=1,scale=False,
-                   atol=None, **kwargs):
+def substitutional(system: System,
+                   pos: Optional[npt.ArrayLike] = None,
+                   ptd_id: Optional[int] = None,
+                   atype: int = 1,
+                   scale: bool = False,
+                   atol: Optional[float] = None,
+                   **kwargs) -> System:
     """
     Generates a new system by adding a substitutional point defect.
     1. Moves the indicated atom to the end of the list and changes its atype
@@ -326,8 +348,13 @@ def substitutional(system, pos=None, ptd_id=None, atype=1,scale=False,
     
     return d_system
 
-def dumbbell(system, pos=None, ptd_id=None, db_vect=None, scale=False,
-             atol=None, **kwargs):
+def dumbbell(system: System,
+             pos: Optional[npt.ArrayLike] = None,
+             ptd_id: Optional[int] = None,
+             db_vect: Optional[npt.ArrayLike] = None,
+             scale: bool = False,
+             atol: Optional[float] = None,
+             **kwargs) -> System:
     r"""
     Generates a new system by adding a dumbbell interstitial point defect.
     

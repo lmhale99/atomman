@@ -7,10 +7,10 @@ from .dislocation_system_basis import dislocation_system_basis
 from .differential_displacement import differential_displacement
 from .DifferentialDisplacement import DifferentialDisplacement
 from .disregistry import disregistry
-from .slip_vector import slip_vector # pylint: disable=no-name-in-module
+from .slip_vector import slip_vector 
 from .nye_tensor import nye_tensor
 from .nye_tensor_p import nye_tensor_p
-from .Strain import Strain # pylint: disable=no-name-in-module
+from .Strain import Strain
 
 from .VolterraDislocation import VolterraDislocation
 from .Stroh import Stroh

@@ -1,16 +1,22 @@
 # coding: utf-8
 # Standard Python libraries
 import warnings
+from typing import Optional
 
 # http://www.numpy.org/
 import numpy as np
+import numpy.typing as npt
 
 # atomman imports
-from .. import NeighborList
+from .. import NeighborList, System
 from ..tools import axes_check
 
-def nye_tensor(system, p_vectors, theta_max = 27, axes=None, neighbors=None,
-               cutoff=None):
+def nye_tensor(system: System,
+               p_vectors: npt.ArrayLike,
+               theta_max: float = 27,
+               axes: Optional[npt.ArrayLike] = None,
+               neighbors: Optional[NeighborList] = None,
+               cutoff: Optional[float] = None) -> dict:
     """
     Computes strain properties and Nye tensor for a defect containing system.
     

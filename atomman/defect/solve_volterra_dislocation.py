@@ -1,11 +1,25 @@
 # coding: utf-8
 
-# atomman imports
-from . import IsotropicVolterraDislocation, Stroh
+# Standard Python libraries
+from typing import Optional
 
-def solve_volterra_dislocation(C, burgers, ξ_uvw=None, slip_hkl=None,
-                               transform=None, axes=None, box=None,
-                               m=[1,0,0], n=[0,1,0], tol=1e-8):
+# http://www.numpy.org/
+import numpy.typing as npt
+
+# atomman imports
+from . import IsotropicVolterraDislocation, Stroh, VolterraDislocation
+from .. import Box, ElasticConstants
+
+def solve_volterra_dislocation(C: ElasticConstants,
+                               burgers: npt.ArrayLike,
+                               ξ_uvw: Optional[npt.ArrayLike] = None,
+                               slip_hkl: Optional[npt.ArrayLike] = None,
+                               transform: Optional[npt.ArrayLike] = None,
+                               axes: Optional[npt.ArrayLike] = None,
+                               box: Optional[Box] = None,
+                               m: npt.ArrayLike = [1,0,0],
+                               n: npt.ArrayLike = [0,1,0],
+                               tol: float = 1e-8) -> VolterraDislocation:
     """
     Wrapper function for generating VolterraDislocation children classes
     that provide linear elastic solutions for straight dislocations.
@@ -49,6 +63,7 @@ def solve_volterra_dislocation(C, burgers, ξ_uvw=None, slip_hkl=None,
         value is 1e-8.
 
     Returns
+    -------
     atomman.defect.VolterraDislocation
         The dislocation solution of the appropriate type.
     """
