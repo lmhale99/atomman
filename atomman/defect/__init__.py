@@ -4,13 +4,13 @@ from .point import __all__ as point_all
 
 from .dislocation_system_transform import dislocation_system_transform
 from .dislocation_system_basis import dislocation_system_basis
+from .nye_tensor import nye_tensor
+from .nye_tensor_p import nye_tensor_p
+from .Strain import Strain
 from .differential_displacement import differential_displacement
 from .DifferentialDisplacement import DifferentialDisplacement
 from .disregistry import disregistry
 from .slip_vector import slip_vector 
-from .nye_tensor import nye_tensor
-from .nye_tensor_p import nye_tensor_p
-from .Strain import Strain
 
 from .VolterraDislocation import VolterraDislocation
 from .Stroh import Stroh

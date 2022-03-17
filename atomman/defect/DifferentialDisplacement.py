@@ -15,6 +15,8 @@ from matplotlib import cm
 # atomman imports
 from ..tools import axes_check
 from .. import Box, System, NeighborList
+from . import Strain
+from ..plot import interpolate_contour
 
 class DifferentialDisplacement():
     def __init__(self,
@@ -268,7 +270,7 @@ class DifferentialDisplacement():
             Scaling factor for the magnitude of the differential displacement
             arrows.  Default value is 1: no scaling, vectors are in units of length.
             For major components, this is often set such that the max differential
-            displacement compoent after wrapping (see ddmax) is scaled to the
+            displacement component after wrapping (see ddmax) is scaled to the
             distance between the atom pairs in the plot.  For minor components, this
             is often set to a large value simply to make the components visible.
         arrowwidth : float, optional
@@ -342,9 +344,9 @@ class DifferentialDisplacement():
             zlim = (atompos[:, 2].min(), atompos[:, 2].max()) 
 
         # Define box for identifying only points inside
-        plotbox = Box(xlo=xlim[0]-5, xhi=xlim[1]+5,
-                      ylo=ylim[0]-5, yhi=ylim[1]+5,
-                      zlo=zlim[0], zhi=zlim[1])
+        plotbox = Box(xlo = xlim[0] - 5, xhi = xlim[1] + 5,
+                      ylo = ylim[0] - 5, yhi = ylim[1] + 5,
+                      zlo = zlim[0], zhi = zlim[1])
             
         # Set plot height if needed
         if isinstance(figsize, (int, float)):
@@ -537,3 +539,195 @@ class DifferentialDisplacement():
             arrowlengths = arrowuvectors * ddcomponents[:,np.newaxis]
         
         return arrowlengths, arrowcenters
+
+    def plot_with_nye(self,
+                      component: Union[str, npt.ArrayLike],
+                      ddmax: Optional[float],
+                      strain: Strain,
+                      plotxaxis: Union[str, npt.ArrayLike] = 'x',
+                      plotyaxis: Union[str, npt.ArrayLike] = 'y',
+                      xlim: Optional[tuple] = None,
+                      ylim: Optional[tuple] = None,
+                      zlim: Optional[tuple] = None,
+                      vlim: Optional[tuple] = None,
+                      cmap: str = 'bwr',
+                      arrowscale: float = 1,
+                      arrowwidth: float = 0.005,
+                      use0z: bool = False,
+                      atomcolor: Union[str, list, None] = None,
+                      atomcmap: Union[str, list, None] = None,
+                      atomsize: float = 0.5,
+                      figsize: int = 10,
+                      xbins: int = 200,
+                      ybins: int = 200,
+                      colorbar: bool = True,
+                      fill_value: float = np.nan,
+                      matplotlib_axes: Optional[plt.axes] = None,
+                      ) -> Tuple[float, plt.figure]:
+
+        """
+        Utility function for simple combined dd-Nye plots.  Note that this
+        method is currently limited to components and plot axis values of
+        'x', 'y', and 'z'.  This could be generalized in the future, if 
+        there is interest...
+
+        Parameters
+        ----------
+        component : str or array-like object
+            Indicates the component(s) of the differential displacement to plot.
+            Values of 'x', 'y', or 'z' will plot the component along that
+            Cartesian direction.  A value of 'projection' will plot the
+            differential displacement vectors as projected onto the plotting
+            plane, thereby showing the two components perpendicular to the line
+            direction.  If a 3D vector is given, then the component parallel to
+            that direction will be used.
+        ddmax : float or None
+            The maximum differential displacement value allowed. Values will be
+            kept between +-ddmax by wrapping values with larger absolute values
+            around by adding/subtracting 2*ddmax. Typically, this is set to be
+            \|b\|/2, but can be defect-specific. For instance, fcc a/2<110>
+            dislocations and basal hcp dislocations are typically plotted with
+            ddmax=\|b\|/4.  If set to None, then no wrapping is done.
+        strain : atomman.defect.Strain
+            A strain object computed for the system in question.  This will be used
+            to compute the Nye tensor values that are included in the plot.
+        plotxaxis : str or array-like object, optional
+            Indicates the Cartesian direction associated with the system's atomic
+            coordinates to align with the plotting x-axis.  Values are either 3D
+            unit vectors, or strings 'x', 'y', or 'z' for the Cartesian axes
+            directions.  plotxaxis and plotyaxis must be orthogonal.  Default value
+            is 'x' = [1, 0, 0].
+        plotyaxis : str or array-like object, optional
+            Indicates the Cartesian direction associated with the system's atomic
+            coordinates to align with the plotting y-axis.  Values are either 3D
+            unit vectors, or strings 'x', 'y', or 'z' for the Cartesian axes
+            directions.  plotxaxis and plotyaxis must be orthogonal.  Default value
+            is 'y' = [0, 1, 0].
+        xlim : tuple, optional
+            The minimum and maximum coordinates along the plotting x-axis to
+            include in the fit.  Values are taken in the specified length_unit.
+            If not given, then the limits are set based on min and max atomic
+            coordinates along the plotting axis.
+        ylim : tuple, optional
+            The minimum and maximum coordinates along the plotting y-axis to
+            include in the fit.  Values are taken in the specified length_unit.
+            If not given, then the limits are set based on min and max atomic
+            coordinates along the plotting axis.
+        zlim : tuple, optional
+            The minimum and maximum coordinates normal to the plotting axes
+            (i.e. plotxaxis X plotyaxis) to include in the fit.  Values are taken
+            in the specified length_unit.  The optimum zlim should encompass only
+            a single periodic slice.  If not given, then the limits are set
+            based on min and max atomic coordinates along the axis.
+        vlim : tuple, optional
+            Range limits for the Nye tensor contour plot.  If not given, will be
+            determined by the range of the Nye tensor component values.
+        cmap : str, optional
+            The matplotlib colormap to use for the Nye tensor contour plot.
+            Default value is 'bwr'.
+        arrowscale : float, optional
+            Scaling factor for the magnitude of the differential displacement
+            arrows.  Default value is 1: no scaling, vectors are in units of length.
+            For major components, this is often set such that the max differential
+            displacement component after wrapping (see ddmax) is scaled to the
+            distance between the atom pairs in the plot.  For minor components, this
+            is often set to a large value simply to make the components visible.
+        arrowwidth : float, optional
+            Scaling factor to use for the width of the plotted arrows. Default value is
+            0.005 = 1/200.
+        use0z : bool, optional
+            If False (default), the z coordinates from the reference system will be
+            used for zlim and atomcmap colors. If True, the z coordinates will be
+            used from system0 even if system1 is the reference system.
+        atomcolor : str or list, optional
+            Matplotlib color name(s) to use to display the atoms.  If str, that
+            color will be assigned to all atypes.  If list, must give a color value
+            or None for each atype.  Default value (None) will use cmap instead.
+            Note: atomcolor and atomcmap can be used together as long as exactly
+            one color or cmap is given for each unique atype.
+        atomcmap : str or list, optional
+            Matplotlib colormap name(s) to use to display the atoms.  Atoms will
+            be colored based on their initial positions and scaled using zlim. If
+            str, that cmap will be assigned to all atypes.  If list, must give a 
+            cmap value or None for each atype.  Default value (None) will use 'hsv'
+            cmap.  Note: atomcolor and atomcmap can be used together as long as
+            exactly one color or cmap is given for each unique atype.
+        atomsize : float, optional
+            The circle radius size to use for the plotted atom positions in units of
+            length.  Default value is 0.5.
+        figsize : float or tuple, optional
+            Specifies the size of the figure to create in inches.  If a single value
+            is given, it will be used for the figure's width, and the height will be
+            scaled based on the xlim and ylim values.  Alternatively, both the width
+            and height can be set by passing a tuple of two values, but the plot will
+            not be guaranteed to be "regular" with respect to length dimensions.
+        xbins : int, optional
+            Specifies the number of interpolation bins to use along the plotting 
+            x-axis.  Default value is 200.
+        ybins : int, optional
+            Specifies the number of interpolation bins to use along the plotting
+            y-axis.  Default value is 200.
+        colorbar: bool, optional
+            If True (default) a colorbar will be added to the plot.
+        fill_value: float, optional
+            Value used to fill in for grid points failed to interpolate in the fit.
+            If not given, then the default is np.nan, which may cause an error in
+            plotting for too narrow xlim and ylim settings.
+        matplotlib_axes : matplotlib.Axes.axes, optional
+            An existing matplotlib axes object. If given, the differential displacement
+            plot will be added to the specified axes of an existing figure.  This
+            allows for subplots to be constructed.  Note that figsize will be ignored
+            as the figure would have to be created beforehand and no automatic
+            optimum scaling of the figure's dimensions will occur.
+
+        Returns
+        -------
+        float
+            The integer sum of the Nye tensor over the plotted area.
+        matplotlib.Figure
+            The generated figure.
+
+        """
+        # Identify Nye tensor components based on component and plot axes
+        try: 
+            component_index = ['x', 'y', 'z'].index(component)
+        except:
+            raise ValueError('component is currently limited to values of "x", "y" or "z"') 
+        try:
+            x_index = ['x', 'y', 'z'].index(plotxaxis)
+        except:
+            raise ValueError('plotxaxis is currently limited to values of "x", "y" or "z"')
+        try:
+            y_index = ['x', 'y', 'z'].index(plotyaxis)
+        except:
+            raise ValueError('plotyaxis is currently limited to values of "x", "y" or "z"')
+        line_index = 3 - (x_index + y_index)
+        prop_index = [line_index, component_index] 
+        
+        # Generate dd plot
+        if matplotlib_axes is None:
+            fig = self.plot(component, ddmax, plotxaxis=plotxaxis, plotyaxis=plotyaxis,
+                            xlim=xlim, ylim=ylim, zlim=zlim, arrowscale=arrowscale,
+                            arrowwidth=arrowwidth, use0z=use0z, atomcolor=atomcolor,
+                            atomcmap=atomcmap, atomsize=atomsize, figsize=figsize)
+            matplotlib_axes = fig.axes[0]
+        else:
+            self.plot(component, ddmax, plotxaxis=plotxaxis, plotyaxis=plotyaxis,
+                      xlim=xlim, ylim=ylim, zlim=zlim, arrowscale=arrowscale,
+                      arrowwidth=arrowwidth, use0z=use0z, atomcolor=atomcolor,
+                      atomcmap=atomcmap, atomsize=atomsize, figsize=figsize,
+                      matplotlib_axes=matplotlib_axes)
+            fig = None
+
+        # Add Nye tensor surface plot
+        intsum = interpolate_contour(self.system1, 'nye', prop_index=prop_index, prop=strain.nye,
+                            plotxaxis=plotxaxis, plotyaxis=plotyaxis,
+                            xlim=xlim, ylim=ylim, zlim=zlim, vlim=vlim, cmap=cmap,
+                            xbins=xbins, ybins=ybins, fill_value=fill_value, 
+                            matplotlib_axes=matplotlib_axes,
+                            dots=False, colorbar=colorbar, title=False)[0]
+        
+        if fig is None:
+            return intsum
+        else:
+            return intsum, fig
