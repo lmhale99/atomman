@@ -240,17 +240,17 @@ class CrystalPrototype(Record):
                 style='int_match',
                 name='sg_number',
                 path=f'{self.modelroot}.space-group.number'),
-            'strukturbericht': load_query(
-                style='str_match',
-                name='strukturbericht',
-                path=f'{self.modelroot}.space-group.Hermann-Maguin'),
             'sg_hm': load_query(
                 style='str_match',
                 name='sg_hm',
-                path=f'{self.modelroot}.space-group.Schoenflies'),
+                path=f'{self.modelroot}.space-group.Hermann-Maguin'),
             'sg_schoenflies': load_query(
                 style='str_match',
                 name='sg_schoenflies',
+                path=f'{self.modelroot}.space-group.Schoenflies'),
+            'crystalfamily': load_query(
+                style='str_match',
+                name='crystalfamily',
                 path=f'{self.modelroot}.system-info.cell.crystal-family'),
             'natypes': load_query(
                 style='int_match',

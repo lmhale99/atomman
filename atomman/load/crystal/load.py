@@ -1,6 +1,7 @@
 # coding: utf-8
 
 # Standard Python imports
+from __future__ import annotations
 from typing import Optional, Union
 
 # https://github.com/usnistgov/potentials

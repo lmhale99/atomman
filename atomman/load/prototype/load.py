@@ -1,8 +1,8 @@
 # coding: utf-8
  
 # Standard Python imports
-from typing import Optional, Union, Tuple
-from pathlib import Path
+from __future__ import annotations
+from typing import Optional, Union
 
 # atomman imports
 from ... import System
