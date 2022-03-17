@@ -18,31 +18,35 @@ from matplotlib import cm
 
 # atomman imports
 import atomman.unitconvert as uc
-from .. import System
+from .. import Box, System
 from ..tools import axes_check
 
 __all__ = ['interpolate_contour']
 
 def interpolate_contour(system: System,
-                        name: str,
-                        property: Optional[npt.ArrayLike] = None,
-                        index: Union[int, tuple, None] = None,
-                        magnitude: bool = False,
+                        prop_name: str,
+                        prop_index: Union[int, tuple, None] = None,
+                        prop_magnitude: bool = False,
+                        prop: Optional[npt.ArrayLike] = None,  
                         plotxaxis: str = 'x',
                         plotyaxis: str = 'y',
                         xlim: Optional[tuple] = None,
                         ylim: Optional[tuple] = None,
                         zlim: Optional[tuple] = None,
+                        vlim: Optional[tuple] = None,
                         xbins: int = 200,
                         ybins: int = 200,
                         dots: bool = True,
-                        czero: bool = True,
-                        save=False,
-                        show=True,
+                        colorbar: bool = True,
+                        vzero: bool = True,
+                        title: Union[bool, str] = True,
                         length_unit: str = 'angstrom',
-                        property_unit: Optional[str] = None,
+                        prop_unit: Optional[str] = None,
                         cmap: str = 'jet',
-                        fill_value: float = np.nan) -> Tuple[float, float]:
+                        fill_value: float = np.nan,
+                        figsize: Optional[tuple] = None,
+                        matplotlib_axes: Optional[plt.axes] = None,
+                       ) -> Tuple[float, float, Optional[plt.figure]]:
     """
     Creates a contour plot of a system's per-atom properties by interpolating
     properties between atoms.
@@ -51,12 +55,12 @@ def interpolate_contour(system: System,
     ----------
     system : atomman.System
         The system with the per-atom property that you want to plot.
-    name : str
+    propname : str
         The name of the per-atom property that you want to plot.
-    property : array-like object, optional
+    prop : array-like object, optional
         Values for the per-atom property to plot.  If not given, values will
         be taken as the "name" property of system.
-    index : int or tuple, optional
+    propindex : int or tuple, optional
         Specifies which component of a multidimensional property to plot.  Not
         needed if the property is scalar.
     magnitude : bool, optional
@@ -88,7 +92,10 @@ def interpolate_contour(system: System,
         The minimum and maximum coordinates normal to the plotting axes
         (i.e. plotxaxis X plotyaxis) to include in the fit.  Values are taken
         in the specified length_unit.  If not given, then the limits are set
-        based on min and max atomic coordinates along the axis.    
+        based on min and max atomic coordinates along the axis.
+    vlim : tuple, optional
+        Allows for the color range to be specified.  If not give, the range
+        will be auto-selected based on the vzero parameter. 
     xbins : int, optional
         Specifies the number of interpolation bins to use along the plotting 
         x-axis.  Default value is 200.
@@ -98,19 +105,22 @@ def interpolate_contour(system: System,
     dots : bool, optional
         If True, then the positions of the atoms are shown as circles.
         Default value is True.
-    czero : bool, optional
-        If True, the range of property values will be centered around zero,
-        i.e. cmax = -cmin.  If False, cmax and cmin will be independently
-        selected using the property values.  Default value is True.
-    save : bool, optional
-        If True, the generated plot will be saved to "name.png".  Default
-        value is False.
-    show : bool, optional
-        If True, matplotlib.pyplot.show() is called.  Default value is True.
+    vzero : bool, optional
+        Specifies how to auto-select the vlim values if vlim is not directly
+        given. vzero=True (default) will center the range around 0, i.e.
+        vlim[0] = -vlim[1].  vzero=False will select vlim[0] and vlim[1] 
+        independently based on the the property values.
+    colorbar: bool, optional
+        If True (default) a colorbar will be added to the plot.
+    title: bool or str, optional
+        If True (default), a plot title will be added matching the property
+        name plus index/magnitude info.  If False, no title will be used.
+        If a string is given, then that will be used instead of the property
+        name.
     length_unit : str, optional
         The units of length to use for the plotting x- and y-axes.  Default
         value is 'angstrom'.
-    property_unit : str or None, optional
+    prop_unit : str or None, optional
         The units to use for the property value being plotted.  Default value
         is None, in which no unit conversion is applied.
     cmap : str, optional
@@ -119,6 +129,21 @@ def interpolate_contour(system: System,
         Value used to fill in for grid points failed to interpolate in the fit.
         If not given, then the default is np.nan, which may cause an error in
         plotting for too narrow xlim and ylim settings.
+    figsize : float or tuple, optional
+        Specifies the size of the figure to create in inches.  If a single value
+        is given, it will be used for the figure's width, and the height will be
+        scaled based on the xlim and ylim values.  Alternatively, both the width
+        and height can be set by passing a tuple of two values, but the plot will
+        not be guaranteed to be "regular" with respect to length dimensions.
+    matplotlib_axes : matplotlib.Axes.axes, optional
+        An existing matplotlib axes object. If given, the differential displacement
+        plot will be added to the specified axes of an existing figure.  This
+        allows for subplots to be constructed.  Note that figsize will be ignored
+        as the figure would have to be created beforehand and no automatic
+        optimum scaling of the figure's dimensions will occur.
+    colorbar: bool, optional
+        If True (default) a colorbar will be added to the plot.
+    header
     
     Returns
     -------
@@ -126,26 +151,15 @@ def interpolate_contour(system: System,
         The area integrated sum of the property over the plotted region.
     avsum : float
         The average property value taken across all plotting bins.
+    figure : matplotlib.pyplot.figure
+        The generated figure object is returned if matplotlib_axes is not given.
     """
     
-    # Give numeric values for str plot axis terms
-    if plotxaxis == 'x':
-        plotxaxis = [1.0,0.0,0.0]
-    elif plotxaxis == 'y':
-        plotxaxis = [0.0,1.0,0.0]
-    elif plotxaxis == 'z':
-        plotxaxis = [0.0,0.0,1.0]
-    
-    if plotyaxis == 'x':
-        plotyaxis = [1.0,0.0,0.0]
-    elif plotyaxis == 'y':
-        plotyaxis = [0.0,1.0,0.0]
-    elif plotyaxis == 'z':
-        plotyaxis = [0.0,0.0,1.0]
+    # Interpret plot axis values
+    plotxaxis = __plotaxisoptions(plotxaxis)
+    plotyaxis = __plotaxisoptions(plotyaxis)
     
     # Build transformation matrix, T, from plot axes.
-    plotxaxis = np.asarray(plotxaxis, dtype='float64')
-    plotyaxis = np.asarray(plotyaxis, dtype='float64')
     T = axes_check([plotxaxis, plotyaxis, np.cross(plotxaxis, plotyaxis)])
     
     # Extract positions and transform using T
@@ -158,78 +172,166 @@ def interpolate_contour(system: System,
         ylim = (pos[:, 1].min(), pos[:, 1].max())
     if zlim is None:
         zlim = (pos[:, 2].min(), pos[:, 2].max())
+        
+    # Define box for identifying only points inside
+    plotbox = Box(xlo = xlim[0] - 5, xhi = xlim[1] + 5,
+                  ylo = ylim[0] - 5, yhi = ylim[1] + 5,
+                  zlo = zlim[0], zhi = zlim[1])
+    in_bounds = plotbox.inside(pos)
     
-    # Extract property values
-    if property is None:
-        property = system.atoms.view[name]
-    
-    # Handle index
-    if index is not None:
-        assert magnitude is False, 'index and magnitude cannot be combined'
-        if isinstance(index, (int, np.integer)):
-            index = [index]
-        else:
-            index = list(index)
-        for i in index:
-            name += '[' + str(i+1) + ']'
-        property = property[tuple([Ellipsis] + index)]
-    
-    # Handle magnitude
-    elif magnitude is True:
-        property = np.linalg.norm(property, axis=1)
-        name += '_mag'
-    
-    assert property.shape == (system.natoms, ), 'property to plot must be a per-atom scalar'
-    
-    # Identify only atoms in xlim, ylim, zlim
-    in_bounds = ((pos[:,0] > xlim[0] - 5.) &
-                 (pos[:,0] < xlim[1] + 5.) &
-                 (pos[:,1] > ylim[0] - 5.) &
-                 (pos[:,1] < ylim[1] + 5.) &
-                 (pos[:,2] > zlim[0]) &
-                 (pos[:,2] < zlim[1]))
+    # Manage property values
+    prop_name, prop = __get_prop_values(system, prop_name, prop_index,
+                                        prop_magnitude, prop, prop_unit)
 
     # Extract plotting coordinates and values
     x = pos[in_bounds, 0]
     y = pos[in_bounds, 1]
-    v = uc.get_in_units(property[in_bounds], property_unit)
+    c = prop[in_bounds]
 
-    # Generate interpolation grid
-    grid, xedges, yedges = grid_interpolate_2d(x, y, v,
-                                               xbins=xbins, ybins=ybins,
-                                               range=[xlim, ylim],
-                                               fill_value=fill_value)
-    if np.any(np.isnan(grid)):
-        warn("Given xlim and ylim are too broad to interpolate. Consider shrinking xlim and ylim or set an appropriate value in fill_value.")
-
+    # Generate plotting grid
+    grid = __grid_interpolate(x, y, c, xbins, ybins, xlim, ylim, fill_value)
+    
     # Compute intsum and avsum values
     intsum = np.sum(grid)
     avsum = intsum / (xbins-1) / (ybins-1)
     intsum = intsum * (xlim[1] - xlim[0]) / (xbins-1) * (ylim[1] - ylim[0]) / (ybins-1)
+    returning = [intsum, avsum]
+    
+    
+    # Create figure if needed
+    if matplotlib_axes is None:
+        if figsize is None:
+            figsize = (7.7, 7)
+        fig = plt.figure(figsize=figsize)
+        matplotlib_axes = fig.add_subplot(111)
+        returning.append(fig)
+    else:
+        fig = matplotlib_axes.get_figure()
+    
+    # Get cmap from str name
+    if isinstance(cmap, str):
+        cmap = cm.get_cmap(cmap)
+    
+    if vlim is None:
+        vlim = __vlim(grid, vzero)
+    
+    # Generate plot
+    im = matplotlib_axes.imshow(grid, extent = [xlim[0], xlim[1], ylim[1], ylim[0]], 
+                                cmap = cmap, norm = plt.Normalize(vmin=vlim[0], vmax=vlim[1]))
+    
+    # Add pretty colorbar
+    if colorbar:
+        ticks = np.linspace(vlim[0], vlim[1], 11, endpoint=True)
+        cbar = fig.colorbar(im, ax=matplotlib_axes, fraction=0.05, pad = 0.05, ticks=ticks)
+        cbar.ax.tick_params(labelsize=15)
+   
+    # Make axes pretty
+    matplotlib_axes.axis([xlim[0], xlim[-1], ylim[0], ylim[-1]])
+    #matplotlib_axes.tick_params(labelsize=15)
 
-    # Generate a pretty figure of the grid
-    fig = prettygrid(grid, xedges, yedges, cmap=cmap, propname=name, czero=czero)
+    # Add title
+    if isinstance(title, str):
+        prop_name = title
+        title = True
+    if title is True:
+        matplotlib_axes.set_title(prop_name, size=30)
 
     # Add dots
     if dots:
-        adddots(x, y, xedges, yedges)
+        __adddots(matplotlib_axes, x, y, xlim, ylim)
+        
+    return returning
 
-    # Save, show and close figure
-    if save is True:
-        plt.savefig(name + '.png', dpi=800)
-    if show is True:
-        plt.show()
-    plt.close(fig)
+def __plotaxisoptions(plotaxis: Union[str, npt.ArrayLike]) -> np.ndarray:
+    """Converts str plotaxis options to arrays as needed"""
 
-    return intsum, avsum
+    # Give numeric values for str plot axis terms
+    if plotaxis == 'x':
+        plotaxis = [1.0, 0.0, 0.0]
+    elif plotaxis == 'y':
+        plotaxis = [0.0, 1.0, 0.0]
+    elif plotaxis == 'z':
+        plotaxis = [0.0, 0.0, 1.0]
 
-def grid_interpolate_2d(x: npt.ArrayLike,
-                        y: npt.ArrayLike,
-                        v: npt.ArrayLike,
-                        xbins: int = 50,
-                        ybins: int = 50,
-                        range: Optional[npt.ArrayLike] = None,
-                        fill_value: float = np.nan) -> Tuple:
+    # Convert to numpy array
+    return np.asarray(plotaxis, dtype=float)
+
+
+def __get_prop_values(system: System,
+                      prop_name: str,
+                      prop_index: Union[int, tuple, None] = None,
+                      prop_magnitude: bool = False,
+                      prop: Optional[npt.ArrayLike] = None,
+                      prop_unit: Optional[str] = None, 
+                     ) -> Tuple[str, np.ndarray]:
+    """
+    Manages the prop parameters
+    
+    Parameters
+    ----------
+    system : atomman.System
+        The system with the per-atom property that you want to plot.
+    prop_name : str
+        The name of the per-atom property that you want to plot.
+    prop_index : int or tuple, optional
+        Specifies which component of a multidimensional property to plot.  Not
+        needed if the property is scalar.
+    prop_magnitude : bool, optional
+        If True, plots the per-atom magnitude of a vector property.  Cannot be
+        combined with index.  Default value is False.
+    prop : array-like object, optional
+        Values for the per-atom property to plot.  If not given, values will
+        be taken as the "name" property of system.
+    prop_unit : str or None, optional
+        The units to use for the property value being plotted.  Default value
+        is None, in which no unit conversion is applied.
+        
+    Returns
+    -------
+    prop_name : str
+        The updated property name.
+    prop : np.ndarray
+        The per-atom property values.
+    """
+    
+    # Get property from system
+    if prop is None:
+        prop = system.atoms.view[prop_name]
+    
+    # Handle index
+    if prop_index is not None:
+        if prop_magnitude is True:
+            raise ValueError('prop_index and prop_magnitude cannot be combined')
+        if isinstance(prop_index, (int, np.integer)):
+            prop_index = [prop_index]
+        else:
+            prop_index = list(prop_index)
+        for i in prop_index:
+            prop_name += f'[{i+1}]'
+        prop = prop[tuple([Ellipsis] + prop_index)]
+    
+    # Handle magnitude
+    elif prop_magnitude is True:
+        prop = np.linalg.norm(prop, axis=1)
+        prop_name += '_mag'
+    
+    # Check that the property is of the right shape
+    if prop.shape != (system.natoms, ):
+        raise ValueError('property to plot must be a per-atom scalar')
+        
+    # Convert to the specified units
+    prop = uc.get_in_units(prop, prop_unit)
+    
+    return prop_name, prop
+
+def __grid_interpolate(x: npt.ArrayLike,
+                       y: npt.ArrayLike,
+                       v: npt.ArrayLike,
+                       xbins: int = 50,
+                       ybins: int = 50,
+                       xlim: Optional[tuple] = None,
+                       ylim: Optional[tuple] = None,
+                       fill_value: float = np.nan) -> np.ndarray:
     """
     Generates 2D grid of property values by interpolating between measured
     values.
@@ -248,9 +350,12 @@ def grid_interpolate_2d(x: npt.ArrayLike,
     ybins : int, optional
         The number of bins to use in interpolating between the y coordinates.
         Default value is 50.
-    range : array-like object, optional
-        2x2 list of the [[xmin, xmax], [ymin, ymax]] coordinates for the bins.
-        If not given, will use [[x.min(), x.max()], [y.min(), y.max()]].
+    xlim : tuple, optional
+        The minimum and maximum coordinates along the plotting x-axis to
+        include in the fit.
+    ylim : tuple, optional
+        The minimum and maximum coordinates along the plotting y-axis to
+        include in the fit.
     fill_value: float, optional
         Value used to fill in for grid points failed to interpolate in the fit.
         If not given, then the default is np.nan.
@@ -259,87 +364,47 @@ def grid_interpolate_2d(x: npt.ArrayLike,
     -------
     grid : numpy.ndarray
         The interpolated values in a grid map array.
-    xedges : list
-        The min, max values of x associated with the grid.
-    yedges : list
-        The min, max values of y associated with the grid.
     """
-    # Handle range and bins options
-    if range is None:
-        range=[[x.min() ,x.max()], [y.min(), y.max()]]
-
     # Generate 1D interpolation points
-    xi = np.linspace(range[0][0], range[0][1], num=xbins)
-    yi = np.linspace(range[1][0], range[1][1], num=ybins)
+    xi = np.linspace(xlim[0], xlim[1], num=xbins)
+    yi = np.linspace(ylim[0], ylim[1], num=ybins)
 
     # Generate 2D grid points
     x0, y0 = np.meshgrid(xi, yi)
 
     # Interpolate values to grid points
     grid = griddata((x, y), v, (x0, y0), fill_value=fill_value)
+    if np.any(np.isnan(grid)):
+        warn("Given xlim and ylim are too broad to interpolate. Consider shrinking xlim and ylim or set an appropriate value in fill_value.")
 
-    return grid, range[0], range[1]
+    return grid
 
-def prettygrid(grid: npt.ArrayLike,
-               xedges: list,
-               yedges: list,
-               cmap: str = 'jet',
-               propname: str = '',
-               czero: bool = True,
-               scale: int = 1) -> plt.figure:
+def __vlim(grid: np.ndarray,
+           vzero: bool = True,
+           scale: float = 1) -> Tuple[float, float]:
     """
-    Generates pretty-looking 2D image maps for grid data using matplotlib.
-
-    Parameters
-    ----------
-    grid : array-like object
-        The grid of property values to plot
-    xedges : list
-        The min, max values of x associated with the grid.
-    yedges : list
-        The min, max values of y associated with the grid.
-    cmap : str, optional
-        The name of the matplotlib colormap to use.  Default value is 'jet'.
-    propname : str, optional
-        Name of the property being printed.  This is used as the plot title.
-    czero : bool, optional
-        If True, the range of property values will be centered around zero,
-        i.e. cmax = -cmin.  If False, cmax and cmin will be independently
-        selected using the property values.  Default value is True.
-    scale : int, optional
-        Scaling factor to apply to min/max property values.  Default value is
-        1 (no scaling).
-    
-    Returns
-    -------
-    matplotlib.Figure
-        The generated figure object.
+    Identifies limits to use for the property values
     """
-    
-    # Get cmap from str name
-    if isinstance(cmap, str):
-        cmap = cm.get_cmap(cmap)
-    
-    # Set vmin = -vmax if czero is True
-    if czero is True:
+    # Set vmin = -vmax if vzero is True
+    if vzero is True:
         vmax = abs(grid).max()
         if vmax != 0.0:
-            vrounder = np.floor(np.log10(vmax))
-            vmax = np.around(2 * vmax / 10.**vrounder) * 10.**vrounder / 2.
+            rounder = np.floor(np.log10(vmax))
+            vmax = np.around(2 * vmax / 10.**rounder) * 10.**rounder / 2.
         else:
             vmax = 1e-15
         vmin = -vmax
     
-    # Set vmin, vmax if czero is False
+    # Set vmin, vmax if vzero is False
     else:
         vmax = grid.max()
         vmin = grid.min()
 
         if abs(grid).max() != 0.0:
-            vrounder = np.floor(np.log10(grid.max() - grid.min()))
+            rounder = np.floor(np.log10(grid.max() - grid.min()))
 
-            vmax = np.around(2 * vmax / 10.**vrounder) * 10.**vrounder / 2.
-            vmin = np.around(2 * vmin / 10.**vrounder) * 10.**vrounder / 2.
+            vmax = np.around(2 * vmax / 10.**rounder) * 10.**rounder / 2.
+            vmin = np.around(2 * vmin / 10.**rounder) * 10.**rounder / 2.
 
             if vmax == vmin:
                 if vmax > 0:
@@ -355,48 +420,31 @@ def prettygrid(grid: npt.ArrayLike,
     vmin *= scale
     vmax *= scale
     
-    # Generate plot
-    fig = plt.figure(figsize=(7.7, 7), dpi=72)
-    plt.imshow(grid, extent = [xedges[0], xedges[-1], yedges[-1], yedges[0]], 
-               cmap=cmap, norm=plt.Normalize(vmax=vmax, vmin=vmin))
+    return vmin, vmax
     
-    # Add pretty colorbar
-    vticks = np.linspace(vmin, vmax, 11, endpoint=True)
-    cbar = plt.colorbar(fraction=0.05, pad = 0.05, ticks=vticks)
-    cbar.ax.tick_params(labelsize=15)
-   
-    # Make axis values and title pretty
-    plt.xlim(xedges[0], xedges[-1])
-    plt.xticks(size=15)
-    plt.ylim(yedges[0], yedges[-1])
-    plt.yticks(size=15)
-    plt.title(propname, size=30)
-    
-    return fig
-    
-def adddots(x: npt.ArrayLike,
-            y: npt.ArrayLike,
-            xedges: list,
-            yedges: list):
+def __adddots(ax: plt.axes,
+              x: npt.ArrayLike,
+              y: npt.ArrayLike,
+              xlim: list,
+              ylim: list):
     """
     Overlays circles onto an active 2D plot to show actual atomic positions.
     
     Parameters
     ----------
+    ax : matplotlib.pyplot.axes
+        The plotting axes to add the atomic positions to.
     x : array-like object
         List of x-coordinates for the atoms/dots.
     y : array-like object
         List of y-coordinates for the atoms/dots.
-    xedges : list
+    xlim : list
         The [xmin, xmax] values associated with the plot.
-    yedges : list
+    ylim : list
         The [ymin, ymax] values associated with the plot.
-    """
-    # Get current plotting axis
-    ax = plt.gca()
-    
+    """    
     # Set linewidth based on system dimensions
-    syswidth = max([abs(xedges[-1]-xedges[0]), abs(yedges[-1]-yedges[0])])
+    syswidth = max([abs(xlim[1]-xlim[0]), abs(ylim[1]-ylim[0])])
     linewidth = 60. / syswidth
     
     # Add circles at each (x,y) position
