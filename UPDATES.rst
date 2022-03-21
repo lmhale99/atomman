@@ -1,6 +1,46 @@
 Updates
 =======
 
+Version 1.4.4
+-------------
+
+- New methods added to **atomman.Box**
+
+  - **reciprocal_vects** method added that computes the reciprocal lattice
+    vectors associated with the Box's vectors.
+
+  - **vector_crystal_to_cartesian** and **plane_crystal_to_cartesian** from
+    **atomman.tools.miller** have been added as Box methods.
+
+  - **position_relative_to_cartesian** replaces **atomman.System.unscale** and
+    **position_cartesian_to_relative** replaces **atomman.System.scale** as the
+    new operations are better named and only relate to Box information.
+
+  - **identifyfamily**, **iscubic**, **ishexagonal**, **istetragonal**,
+    **isrhombohedral**, **isorthorhombic**, **ismonoclinic** and
+    **ismonoclinic** methods added from **atomman.tools**.
+
+- **atomman.region.Plane** has new methods **operate**, **__eq__** and
+  **isclose** for transforming and comparing Planes.
+
+- **atomman.plot.interpolate_contour** reworked to allow 
+  matplotlib.pyplot.axes to be passed through allowing for the color contour
+  plots to be added on top of existing plots.  Options also added to turn off
+  features.
+
+- **atomman.defect.DifferentialDisplacement** has new plot_with_nye method that
+  overlays Nye tensor color contours with the differential displacement plots.
+
+- Overhaul of **atomman.library** operations reflecting that underlying
+  database handling is now branched off into the separate yabadaba package.
+
+- **Dislocation**, **FreeSurface**, **PointDefect** and **StackingFault**
+  Record classes related to defect parameter sets have been moved from iprPy
+  to **atomman.library.record**  This is to support future updates where these
+  parameter sets can be directly passed to the defect generator classes.
+
+- Typing hints added to all of atomman's code.
+
 Version 1.4.3
 -------------
 
@@ -230,12 +270,12 @@ Version 1.3.0
 
 - **lammps.Potential** expanded.
 
-    - **allsymbols** property added to support pair_styles that require all
-      symbols to be listed in the pair_coeff lines even if they are not used.
-    - **status** property added that indicates if the potential is known to
-      have been superseded by a newer version or retracted for being invalid.
-    - **pair_info** now supports an optional masses parameter for overriding
-      default mass values.
+  - **allsymbols** property added to support pair_styles that require all
+    symbols to be listed in the pair_coeff lines even if they are not used.
+  - **status** property added that indicates if the potential is known to
+    have been superseded by a newer version or retracted for being invalid.
+  - **pair_info** now supports an optional masses parameter for overriding
+    default mass values.
 
 - **load.atom_data** now recognizes image flags in the Atoms tables, and reads
   values from the Masses tables.  Parameter checking is performed allowing for
