@@ -13,10 +13,10 @@ from ..region import Plane
 from .. import System
 
 try:
-    from spglib import get_symmetry_dataset
-    spglib_loaded = True
+    import spglib
+    has_spglib = True
 except ImportError:
-    spglib_loaded = False
+    has_spglib = False
 
 
 class FreeSurface():
@@ -292,7 +292,6 @@ class FreeSurface():
     def unique_shifts(self,
                       symprec: float = 1e-5,
                       trial_image_range: int = 1,
-                      rtol: float = 1e-5,
                       atol: float = 1e-8) -> np.ndarray:
         """
         Return symmetrically nonequivalent shifts
@@ -305,8 +304,6 @@ class FreeSurface():
             Maximum cell images searched in finding translationally equivalent planes.
             The default value is one, which corresponds to search the 27 neighbor images, [-1, 1]^3.
             The default value may not be sufficient for largely distorted lattice.
-        rtol: float
-            the relative tolerance used in comparing two crystal planes
         atol: float
             the absolute tolerance used in comparing two crystal planes
 
@@ -314,7 +311,7 @@ class FreeSurface():
         -------
         unique_shifts: np.ndarray, (# of unique shifts, 3)
         """
-        if not spglib_loaded:
+        if not has_spglib:
             raise ImportError("FreeSurface.unique_shifts requires spglib. Use `pip install spglib`")
         if (not isinstance(trial_image_range, int)) or (trial_image_range <= 0):
             raise ValueError("trial_image_range should be positive integer.")
@@ -322,7 +319,7 @@ class FreeSurface():
         # Get symmetry operations of rotated ucell
         lattice, positions, numbers = self.ucell.dump('spglib_cell')
         rotated_lattice = np.dot(lattice, self.transform.T)
-        dataset = get_symmetry_dataset((rotated_lattice, positions, numbers), symprec=symprec)
+        dataset = spglib.get_symmetry_dataset((rotated_lattice, positions, numbers), symprec=symprec)
         operations = []
         vects_tinv = np.linalg.inv(rotated_lattice.T)
         for rotation, translation in zip(dataset['rotations'], dataset['translations']):
@@ -336,7 +333,8 @@ class FreeSurface():
         planes = [Plane(normal, shift) for shift in self.shifts]
 
         unique_shifts = []
-        primitive_vects = dataset['primitive_lattice']
+        primitive_lattice = spglib.standardize_cell((rotated_lattice, positions, numbers),  to_primitive=True)[0]
+        #primitive_lattice = dataset['primitive_lattice']
 
         # List of trial displacements to search for a translation between two planes
         # The range [-1, 1] may not be sufficient for largely distorted lattice.
@@ -346,16 +344,16 @@ class FreeSurface():
             # Check if two planes can be transformed to each other by lattice vectors
             for image in trial_images:
                 rotation = np.eye(3)
-                translation = np.inner(image, primitive_vects.T)
+                translation = np.inner(image, primitive_lattice.T)
                 new_plane1 = plane1.operate(rotation, translation)
-                if new_plane1.isclose(plane2, rtol=rtol, atol=atol):
+                if new_plane1.isclose(plane2, atol=atol):
                     return True
             return False
 
         for i in range(len(self.shifts)):
             plane_i = planes[i]
 
-            # Obtain symmetrically equvalent planes with the i-th plane
+            # Obtain symmetrically equivalent planes with the i-th plane
             equivalent_planes = []
             for rotation, translation in operations:
                 new_plane = plane_i.operate(rotation, translation)
@@ -365,7 +363,7 @@ class FreeSurface():
                     continue
 
                 # If the new plane is already found, skip it.
-                if any([new_plane.isclose(plane, rtol=rtol, atol=atol) for plane in equivalent_planes]):
+                if any([new_plane.isclose(plane, atol=atol) for plane in equivalent_planes]):
                     continue
 
                 equivalent_planes.append(new_plane)
@@ -388,3 +386,121 @@ class FreeSurface():
 
         unique_shifts = np.array(unique_shifts)
         return unique_shifts
+
+    def unique_shifts2(self,
+                    symprec: float = 1e-5,
+                    return_fingerprints: bool = False
+                    ) -> np.ndarray:
+        """
+        Returns a set of shifts that are assoiciated with pairs of symetrically unique
+        termination planes.  The algorithm first identifies which atomic planes in the
+        rotated cells are symmetrically equivalent.  The returned shifts correspond to
+        positions between each unique pair of unique planes.  NOTE: This algorithm
+        cannot tell if different termination plane pairs are equivalent to others, e.g.
+        for aabb stacking, aa, ab, bb, and ba will all be returned even if aa == bb
+        and/or ab == ba.
+
+        Parameters
+        ----------
+        symprec: float
+            Absolute distance tolerance used in spglib to find symmetries
+            and used here to compare planes.
+        return_fingerprints: bool
+            Setting this to True will return the termination plane pair fingerprints
+            associated with each unique shift.
+            
+        Returns
+        -------
+        unique_shifts: np.ndarray (# of unique shifts, 3)
+            The shifts that result in unique pairs of termination planes
+        fingerprints: list
+            Gives the two unique planes that make up the termination planes.
+        """
+        if not has_spglib:
+            raise ImportError("FreeSurface.unique_shifts requires spglib. Use `pip install spglib`")
+
+        # Extract class attributes
+        rcell = self.rcell
+        cutindex = self.cutindex
+            
+        # Define out of plane vector, i.e. plane normal
+        ovect = np.zeros(3)
+        ovect[cutindex] = 1.0
+
+        # Get spglib symmetry info for the rotated cell
+        dataset = spglib.get_symmetry_dataset(rcell.dump('spglib_cell'), symprec=symprec)
+        
+        # Get out of plane width
+        rcellwidth = rcell.box.vects[cutindex, cutindex]
+
+        # Get the unique coordinates normal to the plane
+        pos = rcell.atoms.pos
+        numdec = - int(np.floor(np.log10(symprec)))
+        coords = np.unique(pos[:, cutindex].round(numdec))
+
+        # Add periodic replica if missing
+        if not np.isclose(coords[-1] - coords[0], rcellwidth, rtol=0.0, atol=symprec):
+            coords = np.append(coords, coords[0] + rcellwidth)
+        
+        equivalent_planes = np.full_like(coords, -1, dtype=int)
+
+        # Loop over all coordinates of atomic planes (except periodic replica)
+        for i in range(len(coords)-1):
+
+            # Skip if plane is already identified
+            if equivalent_planes[i] != -1:
+                continue
+
+            # Create Plane object for the atomic plane
+            plane_i = Plane(ovect, coords[i] * ovect)
+
+            # Set plane's id to the next available value
+            p = np.max(equivalent_planes) + 1
+            equivalent_planes[i] = p
+
+            # Loop over all remaining coords  (except periodic replica)
+            for j in range(i+1, len(coords)-1):
+
+                # Skip if plane is already identified
+                if equivalent_planes[j] != -1:
+                    continue
+
+                pos_j = coords[j] * ovect
+
+                # Loop over all symmetry operations
+                for rotation, translation in zip(dataset['rotations'], dataset['translations']):
+
+                    # Apply the symmetry operation and wrap into the cell.
+                    # Note that operations are performed in box relative units
+                    relative_pos = rcell.box.position_cartesian_to_relative(pos_j)
+                    symmetry_pos = np.dot(rotation, relative_pos) + translation
+                    symmetry_pos -= np.floor(symmetry_pos)
+                    test_pos = rcell.box.position_relative_to_cartesian(symmetry_pos)
+
+                    # Check if test plane matches plane_i
+                    test_plane = Plane(ovect, test_pos)
+                    if plane_i.isclose(test_plane, atol=symprec):
+                        equivalent_planes[j] = i
+                        break
+
+        # Set periodic replica
+        equivalent_planes[-1] = equivalent_planes[0]
+        
+        
+        fingerprints = []
+        unique_shifts = []
+        letters = 'abcdefghijklmnopqrstuvwxyz'
+        
+        for i in range(len(coords)-1, 0, -1):
+            fingerprint = letters[equivalent_planes[i-1]] + letters[equivalent_planes[i]]
+            relshift = rcellwidth - (coords[i] + coords[i-1]) / 2
+            if fingerprint in fingerprints:
+                continue
+
+            unique_shifts.append(np.dot(ovect, relshift))
+            fingerprints.append(fingerprint)
+        
+        if return_fingerprints:
+            return np.array(unique_shifts), fingerprints
+        else:
+            return np.array(unique_shifts)
