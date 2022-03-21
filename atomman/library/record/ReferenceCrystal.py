@@ -224,7 +224,8 @@ class ReferenceCrystal(Record):
         self.key = key
         self.sourcename = sourcename
         self.sourcelink = sourcelink
-        self.ucell = ucell
+        if ucell is not None:
+            self.ucell = ucell
         
         self.__symbols = None
         self.__composition = None
@@ -380,7 +381,7 @@ class ReferenceCrystal(Record):
                 name='composition',
                 path=f'{self.modelroot}.system-info.composition'),
             'symbols': load_query(
-                style='in_list',
+                style='list_contains',
                 name='symbols',
                 path=f'{self.modelroot}.system-info.symbol'),
             'natoms': load_query(

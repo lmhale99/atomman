@@ -179,11 +179,11 @@ class PointDefect(Record):
             'family': load_query(
                 style='str_match',
                 name='family',
-                path=f'{self.modelroot}.name'),
+                path=f'{self.modelroot}.system-family'),
             'ptd_type': load_query(
-                style='str_match',
+                style='list_contains',
                 name='ptd_type',
-                path=f'{self.modelroot}.prototype'),
+                path=f'{self.modelroot}.calculation-parameter.ptd_type'),
         }
 
     def pandasfilter(self,

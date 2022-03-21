@@ -327,47 +327,51 @@ class RelaxedCrystal(Record):
             'method': load_query(
                 style='str_match',
                 name='method',
-                path=f'{self.modelroot}.id'),
+                path=f'{self.modelroot}.method'),
             'standing': load_query(
                 style='str_match',
                 name='standing',
-                path=f'{self.modelroot}.name'),
+                path=f'{self.modelroot}.standing'),
             'family': load_query(
                 style='str_match',
                 name='family',
-                path=f'{self.modelroot}.prototype'),
+                path=f'{self.modelroot}.system-info.family'),
             'parent_key': load_query(
                 style='str_match',
                 name='parent_key',
-                path=f'{self.modelroot}.Pearson-symbol'),
+                path=f'{self.modelroot}.system-info.parent_key'),
             'potential_LAMMPS_id': load_query(
                 style='str_match',
                 name='potential_LAMMPS_id',
-                path=f'{self.modelroot}.Strukturbericht'),
+                path=f'{self.modelroot}.potential-LAMMPS.id'),
             'potential_LAMMPS_key': load_query(
                 style='str_match',
                 name='potential_LAMMPS_key',
-                path=f'{self.modelroot}.space-group.number'),
+                path=f'{self.modelroot}.potential-LAMMPS.key'),
             'potential_id': load_query(
                 style='str_match',
                 name='potential_id',
-                path=f'{self.modelroot}.space-group.Hermann-Maguin'),
+                path=f'{self.modelroot}.potential-LAMMPS.potential.id'),
             'potential_key': load_query(
                 style='str_match',
                 name='potential_key',
-                path=f'{self.modelroot}.space-group.Schoenflies'),
+                path=f'{self.modelroot}.potential-LAMMPS.potential.key'),
+            'crystalfamily': load_query(
+                style='str_match',
+                name='crystalfamily',
+                path=f'{self.modelroot}.system-info.cell.crystal-family'),
             'composition': load_query(
                 style='str_match',
                 name='composition',
-                path=f'{self.modelroot}.system-info.cell.crystal-family'),
+                path=f'{self.modelroot}.system-info.composition'),
             'symbols': load_query(
-                style='in_list',
+                style='list_contains',
                 name='symbols',
-                path=f'{self.modelroot}.system-info.cell.natypes'),
+                path=f'{self.modelroot}.system-info.symbol'),
             'natoms': load_query(
                 style='int_match',
                 name='natoms',
-                path=f'{self.modelroot}.system-info.cell.natypes'),
+                path=f'{self.modelroot}.atomic-system.atoms.natoms'),
             'natypes': load_query(
                 style='int_match',
                 name='natypes',

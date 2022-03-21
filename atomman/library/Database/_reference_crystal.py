@@ -17,7 +17,7 @@ import requests
 
 # atomman imports
 from ...load import load_pymatgen_Structure, load_poscar
-from ..record import ReferenceCrystal
+from ..record import load_record
 from ...tools import aslist
 
 def get_reference_crystals(self,
@@ -482,7 +482,7 @@ def fetch_mp_crystals(self,
 
                 # Build record content
                 # Build basic record content
-                record = ReferenceCrystal(name=entry_id)
+                record = load_record('reference_crystal', name=entry_id)
                 record.sourcename = "Materials Project"
                 record.sourcelink = "https://materialsproject.org/"
                 record.ucell = load_pymatgen_Structure(struct).normalize()
@@ -536,7 +536,7 @@ def fetch_oqmd_crystal(self, id: str) -> Record:
     """
     
     # Build basic record content
-    record = ReferenceCrystal(name=id)
+    record = load_record('reference_crystal', name=id)
     record.sourcename = "Open Quantum Materials Database"
     record.sourcelink = "http://oqmd.org/"
     

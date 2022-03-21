@@ -240,11 +240,11 @@ class Dislocation(Record):
             'character': load_query(
                 style='str_match',
                 name='character',
-                path=f'{self.modelroot}.name'),
+                path=f'{self.modelroot}.character'),
             'family': load_query(
                 style='str_match',
                 name='family',
-                path=f'{self.modelroot}.prototype'),
+                path=f'{self.modelroot}.system-family'),
         }
 
     def pandasfilter(self,

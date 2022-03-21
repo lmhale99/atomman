@@ -170,19 +170,19 @@ class StackingFault(Record):
             'family': load_query(
                 style='str_match',
                 name='family',
-                path=f'{self.modelroot}.name'),
+                path=f'{self.modelroot}.system-family'),
             'hkl': load_query(
                 style='str_match',
                 name='hkl',
-                path=f'{self.modelroot}.prototype'),
+                path=f'{self.modelroot}.calculation-parameter.hkl'),
             'shiftindex': load_query(
                 style='int_match',
                 name='shiftindex',
-                path=f'{self.modelroot}.Pearson-symbol'),
+                path=f'{self.modelroot}.calculation-parameter.shiftindex'),
             'cutboxvector': load_query(
                 style='str_match',
                 name='cutboxvector',
-                path=f'{self.modelroot}.Strukturbericht'),
+                path=f'{self.modelroot}.calculation-parameter.cutboxvector'),
         }
 
     def pandasfilter(self,
