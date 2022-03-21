@@ -2,12 +2,15 @@
 
 # Standard Python imports
 from typing import Optional
+import warnings
 
 # http://www.numpy.org/
 import numpy as np
 
 __all__ = ['iscubic', 'ishexagonal', 'istetragonal', 'isrhombohedral',
            'isorthorhombic', 'ismonoclinic', 'istriclinic', 'identifyfamily']
+
+warnmsg = "This is now a method of Box.  The stand-alone function will be depreciated in the next major atomman release."
 
 def iscubic(box, 
             rtol: float = 1e-05,
@@ -31,6 +34,7 @@ def iscubic(box,
     bool
         True if box is a standard cubic cell, False otherwise.
     """
+    warnings.warn(warnmsg, PendingDeprecationWarning)
     return (np.isclose(box.a, box.b, atol=atol, rtol=rtol)
             and np.isclose(box.a, box.c, atol=atol, rtol=rtol)
             and np.isclose(box.alpha, 90.0, atol=atol, rtol=rtol)
@@ -60,6 +64,7 @@ def ishexagonal(box,
     bool
         True if box is a standard hexagonal cell, False otherwise.
     """
+    warnings.warn(warnmsg, PendingDeprecationWarning)
     return (np.isclose(box.a, box.b, atol=atol, rtol=rtol)
             and np.isclose(box.alpha, 90.0, atol=atol, rtol=rtol)
             and np.isclose(box.beta, 90.0, atol=atol, rtol=rtol)
@@ -87,6 +92,7 @@ def istetragonal(box,
     bool
         True if box is a standard tetragonal cell, False otherwise.
     """
+    warnings.warn(warnmsg, PendingDeprecationWarning)
     return (np.isclose(box.a, box.b, atol=atol, rtol=rtol)
             and not np.isclose(box.a, box.c, atol=atol, rtol=rtol)
             and np.isclose(box.alpha, 90.0, atol=atol, rtol=rtol)
@@ -115,6 +121,7 @@ def isrhombohedral(box,
     bool
         True if box is a standard rhombohedral cell, False otherwise.
     """
+    warnings.warn(warnmsg, PendingDeprecationWarning)
     return (np.isclose(box.a, box.b, atol=atol, rtol=rtol)
             and np.isclose(box.a, box.c, atol=atol, rtol=rtol)
             and np.isclose(box.alpha, box.beta, atol=atol, rtol=rtol)
@@ -143,6 +150,7 @@ def isorthorhombic(box,
     bool
         True if box is a standard orthorhombic cell, False otherwise.
     """
+    warnings.warn(warnmsg, PendingDeprecationWarning)
     return (not np.isclose(box.a, box.b, atol=atol, rtol=rtol)
             and not np.isclose(box.a, box.c, atol=atol, rtol=rtol)
             and np.isclose(box.alpha, 90.0, atol=atol, rtol=rtol)
@@ -172,6 +180,7 @@ def ismonoclinic(box,
     bool
         True if box is a standard monoclinic cell, False otherwise.
     """
+    warnings.warn(warnmsg, PendingDeprecationWarning)
     return (not np.isclose(box.a, box.b, atol=atol, rtol=rtol)
             and not np.isclose(box.a, box.c, atol=atol, rtol=rtol)
             and np.isclose(box.alpha, 90.0, atol=atol, rtol=rtol)
@@ -202,6 +211,7 @@ def istriclinic(box,
     bool
         True if box is a standard triclinic cell, False otherwise.
     """
+    warnings.warn(warnmsg, PendingDeprecationWarning)
     return (not np.isclose(box.a, box.b, atol=atol, rtol=rtol)
             and not np.isclose(box.a, box.c, atol=atol, rtol=rtol)
             and not np.isclose(box.alpha, box.beta, atol=atol, rtol=rtol)
@@ -234,6 +244,7 @@ def identifyfamily(box,
     ValueError
         If box is not consistent with a standard cell.
     """
+    warnings.warn(warnmsg, PendingDeprecationWarning)
     if iscubic(box, rtol=rtol, atol=atol):
         return 'cubic'
     elif ishexagonal(box, rtol=rtol, atol=atol):
