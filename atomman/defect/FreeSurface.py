@@ -333,8 +333,8 @@ class FreeSurface():
         planes = [Plane(normal, shift) for shift in self.shifts]
 
         unique_shifts = []
-        primitive_lattice = spglib.standardize_cell((rotated_lattice, positions, numbers),  to_primitive=True)[0]
-        #primitive_lattice = dataset['primitive_lattice']
+        primitive_vects = spglib.standardize_cell((rotated_lattice, positions, numbers),  to_primitive=True)[0]
+        #primitive_vects = dataset['primitive_lattice']
 
         # List of trial displacements to search for a translation between two planes
         # The range [-1, 1] may not be sufficient for largely distorted lattice.
@@ -344,7 +344,7 @@ class FreeSurface():
             # Check if two planes can be transformed to each other by lattice vectors
             for image in trial_images:
                 rotation = np.eye(3)
-                translation = np.inner(image, primitive_lattice.T)
+                translation = np.inner(image, primitive_vects.T)
                 new_plane1 = plane1.operate(rotation, translation)
                 if new_plane1.isclose(plane2, atol=atol):
                     return True
