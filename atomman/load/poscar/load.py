@@ -94,6 +94,8 @@ def load(poscar: Union[str, io.IOBase],
         count += 1
     
     # Add atype, pos to prop dictionary
+    if prop is None:
+        prop = {}
     prop['atype'] = atype
     prop['pos'] = pos
     
