@@ -99,7 +99,8 @@ class FreeSurface():
         # Get the unique coordinates normal to the plane
         pos = rcell.atoms.pos
         numdec = - int(np.floor(np.log10(tol)))
-        coords = np.unique(pos[:, cutindex].round(numdec))
+        _, unique_indices = np.unique(pos[:, cutindex].round(numdec), return_index=True)
+        coords = pos[unique_indices, cutindex]
 
         # Add periodic replica if missing
         if not np.isclose(coords[-1] - coords[0], rcellwidth, rtol=0.0, atol=tol):
@@ -316,6 +317,11 @@ class FreeSurface():
         if (not isinstance(trial_image_range, int)) or (trial_image_range <= 0):
             raise ValueError("trial_image_range should be positive integer.")
 
+        # Planes for each shift
+        normal = np.zeros(3)
+        normal[self.cutindex] = 1.0
+        planes = [Plane(normal, shift) for shift in self.shifts]
+
         # Get symmetry operations of rotated ucell
         lattice, positions, numbers = self.ucell.dump('spglib_cell')
         rotated_lattice = np.dot(lattice, self.transform.T)
@@ -325,16 +331,14 @@ class FreeSurface():
         for rotation, translation in zip(dataset['rotations'], dataset['translations']):
             rotation_cart = np.dot(np.dot(rotated_lattice.T, rotation), vects_tinv)
             translation_cart = np.inner(translation, rotated_lattice.T)
-            operations.append((rotation_cart, translation_cart))
 
-        # Planes for each shift
-        normal = np.zeros(3)
-        normal[self.cutindex] = 1.0
-        planes = [Plane(normal, shift) for shift in self.shifts]
+            # It is sufficient to consider only symmetry operation that preserve the normal vector.
+            if np.allclose(np.dot(rotation_cart, normal), normal):
+                operations.append((rotation_cart, translation_cart))
 
         unique_shifts = []
-        primitive_vects = spglib.standardize_cell((rotated_lattice, positions, numbers),  to_primitive=True)[0]
-        #primitive_vects = dataset['primitive_lattice']
+        # primitive vectors of rotated ucell
+        primitive_vects = dataset['primitive_lattice']
 
         # List of trial displacements to search for a translation between two planes
         # The range [-1, 1] may not be sufficient for largely distorted lattice.
@@ -357,10 +361,6 @@ class FreeSurface():
             equivalent_planes = []
             for rotation, translation in operations:
                 new_plane = plane_i.operate(rotation, translation)
-
-                # new plane should preserve the normal vector
-                if not np.allclose(new_plane.normal, normal):
-                    continue
 
                 # If the new plane is already found, skip it.
                 if any([new_plane.isclose(plane, atol=atol) for plane in equivalent_planes]):
@@ -408,7 +408,7 @@ class FreeSurface():
         return_fingerprints: bool
             Setting this to True will return the termination plane pair fingerprints
             associated with each unique shift.
-            
+
         Returns
         -------
         unique_shifts: np.ndarray (# of unique shifts, 3)
@@ -422,14 +422,14 @@ class FreeSurface():
         # Extract class attributes
         rcell = self.rcell
         cutindex = self.cutindex
-            
+
         # Define out of plane vector, i.e. plane normal
         ovect = np.zeros(3)
         ovect[cutindex] = 1.0
 
         # Get spglib symmetry info for the rotated cell
         dataset = spglib.get_symmetry_dataset(rcell.dump('spglib_cell'), symprec=symprec)
-        
+
         # Get out of plane width
         rcellwidth = rcell.box.vects[cutindex, cutindex]
 
@@ -441,7 +441,7 @@ class FreeSurface():
         # Add periodic replica if missing
         if not np.isclose(coords[-1] - coords[0], rcellwidth, rtol=0.0, atol=symprec):
             coords = np.append(coords, coords[0] + rcellwidth)
-        
+
         equivalent_planes = np.full_like(coords, -1, dtype=int)
 
         # Loop over all coordinates of atomic planes (except periodic replica)
@@ -485,12 +485,12 @@ class FreeSurface():
 
         # Set periodic replica
         equivalent_planes[-1] = equivalent_planes[0]
-        
-        
+
+
         fingerprints = []
         unique_shifts = []
         letters = 'abcdefghijklmnopqrstuvwxyz'
-        
+
         for i in range(len(coords)-1, 0, -1):
             fingerprint = letters[equivalent_planes[i-1]] + letters[equivalent_planes[i]]
             relshift = rcellwidth - (coords[i] + coords[i-1]) / 2
@@ -499,7 +499,7 @@ class FreeSurface():
 
             unique_shifts.append(np.dot(ovect, relshift))
             fingerprints.append(fingerprint)
-        
+
         if return_fingerprints:
             return np.array(unique_shifts), fingerprints
         else:

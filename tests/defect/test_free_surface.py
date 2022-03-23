@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 
+import atomman as am
 import atomman.unitconvert as uc
 from atomman import Box, Atoms, System
 from atomman.defect import FreeSurface, free_surface_basis
@@ -158,3 +159,56 @@ def test_unique_shifts_binary(anatase_TiO2):
     unique_shifts = surface.unique_shifts()
     assert len(surface.shifts) == 2
     assert len(unique_shifts) == 1
+
+
+HKL_LISTS = [
+    [1, 0, 0],
+    [1, 1, 0],
+    [1, 1, 1],
+    [2, 1, 0],
+    [2, 1, 1],
+    [3, 1, 0],
+    [3, 1, 1],
+    [3, 2, 0],
+    [3, 2, 1],
+    [3, 2, 2],
+    [3, 3, 1],
+    [3, 3, 2],
+]
+HEXGONAL_HKL_LISTS = [
+    [0, 0, 0, 1],
+    [1, 0, -1, 0],
+    [1, 0, -1, 1],
+    [1, 0, -1, 2],
+    [1, 1, -2, 0],
+    [1, 1, -2, 1],
+    [2, 0, -2, 1],
+    [2, -1, -1, 2],
+    [2, 1, -3, 0],
+    [2, 1, -3, 1],
+    [2, 1, -3, 2],
+    [2, 2, -4, 1],
+]
+
+@pytest.mark.parametrize(
+    "prototype,list_hkl,list_expected", [
+        ('A1--Cu--fcc', HKL_LISTS, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]),
+        ('A2--W--bcc', HKL_LISTS, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]),
+        ("A3--Mg--hcp", HEXGONAL_HKL_LISTS, [1, 2, 2, 2, 1, 1, 2, 1, 2, 2, 2, 1]),
+        # TODO
+        # ("A4--C--dc", HKL_LISTS, [1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1]),
+        # (
+        #     "A5--beta-Sn",
+        #     [[0, 0, 1], [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1], [1, 1, 2], [2, 0, 1], [2, 1, 1]],
+        #     [1, 1, 2, 1, 1, 1, 1, 2],
+        # ),
+        # ('A15--beta-W', HKL_LISTS, [1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2]),
+        # ("A3'--alpha-La", HEXGONAL_HKL_LISTS, [1, 1, 2, 2, 1, 1, 2, 1, 1, 2, 2, 1]),
+])
+def test_unique_shifts_prototype(prototype, list_hkl, list_expected):
+    assert len(list_hkl) == len(list_expected)
+    ucell = am.load("prototype", id=prototype)
+    for hkl, expected in zip(list_hkl, list_expected):
+        surface = FreeSurface(hkl, ucell)
+        unique_shifts = surface.unique_shifts()
+        assert len(unique_shifts) == expected
