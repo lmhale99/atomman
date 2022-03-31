@@ -1,20 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: Running LAMMPS and the Log class &#8212; atomman 1.4.0 documentation</title>
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction to atomman: Running LAMMPS and the Log class &#8212; atomman 1.4.4 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Basic support and analysis tools" href="3._Basic_support_and_analysis_tools.html" />
@@ -35,8 +33,9 @@
         <li class="right" >
           <a href="2.1._Potential_class.html" title="Introduction to atomman: LAMMPS Potentials"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Running LAMMPS and the Log class</a></li> 
       </ul>
     </div>  
 
@@ -334,8 +333,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.0
-Notebook executed on 2021-08-05
+atomman version = 1.4.4
+Notebook executed on 2022-03-17
 </pre></div></div>
 </div>
 </div>
@@ -414,7 +413,7 @@ Notebook executed on 2021-08-05
 <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="n">run_time</span> <span class="o">=</span> <span class="n">end</span><span class="o">-</span><span class="n">start</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Serial simulation took </span><span class="si">{run_time}</span><span class="s2"> seconds.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Serial simulation took </span><span class="si">{</span><span class="n">run_time</span><span class="si">}</span><span class="s2"> seconds.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -423,7 +422,7 @@ Notebook executed on 2021-08-05
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Serial simulation took 98.3661994934082 seconds.
+Serial simulation took 95.15768051147461 seconds.
 </pre></div></div>
 </div>
 <p>Run in parallel on 4 processors</p>
@@ -444,7 +443,7 @@ Serial simulation took 98.3661994934082 seconds.
 <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="n">run_time</span> <span class="o">=</span> <span class="n">end</span><span class="o">-</span><span class="n">start</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Parallel simulation took </span><span class="si">{run_time}</span><span class="s2"> seconds.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parallel simulation took </span><span class="si">{</span><span class="n">run_time</span><span class="si">}</span><span class="s2"> seconds.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -453,7 +452,7 @@ Serial simulation took 98.3661994934082 seconds.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Parallel simulation took 47.57556772232056 seconds.
+Parallel simulation took 28.15028429031372 seconds.
 </pre></div></div>
 </div>
 </div>
@@ -553,52 +552,52 @@ Index([&#39;Step&#39;, &#39;PotEng&#39;, &#39;Temp&#39;, &#39;Press&#39;, &#39;L
   </thead>
   <tbody>
     <tr>
-      <td>Pair</td>
-      <td>24.363000</td>
-      <td>24.627000</td>
-      <td>24.884000</td>
-      <td>5.0</td>
-      <td>88.57</td>
+      <th>Pair</th>
+      <td>22.412000</td>
+      <td>22.766000</td>
+      <td>23.024000</td>
+      <td>5.6</td>
+      <td>88.35</td>
     </tr>
     <tr>
-      <td>Neigh</td>
-      <td>0.005595</td>
-      <td>0.005656</td>
-      <td>0.005722</td>
+      <th>Neigh</th>
+      <td>0.005201</td>
+      <td>0.005262</td>
+      <td>0.005323</td>
       <td>0.1</td>
       <td>0.02</td>
     </tr>
     <tr>
-      <td>Comm</td>
-      <td>1.087600</td>
-      <td>1.347400</td>
-      <td>1.616000</td>
-      <td>21.7</td>
-      <td>4.85</td>
+      <th>Comm</th>
+      <td>1.098800</td>
+      <td>1.365600</td>
+      <td>1.727300</td>
+      <td>23.3</td>
+      <td>5.30</td>
     </tr>
     <tr>
-      <td>Output</td>
-      <td>0.010593</td>
-      <td>0.010796</td>
-      <td>0.011395</td>
+      <th>Output</th>
+      <td>0.016530</td>
+      <td>0.016752</td>
+      <td>0.017356</td>
       <td>0.3</td>
-      <td>0.04</td>
+      <td>0.07</td>
     </tr>
     <tr>
-      <td>Modify</td>
-      <td>1.530100</td>
-      <td>1.533900</td>
-      <td>1.536700</td>
-      <td>0.2</td>
+      <th>Modify</th>
+      <td>1.415600</td>
+      <td>1.422000</td>
+      <td>1.430000</td>
+      <td>0.4</td>
       <td>5.52</td>
     </tr>
     <tr>
-      <td>Other</td>
+      <th>Other</th>
       <td>0.000000</td>
-      <td>0.281500</td>
+      <td>0.191300</td>
       <td>0.000000</td>
       <td>0.0</td>
-      <td>1.01</td>
+      <td>0.74</td>
     </tr>
   </tbody>
 </table>
@@ -631,7 +630,7 @@ Index([&#39;Step&#39;, &#39;PotEng&#39;, &#39;Temp&#39;, &#39;Press&#39;, &#39;L
 <h3>4.1. Running with restart script included<a class="headerlink" href="#4.1.-Running-with-restart-script-included" title="Permalink to this headline">¶</a></h3>
 <p>Create a new demonstration LAMMPS input script that restarts the previous simulation and runs for an additional 10000 steps.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -659,12 +658,12 @@ Index([&#39;Step&#39;, &#39;PotEng&#39;, &#39;Temp&#39;, &#39;Press&#39;, &#39;L
 </div>
 <p>Now, if we call run() with either restart_script_name or restart_script set, a number of cool things happen:</p>
 <ul class="simple">
-<li><p>If logfile (default log.lammps) does not exist in the working directory then the regular script is passed to LAMMPS./</p></li>
-<li><p>If logfile does exist then it is moved from NAME.EXT to NAME-<a href="#id1"><span class="problematic" id="id2">*</span></a>.EXT, where * is the smallest integer not already there, and the restart script is passed to LAMMPS.</p></li>
-<li><p>Upon completion, the data in NAME.EXT logfile and all NAME-<a href="#id3"><span class="problematic" id="id4">*</span></a>.EXT logfiles are automatically read in by the Log object.</p></li>
+<li><p>If logfile (default log.lammps) does not exist in the working directory then the regular script is passed to LAMMPS.</p></li>
+<li><p>If logfile does exist then it is moved from NAME.EXT to NAME-{i}.EXT, where {i} is the smallest integer not already there, and the restart script is passed to LAMMPS.</p></li>
+<li><p>Upon completion, the data in NAME.EXT logfile and all NAME-{i}.EXT logfiles are automatically read in by the Log object.</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -675,7 +674,7 @@ Index([&#39;Step&#39;, &#39;PotEng&#39;, &#39;Temp&#39;, &#39;Press&#39;, &#39;L
 </div>
 <p>Show all log files in the run directory</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -697,7 +696,7 @@ log.lammps
 </div>
 <p>Show that results now has two simulations, one for steps 0 to 10000 and one for steps 10000 to 20000 (the restart)</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -725,7 +724,7 @@ log.lammps
 <li><p>‘all’ will use all thermo lines from all simulations including ones with the same timesteps. This is useful for “run 0” simulations of different conditions, or if the timestep is reset.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -744,7 +743,7 @@ log.lammps
 </div>
 <p>Note that only thermo data is included in the merged simulation and not the performance data.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -753,7 +752,7 @@ log.lammps
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -768,7 +767,7 @@ log.lammps
 <p><em>LAMMPSError added and error handling improved version 1.3.2</em></p>
 <p>To assist in running LAMMPS simulations, a LAMMPSError error type is defined which does its best to extract the error message that LAMMPS issues as a Python error.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -808,7 +807,7 @@ log.lammps
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -833,7 +832,7 @@ Last command: fix 1 all npt temp 100 100 1.0 aniso 0.0 0.0
 </div>
 <p><strong>File Cleanup</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -849,13 +848,15 @@ Last command: fix 1 all npt temp 100 100 1.0 aniso 0.0 0.0
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Introduction to atomman: Running LAMMPS and the Log class</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
 <li><a class="reference internal" href="#2.-Running-LAMMPS">2. Running LAMMPS</a></li>
@@ -870,12 +871,17 @@ Last command: fix 1 all npt temp 100 100 1.0 aniso 0.0 0.0
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="2.1._Potential_class.html"
-                        title="previous chapter">Introduction to atomman: LAMMPS Potentials</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="3._Basic_support_and_analysis_tools.html"
-                        title="next chapter">Introduction to atomman: Basic support and analysis tools</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="2.1._Potential_class.html"
+                          title="previous chapter">Introduction to atomman: LAMMPS Potentials</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="3._Basic_support_and_analysis_tools.html"
+                          title="next chapter">Introduction to atomman: Basic support and analysis tools</a></p>
+  </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -895,12 +901,13 @@ Last command: fix 1 all npt temp 100 100 1.0 aniso 0.0 0.0
         <li class="right" >
           <a href="2.1._Potential_class.html" title="Introduction to atomman: LAMMPS Potentials"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Running LAMMPS and the Log class</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

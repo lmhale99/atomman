@@ -1,20 +1,20 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: Basic support and analysis tools &#8212; atomman 1.4.0 documentation</title>
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction to atomman: Basic support and analysis tools &#8212; atomman 1.4.4 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: ElasticConstants class" href="3.1._ElasticConstants_class.html" />
@@ -35,8 +35,9 @@
         <li class="right" >
           <a href="2.2._Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Basic support and analysis tools</a></li> 
       </ul>
     </div>  
 
@@ -308,8 +309,8 @@ div.rendered_html tbody tr:hover {
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="nb">open</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="nb">open</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
@@ -335,8 +336,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.0
-Notebook executed on 2021-08-05
+atomman version = 1.4.4
+Notebook executed on 2022-03-17
 </pre></div></div>
 </div>
 <p>Construct a demonstration 2x2x2 diamond cubic silicon system</p>
@@ -506,70 +507,70 @@ Cij (GPa) =
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[0.99603857 1.43863724 0.591721  ]
- [1.72792262 0.61085361 1.70718691]
- [0.15549565 0.92514288 2.61097281]
- [1.41569634 0.90522856 1.68847287]
- [1.81424267 0.56808247 2.18561857]
- [2.72553133 2.13598235 2.74308199]
- [1.29520816 2.46282183 2.21613065]
- [2.90929418 1.73635724 0.41017354]
- [1.76887711 2.85857528 2.65185785]
- [0.26059387 1.02830317 0.77041408]
- [1.27722693 2.63985422 1.0868175 ]
- [2.64540753 2.67385585 0.48848634]
- [2.88070417 2.91077294 1.92749443]
- [0.69530365 2.35475947 0.46623167]
- [1.84750822 2.9051281  0.3921404 ]
- [0.64373951 0.24626612 0.8194635 ]
- [1.89782266 2.66502855 0.46479666]
- [1.7791236  0.22940824 0.36557604]
- [2.05966212 0.88053363 0.27463514]
- [0.99311977 0.48984318 0.38610387]
- [0.50177108 1.85573905 2.17549783]
- [2.00151313 1.11888152 1.91759207]
- [2.82831279 0.51041983 0.43659667]
- [0.16477686 1.31245116 1.84300738]
- [1.14831696 0.89599073 0.94318064]
- [0.40920217 2.69268077 0.92314081]
- [1.92433531 0.43145832 2.57552459]
- [1.29957253 0.52358684 2.54466927]
- [0.37003548 0.80561067 2.4623484 ]
- [0.71855465 2.70688489 2.43903939]
- [0.04998238 0.99324663 0.62647591]
- [1.40175192 1.91228962 0.14133925]
- [0.873906   0.73383899 1.67054587]
- [2.91306592 2.15287323 2.97282268]
- [2.48032709 1.18365632 0.97460698]
- [2.87915574 1.52372723 0.02143964]
- [0.18544469 0.21583727 2.94958799]
- [2.9889433  0.34263071 2.15844326]
- [2.68588446 1.59649889 1.6853371 ]
- [2.85236091 1.28573587 2.12574881]
- [0.70070409 0.79190137 0.71048702]
- [1.50671995 2.64742722 1.4868234 ]
- [0.96455881 0.20132281 2.3701744 ]
- [2.44793886 0.87574734 1.39985676]
- [1.45910007 1.68904979 0.92585075]
- [0.16827792 0.25317677 2.4503324 ]
- [2.04055577 0.91133765 1.99867685]
- [0.13699851 0.32462108 0.5213217 ]
- [0.8698135  2.96181797 0.83466607]
- [0.70480033 0.79672071 1.19483379]
- [2.99017617 0.93501253 0.74366069]
- [1.03433172 0.09130963 0.38036951]
- [0.19494491 0.61943101 2.85282479]
- [1.3757641  1.625531   0.89416238]
- [0.19562443 0.77011829 1.51996765]
- [2.2330411  0.94005377 2.51933319]
- [1.29213491 0.70965131 0.31615813]
- [2.77540236 0.85584758 0.64817984]
- [0.20847362 2.39985079 1.73414601]
- [0.78406961 2.0580142  1.25450911]
- [1.98109968 1.63475414 0.67012227]
- [0.37131018 0.41426808 2.09247931]
- [0.83840685 0.07476563 0.8252753 ]
- [1.06777949 2.27272563 0.38276492]]
+[[2.30367917 2.3487104  2.85970854]
+ [2.27531496 1.02050817 1.25967965]
+ [1.99799574 1.79240305 2.79155531]
+ [1.46566173 0.87350871 1.29437791]
+ [2.77683528 2.19979903 1.16142669]
+ [0.60495831 1.15905085 1.71790408]
+ [0.46916565 0.01687008 0.69069794]
+ [0.03807811 0.17934985 1.84228672]
+ [1.30814234 2.2749664  2.228111  ]
+ [0.4733944  1.82776664 1.3905906 ]
+ [0.64635201 2.19211811 1.22608594]
+ [2.57601426 0.33474941 2.95331058]
+ [1.09514577 2.47585748 0.49684326]
+ [0.58881538 0.21115074 0.55100254]
+ [1.76572129 2.25280815 2.94703426]
+ [1.29744841 0.33726989 2.09833713]
+ [1.60520234 0.02979757 1.20061231]
+ [0.28008485 1.78521247 0.29061105]
+ [1.21434029 0.23657935 0.7577544 ]
+ [2.37806405 2.45198497 2.39362906]
+ [0.14053644 2.15866906 1.10367296]
+ [1.0536264  2.29378046 0.23994123]
+ [0.15528608 2.2203562  1.72805651]
+ [2.90616602 1.00688418 2.61202397]
+ [0.21585405 2.95324745 1.88622874]
+ [1.43118836 2.49088101 2.75680438]
+ [0.05657582 1.17135651 1.28196146]
+ [2.10464253 0.18507456 2.85016199]
+ [0.38826712 2.37178757 2.73443301]
+ [1.61813321 2.38720787 2.63159538]
+ [1.95775363 0.80757433 1.47483392]
+ [1.63511724 2.69818564 1.74395684]
+ [1.16640353 0.77160045 2.66565507]
+ [0.32272071 2.49814439 2.15183727]
+ [2.36899807 1.67740462 1.9469423 ]
+ [0.2422808  2.5393543  2.4089751 ]
+ [1.25833723 0.37773689 0.70414346]
+ [0.09379404 2.18908778 1.35098384]
+ [2.30804979 0.49560984 0.83050823]
+ [1.73813343 2.02976942 1.12679582]
+ [2.57592371 0.18490332 2.47941382]
+ [2.74878022 2.15525565 0.03469917]
+ [2.10352374 1.10580935 2.52521685]
+ [1.35452161 1.28921551 2.70993406]
+ [0.03276028 1.87242305 2.6855388 ]
+ [1.68675533 0.89297636 1.80403308]
+ [0.95034231 0.5505729  2.0755478 ]
+ [0.04056123 0.02081778 1.3307037 ]
+ [0.65271422 2.20230841 1.8556757 ]
+ [0.2528307  0.58758373 2.35980699]
+ [0.93405983 2.84143804 0.64891983]
+ [1.58624429 1.2460871  0.73859355]
+ [2.9127833  0.6539877  0.47553949]
+ [0.83242444 0.67899395 1.31062329]
+ [2.95105346 0.79403734 0.5554988 ]
+ [0.39031125 1.58785371 1.2526019 ]
+ [1.86368324 2.2306242  0.00973364]
+ [0.1094249  2.11421856 2.58857125]
+ [2.95233953 1.31099997 0.26150053]
+ [0.50435727 0.87342455 2.4600054 ]
+ [0.48684772 0.66580478 0.89776317]
+ [2.04569564 0.52110356 0.41227405]
+ [0.46450444 2.27451199 2.72634176]
+ [0.12208499 1.80657146 2.59124352]]
 </pre></div></div>
 </div>
 </div>
@@ -671,20 +672,20 @@ Neighbors of atom 6 = [ 2 11 33 40]
 <span class="n">plane</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">Plane</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">system</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">bvect</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 
 <span class="c1"># Count number of atoms in system, and above/below plane</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{system.natoms}</span><span class="s1"> atoms in system&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="si">}</span><span class="s1"> atoms in system&#39;</span><span class="p">)</span>
 
 <span class="n">abovecount</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">plane</span><span class="o">.</span><span class="n">above</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{abovecount}</span><span class="s1"> atoms above plane&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">abovecount</span><span class="si">}</span><span class="s1"> atoms above plane&#39;</span><span class="p">)</span>
 
 <span class="n">belowcount</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">plane</span><span class="o">.</span><span class="n">below</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{belowcount}</span><span class="s1"> atoms below plane&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">belowcount</span><span class="si">}</span><span class="s1"> atoms below plane&#39;</span><span class="p">)</span>
 
 <span class="c1"># Define a sphere centered at [0,0,0] with radius = 6</span>
 <span class="n">sphere</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">Sphere</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="mi">6</span><span class="p">)</span>
 
 <span class="c1"># Count atoms inside sphere</span>
 <span class="n">insidecount</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">sphere</span><span class="o">.</span><span class="n">inside</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{insidecount}</span><span class="s1"> atoms inside sphere&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">insidecount</span><span class="si">}</span><span class="s1"> atoms inside sphere&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -918,9 +919,9 @@ b&#39;Here I am, read me!&#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Angle between [-0.34828678 -0.74741765  0.60540275] and [-0.67224036  0.72470423 -0.14586779] =
-112.78423936770139 degrees
-1.9684563213237967 radians
+Angle between [ 0.82190188 -0.16527953 -0.94974471] and [-0.03216575 -0.5275421  -0.55407587] =
+52.763036400965284 degrees
+0.9208887085464633 radians
 </pre></div></div>
 </div>
 </div>
@@ -970,22 +971,22 @@ Angle between [-0.34828678 -0.74741765  0.60540275] and [-0.67224036  0.72470423
   </thead>
   <tbody>
     <tr>
-      <td>0</td>
+      <th>0</th>
       <td>1.00001</td>
       <td>Same</td>
     </tr>
     <tr>
-      <td>1</td>
+      <th>1</th>
       <td>1.00002</td>
       <td>Diff</td>
     </tr>
     <tr>
-      <td>2</td>
+      <th>2</th>
       <td>3.00000</td>
       <td>Same</td>
     </tr>
     <tr>
-      <td>3</td>
+      <th>3</th>
       <td>1.00000</td>
       <td>Same</td>
     </tr>
@@ -1032,17 +1033,17 @@ Angle between [-0.34828678 -0.74741765  0.60540275] and [-0.67224036  0.72470423
   </thead>
   <tbody>
     <tr>
-      <td>1</td>
+      <th>1</th>
       <td>1.00002</td>
       <td>Diff</td>
     </tr>
     <tr>
-      <td>2</td>
+      <th>2</th>
       <td>3.00000</td>
       <td>Same</td>
     </tr>
     <tr>
-      <td>3</td>
+      <th>3</th>
       <td>1.00000</td>
       <td>Same</td>
     </tr>
@@ -1109,17 +1110,17 @@ Angle between [-0.34828678 -0.74741765  0.60540275] and [-0.67224036  0.72470423
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[-1  0  2]
- [ 3 -4  4]
- [ 1 -2  1]]
+[[ 4 -1  0]
+ [-2 -5  3]
+ [-2  3 -4]]
 
-[[-0.66666667  0.33333333  0.33333333  2.        ]
- [ 3.33333333 -3.66666667  0.33333333  4.        ]
- [ 1.33333333 -1.66666667  0.33333333  1.        ]]
+[[ 3.         -2.         -1.          0.        ]
+ [ 0.33333333 -2.66666667  2.33333333  3.        ]
+ [-2.33333333  2.66666667 -0.33333333 -4.        ]]
 
-[[-1.  0.  2.]
- [ 3. -4.  4.]
- [ 1. -2.  1.]]
+[[ 4. -1.  0.]
+ [-2. -5.  3.]
+ [-2.  3. -4.]]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1168,17 +1169,17 @@ Angle between [-0.34828678 -0.74741765  0.60540275] and [-0.67224036  0.72470423
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[-2  4  0]
- [-1 -3  5]
- [ 3  3 -5]]
+[[ 0  0 -5]
+ [-3  5  3]
+ [ 1 -3  5]]
 
-[[-2.  4. -2.  0.]
- [-1. -3.  4.  5.]
- [ 3.  3. -6. -5.]]
+[[ 0.  0. -0. -5.]
+ [-3.  5. -2.  3.]
+ [ 1. -3.  2.  5.]]
 
-[[-2.  4.  0.]
- [-1. -3.  5.]
- [ 3.  3. -5.]]
+[[ 0.  0. -5.]
+ [-3.  5.  3.]
+ [ 1. -3.  5.]]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1355,6 +1356,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </div>
 <div class="section" id="5.9.-Crystal-lattice-identification">
 <h3>5.9. Crystal lattice identification<a class="headerlink" href="#5.9.-Crystal-lattice-identification" title="Permalink to this headline">¶</a></h3>
+<p><em>Note version 1.4.4</em> These have been added as methods of the Box class. These stand-alone functions are likely to be depreciated in the next major atomman version.</p>
 <p>There are also a few tests for identifying if a supplied box is consistent with a standard representation of a crystal family unit cell.</p>
 <ul class="simple">
 <li><p><strong>atomman.tools.identifyfamily(box)</strong> returns str crystal family if box corresponds to a standard crystal representation. Otherwise, returns None.</p></li>
@@ -1508,13 +1510,15 @@ Composition = Al2Si5
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Introduction to atomman: Basic support and analysis tools</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
 <li><a class="reference internal" href="#2.-Elastic-constants">2. Elastic constants</a></li>
@@ -1543,12 +1547,17 @@ Composition = Al2Si5
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="2.2._Running_LAMMPS_and_the_Log_class.html"
-                        title="previous chapter">Introduction to atomman: Running LAMMPS and the Log class</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="3.1._ElasticConstants_class.html"
-                        title="next chapter">Introduction to atomman: ElasticConstants class</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="2.2._Running_LAMMPS_and_the_Log_class.html"
+                          title="previous chapter">Introduction to atomman: Running LAMMPS and the Log class</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="3.1._ElasticConstants_class.html"
+                          title="next chapter">Introduction to atomman: ElasticConstants class</a></p>
+  </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1568,12 +1577,13 @@ Composition = Al2Si5
         <li class="right" >
           <a href="2.2._Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Basic support and analysis tools</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

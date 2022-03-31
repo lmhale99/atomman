@@ -1,20 +1,20 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: Semidiscrete variational Peierls-Nabarro model &#8212; atomman 1.4.0 documentation</title>
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction to atomman: Semidiscrete variational Peierls-Nabarro model &#8212; atomman 1.4.4 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Strain class" href="4.8._Strain_class.html" />
@@ -35,8 +35,9 @@
         <li class="right" >
           <a href="4.6._Dislocation_analysis_tools.html" title="Introduction to atomman: Dislocation analysis tools"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Semidiscrete variational Peierls-Nabarro model</a></li> 
       </ul>
     </div>  
 
@@ -308,7 +309,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
@@ -335,8 +336,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.0
-Notebook executed on 2021-08-05
+atomman version = 1.4.4
+Notebook executed on 2022-03-17
 </pre></div></div>
 </div>
 </div>
@@ -371,7 +372,7 @@ that minimizes the dislocation’s energy.</p>
 <p>The elastic energy is due to the elastic energy of the dislocation. It contains two components: a configuration-dependent part associated with the interaction of the dislocation at one position interacting with the dislocation at another point, and a configuration-independent part associated with the dislocation’s long-range strain field. The elastic energy is expressed as</p>
 <div class="math notranslate nohighlight">
 \[U_{elastic} = \frac{1}{4\pi} \sum_i{\left[ \sum_j{\left( \chi(i, j, \Delta \xi) K_{lm} \rho_l[i] \rho_m[j] \right)} \right]} + \frac{1}{4\pi} K_{lm} b_l b_m \ln{(L)},\]</div>
-<p>where <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span> are integer indexes of the <span class="math notranslate nohighlight">\(\xi\)</span> evaluation points, i.e. <span class="math notranslate nohighlight">\(\xi[i+1] = \xi[i] + \Delta \xi\)</span>, <span class="math notranslate nohighlight">\(K_{lm}\)</span> is the dislocation’s energy coefficient tensor, <span class="math notranslate nohighlight">\(L\)</span> is a cutoff radius for the long-range configuration-independent elastic energy, and <span class="math notranslate nohighlight">\(\chi\)</span> is a multiplicative factor related to the distance between points <span class="math notranslate nohighlight">\(\xi[i]\)</span> and <span class="math notranslate nohighlight">\(\xi[j]\)</span> given by</p>
+<p>where <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span> are integer indexes of the <span class="math notranslate nohighlight">\(\xi\)</span> evaluation points, i.e. <span class="math notranslate nohighlight">\(\xi[i+1] = \xi[i] + \Delta \xi\)</span>, <span class="math notranslate nohighlight">\(K_{lm}\)</span> is the dislocation’s energy coefficient tensor, <span class="math notranslate nohighlight">\(L\)</span> is a cutoff radius for the long-range configuration-independent elastic energy, and <span class="math notranslate nohighlight">\(\chi\)</span> is a multiplicative factor related to the distance between points <span class="math notranslate nohighlight">\(\xi[i]\)</span> and <span class="math notranslate nohighlight">\(\xi[j]\)</span> given by</p>
 <div class="math notranslate nohighlight">
 \[\chi(i,j,\Delta \xi) = \frac{3}{2} \Delta \xi^2 + \psi(i-1,j-1,\Delta \xi) + \psi(i,j,\Delta \xi) - \psi(i,j-1,\Delta \xi) - \psi(j,i-1,\Delta \xi),\]</div>
 <div class="math notranslate nohighlight">
@@ -704,13 +705,13 @@ Transformed Burgers vector = [2.86043063 0.         0.        ]
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Dislocation energy terms in eV/Å:
-Misfit energy =     0.15241997612247116
-Elastic energy =    -0.21141715213384996
-Long-range energy = 2.312310391118972
+Misfit energy =     0.15241997612249505
+Elastic energy =    -0.21141715213385687
+Long-range energy = 2.312310391119044
 Stress energy =     -0.0
 Surface energy =    0.0
 Nonlocal energy =   0.0
-Total energy =      2.253313215107593
+Total energy =      2.2533132151076822
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -789,7 +790,7 @@ Total energy =      2.253313215107593
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 11
-         Function evaluations: 33184
+         Function evaluations: 33787
 </pre></div></div>
 </div>
 </div>
@@ -812,13 +813,13 @@ Optimization terminated successfully.
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Dislocation energy terms in eV/Å:
-Misfit energy =     0.15773145395826443
-Elastic energy =    -0.2561554835193246
-Long-range energy = 2.312310391118972
+Misfit energy =     0.15773037630013326
+Elastic energy =    -0.25615441151417057
+Long-range energy = 2.312310391119044
 Stress energy =     -0.0
 Surface energy =    0.0
 Nonlocal energy =   0.0
-Total energy =      2.2138863615579116
+Total energy =      2.213886355905007
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -851,11 +852,7 @@ Total energy =      2.2138863615579116
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 3952
-Optimization terminated successfully.
-         Current function value: 2.213886
-         Iterations: 1
-         Function evaluations: 3839
+         Function evaluations: 3944
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
@@ -863,31 +860,35 @@ Optimization terminated successfully.
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 4132
+         Function evaluations: 3885
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 4467
+         Function evaluations: 4120
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 4573
+         Function evaluations: 4146
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 4813
+         Function evaluations: 4409
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 4732
+         Function evaluations: 4593
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 4861
+         Function evaluations: 4788
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 4826
+         Function evaluations: 4716
+Optimization terminated successfully.
+         Current function value: 2.213886
+         Iterations: 1
+         Function evaluations: 4839
 </pre></div></div>
 </div>
 </div>
@@ -910,13 +911,13 @@ Optimization terminated successfully.
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Dislocation energy terms in eV/Å:
-Misfit energy =     0.15770922556516204
-Elastic energy =    -0.25613380502107364
-Long-range energy = 2.312310391118972
+Misfit energy =     0.15770920863911703
+Elastic energy =    -0.2561337881076612
+Long-range energy = 2.312310391119044
 Stress energy =     -0.0
 Surface energy =    0.0
 Nonlocal energy =   0.0
-Total energy =      2.21388581166306
+Total energy =      2.2138858116504996
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1020,13 +1021,13 @@ Total energy =      2.21388581166306
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Dislocation energy terms in eV/Å:
-Misfit energy =     0.15770922556516204
-Elastic energy =    -0.25613380502107364
-Long-range energy = 2.312310391118972
+Misfit energy =     0.15770920863911703
+Elastic energy =    -0.2561337881076612
+Long-range energy = 2.312310391119044
 Stress energy =     -0.0
 Surface energy =    0.0
 Nonlocal energy =   0.0
-Total energy =      2.21388581166306
+Total energy =      2.2138858116504996
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1068,13 +1069,15 @@ Total energy =      2.21388581166306
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Introduction to atomman: Semidiscrete variational Peierls-Nabarro model</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
 <li><a class="reference internal" href="#2.-Theory">2. Theory</a><ul>
@@ -1112,12 +1115,17 @@ Total energy =      2.21388581166306
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="4.6._Dislocation_analysis_tools.html"
-                        title="previous chapter">Introduction to atomman: Dislocation analysis tools</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="4.8._Strain_class.html"
-                        title="next chapter">Introduction to atomman: Strain class</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="4.6._Dislocation_analysis_tools.html"
+                          title="previous chapter">Introduction to atomman: Dislocation analysis tools</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="4.8._Strain_class.html"
+                          title="next chapter">Introduction to atomman: Strain class</a></p>
+  </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1137,12 +1145,13 @@ Total energy =      2.21388581166306
         <li class="right" >
           <a href="4.6._Dislocation_analysis_tools.html" title="Introduction to atomman: Dislocation analysis tools"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Semidiscrete variational Peierls-Nabarro model</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

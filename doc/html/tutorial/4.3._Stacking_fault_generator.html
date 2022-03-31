@@ -1,20 +1,20 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: Stacking fault generator &#8212; atomman 1.4.0 documentation</title>
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction to atomman: Stacking fault generator &#8212; atomman 1.4.4 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Dislocation solution and generator" href="4.4._Dislocation_solution_and_generator.html" />
@@ -35,8 +35,9 @@
         <li class="right" >
           <a href="4.2._Free_surface_generator.html" title="Introduction to atomman: Free surface generator"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Stacking fault generator</a></li> 
       </ul>
     </div>  
 
@@ -331,8 +332,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.0
-Notebook executed on 2021-08-05
+atomman version = 1.4.4
+Notebook executed on 2022-03-17
 </pre></div></div>
 </div>
 </div>
@@ -698,11 +699,11 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{sf.system.natoms}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{sf.abovefault.sum()} atoms above the fault&#39;</span><span class="p">)</span>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="si">}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">abovefault</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s1"> atoms above the fault&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Relative fault plane position: </span><span class="si">{sf.faultpos_rel}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Absolute fault plane position: </span><span class="si">{sf.faultpos_cart}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Relative fault plane position: </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_rel</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Absolute fault plane position: </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_cart</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -726,11 +727,11 @@ Absolute fault plane position: 14.029611541307906
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_rel</span> <span class="o">=</span> <span class="mf">0.57</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{sf.system.natoms}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{sf.abovefault.sum()} atoms above the fault&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="si">}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">abovefault</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s1"> atoms above the fault&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Relative fault plane position: </span><span class="si">{sf.faultpos_rel}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Absolute fault plane position: </span><span class="si">{sf.faultpos_cart}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Relative fault plane position: </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_rel</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Absolute fault plane position: </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_cart</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -753,11 +754,11 @@ Absolute fault plane position: 15.99375715709101
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_cart</span> <span class="o">=</span> <span class="mf">14.029611541307906</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{sf.system.natoms}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{sf.abovefault.sum()} atoms above the fault&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="si">}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">abovefault</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s1"> atoms above the fault&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Relative fault plane position: </span><span class="si">{sf.faultpos_rel}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Absolute fault plane position: </span><span class="si">{sf.faultpos_cart}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Relative fault plane position: </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_rel</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Absolute fault plane position: </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_cart</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -800,9 +801,7 @@ atoms in faultsystem are displaced by:
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
- [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
- [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
- [ 8.88178420e-16  0.00000000e+00  0.00000000e+00]
+ [ 4.44089210e-16  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
@@ -814,7 +813,9 @@ atoms in faultsystem are displaced by:
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
- [ 8.88178420e-16  0.00000000e+00  0.00000000e+00]
+ [ 4.44089210e-16  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
@@ -822,7 +823,7 @@ atoms in faultsystem are displaced by:
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
- [ 1.43189123e+00 -2.22044605e-16  0.00000000e+00]
+ [ 1.43189123e+00 -1.11022302e-16  0.00000000e+00]
  [ 1.43189123e+00 -1.11022302e-16  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
@@ -834,7 +835,7 @@ atoms in faultsystem are displaced by:
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
- [ 1.43189123e+00 -2.22044605e-16  0.00000000e+00]
+ [ 1.43189123e+00 -1.11022302e-16  0.00000000e+00]
  [ 1.43189123e+00 -1.11022302e-16  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
@@ -852,7 +853,7 @@ atoms in faultsystem are displaced by:
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="k">for</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">faultsystem</span> <span class="ow">in</span> <span class="n">sf</span><span class="o">.</span><span class="n">iterfaultmap</span><span class="p">(</span><span class="n">num_a1</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">num_a2</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">displacement</span><span class="p">(</span><span class="n">surfacesystem</span><span class="p">,</span> <span class="n">faultsystem</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;a1 = </span><span class="si">{a1:.1f}</span><span class="s1">, a2 = </span><span class="si">{a2:.1f}</span><span class="s1">, d = [</span><span class="si">{d[0]: 5.3f}</span><span class="s1"> </span><span class="si">{d[1]: 5.3f}</span><span class="s1"> </span><span class="si">{d[2]: 5.3f}</span><span class="s1">]&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;a1 = </span><span class="si">{</span><span class="n">a1</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">, a2 = </span><span class="si">{</span><span class="n">a2</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">, d = [</span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1"> 5.3f</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1"> 5.3f</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s1"> 5.3f</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -883,7 +884,7 @@ a1 = 0.6, a2 = 0.6, d = [ 2.577  1.488  0.000]
 a1 = 0.8, a2 = 0.6, d = [-2.577  1.488  0.000]
 a1 = 0.0, a2 = 0.8, d = [ 1.146  1.984  0.000]
 a1 = 0.2, a2 = 0.8, d = [ 1.718  1.984  0.000]
-a1 = 0.4, a2 = 0.8, d = [ 2.291  1.984  0.000]
+a1 = 0.4, a2 = 0.8, d = [-0.573 -2.976  0.000]
 a1 = 0.6, a2 = 0.8, d = [ 0.000 -2.976  0.000]
 a1 = 0.8, a2 = 0.8, d = [-2.291  1.984  0.000]
 </pre></div></div>
@@ -996,7 +997,7 @@ The crystal shift vectors:
 [ 0.  -0.5  0.5]
 [ 0.5 -0.5  0. ]
 The Cartesian shift vectors:
-[ 2.86378246e+00  2.86439546e-16 -2.38358656e-16]
+[ 2.86378246e+00  2.86439546e-16 -1.63140510e-17]
 [ 1.43189123e+00  2.48010836e+00 -2.46533587e-16]
 </pre></div></div>
 </div>
@@ -1053,11 +1054,11 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{sf.system.natoms}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{sf.abovefault.sum()} atoms above the fault&#39;</span><span class="p">)</span>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="si">}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">abovefault</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s1"> atoms above the fault&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Relative fault plane position: </span><span class="si">{sf.faultpos_rel}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Absolute fault plane position: </span><span class="si">{sf.faultpos_cart}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Relative fault plane position: </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_rel</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Absolute fault plane position: </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_cart</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1080,11 +1081,11 @@ Absolute fault plane position: 14.029611541307904
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_rel</span> <span class="o">=</span> <span class="mf">0.57</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{sf.system.natoms}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{sf.abovefault.sum()} atoms above the fault&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="si">}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">abovefault</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s1"> atoms above the fault&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Relative fault plane position: </span><span class="si">{sf.faultpos_rel}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Absolute fault plane position: </span><span class="si">{sf.faultpos_cart}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Relative fault plane position: </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_rel</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Absolute fault plane position: </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_cart</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1107,11 +1108,11 @@ Absolute fault plane position: 17.39375715709101
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_cart</span> <span class="o">=</span> <span class="mf">14.029611541307906</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{sf.system.natoms}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{sf.abovefault.sum()} atoms above the fault&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="si">}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">abovefault</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s1"> atoms above the fault&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Relative fault plane position: </span><span class="si">{sf.faultpos_rel}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Absolute fault plane position: </span><span class="si">{sf.faultpos_cart}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Relative fault plane position: </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_rel</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Absolute fault plane position: </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_cart</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1139,7 +1140,7 @@ Absolute fault plane position: 14.029611541307906
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="k">for</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">faultsystem</span> <span class="ow">in</span> <span class="n">sf</span><span class="o">.</span><span class="n">iterfaultmap</span><span class="p">(</span><span class="n">num_a1</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">num_a2</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">minimum_r</span><span class="o">=</span><span class="mf">0.85</span><span class="o">*</span><span class="n">ucell</span><span class="o">.</span><span class="n">r0</span><span class="p">()):</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">displacement</span><span class="p">(</span><span class="n">surfacesystem</span><span class="p">,</span> <span class="n">faultsystem</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;a1 = </span><span class="si">{a1:.1f}</span><span class="s1">, a2 = </span><span class="si">{a2:.1f}</span><span class="s1">, d = [</span><span class="si">{d[0]: 5.3f}</span><span class="s1"> </span><span class="si">{d[1]: 5.3f}</span><span class="s1"> </span><span class="si">{d[2]: 5.3f}</span><span class="s1">]&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;a1 = </span><span class="si">{</span><span class="n">a1</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">, a2 = </span><span class="si">{</span><span class="n">a2</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">, d = [</span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1"> 5.3f</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1"> 5.3f</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s1"> 5.3f</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1155,14 +1156,14 @@ a1 = 0.6, a2 = 0.0, d = [-1.146  0.000  0.000]
 a1 = 0.8, a2 = 0.0, d = [-0.573  0.000  0.000]
 a1 = 0.0, a2 = 0.2, d = [ 0.286  0.496  0.000]
 a1 = 0.2, a2 = 0.2, d = [ 0.859  0.496  0.004]
-a1 = 0.4, a2 = 0.2, d = [-1.432  0.496  0.073]
+a1 = 0.4, a2 = 0.2, d = [ 1.432  0.496  0.073]
 a1 = 0.6, a2 = 0.2, d = [-0.859  0.496  0.004]
 a1 = 0.8, a2 = 0.2, d = [-0.286  0.496  0.000]
 a1 = 0.0, a2 = 0.4, d = [ 0.573  0.992  0.000]
 a1 = 0.2, a2 = 0.4, d = [ 1.146  0.992  0.073]
 a1 = 0.4, a2 = 0.4, d = [-1.146  0.992  0.073]
 a1 = 0.6, a2 = 0.4, d = [-0.573  0.992  0.000]
-a1 = 0.8, a2 = 0.4, d = [-0.000  0.992  0.000]
+a1 = 0.8, a2 = 0.4, d = [ 0.000  0.992  0.000]
 a1 = 0.0, a2 = 0.6, d = [-0.573 -0.992  0.000]
 a1 = 0.2, a2 = 0.6, d = [ 0.000 -0.992  0.004]
 a1 = 0.4, a2 = 0.6, d = [ 0.573 -0.992  0.000]
@@ -1171,7 +1172,7 @@ a1 = 0.8, a2 = 0.6, d = [-1.146 -0.992  0.000]
 a1 = 0.0, a2 = 0.8, d = [-0.286 -0.496  0.000]
 a1 = 0.2, a2 = 0.8, d = [ 0.286 -0.496  0.000]
 a1 = 0.4, a2 = 0.8, d = [ 0.859 -0.496  0.000]
-a1 = 0.6, a2 = 0.8, d = [ 1.432 -0.496  0.000]
+a1 = 0.6, a2 = 0.8, d = [-1.432 -0.496  0.000]
 a1 = 0.8, a2 = 0.8, d = [-0.859 -0.496  0.000]
 </pre></div></div>
 </div>
@@ -1290,13 +1291,15 @@ The Cartesian shift vectors:
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Introduction to atomman: Stacking fault generator</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
 <li><a class="reference internal" href="#2.-Theory">2. Theory</a></li>
@@ -1335,12 +1338,17 @@ The Cartesian shift vectors:
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="4.2._Free_surface_generator.html"
-                        title="previous chapter">Introduction to atomman: Free surface generator</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="4.4._Dislocation_solution_and_generator.html"
-                        title="next chapter">Introduction to atomman: Dislocation solution and generator</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="4.2._Free_surface_generator.html"
+                          title="previous chapter">Introduction to atomman: Free surface generator</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="4.4._Dislocation_solution_and_generator.html"
+                          title="next chapter">Introduction to atomman: Dislocation solution and generator</a></p>
+  </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1360,12 +1368,13 @@ The Cartesian shift vectors:
         <li class="right" >
           <a href="4.2._Free_surface_generator.html" title="Introduction to atomman: Free surface generator"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Stacking fault generator</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

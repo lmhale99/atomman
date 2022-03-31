@@ -1,20 +1,20 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: Dislocation analysis tools &#8212; atomman 1.4.0 documentation</title>
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction to atomman: Dislocation analysis tools &#8212; atomman 1.4.4 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Semidiscrete variational Peierls-Nabarro model" href="4.7._Semidiscrete_variational_Peierls-Nabarro_model.html" />
@@ -35,8 +35,9 @@
         <li class="right" >
           <a href="4.5._Gamma_surface_plotting.html" title="Introduction to atomman: Gamma surface plotting"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Dislocation analysis tools</a></li> 
       </ul>
     </div>  
 
@@ -307,7 +308,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Standard Python libraries</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
@@ -334,8 +335,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.0
-Notebook executed on 2021-08-05
+atomman version = 1.4.4
+Notebook executed on 2022-03-17
 </pre></div></div>
 </div>
 </div>
@@ -513,8 +514,8 @@ array([0.        , 2.86378246, 0.        ])
 <span class="c1"># as fcc (111) planes have three cross-plane neighbors</span>
 <span class="n">burgers_est</span> <span class="o">=</span> <span class="n">aveslip</span> <span class="o">/</span> <span class="mi">3</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;actual Burgers vector:    [</span><span class="si">{burgers[0]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers[1]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers[2]: 7.4f}</span><span class="s1">]&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;estimated Burgers vector: [</span><span class="si">{burgers_est[0]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers_est[1]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers_est[2]: 7.4f}</span><span class="s1">]&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;actual Burgers vector:    [</span><span class="si">{</span><span class="n">burgers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">burgers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">burgers</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;estimated Burgers vector: [</span><span class="si">{</span><span class="n">burgers_est</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">burgers_est</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">burgers_est</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -547,8 +548,8 @@ estimated Burgers vector: [-0.0016,  2.8662,  0.0060]
 <span class="c1"># Define the Shockley Burgers vector relative to the system definintion</span>
 <span class="n">shockley</span> <span class="o">=</span> <span class="n">alat</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">6</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;actual Burgers vector:    [</span><span class="si">{shockley[0]: 7.4f}</span><span class="s1">, </span><span class="si">{shockley[1]: 7.4f}</span><span class="s1">, </span><span class="si">{shockley[2]: 7.4f}</span><span class="s1">]&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;estimated Burgers vector: [</span><span class="si">{burgers_est[0]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers_est[1]: 7.4f}</span><span class="s1">, </span><span class="si">{burgers_est[2]: 7.4f}</span><span class="s1">]&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;actual Burgers vector:    [</span><span class="si">{</span><span class="n">shockley</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">shockley</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">shockley</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;estimated Burgers vector: [</span><span class="si">{</span><span class="n">burgers_est</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">burgers_est</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">burgers_est</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -934,13 +935,15 @@ dislocations tend to split into partials separated by a stacking fault width. Th
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Introduction to atomman: Dislocation analysis tools</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
 <li><a class="reference internal" href="#1.1.-Load-atomic-systems">1.1. Load atomic systems</a></li>
@@ -969,12 +972,17 @@ dislocations tend to split into partials separated by a stacking fault width. Th
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="4.5._Gamma_surface_plotting.html"
-                        title="previous chapter">Introduction to atomman: Gamma surface plotting</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="4.7._Semidiscrete_variational_Peierls-Nabarro_model.html"
-                        title="next chapter">Introduction to atomman: Semidiscrete variational Peierls-Nabarro model</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="4.5._Gamma_surface_plotting.html"
+                          title="previous chapter">Introduction to atomman: Gamma surface plotting</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="4.7._Semidiscrete_variational_Peierls-Nabarro_model.html"
+                          title="next chapter">Introduction to atomman: Semidiscrete variational Peierls-Nabarro model</a></p>
+  </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -994,12 +1002,13 @@ dislocations tend to split into partials separated by a stacking fault width. Th
         <li class="right" >
           <a href="4.5._Gamma_surface_plotting.html" title="Introduction to atomman: Gamma surface plotting"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Dislocation analysis tools</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

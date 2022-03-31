@@ -1,20 +1,20 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: Dislocation solution and generator &#8212; atomman 1.4.0 documentation</title>
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction to atomman: Dislocation solution and generator &#8212; atomman 1.4.4 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Gamma surface plotting" href="4.5._Gamma_surface_plotting.html" />
@@ -35,8 +35,9 @@
         <li class="right" >
           <a href="4.3._Stacking_fault_generator.html" title="Introduction to atomman: Stacking fault generator"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Dislocation solution and generator</a></li> 
       </ul>
     </div>  
 
@@ -340,8 +341,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.0
-Notebook executed on 2021-08-05
+atomman version = 1.4.4
+Notebook executed on 2022-03-17
 </pre></div></div>
 </div>
 </div>
@@ -669,8 +670,8 @@ Transformation matrix from standard orientation to dislocation orientation:
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">IsotropicVolterraDislocation</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Solution is isotropic&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;mu -&gt; {uc.get_in_units(solution.mu, &quot;GPa&quot;):.3f} GPa&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;nu -&gt; </span><span class="si">{solution.nu:.3f}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;mu -&gt; </span><span class="si">{</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="s2">&quot;GPa&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> GPa&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;nu -&gt; </span><span class="si">{</span><span class="n">solution</span><span class="o">.</span><span class="n">nu</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">Stroh</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Solution is anisotropic&#39;</span><span class="p">)</span>
@@ -703,10 +704,10 @@ A -&gt;
    6.67206634e-01+0.00000000e+00j]
  [-4.92478068e-01-2.92695902e-01j -1.86741173e-01+9.77580274e-02j
    6.67206634e-01-0.00000000e+00j]
- [-3.81543382e-17-1.47294255e-01j  7.89087414e-01+0.00000000e+00j
-   4.27766816e-01-8.60735226e-17j]
- [-3.81543382e-17+1.47294255e-01j  7.89087414e-01-0.00000000e+00j
-   4.27766816e-01+8.60735226e-17j]]
+ [-3.05560230e-17-1.47294255e-01j  7.89087414e-01+0.00000000e+00j
+   4.27766816e-01-9.13706987e-17j]
+ [-3.05560230e-17+1.47294255e-01j  7.89087414e-01-0.00000000e+00j
+   4.27766816e-01+9.13706987e-17j]]
 L -&gt;
 [[ 1.87773573e-01-2.53391120e-01j  1.05996344e-01+1.67934295e-01j
   -2.23781767e-02-2.06874267e-01j]
@@ -716,14 +717,14 @@ L -&gt;
    2.23781767e-02-2.06874267e-01j]
  [ 1.87773573e-01-2.53391120e-01j -1.05996344e-01-1.67934295e-01j
    2.23781767e-02+2.06874267e-01j]
- [-1.50398047e-01-5.74605304e-18j  1.28485597e-16-3.81790193e-01j
-  -8.49601677e-17-6.54039958e-02j]
- [-1.50398047e-01+5.74605304e-18j  1.28485597e-16+3.81790193e-01j
-  -8.49601677e-17+6.54039958e-02j]]
+ [-1.50398047e-01-1.01240078e-17j  1.30479010e-16-3.81790193e-01j
+  -8.20886609e-17-6.54039958e-02j]
+ [-1.50398047e-01+1.01240078e-17j  1.30479010e-16+3.81790193e-01j
+  -8.20886609e-17+6.54039958e-02j]]
 k -&gt;
 [ 8.78792266e-01+1.74127681j  8.78792266e-01-1.74127681j
  -8.78792266e-01+1.74127681j -8.78792266e-01-1.74127681j
-  3.40946117e-16+1.62818332j  3.40946117e-16-1.62818332j]
+  3.44483780e-16+1.62818332j  3.44483780e-16-1.62818332j]
 </pre></div></div>
 </div>
 <p><span class="math notranslate nohighlight">\(K_{ij}\)</span>, <span class="math notranslate nohighlight">\(K\)</span>, and pre-ln factor</p>
@@ -736,8 +737,8 @@ k -&gt;
 <span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">K_tensor</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">()</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;K_coeff -&gt; {uc.get_in_units(solution.K_coeff, &quot;GPa&quot;):.3f} GPa&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;preln -&gt; {uc.get_in_units(solution.preln, &quot;eV/Å&quot;):f} eV/Å&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;K_coeff -&gt; </span><span class="si">{</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">K_coeff</span><span class="p">,</span> <span class="s2">&quot;GPa&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> GPa&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;preln -&gt; </span><span class="si">{</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">preln</span><span class="p">,</span> <span class="s2">&quot;eV/Å&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1">f</span><span class="si">}</span><span class="s1"> eV/Å&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -801,7 +802,7 @@ preln -&gt; 0.238480 eV/Å
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
     <span class="n">im</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xvals</span><span class="p">,</span> <span class="n">yvals</span><span class="p">,</span> <span class="n">disp</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">num_xy</span><span class="p">,</span> <span class="n">num_xy</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=-</span><span class="n">disp_max</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">disp_max</span><span class="p">)</span>
-    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;$u_{{{i+1}}}$&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;$u_</span><span class="se">{{</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="se">}}</span><span class="s1">$&#39;</span><span class="p">)</span>
     <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;large&#39;</span><span class="p">)</span>
     <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;large&#39;</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
@@ -842,7 +843,7 @@ Coordinates and displacements in Angstroms
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
         <span class="n">im</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xvals</span><span class="p">,</span> <span class="n">yvals</span><span class="p">,</span> <span class="n">stress</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">num_xy</span><span class="p">,</span> <span class="n">num_xy</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=-</span><span class="n">stress_max</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">stress_max</span><span class="p">)</span>
-        <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;$\sigma_{{{i+1}{j+1}}}$&#39;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;$\sigma_</span><span class="se">{{</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}{</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="se">}}</span><span class="s1">$&#39;</span><span class="p">)</span>
         <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;large&#39;</span><span class="p">)</span>
         <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;large&#39;</span><span class="p">)</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
@@ -1084,8 +1085,8 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;character angle = {disl.dislsol.characterangle()} degrees&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;K_coeff = {uc.get_in_units(disl.dislsol.K_coeff, &quot;GPa&quot;):.3f} GPa&#39;</span><span class="p">)</span>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;character angle = </span><span class="si">{</span><span class="n">disl</span><span class="o">.</span><span class="n">dislsol</span><span class="o">.</span><span class="n">characterangle</span><span class="p">()</span><span class="si">}</span><span class="s1"> degrees&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;K_coeff = </span><span class="si">{</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">disl</span><span class="o">.</span><span class="n">dislsol</span><span class="o">.</span><span class="n">K_coeff</span><span class="p">,</span> <span class="s2">&quot;GPa&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> GPa&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;burgers =&#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">disl</span><span class="o">.</span><span class="n">dislsol</span><span class="o">.</span><span class="n">burgers</span><span class="p">,</span> <span class="s2">&quot;angstrom&quot;</span><span class="p">),</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1413,13 +1414,15 @@ shift set during class initialization.</p></li>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Introduction to atomman: Dislocation solution and generator</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
 <li><a class="reference internal" href="#2.-Theory">2. Theory</a><ul>
@@ -1465,12 +1468,17 @@ shift set during class initialization.</p></li>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="4.3._Stacking_fault_generator.html"
-                        title="previous chapter">Introduction to atomman: Stacking fault generator</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="4.5._Gamma_surface_plotting.html"
-                        title="next chapter">Introduction to atomman: Gamma surface plotting</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="4.3._Stacking_fault_generator.html"
+                          title="previous chapter">Introduction to atomman: Stacking fault generator</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="4.5._Gamma_surface_plotting.html"
+                          title="next chapter">Introduction to atomman: Gamma surface plotting</a></p>
+  </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1490,12 +1498,13 @@ shift set during class initialization.</p></li>
         <li class="right" >
           <a href="4.3._Stacking_fault_generator.html" title="Introduction to atomman: Stacking fault generator"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Dislocation solution and generator</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

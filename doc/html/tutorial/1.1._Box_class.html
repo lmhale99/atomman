@@ -1,20 +1,20 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Introduction to atomman: Box class &#8212; atomman 1.4.0 documentation</title>
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction to atomman: Box class &#8212; atomman 1.4.4 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Atoms class" href="1.2._Atoms_class.html" />
@@ -35,8 +35,9 @@
         <li class="right" >
           <a href="1._Defining_atomic_systems.html" title="Introduction to atomman: Defining atomic systems"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Box class</a></li> 
       </ul>
     </div>  
 
@@ -335,8 +336,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.0
-Notebook executed on 2021-08-03
+atomman version = 1.4.4
+Notebook executed on 2022-03-17
 </pre></div></div>
 </div>
 <p>Create a default box with vects that are normal unit vectors.</p>
@@ -489,10 +490,10 @@ box.volume -&gt; 1.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 3.984,  2.105,  3.954]
-bvect =  [ 2.501,  1.440,  1.008]
-cvect =  [ 0.239,  0.756,  3.879]
-origin = [ 0.138,  0.565,  0.913]
+avect =  [ 1.197,  3.986,  2.803]
+bvect =  [ 3.040,  0.223,  2.596]
+cvect =  [ 1.344,  1.836,  3.959]
+origin = [ 0.459,  0.131,  0.410]
 </pre></div></div>
 </div>
 </div>
@@ -746,8 +747,100 @@ box.gamma -&gt; 119.99999999999999
 </div>
 </div>
 </div>
-<div class="section" id="4.-LAMMPS-compatible-Boxes">
-<h2>4. LAMMPS-compatible Boxes<a class="headerlink" href="#4.-LAMMPS-compatible-Boxes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="4.-Box-model">
+<h2>4. Box model<a class="headerlink" href="#4.-Box-model" title="Permalink to this headline">¶</a></h2>
+<p><em>Added version 1.2.7</em></p>
+<p>A JSON/XML equivalent data model representation of the Box object can be generated using the model() method.</p>
+<p>The units of length used in the model can be set using the ‘length_unit’ parameter.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">xml</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#34;box&#34;: {&#34;avect&#34;: {&#34;value&#34;: [3.12, 0.0, 0.0], &#34;unit&#34;: &#34;angstrom&#34;}, &#34;bvect&#34;: {&#34;value&#34;: [-1.5599999999999994, 2.701999259807449, 0.0], &#34;unit&#34;: &#34;angstrom&#34;}, &#34;cvect&#34;: {&#34;value&#34;: [0.0, 0.0, 5.14], &#34;unit&#34;: &#34;angstrom&#34;}, &#34;origin&#34;: {&#34;value&#34;: [0.0, 0.0, 0.0], &#34;unit&#34;: &#34;angstrom&#34;}}}
+
+&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
+&lt;box&gt;&lt;avect&gt;&lt;value&gt;3.12&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/avect&gt;&lt;bvect&gt;&lt;value&gt;-1.5599999999999994&lt;/value&gt;&lt;value&gt;2.701999259807449&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/bvect&gt;&lt;cvect&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;5.14&lt;/value&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/cvect&gt;&lt;origin&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/origin&gt;&lt;/box&gt;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">length_unit</span><span class="o">=</span><span class="s1">&#39;nm&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#34;box&#34;: {&#34;avect&#34;: {&#34;value&#34;: [0.312, 0.0, 0.0], &#34;unit&#34;: &#34;nm&#34;}, &#34;bvect&#34;: {&#34;value&#34;: [-0.15599999999999994, 0.27019992598074494, 0.0], &#34;unit&#34;: &#34;nm&#34;}, &#34;cvect&#34;: {&#34;value&#34;: [0.0, 0.0, 0.514], &#34;unit&#34;: &#34;nm&#34;}, &#34;origin&#34;: {&#34;value&#34;: [0.0, 0.0, 0.0], &#34;unit&#34;: &#34;nm&#34;}}}
+</pre></div></div>
+</div>
+<p>Any stored model information can then be reloaded in as a Box object by passing the ‘model’ parameter to either the class initializer or the model() method.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 3.120,  0.000,  0.000]
+bvect =  [-1.560,  2.702,  0.000]
+cvect =  [ 0.000,  0.000,  5.140]
+origin = [ 0.000,  0.000,  0.000]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">box</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 3.120,  0.000,  0.000]
+bvect =  [-1.560,  2.702,  0.000]
+cvect =  [ 0.000,  0.000,  5.140]
+origin = [ 0.000,  0.000,  0.000]
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="5.-Characterization-and-utility-methods">
+<h2>5. Characterization and utility methods<a class="headerlink" href="#5.-Characterization-and-utility-methods" title="Permalink to this headline">¶</a></h2>
+<p>This section describes some additional useful methods built into the Box class.</p>
+<div class="section" id="5.1.-LAMMPS-compatible-Boxes">
+<h3>5.1. LAMMPS-compatible Boxes<a class="headerlink" href="#5.1.-LAMMPS-compatible-Boxes" title="Permalink to this headline">¶</a></h3>
 <p>For boxes to be compatible with LAMMPS, they have to adhere to the following conditions:</p>
 <ul>
 <li><p>avect, bvect, cvect are right-handed.</p></li>
@@ -761,11 +854,12 @@ box.gamma -&gt; 119.99999999999999
 <li><p>The tilt factors are limited to being between -1/2 and 1/2 the corresponding length terms.</p></li>
 </ul>
 <p>The first two conditions are automatically adhered to if the box is set with LAMMPS terms or crystal lattice parameters, but may not be true if the box was set using the crystal vectors. The third condition is not checked by atomman. Large tilt factors are allowed by LAMMPS if the “box tilt large” command is used.</p>
-<div class="section" id="4.1.-Box.is_lammps_norm()">
-<h3>4.1. Box.is_lammps_norm()<a class="headerlink" href="#4.1.-Box.is_lammps_norm()" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="5.1.1.-Box.is_lammps_norm()">
+<h3>5.1.1. Box.is_lammps_norm()<a class="headerlink" href="#5.1.1.-Box.is_lammps_norm()" title="Permalink to this headline">¶</a></h3>
 <p>This function returns True if the Box is compatible with the first two LAMMPS condtions and False otherwise.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -783,7 +877,7 @@ box.is_lammps_norm() -&gt; True
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -804,7 +898,7 @@ box.is_lammps_norm() -&gt; False
 </div>
 <p>Trying to access LAMMPS box parameters for incompatible boxes will issue an error.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -824,98 +918,8 @@ AssertionError: Box is not normalized for LAMMPS style parameters
 </pre></div></div>
 </div>
 </div>
-</div>
-<div class="section" id="5.-Box-model">
-<h2>5. Box model<a class="headerlink" href="#5.-Box-model" title="Permalink to this headline">¶</a></h2>
-<p><em>Added version 1.2.7</em></p>
-<p>A JSON/XML equivalent data model representation of the Box object can be generated using the model() method.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">xml</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{&#34;box&#34;: {&#34;avect&#34;: {&#34;value&#34;: [10.0, 0.1, 0.0], &#34;unit&#34;: &#34;angstrom&#34;}, &#34;bvect&#34;: {&#34;value&#34;: [0.2, 9.0, 0.0], &#34;unit&#34;: &#34;angstrom&#34;}, &#34;cvect&#34;: {&#34;value&#34;: [-0.2, 0.5, 14.0], &#34;unit&#34;: &#34;angstrom&#34;}, &#34;origin&#34;: {&#34;value&#34;: [0.0, 0.0, 0.0], &#34;unit&#34;: &#34;angstrom&#34;}}}
-
-&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
-&lt;box&gt;&lt;avect&gt;&lt;value&gt;10.0&lt;/value&gt;&lt;value&gt;0.1&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/avect&gt;&lt;bvect&gt;&lt;value&gt;0.2&lt;/value&gt;&lt;value&gt;9.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/bvect&gt;&lt;cvect&gt;&lt;value&gt;-0.2&lt;/value&gt;&lt;value&gt;0.5&lt;/value&gt;&lt;value&gt;14.0&lt;/value&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/cvect&gt;&lt;origin&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;unit&gt;angstrom&lt;/unit&gt;&lt;/origin&gt;&lt;/box&gt;
-</pre></div></div>
-</div>
-<p>The units of length used in the model can be set using the ‘length_unit’ parameter.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">length_unit</span><span class="o">=</span><span class="s1">&#39;nm&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{&#34;box&#34;: {&#34;avect&#34;: {&#34;value&#34;: [1.0, 0.01, 0.0], &#34;unit&#34;: &#34;nm&#34;}, &#34;bvect&#34;: {&#34;value&#34;: [0.02, 0.9, 0.0], &#34;unit&#34;: &#34;nm&#34;}, &#34;cvect&#34;: {&#34;value&#34;: [-0.02, 0.05, 1.4], &#34;unit&#34;: &#34;nm&#34;}, &#34;origin&#34;: {&#34;value&#34;: [0.0, 0.0, 0.0], &#34;unit&#34;: &#34;nm&#34;}}}
-</pre></div></div>
-</div>
-<p>Any stored model information can then be reloaded in as a Box object by passing the ‘model’ parameter to either the class initializer or the model() method.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-avect =  [10.000,  0.100,  0.000]
-bvect =  [ 0.200,  9.000,  0.000]
-cvect =  [-0.200,  0.500, 14.000]
-origin = [ 0.000,  0.000,  0.000]
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">box</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-avect =  [10.000,  0.100,  0.000]
-bvect =  [ 0.200,  9.000,  0.000]
-cvect =  [-0.200,  0.500, 14.000]
-origin = [ 0.000,  0.000,  0.000]
-</pre></div></div>
-</div>
-</div>
-<div class="section" id="6.-Inside/outside">
-<h2>6. Inside/outside<a class="headerlink" href="#6.-Inside/outside" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="5.2.-Inside/outside">
+<h3>5.2. Inside/outside<a class="headerlink" href="#5.2.-Inside/outside" title="Permalink to this headline">¶</a></h3>
 <p><em>Added version 1.3.0</em></p>
 <p>The Box is treated as a regional shape object (see <a class="reference external" href="3.3._Region_selectors.html">3.3._Region_selectors.html</a>) and has methods inside() and outside() that indicate whether any 3D coordinate(s) are located inside or outside the shape.</p>
 <div class="nbinput docutils container">
@@ -934,26 +938,26 @@ origin = [ 0.000,  0.000,  0.000]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[3.50935711e-04 8.43534481e+00 7.56186733e+00]
- [7.68417174e+00 1.44018251e+00 3.82031142e+00]
- [5.42692419e+00 5.34775862e+00 8.36842195e+00]
- [5.02098822e-01 7.29699620e+00 5.73972206e+00]
- [5.49586909e+00 3.41205627e+00 2.40458800e+00]
- [1.90197071e+00 6.01091414e+00 4.15105154e+00]
- [7.60738650e+00 1.13225840e+00 7.60973322e-01]
- [2.68222970e+00 1.90518002e+00 3.87149087e+00]
- [2.32293387e+00 6.81898691e+00 4.46305318e-01]
- [2.42944318e-01 1.24921142e+00 3.41695583e+00]
- [4.81760739e+00 3.87201936e+00 4.61687957e-01]
- [8.80313374e+00 6.62335023e+00 1.14546269e+00]
- [6.85628854e+00 2.01130575e+00 9.82021815e-01]
- [2.86122074e+00 2.70360586e+00 8.16799600e+00]
- [5.42580903e+00 9.51393606e+00 7.15510070e+00]
- [7.41785970e+00 5.59991385e+00 2.16687590e+00]
- [3.21148399e+00 4.10968868e+00 9.32364816e+00]
- [2.56662735e+00 6.91333348e+00 3.78790083e-01]
- [2.27166141e+00 8.30469351e+00 7.08670597e+00]
- [3.69521214e+00 1.34649689e-01 9.68358498e+00]]
+[[6.65888141 3.17467732 2.77194746]
+ [9.1782622  9.00779565 9.10660831]
+ [5.29341049 8.81352193 7.77149895]
+ [8.73680515 5.99025118 1.36323803]
+ [9.05079964 2.2979312  2.28166854]
+ [8.65670693 5.6202138  8.63923615]
+ [0.11737769 3.47236634 7.55776883]
+ [4.94076821 8.27231409 4.8711914 ]
+ [6.26899408 1.38322078 2.30828485]
+ [8.68503602 5.81643795 4.75871108]
+ [1.17551295 0.89185608 1.57520549]
+ [4.24860422 3.15819359 7.07851261]
+ [2.05247652 5.46192477 1.22120399]
+ [9.37999124 2.99478422 5.2807701 ]
+ [3.52955207 1.79659696 3.82576127]
+ [7.67131364 8.32312763 6.21130064]
+ [8.42833575 0.59586346 5.14788703]
+ [6.7890742  5.40463985 6.55436879]
+ [5.05772505 0.12269974 7.8848371 ]
+ [0.71618958 0.95564856 6.03683374]]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -974,24 +978,156 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Points inside:
-[False  True  True  True  True  True  True  True  True  True  True  True
-  True  True False  True  True  True  True False]
+[ True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True False  True]
 Points outside:
-[ True False False False False False False False False False False False
- False False  True False False False False  True]
+[False False False False False False False False False False False False
+ False False False False False False  True False]
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="5.3.-Vector/plane-conversions">
+<h3>5.3. Vector/plane conversions<a class="headerlink" href="#5.3.-Vector/plane-conversions" title="Permalink to this headline">¶</a></h3>
+<p><em>Added version 1.4.4:</em></p>
+<p>It is often convenient to define positions, vectors and planes relative to a Box. These methods perform the appropriate conversions.</p>
+<ul class="simple">
+<li><p><strong>vector_crystal_to_cartesian(indices)</strong> Converts crystal indices to Cartesian vectors relative to the box’s lattice vectors.</p></li>
+<li><p><strong>plane_crystal_to_cartesian(indices)</strong> Converts crystal planar indices to Cartesian plane normal vectors based on the box’s lattice vectors. Note: the algorithm used requires that the planar indices be integers.</p></li>
+<li><p><strong>position_relative_to_cartesian(relpos)</strong> Converts position vectors from relative box coordinates to absolute Cartesian coordinates based on the box’s vects and origin.</p></li>
+<li><p><strong>position_cartesian_to_relative(cartpos)</strong> Converts position vectors from absolute Cartesian coordinates to relative box coordinates based on the box’s vects and origin.</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Define an orthogonal box</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">2.51</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">3.13</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.07</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">box</span><span class="o">.</span><span class="n">vector_crystal_to_cartesian</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([2.51, 3.13, 4.07])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">box</span><span class="o">.</span><span class="n">plane_crystal_to_cartesian</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([0.70300632, 0.56375267, 0.43354935])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">relpos</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+<span class="n">cartpos</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">position_relative_to_cartesian</span><span class="p">(</span><span class="n">relpos</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cartpos</span><span class="p">)</span>
+
+<span class="n">relpos2</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">position_cartesian_to_relative</span><span class="p">(</span><span class="n">cartpos</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">relpos2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1.255 1.565 2.035]
+[0.5 0.5 0.5]
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="5.4.-Crystal-lattice-identification">
+<h3>5.4. Crystal lattice identification<a class="headerlink" href="#5.4.-Crystal-lattice-identification" title="Permalink to this headline">¶</a></h3>
+<p><em>Added version 1.4.4</em></p>
+<p>There are also a few tests for identifying if the box is consistent with a standard representation of a crystal family unit cell.</p>
+<ul class="simple">
+<li><p><strong>identifyfamily()</strong> returns str crystal family if box corresponds to a standard crystal representation. Otherwise, returns None.</p></li>
+<li><p><strong>iscubic()</strong> returns bool indicating if box is a standard cubic box.</p></li>
+<li><p><strong>ishexagonal()</strong> returns bool indicating if box is a standard hexagonal box.</p></li>
+<li><p><strong>istetragonal()</strong> returns bool indicating if box is a standard tetragonal box.</p></li>
+<li><p><strong>isrhombohedral()</strong> returns bool indicating if box is a standard rhombohedral box.</p></li>
+<li><p><strong>isorthorhombic()</strong> returns bool indicating if box is a standard orthorhombic box.</p></li>
+<li><p><strong>ismonoclinic()</strong> returns bool indicating if box is a standard monoclinic box.</p></li>
+<li><p><strong>istriclinic()</strong> returns bool indicating if box is a standard triclinic box.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;identifyfamily =&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">identifyfamily</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;iscubic =       &#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">iscubic</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ishexagonal =   &#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">ishexagonal</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;istetragonal =  &#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">istetragonal</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;isrhombohedral =&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">isrhombohedral</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;isorthorhombic =&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">isorthorhombic</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ismonoclinic =  &#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">ismonoclinic</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;istriclinic =   &#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">istriclinic</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+identifyfamily = orthorhombic
+iscubic =        False
+ishexagonal =    False
+istetragonal =   False
+isrhombohedral = False
+isorthorhombic = True
+ismonoclinic =   False
+istriclinic =    False
 </pre></div></div>
 </div>
 </div>
 </div>
+</div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Introduction to atomman: Box class</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
 <li><a class="reference internal" href="#2.-Box-parameters">2. Box parameters</a></li>
@@ -1001,22 +1137,30 @@ Points outside:
 <li><a class="reference internal" href="#3.3.-Crystal-family-static-methods">3.3. Crystal family static methods</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#4.-LAMMPS-compatible-Boxes">4. LAMMPS-compatible Boxes</a><ul>
-<li><a class="reference internal" href="#4.1.-Box.is_lammps_norm()">4.1. Box.is_lammps_norm()</a></li>
+<li><a class="reference internal" href="#4.-Box-model">4. Box model</a></li>
+<li><a class="reference internal" href="#5.-Characterization-and-utility-methods">5. Characterization and utility methods</a><ul>
+<li><a class="reference internal" href="#5.1.-LAMMPS-compatible-Boxes">5.1. LAMMPS-compatible Boxes</a></li>
+<li><a class="reference internal" href="#5.1.1.-Box.is_lammps_norm()">5.1.1. Box.is_lammps_norm()</a></li>
+<li><a class="reference internal" href="#5.2.-Inside/outside">5.2. Inside/outside</a></li>
+<li><a class="reference internal" href="#5.3.-Vector/plane-conversions">5.3. Vector/plane conversions</a></li>
+<li><a class="reference internal" href="#5.4.-Crystal-lattice-identification">5.4. Crystal lattice identification</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#5.-Box-model">5. Box model</a></li>
-<li><a class="reference internal" href="#6.-Inside/outside">6. Inside/outside</a></li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="1._Defining_atomic_systems.html"
-                        title="previous chapter">Introduction to atomman: Defining atomic systems</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="1.2._Atoms_class.html"
-                        title="next chapter">Introduction to atomman: Atoms class</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="1._Defining_atomic_systems.html"
+                          title="previous chapter">Introduction to atomman: Defining atomic systems</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="1.2._Atoms_class.html"
+                          title="next chapter">Introduction to atomman: Atoms class</a></p>
+  </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1036,12 +1180,13 @@ Points outside:
         <li class="right" >
           <a href="1._Defining_atomic_systems.html" title="Introduction to atomman: Defining atomic systems"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Box class</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>
