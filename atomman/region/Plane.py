@@ -150,7 +150,6 @@ class Plane():
 
     def isclose(self,
                 other: Plane,
-                rtol: float = 1e-5,
                 atol: float = 1e-8) -> bool:
         """
         Check the plane and a given one represent the same.
@@ -172,9 +171,9 @@ class Plane():
         """
         # check if normals are parallel
         angle = vect_angle(self.normal, other.normal, unit='radian')
-        if not np.isclose(angle, 0.0, rtol=rtol, atol=atol):
+        if not np.isclose(angle, 0.0, rtol=0.0, atol=atol):
             return False
 
         # check if the point is contained in the other plane
         projected = np.dot(other.normal, self.point - other.point)
-        return np.isclose(projected, 0.0, rtol=rtol, atol=atol)
+        return np.isclose(projected, 0.0, rtol=0.0, atol=atol)
