@@ -140,15 +140,6 @@ def _test_free_surface_basis(box: Box, hkl):
     assert np.dot(v3, planenormal) > 0
 
 
-def test_unique_shifts_elemental(bcc_Fe):
-    pytest.importorskip("spglib")
-
-    hkl = [1, 1, 0]
-    surface = FreeSurface(hkl, ucell=bcc_Fe)
-    unique_shifts = surface.unique_shifts()
-    assert len(unique_shifts) == 1
-
-
 def test_unique_shifts_binary(anatase_TiO2):
     # Example from Section 2.4 of W. Sun and G. Cedar, Surface Science, 617, 53-59 (2013)
     # The two possible shifts (terminations) are identical under a glide operation.
@@ -161,7 +152,7 @@ def test_unique_shifts_binary(anatase_TiO2):
     assert len(unique_shifts) == 1
 
 
-HKL_LISTS = [
+CUBIC_HKL_LISTS = [
     [1, 0, 0],
     [1, 1, 0],
     [1, 1, 1],
@@ -174,6 +165,16 @@ HKL_LISTS = [
     [3, 2, 2],
     [3, 3, 1],
     [3, 3, 2],
+]
+TETRAGONAL_HKL_LISTS = [
+    [0, 0, 1],
+    [1, 0, 0],
+    [1, 0, 1],
+    [1, 1, 0],
+    [1, 1, 1],
+    [1, 1, 2],
+    [2, 0, 1],
+    [2, 1, 1],
 ]
 HEXGONAL_HKL_LISTS = [
     [0, 0, 0, 1],
@@ -192,20 +193,25 @@ HEXGONAL_HKL_LISTS = [
 
 @pytest.mark.parametrize(
     "prototype,list_hkl,list_expected", [
-        ('A1--Cu--fcc', HKL_LISTS, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]),
-        ('A2--W--bcc', HKL_LISTS, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]),
+        ('A1--Cu--fcc', CUBIC_HKL_LISTS, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]),
+        ('A2--W--bcc', CUBIC_HKL_LISTS, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]),
         ("A3--Mg--hcp", HEXGONAL_HKL_LISTS, [1, 2, 2, 2, 1, 1, 2, 1, 2, 2, 2, 1]),
+        ("A4--C--dc", CUBIC_HKL_LISTS, [1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 2, 1]),
+        ("A5--beta-Sn", TETRAGONAL_HKL_LISTS, [1, 1, 2, 1, 1, 1, 2, 2]),
+        ('A6--In--bct', TETRAGONAL_HKL_LISTS, [1, 1, 1, 1, 1, 1, 1, 1]),
+        ('A7--alpha-As', HEXGONAL_HKL_LISTS, [2, 1, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2]),
+        ('Ah--alpha-Po--sc', CUBIC_HKL_LISTS, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]),
         # TODO
-        # ("A4--C--dc", HKL_LISTS, [1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1]),
-        # (
-        #     "A5--beta-Sn",
-        #     [[0, 0, 1], [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1], [1, 1, 2], [2, 0, 1], [2, 1, 1]],
-        #     [1, 1, 2, 1, 1, 1, 1, 2],
-        # ),
-        # ('A15--beta-W', HKL_LISTS, [1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2]),
-        # ("A3'--alpha-La", HEXGONAL_HKL_LISTS, [1, 1, 2, 2, 1, 1, 2, 1, 1, 2, 2, 1]),
+        # ('A15--beta-W', CUBIC_HKL_LISTS, [2, 4, 2, 1, 2, 1, 1, 1, 2, 1, 1, 2]),
+        # ("A3'--alpha-La--double-hcp", HEXGONAL_HKL_LISTS, [2, 3, 2, 2, 1, 1, 2, 1, 1, 2, 2, 1]),
 ])
 def test_unique_shifts_prototype(prototype, list_hkl, list_expected):
+    # For some prototypes, the number of detected free surfaces differs from https://github.com/lmhale99/potentials-library/tree/master/free_surface.
+    # A3'(alpha-La) (0001):
+    #   seems to have two free surfaces, La(2a) surface and La(2c) one. but equivalent as slab models
+    # - A4(diamond) (322) seems to have two free surfaces.
+    # - A3' (100) seems to have two free surfaces.
+
     assert len(list_hkl) == len(list_expected)
     ucell = am.load("prototype", id=prototype)
     for hkl, expected in zip(list_hkl, list_expected):
