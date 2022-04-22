@@ -1,7 +1,7 @@
 # coding: utf-8
 # Standard Python libraries
 from itertools import product
-from typing import Optional
+from typing import Optional, Tuple, Union
 
 # http://www.numpy.org/
 import numpy as np
@@ -295,9 +295,15 @@ class FreeSurface():
     def unique_shifts(self,
                       symprec: float = 1e-5,
                       trial_image_range: int = 1,
-                      atol: float = 1e-8) -> np.ndarray:
+                      atol: float = 1e-8,
+                      return_indices: bool = False
+                      ) -> Union[np.ndarray, Tuple[np.ndarray, list]]:
         """
-        Return symmetrically nonequivalent shifts
+        Use crystal symmetry operations to filter the list of shift values to
+        only those that are symmetrically unique.  Note that the identified
+        unique shifts can still result in the creation of energetically
+        equivalent free surfaces if the free surface introduces a symmetry
+        operation not present in the bulk crystal.
 
         Parameters
         ----------
@@ -310,10 +316,18 @@ class FreeSurface():
             sufficient for largely distorted lattice.
         atol: float
             The absolute tolerance used in comparing two crystal planes.
+        return_indices: bool
+            If True then the indices of shift that correspond to the
+            identified unique shifts will be returned as well.  Default value
+            is False (only return the shift vectors).
 
         Returns
         -------
         unique_shifts: np.ndarray, (# of unique shifts, 3)
+            The symmetrically unique shift vectors.
+        unique_indices: list
+            The indices of shifts that correspond to the identified unique
+            shifts.
         """
         if not has_spglib:
             raise ImportError("FreeSurface.unique_shifts requires spglib. Use `pip install spglib`")
@@ -342,6 +356,7 @@ class FreeSurface():
                 operations.append((rotation_cart, translation_cart))
 
         unique_shifts = []
+        unique_indices = []
 
         # Use primitive vectors for the search if available
         try:
@@ -363,7 +378,7 @@ class FreeSurface():
                     return True
             return False
 
-        for i in range(len(self.shifts)):
+        for i in range(len(self.shifts)-1, -1, -1):
             plane_i = planes[i]
 
             # Obtain symmetrically equivalent planes with the i-th plane
@@ -372,14 +387,18 @@ class FreeSurface():
                 new_plane = plane_i.operate(rotation, translation)
 
                 # If the new plane is already found, skip it.
-                if any([new_plane.isclose(plane, atol=atol) for plane in equivalent_planes]):
+                skip = False
+                for old_plane in equivalent_planes:
+                    if new_plane.isclose(old_plane, atol=atol):
+                        skip = True
+                        continue
+                if skip:
                     continue
-
                 equivalent_planes.append(new_plane)
 
             # Compare with remained shifts
             is_unique = True
-            for j in range(i + 1, len(self.shifts)):
+            for j in range(i-1, -1, -1):
                 plane_j = planes[j]
                 # Here, the two planes have the normal vector.
                 for plane in equivalent_planes:
@@ -391,7 +410,13 @@ class FreeSurface():
                     break
 
             if is_unique:
-                unique_shifts.append(plane_i.point)
+                #unique_shifts.insert(0, plane_i.point)
+                unique_indices.append(i)
 
-        unique_shifts = np.array(unique_shifts)
+        unique_indices.sort()
+        #unique_shifts = np.array(unique_shifts)
+        unique_shifts = self.shifts[unique_indices]
+
+        if return_indices is True:
+            return unique_shifts, unique_indices
         return unique_shifts
