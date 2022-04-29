@@ -186,24 +186,75 @@ class Stroh(VolterraDislocation):
         # updn is alternating +-
         updn = np.array([1, -1, 1, -1, 1, -1])
         
+        # Compute dot of L and b
+        Lb = self.L.dot(self.burgers)
+        
+        # Combine k, updn, Lb
+        kLb = self.k * updn * Lb
+        
         # Convert pos to eta coordinate
         eta = self.eta(pos)
         
         # Compute the displacements
-        disp = 1 / (2 * np.pi * ii) * np.einsum('a,a,ai,a,na->ni',
-                                                updn, self.k, self.A,
-                                                self.L.dot(self.burgers),
-                                                np.log(eta))
+        disp = 1 / (2 * np.pi * ii) * np.einsum('a, ai, ...a -> ...i',
+                                                kLb, self.A, np.log(eta))
         
         # Round away near-zero terms
         disp = np.real_if_close(disp, tol=self.tol)
         
         # Reduce single-value solutions
-        if np.asarray(pos).ndim == 1:
+        if disp.shape[0] == 1:
             return disp[0]
         else:
             return disp
-    
+
+    def strain(self, pos: npt.ArrayLike) -> np.ndarray:
+        """
+        Compute the position-dependent anisotropic stresses.
+        
+            ϵ_ij = 1 / (4 π i) (Σ_a +- k_a (mpn_ai A_aj + mpn_aj A_ai) (L_am * burgers_m) / η_a)
+        
+        Parameters
+        ----------
+        pos : array-like object
+            3D vector position(s).
+        
+        Returns
+        -------
+        numpy.ndarray
+            The computed 3x3 stress states at all given points.
+        """
+        # ii is imaginary unit
+        ii = np.array([1.j])
+        
+        # updn is alternating +-
+        updn = np.array([1, -1, 1, -1, 1, -1])
+        
+        # Compute dot of L and b
+        Lb = self.L.dot(self.burgers)
+        
+        # Combine k, updn, Lb
+        kLb = self.k * updn * Lb
+        
+        # Compute symmetric Ampn factor
+        mpn = self.m + np.outer(self.p, self.n)
+        Ampn = np.einsum('ai, aj -> aij', mpn, self.A) + np.einsum('aj, ai -> aij', mpn, self.A)
+        
+        # Convert pos to eta coordinate
+        eta = self.eta(pos)
+        
+        # Compute the strains
+        strain = 1 / (4 * np.pi * ii) * np.einsum('a, aij, ...a -> ...ij',
+                                                  kLb, Ampn, 1/eta)
+        
+        # Round away near-zero terms
+        strain = np.real_if_close(strain, tol=self.tol)
+        
+        if strain.shape[0] == 1:
+            return strain[0]
+        else:
+            return strain
+
     def stress(self, pos: npt.ArrayLike) -> np.ndarray:
         """
         Compute the position-dependent anisotropic stresses.
@@ -226,23 +277,27 @@ class Stroh(VolterraDislocation):
         # updn is alternating +-
         updn = np.array([1, -1, 1, -1, 1, -1])
         
-        # Convert pos to eta coordinate
-        eta = self.eta(pos)
+        # Compute dot of L and b
+        Lb = self.L.dot(self.burgers)
+        
+        # Combine k, updn, Lb
+        kLb = self.k * updn * Lb
         
         # Compute mpn factor
         mpn = self.m + np.outer(self.p, self.n)
+        Ampn = np.einsum('ai, aj -> aij', mpn, self.A)
+       
+        # Convert pos to eta coordinate
+        eta = self.eta(pos)
         
         # Compute the stresses
-        stress = 1 / (2 * np.pi * ii) * np.einsum('a,a,ijkl,al,ak,a,na->nij',
-                                                  updn, self.k, self.C.Cijkl,
-                                                  mpn, self.A,
-                                                  self.L.dot(self.burgers),
-                                                  1/eta)
+        stress = 1 / (2 * np.pi * ii) * np.einsum('a, ijkl, alk, ...a -> ...ij',
+                                                  kLb, self.C.Cijkl, Ampn, 1/eta)
         
         # Round away near-zero terms
         stress = np.real_if_close(stress, tol=self.tol)
         
-        if np.asarray(pos).ndim == 1:
+        if stress.shape[0] == 1:
             return stress[0]
         else:
             return stress

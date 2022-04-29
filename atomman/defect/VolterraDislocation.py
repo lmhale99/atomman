@@ -245,7 +245,7 @@ class VolterraDislocation(object):
     
     def displacement(self, pos: npt.ArrayLike) -> np.ndarray:
         """
-        Compute the position-dependent isotropic displacements.
+        Compute the position-dependent displacements.
         
         Parameters
         ----------
@@ -259,9 +259,25 @@ class VolterraDislocation(object):
         """
         raise NotImplementedError('Needs to be defined by subclass')
     
+    def strain(self, pos: npt.ArrayLike) -> np.ndarray:
+        """
+        Compute the position-dependent strains.
+        
+        Parameters
+        ----------
+        pos : array-like object
+            3D vector position(s).
+        
+        Returns
+        -------
+        numpy.ndarray
+            The computed 3x3 strain states at all given points.
+        """
+        raise NotImplementedError('Needs to be defined by subclass')
+
     def stress(self, pos: npt.ArrayLike) -> np.ndarray:
         """
-        Compute the position-dependent isotropic stresses.
+        Compute the position-dependent stresses.
         
         Parameters
         ----------

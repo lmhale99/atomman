@@ -177,10 +177,66 @@ class IsotropicVolterraDislocation(VolterraDislocation):
 
         # Combine into array
         disp = np.outer(disp_ξ, self.ξ) + np.outer(disp_m, self.m) + np.outer(disp_n, self.n)
+        
         if disp.shape[0] == 1:
             return disp[0]
         else:
             return disp
+
+    def strain(self, pos: npt.ArrayLike) -> np.ndarray:
+        """
+        Compute the position-dependent isotropic strains.  The equations used are derived
+        from ϵ_ij = S_ijkl σ_kl.
+        
+        Parameters
+        ----------
+        pos : array-like object
+            3D vector position(s).
+        
+        Returns
+        -------
+        numpy.ndarray
+            The computed 3x3 strain states at all given points.
+        """
+        pos = np.asarray(pos)
+        if pos.shape == (3,):
+            pos = pos.reshape(1,3)
+
+        # Split pos, burgers into components
+        x = pos.dot(self.m)
+        y = pos.dot(self.n)
+        b_s = self.burgers.dot(self.ξ)
+        b_e = self.burgers.dot(self.m)
+        nu = self.nu
+
+        # Initialize empty strain array
+        strain = np.empty(pos.shape[:-1] + (3,3))
+  
+        # Strain components due to b_s
+        strain[..., 0, 2] = strain[..., 2, 0] = -b_s * y / (4 * np.pi * (x**2 + y**2))
+        strain[..., 1, 2] = strain[..., 2, 1] =  b_s * x / (4 * np.pi * (x**2 + y**2))
+
+        # Shear strain components due to b_e
+        strain[..., 0, 1] = strain[..., 1, 0] = b_e * (x * (x**2 - y**2)) / (4 * np.pi * (1 - nu) * (x**2 + y**2)**2)
+        
+        # Normal strain components due to b_e
+        common = b_e * y / (4 * np.pi * (1 - nu**2) * (x**2 + y**2)**2)
+        strain[..., 0, 0] = common * (x**2 * (-3 - nu + 2 * nu**2) + y**2 * (-1 + nu + 2 * nu**2))
+        strain[..., 1, 1] = common * (x**2 * (1 + 3 * nu + 2 * nu**2) + y**2 * (-1 + nu + 2 * nu**2))
+
+        # Set zero values
+        strain[..., 2, 2] = 0.0
+
+        # Get the reverse transformation matrix
+        transform = np.array([self.m, self.n, self.ξ]).T
+
+        # Transform strains
+        strain = np.einsum('mi, nj, ...ij -> ...mn', transform, transform, strain)
+    
+        if strain.shape[0] == 1:
+            return strain[0]
+        else:
+            return strain
 
     def stress(self, pos: npt.ArrayLike) -> np.ndarray:
         """
@@ -207,26 +263,29 @@ class IsotropicVolterraDislocation(VolterraDislocation):
         b_e = self.burgers.dot(self.m)
         nu = self.nu
         mu = self.mu
-        
-        # Define screw / edge prefactors
-        pre_s = mu * b_s / (2 * np.pi)
-        pre_e = mu * b_e / (2 * np.pi * (1 - nu))
 
         # Initialize empty stress array
-        sigma = np.empty(pos.shape[:-1] + (3,3))
+        stress = np.empty(pos.shape[:-1] + (3,3))
   
         # Stress components due to b_s
-        sigma[..., 0, 2] = sigma[..., 2, 0] =-pre_s * y / (x**2 + y**2)
-        sigma[..., 1, 2] = sigma[..., 2, 1] = pre_s * x / (x**2 + y**2)
+        pre_s = mu * b_s / (2 * np.pi)
+        stress[..., 0, 2] = stress[..., 2, 0] =-pre_s * y / (x**2 + y**2)
+        stress[..., 1, 2] = stress[..., 2, 1] = pre_s * x / (x**2 + y**2)
 
         # Stress components due to b_e
-        sigma[..., 0, 0] =-pre_e * (y * (3 * x**2 + y**2)) / (x**2 + y**2)**2
-        sigma[..., 1, 1] = pre_e * (y * (x**2 - y**2)) / (x**2 + y**2)**2
-        sigma[..., 2, 2] = nu * (sigma[..., 0, 0] + sigma[..., 1, 1])
-        sigma[..., 0, 1] = sigma[..., 1, 0] = pre_e * (x * (x**2 - y**2)) / (x**2 + y**2)**2
+        pre_e = mu * b_e / (2 * np.pi * (1 - nu))
+        stress[..., 0, 0] =-pre_e * (y * (3 * x**2 + y**2)) / (x**2 + y**2)**2
+        stress[..., 1, 1] = pre_e * (y * (x**2 - y**2)) / (x**2 + y**2)**2
+        stress[..., 2, 2] = nu * (stress[..., 0, 0] + stress[..., 1, 1])
+        stress[..., 0, 1] = stress[..., 1, 0] = pre_e * (x * (x**2 - y**2)) / (x**2 + y**2)**2
 
         # Get the reverse transformation matrix
         transform = np.array([self.m, self.n, self.ξ]).T
 
         # Transform stresses
-        return np.einsum('mi,nj,...ij->...mn', transform, transform, sigma)
+        stress = np.einsum('mi, nj, ...ij -> ...mn', transform, transform, stress)
+
+        if stress.shape[0] == 1:
+            return stress[0]
+        else:
+            return stress

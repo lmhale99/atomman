@@ -6,22 +6,24 @@ from typing import Optional, Tuple, Union
 import numpy as np
 import numpy.typing as npt
 
-def pn_arctan_disregistry(x: Optional[npt.ArrayLike] = None,
+# Local imports
+from .pn_arctan_disregistry import pn_arctan_disregistry
+
+def pn_arctan_disldensity(x: Optional[npt.ArrayLike] = None,
                           xmax: Optional[float] = None,
                           xstep: Optional[float] = None,
                           xnum: Optional[int] = None,
                           burgers: Union[float, npt.ArrayLike, None] = None,
                           center: float = 0.0,
                           halfwidth: float = 1,
-                          normalize: bool = True,
-                          shift: bool = True
+                          normalize: bool = True
                           ) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Computes the classic Peierls-Nabarro arctan disregistry for an array of
-    points x.
+    Computes the classic Peierls-Nabarro dislocation density based on an arctan
+    disregistry for an array of points x.
         
-        δ(x) = b / π * arctan(x / ξ) + b / 2
-    
+        ρ(x) = b / π * (ξ / (x^2 + ξ^2)
+
     Parameters
     ----------
     x : array-like or None, optional
@@ -44,18 +46,15 @@ def pn_arctan_disregistry(x: Optional[npt.ArrayLike] = None,
     halfwidth : float, optional
         The dislocation halfwidth to use. Default value is 1.
     normalize : bool, optional
-        If True (default), the disregistry values will be scaled such that the
-        two endpoints differ by exactly one Burgers vector.
-    shift : bool, optional
-        If True (default), the disregistry will range [0, 0, 0] to burgers.
-        If False, the disregistry will range from -burgers to burgers.
+        If True (default), the disldensity values will be scaled such that the
+        integral over the x range is equal to b.
         
     Returns
     -------
     x : numpy.ndarray
         The x-coordinates for the disregistry values.
-    disregistry : numpy.ndarray
-        The disregistry vector at each x-coordinate.
+    disldensity : numpy.ndarray
+        The disldensity vector at each x-coordinate.
     """
     if x is not None:
         if xmax is not None or xstep is not None or xnum is not None:
@@ -91,14 +90,17 @@ def pn_arctan_disregistry(x: Optional[npt.ArrayLike] = None,
         burgers = np.array([1.0, 0.0, 0.0])
     burgers = np.asarray(burgers)
     
-    # δ(x) = b / π * arctan(x / ξ) + b / 2
-    disregistry = np.outer(np.arctan((x - center) / halfwidth), burgers / np.pi) + burgers / 2
+    # ρ(x) = b * ξ / (π (x^2 + ξ^2)) 
+    disldensity = np.outer(halfwidth / ((x - center)**2 + halfwidth**2), burgers / np.pi)
     
     if normalize is True:
-        disregistry = disregistry - disregistry[0]
-        disregistry = disregistry * np.linalg.norm(burgers) / np.linalg.norm(disregistry[-1])
+        # Compute the un-normalized disregistry
+        disregistry = pn_arctan_disregistry(x=x, burgers=burgers, center=center, halfwidth=halfwidth,
+                                            normalize=False)[1]
+        # The change in disregistry between xmin and xmax equals the integral of disldensity
+        intdisldensity = disregistry[-1] - disregistry[0]
+        
+        # Rescale disldensity to match the burgers vector
+        disldensity = disldensity * np.linalg.norm(burgers) / np.linalg.norm(intdisldensity)
     
-    if shift is False:
-        disregistry -= burgers / 2
-    
-    return x, disregistry
+    return x, disldensity
