@@ -1,7 +1,7 @@
 # coding: utf-8
 # Standard Python libraries
 from itertools import product
-from typing import Optional
+from typing import Optional, Tuple, Union
 
 # http://www.numpy.org/
 import numpy as np
@@ -13,10 +13,10 @@ from ..region import Plane
 from .. import System
 
 try:
-    from spglib import get_symmetry_dataset
-    spglib_loaded = True
+    import spglib
+    has_spglib = True
 except ImportError:
-    spglib_loaded = False
+    has_spglib = False
 
 
 class FreeSurface():
@@ -99,7 +99,8 @@ class FreeSurface():
         # Get the unique coordinates normal to the plane
         pos = rcell.atoms.pos
         numdec = - int(np.floor(np.log10(tol)))
-        coords = np.unique(pos[:, cutindex].round(numdec))
+        _, unique_indices = np.unique(pos[:, cutindex].round(numdec), return_index=True)
+        coords = pos[unique_indices, cutindex]
 
         # Add periodic replica if missing
         if not np.isclose(coords[-1] - coords[0], rcellwidth, rtol=0.0, atol=tol):
@@ -122,6 +123,8 @@ class FreeSurface():
         self.__shifts = shifts
         self.__transform = transform
         self.__conventional_setting = conventional_setting
+        self.__system = None
+        self.__surfacearea = None
 
     @property
     def hkl(self) -> np.ndarray:
@@ -166,17 +169,17 @@ class FreeSurface():
     @property
     def system(self) -> System:
         """atomman.System : The built free surface system."""
-        try:
+        if self.__system is not None:
             return self.__system
-        except:
+        else:
             raise AttributeError('system not yet built. Use build_system() or surface().')
 
     @property
     def surfacearea(self) -> float:
         """float : The surface area of one of the hkl planes."""
-        try:
+        if self.__surfacearea is not None:
             return self.__surfacearea
-        except:
+        else:
             raise AttributeError('system not yet built. Use build_system() or surface().')
 
     @property
@@ -292,51 +295,74 @@ class FreeSurface():
     def unique_shifts(self,
                       symprec: float = 1e-5,
                       trial_image_range: int = 1,
-                      rtol: float = 1e-5,
-                      atol: float = 1e-8) -> np.ndarray:
+                      atol: float = 1e-8,
+                      return_indices: bool = False
+                      ) -> Union[np.ndarray, Tuple[np.ndarray, list]]:
         """
-        Return symmetrically nonequivalent shifts
+        Use crystal symmetry operations to filter the list of shift values to
+        only those that are symmetrically unique.  Note that the identified
+        unique shifts can still result in the creation of energetically
+        equivalent free surfaces if the free surface introduces a symmetry
+        operation not present in the bulk crystal.
 
         Parameters
         ----------
         symprec: float
-            the tolerance value used in spglib
+            The symmetry precision tolerance value used in spglib.
         trial_image_range: int, more than or equal to 1.
-            Maximum cell images searched in finding translationally equivalent planes.
-            The default value is one, which corresponds to search the 27 neighbor images, [-1, 1]^3.
-            The default value may not be sufficient for largely distorted lattice.
-        rtol: float
-            the relative tolerance used in comparing two crystal planes
+            Maximum cell images searched in finding translationally equivalent
+            planes.  The default value is one, which corresponds to search the
+            27 neighbor images, [-1, 1]^3.  The default value may not be
+            sufficient for largely distorted lattice.
         atol: float
-            the absolute tolerance used in comparing two crystal planes
+            The absolute tolerance used in comparing two crystal planes.
+        return_indices: bool
+            If True then the indices of shift that correspond to the
+            identified unique shifts will be returned as well.  Default value
+            is False (only return the shift vectors).
 
         Returns
         -------
         unique_shifts: np.ndarray, (# of unique shifts, 3)
+            The symmetrically unique shift vectors.
+        unique_indices: list
+            The indices of shifts that correspond to the identified unique
+            shifts.
         """
-        if not spglib_loaded:
+        if not has_spglib:
             raise ImportError("FreeSurface.unique_shifts requires spglib. Use `pip install spglib`")
         if (not isinstance(trial_image_range, int)) or (trial_image_range <= 0):
             raise ValueError("trial_image_range should be positive integer.")
-
-        # Get symmetry operations of rotated ucell
-        lattice, positions, numbers = self.ucell.dump('spglib_cell')
-        rotated_lattice = np.dot(lattice, self.transform.T)
-        dataset = get_symmetry_dataset((rotated_lattice, positions, numbers), symprec=symprec)
-        operations = []
-        vects_tinv = np.linalg.inv(rotated_lattice.T)
-        for rotation, translation in zip(dataset['rotations'], dataset['translations']):
-            rotation_cart = np.dot(np.dot(rotated_lattice.T, rotation), vects_tinv)
-            translation_cart = np.inner(translation, rotated_lattice.T)
-            operations.append((rotation_cart, translation_cart))
 
         # Planes for each shift
         normal = np.zeros(3)
         normal[self.cutindex] = 1.0
         planes = [Plane(normal, shift) for shift in self.shifts]
 
+        # Get symmetry operations of rotated ucell
+        vects, positions, numbers = self.ucell.dump('spglib_cell')
+        rotated_vects = np.dot(vects, self.transform.T)
+        dataset = spglib.get_symmetry_dataset((rotated_vects, positions, numbers), symprec=symprec)
+
+        # Convert operations to Cartesian
+        operations = []
+        vects_tinv = np.linalg.inv(rotated_vects.T)
+        for rotation, translation in zip(dataset['rotations'], dataset['translations']):
+            rotation_cart = np.dot(np.dot(rotated_vects.T, rotation), vects_tinv)
+            translation_cart = np.inner(translation, rotated_vects.T)
+
+            # It is sufficient to consider only symmetry operation that preserve the normal vector.
+            if np.allclose(np.dot(rotation_cart, normal), normal):
+                operations.append((rotation_cart, translation_cart))
+
         unique_shifts = []
-        primitive_vects = dataset['primitive_lattice']
+        unique_indices = []
+
+        # Use primitive vectors for the search if available
+        try:
+            primitive_vects = dataset['primitive_lattice']
+        except KeyError:
+            primitive_vects = rotated_vects
 
         # List of trial displacements to search for a translation between two planes
         # The range [-1, 1] may not be sufficient for largely distorted lattice.
@@ -348,31 +374,31 @@ class FreeSurface():
                 rotation = np.eye(3)
                 translation = np.inner(image, primitive_vects.T)
                 new_plane1 = plane1.operate(rotation, translation)
-                if new_plane1.isclose(plane2, rtol=rtol, atol=atol):
+                if new_plane1.isclose(plane2, atol=atol):
                     return True
             return False
 
-        for i in range(len(self.shifts)):
+        for i in range(len(self.shifts)-1, -1, -1):
             plane_i = planes[i]
 
-            # Obtain symmetrically equvalent planes with the i-th plane
+            # Obtain symmetrically equivalent planes with the i-th plane
             equivalent_planes = []
             for rotation, translation in operations:
                 new_plane = plane_i.operate(rotation, translation)
 
-                # new plane should preserve the normal vector
-                if not np.allclose(new_plane.normal, normal):
-                    continue
-
                 # If the new plane is already found, skip it.
-                if any([new_plane.isclose(plane, rtol=rtol, atol=atol) for plane in equivalent_planes]):
+                skip = False
+                for old_plane in equivalent_planes:
+                    if new_plane.isclose(old_plane, atol=atol):
+                        skip = True
+                        continue
+                if skip:
                     continue
-
                 equivalent_planes.append(new_plane)
 
             # Compare with remained shifts
             is_unique = True
-            for j in range(i + 1, len(self.shifts)):
+            for j in range(i-1, -1, -1):
                 plane_j = planes[j]
                 # Here, the two planes have the normal vector.
                 for plane in equivalent_planes:
@@ -384,7 +410,13 @@ class FreeSurface():
                     break
 
             if is_unique:
-                unique_shifts.append(plane_i.point)
+                #unique_shifts.insert(0, plane_i.point)
+                unique_indices.append(i)
 
-        unique_shifts = np.array(unique_shifts)
+        unique_indices.sort()
+        #unique_shifts = np.array(unique_shifts)
+        unique_shifts = self.shifts[unique_indices]
+
+        if return_indices is True:
+            return unique_shifts, unique_indices
         return unique_shifts
