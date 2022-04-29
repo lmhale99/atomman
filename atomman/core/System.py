@@ -531,7 +531,7 @@ class System(object):
         atomman.System
             A new System object with Atoms extended to contain all atoms and
             properties of the current object plus the additional atoms.  The
-            cuurent System object's box and pbc (and symbols if not specified)
+            current System object's box and pbc (and symbols if not specified)
             will be copied over.
         """
         # Copy value if safecopy
