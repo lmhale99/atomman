@@ -12,6 +12,8 @@ try:
     has_phonopy = True
 except ModuleNotFoundError:
     has_phonopy = False
+    class PhonopyAtoms():
+        pass
 
 def dump(system,
          symbols: Optional[tuple] = None,
