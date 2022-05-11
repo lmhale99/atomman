@@ -8,7 +8,7 @@ from typing import Optional
 import numpy as np
 import numpy.typing as npt
 
-from potentials.record import BasePotentalLAMMPS
+from potentials.record.BasePotentialLAMMPS import BasePotentialLAMMPS
 
 # atomman imports
 from ...tools.crystalsystem import identifyfamily
@@ -17,7 +17,7 @@ def dump(system,
          atom_style: Optional[str] = None,
          units: Optional[str] = None,
          natypes: Optional[int] = None, 
-         potential: BasePotentalLAMMPS = None,
+         potential: Optional[BasePotentialLAMMPS] = None,
          uvws: Optional[npt.ArrayLike] = None,
          shift: Optional[npt.ArrayLike] = None,
          size_mults: Optional[npt.ArrayLike] = None,

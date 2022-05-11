@@ -4,7 +4,7 @@
 from typing import Optional, Union
 
 # https://github.com/usnistgov/potentials
-from potentials.record import BasePotentalLAMMPS
+from potentials.record.BasePotentialLAMMPS import BasePotentialLAMMPS
 
 # atomman imports
 from . import Database
@@ -29,7 +29,7 @@ def load_lammps_potential(name: Union[str, list, None] = None,
                           database: Optional[Database] = None,
                           getfiles: bool = False,
                           prompt: bool = True,
-                          verbose: bool = False) -> BasePotentalLAMMPS:
+                          verbose: bool = False) -> BasePotentialLAMMPS:
     """
     Loads a LAMMPS potential from the NIST Interatomic Potentials Repository
     or from a local copy of the repository.  Will issue a prompt if

@@ -9,7 +9,7 @@ from typing import Optional, Tuple, Union
 # http://www.numpy.org/
 import numpy as np
 
-from potentials.record import BasePotentalLAMMPS
+from potentials.record.BasePotentialLAMMPS import BasePotentialLAMMPS
 
 # atomman imports
 import atomman.unitconvert as uc
@@ -23,7 +23,7 @@ def dump(system,
          atom_style: Optional[str] = None,
          units: Optional[str] = None,
          natypes: Optional[int] = None,
-         potential: BasePotentalLAMMPS = None,
+         potential: Optional[BasePotentialLAMMPS] = None,
          float_format: str = '%.13f',
          return_info: bool = True,
          prompt: bool = False,
