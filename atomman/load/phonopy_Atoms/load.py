@@ -45,18 +45,18 @@ def load(phonopyatoms: PhonopyAtoms,
         prop = {}
 
     # Get box/cell information
-    box = Box(vects = phonopyatoms.get_cell())
+    box = Box(vects = phonopyatoms.cell)
     pbc = (True, True, True)
     
     # Get element information
-    all_elements = np.array(phonopyatoms.get_chemical_symbols())
+    all_elements = np.array(phonopyatoms.symbols)
     elements, atype = np.unique(all_elements, return_inverse = True)
     if symbols is None:
         symbols = elements
 
     # Get atomic information
     prop['atype'] = atype + 1
-    prop['pos'] = phonopyatoms.get_positions()
+    prop['pos'] = phonopyatoms.positions
     atoms = Atoms(prop=prop)
     
     # Build system
