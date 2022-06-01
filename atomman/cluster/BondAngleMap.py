@@ -515,6 +515,75 @@ class BondAngleMap():
                         f.write(f'{i+1:6} {j+1:6} {k+1:6} {self.df.energy.values[l]:18.14}\n')
                         l += 1
 
+    def load_table(self,
+                   filename: str,
+                   length_unit: str = 'angstrom',
+                   energy_unit: str = 'eV'):
+        """
+        Loads a tabulated representation of the coordinates and energy values
+        from a file.
+
+        Parameters
+        ----------
+        filename : str
+            The path to the file where the tabulated data is stored.
+        length_unit : str, optional
+            The units of length used in the file.  Default value is 'angstrom'.
+        energy_unit : str, optional
+            The units of energy used in the file.  Default value is 'eV'.
+        """
+
+        with open(filename, encoding='UTF-8') as f:
+            lines = f.readlines()
+
+        count = 0
+        energies = []
+        i = 1
+        j = 1
+        k = 1
+        for line in lines:
+            terms = line.split()
+            if line.strip()[0] == '#' or len(terms) == 0:
+                continue
+            
+            # Get r_ij min, max, num 
+            if count == 0:
+                rmin = float(terms[0])
+                rmax = float(terms[1])
+                rnum = int(terms[2])
+                count += 1
+            
+            # Check r_ik min, max, num 
+            elif count == 1:
+                assert np.isclose(rmin, float(terms[0])), 'only identical rij and rik ranges currently supported'
+                assert np.isclose(rmax, float(terms[1])), 'only identical rij and rik ranges currently supported'
+                assert np.isclose(rnum, int(terms[2])), 'only identical rij and rik ranges currently supported'
+                count += 1
+
+            # Get theta min, max, num 
+            elif count == 2:
+                thetamin = float(terms[0])
+                thetamax = float(terms[1])
+                thetanum = int(terms[2])
+                count += 1
+                energies = np.empty(rnum*rnum*thetanum)
+            
+            # Get energies
+            else:
+                i = int(terms[0]) - 1
+                j = int(terms[1]) - 1
+                k = int(terms[2]) - 1
+                index = k + j * thetanum + i * rnum * thetanum
+                energies[index] = float(terms[3])
+        
+        # Convert units 
+        rmin = uc.set_in_units(rmin, length_unit)
+        rmax = uc.set_in_units(rmax, length_unit)  
+        energies = uc.set_in_units(energies, energy_unit)
+        
+        self.set(rmin=rmin, rmax=rmax, rnum=rnum, thetamin=thetamin,
+                 thetamax=thetamax, thetanum=thetanum, energy=energies)
+
     def pdf(self,
             nbins: int = 301,
             energymin: float = -15.0,
