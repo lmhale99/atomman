@@ -298,7 +298,7 @@ class Strain():
         for i in range(basesystem.natoms):
             p.append(basesystem.dvect(i, neighbors[i]))
 
-        self.__p_vectors = np.asarray(p)
+        self.__p_vectors = np.asarray(p, dtype=object)
 
     def solve_G(self, theta_max=None):
         """
