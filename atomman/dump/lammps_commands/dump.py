@@ -10,9 +10,6 @@ import numpy.typing as npt
 
 from potentials.record.BasePotentialLAMMPS import BasePotentialLAMMPS
 
-# atomman imports
-from ...tools.crystalsystem import identifyfamily
-
 def dump(system,
          atom_style: Optional[str] = None,
          units: Optional[str] = None,
@@ -118,7 +115,7 @@ def dump(system,
         system = deepcopy(system)
     system.wrap()
     
-    family = identifyfamily(system.box)
+    family = system.box.identifyfamily()
     
     # Generate boundary condition
     info += 'boundary '

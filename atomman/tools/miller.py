@@ -4,8 +4,6 @@
 import numpy as np
 import numpy.typing as npt
 
-from .crystalsystem import ishexagonal
-
 __all__ = ['plane3to4', 'plane4to3', 'vector3to4', 'vector4to3',
            'plane_crystal_to_cartesian',
            'vector_crystal_to_cartesian',
@@ -179,7 +177,7 @@ def vector_crystal_to_cartesian(indices: npt.ArrayLike,
     
     # Convert 4-term Miller-Bravais to standard 3-term indices
     if indices.shape[-1] == 4: 
-        if not ishexagonal(box):
+        if not box.ishexagonal():
             raise ValueError('Hexagonal indices given with non-hexagonal box')
         indices = vector4to3(indices)
     
@@ -340,7 +338,7 @@ def plane_crystal_to_cartesian(indices: npt.ArrayLike,
     
     # Convert hkil to hkl
     if indices.shape[-1] == 4:
-        if ishexagonal(box):
+        if box.ishexagonal():
             indices = plane4to3(indices)
         else:
             raise ValueError('Hexagonal indices given with non-hexagonal box')
