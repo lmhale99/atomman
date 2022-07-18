@@ -13,11 +13,8 @@ except ImportError:
 # atomman imports
 from ... import System, load_spglib_cell
 
-
-
 def dump(system: System,
          symprec: float = 1e-5,
-         no_idealize: bool = False,
          normalize: Optional[str] = 'lammps') -> System:
     """
     Converts a given system into a primitive unit cell.  NOTE: This works best for small systems,
@@ -30,12 +27,11 @@ def dump(system: System,
     symprec : float, optional
         Absolute length tolerance to use in identifying symmetry of atomic
         sites and system boundaries. Default value is 1e-5.
-    no_idealize : bool, optional
-        Indicates if the atom positions in the returned unit cell are averaged
-        (True) or idealized based on the structure (False).  Default value is
-        False.
     normalize : str or None
-        Indicates if the 
+        Indicates which normalization scheme, if any, to use on the identified
+        primitive cell.  None will return exactly as obtained from spglib.
+        Default value is 'lammps', meaning that the cell will be compatible
+        with LAMMPS.
     """
     assert has_spglib, 'spglib must be installed to use dump primitive cell'
 
@@ -43,8 +39,11 @@ def dump(system: System,
     cell = system.dump('spglib_cell')
     
     # Use spglib to identify the primitive cell
-    primitive_cell = spglib.standardize_cell(cell, to_primitive=True,
-                                             symprec=symprec, no_idealize=no_idealize)
+    primitive_cell = spglib.find_primitive(cell, symprec=symprec)
+    
+    # Return original system if primitive search failed
+    if primitive_cell is None:
+        return system
     
     # Convert back to an atomman System and normalize
     primitive_system = load_spglib_cell(primitive_cell, symbols=system.symbols)

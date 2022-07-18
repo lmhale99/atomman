@@ -12,7 +12,7 @@ from . import tools
 from . import mep
 from . import region
 from . import lammps
-from .dump import *
+from .dump import dump, set_dump_styles
 from .dump import __all__ as dump_all
 from .core import *
 from .core import __all__ as core_all
@@ -23,6 +23,9 @@ from .load import *
 from .load import __all__ as load_all
 from . import plot
 from . import defect
+
+# Set dump styles
+set_dump_styles()
 
 # Read version from VERSION file
 __version__ = resources.read_text('atomman', 'VERSION').strip()

@@ -1,20 +1,10 @@
 # coding: utf-8
+from importlib import import_module, resources
 
-from .ase_Atoms import dump as dump_ase_Atoms
-from .pymatgen_Structure import dump as dump_pymatgen_Structure
-from .table import dump as dump_table
-from .system_model import dump as dump_system_model
-from .poscar import dump as dump_poscar
-from .atom_data import dump as dump_atom_data
-from .atom_dump import dump as dump_atom_dump
-from .spglib_cell import dump as dump_spglib_cell
-from .phonopy_Atoms import dump as dump_phonopy_Atoms
-from .lammps_commands import dump as dump_lammps_commands
+__all__ = ['dump', 'set_dump_styles']
 
-__all__ = ['dump', 'dump_ase_Atoms', 'dump_pymatgen_Structure', 'dump_table',
-           'dump_system_model', 'dump_poscar', 'dump_atom_data',
-           'dump_atom_dump', 'dump_spglib_cell', 'dump_phonopy_Atoms',
-           'dump_lammps_commands']
+# Set global dump_styles dict
+dump_styles = {}
 
 def dump(style, system, **kwargs):
     """
@@ -35,35 +25,26 @@ def dump(style, system, **kwargs):
         Any content returned by the underlying dump methods.
     """
     
-    if style == 'system_model':
-        return dump_system_model(system, **kwargs)
-    
-    elif style == 'atom_data':
-        return dump_atom_data(system, **kwargs)
-    
-    elif style == 'atom_dump':
-        return dump_atom_dump(system, **kwargs)
-    
-    elif style == 'table':
-        return dump_table(system, **kwargs)
-    
-    elif style == 'ase_Atoms':
-        return dump_ase_Atoms(system, **kwargs)
+    if style in dump_styles:
+        return dump_styles[style](system, **kwargs)
 
-    elif style == 'phonopy_Atoms':
-        return dump_phonopy_Atoms(system, **kwargs)
-    
-    elif style == 'pymatgen_Structure':
-        return dump_pymatgen_Structure(system, **kwargs)
-    
-    elif style == 'poscar':
-        return dump_poscar(system, **kwargs)
-    
-    elif style == 'spglib_cell':
-        return dump_spglib_cell(system, **kwargs)
-
-    elif style == 'lammps_commands':
-        return dump_lammps_commands(system, **kwargs)
-        
     else:
-        raise ValueError('Unsupported style')
+        raise ValueError(f'Unsupported Atoms dump style {style}')
+
+def set_dump_styles():
+    """
+    Imports and sets the dump styles.  Should be called after importing the
+    iprPy.load submodule.
+    """
+    # Define subfolders to ignore
+    ignorelist = ['__pycache__']
+
+    # Dynamically import calculation styles
+    for style in resources.contents(__name__):
+
+        # Only import subfolders not in ignorelist
+        if '.' not in style and style not in ignorelist:
+            
+            # Import module and set to dump_styles
+            module = import_module(f'.{style}', __name__)
+            dump_styles[style] = module.dump
