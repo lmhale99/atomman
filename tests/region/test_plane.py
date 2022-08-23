@@ -7,8 +7,8 @@ def test_isclose():
     plane1 = Plane(normal=[1, 0, 0], point=[1, 0, 0])
     plane2 = Plane(normal=[1.0001, 0, 0], point=[1.0001, 1, 1])
     assert plane1 != plane2
-    assert plane1.isclose(plane2, rtol=1e-4, atol=1e-4)
-    assert plane2.isclose(plane1, rtol=1e-4, atol=1e-4)
+    assert plane1.isclose(plane2, atol=1e-4)
+    assert plane2.isclose(plane1, atol=1e-4)
 
 
 def test_equality():
