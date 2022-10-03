@@ -1,6 +1,23 @@
 Updates
 =======
 
+Version 1.4.6
+-------------
+
+- Import of dump styles is now fully modular and delayed.  This allows for
+  new styles to be introduced that have additional package requirements without
+  breaking all of atomman. The delayed loading also makes it possible for dump
+  methods to call other dump or load methods without import errors.
+
+- **atomman.dump.primitive_cell** now works properly because of the above.
+
+- Internal use of **atomman.tools.crystalsystem** functions changed to use the
+  corresponding **atomman.Box** methods introduced in 1.4.4. instead.
+
+- XSL and XSD files added for the defined record styles to better support
+  integration of the reference records with potentials.nist.gov.
+
+
 Version 1.4.5
 -------------
 
