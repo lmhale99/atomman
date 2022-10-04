@@ -4,6 +4,9 @@ import datetime
 from typing import Optional, Union, List
 import io
 
+# http://www.numpy.org/
+import numpy as np
+
 # https://pandas.pydata.org/
 import pandas as pd
 
@@ -312,13 +315,26 @@ class Log():
         for i in range(1, len(self.simulations)):
             if self.simulations[i].thermo is not None:
                 thermo = self.simulations[i].thermo
+                
                 if style == 'first':
                     merged_df = pd.concat([merged_df, thermo[thermo.Step > merged_df.Step.max()]], ignore_index=True)
+                
                 elif style == 'last':
                     merged_df = pd.concat([merged_df[merged_df.Step < thermo.Step.min()], thermo], ignore_index=True)
+                    
+                    # Fix for incomplete log values in crashed runs possibly altering data types
+                    # Loop over all keys in final simulation
+                    for key in self.simulations[-1].thermo.keys():
+                        try:
+                            # Try setting dtype of column to match what it is in the final simulation run.
+                            merged_df[key] = np.asarray(merged_df[key], dtype=self.simulations[-1].thermo[key].dtype)
+                        except ValueError:
+                            pass
+                    
                 elif style == 'all':
                     merged_df = pd.concat([merged_df, thermo], ignore_index=True)
+                
                 else:
                     raise ValueError('Unsupported style')
-        
+
         return Simulation(thermo=merged_df)
