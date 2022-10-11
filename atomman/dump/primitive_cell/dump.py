@@ -3,15 +3,10 @@
 from typing import Optional
 
 # https://atztogo.github.io/spglib/python-spglib.html
-try:
-    import spglib
-    has_spglib = True
-except ImportError:
-    has_spglib = False
-
+import spglib
 
 # atomman imports
-from ... import System, load_spglib_cell
+from ... import System, load
 
 def dump(system: System,
          symprec: float = 1e-5,
@@ -33,8 +28,7 @@ def dump(system: System,
         Default value is 'lammps', meaning that the cell will be compatible
         with LAMMPS.
     """
-    assert has_spglib, 'spglib must be installed to use dump primitive cell'
-
+    
     # Convert to spglib cell
     cell = system.dump('spglib_cell')
     
@@ -46,7 +40,7 @@ def dump(system: System,
         return system
     
     # Convert back to an atomman System and normalize
-    primitive_system = load_spglib_cell(primitive_cell, symbols=system.symbols)
+    primitive_system = load('spglib_cell', primitive_cell, symbols=system.symbols)
     
     # Normalize
     if normalize is not None:

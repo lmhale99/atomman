@@ -19,7 +19,7 @@ from .core import __all__ as core_all
 from . import cluster
 from . import library
 from .library import load_lammps_potential
-from .load import *
+from .load import load, FileFormatError
 from .load import __all__ as load_all
 from . import plot
 from . import defect

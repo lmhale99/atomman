@@ -7,11 +7,7 @@ from typing import Tuple, Union
 import numpy as np
 
 # https://wiki.fysik.dtu.dk/ase/
-try:
-    import ase
-    has_ase = True
-except ModuleNotFoundError:
-    has_ase = False
+import ase
 
 def dump(system,
          symbols: Union[str, list, None] = None,
@@ -39,8 +35,6 @@ def dump(system,
         Dictionary containing any extra per-atom properties to include.
         Returned if return_prop is True.
     """
-    
-    assert has_ase, 'ase not imported'
     
     # Get box/cell information
     cell = system.box.vects

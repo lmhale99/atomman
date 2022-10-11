@@ -9,7 +9,7 @@ import atomman.unitconvert as uc
 from ... import Atoms, Box, System
 from .process_prop_info import process_prop_info, standard_conversions
 from ...lammps import style
-from .. import load_table
+from .. import load as amload
 from ...tools import uber_open_rmode
 
 def load(data: Union[str, io.IOBase],
@@ -201,9 +201,9 @@ def load(data: Union[str, io.IOBase],
         short_prop_info.append(pinfo)
     
     # Read atoms into system
-    system = load_table(data, box=system.box, symbols=symbols, system=system,
-                        prop_info=short_prop_info, skiprows=atomsstart,
-                        nrows=natoms)
+    system = amload('table', data, box=system.box, symbols=symbols, system=system,
+                  prop_info=short_prop_info, skiprows=atomsstart,
+                  nrows=natoms)
     
     if return_prop_info:
         return system, short_prop_info

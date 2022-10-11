@@ -7,11 +7,7 @@ from typing import Optional, Union
 import numpy as np
 
 # http://www.diffpy.org/diffpy.structure/
-try:
-    import diffpy.structure
-    has_diffpy = True
-except:
-    has_diffpy = False
+import diffpy.structure
 
 # atomman imports
 from ... import Atoms, Box, System
@@ -36,8 +32,6 @@ def load(cif: Union[str, io.IOBase],
     system : atomman.System
         An atomman representation of a system.
     """
-    
-    assert has_diffpy, 'diffpy.Structure not imported'
     
     # Read in cif file to diffpy Structure
     dps = diffpy.structure.structure.Structure()

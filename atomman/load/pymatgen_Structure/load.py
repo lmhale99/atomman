@@ -13,16 +13,10 @@ from ... import Atoms, Box, System
 try:
     # import from newer pymatgen
     from pymatgen.core import Structure
-    has_pmg = True
 
 except ModuleNotFoundError:
-    try:
-        # Import from older pymatgen
-        from pymatgen import Structure
-        has_pmg = True
-
-    except ModuleNotFoundError:
-        has_pmg = False
+    # Import from older pymatgen
+    from pymatgen import Structure
 
 def load(structure: Structure,
          symbols: Optional[tuple] = None) -> System:
@@ -43,8 +37,6 @@ def load(structure: Structure,
     system : atomman.System
         A atomman representation of a system.
     """
-    
-    assert has_pmg, 'pymatgen not imported'
     
     # Get box/lattice information
     box = Box(vects = structure.lattice.matrix)

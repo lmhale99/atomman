@@ -13,7 +13,8 @@ from .atoms_prop_info import atoms_prop_info
 from .velocities_prop_info import velocities_prop_info
 from ... import Atoms, Box, System
 from ...lammps import style
-from .. import load_table, FileFormatError
+from .. import load as amload 
+from .. import FileFormatError
 from ...tools import uber_open_rmode
 
 def load(data: Union[str, io.IOBase],
@@ -290,10 +291,10 @@ def read_atoms(data, system, atom_style, units, atomsstart, atomscolumns):
         ncols = countreadcolumns(prop_info)
         
         # Read Atoms table
-        system = load_table(data, box=system.box, system=system, 
-                            prop_info=prop_info, skiprows=atomsstart,
-                            nrows=system.natoms, comment='#',
-                            header=None, usecols=range(ncols))
+        system = amload('table', data, box=system.box, system=system, 
+                        prop_info=prop_info, skiprows=atomsstart,
+                        nrows=system.natoms, comment='#',
+                        header=None, usecols=range(ncols))
         
         # Check if image flags are included
         if atomscolumns == ncols + 3:
@@ -380,9 +381,9 @@ def read_velocities(data, system, atom_style, units, velocitiesstart):
     """
     if velocitiesstart is not None:
         prop_info = velocities_prop_info(atom_style, units)
-        system = load_table(data, box=system.box, system=system,
-                            prop_info=prop_info, skiprows=velocitiesstart,
-                            nrows=system.natoms, comment='#', header=None)
+        system = amload('table', data, box=system.box, system=system,
+                        prop_info=prop_info, skiprows=velocitiesstart,
+                        nrows=system.natoms, comment='#', header=None)
 
 
     return system

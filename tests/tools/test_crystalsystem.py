@@ -36,73 +36,73 @@ class Test_crystalsystem(object):
         return am.Box(a=3, b=4, c=5, alpha=74, beta=87, gamma=105)
     
     def test_iscubic(self):
-        assert am.tools.iscubic(self.boxcubic)
-        assert not am.tools.iscubic(self.boxhexagonal)
-        assert not am.tools.iscubic(self.boxtetragonal)
-        assert not am.tools.iscubic(self.boxrhombohedral)
-        assert not am.tools.iscubic(self.boxorthorhombic)
-        assert not am.tools.iscubic(self.boxmonoclinic)
-        assert not am.tools.iscubic(self.boxtriclinic)
+        assert self.boxcubic.iscubic()
+        assert not self.boxhexagonal.iscubic()
+        assert not self.boxtetragonal.iscubic()
+        assert not self.boxrhombohedral.iscubic()
+        assert not self.boxorthorhombic.iscubic()
+        assert not self.boxmonoclinic.iscubic()
+        assert not self.boxtriclinic.iscubic()
 
     def test_ishexagonal(self):
-        assert not am.tools.ishexagonal(self.boxcubic)
-        assert am.tools.ishexagonal(self.boxhexagonal)
-        assert not am.tools.ishexagonal(self.boxtetragonal)
-        assert not am.tools.ishexagonal(self.boxrhombohedral)
-        assert not am.tools.ishexagonal(self.boxorthorhombic)
-        assert not am.tools.ishexagonal(self.boxmonoclinic)
-        assert not am.tools.ishexagonal(self.boxtriclinic)
+        assert not self.boxcubic.ishexagonal()
+        assert self.boxhexagonal.ishexagonal()
+        assert not self.boxtetragonal.ishexagonal()
+        assert not self.boxrhombohedral.ishexagonal()
+        assert not self.boxorthorhombic.ishexagonal()
+        assert not self.boxmonoclinic.ishexagonal()
+        assert not self.boxtriclinic.ishexagonal()
 
     def test_istetragonal(self):
-        assert not am.tools.istetragonal(self.boxcubic)
-        assert not am.tools.istetragonal(self.boxhexagonal)
-        assert am.tools.istetragonal(self.boxtetragonal)
-        assert not am.tools.istetragonal(self.boxrhombohedral)
-        assert not am.tools.istetragonal(self.boxorthorhombic)
-        assert not am.tools.istetragonal(self.boxmonoclinic)
-        assert not am.tools.istetragonal(self.boxtriclinic)
+        assert not self.boxcubic.istetragonal()
+        assert not self.boxhexagonal.istetragonal()
+        assert self.boxtetragonal.istetragonal()
+        assert not self.boxrhombohedral.istetragonal()
+        assert not self.boxorthorhombic.istetragonal()
+        assert not self.boxmonoclinic.istetragonal()
+        assert not self.boxtriclinic.istetragonal()
 
     def test_isrhombohedral(self):
-        assert not am.tools.isrhombohedral(self.boxcubic)
-        assert not am.tools.isrhombohedral(self.boxhexagonal)
-        assert not am.tools.isrhombohedral(self.boxtetragonal)
-        assert am.tools.isrhombohedral(self.boxrhombohedral)
-        assert not am.tools.isrhombohedral(self.boxorthorhombic)
-        assert not am.tools.isrhombohedral(self.boxmonoclinic)
-        assert not am.tools.isrhombohedral(self.boxtriclinic)
+        assert not self.boxcubic.isrhombohedral()
+        assert not self.boxhexagonal.isrhombohedral()
+        assert not self.boxtetragonal.isrhombohedral()
+        assert self.boxrhombohedral.isrhombohedral()
+        assert not self.boxorthorhombic.isrhombohedral()
+        assert not self.boxmonoclinic.isrhombohedral()
+        assert not self.boxtriclinic.isrhombohedral()
 
     def test_isorthorhombic(self):
-        assert not am.tools.isorthorhombic(self.boxcubic)
-        assert not am.tools.isorthorhombic(self.boxhexagonal)
-        assert not am.tools.isorthorhombic(self.boxtetragonal)
-        assert not am.tools.isorthorhombic(self.boxrhombohedral)
-        assert am.tools.isorthorhombic(self.boxorthorhombic)
-        assert not am.tools.isorthorhombic(self.boxmonoclinic)
-        assert not am.tools.isorthorhombic(self.boxtriclinic)
+        assert not self.boxcubic.isorthorhombic()
+        assert not self.boxhexagonal.isorthorhombic()
+        assert not self.boxtetragonal.isorthorhombic()
+        assert not self.boxrhombohedral.isorthorhombic()
+        assert self.boxorthorhombic.isorthorhombic()
+        assert not self.boxmonoclinic.isorthorhombic()
+        assert not self.boxtriclinic.isorthorhombic()
 
     def test_ismonoclinic(self):
-        assert not am.tools.ismonoclinic(self.boxcubic)
-        assert not am.tools.ismonoclinic(self.boxhexagonal)
-        assert not am.tools.ismonoclinic(self.boxtetragonal)
-        assert not am.tools.ismonoclinic(self.boxrhombohedral)
-        assert not am.tools.ismonoclinic(self.boxorthorhombic)
-        assert am.tools.ismonoclinic(self.boxmonoclinic)
-        assert not am.tools.ismonoclinic(self.boxtriclinic)
+        assert not self.boxcubic.ismonoclinic()
+        assert not self.boxhexagonal.ismonoclinic()
+        assert not self.boxtetragonal.ismonoclinic()
+        assert not self.boxrhombohedral.ismonoclinic()
+        assert not self.boxorthorhombic.ismonoclinic()
+        assert self.boxmonoclinic.ismonoclinic()
+        assert not self.boxtriclinic.ismonoclinic()
 
     def test_istriclinic(self):
-        assert not am.tools.istriclinic(self.boxcubic)
-        assert not am.tools.istriclinic(self.boxhexagonal)
-        assert not am.tools.istriclinic(self.boxtetragonal)
-        assert not am.tools.istriclinic(self.boxrhombohedral)
-        assert not am.tools.istriclinic(self.boxorthorhombic)
-        assert not am.tools.istriclinic(self.boxmonoclinic)
-        assert am.tools.istriclinic(self.boxtriclinic)
+        assert not self.boxcubic.istriclinic()
+        assert not self.boxhexagonal.istriclinic()
+        assert not self.boxtetragonal.istriclinic()
+        assert not self.boxrhombohedral.istriclinic()
+        assert not self.boxorthorhombic.istriclinic()
+        assert not self.boxmonoclinic.istriclinic()
+        assert self.boxtriclinic.istriclinic()
 
     def test_identifyfamily(self):
-        assert am.tools.identifyfamily(self.boxcubic) == 'cubic'
-        assert am.tools.identifyfamily(self.boxhexagonal) == 'hexagonal'
-        assert am.tools.identifyfamily(self.boxtetragonal) == 'tetragonal'
-        assert am.tools.identifyfamily(self.boxrhombohedral) == 'rhombohedral'
-        assert am.tools.identifyfamily(self.boxorthorhombic) == 'orthorhombic'
-        assert am.tools.identifyfamily(self.boxmonoclinic) == 'monoclinic'
-        assert am.tools.identifyfamily(self.boxtriclinic) == 'triclinic'
+        assert self.boxcubic.identifyfamily() == 'cubic'
+        assert self.boxhexagonal.identifyfamily() == 'hexagonal'
+        assert self.boxtetragonal.identifyfamily() == 'tetragonal'
+        assert self.boxrhombohedral.identifyfamily() == 'rhombohedral'
+        assert self.boxorthorhombic.identifyfamily() == 'orthorhombic'
+        assert self.boxmonoclinic.identifyfamily() == 'monoclinic'
+        assert self.boxtriclinic.identifyfamily() == 'triclinic'

@@ -10,11 +10,7 @@ import numpy as np
 from ... import Atoms, Box, System
 
 # https://atztogo.github.io/phonopy/
-try:
-    from phonopy.structure.atoms import PhonopyAtoms
-    has_phonopy = True
-except:
-    has_phonopy = False
+from phonopy.structure.atoms import PhonopyAtoms
 
 def load(phonopyatoms: PhonopyAtoms,
          symbols: Optional[tuple] = None,
@@ -38,8 +34,6 @@ def load(phonopyatoms: PhonopyAtoms,
     system : atomman.System
         A atomman representation of a system.
     """
-    
-    assert has_phonopy, 'phonopy not imported'
     
     if prop is None:
         prop = {}

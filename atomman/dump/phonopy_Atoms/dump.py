@@ -7,13 +7,7 @@ from typing import Optional, Union, Tuple
 import numpy as np
 
 # https://atztogo.github.io/phonopy/
-try:
-    from phonopy.structure.atoms import PhonopyAtoms
-    has_phonopy = True
-except ModuleNotFoundError:
-    has_phonopy = False
-    class PhonopyAtoms():
-        pass
+from phonopy.structure.atoms import PhonopyAtoms
 
 def dump(system,
          symbols: Optional[tuple] = None,
@@ -41,8 +35,6 @@ def dump(system,
         Dictionary containing any extra per-atom properties to include.
         Returned if return_prop is True.
     """
-    
-    assert has_phonopy, 'phonopy not imported'
     
     # Get box/cell information
     cell = system.box.vects

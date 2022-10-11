@@ -7,6 +7,7 @@ from atomman import Box, Atoms, System
 from atomman.defect import FreeSurface, free_surface_basis
 from atomman.tools.miller import vector_crystal_to_cartesian
 
+import warnings
 
 @pytest.fixture
 def bcc_Fe() -> System:
@@ -211,7 +212,8 @@ def test_unique_shifts_prototype(prototype, list_hkl, list_expected):
     #   seems to have two free surfaces, La(2a) surface and La(2c) one. but equivalent as slab models
     # - A4(diamond) (322) seems to have two free surfaces.
     # - A3' (100) seems to have two free surfaces.
-
+    pytest.importorskip("spglib")
+    
     assert len(list_hkl) == len(list_expected)
     ucell = am.load("prototype", id=prototype)
     for hkl, expected in zip(list_hkl, list_expected):

@@ -1,31 +1,17 @@
 # coding: utf-8
+from importlib import import_module, resources
 
+__all__ = ['load', 'FileFormatError']
+
+# Set global load_styles dict
+load_styles = {}
+failed_load_styles = {}
 class FileFormatError(Exception):
     pass
 
-from .ase_Atoms import load as load_ase_Atoms
-from .cif import load as load_cif
-from .pymatgen_Structure import load as load_pymatgen_Structure
-from .table import load as load_table
-from .system_model import load as load_system_model
-from .prototype import load as load_prototype
-from .crystal import load as load_crystal
-from .poscar import load as load_poscar
-from .dft_reference import load as load_dft_reference
-from .atom_data import load as load_atom_data
-from .atom_dump import load as load_atom_dump
-from .spglib_cell import load as load_spglib_cell
-from .phonopy_Atoms import load as load_phonopy_Atoms
-
-__all__ = ['FileFormatError', 'load', 'load_ase_Atoms', 'load_pymatgen_Structure',
-           'load_table', 'load_system_model', 'load_poscar', 'load_atom_data',
-           'load_atom_dump', 'load_cif', 'load_spglib_cell', 'load_phonopy_Atoms',
-           'load_prototype', 'load_crystal'
-           ]
-
 def load(style, *args, **kwargs):
     """
-    Load a System.
+    Load a System from another format.
     
     Parameters
     ----------
@@ -42,44 +28,32 @@ def load(style, *args, **kwargs):
         The system object associated with the data model.
     """
     
-    if style == 'system_model':
-        return load_system_model(*args, **kwargs)
-    
-    elif style == 'prototype':
-        return load_prototype(*args, **kwargs)
-
-    elif style == 'crystal':
-        return load_crystal(*args, **kwargs)
-
-    elif style == 'dft_reference':
-        return load_dft_reference(*args, **kwargs)
-
-    elif style == 'cif':
-        return load_cif(*args, **kwargs)
-    
-    elif style == 'atom_data':
-        return load_atom_data(*args, **kwargs)
-    
-    elif style == 'atom_dump':
-        return load_atom_dump(*args, **kwargs)
-    
-    elif style == 'table':
-        return load_table(*args, **kwargs)
-    
-    elif style == 'ase_Atoms':
-        return load_ase_Atoms(*args, **kwargs)
-    
-    elif style == 'phonopy_Atoms':
-        return load_phonopy_Atoms(*args, **kwargs)
-    
-    elif style == 'pymatgen_Structure':
-        return load_pymatgen_Structure(*args, **kwargs)
-    
-    elif style == 'poscar':
-        return load_poscar(*args, **kwargs)
-    
-    elif style == 'spglib_cell':
-        return load_spglib_cell(*args, **kwargs)
-    
+    if style in load_styles:
+        return load_styles[style](*args, **kwargs)
+    elif style in failed_load_styles:
+        raise failed_load_styles[style]
     else:
-        raise ValueError('Unsupported style')
+        raise ValueError(f'Unsupported load style {style}')
+
+def set_load_styles():
+    """
+    Imports and sets the load styles.  Should be called after importing the
+    iprPy.load submodule.
+    """
+    # Define subfolders to ignore
+    ignorelist = ['__pycache__']
+
+    # Dynamically import calculation styles
+    for style in resources.contents(__name__):
+
+        # Only import subfolders not in ignorelist
+        if '.' not in style and style not in ignorelist:
+            
+            # Import module and set to load_styles
+            try:
+                module = import_module(f'.{style}', __name__)
+                load_styles[style] = module.load
+            except ModuleNotFoundError as e:
+                failed_load_styles[style] = e
+
+set_load_styles()

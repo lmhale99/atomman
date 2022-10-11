@@ -5,6 +5,7 @@ __all__ = ['dump', 'set_dump_styles']
 
 # Set global dump_styles dict
 dump_styles = {}
+failed_dump_styles = {}
 
 def dump(style, system, **kwargs):
     """
@@ -27,9 +28,10 @@ def dump(style, system, **kwargs):
     
     if style in dump_styles:
         return dump_styles[style](system, **kwargs)
-
+    elif style in failed_dump_styles:
+        raise failed_dump_styles[style]
     else:
-        raise ValueError(f'Unsupported Atoms dump style {style}')
+        raise ValueError(f'Unsupported dump style {style}')
 
 def set_dump_styles():
     """
@@ -46,5 +48,8 @@ def set_dump_styles():
         if '.' not in style and style not in ignorelist:
             
             # Import module and set to dump_styles
-            module = import_module(f'.{style}', __name__)
-            dump_styles[style] = module.dump
+            try:
+                module = import_module(f'.{style}', __name__)
+                dump_styles[style] = module.dump
+            except ModuleNotFoundError as e:
+                failed_dump_styles[style] = e

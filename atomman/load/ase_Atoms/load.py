@@ -10,11 +10,7 @@ import numpy as np
 from ... import Atoms, Box, System
 
 # https://wiki.fysik.dtu.dk/ase/
-try:
-    import ase
-    has_ase = True
-except:
-    has_ase = False
+import ase
 
 def load(aseatoms: ase.Atoms,
          symbols: Optional[tuple] = None,
@@ -38,8 +34,6 @@ def load(aseatoms: ase.Atoms,
     system : atomman.System
         A atomman representation of a system.
     """
-    
-    assert has_ase, 'ase not imported'
     
     if prop is None:
         prop = {}

@@ -16,7 +16,7 @@ import pandas as pd
 import requests
 
 # atomman imports
-from ...load import load_pymatgen_Structure, load_poscar
+from ...load import load
 from ..record import load_record
 from ...tools import aslist
 
@@ -461,8 +461,16 @@ def fetch_mp_crystals(self,
     """
 
     # Function-specific imports
+     # http://pymatgen.org
     import pymatgen as pmg
     from pymatgen.ext.matproj import MPRester
+    try:
+        # import from newer pymatgen
+        from pymatgen.core import Structure
+
+    except ModuleNotFoundError:
+        # Import from older pymatgen
+        from pymatgen import Structure
 
     # Open connection to Materials Project
     records = []
@@ -477,7 +485,7 @@ def fetch_mp_crystals(self,
             # Convert cif to model and save
             for entry in entries:
                 entry_id = entry['material_id']
-                struct = pmg.Structure.from_str(entry['cif'], fmt='cif')
+                struct = Structure.from_str(entry['cif'], fmt='cif')
                 struct = pmg.symmetry.analyzer.SpacegroupAnalyzer(struct).get_conventional_standard_structure()
 
                 # Build record content
@@ -485,7 +493,7 @@ def fetch_mp_crystals(self,
                 record = load_record('reference_crystal', name=entry_id)
                 record.sourcename = "Materials Project"
                 record.sourcelink = "https://materialsproject.org/"
-                record.ucell = load_pymatgen_Structure(struct).normalize()
+                record.ucell = load('pymatgen_Structure', struct).normalize()
                 records.append(record)
     
     return records
@@ -562,7 +570,7 @@ def fetch_oqmd_crystal(self, id: str) -> Record:
             raise ValueError('Failed to find the poscar file for the structure')
             
     # Load ucell
-    record.ucell = load_poscar(structure_r.text).normalize()
+    record.ucell = load('poscar', structure_r.text).normalize()
     
     return record
 

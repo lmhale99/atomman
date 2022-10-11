@@ -10,16 +10,9 @@ import numpy as np
 try:
     # import from newer pymatgen
     from pymatgen.core import Lattice, Structure
-    has_pmg = True
 
 except ModuleNotFoundError:
-    try:
-        # Import from older pymatgen
-        from pymatgen import Lattice, Structure
-        has_pmg = True
-
-    except ModuleNotFoundError:
-        has_pmg = False
+    from pymatgen import Lattice, Structure
 
 def dump(system,
          symbols: Optional[tuple] = None
@@ -41,8 +34,6 @@ def dump(system,
     structure : pymatgen.Structure
         A pymatgen representation of a structure.
     """
-    
-    assert has_pmg, 'pymatgen not imported'
     
     # Get box/lattice information
     lattice = Lattice(system.box.vects)
