@@ -1069,7 +1069,7 @@ class System(object):
         
         # Convert uvws from Miller-Bravais to Miller indices if needed
         if uvws.shape == (3, 4):
-            if ishexagonal(self.box):
+            if self.box.ishexagonal():
                 uvws = miller.vector4to3(uvws)
             else:
                 raise ValueError('hexagonal indices only work on hexagonal systems')

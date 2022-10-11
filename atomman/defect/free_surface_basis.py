@@ -88,7 +88,7 @@ def free_surface_basis(hkl: npt.ArrayLike,
 
     # Convert hkil to hkl
     if hkl.shape == (4,):
-        if ishexagonal(box):
+        if box.ishexagonal():
             hkl = miller.plane4to3(hkl)
             if return_hexagonal is None:
                 return_hexagonal = True
@@ -97,7 +97,7 @@ def free_surface_basis(hkl: npt.ArrayLike,
     elif hkl.shape == (3,):
         if return_hexagonal is None:
             return_hexagonal = False
-        elif return_hexagonal and not ishexagonal(box):
+        elif return_hexagonal and not box.ishexagonal():
             raise ValueError('cannot return Miller-Bravais indices for non-hexagonal box')
     else:
         raise ValueError('Invalid hkl indices: must be 3 values or 4')
