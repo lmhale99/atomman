@@ -1,13 +1,31 @@
 Updates
 =======
 
+Version 1.4.7
+-------------
+
+- **atomman.load** Import of load styles is now fully modular. Note that as a 
+  result of this, the individual **load_{style}** function calls have been
+  removed.
+
+- **atomman.load** and **atomman.dump** Fix to make the individual load
+  and dump styles optional dependent on any additional package requirements.
+  Versions 1.4.4-1.4.6 accidentally required that these optional packages be
+  installed.
+
+- **atomman.lammps.Log.flatten** Fix for a rare case associated with stopped
+  LAMMPS simulations and restarts that occasionally resulted in columns
+  inadvertently being interpreted as str values instead of float values. 
+
 Version 1.4.6
 -------------
 
 - Import of dump styles is now fully modular and delayed.  This allows for
   new styles to be introduced that have additional package requirements without
   breaking all of atomman. The delayed loading also makes it possible for dump
-  methods to call other dump or load methods without import errors.
+  methods to call other dump or load methods without import errors. Note that 
+  as a result of this, the individual **dump_{style}** function calls have been
+  removed.
 
 - **atomman.dump.primitive_cell** now works properly because of the above.
 
