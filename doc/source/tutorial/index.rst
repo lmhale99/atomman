@@ -22,6 +22,7 @@ Tutorials
    1.4.10. prototype loading <1.4.10._prototype_loading>
    1.4.11. crystal loading <1.4.11._crystal_loading>
    1.4.12. DFT reference crystal loading <1.4.12._DFT_reference_crystal_loading>
+   1.4.13. primitive cell dumping <1.4.13._primitive_cell_dumping>
    1.5. Settings and databases <1.5._Settings_and_databases>
    2. LAMMPS functionality <2._LAMMPS_functionality>
    2.1. Potential class <2.1._Potential_class>

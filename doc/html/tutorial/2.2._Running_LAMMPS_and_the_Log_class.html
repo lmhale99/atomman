@@ -1,17 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction to atomman: Running LAMMPS and the Log class &#8212; atomman 1.4.4 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Introduction to atomman: Running LAMMPS and the Log class &#8212; atomman 1.4.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -33,7 +36,7 @@
         <li class="right" >
           <a href="2.1._Potential_class.html" title="Introduction to atomman: LAMMPS Potentials"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Running LAMMPS and the Log class</a></li> 
       </ul>
@@ -49,35 +52,21 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
     border: none;
-    padding: 0;
+    padding: 0 0;
     margin: 0;
     box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -178,7 +167,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    /*background: #f5f5f5;*/
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -244,7 +233,6 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
-    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -292,12 +280,12 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-Running-LAMMPS-and-the-Log-class">
-<h1>Introduction to atomman: Running LAMMPS and the Log class<a class="headerlink" href="#Introduction-to-atomman:-Running-LAMMPS-and-the-Log-class" title="Permalink to this headline">¶</a></h1>
+<section id="Introduction-to-atomman:-Running-LAMMPS-and-the-Log-class">
+<h1>Introduction to atomman: Running LAMMPS and the Log class<a class="headerlink" href="#Introduction-to-atomman:-Running-LAMMPS-and-the-Log-class" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
-<div class="section" id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<section id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
 <p>This Notebook outlines the options of the atomman.lammps.Log class and the atomman.lammps.run() function.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
@@ -333,13 +321,13 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.4
-Notebook executed on 2022-03-17
+atomman version = 1.4.7
+Notebook executed on 2022-10-12
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.-Running-LAMMPS">
-<h2>2. Running LAMMPS<a class="headerlink" href="#2.-Running-LAMMPS" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="2.-Running-LAMMPS">
+<h2>2. Running LAMMPS<a class="headerlink" href="#2.-Running-LAMMPS" title="Permalink to this heading">¶</a></h2>
 <p><em>Updated version 1.4.0:</em> Parameters updated to provide more running options and remove obsolete Log class-based parameters.</p>
 <p>The LAMMPS simulation can be ran from within Python using the run() function. This runs LAMMPS as a subprocess, meaning that it can use any installed LAMMPS and MPI executables.</p>
 <p>Parameters</p>
@@ -422,7 +410,7 @@ Notebook executed on 2022-03-17
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Serial simulation took 95.15768051147461 seconds.
+Serial simulation took 121.65530848503113 seconds.
 </pre></div></div>
 </div>
 <p>Run in parallel on 4 processors</p>
@@ -452,12 +440,12 @@ Serial simulation took 95.15768051147461 seconds.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Parallel simulation took 28.15028429031372 seconds.
+Parallel simulation took 68.62814044952393 seconds.
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.-Accessing-results-with-Log-class">
-<h2>3. Accessing results with Log class<a class="headerlink" href="#3.-Accessing-results-with-Log-class" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="3.-Accessing-results-with-Log-class">
+<h2>3. Accessing results with Log class<a class="headerlink" href="#3.-Accessing-results-with-Log-class" title="Permalink to this heading">¶</a></h2>
 <p><em>Updated version 1.3.7</em>: now captures performance output. A Simulation class is added to better represent each run/simulation. The flatten method is updated to return a new Simulation rather than overwriting the current data. New ‘all’ style added to flatten that will merge all runs without filtering out duplicate timesteps.</p>
 <p>Information from the log.lammps file(s) is automatically parsed by the run() function and returned as an atomman.lammps.Log object. Currently, the Log class stores the following information:</p>
 <ul class="simple">
@@ -553,51 +541,51 @@ Index([&#39;Step&#39;, &#39;PotEng&#39;, &#39;Temp&#39;, &#39;Press&#39;, &#39;L
   <tbody>
     <tr>
       <th>Pair</th>
-      <td>22.412000</td>
-      <td>22.766000</td>
-      <td>23.024000</td>
-      <td>5.6</td>
-      <td>88.35</td>
+      <td>36.848000</td>
+      <td>37.428000</td>
+      <td>38.062000</td>
+      <td>9.0</td>
+      <td>76.96</td>
     </tr>
     <tr>
       <th>Neigh</th>
-      <td>0.005201</td>
-      <td>0.005262</td>
-      <td>0.005323</td>
-      <td>0.1</td>
+      <td>0.006720</td>
+      <td>0.007937</td>
+      <td>0.008915</td>
+      <td>0.9</td>
       <td>0.02</td>
     </tr>
     <tr>
       <th>Comm</th>
-      <td>1.098800</td>
-      <td>1.365600</td>
-      <td>1.727300</td>
-      <td>23.3</td>
-      <td>5.30</td>
+      <td>6.929100</td>
+      <td>7.579000</td>
+      <td>8.167400</td>
+      <td>20.5</td>
+      <td>15.58</td>
     </tr>
     <tr>
       <th>Output</th>
-      <td>0.016530</td>
-      <td>0.016752</td>
-      <td>0.017356</td>
-      <td>0.3</td>
-      <td>0.07</td>
+      <td>0.013064</td>
+      <td>0.013328</td>
+      <td>0.014062</td>
+      <td>0.4</td>
+      <td>0.03</td>
     </tr>
     <tr>
       <th>Modify</th>
-      <td>1.415600</td>
-      <td>1.422000</td>
-      <td>1.430000</td>
-      <td>0.4</td>
-      <td>5.52</td>
+      <td>2.832000</td>
+      <td>2.854500</td>
+      <td>2.875100</td>
+      <td>1.1</td>
+      <td>5.87</td>
     </tr>
     <tr>
       <th>Other</th>
       <td>0.000000</td>
-      <td>0.191300</td>
+      <td>0.752900</td>
       <td>0.000000</td>
       <td>0.0</td>
-      <td>0.74</td>
+      <td>1.55</td>
     </tr>
   </tbody>
 </table>
@@ -622,12 +610,12 @@ Index([&#39;Step&#39;, &#39;PotEng&#39;, &#39;Temp&#39;, &#39;Press&#39;, &#39;L
 <img alt="../_images/tutorial_2.2._Running_LAMMPS_and_the_Log_class_17_0.png" src="../_images/tutorial_2.2._Running_LAMMPS_and_the_Log_class_17_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="4.-Restarting-and-flattening">
-<h2>4. Restarting and flattening<a class="headerlink" href="#4.-Restarting-and-flattening" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="4.-Restarting-and-flattening">
+<h2>4. Restarting and flattening<a class="headerlink" href="#4.-Restarting-and-flattening" title="Permalink to this heading">¶</a></h2>
 <p>There is also some built-in functionality for conveniently handling simulations containing multiple runs and/or multiple sequential simulation executions of the same overall run (i.e. restarts).</p>
-<div class="section" id="4.1.-Running-with-restart-script-included">
-<h3>4.1. Running with restart script included<a class="headerlink" href="#4.1.-Running-with-restart-script-included" title="Permalink to this headline">¶</a></h3>
+<section id="4.1.-Running-with-restart-script-included">
+<h3>4.1. Running with restart script included<a class="headerlink" href="#4.1.-Running-with-restart-script-included" title="Permalink to this heading">¶</a></h3>
 <p>Create a new demonstration LAMMPS input script that restarts the previous simulation and runs for an additional 10000 steps.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
@@ -713,9 +701,9 @@ log.lammps
 <img alt="../_images/tutorial_2.2._Running_LAMMPS_and_the_Log_class_26_0.png" src="../_images/tutorial_2.2._Running_LAMMPS_and_the_Log_class_26_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="4.2.-Flattening-data-from-multiple-simulations-together">
-<h3>4.2. Flattening data from multiple simulations together<a class="headerlink" href="#4.2.-Flattening-data-from-multiple-simulations-together" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="4.2.-Flattening-data-from-multiple-simulations-together">
+<h3>4.2. Flattening data from multiple simulations together<a class="headerlink" href="#4.2.-Flattening-data-from-multiple-simulations-together" title="Permalink to this heading">¶</a></h3>
 <p><em>Changed version 1.3.7</em> flatten now returns a new Simulation rather than overwriting the current content.</p>
 <p>The Log.flatten() method creates a new Simulation object that combines the thermo data from all of the simulations. flatten takes a single parameter that specifies how thermo lines with duplicate timesteps are treated:</p>
 <ul class="simple">
@@ -760,10 +748,10 @@ log.lammps
 &#39;None&#39;
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="5.-Error-messages">
-<h2>5. Error messages<a class="headerlink" href="#5.-Error-messages" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="5.-Error-messages">
+<h2>5. Error messages<a class="headerlink" href="#5.-Error-messages" title="Permalink to this heading">¶</a></h2>
 <p><em>LAMMPSError added and error handling improved version 1.3.2</em></p>
 <p>To assist in running LAMMPS simulations, a LAMMPSError error type is defined which does its best to extract the error message that LAMMPS issues as a Python error.</p>
 <div class="nbinput nblast docutils container">
@@ -844,8 +832,8 @@ Last command: fix 1 all npt temp 100 100 1.0 aniso 0.0 0.0
 </pre></div>
 </div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -901,13 +889,13 @@ Last command: fix 1 all npt temp 100 100 1.0 aniso 0.0 0.0
         <li class="right" >
           <a href="2.1._Potential_class.html" title="Introduction to atomman: LAMMPS Potentials"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Running LAMMPS and the Log class</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
     </div>
   </body>
 </html>

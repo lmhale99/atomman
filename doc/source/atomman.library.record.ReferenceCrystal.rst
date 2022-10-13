@@ -1,5 +1,5 @@
 ReferenceCrystal
-==============
+================
 
 .. autoclass:: atomman.library.record.ReferenceCrystal
     :members:

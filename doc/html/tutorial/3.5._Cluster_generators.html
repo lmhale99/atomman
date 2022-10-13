@@ -1,17 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction to atomman: Cluster generators &#8212; atomman 1.4.4 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Introduction to atomman: Cluster generators &#8212; atomman 1.4.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -35,7 +38,7 @@
         <li class="right" >
           <a href="3.4._Minimum_energy_paths.html" title="Introduction to atomman: Minimum energy paths"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Cluster generators</a></li> 
       </ul>
@@ -51,35 +54,21 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
     border: none;
-    padding: 0;
+    padding: 0 0;
     margin: 0;
     box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -180,7 +169,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    /*background: #f5f5f5;*/
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -246,7 +235,6 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
-    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -294,16 +282,16 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-Cluster-generators">
-<h1>Introduction to atomman: Cluster generators<a class="headerlink" href="#Introduction-to-atomman:-Cluster-generators" title="Permalink to this headline">¶</a></h1>
+<section id="Introduction-to-atomman:-Cluster-generators">
+<h1>Introduction to atomman: Cluster generators<a class="headerlink" href="#Introduction-to-atomman:-Cluster-generators" title="Permalink to this heading">¶</a></h1>
 <p><em>added version 1.4.0</em></p>
 <p>In addition to crystal structures, atomman has tools supporting calculations involving small atomic clusters.</p>
-<div class="section" id="1.-BondAngleMap">
-<h2>1. BondAngleMap<a class="headerlink" href="#1.-BondAngleMap" title="Permalink to this headline">¶</a></h2>
+<section id="1.-BondAngleMap">
+<h2>1. BondAngleMap<a class="headerlink" href="#1.-BondAngleMap" title="Permalink to this heading">¶</a></h2>
 <p><strong>NOTE</strong> The methods associated with this class are still in development and testing and therefore may undergo substantial updates within the next few versions. Examples also to come later…</p>
 <p>The BondAngleMap class generates three atom clusters to explore and map the bond angle energies associated with an interatomic potential. This is meant to provide a means of characterizing a potential’s three-body interactions.</p>
-<div class="section" id="1.1.-Method-and-theory">
-<h3>1.1. Method and theory<a class="headerlink" href="#1.1.-Method-and-theory" title="Permalink to this headline">¶</a></h3>
+<section id="1.1.-Method-and-theory">
+<h3>1.1. Method and theory<a class="headerlink" href="#1.1.-Method-and-theory" title="Permalink to this heading">¶</a></h3>
 <p>The phase space associated with a cluster of three atoms i, j and k is characterized using the following three coordinates:</p>
 <ul class="simple">
 <li><p><strong>:math:`r_{ij}`</strong> being the radial distance between atoms i and j.</p></li>
@@ -312,9 +300,9 @@ div.rendered_html tbody tr:hover {
 </ul>
 <p>A map of the phase space can then be constructed by taking equal steps along these three coordinates according to sampling parameters rmin, rmax, and rnum for the two radial distances and thetamin, thetamax and thetanum for the angle. For each configuration, the radial distance between atoms j and k can be computed using <span class="math notranslate nohighlight">\(r_{jk} = \sqrt{r_{ij}^2 + r_{ik}^2 - 2 r_{ij} r_{ik} \cos(\theta_{ijk})}\)</span></p>
 <p>Atomic cluster configurations are constructed based on the three coordinates as - atom i is positioned at <span class="math notranslate nohighlight">\([0.0, 0.0, 0.0]\)</span> - atom j is positioned at <span class="math notranslate nohighlight">\([r_{ij}, 0.0, 0.0]\)</span> - atom k is positioned at $[r_{ik} <span class="math">\cos`(:nbsphinx-math:</span>theta`<em>{ijk}), r</em>{ik} <span class="math">\sin`(:nbsphinx-math:</span>theta`_{ijk}), 0.0] $ - box dimensions of at least <span class="math notranslate nohighlight">\(\pm\)</span>rmax in all directions and non-periodic boundary conditions.</p>
-</div>
-<div class="section" id="1.2.-Initializing-a-BondAngleMap">
-<h3>1.2. Initializing a BondAngleMap<a class="headerlink" href="#1.2.-Initializing-a-BondAngleMap" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="1.2.-Initializing-a-BondAngleMap">
+<h3>1.2. Initializing a BondAngleMap<a class="headerlink" href="#1.2.-Initializing-a-BondAngleMap" title="Permalink to this heading">¶</a></h3>
 <p>The cluster coordinates (r distances and theta angles) are required and can be specified in one of three ways.</p>
 <ul class="simple">
 <li><p>A data model containing all the information.</p></li>
@@ -336,15 +324,15 @@ div.rendered_html tbody tr:hover {
 <li><p><strong>energy</strong> (<em>array-like, optional</em>) All measured energies. If r_ij, r_ik and theta are given then all should be the same length. If the coordinate range parameters are given, then the energies should be of length rnum<em>rnum</em>thetanum and ordered to correspond to three embedded loops with r_ij iterating in the outside loop, r_ik in the middle and theta in the inside. If energy is not given, then all values will initially be set to np.nan.</p></li>
 <li><p><strong>symbols</strong> (<em>str or list, optional</em>) Element model symbol(s) to associate with the three atoms if/when systems are created. Can either be a single symbol to assign to all atoms, or three symbols to assign to atoms i, j, and k individually. Not needed if systems are not generated by this class.</p></li>
 </ul>
-</div>
-<div class="section" id="1.3.-Iterators">
-<h3>1.3. Iterators<a class="headerlink" href="#1.3.-Iterators" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="1.3.1.-itercoords">
-<h4>1.3.1. itercoords<a class="headerlink" href="#1.3.1.-itercoords" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="1.3.-Iterators">
+<h3>1.3. Iterators<a class="headerlink" href="#1.3.-Iterators" title="Permalink to this heading">¶</a></h3>
+<section id="1.3.1.-itercoords">
+<h4>1.3.1. itercoords<a class="headerlink" href="#1.3.1.-itercoords" title="Permalink to this heading">¶</a></h4>
 <p>Iterates through the set of r_ij, r_ik, r_jk and theta_ijk coordinates for each configuration.</p>
-</div>
-<div class="section" id="1.3.2.-itersystems()">
-<h4>1.3.2. itersystems()<a class="headerlink" href="#1.3.2.-itersystems()" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="1.3.2.-itersystems()">
+<h4>1.3.2. itersystems()<a class="headerlink" href="#1.3.2.-itersystems()" title="Permalink to this heading">¶</a></h4>
 <p>Iterates through the three-body coordinates based on the r and theta values.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -355,16 +343,16 @@ div.rendered_html tbody tr:hover {
 <ul class="simple">
 <li><p>(<em>atomman.System</em>) The atomic system containing the three-body cluster.</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="1.4.-Data-representations">
-<h3>1.4. Data representations<a class="headerlink" href="#1.4.-Data-representations" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="1.4.1.-df">
-<h4>1.4.1. df<a class="headerlink" href="#1.4.1.-df" title="Permalink to this headline">¶</a></h4>
+</section>
+</section>
+<section id="1.4.-Data-representations">
+<h3>1.4. Data representations<a class="headerlink" href="#1.4.-Data-representations" title="Permalink to this heading">¶</a></h3>
+<section id="1.4.1.-df">
+<h4>1.4.1. df<a class="headerlink" href="#1.4.1.-df" title="Permalink to this heading">¶</a></h4>
 <p>Generates a pandas.DataFrame of the coordinates and the associated energies, if measured.</p>
-</div>
-<div class="section" id="1.4.2.-model()">
-<h4>1.4.2. model()<a class="headerlink" href="#1.4.2.-model()" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="1.4.2.-model()">
+<h4>1.4.2. model()<a class="headerlink" href="#1.4.2.-model()" title="Permalink to this heading">¶</a></h4>
 <p>Loads or generates a bond angle map data model.</p>
 <p>Note: Generating data models is currently limited to regular values, i.e. ones which the coordinates correspond to embedded loops with r_ij iterating in the outside loop, r_ik in the middle loop and theta in the inside loop.</p>
 <p>Parameters</p>
@@ -381,21 +369,21 @@ div.rendered_html tbody tr:hover {
 <ul class="simple">
 <li><p><em>(ValueError</em>) If the data is irregular, i.e. coordinates do not conform to embedded loops with r_ij in the outer loop, r_ik in the middle loop and theta in the inside loop.</p></li>
 </ul>
-</div>
-<div class="section" id="1.4.3.-save_table()">
-<h4>1.4.3. save_table()<a class="headerlink" href="#1.4.3.-save_table()" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="1.4.3.-save_table()">
+<h4>1.4.3. save_table()<a class="headerlink" href="#1.4.3.-save_table()" title="Permalink to this heading">¶</a></h4>
 <p>Saves a tabulated representation of the coordinates and energy values to a file.</p>
 <p>Parameters</p>
 <ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) The path to the file where the table will be saved.</p></li>
 <li><p><strong>include_header</strong> (<em>bool</em>) If True (default) then header comments will be listed at the top of the file.</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="1.5-Data-analysis-methods">
-<h3>1.5 Data analysis methods<a class="headerlink" href="#1.5-Data-analysis-methods" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="1.5.1.-pdf()">
-<h4>1.5.1. pdf()<a class="headerlink" href="#1.5.1.-pdf()" title="Permalink to this headline">¶</a></h4>
+</section>
+</section>
+<section id="1.5-Data-analysis-methods">
+<h3>1.5 Data analysis methods<a class="headerlink" href="#1.5-Data-analysis-methods" title="Permalink to this heading">¶</a></h3>
+<section id="1.5.1.-pdf()">
+<h4>1.5.1. pdf()<a class="headerlink" href="#1.5.1.-pdf()" title="Permalink to this heading">¶</a></h4>
 <p>Returns the probability density function for the energy</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -408,9 +396,9 @@ div.rendered_html tbody tr:hover {
 <li><p><strong>pdf</strong> (<em>numpy.NDArray</em>) The probability density function associated with each bin.</p></li>
 <li><p><strong>centers</strong> (<em>numpy.NDArray</em>) The center values for each bin.</p></li>
 </ul>
-</div>
-<div class="section" id="1.5.2.-cumulative_pdf()">
-<h4>1.5.2. cumulative_pdf()<a class="headerlink" href="#1.5.2.-cumulative_pdf()" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="1.5.2.-cumulative_pdf()">
+<h4>1.5.2. cumulative_pdf()<a class="headerlink" href="#1.5.2.-cumulative_pdf()" title="Permalink to this heading">¶</a></h4>
 <p>Returns the cumulative probability density function for the energy.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -423,9 +411,9 @@ div.rendered_html tbody tr:hover {
 <li><p><strong>cum_pdf</strong> (<em>numpy.NDArray</em>) The cumulative probability density function associated with each bin.</p></li>
 <li><p><strong>centers</strong> (<em>numpy.NDArray</em>) The center values for each bin.</p></li>
 </ul>
-</div>
-<div class="section" id="1.5.3.-plot_pdf()">
-<h4>1.5.3. plot_pdf()<a class="headerlink" href="#1.5.3.-plot_pdf()" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="1.5.3.-plot_pdf()">
+<h4>1.5.3. plot_pdf()<a class="headerlink" href="#1.5.3.-plot_pdf()" title="Permalink to this heading">¶</a></h4>
 <p>Generates a plot of the probability density function of the energy.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -439,9 +427,9 @@ div.rendered_html tbody tr:hover {
 <ul class="simple">
 <li><p>(<em>matplotlib.Figure</em>) The generated figure. Not returned if matplotlib_axes is given.</p></li>
 </ul>
-</div>
-<div class="section" id="1.5.4.-plot_cumulative_pdf()">
-<h4>1.5.4. plot_cumulative_pdf()<a class="headerlink" href="#1.5.4.-plot_cumulative_pdf()" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="1.5.4.-plot_cumulative_pdf()">
+<h4>1.5.4. plot_cumulative_pdf()<a class="headerlink" href="#1.5.4.-plot_cumulative_pdf()" title="Permalink to this heading">¶</a></h4>
 <p>Generates a plot of the cumulative probability density function of the energy.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -464,10 +452,10 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -537,13 +525,13 @@ div.rendered_html tbody tr:hover {
         <li class="right" >
           <a href="3.4._Minimum_energy_paths.html" title="Introduction to atomman: Minimum energy paths"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Cluster generators</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
     </div>
   </body>
 </html>

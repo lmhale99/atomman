@@ -1,17 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction to atomman: LAMMPS functionality &#8212; atomman 1.4.4 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Introduction to atomman: LAMMPS functionality &#8212; atomman 1.4.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -33,7 +36,7 @@
         <li class="right" >
           <a href="1.5._Settings_and_databases.html" title="Introduction to atomman: Settings and Library"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: LAMMPS functionality</a></li> 
       </ul>
@@ -49,35 +52,21 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
     border: none;
-    padding: 0;
+    padding: 0 0;
     margin: 0;
     box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -178,7 +167,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    /*background: #f5f5f5;*/
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -244,7 +233,6 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
-    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -292,12 +280,12 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-LAMMPS-functionality">
-<h1>Introduction to atomman: LAMMPS functionality<a class="headerlink" href="#Introduction-to-atomman:-LAMMPS-functionality" title="Permalink to this headline">¶</a></h1>
+<section id="Introduction-to-atomman:-LAMMPS-functionality">
+<h1>Introduction to atomman: LAMMPS functionality<a class="headerlink" href="#Introduction-to-atomman:-LAMMPS-functionality" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
-<div class="section" id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<section id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
 <p>This Notebook provides an introduction to interacting with LAMMPS using atomman by working through a demonstration simulation.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
@@ -334,16 +322,16 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.4
-Notebook executed on 2022-03-17
+atomman version = 1.4.7
+Notebook executed on 2022-10-12
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.-Interatomic-Potential-Control">
-<h2>2. Interatomic Potential Control<a class="headerlink" href="#2.-Interatomic-Potential-Control" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="2.-Interatomic-Potential-Control">
+<h2>2. Interatomic Potential Control<a class="headerlink" href="#2.-Interatomic-Potential-Control" title="Permalink to this heading">¶</a></h2>
 <p>LAMMPS is capable of using a wide array of interatomic potential styles, which are defined through a combination of LAMMPS commands and potential parameter files. In atomman, the LAMMPS commands can be automatically generated using the Potentials class and structured data model files.</p>
-<div class="section" id="2.1.-Load-potential-from-database">
-<h3>2.1. Load potential from database<a class="headerlink" href="#2.1.-Load-potential-from-database" title="Permalink to this headline">¶</a></h3>
+<section id="2.1.-Load-potential-from-database">
+<h3>2.1. Load potential from database<a class="headerlink" href="#2.1.-Load-potential-from-database" title="Permalink to this heading">¶</a></h3>
 <p>Any LAMMPS-compatible potential in the NIST Interatomic Potentials Repository can be loaded/downloaded using load_lammps_potential().</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -356,9 +344,9 @@ Notebook executed on 2022-03-17
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="2.2.-Potential-parameter-files">
-<h3>2.2. Potential parameter files<a class="headerlink" href="#2.2.-Potential-parameter-files" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="2.2.-Potential-parameter-files">
+<h3>2.2. Potential parameter files<a class="headerlink" href="#2.2.-Potential-parameter-files" title="Permalink to this heading">¶</a></h3>
 <p>Setting getfiles=True will copy/download the potential parameter files from the local/remote library database to the current working directory in a subfolder matching the potential’s id.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -403,9 +391,9 @@ augt1 = 1
 
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.3.-lammps.Potential-Class">
-<h3>2.3. lammps.Potential Class<a class="headerlink" href="#2.3.-lammps.Potential-Class" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="2.3.-lammps.Potential-Class">
+<h3>2.3. lammps.Potential Class<a class="headerlink" href="#2.3.-lammps.Potential-Class" title="Permalink to this heading">¶</a></h3>
 <p>The load_lammps_potential() function returns a Potential object that can be used to explore properties of the potential and generate LAMMPS input commands.</p>
 <p>Basic properties can be directly obtained.</p>
 <div class="nbinput docutils container">
@@ -501,12 +489,12 @@ mass 3 26.9815
 
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="3.-Generate-initial-system">
-<h2>3. Generate initial system<a class="headerlink" href="#3.-Generate-initial-system" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="3.1.-Load-relaxed-crystal">
-<h3>3.1. Load relaxed crystal<a class="headerlink" href="#3.1.-Load-relaxed-crystal" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="3.-Generate-initial-system">
+<h2>3. Generate initial system<a class="headerlink" href="#3.-Generate-initial-system" title="Permalink to this heading">¶</a></h2>
+<section id="3.1.-Load-relaxed-crystal">
+<h3>3.1. Load relaxed crystal<a class="headerlink" href="#3.1.-Load-relaxed-crystal" title="Permalink to this heading">¶</a></h3>
 <p>A crystalline system can be easily generated using a unit cell system either defined in atomman, imported from another format, or accessed from the potentials database. For simplicity, here we will get the relaxed fcc structure for the potential.</p>
 <p>Load fcc prototype with Al lattice constant</p>
 <div class="nbinput docutils container">
@@ -540,9 +528,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       3 |       1 |   2.025 |   2.025 |   0.000
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.2.-Manipulate-system">
-<h3>3.2. Manipulate system<a class="headerlink" href="#3.2.-Manipulate-system" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.2.-Manipulate-system">
+<h3>3.2. Manipulate system<a class="headerlink" href="#3.2.-Manipulate-system" title="Permalink to this heading">¶</a></h3>
 <p>More complicated atomic configurations can then be generated by manipulating the seed system and the atoms contained within. Here, we’ll limit the manipulations to making the system a 3x3x3 supercell of itself.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -562,9 +550,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 Supercell has 108 atoms
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.3.-Save-to-atom-data-file">
-<h3>3.3. Save to atom data file<a class="headerlink" href="#3.3.-Save-to-atom-data-file" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.3.-Save-to-atom-data-file">
+<h3>3.3. Save to atom data file<a class="headerlink" href="#3.3.-Save-to-atom-data-file" title="Permalink to this heading">¶</a></h3>
 <p>System.dump(‘atom_data’) outputs the system to a LAMMPS atom data file. Quick notes on the parameters used here</p>
 <ul class="simple">
 <li><p>Giving potential allows for the appropriate units and atom_style settings to be used.</p></li>
@@ -755,10 +743,10 @@ Atoms # atomic
 
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="4.-Converting-to/from-LAMMPS-units">
-<h2>4. Converting to/from LAMMPS units<a class="headerlink" href="#4.-Converting-to/from-LAMMPS-units" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="4.-Converting-to/from-LAMMPS-units">
+<h2>4. Converting to/from LAMMPS units<a class="headerlink" href="#4.-Converting-to/from-LAMMPS-units" title="Permalink to this heading">¶</a></h2>
 <p>LAMMPS performs its calculations with values in one of multiple sets of pre-defined units. The atomman.lammps.style submodule has some useful functions when working with different units options.</p>
 <p><strong>atomman.lammps.style.timestep()</strong></p>
 <p>The lammps.style.timestep() function returns the default timestep value for a given LAMMPS units option.</p>
@@ -808,12 +796,12 @@ Atoms # atomic
 OrderedDict([(&#39;mass&#39;, &#39;g/mol&#39;), (&#39;length&#39;, &#39;angstrom&#39;), (&#39;time&#39;, &#39;ps&#39;), (&#39;energy&#39;, &#39;eV&#39;), (&#39;velocity&#39;, &#39;angstrom/ps&#39;), (&#39;force&#39;, &#39;eV/angstrom&#39;), (&#39;torque&#39;, &#39;eV&#39;), (&#39;temperature&#39;, &#39;K&#39;), (&#39;pressure&#39;, &#39;bar&#39;), (&#39;dynamic viscosity&#39;, &#39;Pa*s/10&#39;), (&#39;charge&#39;, &#39;e&#39;), (&#39;dipole&#39;, &#39;e*angstrom&#39;), (&#39;electric field&#39;, &#39;V/angstrom&#39;), (&#39;density&#39;, &#39;g/cm^3&#39;), (&#39;ang-mom&#39;, &#39;angstrom*angstrom/ps*g/mol&#39;), (&#39;ang-vel&#39;, &#39;1/ps&#39;)])
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="5.-Composing-LAMMPS-Input-Scripts">
-<h2>5. Composing LAMMPS Input Scripts<a class="headerlink" href="#5.-Composing-LAMMPS-Input-Scripts" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="5.-Composing-LAMMPS-Input-Scripts">
+<h2>5. Composing LAMMPS Input Scripts<a class="headerlink" href="#5.-Composing-LAMMPS-Input-Scripts" title="Permalink to this heading">¶</a></h2>
 <p>LAMMPS scripts can easily be constructed by combining the system_info generated from System.dump(‘atom_data’), the pair_info from Potential.pair_info(), and any user-defined input lines. This allows for specific simulation actions to easily be perfored across different potentials or initial configurations.</p>
-<div class="section" id="5.1.-Show-content-generated-in-previous-sections">
-<h3>5.1. Show content generated in previous sections<a class="headerlink" href="#5.1.-Show-content-generated-in-previous-sections" title="Permalink to this headline">¶</a></h3>
+<section id="5.1.-Show-content-generated-in-previous-sections">
+<h3>5.1. Show content generated in previous sections<a class="headerlink" href="#5.1.-Show-content-generated-in-previous-sections" title="Permalink to this heading">¶</a></h3>
 <p>Show system_pair_info generated in Section 3.3.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
@@ -849,9 +837,9 @@ mass 1 26.9815
 
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="5.2.-Write-LAMMPS-input-script-template">
-<h3>5.2. Write LAMMPS input script template<a class="headerlink" href="#5.2.-Write-LAMMPS-input-script-template" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="5.2.-Write-LAMMPS-input-script-template">
+<h3>5.2. Write LAMMPS input script template<a class="headerlink" href="#5.2.-Write-LAMMPS-input-script-template" title="Permalink to this heading">¶</a></h3>
 <p>LAMMPS scripts can be dynamically generated using Python functions or templates that take the above info lines and other values as parameters. Here, we demonstrate a LAMMPS input template script where all fields to be filled in in Python are delimited with &lt;&gt; brackets.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -895,9 +883,9 @@ mass 1 26.9815
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="5.3.-Fill-in-the-template-with-atomman.tools.filltemplate()">
-<h3>5.3. Fill in the template with atomman.tools.filltemplate()<a class="headerlink" href="#5.3.-Fill-in-the-template-with-atomman.tools.filltemplate()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="5.3.-Fill-in-the-template-with-atomman.tools.filltemplate()">
+<h3>5.3. Fill in the template with atomman.tools.filltemplate()<a class="headerlink" href="#5.3.-Fill-in-the-template-with-atomman.tools.filltemplate()" title="Permalink to this heading">¶</a></h3>
 <p>The template can then be easily filled in with the atomman.tools.filltemplate() function.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -1016,10 +1004,10 @@ run 100000
 
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="6.-Run-LAMMPS">
-<h2>6. Run LAMMPS<a class="headerlink" href="#6.-Run-LAMMPS" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="6.-Run-LAMMPS">
+<h2>6. Run LAMMPS<a class="headerlink" href="#6.-Run-LAMMPS" title="Permalink to this heading">¶</a></h2>
 <p>The LAMMPS simulation can be ran from within Python using the run() function.</p>
 <p>Specify your lammps executable</p>
 <div class="nbinput nblast docutils container">
@@ -1042,9 +1030,9 @@ run 100000
 </div>
 </div>
 <p>The resulting simulation data is returned as a Log object, which containes the thermo data from the log.lammps files.</p>
-</div>
-<div class="section" id="7.-Analyzing-Thermo-Results">
-<h2>7. Analyzing Thermo Results<a class="headerlink" href="#7.-Analyzing-Thermo-Results" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="7.-Analyzing-Thermo-Results">
+<h2>7. Analyzing Thermo Results<a class="headerlink" href="#7.-Analyzing-Thermo-Results" title="Permalink to this heading">¶</a></h2>
 <p>Data for each simulation run/minimization is stored in the returned Log object. Each Simulation has a thermo property that is a pandas.DataFrame of the LAMMPS thermo data.</p>
 <p><em>Updated version 1.3.7</em>: Each simulation is now represented using a Simulation class rather than a dictionary.</p>
 <p>Show thermo data column names for the first (and only) simulation run.</p>
@@ -1136,9 +1124,9 @@ run 100000
 <img alt="../_images/tutorial_2._LAMMPS_functionality_55_0.png" src="../_images/tutorial_2._LAMMPS_functionality_55_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="8-Reading-in-dump-files">
-<h2>8 Reading in dump files<a class="headerlink" href="#8-Reading-in-dump-files" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="8-Reading-in-dump-files">
+<h2>8 Reading in dump files<a class="headerlink" href="#8-Reading-in-dump-files" title="Permalink to this heading">¶</a></h2>
 <p>Finally, any dump files generated by the LAMMPS simulation can be loaded into atomman as Systems.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
@@ -1304,8 +1292,8 @@ origin = [-0.021, -0.021, -0.021]
 </pre></div>
 </div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -1375,13 +1363,13 @@ origin = [-0.021, -0.021, -0.021]
         <li class="right" >
           <a href="1.5._Settings_and_databases.html" title="Introduction to atomman: Settings and Library"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: LAMMPS functionality</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
     </div>
   </body>
 </html>

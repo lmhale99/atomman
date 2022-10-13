@@ -1,17 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction to atomman: Defect creation and analysis &#8212; atomman 1.4.4 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Introduction to atomman: Defect creation and analysis &#8212; atomman 1.4.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -35,7 +38,7 @@
         <li class="right" >
           <a href="3.5._Cluster_generators.html" title="Introduction to atomman: Cluster generators"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Defect creation and analysis</a></li> 
       </ul>
@@ -51,35 +54,21 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
     border: none;
-    padding: 0;
+    padding: 0 0;
     margin: 0;
     box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -180,7 +169,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    /*background: #f5f5f5;*/
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -246,7 +235,6 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
-    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -294,12 +282,12 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-Defect-creation-and-analysis">
-<h1>Introduction to atomman: Defect creation and analysis<a class="headerlink" href="#Introduction-to-atomman:-Defect-creation-and-analysis" title="Permalink to this headline">¶</a></h1>
+<section id="Introduction-to-atomman:-Defect-creation-and-analysis">
+<h1>Introduction to atomman: Defect creation and analysis<a class="headerlink" href="#Introduction-to-atomman:-Defect-creation-and-analysis" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
-<div class="section" id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<section id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
 <p>One of the focuses of the atomman package is to provide tools for generating and analyzing atomic systems containing defects. Many of these tools are more complex than the basic tools outlined in the previous section. This Notebook provides an overview of the various defect capabilities in atomman.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
@@ -334,13 +322,13 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.4
-Notebook executed on 2022-03-17
+atomman version = 1.4.7
+Notebook executed on 2022-10-12
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.-Point-defects">
-<h2>2. Point defects<a class="headerlink" href="#2.-Point-defects" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="2.-Point-defects">
+<h2>2. Point defects<a class="headerlink" href="#2.-Point-defects" title="Permalink to this heading">¶</a></h2>
 <p>The atomman.defect.point() function inserts a point defect into a System and helps with tracking the defect by (1) moving any new/modified atoms to the end of the Atoms list and (2) adding per-atom property old_id that retains each atom’s original index.</p>
 <p>See <a class="reference external" href="4.1._Point_defect_generation.html">4.1. Point defect generation Jupyter Notebook</a> for more examples.</p>
 <ul class="simple">
@@ -435,21 +423,21 @@ Notebook executed on 2022-03-17
 16      1  1.73325  4.59975  1.73325      16
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.-Free-surfaces">
-<h2>3. Free surfaces<a class="headerlink" href="#3.-Free-surfaces" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="3.-Free-surfaces">
+<h2>3. Free surfaces<a class="headerlink" href="#3.-Free-surfaces" title="Permalink to this heading">¶</a></h2>
 <p>Atomic configurations with a specific crystalline free surface can be generated with the FreeSurface class.</p>
 <p>See the <a class="reference external" href="4.2._Free_surface_generator.html">4.2. Free surface generator Jupyter Notebook</a> for the underlying theory and examples of the class being used.</p>
-</div>
-<div class="section" id="4.-Stacking-faults">
-<h2>4. Stacking faults<a class="headerlink" href="#4.-Stacking-faults" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="4.-Stacking-faults">
+<h2>4. Stacking faults<a class="headerlink" href="#4.-Stacking-faults" title="Permalink to this heading">¶</a></h2>
 <p>The atomman.defect.StackingFault class provides methods for generating atomic configurations of generalized stacking faults that can be used to compute stacking fault energies. You can generate either a single configuration, or a 1D array of configurations for a slip plane and direction, or a 2D map of configurations exploring the full gamma surface.</p>
 <p>See the <a class="reference external" href="4.3._Stacking_fault_generator.html">4.3. Stacking fault generator Jupyter Notebook</a> for a description of the class and examples.</p>
 <p>The atomman.defect.GammaSurface class provides convenient methods for plotting and interpolating generalized stacking fault (<span class="math notranslate nohighlight">\(\gamma\)</span> surface) data.</p>
 <p>See the <a class="reference external" href="4.5._Gamma_surface_plotting.html">4.5. Gamma surface plotting Jupyter Notebook</a> for a description of the class and examples.</p>
-</div>
-<div class="section" id="5.-Dislocations">
-<h2>5. Dislocations<a class="headerlink" href="#5.-Dislocations" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="5.-Dislocations">
+<h2>5. Dislocations<a class="headerlink" href="#5.-Dislocations" title="Permalink to this heading">¶</a></h2>
 <p><em>Updated version 1.2.5:</em> Ability to solve isotropic solutions added.</p>
 <p><em>Added version 1.3.4:</em> Dislocation class</p>
 <p>The atomman.defect.solve_volterra_dislocation() function generates an elasticity solution for a perfectly straight dislocation. The function returns either a Stroh object or a IsotropicVolterraDislocation object which has methods for obtaining position-based displacements and stress states, as well as energy-related parameters.</p>
@@ -464,14 +452,14 @@ Notebook executed on 2022-03-17
 <p>See the <a class="reference external" href="4.6._Dislocation_analysis_tools.html">4.6. Dislocation analysis tools Jupyter Notebook</a> for the underlying theory and examples of the tools being used.</p>
 <p>The atomman.defect.SDVPN class allows for Semidiscrete variational Peierls-Nabarro dislocation models to be constructed based on supplied generalized stacking fault energy values.</p>
 <p>See the <a class="reference external" href="4.7._Semidiscrete_variational_Peierls-Nabarro_model.html">4.7. Semidiscrete variational Peierls-Nabarro model Jupyter Notebook</a> for a description of the method and examples.</p>
-</div>
-<div class="section" id="6.-Strain-class">
-<h2>6. Strain class<a class="headerlink" href="#6.-Strain-class" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="6.-Strain-class">
+<h2>6. Strain class<a class="headerlink" href="#6.-Strain-class" title="Permalink to this heading">¶</a></h2>
 <p><em>Added version 1.3.7</em></p>
 <p>The atomman.defect.Strain class provides a means of computing atomistic strain properties on a per-atom basis. In performing the calculation, the reference “zero strain” configuration can be specified either as a System object or by specifying ideal lattice vectors on a per-atom basis.</p>
 <p>See the <a class="reference external" href="4.8._Strain_class.html">4.8. Strain class Juptyer Notebook</a> for a description of the class and examples.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -524,13 +512,13 @@ Notebook executed on 2022-03-17
         <li class="right" >
           <a href="3.5._Cluster_generators.html" title="Introduction to atomman: Cluster generators"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Defect creation and analysis</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
     </div>
   </body>
 </html>

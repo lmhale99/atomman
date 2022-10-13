@@ -1,17 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction to atomman: prototype loading &#8212; atomman 1.4.4 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Introduction to atomman: prototype loading &#8212; atomman 1.4.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -33,7 +36,7 @@
         <li class="right" >
           <a href="1.4.9._spglib_conversions.html" title="Introduction to atomman: Load and dump"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: prototype loading</a></li> 
       </ul>
@@ -49,35 +52,21 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
     border: none;
-    padding: 0;
+    padding: 0 0;
     margin: 0;
     box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -178,7 +167,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    /*background: #f5f5f5;*/
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -244,7 +233,6 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
-    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -292,12 +280,12 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-prototype-loading">
-<h1>Introduction to atomman: prototype loading<a class="headerlink" href="#Introduction-to-atomman:-prototype-loading" title="Permalink to this headline">¶</a></h1>
+<section id="Introduction-to-atomman:-prototype-loading">
+<h1>Introduction to atomman: prototype loading<a class="headerlink" href="#Introduction-to-atomman:-prototype-loading" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
-<div class="section" id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<section id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
 <p>The crystal_prototype records found in the NIST Interatomic Potentials Repository database (<a class="reference external" href="https://potentials.nist.gov/">https://potentials.nist.gov/</a>) define a number of unit cells for standard crystal prototypes. The ‘prototype’ load option allows Systems to be constructed based on the information in these records. The information can be loaded either from a local copy of the database or the remote database.</p>
 <p><em>Updated version 1.4.0.</em> Query parameters and database options updated to be in line with potentials version 0.3.0.</p>
 <p><strong>Library Imports</strong></p>
@@ -328,13 +316,13 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.4
-Notebook executed on 2022-03-17
+atomman version = 1.4.7
+Notebook executed on 2022-10-12
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.-atomman.load(‘prototype’)">
-<h2>2. atomman.load(‘prototype’)<a class="headerlink" href="#2.-atomman.load(‘prototype’)" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="2.-atomman.load(‘prototype’)">
+<h2>2. atomman.load(‘prototype’)<a class="headerlink" href="#2.-atomman.load(‘prototype’)" title="Permalink to this heading">¶</a></h2>
 <p>Accesses the potentials database to retrieve a crystal_prototype record and generate a unit cell System based on it.</p>
 <p>Query parameters - <strong>name</strong> (<em>str or list, optional</em>) Record names to search for. These should be the same values as id. - <strong>id</strong> (<em>str or list, optional</em>) Prototype ID(s) to search for. These are unique identifiers for each prototype based on comm. - <strong>key</strong> (<em>str or list, optional</em>) UUID4 key(s) to search for. Each entry has a unique random-generated UUID4 key. - <strong>commonname</strong> (<em>str or list, optional</em>) Common name(s) to limit the search by. - <strong>prototype</strong> (<em>str or list, optional</em>) Prototype
 identifying composition(s) to limit the search by. - <strong>pearson</strong> (<em>str or list, optional</em>) The Pearson symbol(s) to limit the search by. - <strong>strukturbericht</strong> (<em>str or list, optional</em>) The strukturbericht identifier(s) to limit the search by. - <strong>sg_number</strong> (<em>int or list, optional</em>) The space group number(s) to limit the search by. - <strong>sg_hm</strong> (<em>str or list, optional</em>) The space group Hermann-Maguin identifier(s) to limit the search by. - <strong>sg_schoenflies</strong> (<em>str or list, optional</em>) The space
@@ -363,8 +351,8 @@ group Schoenflies identifier(s) to limit the search by.</p>
 <ul class="simple">
 <li><p><strong>system</strong> (<em>atomman.System</em>) The system object generated from the crystal prototype.</p></li>
 </ul>
-<div class="section" id="2.1.-Query-parameters">
-<h3>2.1. Query parameters<a class="headerlink" href="#2.1.-Query-parameters" title="Permalink to this headline">¶</a></h3>
+<section id="2.1.-Query-parameters">
+<h3>2.1. Query parameters<a class="headerlink" href="#2.1.-Query-parameters" title="Permalink to this heading">¶</a></h3>
 <p>Prototypes can be selected based on a number of different ids.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -450,9 +438,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       3 |       1 |   0.500 |   0.500 |   0.000
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.2.-Modification-parameters">
-<h3>2.2. Modification parameters<a class="headerlink" href="#2.2.-Modification-parameters" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="2.2.-Modification-parameters">
+<h3>2.2. Modification parameters<a class="headerlink" href="#2.2.-Modification-parameters" title="Permalink to this heading">¶</a></h3>
 <p>The nature of a crystal prototype is that it is stripped of element-specific information: there are no elements/symbols assigned to the atom types and all lattice constants are scaled based on a=1 and the “ideal” ratios for the reference crystal. Because of this, the lattice constants and symbols can be set within the load method.</p>
 <p><strong>NOTE</strong>: The allowed lattice constants for this method depend on the independent lattice constants associated with the prototype’s crystal family (cubic, hexagonal, etc.). Either all or none of the independent lattice constants can be set during load.</p>
 <div class="nbinput docutils container">
@@ -515,9 +503,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       1 |       1 |   0.000 |   1.703 |   2.350
 </pre></div></div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -570,13 +558,13 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
         <li class="right" >
           <a href="1.4.9._spglib_conversions.html" title="Introduction to atomman: Load and dump"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: prototype loading</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
     </div>
   </body>
 </html>

@@ -1,17 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction to atomman: Stacking fault generator &#8212; atomman 1.4.4 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Introduction to atomman: Stacking fault generator &#8212; atomman 1.4.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -35,7 +38,7 @@
         <li class="right" >
           <a href="4.2._Free_surface_generator.html" title="Introduction to atomman: Free surface generator"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Stacking fault generator</a></li> 
       </ul>
@@ -51,35 +54,21 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
     border: none;
-    padding: 0;
+    padding: 0 0;
     margin: 0;
     box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -180,7 +169,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    /*background: #f5f5f5;*/
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -246,7 +235,6 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
-    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -294,12 +282,12 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-Stacking-fault-generator">
-<h1>Introduction to atomman: Stacking fault generator<a class="headerlink" href="#Introduction-to-atomman:-Stacking-fault-generator" title="Permalink to this headline">¶</a></h1>
+<section id="Introduction-to-atomman:-Stacking-fault-generator">
+<h1>Introduction to atomman: Stacking fault generator<a class="headerlink" href="#Introduction-to-atomman:-Stacking-fault-generator" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
-<div class="section" id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<section id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
 <p>This Notebook outlines the StackingFault class which generates atomic systems that can be used to evaluate stacking fault energies. See the <a class="reference external" href="4.5._Gamma_surface_plotting.html">4.5 Gamma surface plotting Notebook</a> for analysis and plotting of computed stacking fault energies.</p>
 <p><em>Completely reworked for version 1.3.2</em> the new StackingFault class is a child of FreeSurface, and therefore has built-in tools for easier generation.</p>
 <p>Documentation for the older StackingFault class can be found on github by exploring past versions of this Notebook.</p>
@@ -332,13 +320,13 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.4
-Notebook executed on 2022-03-17
+atomman version = 1.4.7
+Notebook executed on 2022-10-12
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.-Theory">
-<h2>2. Theory<a class="headerlink" href="#2.-Theory" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="2.-Theory">
+<h2>2. Theory<a class="headerlink" href="#2.-Theory" title="Permalink to this heading">¶</a></h2>
 <p>A stacking fault atomic configuration can be constructed by</p>
 <ol class="arabic simple">
 <li><p>Generating a bulk crystalline system with all periodic boundaries.</p></li>
@@ -354,17 +342,17 @@ fractional coordinates, <span class="math notranslate nohighlight">\(a_1\)</span
 <div class="math notranslate nohighlight">
 \[\mathbf{d} = a_1 \mathbf{a_1} + a_2 \mathbf{a_2}\]</div>
 <p>If the free surface configuration was generated using a primitive unit cell, then the two in-plane box vectors of the intermediate rotated cell will correspond to the shortest in-plane lattice vectors. As such, using those box vectors will result in the smallest periodic 2D cell necessary to fully explore the stacking fault map.</p>
-</div>
-<div class="section" id="3.-Class-basics">
-<h2>3. Class basics<a class="headerlink" href="#3.-Class-basics" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="3.-Class-basics">
+<h2>3. Class basics<a class="headerlink" href="#3.-Class-basics" title="Permalink to this heading">¶</a></h2>
 <p>The class is set up to generate stacking fault configuration systems in three steps:</p>
 <ol class="arabic simple">
 <li><p>Initialize the class and specify the (hkl) fault/surface plane and unit cell structure to use. The proper rotated cell will be generated as well as a list of shifts that can be applied.</p></li>
 <li><p>Build the free surface system by selecting the shift value corresponding to the termination planes of interest and the size of the final system.</p></li>
 <li><p>Construct stacking fault configurations by rigidly shifting all atoms on one side of the fault plane.</p></li>
 </ol>
-<div class="section" id="3.1.-StackingFault-initialization">
-<h3>3.1. StackingFault initialization<a class="headerlink" href="#3.1.-StackingFault-initialization" title="Permalink to this headline">¶</a></h3>
+<section id="3.1.-StackingFault-initialization">
+<h3>3.1. StackingFault initialization<a class="headerlink" href="#3.1.-StackingFault-initialization" title="Permalink to this heading">¶</a></h3>
 <p>Class initializer. Identifies the proper rotations for the given hkl plane and cutboxvector, and creates the rotated cell.</p>
 <ul class="simple">
 <li><p><strong>hkl</strong> (<em>array-like object</em>) The free surface plane to generate expressed in either 3 indices Miller (hkl) format or 4 indices Miller-Bravais (hkil) format.</p></li>
@@ -376,9 +364,9 @@ fractional coordinates, <span class="math notranslate nohighlight">\(a_1\)</span
 <li><p><strong>conventional_setting</strong> (<em>str, optional</em>) Allows for rotations of a primitive unit cell to be determined from (hkl) indices specified relative to a conventional unit cell. Allowed settings: ‘p’ for primitive (no conversion), ‘f’ for face-centered, ‘i’ for body-centered, and ‘a’, ‘b’, or ‘c’ for side-centered. Default behavior is to perform no conversion, i.e. take (hkl) relative to the given ucell.</p></li>
 <li><p><strong>tol</strong> (<em>float, optional</em>) Tolerance parameter used to round off near-zero values. Default value is 1e-8.</p></li>
 </ul>
-</div>
-<div class="section" id="3.2.-StackingFault.surface()">
-<h3>3.2. StackingFault.surface()<a class="headerlink" href="#3.2.-StackingFault.surface()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.2.-StackingFault.surface()">
+<h3>3.2. StackingFault.surface()<a class="headerlink" href="#3.2.-StackingFault.surface()" title="Permalink to this heading">¶</a></h3>
 <p>Generates the free surface atomic system, which is used as the basis for generating the stacking fault configuration(s).</p>
 <ul class="simple">
 <li><p><strong>shift</strong> (<em>array-like object, optional</em>) Applies a shift to all atoms. Different values allow for free surfaces with different termination planes to be selected.</p></li>
@@ -389,9 +377,9 @@ fractional coordinates, <span class="math notranslate nohighlight">\(a_1\)</span
 <li><p><strong>faultpos_rel</strong> (<em>float, optional</em>) The position to place the slip plane within the system given as a relative coordinate along the out-of-plane direction. faultpos_rel and faultpos_cart cannot both be given. Default value is 0.5 if faultpos_cart is also not given.</p></li>
 <li><p><strong>faultpos_cart</strong> (<em>float, optional</em>) The position to place the slip plane within the system given as a Cartesian coordinate along the out-of-plane direction. faultpos_rel and faultpos_cart cannot both be given.</p></li>
 </ul>
-</div>
-<div class="section" id="3.3.-StackingFault.fault()">
-<h3>3.3. StackingFault.fault()<a class="headerlink" href="#3.3.-StackingFault.fault()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.3.-StackingFault.fault()">
+<h3>3.3. StackingFault.fault()<a class="headerlink" href="#3.3.-StackingFault.fault()" title="Permalink to this heading">¶</a></h3>
 <p>Generates a fault configuration by displacing all atoms above the slip plane.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -405,9 +393,9 @@ fractional coordinates, <span class="math notranslate nohighlight">\(a_1\)</span
 <ul class="simple">
 <li><p>(<em>atomman.System</em>) The atomic configuration with stacking fault shift</p></li>
 </ul>
-</div>
-<div class="section" id="3.4.-StackingFault.iterfaultmap()">
-<h3>3.4. StackingFault.iterfaultmap()<a class="headerlink" href="#3.4.-StackingFault.iterfaultmap()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.4.-StackingFault.iterfaultmap()">
+<h3>3.4. StackingFault.iterfaultmap()<a class="headerlink" href="#3.4.-StackingFault.iterfaultmap()" title="Permalink to this heading">¶</a></h3>
 <p>Iterates over generalized stacking fault configurations associated with a 2D map of equally spaced a1, a2 coordinates.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -422,14 +410,14 @@ fractional coordinates, <span class="math notranslate nohighlight">\(a_1\)</span
 <li><p><strong>a2</strong> (<em>float</em>) The a2 fractional coordinate of a2vect.</p></li>
 <li><p>(<em>atomman.System</em>) The fault configuration associated with the a1, a2 shift.</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="4.-Examples">
-<h2>4. Examples<a class="headerlink" href="#4.-Examples" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="4.1.-fcc-\{111\}">
-<h3>4.1. fcc <span class="math notranslate nohighlight">\(\{111\}\)</span><a class="headerlink" href="#4.1.-fcc-\{111\}" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="4.1.1.-Define-an-fcc-conventional-cell-and-initialize-a-StackingFault">
-<h4>4.1.1. Define an fcc conventional cell and initialize a StackingFault<a class="headerlink" href="#4.1.1.-Define-an-fcc-conventional-cell-and-initialize-a-StackingFault" title="Permalink to this headline">¶</a></h4>
+</section>
+</section>
+<section id="4.-Examples">
+<h2>4. Examples<a class="headerlink" href="#4.-Examples" title="Permalink to this heading">¶</a></h2>
+<section id="4.1.-fcc-\{111\}">
+<h3>4.1. fcc <span class="math notranslate nohighlight">\(\{111\}\)</span><a class="headerlink" href="#4.1.-fcc-\{111\}" title="Permalink to this heading">¶</a></h3>
+<section id="4.1.1.-Define-an-fcc-conventional-cell-and-initialize-a-StackingFault">
+<h4>4.1.1. Define an fcc conventional cell and initialize a StackingFault<a class="headerlink" href="#4.1.1.-Define-an-fcc-conventional-cell-and-initialize-a-StackingFault" title="Permalink to this heading">¶</a></h4>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -452,9 +440,9 @@ fractional coordinates, <span class="math notranslate nohighlight">\(a_1\)</span
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="4.1.2.-Check-the-identified-rotated-system">
-<h4>4.1.2. Check the identified rotated system<a class="headerlink" href="#4.1.2.-Check-the-identified-rotated-system" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="4.1.2.-Check-the-identified-rotated-system">
+<h4>4.1.2. Check the identified rotated system<a class="headerlink" href="#4.1.2.-Check-the-identified-rotated-system" title="Permalink to this heading">¶</a></h4>
 <p>The StackingFault class is a child of FreeSurface, so it has all the same attributes that you can check. In addition, default values of a1vect and a2vect are set during the class initialization.</p>
 <ul class="simple">
 <li><p><strong>uvws</strong> are the three conventional Miller vectors used as the box vectors of the rotated system.</p></li>
@@ -582,9 +570,9 @@ The Cartesian shift vectors:
 [ 1.43189123e+00  2.48010836e+00 -4.14877046e-16]
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="4.1.3.-Build-the-free-surface-configuration">
-<h4>4.1.3. Build the free surface configuration<a class="headerlink" href="#4.1.3.-Build-the-free-surface-configuration" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="4.1.3.-Build-the-free-surface-configuration">
+<h4>4.1.3. Build the free surface configuration<a class="headerlink" href="#4.1.3.-Build-the-free-surface-configuration" title="Permalink to this heading">¶</a></h4>
 <p>The stacking fault configurations are modifications of the free surface configuration, so the next step is to build the free surface system. For stacking fault configurations, two different parallel geometrical planes need to be positioned inside the system: the free surface cut plane and the fault plane. Their positioning with respect to the atomic system is controlled by</p>
 <ul class="simple">
 <li><p><strong>shift</strong> rigidly shifts the atoms. This is best used to position the cut plane</p></li>
@@ -685,9 +673,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      47 |       1 |   2.864 |   1.653 |  26.890
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="4.1.4.-Check-the-free-surface-system-and-fault-position">
-<h4>4.1.4. Check the free surface system and fault position<a class="headerlink" href="#4.1.4.-Check-the-free-surface-system-and-fault-position" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="4.1.4.-Check-the-free-surface-system-and-fault-position">
+<h4>4.1.4. Check the free surface system and fault position<a class="headerlink" href="#4.1.4.-Check-the-free-surface-system-and-fault-position" title="Permalink to this heading">¶</a></h4>
 <p>Once the free surface configuration has been created, the quality of the fault position can be checked with the following class attributes:</p>
 <ul class="simple">
 <li><p><strong>abovefault</strong> is a boolean mask indicating which atoms are above the fault plane. A good fault position should have (roughly) the same number of atoms above and below the plane.</p></li>
@@ -774,9 +762,9 @@ Relative fault plane position: 0.5
 Absolute fault plane position: 14.029611541307906
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="4.1.5.-Generate-stacking-fault-configuration(s)">
-<h4>4.1.5. Generate stacking fault configuration(s)<a class="headerlink" href="#4.1.5.-Generate-stacking-fault-configuration(s)" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="4.1.5.-Generate-stacking-fault-configuration(s)">
+<h4>4.1.5. Generate stacking fault configuration(s)<a class="headerlink" href="#4.1.5.-Generate-stacking-fault-configuration(s)" title="Permalink to this heading">¶</a></h4>
 <p>A single stacking fault configuration for a specific shift can be generated using the fault() method. A full 1D or 2D array of stacking fault configurations can be generated using the iterfaultmap() method.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
@@ -801,7 +789,9 @@ atoms in faultsystem are displaced by:
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
- [ 4.44089210e-16  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 8.88178420e-16  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
@@ -813,9 +803,7 @@ atoms in faultsystem are displaced by:
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
- [ 4.44089210e-16  0.00000000e+00  0.00000000e+00]
- [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
- [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 8.88178420e-16  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
@@ -823,7 +811,7 @@ atoms in faultsystem are displaced by:
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
- [ 1.43189123e+00 -1.11022302e-16  0.00000000e+00]
+ [ 1.43189123e+00 -2.22044605e-16  0.00000000e+00]
  [ 1.43189123e+00 -1.11022302e-16  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
@@ -835,7 +823,7 @@ atoms in faultsystem are displaced by:
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
- [ 1.43189123e+00 -1.11022302e-16  0.00000000e+00]
+ [ 1.43189123e+00 -2.22044605e-16  0.00000000e+00]
  [ 1.43189123e+00 -1.11022302e-16  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
@@ -884,23 +872,23 @@ a1 = 0.6, a2 = 0.6, d = [ 2.577  1.488  0.000]
 a1 = 0.8, a2 = 0.6, d = [-2.577  1.488  0.000]
 a1 = 0.0, a2 = 0.8, d = [ 1.146  1.984  0.000]
 a1 = 0.2, a2 = 0.8, d = [ 1.718  1.984  0.000]
-a1 = 0.4, a2 = 0.8, d = [-0.573 -2.976  0.000]
+a1 = 0.4, a2 = 0.8, d = [ 2.291  1.984  0.000]
 a1 = 0.6, a2 = 0.8, d = [ 0.000 -2.976  0.000]
 a1 = 0.8, a2 = 0.8, d = [-2.291  1.984  0.000]
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="4.2.-fcc-{111}-using-primitive-unit-cell">
-<h3>4.2. fcc {111} using primitive unit cell<a class="headerlink" href="#4.2.-fcc-{111}-using-primitive-unit-cell" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="4.2.-fcc-{111}-using-primitive-unit-cell">
+<h3>4.2. fcc {111} using primitive unit cell<a class="headerlink" href="#4.2.-fcc-{111}-using-primitive-unit-cell" title="Permalink to this heading">¶</a></h3>
 <p>Just like with the FreeSurface class, a primitive unit cell can be given with a conventional (hkl) slip plane by specifying what the conventional cell’s setting/centering is.</p>
 <p>The advantages of doing this for StackingFaults are</p>
 <ul class="simple">
 <li><p>the resulting systems will be smaller in the in-plane directions making DFT calculations easier, and</p></li>
 <li><p>the default shifting vectors will be the smallest in-plane lattice vectors.</p></li>
 </ul>
-<div class="section" id="4.2.1.-Define-an-fcc-primitive-cell-and-initialize-a-StackingFault">
-<h4>4.2.1. Define an fcc primitive cell and initialize a StackingFault<a class="headerlink" href="#4.2.1.-Define-an-fcc-primitive-cell-and-initialize-a-StackingFault" title="Permalink to this headline">¶</a></h4>
+<section id="4.2.1.-Define-an-fcc-primitive-cell-and-initialize-a-StackingFault">
+<h4>4.2.1. Define an fcc primitive cell and initialize a StackingFault<a class="headerlink" href="#4.2.1.-Define-an-fcc-primitive-cell-and-initialize-a-StackingFault" title="Permalink to this heading">¶</a></h4>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
@@ -923,9 +911,9 @@ a1 = 0.8, a2 = 0.8, d = [-2.291  1.984  0.000]
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="4.2.2.-Check-the-identified-rotated-system-and-shift-vectors">
-<h4>4.2.2. Check the identified rotated system and shift vectors<a class="headerlink" href="#4.2.2.-Check-the-identified-rotated-system-and-shift-vectors" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="4.2.2.-Check-the-identified-rotated-system-and-shift-vectors">
+<h4>4.2.2. Check the identified rotated system and shift vectors<a class="headerlink" href="#4.2.2.-Check-the-identified-rotated-system-and-shift-vectors" title="Permalink to this heading">¶</a></h4>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
@@ -997,14 +985,14 @@ The crystal shift vectors:
 [ 0.  -0.5  0.5]
 [ 0.5 -0.5  0. ]
 The Cartesian shift vectors:
-[ 2.86378246e+00  2.86439546e-16 -1.63140510e-17]
+[ 2.86378246e+00  2.86439546e-16 -2.38358656e-16]
 [ 1.43189123e+00  2.48010836e+00 -2.46533587e-16]
 </pre></div></div>
 </div>
 <p>Now, we have an rcell with 1/4 the atoms and the algorithm automatically identified the same “best” shifts that we had to manually specify for the conventional cell!</p>
-</div>
-<div class="section" id="4.2.3.-Build-the-free-surface-configuration">
-<h4>4.2.3. Build the free surface configuration<a class="headerlink" href="#4.2.3.-Build-the-free-surface-configuration" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="4.2.3.-Build-the-free-surface-configuration">
+<h4>4.2.3. Build the free surface configuration<a class="headerlink" href="#4.2.3.-Build-the-free-surface-configuration" title="Permalink to this heading">¶</a></h4>
 <p>The <strong>vacuumwidth</strong> parameter of surface() inserts a volume of vacuum at the free surface of this width. DFT calculations are more efficient for free surfaces introduced with a volume of vacuum rather than making one dimension non-periodic.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
@@ -1045,9 +1033,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      11 |       1 |   1.432 |   2.480 |  22.214
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="4.2.4.-Check-the-free-surface-system-and-fault-position">
-<h4>4.2.4. Check the free surface system and fault position<a class="headerlink" href="#4.2.4.-Check-the-free-surface-system-and-fault-position" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="4.2.4.-Check-the-free-surface-system-and-fault-position">
+<h4>4.2.4. Check the free surface system and fault position<a class="headerlink" href="#4.2.4.-Check-the-free-surface-system-and-fault-position" title="Permalink to this heading">¶</a></h4>
 <p>The vacuum region changes the box dimensions but not the Cartesian atomic positions. As such, the Cartesian fault positions are the same with and without the vacuum region, but the relative fault positions are different for all but one value. Half of the vacuum region is added to the bottom of the system (by shifting origin) and the other half is added to the top. This means that a relative shift of 0.5 results in the same Cartesian location.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
@@ -1128,9 +1116,9 @@ Relative fault plane position: 0.5000000000000001
 Absolute fault plane position: 14.029611541307906
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="4.2.5.-Generate-stacking-fault-configuration(s)">
-<h4>4.2.5. Generate stacking fault configuration(s)<a class="headerlink" href="#4.2.5.-Generate-stacking-fault-configuration(s)" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="4.2.5.-Generate-stacking-fault-configuration(s)">
+<h4>4.2.5. Generate stacking fault configuration(s)<a class="headerlink" href="#4.2.5.-Generate-stacking-fault-configuration(s)" title="Permalink to this heading">¶</a></h4>
 <p>Further support for DFT is that the fault() and iterfaultmap() methods also have a <strong>minimum_r</strong> parameter that can be used to ensure all atoms across the fault plane remain at least a set distance apart. This can help with relaxations when certain faults may otherwise position atoms very close together.</p>
 <p>Here, minimum_r is set to be 0.85 of the unit cell’s smallest interatomic vector r0. This results in some shifts in the z direction for certain fault configurations.</p>
 <div class="nbinput docutils container">
@@ -1156,14 +1144,14 @@ a1 = 0.6, a2 = 0.0, d = [-1.146  0.000  0.000]
 a1 = 0.8, a2 = 0.0, d = [-0.573  0.000  0.000]
 a1 = 0.0, a2 = 0.2, d = [ 0.286  0.496  0.000]
 a1 = 0.2, a2 = 0.2, d = [ 0.859  0.496  0.004]
-a1 = 0.4, a2 = 0.2, d = [ 1.432  0.496  0.073]
+a1 = 0.4, a2 = 0.2, d = [-1.432  0.496  0.073]
 a1 = 0.6, a2 = 0.2, d = [-0.859  0.496  0.004]
 a1 = 0.8, a2 = 0.2, d = [-0.286  0.496  0.000]
 a1 = 0.0, a2 = 0.4, d = [ 0.573  0.992  0.000]
 a1 = 0.2, a2 = 0.4, d = [ 1.146  0.992  0.073]
 a1 = 0.4, a2 = 0.4, d = [-1.146  0.992  0.073]
 a1 = 0.6, a2 = 0.4, d = [-0.573  0.992  0.000]
-a1 = 0.8, a2 = 0.4, d = [ 0.000  0.992  0.000]
+a1 = 0.8, a2 = 0.4, d = [-0.000  0.992  0.000]
 a1 = 0.0, a2 = 0.6, d = [-0.573 -0.992  0.000]
 a1 = 0.2, a2 = 0.6, d = [ 0.000 -0.992  0.004]
 a1 = 0.4, a2 = 0.6, d = [ 0.573 -0.992  0.000]
@@ -1172,17 +1160,17 @@ a1 = 0.8, a2 = 0.6, d = [-1.146 -0.992  0.000]
 a1 = 0.0, a2 = 0.8, d = [-0.286 -0.496  0.000]
 a1 = 0.2, a2 = 0.8, d = [ 0.286 -0.496  0.000]
 a1 = 0.4, a2 = 0.8, d = [ 0.859 -0.496  0.000]
-a1 = 0.6, a2 = 0.8, d = [-1.432 -0.496  0.000]
+a1 = 0.6, a2 = 0.8, d = [ 1.432 -0.496  0.000]
 a1 = 0.8, a2 = 0.8, d = [-0.859 -0.496  0.000]
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="4.3.-hcp-{0001}-slip-plane">
-<h3>4.3. hcp {0001} slip plane<a class="headerlink" href="#4.3.-hcp-{0001}-slip-plane" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="4.3.-hcp-{0001}-slip-plane">
+<h3>4.3. hcp {0001} slip plane<a class="headerlink" href="#4.3.-hcp-{0001}-slip-plane" title="Permalink to this heading">¶</a></h3>
 <p>The system rotation vectors and the shifting vectors can be given in Miller-Bravais indices if the reference unit cell is hexagonal.</p>
-<div class="section" id="4.3.1.-Define-an-fcc-primitive-cell-and-initialize-a-StackingFault">
-<h4>4.3.1. Define an fcc primitive cell and initialize a StackingFault<a class="headerlink" href="#4.3.1.-Define-an-fcc-primitive-cell-and-initialize-a-StackingFault" title="Permalink to this headline">¶</a></h4>
+<section id="4.3.1.-Define-an-fcc-primitive-cell-and-initialize-a-StackingFault">
+<h4>4.3.1. Define an fcc primitive cell and initialize a StackingFault<a class="headerlink" href="#4.3.1.-Define-an-fcc-primitive-cell-and-initialize-a-StackingFault" title="Permalink to this heading">¶</a></h4>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
@@ -1206,9 +1194,9 @@ a1 = 0.8, a2 = 0.8, d = [-0.859 -0.496  0.000]
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="4.3.2.-Check-the-identified-rotated-system-and-shift-vectors">
-<h4>4.3.2. Check the identified rotated system and shift vectors<a class="headerlink" href="#4.3.2.-Check-the-identified-rotated-system-and-shift-vectors" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="4.3.2.-Check-the-identified-rotated-system-and-shift-vectors">
+<h4>4.3.2. Check the identified rotated system and shift vectors<a class="headerlink" href="#4.3.2.-Check-the-identified-rotated-system-and-shift-vectors" title="Permalink to this heading">¶</a></h4>
 <p>If plane_hkl was given in the 4-index representation, then uvws, a1vect_uvw and a2vect_uvw will be saved in the 4-index representation as well.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
@@ -1285,10 +1273,10 @@ The Cartesian shift vectors:
 </pre></div></div>
 </div>
 <p>The remaining steps are similar to those mentioned for the other systems above.</p>
-</div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -1368,13 +1356,13 @@ The Cartesian shift vectors:
         <li class="right" >
           <a href="4.2._Free_surface_generator.html" title="Introduction to atomman: Free surface generator"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Stacking fault generator</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
     </div>
   </body>
 </html>

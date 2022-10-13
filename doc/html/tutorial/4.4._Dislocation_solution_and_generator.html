@@ -1,23 +1,26 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction to atomman: Dislocation solution and generator &#8212; atomman 1.4.4 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Introduction to atomman: Dislocation solution and generator &#8212; atomman 1.4.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction to atomman: Gamma surface plotting" href="4.5._Gamma_surface_plotting.html" />
+    <link rel="next" title="&lt;no title&gt;" href="4.5._Gamma_surface_plotting.html" />
     <link rel="prev" title="Introduction to atomman: Stacking fault generator" href="4.3._Stacking_fault_generator.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -30,12 +33,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="4.5._Gamma_surface_plotting.html" title="Introduction to atomman: Gamma surface plotting"
+          <a href="4.5._Gamma_surface_plotting.html" title="&lt;no title&gt;"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="4.3._Stacking_fault_generator.html" title="Introduction to atomman: Stacking fault generator"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Dislocation solution and generator</a></li> 
       </ul>
@@ -51,35 +54,21 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
     border: none;
-    padding: 0;
+    padding: 0 0;
     margin: 0;
     box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -180,7 +169,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    /*background: #f5f5f5;*/
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -246,7 +235,6 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
-    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -294,12 +282,12 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-Dislocation-solution-and-generator">
-<h1>Introduction to atomman: Dislocation solution and generator<a class="headerlink" href="#Introduction-to-atomman:-Dislocation-solution-and-generator" title="Permalink to this headline">¶</a></h1>
+<section id="Introduction-to-atomman:-Dislocation-solution-and-generator">
+<h1>Introduction to atomman: Dislocation solution and generator<a class="headerlink" href="#Introduction-to-atomman:-Dislocation-solution-and-generator" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
-<div class="section" id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<section id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
 <p>This Notebook outlines the use of the classes and methods in atomman for obtaining elastic solutions for perfectly straight dislocations and constructing atomic configurations based on them.</p>
 <ul class="simple">
 <li><p><a class="reference external" href="#section2">Section #2</a> details the theory used to obtain the dislocation solutions and construct the atomic systems.</p></li>
@@ -341,17 +329,17 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.4
-Notebook executed on 2022-03-17
+atomman version = 1.4.7
+Notebook executed on 2022-10-12
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.-Theory">
-<h2>2. Theory<a class="headerlink" href="#2.-Theory" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="2.-Theory">
+<h2>2. Theory<a class="headerlink" href="#2.-Theory" title="Permalink to this heading">¶</a></h2>
 <p>The Dislocation class is meant to provide a simple and convenient means of generating dislocation monopole and periodic array of dislocations atomic configurations. The dislocation configurations generated by this class contain a single dislocation which is inserted into an otherwise perfect crystalline system by applying displacements corresponding to a Volterra dislocation solution. The boundary conditions are then handled differently based on whether the system is to be a dislocation monopole
 configuration or a periodic array of dislocations configuration.</p>
-<div class="section" id="2.1.-Dislocation-solutions">
-<h3>2.1. Dislocation solutions<a class="headerlink" href="#2.1.-Dislocation-solutions" title="Permalink to this headline">¶</a></h3>
+<section id="2.1.-Dislocation-solutions">
+<h3>2.1. Dislocation solutions<a class="headerlink" href="#2.1.-Dislocation-solutions" title="Permalink to this heading">¶</a></h3>
 <p>Dislocation theory is based on computing and using elasticity solutions of dislocations to define what they look like and how they interact with the surrounding material. The Volterra dislocation model assumes that the discontinuity in the crystal due to the dislocation exists as a line singularity. While this assumption does not hold true in real materials, the Volterra solution still provides a decent guess for the long-range stress and strain fields of compact dislocation cores. It also
 provides a useful starting point for developing more complicated dislocation solutions, and can provide good initial guesses for constructing atomic dislocation configurations.</p>
 <p>Solutions of straight dislocations are always defined relative to three orthogonal unit vectors <span class="math notranslate nohighlight">\(\hat{m}\)</span>, <span class="math notranslate nohighlight">\(\hat{n}\)</span>, and <span class="math notranslate nohighlight">\(\hat{\xi}\)</span></p>
@@ -364,8 +352,8 @@ provides a useful starting point for developing more complicated dislocation sol
 <div class="math notranslate nohighlight">
 \[x_i = x_1 \hat{m} + x_2 \hat{n} + x_3 \hat{\xi}\]</div>
 <p>For straight dislocations, the elasticity solutions are independent of the <span class="math notranslate nohighlight">\(x_3\)</span> direction and therefore only depend on <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span>.</p>
-<div class="section" id="2.1.1.-Isotropic-solution">
-<h4>2.1.1. Isotropic solution<a class="headerlink" href="#2.1.1.-Isotropic-solution" title="Permalink to this headline">¶</a></h4>
+<section id="2.1.1.-Isotropic-solution">
+<h4>2.1.1. Isotropic solution<a class="headerlink" href="#2.1.1.-Isotropic-solution" title="Permalink to this heading">¶</a></h4>
 <p>For isotropic materials, the elastic solution for a Volterra dislocation can be given as analytical equations. Variations of the analytical solutions can be found in every textbook on dislocation theory. The particular equations used in atomman match those found in Elementary Dislocation Theory by Weertman and Weertman except with flipped signs. This choice provides the best correspondence of the isotropic solution to the anisotropic solutions described below.</p>
 <p>Isotropic elastic constants can be represented using only two independent terms. The two isotropic elastic constants typically used for dislocation solutions are the shear modulus, <span class="math notranslate nohighlight">\(\mu\)</span>, and the Poisson’s ratio, <span class="math notranslate nohighlight">\(\nu\)</span>.</p>
 <p>The isotropic displacements, <span class="math notranslate nohighlight">\(d_i\)</span>, for a dislocation centered at <span class="math notranslate nohighlight">\(x_1 = x_2 = 0\)</span> are</p>
@@ -411,9 +399,9 @@ provides a useful starting point for developing more complicated dislocation sol
 <p>Alternatively, everything in the self-energy expression outside the ln term can be grouped together as the pre-ln factor</p>
 <div class="math notranslate nohighlight">
 \[\frac{W}{l} = a \ln{ \left( \frac{R}{r_0} \right)}.\]</div>
-</div>
-<div class="section" id="2.1.2.-Anisotropic-solution">
-<h4>2.1.2. Anisotropic solution<a class="headerlink" href="#2.1.2.-Anisotropic-solution" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="2.1.2.-Anisotropic-solution">
+<h4>2.1.2. Anisotropic solution<a class="headerlink" href="#2.1.2.-Anisotropic-solution" title="Permalink to this heading">¶</a></h4>
 <p>The elasticity solution for Volterra dislocations in anisotropic materials was first introduced by <a class="reference external" href="https://doi.org/10.1016/0001-6160(53)90099-6">Eshelby</a>. Starting with the fundamental equations of elasticity</p>
 <div class="math notranslate nohighlight">
 \[\sigma_{ij} = C_{ijkl} \epsilon_{kl}\]</div>
@@ -447,19 +435,19 @@ provides a useful starting point for developing more complicated dislocation sol
 <p>For the displacement and stress equations, <span class="math notranslate nohighlight">\(\eta\)</span> is an imaginary coordinate that combines <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span> using the computed eigenvalues <span class="math notranslate nohighlight">\(p_{\alpha}\)</span></p>
 <div class="math notranslate nohighlight">
 \[\eta_{\alpha} = x_1 + p_{\alpha} x_2\]</div>
-</div>
-<div class="section" id="2.1.3.-Linear-displacement-solution">
-<h4>2.1.3. Linear displacement solution<a class="headerlink" href="#2.1.3.-Linear-displacement-solution" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="2.1.3.-Linear-displacement-solution">
+<h4>2.1.3. Linear displacement solution<a class="headerlink" href="#2.1.3.-Linear-displacement-solution" title="Permalink to this heading">¶</a></h4>
 <p>The periodic array of dislocations configuration uses an additional solution based on applying a linear gradient of displacements to the atoms to generate a geometrically necessary dislocation inside the system.</p>
 <div class="math notranslate nohighlight">
 \[u_j = \frac{b_j}{2} - \text{sign}(x_2)\left[ \frac{x_1 b_j}{2l} + \frac{b_j}{4}\right],\]</div>
 <p>where <span class="math notranslate nohighlight">\(l\)</span> is the full periodic length of the system in the <span class="math notranslate nohighlight">\(\hat{m}\)</span> direction. By applying opposite displacements above and below the slip plane, the atomic disregistry linearly varies from 0 to <span class="math notranslate nohighlight">\(b\)</span> across the system.</p>
 <p>While this does not give a good approximation of a real dislocation, it does have a couple of benefits besides its simplicity. First, the solution is independent of the dislocation’s position along the slip plane. This makes it a good choice of displacements for the non-periodic surfaces if the atoms are held rigidly as the interaction between the dislocation and the boundaries will remain constant as the dislocation moves. Also, since <span class="math notranslate nohighlight">\(u_j\)</span> depends on <span class="math notranslate nohighlight">\(\text{sign}(x_2)\)</span> rather than
 <span class="math notranslate nohighlight">\(x_2\)</span> the solution on each side of the slip plane only depends on <span class="math notranslate nohighlight">\(x_1\)</span>.</p>
-</div>
-</div>
-<div class="section" id="2.2.-Dislocation-definition">
-<h3>2.2. Dislocation definition<a class="headerlink" href="#2.2.-Dislocation-definition" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="2.2.-Dislocation-definition">
+<h3>2.2. Dislocation definition<a class="headerlink" href="#2.2.-Dislocation-definition" title="Permalink to this heading">¶</a></h3>
 <p>A type of dislocation can be fully defined relative to a unit cell, ucell, by specifying the Miller slip plane, <span class="math notranslate nohighlight">\(n_{(hkl)}\)</span>, the Miller Burgers vector, <span class="math notranslate nohighlight">\(b_{[uvw]}\)</span>, and the Miller line direction, <span class="math notranslate nohighlight">\(\xi_{[uvw]}\)</span>. Defining dislocations using Miller planes and vectors rather than Cartesian planes and vectors is more convenient as the definitions hold true for all crystals associated with a given crystal prototype. This is also how dislocations are typically defined by materials
 scientists.</p>
 <p>The dislocation’s character (screw, edge, mixed) is given by the angle between <span class="math notranslate nohighlight">\(b_{[uvw]}\)</span> and <span class="math notranslate nohighlight">\(\xi_{[uvw]}\)</span>. Screw dislocations have <span class="math notranslate nohighlight">\(\xi_{[uvw]}\)</span> parallel to <span class="math notranslate nohighlight">\(b_{[uvw]}\)</span>, and therefore a character angle of 0<span class="math notranslate nohighlight">\(^{\circ}\)</span> or 180<span class="math notranslate nohighlight">\(^{\circ}\)</span>, while edge dislocations have the two directions perpendicular for a character angle of 90<span class="math notranslate nohighlight">\(^{\circ}\)</span>. For atomic configurations, the line direction must be a crystal vector, which limits the character angles that
@@ -482,11 +470,11 @@ can be explored. This is done as the system is periodic along the line direction
 <p>A rotated cell, rcell, is then created using ucell and the rotation vectors. This rotated cell serves as the seed for constructing the larger atomic configurations in which the dislocation is inserted. As rcell is constructed, the Cartesian transformation matrix, <span class="math notranslate nohighlight">\(T\)</span>, associated with transforming from the ucell orientation to the rcell orientation is also identified. The unit cell and <span class="math notranslate nohighlight">\(T\)</span> are then used to convert <span class="math notranslate nohighlight">\(b_{[uvw]}\)</span> to the Cartesian <span class="math notranslate nohighlight">\(b\)</span> vector.</p>
 <p>Finally, a rigid body shift, <span class="math notranslate nohighlight">\(\delta\)</span> is defined relative to rcell. This is used to adjust the atomic positions such that the mathematical position of the dislocation line and/or slip plane can be properly placed relative to the atoms. For dislocations defined relative to crystal prototypes, <span class="math notranslate nohighlight">\(\delta\)</span> can be expressed in reduced coordinates relative to ucell. Alternatively, rcell itself can be used to identify shifts normal to the slip plane that place the mathematical slip plane
 halfway between all atomic planes in rcell. This allows for dislocations to be easily generated either from pre-defined parameters or based on optimum shift recommendations.</p>
-</div>
-<div class="section" id="2.3.-Boundary-conditions">
-<h3>2.3. Boundary conditions<a class="headerlink" href="#2.3.-Boundary-conditions" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="2.3.1.-Dislocation-monopoles">
-<h4>2.3.1. Dislocation monopoles<a class="headerlink" href="#2.3.1.-Dislocation-monopoles" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="2.3.-Boundary-conditions">
+<h3>2.3. Boundary conditions<a class="headerlink" href="#2.3.-Boundary-conditions" title="Permalink to this heading">¶</a></h3>
+<section id="2.3.1.-Dislocation-monopoles">
+<h4>2.3.1. Dislocation monopoles<a class="headerlink" href="#2.3.1.-Dislocation-monopoles" title="Permalink to this heading">¶</a></h4>
 <p>A dislocation monopole is an atomic configuration that contains a single straight dislocation.</p>
 <ul class="simple">
 <li><p>The box direction parallel to the dislocation line is made periodic. The other two box directions are non-periodic.</p></li>
@@ -497,9 +485,9 @@ halfway between all atomic planes in rcell. This allows for dislocations to be e
 configurations and keeping investigations to dislocations with compact cores that remain positioned near the center of the systems.</p>
 <p>A flexible boundary relaxation is one in which the boundary atoms are subjected to an alternative relaxation method, such as the lattice Greens function. This alternative relaxation method allows for the misfit forces at the interface between the boundary and non-boundary atoms to be reduced while preventing the atoms at the non-periodic box boundaries from forming free surfaces. This method is preferred for expensive atomistic methods like DFT as it gives good structure predictions as long as
 the dislocation core itself remains in the non-boundary region.</p>
-</div>
-<div class="section" id="2.3.2.-Periodic-array-of-dislocations">
-<h4>2.3.2. Periodic array of dislocations<a class="headerlink" href="#2.3.2.-Periodic-array-of-dislocations" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="2.3.2.-Periodic-array-of-dislocations">
+<h4>2.3.2. Periodic array of dislocations<a class="headerlink" href="#2.3.2.-Periodic-array-of-dislocations" title="Permalink to this heading">¶</a></h4>
 <p>A periodic array of dislocations atomic configuration is one in which the system itself only contains one dislocation, but the system’s box boundary conditions are such that it represents an infinite array of equally spaced dislocations.</p>
 <ul class="simple">
 <li><p>The two box directions in the slip plane are made periodic while the out-of-plane box direction is non-periodic.</p></li>
@@ -514,12 +502,12 @@ to the system by adding displacements/forces to the boundary atoms. Some example
 <li><p>Strain-controlled simulations in which a constant displacement rate is applied to the boundary atoms. Simulations can either have rigid boundaries, in which the boundary atoms only move in the displacement direction, or free-surface boundaries, in which motion in the displacement direction is fixed but MD motions in perpendicular directions are allowed.</p></li>
 <li><p>Stress-controlled simulations in which a constant force is applied to the boundary atoms. Simulations can either have rigid boundaries, in which the boundary is treated as a rigid block that the force acts on, or free-surface boundaries, in which the boundary atoms are subjected to MD steps but each has an extra constant force applied to it.</p></li>
 </ul>
-</div>
-</div>
-</div>
-<div class="section" id="3.-Volterra-solutions">
-<h2>3. Volterra solutions<a class="headerlink" href="#3.-Volterra-solutions" title="Permalink to this headline">¶</a></h2>
-<p><strong>Skip to</strong><a class="reference external" href="#section4">Section #4</a><strong>if you want to construct atomic configurations!</strong></p>
+</section>
+</section>
+</section>
+<section id="3.-Volterra-solutions">
+<h2>3. Volterra solutions<a class="headerlink" href="#3.-Volterra-solutions" title="Permalink to this heading">¶</a></h2>
+<p><strong>Skip to</strong> <a class="reference external" href="#section4">Section #4</a> <strong>if you want to construct atomic configurations!</strong></p>
 <p>A Volterra dislocation solution can be obtained with the solve_volterra_dislocation() function.</p>
 <p><em>Update Version 1.3.2: ξ_uvw, slip_hkl, and box parameters added to make defining systems easier, especially for non-cubic crystals. axes renamed to transform for clarity.</em></p>
 <p>Parameters</p>
@@ -539,8 +527,8 @@ to the system by adding displacements/forces to the boundary atoms. Some example
 <ul class="simple">
 <li><p>(<em>atomman.defect.VolterraDislocation</em>) The dislocation solution. This will be an atomman.defect.IsotropicVolterraDislocation object or an atomman.defect.Stroh object depending on if the elastic constants used are isotropic or anisotropic.</p></li>
 </ul>
-<div class="section" id="3.1.-Build-solution">
-<h3>3.1. Build solution<a class="headerlink" href="#3.1.-Build-solution" title="Permalink to this headline">¶</a></h3>
+<section id="3.1.-Build-solution">
+<h3>3.1. Build solution<a class="headerlink" href="#3.1.-Build-solution" title="Permalink to this heading">¶</a></h3>
 <p>Specify materials properties, namely the unit cell box and the elastic constants.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -622,8 +610,8 @@ Cij in GPa:
 </pre></div>
 </div>
 </div>
-<div class="section" id="3.2.-Compute-properties">
-<h4>3.2. Compute properties<a class="headerlink" href="#3.2.-Compute-properties" title="Permalink to this headline">¶</a></h4>
+<section id="3.2.-Compute-properties">
+<h4>3.2. Compute properties<a class="headerlink" href="#3.2.-Compute-properties" title="Permalink to this heading">¶</a></h4>
 <p>Check configuration</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -693,8 +681,9 @@ Transformation matrix from standard orientation to dislocation orientation:
 <div class="highlight"><pre>
 Solution is anisotropic
 p -&gt;
-[ 0.57432511+1.48063821j  0.57432511-1.48063821j -0.57432511+1.48063821j
- -0.57432511-1.48063821j  0.        +0.39392852j  0.        -0.39392852j]
+[ 5.74325108e-01+1.48063821j  5.74325108e-01-1.48063821j
+ -5.74325108e-01+1.48063821j -5.74325108e-01-1.48063821j
+ -5.55111512e-17+0.39392852j -5.55111512e-17-0.39392852j]
 A -&gt;
 [[ 4.92478068e-01+2.92695902e-01j -1.86741173e-01+9.77580274e-02j
    6.67206634e-01+0.00000000e+00j]
@@ -704,10 +693,10 @@ A -&gt;
    6.67206634e-01+0.00000000e+00j]
  [-4.92478068e-01-2.92695902e-01j -1.86741173e-01+9.77580274e-02j
    6.67206634e-01-0.00000000e+00j]
- [-3.05560230e-17-1.47294255e-01j  7.89087414e-01+0.00000000e+00j
-   4.27766816e-01-9.13706987e-17j]
- [-3.05560230e-17+1.47294255e-01j  7.89087414e-01-0.00000000e+00j
-   4.27766816e-01+9.13706987e-17j]]
+ [ 3.55985935e-16+1.47294255e-01j -7.89087414e-01+0.00000000e+00j
+  -4.27766816e-01-1.31098024e-16j]
+ [ 3.55985935e-16-1.47294255e-01j -7.89087414e-01-0.00000000e+00j
+  -4.27766816e-01+1.31098024e-16j]]
 L -&gt;
 [[ 1.87773573e-01-2.53391120e-01j  1.05996344e-01+1.67934295e-01j
   -2.23781767e-02-2.06874267e-01j]
@@ -717,14 +706,14 @@ L -&gt;
    2.23781767e-02-2.06874267e-01j]
  [ 1.87773573e-01-2.53391120e-01j -1.05996344e-01-1.67934295e-01j
    2.23781767e-02+2.06874267e-01j]
- [-1.50398047e-01-1.01240078e-17j  1.30479010e-16-3.81790193e-01j
-  -8.20886609e-17-6.54039958e-02j]
- [-1.50398047e-01+1.01240078e-17j  1.30479010e-16+3.81790193e-01j
-  -8.20886609e-17+6.54039958e-02j]]
+ [ 1.50398047e-01-1.50200901e-17j -1.18890059e-17+3.81790193e-01j
+   1.59422563e-16+6.54039958e-02j]
+ [ 1.50398047e-01+1.50200901e-17j -1.18890059e-17-3.81790193e-01j
+   1.59422563e-16-6.54039958e-02j]]
 k -&gt;
 [ 8.78792266e-01+1.74127681j  8.78792266e-01-1.74127681j
  -8.78792266e-01+1.74127681j -8.78792266e-01-1.74127681j
-  3.44483780e-16+1.62818332j  3.44483780e-16-1.62818332j]
+  2.92248361e-17+1.62818332j  2.92248361e-17-1.62818332j]
 </pre></div></div>
 </div>
 <p><span class="math notranslate nohighlight">\(K_{ij}\)</span>, <span class="math notranslate nohighlight">\(K\)</span>, and pre-ln factor</p>
@@ -868,11 +857,11 @@ Stress components in GPa, coordinates in Angstroms
 <img alt="../_images/tutorial_4.4._Dislocation_solution_and_generator_26_1.png" src="../_images/tutorial_4.4._Dislocation_solution_and_generator_26_1.png" />
 </div>
 </div>
-</div>
-</div>
-</div>
-<div class="section" id="4.-Dislocation-initialization">
-<h2>4. Dislocation initialization<a class="headerlink" href="#4.-Dislocation-initialization" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+</section>
+<section id="4.-Dislocation-initialization">
+<h2>4. Dislocation initialization<a class="headerlink" href="#4.-Dislocation-initialization" title="Permalink to this heading">¶</a></h2>
 <p>The Dislocation class is initialized by giving it parameters associated with the crystal information and the dislocation definition.</p>
 <p>Crystal parameters</p>
 <ul class="simple">
@@ -894,8 +883,8 @@ Stress components in GPa, coordinates in Angstroms
 <li><p><strong>shiftindex</strong> (<em>float, optional</em>) The index of the identified optimum shifts based on the rotated cell to use. Different values allow for the selection of different atomic planes neighboring the slip plane. Note that shiftindex values only apply shifts normal to the slip plane; best shifts for non-planar dislocations (like bcc screw) may also need a shift in the slip plane. Cannot be given with shiftindex. If neither shift nor shiftindex is given then shiftindex = 0 is used.</p></li>
 <li><p><strong>shiftscale</strong> (<em>bool, optional</em>) If False (default), a given shift value will be taken as absolute Cartesian. If True, a given shift will be taken relative to the rotated cell’s box vectors.</p></li>
 </ul>
-<div class="section" id="4.1.-Define-the-Dislocation">
-<h3>4.1. Define the Dislocation<a class="headerlink" href="#4.1.-Define-the-Dislocation" title="Permalink to this headline">¶</a></h3>
+<section id="4.1.-Define-the-Dislocation">
+<h3>4.1. Define the Dislocation<a class="headerlink" href="#4.1.-Define-the-Dislocation" title="Permalink to this heading">¶</a></h3>
 <p>This is similar to what is done in Section #3 with the main differences being that the full unit cell is created rather than the box, and m and n are left as their default values. The default m=<span class="math notranslate nohighlight">\([0,1,0]\)</span> and n=<span class="math notranslate nohighlight">\([0,0,1]\)</span> values are left alone as this is the optimal choice for LAMMPS calculations and allows for the construction of any perfect straight dislocation type for any crystal structure.</p>
 <p>Specify materials properties, namely the unit cell and the elastic constants.</p>
 <div class="nbinput docutils container">
@@ -974,9 +963,9 @@ Cij (GPa) =
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="4.2.-Check-the-solution">
-<h3>4.2. Check the solution<a class="headerlink" href="#4.2.-Check-the-solution" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="4.2.-Check-the-solution">
+<h3>4.2. Check the solution<a class="headerlink" href="#4.2.-Check-the-solution" title="Permalink to this heading">¶</a></h3>
 <p>The Dislocation object has a number of attributes that describe the basic setup.</p>
 <ul class="simple">
 <li><p><strong>transform</strong> is the Cartesian transformation matrix associated with rotating from the unit cell orientation to the rotated cell orientation. This can be used to transform any other vectors between the two orientations.</p></li>
@@ -1136,10 +1125,10 @@ Identified shifts =
 The shift currently set to be used = [0.        0.        1.1691343]
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="5.-Dislocation-Monopole-Configuration">
-<h2>5. Dislocation Monopole Configuration<a class="headerlink" href="#5.-Dislocation-Monopole-Configuration" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="5.-Dislocation-Monopole-Configuration">
+<h2>5. Dislocation Monopole Configuration<a class="headerlink" href="#5.-Dislocation-Monopole-Configuration" title="Permalink to this heading">¶</a></h2>
 <p>System size parameters</p>
 <ul class="simple">
 <li><p><strong>sizemults</strong> (<em>tuple, optional</em>) The size multipliers to use when generating the system. Values are limited to being positive integers. The multipliers for the two non-periodic directions must be even. If not given, the default multipliers will be 2 for the non-periodic directions and 1 for the periodic direction.</p></li>
@@ -1164,8 +1153,8 @@ shift set during class initialization.</p></li>
 <ul class="simple">
 <li><p><strong>return_base_system</strong> (<em>bool, optional</em>) If True then the dislocation-free base system corresponding to the dislocation system will also be returned. The base system is used as a reference state for most of the dislocation analysis tools.</p></li>
 </ul>
-<div class="section" id="5.1.-Small-atomic-system-example,-easy-to-see-atomic-positions">
-<h3>5.1. Small atomic system example, easy to see atomic positions<a class="headerlink" href="#5.1.-Small-atomic-system-example,-easy-to-see-atomic-positions" title="Permalink to this headline">¶</a></h3>
+<section id="5.1.-Small-atomic-system-example,-easy-to-see-atomic-positions">
+<h3>5.1. Small atomic system example, easy to see atomic positions<a class="headerlink" href="#5.1.-Small-atomic-system-example,-easy-to-see-atomic-positions" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
@@ -1199,9 +1188,9 @@ shift set during class initialization.</p></li>
 <img alt="../_images/tutorial_4.4._Dislocation_solution_and_generator_45_0.png" src="../_images/tutorial_4.4._Dislocation_solution_and_generator_45_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="5.2.-Large-atomic-system-example,-more-useful-for-simulations">
-<h3>5.2. Large atomic system example, more useful for simulations<a class="headerlink" href="#5.2.-Large-atomic-system-example,-more-useful-for-simulations" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="5.2.-Large-atomic-system-example,-more-useful-for-simulations">
+<h3>5.2. Large atomic system example, more useful for simulations<a class="headerlink" href="#5.2.-Large-atomic-system-example,-more-useful-for-simulations" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
@@ -1235,9 +1224,9 @@ shift set during class initialization.</p></li>
 <img alt="../_images/tutorial_4.4._Dislocation_solution_and_generator_48_0.png" src="../_images/tutorial_4.4._Dislocation_solution_and_generator_48_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="5.3.-Dislocation-property-evaluations">
-<h3>5.3. Dislocation property evaluations<a class="headerlink" href="#5.3.-Dislocation-property-evaluations" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="5.3.-Dislocation-property-evaluations">
+<h3>5.3. Dislocation property evaluations<a class="headerlink" href="#5.3.-Dislocation-property-evaluations" title="Permalink to this heading">¶</a></h3>
 <p>The dislocation characterization methods all compare defect configurations to a defect-free base system. The monopole method automatically returns a compatible base system that can be used for the characterization methods.</p>
 <p>See the <a class="reference external" href="4.6._Dislocation_analysis_tools.html">4.6. Dislocation analysis tools Notebook</a> for more dislocation property evaluations.</p>
 <p><strong>NOTE</strong>: The characterizations shown here are simply for demonstration purposes. For real problems, the returned dislocation system should be atomically relaxed prior to characterizing it.</p>
@@ -1271,10 +1260,10 @@ shift set during class initialization.</p></li>
 <img alt="../_images/tutorial_4.4._Dislocation_solution_and_generator_50_0.png" src="../_images/tutorial_4.4._Dislocation_solution_and_generator_50_0.png" />
 </div>
 </div>
-</div>
-</div>
-<div class="section" id="6.-Periodic-Array-of-Dislocations-Configuration">
-<h2>6. Periodic Array of Dislocations Configuration<a class="headerlink" href="#6.-Periodic-Array-of-Dislocations-Configuration" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="6.-Periodic-Array-of-Dislocations-Configuration">
+<h2>6. Periodic Array of Dislocations Configuration<a class="headerlink" href="#6.-Periodic-Array-of-Dislocations-Configuration" title="Permalink to this heading">¶</a></h2>
 <p>System size parameters</p>
 <ul class="simple">
 <li><p><strong>sizemults</strong> (<em>tuple, optional</em>) The size multipliers to use when generating the system. Values are limited to being positive integers. The multipliers for the two non-periodic directions must be even. If not given, the default multipliers will be 2 for the non-periodic directions and 1 for the periodic direction.</p></li>
@@ -1302,8 +1291,8 @@ shift set during class initialization.</p></li>
 <ul class="simple">
 <li><p><strong>return_base_system</strong> (<em>bool, optional</em>) If True then the dislocation-free base system corresponding to the dislocation system will also be returned. The base system is used as a reference state for most of the dislocation analysis tools.</p></li>
 </ul>
-<div class="section" id="6.1.-Small-atomic-system-example,-easy-to-see-atomic-positions">
-<h3>6.1. Small atomic system example, easy to see atomic positions<a class="headerlink" href="#6.1.-Small-atomic-system-example,-easy-to-see-atomic-positions" title="Permalink to this headline">¶</a></h3>
+<section id="6.1.-Small-atomic-system-example,-easy-to-see-atomic-positions">
+<h3>6.1. Small atomic system example, easy to see atomic positions<a class="headerlink" href="#6.1.-Small-atomic-system-example,-easy-to-see-atomic-positions" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
@@ -1337,9 +1326,9 @@ shift set during class initialization.</p></li>
 <img alt="../_images/tutorial_4.4._Dislocation_solution_and_generator_54_0.png" src="../_images/tutorial_4.4._Dislocation_solution_and_generator_54_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="6.2.-Large-atomic-system-example,-more-useful-for-simulations">
-<h3>6.2. Large atomic system example, more useful for simulations<a class="headerlink" href="#6.2.-Large-atomic-system-example,-more-useful-for-simulations" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="6.2.-Large-atomic-system-example,-more-useful-for-simulations">
+<h3>6.2. Large atomic system example, more useful for simulations<a class="headerlink" href="#6.2.-Large-atomic-system-example,-more-useful-for-simulations" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
@@ -1373,9 +1362,9 @@ shift set during class initialization.</p></li>
 <img alt="../_images/tutorial_4.4._Dislocation_solution_and_generator_57_0.png" src="../_images/tutorial_4.4._Dislocation_solution_and_generator_57_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="6.3.-Dislocation-property-evaluations">
-<h3>6.3. Dislocation property evaluations<a class="headerlink" href="#6.3.-Dislocation-property-evaluations" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="6.3.-Dislocation-property-evaluations">
+<h3>6.3. Dislocation property evaluations<a class="headerlink" href="#6.3.-Dislocation-property-evaluations" title="Permalink to this heading">¶</a></h3>
 <p>The dislocation characterization methods all compare defect configurations to a defect-free base system. The periodicarray method automatically returns a compatible base system that can be used for the characterization methods. This is especially important for PAD systems of dislocations with edge components as the deleted atoms are appropriately handled.</p>
 <p>See the <a class="reference external" href="4.6._Dislocation_analysis_tools.html">4.6. Dislocation analysis tools Notebook</a> for more dislocation property evaluations.</p>
 <p><strong>NOTE</strong>: The characterizations shown here are simply for demonstration purposes. For real problems, the returned dislocation system should be atomically relaxed prior to characterizing it.</p>
@@ -1409,9 +1398,9 @@ shift set during class initialization.</p></li>
 <img alt="../_images/tutorial_4.4._Dislocation_solution_and_generator_59_0.png" src="../_images/tutorial_4.4._Dislocation_solution_and_generator_59_0.png" />
 </div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -1477,7 +1466,7 @@ shift set during class initialization.</p></li>
   <div>
     <h4>Next topic</h4>
     <p class="topless"><a href="4.5._Gamma_surface_plotting.html"
-                          title="next chapter">Introduction to atomman: Gamma surface plotting</a></p>
+                          title="next chapter">&lt;no title&gt;</a></p>
   </div>
         </div>
       </div>
@@ -1493,18 +1482,18 @@ shift set during class initialization.</p></li>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="4.5._Gamma_surface_plotting.html" title="Introduction to atomman: Gamma surface plotting"
+          <a href="4.5._Gamma_surface_plotting.html" title="&lt;no title&gt;"
              >next</a> |</li>
         <li class="right" >
           <a href="4.3._Stacking_fault_generator.html" title="Introduction to atomman: Stacking fault generator"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Dislocation solution and generator</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
     </div>
   </body>
 </html>
