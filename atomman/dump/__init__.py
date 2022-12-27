@@ -10,7 +10,7 @@ failed_dump_styles = {}
 def dump(style, system, **kwargs):
     """
     Convert a System to another format.
-    
+
     Parameters
     ----------
     style : str
@@ -19,13 +19,13 @@ def dump(style, system, **kwargs):
         The system to convert.
     kwargs : any, optional
         Any extra keyword arguments to pass to the underlying dump methods.
-        
+
     Returns
     -------
     str, object or tuple
         Any content returned by the underlying dump methods.
     """
-    
+
     if style in dump_styles:
         return dump_styles[style](system, **kwargs)
     elif style in failed_dump_styles:
@@ -46,7 +46,7 @@ def set_dump_styles():
 
         # Only import subfolders not in ignorelist
         if '.' not in style and style not in ignorelist:
-            
+
             # Import module and set to dump_styles
             try:
                 module = import_module(f'.{style}', __name__)
