@@ -30,8 +30,8 @@ def vect_angle(vect1: npt.ArrayLike,
     vect2 = np.asarray(vect2)
     
     # Compute unit vectors
-    u_vect1 = vect1 / np.linalg.norm(vect1)
-    u_vect2 = vect2 / np.linalg.norm(vect2)
+    u_vect1 = (vect1.T / np.linalg.norm(vect1, axis=-1)).T
+    u_vect2 = (vect2.T / np.linalg.norm(vect2, axis=-1)).T
     
     # calculate cosine angle between vectors
     cosine = np.dot(u_vect1, u_vect2)
@@ -41,7 +41,7 @@ def vect_angle(vect1: npt.ArrayLike,
         # For multiple values
         cosine[cosine < -1] = -1
         cosine[cosine > 1] = 1
-    except:
+    except TypeError:
         # For single values
         if cosine < -1:
             cosine = -1
