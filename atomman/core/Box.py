@@ -13,7 +13,7 @@ import numpy.typing as npt
 # https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
 
-# atomman imports
+# local imports
 import atomman.unitconvert as uc
 from ..tools import vect_angle, miller
 from ..region import Shape, Plane
