@@ -1,7 +1,7 @@
 # coding: utf-8
 
 # Standard Python libraries
-from typing import Optional
+from typing import Optional, Union
 
 # http://www.numpy.org/
 import numpy.typing as npt
@@ -17,13 +17,14 @@ def solve_volterra_dislocation(C: ElasticConstants,
                                transform: Optional[npt.ArrayLike] = None,
                                axes: Optional[npt.ArrayLike] = None,
                                box: Optional[Box] = None,
-                               m: npt.ArrayLike = [1,0,0],
-                               n: npt.ArrayLike = [0,1,0],
+                               m: Union[str, npt.ArrayLike] = 'x',
+                               n: Union[str, npt.ArrayLike] = 'y',
+                               cart_axes: bool = False,
                                tol: float = 1e-8) -> VolterraDislocation:
     """
     Wrapper function for generating VolterraDislocation children classes
     that provide linear elastic solutions for straight dislocations.
-    
+
     Parameters
     ----------
     C : atomman.ElasticConstants
@@ -50,14 +51,21 @@ def solve_volterra_dislocation(C: ElasticConstants,
         The unit cell's box that crystal vectors are taken with respect to.
         If not given, will use a cubic box with a=1 meaning that burgers,
         ξ_uvw and slip_hkl will be interpreted as Cartesian vectors.
-    m : array-like object, optional
-        The m unit vector for the solution.  m, n, and u (dislocation
-        line) should be right-hand orthogonal.  Default value is [1,0,0]
-        (x-axis).
-    n : array-like object, optional
-        The n unit vector for the solution.  m, n, and u (dislocation
-        line) should be right-hand orthogonal.  Default value is [0,1,0]
-        (y-axis). n is normal to the dislocation slip plane.
+    m : str or array-like object, optional
+        The 3D Cartesian unit vector to align with the dislocation solution's m-axis,
+        i.e. the in-plane direction perpendicular to the dislocation line.  Also
+        accepts str values of 'x', 'y', or 'z', in which case the dislocation axis will
+        be aligned with the corresponding Cartesian axis.  Default value is 'x'.
+    n : str or array-like object, optional
+        The 3D Cartesian unit vector to align with the dislocation solution's n-axis,
+        i.e. the slip plane normal. Also accepts str values of 'x', 'y', or 'z', in
+        which case the dislocation axis will be aligned with the corresponding Cartesian
+        axis. Default value is 'y'.
+    cart_axes : bool, optional
+        Setting this to True will also perform an assertion check that the m- and n-axes
+        are both aligned with Cartesian axes. This is a requirement for some of the
+        atomic configuration generators. Default value is False as the elastic solution
+        by itself does not require the limitation.
     tol : float
         Tolerance parameter used to round off near-zero values.  Default
         value is 1e-8.
@@ -70,9 +78,9 @@ def solve_volterra_dislocation(C: ElasticConstants,
 
     try:
         return Stroh(C, burgers, ξ_uvw=ξ_uvw, slip_hkl=slip_hkl, transform=transform,
-                   axes=axes, box=box, m=m, n=n, tol=tol)
-    except:
+                   axes=axes, box=box, m=m, n=n, cart_axes=cart_axes, tol=tol)
+    except ValueError:
         return IsotropicVolterraDislocation(C, burgers, ξ_uvw=ξ_uvw, slip_hkl=slip_hkl,
                                             transform=transform, axes=axes, box=box,
-                                            m=m, n=n, tol=tol)
+                                            m=m, n=n, cart_axes=cart_axes, tol=tol)
                                             
