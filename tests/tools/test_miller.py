@@ -74,12 +74,10 @@ class TestMiller():
     @property
     def fset(self):
         """A set of face-centered lattice vectors corresponding to prim"""
-        return np.array([[ 0.5,  1. ,  1.5],
-                         [-2.5, -1.5, -1. ],
-                         [-1. , -2. ,  0. ],
-                         [ 1. , -0.5, -1.5]])
-
-
+        return np.array([[ 1. ,  0.5,  1.5],
+                         [-1.5, -2.5, -1. ],
+                         [-2. , -1. ,  0. ],
+                         [-0.5,  1. , -1.5]])
 
     def test_vector3to4(self):
         """test vector3to4 by checking that vector3 -> vector4"""

@@ -237,8 +237,8 @@ def vector_primitive_to_conventional(indices: npt.ArrayLike,
                                      [-0.5, 0.5,-0.5],
                                      [-0.5,-0.5, 0.5]])
     lattice_vectors['f'] = np.array([[ 0.5, 0.5, 0.0],
-                                     [ 0.5, 0.0, 0.5],
-                                     [ 0.0, 0.5, 0.5]])
+                                     [ 0.0, 0.5, 0.5],
+                                     [ 0.5, 0.0, 0.5]])
     
     try:
         lat = lattice_vectors[setting]
@@ -296,8 +296,8 @@ def vector_conventional_to_primitive(indices: npt.ArrayLike,
     lattice_vectors['i'] = np.array([[ 0.0,-1.0,-1.0],
                                      [ 1.0, 1.0, 0.0],
                                      [ 1.0, 0.0, 1.0]])
-    lattice_vectors['f'] = np.array([[ 1.0, 1.0,-1.0],
-                                     [ 1.0,-1.0, 1.0],
+    lattice_vectors['f'] = np.array([[ 1.0,-1.0, 1.0],
+                                     [ 1.0, 1.0,-1.0],
                                      [-1.0, 1.0, 1.0]])
     
     try:
