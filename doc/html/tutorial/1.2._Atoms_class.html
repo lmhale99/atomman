@@ -1,17 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction to atomman: Atoms class &#8212; atomman 1.4.4 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Introduction to atomman: Atoms class &#8212; atomman 1.4.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -33,7 +36,7 @@
         <li class="right" >
           <a href="1.1._Box_class.html" title="Introduction to atomman: Box class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Atoms class</a></li> 
       </ul>
@@ -49,35 +52,21 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
     border: none;
-    padding: 0;
+    padding: 0 0;
     margin: 0;
     box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -178,7 +167,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    /*background: #f5f5f5;*/
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -244,7 +233,6 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
-    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -292,12 +280,12 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-Atoms-class">
-<h1>Introduction to atomman: Atoms class<a class="headerlink" href="#Introduction-to-atomman:-Atoms-class" title="Permalink to this headline">¶</a></h1>
+<section id="Introduction-to-atomman:-Atoms-class">
+<h1>Introduction to atomman: Atoms class<a class="headerlink" href="#Introduction-to-atomman:-Atoms-class" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
-<div class="section" id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<section id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
 <p>The Atoms class collects per-atom properties. The basic behaviors of the class are:</p>
 <ul class="simple">
 <li><p>The number of atoms is immutable after initializing.</p></li>
@@ -334,15 +322,15 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.4
-Notebook executed on 2022-03-17
+atomman version = 1.4.7
+Notebook executed on 2022-10-12
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.-Basics">
-<h2>2. Basics<a class="headerlink" href="#2.-Basics" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="2.1.-Initialization">
-<h3>2.1. Initialization<a class="headerlink" href="#2.1.-Initialization" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="2.-Basics">
+<h2>2. Basics<a class="headerlink" href="#2.-Basics" title="Permalink to this heading">¶</a></h2>
+<section id="2.1.-Initialization">
+<h3>2.1. Initialization<a class="headerlink" href="#2.1.-Initialization" title="Permalink to this heading">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><p><strong>natoms</strong> (<em>int, optional</em>) The number of atoms to associate with the Atoms instance. This is constant once the Atoms object is initialized. If not given, will be inferred from the length of atype and/or pos.</p></li>
@@ -370,21 +358,21 @@ Notebook executed on 2022-03-17
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.412 |   2.547 |   1.230
-      1 |       1 |   2.817 |   2.966 |   3.738
-      2 |       1 |   3.519 |   2.581 |   1.959
-      3 |       1 |   1.685 |   3.818 |   0.309
-      4 |       1 |   3.699 |   0.962 |   0.138
-      5 |       1 |   1.911 |   1.896 |   3.901
-      6 |       1 |   1.321 |   1.700 |   0.059
-      7 |       1 |   1.515 |   2.968 |   1.112
-      8 |       1 |   1.151 |   0.796 |   0.065
-      9 |       1 |   2.063 |   0.720 |   0.798
+      0 |       1 |   3.447 |   2.533 |   2.372
+      1 |       1 |   3.515 |   2.930 |   1.236
+      2 |       1 |   2.117 |   1.062 |   2.518
+      3 |       1 |   1.514 |   0.737 |   1.895
+      4 |       1 |   1.999 |   1.047 |   0.856
+      5 |       1 |   3.360 |   0.915 |   3.548
+      6 |       1 |   2.661 |   3.744 |   2.317
+      7 |       1 |   3.116 |   3.257 |   2.609
+      8 |       1 |   3.040 |   1.765 |   1.248
+      9 |       1 |   2.006 |   3.954 |   2.345
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.2.-Pre-defined-attributes">
-<h3>2.2. Pre-defined attributes<a class="headerlink" href="#2.2.-Pre-defined-attributes" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="2.2.-Pre-defined-attributes">
+<h3>2.2. Pre-defined attributes<a class="headerlink" href="#2.2.-Pre-defined-attributes" title="Permalink to this heading">¶</a></h3>
 <p>The class has a few pre-defined attributes:</p>
 <ul class="simple">
 <li><p><strong>natoms</strong> is the number of atoms. len(Atoms) returns the same thing.</p></li>
@@ -415,18 +403,18 @@ atoms.atypes -&gt;  (1,)
 atoms.natypes -&gt; 1
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="3.-Per-atom-properties">
-<h2>3. Per-atom properties<a class="headerlink" href="#3.-Per-atom-properties" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="3.-Per-atom-properties">
+<h2>3. Per-atom properties<a class="headerlink" href="#3.-Per-atom-properties" title="Permalink to this heading">¶</a></h2>
 <p>The per-atom properties of an Atoms instance can be interacted with in one of three ways:</p>
 <ul class="simple">
 <li><p>as attributes of the Atoms instance, i.e. atoms.myprop.</p></li>
 <li><p>as items in the Atoms.view dictionary.</p></li>
 <li><p>by calling the Atoms.prop() (<a class="reference external" href="#section6">Section 6</a>) or Atoms.prop_atype() (<a class="reference external" href="#section7">Section 7</a>) methods.</p></li>
 </ul>
-<div class="section" id="3.1.-List-assigned-per-atom-properties">
-<h3>3.1. List assigned per-atom properties<a class="headerlink" href="#3.1.-List-assigned-per-atom-properties" title="Permalink to this headline">¶</a></h3>
+<section id="3.1.-List-assigned-per-atom-properties">
+<h3>3.1. List assigned per-atom properties<a class="headerlink" href="#3.1.-List-assigned-per-atom-properties" title="Permalink to this heading">¶</a></h3>
 <p>A list of all assigned per-atom properties can be retrieved using either:</p>
 <ul class="simple">
 <li><p>atoms.prop()</p></li>
@@ -451,9 +439,9 @@ atoms.prop() -&gt;      [&#39;atype&#39;, &#39;pos&#39;]
 atoms.view.keys() -&gt; odict_keys([&#39;atype&#39;, &#39;pos&#39;])
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.2.-Accessing-per-atom-properties">
-<h3>3.2. Accessing per-atom properties<a class="headerlink" href="#3.2.-Accessing-per-atom-properties" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.2.-Accessing-per-atom-properties">
+<h3>3.2. Accessing per-atom properties<a class="headerlink" href="#3.2.-Accessing-per-atom-properties" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -473,9 +461,9 @@ atoms.atype -&gt;             [1 1 1 1 1 1 1 1 1 1]
 atoms.view[&#39;atype&#39;] -&gt;     [1 1 1 1 1 1 1 1 1 1]
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.3.-Setting-values-of-existing-per-atom-properties">
-<h3>3.3. Setting values of existing per-atom properties<a class="headerlink" href="#3.3.-Setting-values-of-existing-per-atom-properties" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.3.-Setting-values-of-existing-per-atom-properties">
+<h3>3.3. Setting values of existing per-atom properties<a class="headerlink" href="#3.3.-Setting-values-of-existing-per-atom-properties" title="Permalink to this heading">¶</a></h3>
 <p>The same three options can be used for setting values to existing per-atom properties.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -504,9 +492,9 @@ setting: atoms.view[&#39;atype&#39;][5] = 2
 atoms.atype -&gt; [1 1 2 1 1 2 1 1 1 1]
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.4.-Assigning-new-per-atom-properties">
-<h3>3.4. Assigning new per-atom properties<a class="headerlink" href="#3.4.-Assigning-new-per-atom-properties" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.4.-Assigning-new-per-atom-properties">
+<h3>3.4. Assigning new per-atom properties<a class="headerlink" href="#3.4.-Assigning-new-per-atom-properties" title="Permalink to this heading">¶</a></h3>
 <p>New per-atom properties can be assigned almost as easily as setting values of exising properties. The only limitations are that values must be given for all atoms and the data types and shapes must be consistent for all atoms.</p>
 <p>Value setting rules:</p>
 <ul class="simple">
@@ -544,9 +532,9 @@ atoms.stress[0] -&gt;
  [0. 0. 0.]]
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.5.-Viewing-per-atom-properties">
-<h3>3.5. Viewing per-atom properties<a class="headerlink" href="#3.5.-Viewing-per-atom-properties" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.5.-Viewing-per-atom-properties">
+<h3>3.5. Viewing per-atom properties<a class="headerlink" href="#3.5.-Viewing-per-atom-properties" title="Permalink to this heading">¶</a></h3>
 <p><em>Updated version 1.2.7</em></p>
 <p>The string representation of atoms lists all assigned per-atom properties and shows id, atype and pos values.</p>
 <div class="nbinput docutils container">
@@ -565,16 +553,16 @@ atoms.stress[0] -&gt;
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.412 |   2.547 |   1.230
-      1 |       1 |   2.817 |   2.966 |   3.738
-      2 |       2 |   3.519 |   2.581 |   1.959
-      3 |       1 |   1.685 |   3.818 |   0.309
-      4 |       1 |   3.699 |   0.962 |   0.138
-      5 |       2 |   1.911 |   1.896 |   3.901
-      6 |       1 |   1.321 |   1.700 |   0.059
-      7 |       1 |   1.515 |   2.968 |   1.112
-      8 |       1 |   1.151 |   0.796 |   0.065
-      9 |       1 |   2.063 |   0.720 |   0.798
+      0 |       1 |   3.447 |   2.533 |   2.372
+      1 |       1 |   3.515 |   2.930 |   1.236
+      2 |       2 |   2.117 |   1.062 |   2.518
+      3 |       1 |   1.514 |   0.737 |   1.895
+      4 |       1 |   1.999 |   1.047 |   0.856
+      5 |       2 |   3.360 |   0.915 |   3.548
+      6 |       1 |   2.661 |   3.744 |   2.317
+      7 |       1 |   3.116 |   3.257 |   2.609
+      8 |       1 |   3.040 |   1.765 |   1.248
+      9 |       1 |   2.006 |   3.954 |   2.345
 </pre></div></div>
 </div>
 <p>Alternatively, the atoms object can be copied into a pandas.DataFrame with the Atoms.df() method. This is convenient for viewing and analyzing all per-atom property values at once.</p>
@@ -630,9 +618,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>0</th>
       <td>1</td>
-      <td>0.412372</td>
-      <td>2.547375</td>
-      <td>1.230340</td>
+      <td>3.447285</td>
+      <td>2.532506</td>
+      <td>2.372424</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -646,9 +634,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>2.816587</td>
-      <td>2.966123</td>
-      <td>3.737664</td>
+      <td>3.514516</td>
+      <td>2.930115</td>
+      <td>1.235578</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -662,9 +650,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>3.519011</td>
-      <td>2.580632</td>
-      <td>1.958943</td>
+      <td>2.116695</td>
+      <td>1.061932</td>
+      <td>2.518101</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -678,9 +666,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>3</th>
       <td>1</td>
-      <td>1.685157</td>
-      <td>3.818035</td>
-      <td>0.309488</td>
+      <td>1.514163</td>
+      <td>0.736550</td>
+      <td>1.894892</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -694,9 +682,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>4</th>
       <td>1</td>
-      <td>3.698741</td>
-      <td>0.961913</td>
-      <td>0.138131</td>
+      <td>1.998971</td>
+      <td>1.046947</td>
+      <td>0.856327</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -710,9 +698,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>5</th>
       <td>2</td>
-      <td>1.910813</td>
-      <td>1.896184</td>
-      <td>3.901485</td>
+      <td>3.359814</td>
+      <td>0.915184</td>
+      <td>3.547557</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -726,9 +714,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>6</th>
       <td>1</td>
-      <td>1.320717</td>
-      <td>1.700412</td>
-      <td>0.058551</td>
+      <td>2.660950</td>
+      <td>3.743901</td>
+      <td>2.317262</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -742,9 +730,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>7</th>
       <td>1</td>
-      <td>1.515045</td>
-      <td>2.967971</td>
-      <td>1.111795</td>
+      <td>3.116182</td>
+      <td>3.257117</td>
+      <td>2.609323</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -758,9 +746,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>8</th>
       <td>1</td>
-      <td>1.150797</td>
-      <td>0.796226</td>
-      <td>0.065061</td>
+      <td>3.039714</td>
+      <td>1.764863</td>
+      <td>1.247991</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -774,9 +762,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>9</th>
       <td>1</td>
-      <td>2.062969</td>
-      <td>0.720394</td>
-      <td>0.797720</td>
+      <td>2.006055</td>
+      <td>3.954029</td>
+      <td>2.345160</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -812,14 +800,14 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 [1 1 2 1 1 2 1 1 1 1]
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="4.-Atoms-by-index">
-<h2>4. Atoms by index<a class="headerlink" href="#4.-Atoms-by-index" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="4.-Atoms-by-index">
+<h2>4. Atoms by index<a class="headerlink" href="#4.-Atoms-by-index" title="Permalink to this heading">¶</a></h2>
 <p>The Atoms class also allows for the atoms to be get/set using numpy indexing. This is useful for manipulations in how the atoms are listed and all per-atom properties for a given atom are to be retained.</p>
 <p><strong>Note:</strong> If you want to access/manipulate per-atom properties of certain atoms, it is more efficient to access the properties first (as in <a class="reference external" href="#section3">Section 3</a>) then apply the slice.</p>
-<div class="section" id="4.1.-Getting-by-index">
-<h3>4.1. Getting by index<a class="headerlink" href="#4.1.-Getting-by-index" title="Permalink to this headline">¶</a></h3>
+<section id="4.1.-Getting-by-index">
+<h3>4.1. Getting by index<a class="headerlink" href="#4.1.-Getting-by-index" title="Permalink to this heading">¶</a></h3>
 <p>An atoms object can be sliced using numpy indexing. This returns a new Atoms instance containing only the selected atom(s). Useful for generating subsets.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
@@ -839,13 +827,16 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       2 |   3.519 |   2.581 |   1.959
-      1 |       1 |   3.699 |   0.962 |   0.138
+      0 |       1 |   3.447 |   2.533 |   2.372
+      1 |       1 |   3.515 |   2.930 |   1.236
+      2 |       2 |   3.360 |   0.915 |   3.548
+      3 |       1 |   3.116 |   3.257 |   2.609
+      4 |       1 |   3.040 |   1.765 |   1.248
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="4.2.-Setting-by-index">
-<h3>4.2. Setting by index<a class="headerlink" href="#4.2.-Setting-by-index" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="4.2.-Setting-by-index">
+<h3>4.2. Setting by index<a class="headerlink" href="#4.2.-Setting-by-index" title="Permalink to this heading">¶</a></h3>
 <p>All per-atom values of a subset of Atoms can be set at once using indexing. The value being assigned must be an Atoms instance of compatible size and same per-atom properties as the Atoms instance it is being assigned to.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
@@ -865,8 +856,11 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       2 |   3.519 |   2.581 |   1.959
-      1 |       1 |   0.412 |   2.547 |   1.230
+      0 |       1 |   3.447 |   2.533 |   2.372
+      1 |       1 |   3.515 |   2.930 |   1.236
+      2 |       2 |   3.360 |   0.915 |   3.548
+      3 |       1 |   3.116 |   3.257 |   2.609
+      4 |       1 |   3.447 |   2.533 |   2.372
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -891,35 +885,35 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.412 |   2.547 |   1.230
-      1 |       1 |   2.817 |   2.966 |   3.738
-      2 |       2 |   3.519 |   2.581 |   1.959
-      3 |       1 |   1.685 |   3.818 |   0.309
-      4 |       1 |   3.699 |   0.962 |   0.138
-      5 |       2 |   1.911 |   1.896 |   3.901
-      6 |       1 |   1.321 |   1.700 |   0.059
-      7 |       1 |   1.515 |   2.968 |   1.112
-      8 |       1 |   1.151 |   0.796 |   0.065
-      9 |       1 |   2.063 |   0.720 |   0.798
+      0 |       1 |   3.447 |   2.533 |   2.372
+      1 |       1 |   3.515 |   2.930 |   1.236
+      2 |       2 |   2.117 |   1.062 |   2.518
+      3 |       1 |   1.514 |   0.737 |   1.895
+      4 |       1 |   1.999 |   1.047 |   0.856
+      5 |       2 |   3.360 |   0.915 |   3.548
+      6 |       1 |   2.661 |   3.744 |   2.317
+      7 |       1 |   3.116 |   3.257 |   2.609
+      8 |       1 |   3.040 |   1.765 |   1.248
+      9 |       1 |   2.006 |   3.954 |   2.345
 
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   2.817 |   2.966 |   3.738
-      1 |       1 |   0.412 |   2.547 |   1.230
-      2 |       2 |   3.519 |   2.581 |   1.959
-      3 |       1 |   1.685 |   3.818 |   0.309
-      4 |       1 |   3.699 |   0.962 |   0.138
-      5 |       2 |   1.911 |   1.896 |   3.901
-      6 |       1 |   1.321 |   1.700 |   0.059
-      7 |       1 |   1.515 |   2.968 |   1.112
-      8 |       1 |   1.151 |   0.796 |   0.065
-      9 |       1 |   2.063 |   0.720 |   0.798
+      0 |       1 |   3.515 |   2.930 |   1.236
+      1 |       1 |   3.447 |   2.533 |   2.372
+      2 |       2 |   2.117 |   1.062 |   2.518
+      3 |       1 |   1.514 |   0.737 |   1.895
+      4 |       1 |   1.999 |   1.047 |   0.856
+      5 |       2 |   3.360 |   0.915 |   3.548
+      6 |       1 |   2.661 |   3.744 |   2.317
+      7 |       1 |   3.116 |   3.257 |   2.609
+      8 |       1 |   3.040 |   1.765 |   1.248
+      9 |       1 |   2.006 |   3.954 |   2.345
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="5.-Atoms.extend()">
-<h2>5. Atoms.extend()<a class="headerlink" href="#5.-Atoms.extend()" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="5.-Atoms.extend()">
+<h2>5. Atoms.extend()<a class="headerlink" href="#5.-Atoms.extend()" title="Permalink to this heading">¶</a></h2>
 <p><em>Added version 1.2.8</em></p>
 <p>The Atoms.extend method creates a new Atoms object by copying the current Atoms object and adding new atoms to it. The new atoms can either be copied from another existing Atoms object, or a specified number of ‘empty’ atoms can be added.</p>
 <p>Parameters - <strong>value</strong> (<em>atomman.Atoms or int</em>) An int value will result in the atoms object being extended by that number of atoms, with all per-atom properties having default values (atype = 1, everything else = 0). For an Atoms value, the current atoms list will be extended by the correct number of atoms and all per-atom properties in value will be copied over. Any properties defined in one Atoms object and not the other will be set to default values.</p>
@@ -941,16 +935,16 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   2.817 |   2.966 |   3.738
-      1 |       1 |   0.412 |   2.547 |   1.230
-      2 |       2 |   3.519 |   2.581 |   1.959
-      3 |       1 |   1.685 |   3.818 |   0.309
-      4 |       1 |   3.699 |   0.962 |   0.138
-      5 |       2 |   1.911 |   1.896 |   3.901
-      6 |       1 |   1.321 |   1.700 |   0.059
-      7 |       1 |   1.515 |   2.968 |   1.112
-      8 |       1 |   1.151 |   0.796 |   0.065
-      9 |       1 |   2.063 |   0.720 |   0.798
+      0 |       1 |   3.515 |   2.930 |   1.236
+      1 |       1 |   3.447 |   2.533 |   2.372
+      2 |       2 |   2.117 |   1.062 |   2.518
+      3 |       1 |   1.514 |   0.737 |   1.895
+      4 |       1 |   1.999 |   1.047 |   0.856
+      5 |       2 |   3.360 |   0.915 |   3.548
+      6 |       1 |   2.661 |   3.744 |   2.317
+      7 |       1 |   3.116 |   3.257 |   2.609
+      8 |       1 |   3.040 |   1.765 |   1.248
+      9 |       1 |   2.006 |   3.954 |   2.345
      10 |       1 |   0.000 |   0.000 |   0.000
      11 |       1 |   0.000 |   0.000 |   0.000
 </pre></div></div>
@@ -973,25 +967,25 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   2.817 |   2.966 |   3.738
-      1 |       1 |   0.412 |   2.547 |   1.230
-      2 |       2 |   3.519 |   2.581 |   1.959
-      3 |       1 |   1.685 |   3.818 |   0.309
-      4 |       1 |   3.699 |   0.962 |   0.138
-      5 |       2 |   1.911 |   1.896 |   3.901
-      6 |       1 |   1.321 |   1.700 |   0.059
-      7 |       1 |   1.515 |   2.968 |   1.112
-      8 |       1 |   1.151 |   0.796 |   0.065
-      9 |       1 |   2.063 |   0.720 |   0.798
-     10 |       1 |   2.817 |   2.966 |   3.738
-     11 |       1 |   0.412 |   2.547 |   1.230
-     12 |       2 |   3.519 |   2.581 |   1.959
-     13 |       1 |   1.685 |   3.818 |   0.309
+      0 |       1 |   3.515 |   2.930 |   1.236
+      1 |       1 |   3.447 |   2.533 |   2.372
+      2 |       2 |   2.117 |   1.062 |   2.518
+      3 |       1 |   1.514 |   0.737 |   1.895
+      4 |       1 |   1.999 |   1.047 |   0.856
+      5 |       2 |   3.360 |   0.915 |   3.548
+      6 |       1 |   2.661 |   3.744 |   2.317
+      7 |       1 |   3.116 |   3.257 |   2.609
+      8 |       1 |   3.040 |   1.765 |   1.248
+      9 |       1 |   2.006 |   3.954 |   2.345
+     10 |       1 |   3.515 |   2.930 |   1.236
+     11 |       1 |   3.447 |   2.533 |   2.372
+     12 |       2 |   2.117 |   1.062 |   2.518
+     13 |       1 |   1.514 |   0.737 |   1.895
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="6.-Atoms.prop()">
-<h2>6. Atoms.prop()<a class="headerlink" href="#6.-Atoms.prop()" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="6.-Atoms.prop()">
+<h2>6. Atoms.prop()<a class="headerlink" href="#6.-Atoms.prop()" title="Permalink to this heading">¶</a></h2>
 <p>The Atoms.prop() method offers a “safe” means of getting and setting values. It is designed with three things in mind:</p>
 <ol class="arabic simple">
 <li><p>All get/set actions copy values instead of references.</p></li>
@@ -1054,13 +1048,13 @@ atoms.prop(&#39;atype&#39;) -&gt; [1 1 2 1 1 2 1 1 1 1]
 atoms.prop(index=slice(1,5)) -&gt;
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.412 |   2.547 |   1.230
-      1 |       2 |   3.519 |   2.581 |   1.959
-      2 |       1 |   1.685 |   3.818 |   0.309
-      3 |       1 |   3.699 |   0.962 |   0.138
+      0 |       1 |   3.447 |   2.533 |   2.372
+      1 |       2 |   2.117 |   1.062 |   2.518
+      2 |       1 |   1.514 |   0.737 |   1.895
+      3 |       1 |   1.999 |   1.047 |   0.856
 
 atoms.prop(key=&#39;pos&#39;, index=0) -&gt;
-[2.81658706 2.9661233  3.73766367]
+[3.51451582 2.93011501 1.23557797]
 </pre></div></div>
 </div>
 <p>Values can be set to Atoms using the value parameter. Any values set are copied to the Atoms instance as opposed to assigned by reference.</p>
@@ -1116,16 +1110,16 @@ atoms.prop(&#39;atype&#39;) -&gt; [7 7 7 7 1 7 7 7 7 7]
 calling: atoms.prop(index=9, value=atoms.prop(index=0))
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       7 |   2.817 |   2.966 |   3.738
-      1 |       7 |   0.412 |   2.547 |   1.230
-      2 |       7 |   3.519 |   2.581 |   1.959
-      3 |       7 |   1.685 |   3.818 |   0.309
-      4 |       1 |   3.699 |   0.962 |   0.138
-      5 |       7 |   1.911 |   1.896 |   3.901
-      6 |       7 |   1.321 |   1.700 |   0.059
-      7 |       7 |   1.515 |   2.968 |   1.112
-      8 |       7 |   1.151 |   0.796 |   0.065
-      9 |       7 |   2.817 |   2.966 |   3.738
+      0 |       7 |   3.515 |   2.930 |   1.236
+      1 |       7 |   3.447 |   2.533 |   2.372
+      2 |       7 |   2.117 |   1.062 |   2.518
+      3 |       7 |   1.514 |   0.737 |   1.895
+      4 |       1 |   1.999 |   1.047 |   0.856
+      5 |       7 |   3.360 |   0.915 |   3.548
+      6 |       7 |   2.661 |   3.744 |   2.317
+      7 |       7 |   3.116 |   3.257 |   2.609
+      8 |       7 |   3.040 |   1.765 |   1.248
+      9 |       7 |   3.515 |   2.930 |   1.236
 </pre></div></div>
 </div>
 <p>Demonstrate safe copy of prop() using only value parameter.</p>
@@ -1238,9 +1232,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       2 |       3 |   0.000 |   0.000 |   0.000
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="7.-Atoms.prop_atype()">
-<h2>7. Atoms.prop_atype()<a class="headerlink" href="#7.-Atoms.prop_atype()" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="7.-Atoms.prop_atype()">
+<h2>7. Atoms.prop_atype()<a class="headerlink" href="#7.-Atoms.prop_atype()" title="Permalink to this heading">¶</a></h2>
 <p><em>Added version 1.3.0</em></p>
 <p>prop_atype() is a convenience method allowing for property values to be assigned to the atoms based on the atom’s corresponding atype values.</p>
 <p>Parameters</p>
@@ -1533,9 +1527,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </table>
 </div></div>
 </div>
-</div>
-<div class="section" id="8.-Atoms.model()">
-<h2>8. Atoms.model()<a class="headerlink" href="#8.-Atoms.model()" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="8.-Atoms.model()">
+<h2>8. Atoms.model()<a class="headerlink" href="#8.-Atoms.model()" title="Permalink to this heading">¶</a></h2>
 <p><em>Added version 1.2.7</em></p>
 <p>A JSON/XML equivalent data model representation of the Atoms object can be generated using the model() method.</p>
 <p>Parameters</p>
@@ -1600,8 +1594,8 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;charge&#39;]
       9 |       2 |   0.000 |   0.000 |   0.000
 </pre></div></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -1671,13 +1665,13 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;charge&#39;]
         <li class="right" >
           <a href="1.1._Box_class.html" title="Introduction to atomman: Box class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Atoms class</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
     </div>
   </body>
 </html>

@@ -1,17 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction to atomman: Unit conversions &#8212; atomman 1.4.4 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Introduction to atomman: Unit conversions &#8212; atomman 1.4.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -33,7 +36,7 @@
         <li class="right" >
           <a href="index.html" title="Tutorials"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Unit conversions</a></li> 
       </ul>
@@ -49,35 +52,21 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
     border: none;
-    padding: 0;
+    padding: 0 0;
     margin: 0;
     box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -178,7 +167,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    /*background: #f5f5f5;*/
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -244,7 +233,6 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
-    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -292,12 +280,12 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-Unit-conversions">
-<h1>Introduction to atomman: Unit conversions<a class="headerlink" href="#Introduction-to-atomman:-Unit-conversions" title="Permalink to this headline">¶</a></h1>
+<section id="Introduction-to-atomman:-Unit-conversions">
+<h1>Introduction to atomman: Unit conversions<a class="headerlink" href="#Introduction-to-atomman:-Unit-conversions" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
-<div class="section" id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<section id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
 <p>The atomman.unitconvert submodule includes tools for handling unit conversions within calculations. The unitconvert module is built around the <a class="reference external" href="https://pypi.python.org/pypi/numericalunits">numericalunits</a> package, extending it with useful functions and tools.</p>
 <p>Units are handled in the following manner:</p>
 <ol class="arabic simple">
@@ -335,15 +323,15 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.4
-Notebook executed on 2022-03-17
+atomman version = 1.4.7
+Notebook executed on 2022-10-12
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.-Basics">
-<h2>2. Basics<a class="headerlink" href="#2.-Basics" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="2.1.-unit-dictionary">
-<h3>2.1. unit dictionary<a class="headerlink" href="#2.1.-unit-dictionary" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="2.-Basics">
+<h2>2. Basics<a class="headerlink" href="#2.-Basics" title="Permalink to this heading">¶</a></h2>
+<section id="2.1.-unit-dictionary">
+<h3>2.1. unit dictionary<a class="headerlink" href="#2.1.-unit-dictionary" title="Permalink to this heading">¶</a></h3>
 <p>The unit dictionary stores all units defined by <a class="reference external" href="https://pypi.python.org/pypi/numericalunits">numericalunits</a>. This keeps the namespace clean and allows for units to be accessed by string.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -359,12 +347,12 @@ Notebook executed on 2022-03-17
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&#39;pi&#39;, &#39;m&#39;, &#39;kg&#39;, &#39;s&#39;, &#39;C&#39;, &#39;K&#39;, &#39;cm&#39;, &#39;mm&#39;, &#39;um&#39;, &#39;nm&#39;, &#39;pm&#39;, &#39;fm&#39;, &#39;km&#39;, &#39;angstrom&#39;, &#39;lightyear&#39;, &#39;astro_unit&#39;, &#39;pc&#39;, &#39;kpc&#39;, &#39;Mpc&#39;, &#39;Gpc&#39;, &#39;inch&#39;, &#39;foot&#39;, &#39;mile&#39;, &#39;thou&#39;, &#39;L&#39;, &#39;mL&#39;, &#39;uL&#39;, &#39;nL&#39;, &#39;pL&#39;, &#39;fL&#39;, &#39;aL&#39;, &#39;kL&#39;, &#39;ML&#39;, &#39;GL&#39;, &#39;ms&#39;, &#39;us&#39;, &#39;ns&#39;, &#39;ps&#39;, &#39;fs&#39;, &#39;minute&#39;, &#39;hour&#39;, &#39;day&#39;, &#39;week&#39;, &#39;year&#39;, &#39;Hz&#39;, &#39;mHz&#39;, &#39;kHz&#39;, &#39;MHz&#39;, &#39;GHz&#39;, &#39;THz&#39;, &#39;PHz&#39;, &#39;rtHz&#39;, &#39;rpm&#39;, &#39;g&#39;, &#39;mg&#39;, &#39;ug&#39;, &#39;ng&#39;, &#39;pg&#39;, &#39;fg&#39;, &#39;tonne&#39;, &#39;amu&#39;, &#39;Da&#39;, &#39;kDa&#39;, &#39;lbm&#39;, &#39;J&#39;, &#39;mJ&#39;, &#39;uJ&#39;, &#39;nJ&#39;, &#39;pJ&#39;, &#39;fJ&#39;, &#39;kJ&#39;, &#39;MJ&#39;, &#39;GJ&#39;, &#39;erg&#39;, &#39;eV&#39;, &#39;meV&#39;, &#39;keV&#39;, &#39;MeV&#39;, &#39;GeV&#39;, &#39;TeV&#39;, &#39;btu&#39;, &#39;smallcal&#39;, &#39;kcal&#39;, &#39;Wh&#39;, &#39;kWh&#39;, &#39;NA&#39;, &#39;mol&#39;, &#39;mmol&#39;, &#39;umol&#39;, &#39;nmol&#39;, &#39;pmol&#39;, &#39;fmol&#39;, &#39;M&#39;, &#39;mM&#39;, &#39;uM&#39;, &#39;nM&#39;, &#39;pM&#39;, &#39;fM&#39;, &#39;N&#39;, &#39;mN&#39;, &#39;uN&#39;, &#39;nN&#39;, &#39;pN&#39;, &#39;fN&#39;, &#39;kN&#39;, &#39;MN&#39;, &#39;GN&#39;, &#39;dyn&#39;, &#39;lbf&#39;, &#39;Pa&#39;, &#39;hPa&#39;, &#39;kPa&#39;, &#39;MPa&#39;, &#39;GPa&#39;, &#39;bar&#39;, &#39;mbar&#39;, &#39;cbar&#39;, &#39;dbar&#39;, &#39;kbar&#39;, &#39;Mbar&#39;, &#39;atm&#39;, &#39;torr&#39;, &#39;mtorr&#39;, &#39;psi&#39;, &#39;W&#39;, &#39;mW&#39;, &#39;uW&#39;, &#39;nW&#39;, &#39;pW&#39;, &#39;kW&#39;, &#39;MW&#39;, &#39;GW&#39;, &#39;TW&#39;, &#39;horsepower_imperial&#39;, &#39;horsepower_metric&#39;, &#39;degFinterval&#39;, &#39;degCinterval&#39;, &#39;mK&#39;, &#39;uK&#39;, &#39;nK&#39;, &#39;pK&#39;, &#39;mC&#39;, &#39;uC&#39;, &#39;nC&#39;, &#39;Ah&#39;, &#39;mAh&#39;, &#39;A&#39;, &#39;mA&#39;, &#39;uA&#39;, &#39;nA&#39;, &#39;pA&#39;, &#39;fA&#39;, &#39;V&#39;, &#39;mV&#39;, &#39;uV&#39;, &#39;nV&#39;, &#39;kV&#39;, &#39;MV&#39;, &#39;GV&#39;, &#39;TV&#39;, &#39;ohm&#39;, &#39;mohm&#39;, &#39;kohm&#39;, &#39;Mohm&#39;, &#39;Gohm&#39;, &#39;S&#39;, &#39;mS&#39;, &#39;uS&#39;, &#39;nS&#39;, &#39;T&#39;, &#39;mT&#39;, &#39;uT&#39;, &#39;nT&#39;, &#39;G&#39;, &#39;mG&#39;, &#39;uG&#39;, &#39;kG&#39;, &#39;Oe&#39;, &#39;Wb&#39;, &#39;F&#39;, &#39;uF&#39;, &#39;nF&#39;, &#39;pF&#39;, &#39;fF&#39;, &#39;aF&#39;, &#39;H&#39;, &#39;mH&#39;, &#39;uH&#39;, &#39;nH&#39;, &#39;c0&#39;, &#39;mu0&#39;, &#39;eps0&#39;, &#39;Z0&#39;, &#39;hPlanck&#39;, &#39;hbar&#39;, &#39;kB&#39;, &#39;GNewton&#39;, &#39;sigmaSB&#39;, &#39;alphaFS&#39;, &#39;Rgas&#39;, &#39;e&#39;, &#39;uBohr&#39;, &#39;uNuc&#39;, &#39;aBohr&#39;, &#39;me&#39;, &#39;mp&#39;, &#39;mn&#39;, &#39;Rinf&#39;, &#39;Ry&#39;, &#39;Hartree&#39;, &#39;ARichardson&#39;, &#39;Phi0&#39;, &#39;KJos&#39;, &#39;RKlitz&#39;, &#39;REarth&#39;, &#39;g0&#39;, &#39;Msolar&#39;, &#39;MEarth&#39;, &#39;Å&#39;, &#39;Hz·2π&#39;, &#39;mHz·2π&#39;, &#39;kHz·2π&#39;, &#39;MHz·2π&#39;, &#39;GHz·2π&#39;, &#39;THz·2π&#39;, &#39;PHz·2π&#39;, &#39;rpm·2π&#39;, &#39;Ω&#39;, &#39;mΩ&#39;, &#39;kΩ&#39;, &#39;MΩ&#39;, &#39;GΩ&#39;, &#39;μ0&#39;, &#39;ε0&#39;, &#39;ħ&#39;, &#39;σSB&#39;, &#39;αFS&#39;]
+[&#39;pi&#39;, &#39;m&#39;, &#39;kg&#39;, &#39;s&#39;, &#39;C&#39;, &#39;K&#39;, &#39;cm&#39;, &#39;mm&#39;, &#39;um&#39;, &#39;nm&#39;, &#39;pm&#39;, &#39;fm&#39;, &#39;km&#39;, &#39;angstrom&#39;, &#39;Å&#39;, &#39;lightyear&#39;, &#39;astro_unit&#39;, &#39;pc&#39;, &#39;kpc&#39;, &#39;Mpc&#39;, &#39;Gpc&#39;, &#39;inch&#39;, &#39;foot&#39;, &#39;mile&#39;, &#39;thou&#39;, &#39;L&#39;, &#39;mL&#39;, &#39;uL&#39;, &#39;nL&#39;, &#39;pL&#39;, &#39;fL&#39;, &#39;aL&#39;, &#39;kL&#39;, &#39;ML&#39;, &#39;GL&#39;, &#39;ms&#39;, &#39;us&#39;, &#39;ns&#39;, &#39;ps&#39;, &#39;fs&#39;, &#39;minute&#39;, &#39;hour&#39;, &#39;day&#39;, &#39;week&#39;, &#39;year&#39;, &#39;Hz&#39;, &#39;mHz&#39;, &#39;kHz&#39;, &#39;MHz&#39;, &#39;GHz&#39;, &#39;THz&#39;, &#39;PHz&#39;, &#39;rtHz&#39;, &#39;rpm&#39;, &#39;Hz·2π&#39;, &#39;mHz·2π&#39;, &#39;kHz·2π&#39;, &#39;MHz·2π&#39;, &#39;GHz·2π&#39;, &#39;THz·2π&#39;, &#39;PHz·2π&#39;, &#39;rpm·2π&#39;, &#39;g&#39;, &#39;mg&#39;, &#39;ug&#39;, &#39;ng&#39;, &#39;pg&#39;, &#39;fg&#39;, &#39;tonne&#39;, &#39;amu&#39;, &#39;Da&#39;, &#39;kDa&#39;, &#39;lbm&#39;, &#39;J&#39;, &#39;mJ&#39;, &#39;uJ&#39;, &#39;nJ&#39;, &#39;pJ&#39;, &#39;fJ&#39;, &#39;kJ&#39;, &#39;MJ&#39;, &#39;GJ&#39;, &#39;erg&#39;, &#39;eV&#39;, &#39;meV&#39;, &#39;keV&#39;, &#39;MeV&#39;, &#39;GeV&#39;, &#39;TeV&#39;, &#39;btu&#39;, &#39;smallcal&#39;, &#39;kcal&#39;, &#39;Wh&#39;, &#39;kWh&#39;, &#39;NA&#39;, &#39;mol&#39;, &#39;mmol&#39;, &#39;umol&#39;, &#39;nmol&#39;, &#39;pmol&#39;, &#39;fmol&#39;, &#39;M&#39;, &#39;mM&#39;, &#39;uM&#39;, &#39;nM&#39;, &#39;pM&#39;, &#39;fM&#39;, &#39;N&#39;, &#39;mN&#39;, &#39;uN&#39;, &#39;nN&#39;, &#39;pN&#39;, &#39;fN&#39;, &#39;kN&#39;, &#39;MN&#39;, &#39;GN&#39;, &#39;dyn&#39;, &#39;lbf&#39;, &#39;Pa&#39;, &#39;hPa&#39;, &#39;kPa&#39;, &#39;MPa&#39;, &#39;GPa&#39;, &#39;bar&#39;, &#39;mbar&#39;, &#39;cbar&#39;, &#39;dbar&#39;, &#39;kbar&#39;, &#39;Mbar&#39;, &#39;atm&#39;, &#39;torr&#39;, &#39;mtorr&#39;, &#39;psi&#39;, &#39;W&#39;, &#39;mW&#39;, &#39;uW&#39;, &#39;nW&#39;, &#39;pW&#39;, &#39;kW&#39;, &#39;MW&#39;, &#39;GW&#39;, &#39;TW&#39;, &#39;horsepower_imperial&#39;, &#39;horsepower_metric&#39;, &#39;Gal&#39;, &#39;mGal&#39;, &#39;uGal&#39;, &#39;eotvos&#39;, &#39;degFinterval&#39;, &#39;degCinterval&#39;, &#39;mK&#39;, &#39;uK&#39;, &#39;nK&#39;, &#39;pK&#39;, &#39;mC&#39;, &#39;uC&#39;, &#39;nC&#39;, &#39;Ah&#39;, &#39;mAh&#39;, &#39;A&#39;, &#39;mA&#39;, &#39;uA&#39;, &#39;nA&#39;, &#39;pA&#39;, &#39;fA&#39;, &#39;V&#39;, &#39;mV&#39;, &#39;uV&#39;, &#39;nV&#39;, &#39;kV&#39;, &#39;MV&#39;, &#39;GV&#39;, &#39;TV&#39;, &#39;ohm&#39;, &#39;mohm&#39;, &#39;kohm&#39;, &#39;Mohm&#39;, &#39;Gohm&#39;, &#39;Ω&#39;, &#39;mΩ&#39;, &#39;kΩ&#39;, &#39;MΩ&#39;, &#39;GΩ&#39;, &#39;S&#39;, &#39;mS&#39;, &#39;uS&#39;, &#39;nS&#39;, &#39;T&#39;, &#39;mT&#39;, &#39;uT&#39;, &#39;nT&#39;, &#39;G&#39;, &#39;mG&#39;, &#39;uG&#39;, &#39;kG&#39;, &#39;Oe&#39;, &#39;Wb&#39;, &#39;F&#39;, &#39;uF&#39;, &#39;nF&#39;, &#39;pF&#39;, &#39;fF&#39;, &#39;aF&#39;, &#39;H&#39;, &#39;mH&#39;, &#39;uH&#39;, &#39;nH&#39;, &#39;c0&#39;, &#39;mu0&#39;, &#39;μ0&#39;, &#39;eps0&#39;, &#39;ε0&#39;, &#39;Z0&#39;, &#39;hPlanck&#39;, &#39;hbar&#39;, &#39;ħ&#39;, &#39;kB&#39;, &#39;GNewton&#39;, &#39;sigmaSB&#39;, &#39;σSB&#39;, &#39;alphaFS&#39;, &#39;αFS&#39;, &#39;Rgas&#39;, &#39;e&#39;, &#39;uBohr&#39;, &#39;uNuc&#39;, &#39;aBohr&#39;, &#39;me&#39;, &#39;mp&#39;, &#39;mn&#39;, &#39;Rinf&#39;, &#39;Ry&#39;, &#39;Hartree&#39;, &#39;ARichardson&#39;, &#39;Phi0&#39;, &#39;KJos&#39;, &#39;RKlitz&#39;, &#39;REarth&#39;, &#39;g0&#39;, &#39;Msolar&#39;, &#39;MEarth&#39;]
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.2.-Working-units">
-<h3>2.2. Working units<a class="headerlink" href="#2.2.-Working-units" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="2.2.-Working-units">
+<h3>2.2. Working units<a class="headerlink" href="#2.2.-Working-units" title="Permalink to this heading">¶</a></h3>
 <p>By default, atomman defines working units in:</p>
 <ul class="simple">
 <li><p>length = ‘angstrom’ = ‘Å’</p></li>
@@ -398,18 +386,18 @@ Notebook executed on 2022-03-17
 <div class="highlight"><pre>
 angstrom = 1.0
 amu =      1.0
-eV =       0.9999999999999999
+eV =       1.0
 e =        1.0
 K =        1.0
 nm =       10.0
-g =        6.022140858549161e+23
-J =        6.241509074460762e+18
-ps =       98.22694828927632
+g =        6.022140762081123e+23
+J =        6.241509074460763e+18
+ps =       98.22694750253277
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.3.-reset_units()">
-<h3>2.3. reset_units()<a class="headerlink" href="#2.3.-reset_units()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="2.3.-reset_units()">
+<h3>2.3. reset_units()<a class="headerlink" href="#2.3.-reset_units()" title="Permalink to this heading">¶</a></h3>
 <p>The working units can be altered using reset_units(). You can specify up to four out of five of length, mass, time, energy, and charge. If less than four values are given, SI units are used. Temperature is always ‘K’ when values are specified.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -437,7 +425,7 @@ ps =       98.22694828927632
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 angstrom = 0.09999999999999999
-amu =      1.66053904e-24
+amu =      1.6605390666e-24
 eV =       1.6021766339999996e-22
 e =        1.602176634e-19
 K =        1.0
@@ -473,15 +461,15 @@ ps =       1.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-angstrom = 5.95333042563363e-10
-amu =      3.491339085463604e-29
-eV =       2.39738305414258e-18
-e =        8.104859877154317e-21
-K =        0.0606605789867545
-nm =       5.95333042563363e-09
-g =        2.1025335757620033e-05
-J =        14.96328808738937
-ps =       2.2316081504896394e-13
+angstrom = 5.470946841806242e-09
+amu =      4.510557561965496e-26
+eV =       8.435055464123283e-14
+e =        3.360597535874564e-21
+K =        0.0504215802651571
+nm =       5.470946841806242e-08
+g =        0.027163212553625662
+J =        526474.7522290532
+ps =       3.9297442446522326e-13
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -494,16 +482,16 @@ ps =       2.2316081504896394e-13
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="2.4.-Setting-and-getting-static-values">
-<h3>2.4. Setting and getting static values<a class="headerlink" href="#2.4.-Setting-and-getting-static-values" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="2.4.-Setting-and-getting-static-values">
+<h3>2.4. Setting and getting static values<a class="headerlink" href="#2.4.-Setting-and-getting-static-values" title="Permalink to this heading">¶</a></h3>
 <p>Static numerical values can be set and get in one of two ways:</p>
 <ul class="simple">
 <li><p>set by multiplying value by units, and get by dividing by units.</p></li>
 <li><p>use the set_in_units() and get_in_units() functions.</p></li>
 </ul>
-<div class="section" id="2.4.1.-Direct-setting-and-getting">
-<h4>2.4.1. Direct setting and getting<a class="headerlink" href="#2.4.1.-Direct-setting-and-getting" title="Permalink to this headline">¶</a></h4>
+<section id="2.4.1.-Direct-setting-and-getting">
+<h4>2.4.1. Direct setting and getting<a class="headerlink" href="#2.4.1.-Direct-setting-and-getting" title="Permalink to this heading">¶</a></h4>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
@@ -545,7 +533,7 @@ ps =       2.2316081504896394e-13
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 5.5 kg/(m*s^2) =
-5.499999999999999 Pa
+5.5 Pa
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -572,9 +560,9 @@ ps =       2.2316081504896394e-13
  [1300. 2300. 3300.]] MPa
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.4.2.-parse()">
-<h4>2.4.2. parse()<a class="headerlink" href="#2.4.2.-parse()" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="2.4.2.-parse()">
+<h4>2.4.2. parse()<a class="headerlink" href="#2.4.2.-parse()" title="Permalink to this heading">¶</a></h4>
 <p>As the above example shows, expressing complex units can get messy and unclear. The parse() function makes this easier by allowing complex units to be parsed from strings.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
@@ -617,12 +605,12 @@ ps =       2.2316081504896394e-13
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 5.5 kg/(m*s^2) =
-5.499999999999999 Pa
+5.5 Pa
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.4.3.-set_in_units()-and-get_in_units()">
-<h4>2.4.3. set_in_units() and get_in_units()<a class="headerlink" href="#2.4.3.-set_in_units()-and-get_in_units()" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="2.4.3.-set_in_units()-and-get_in_units()">
+<h4>2.4.3. set_in_units() and get_in_units()<a class="headerlink" href="#2.4.3.-set_in_units()-and-get_in_units()" title="Permalink to this heading">¶</a></h4>
 <p>Both functions take a value and a unit string, call parse on the unit string and perform the correct * or /.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
@@ -665,7 +653,7 @@ ps =       2.2316081504896394e-13
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 5.5 kg/(m*s^2) =
-5.499999999999999 Pa
+5.5 Pa
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -692,10 +680,10 @@ ps =       2.2316081504896394e-13
  [1300. 2300. 3300.]] MPa
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="2.5.-set_literal()">
-<h3>2.5. set_literal()<a class="headerlink" href="#2.5.-set_literal()" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="2.5.-set_literal()">
+<h3>2.5. set_literal()<a class="headerlink" href="#2.5.-set_literal()" title="Permalink to this heading">¶</a></h3>
 <p>Values can also be read in from strings with set_literal().</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -743,13 +731,13 @@ ps =       2.2316081504896394e-13
  [1300. 2300. 3300.]] MPa
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="3.-Data-model-representations">
-<h2>3. Data model representations<a class="headerlink" href="#3.-Data-model-representations" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="3.-Data-model-representations">
+<h2>3. Data model representations<a class="headerlink" href="#3.-Data-model-representations" title="Permalink to this heading">¶</a></h2>
 <p>In addition to the basic conversions, unitconvert also allows for the values to be returned as and extracted from a <a class="reference external" href="https://github.com/usnistgov/DataModelDict">DataModelDict</a>. This provides a means of representing the data equivalently in either JSON or XML.</p>
-<div class="section" id="3.1.-model()">
-<h3>3.1. model()<a class="headerlink" href="#3.1.-model()" title="Permalink to this headline">¶</a></h3>
+<section id="3.1.-model()">
+<h3>3.1. model()<a class="headerlink" href="#3.1.-model()" title="Permalink to this heading">¶</a></h3>
 <p>Values can be converted into a structured data model using model().</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
@@ -841,9 +829,9 @@ ps =       2.2316081504896394e-13
 &lt;value&gt;1100.0000000000002&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;2000.0000000000002&lt;/value&gt;&lt;value&gt;500.00000000000006&lt;/value&gt;&lt;value&gt;0.0&lt;/value&gt;&lt;value&gt;500.00000000000006&lt;/value&gt;&lt;value&gt;-1400.0&lt;/value&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;shape&gt;3&lt;/shape&gt;&lt;unit&gt;kPa&lt;/unit&gt;
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.2.-value_unit()">
-<h3>3.2. value_unit()<a class="headerlink" href="#3.2.-value_unit()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.2.-value_unit()">
+<h3>3.2. value_unit()<a class="headerlink" href="#3.2.-value_unit()" title="Permalink to this heading">¶</a></h3>
 <p>Values can then be read back in from a model, XML or JSON using value_unit().</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
@@ -910,9 +898,9 @@ ps =       2.2316081504896394e-13
  [ 0.   0.5 -1.4]] MPa
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.3.-error_unit()">
-<h3>3.3. error_unit()<a class="headerlink" href="#3.3.-error_unit()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.3.-error_unit()">
+<h3>3.3. error_unit()<a class="headerlink" href="#3.3.-error_unit()" title="Permalink to this heading">¶</a></h3>
 <p>Standard errors associated with each given value can also be included in the model, which can then be retrieved using error_unit().</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
@@ -940,18 +928,18 @@ ps =       2.2316081504896394e-13
 <div class="highlight"><pre>
 {
   &#34;value&#34;: [
-    0.009792462596024655,
-    0.020236379090091423,
-    0.029709055371072365,
-    0.04020864727063951,
-    0.04943011139350733
+    0.009059677392378203,
+    0.02092901781300947,
+    0.0300663893629268,
+    0.03965579589591802,
+    0.04926180462443053
   ],
   &#34;error&#34;: [
-    0.0019004286886095529,
-    0.001920893943242124,
-    0.0019537069049536996,
-    0.0020746620840713503,
-    0.0019092654499337782
+    0.0020993830556601794,
+    0.0019229896098040108,
+    0.0020250869690036865,
+    0.002094662715296287,
+    0.002081642820740343
   ],
   &#34;unit&#34;: &#34;m&#34;
 }
@@ -974,14 +962,14 @@ ps =       2.2316081504896394e-13
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-value = [ 9.7924626  20.23637909 29.70905537 40.20864727 49.43011139] mm
-error = [1.90042869 1.92089394 1.9537069  2.07466208 1.90926545] mm
+value = [ 9.05967739 20.92901781 30.06638936 39.6557959  49.26180462] mm
+error = [2.09938306 1.92298961 2.02508697 2.09466272 2.08164282] mm
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="4.-Unit-debugging">
-<h2>4. Unit debugging<a class="headerlink" href="#4.-Unit-debugging" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="4.-Unit-debugging">
+<h2>4. Unit debugging<a class="headerlink" href="#4.-Unit-debugging" title="Permalink to this heading">¶</a></h2>
 <p>There is no explicit unit control with unitconvert, but correct unit conversions can still be debugged and tested by seeing if changing the working units changes values.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
@@ -1009,7 +997,7 @@ error = [1.90042869 1.92089394 1.9537069  2.07466208 1.90926545] mm
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 57 atm = 0.005775525 GPa
-57 atm = 0.005775525000000001 GPa
+57 atm = 0.005775524999999999 GPa
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1037,12 +1025,12 @@ error = [1.90042869 1.92089394 1.9537069  2.07466208 1.90926545] mm
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-57 s = 5.893541891430732e-08 GPa
-57 s = 1.4753513599432711e-08 GPa
+57 s = 6.513941099627281e-05 GPa
+57 s = 5.324981508581029e-09 GPa
 </pre></div></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -1110,13 +1098,13 @@ error = [1.90042869 1.92089394 1.9537069  2.07466208 1.90926545] mm
         <li class="right" >
           <a href="index.html" title="Tutorials"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Unit conversions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
     </div>
   </body>
 </html>

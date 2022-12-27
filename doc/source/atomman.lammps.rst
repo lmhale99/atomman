@@ -24,7 +24,7 @@ Functions and attributes
     :undoc-members:
     :show-inheritance:
 
-    .. automodule:: atomman.lammps.Potential
+.. automodule:: atomman.lammps.Potential
     :members:
     :undoc-members:
     :show-inheritance:

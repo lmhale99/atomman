@@ -1,22 +1,25 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction to atomman: Settings and Library &#8212; atomman 1.4.4 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Introduction to atomman: Settings and Library &#8212; atomman 1.4.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: LAMMPS functionality" href="2._LAMMPS_functionality.html" />
-    <link rel="prev" title="Introduction to atomman: DFT reference crystal loading" href="1.4.12._DFT_reference_crystal_loading.html" /> 
+    <link rel="prev" title="Introduction to atomman: primitive_cell dumping" href="1.4.13._primitive_cell_dumping.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -31,9 +34,9 @@
           <a href="2._LAMMPS_functionality.html" title="Introduction to atomman: LAMMPS functionality"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="1.4.12._DFT_reference_crystal_loading.html" title="Introduction to atomman: DFT reference crystal loading"
+          <a href="1.4.13._primitive_cell_dumping.html" title="Introduction to atomman: primitive_cell dumping"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Settings and Library</a></li> 
       </ul>
@@ -49,35 +52,21 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
     border: none;
-    padding: 0;
+    padding: 0 0;
     margin: 0;
     box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -178,7 +167,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    /*background: #f5f5f5;*/
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -244,7 +233,6 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
-    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -292,12 +280,12 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-Settings-and-Library">
-<h1>Introduction to atomman: Settings and Library<a class="headerlink" href="#Introduction-to-atomman:-Settings-and-Library" title="Permalink to this headline">¶</a></h1>
+<section id="Introduction-to-atomman:-Settings-and-Library">
+<h1>Introduction to atomman: Settings and Library<a class="headerlink" href="#Introduction-to-atomman:-Settings-and-Library" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
-<div class="section" id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<section id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
 <p>The atomman package extends the settings and Database tools provided by the <a class="reference external" href="https://github.com/usnistgov/potentials">potentials package</a>. The settings options allow for the default values of certain parameters to be changed and saved for later sessions. Database provides a single class for interacting with records in the NIST Interatomic Potentials Repository’s database.</p>
 <p><em>Updated version 1.4.0</em>: Major changes in the settings and library behavior due to potentials version 0.3.0.</p>
 <p><strong>Library Imports</strong></p>
@@ -326,18 +314,18 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.4
-Notebook executed on 2022-03-31
+atomman version = 1.4.7
+Notebook executed on 2022-10-13
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.-Settings">
-<h2>2. Settings<a class="headerlink" href="#2.-Settings" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="2.-Settings">
+<h2>2. Settings<a class="headerlink" href="#2.-Settings" title="Permalink to this heading">¶</a></h2>
 <p>Many optional settings can be set and saved for later sessions using atomman.settings. The settings in atomman are identical to those found in <a class="reference external" href="https://github.com/lmhale99/potentials/blob/master/doc/3.%20Change%20Default%20Settings.html">potentials.settings</a> meaning that changing the settings in either package will affect the behavior of the other. See the <a class="reference external" href="https://github.com/lmhale99/potentials/blob/master/doc/3.%20Change%20Default%20Settings.html">potentials.settings</a> documentation for
 more details.</p>
-</div>
-<div class="section" id="3.-Database-interface">
-<h2>3. Database interface<a class="headerlink" href="#3.-Database-interface" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="3.-Database-interface">
+<h2>3. Database interface<a class="headerlink" href="#3.-Database-interface" title="Permalink to this heading">¶</a></h2>
 <p>The atomman.library.Database class extends <a class="reference external" href="https://github.com/lmhale99/potentials/blob/master/doc/4.%20Database%20Class.html">potentials.Database</a> to provide support for crystal structure references in addition to the potentials references. The Database class is used by atomman.load() for <a class="reference external" href="1.4.10._prototype_loading.html">‘prototype’</a>, <a class="reference external" href="1.4.11._crystal_loading.html">‘crystal’</a> and <a class="reference external" href="1.4.12._DFT_reference_crystal_loading.html">‘dft_reference’</a> styles and by
 <a class="reference external" href="2.1._Potential_class.html">atomman.load_lammps_potential</a>. It can also be directly accessed and used to explore the database for more involved investigations.</p>
 <p>See the <a class="reference external" href="https://github.com/lmhale99/potentials/blob/master/doc/4.%20Database%20Class.html">potentials.Database documentation</a> for information about initializing a Database object and the generic record query methods.</p>
@@ -347,15 +335,15 @@ more details.</p>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Load a Database with default settings</span>
-<span class="n">potdb</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">library</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+<span class="n">potdb</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">library</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">local_name</span><span class="o">=</span><span class="s1">&#39;master&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="3.1.-Crystal-prototypes">
-<h3>3.1. Crystal prototypes<a class="headerlink" href="#3.1.-Crystal-prototypes" title="Permalink to this headline">¶</a></h3>
+<section id="3.1.-Crystal-prototypes">
+<h3>3.1. Crystal prototypes<a class="headerlink" href="#3.1.-Crystal-prototypes" title="Permalink to this heading">¶</a></h3>
 <p>Crystal prototype records provide atomic coordinates for a crystal prototype, i.e. a combination of space group and lattice sites without any species-specific information.</p>
-<div class="section" id="3.1.1.-get_crystal_prototypes,-get_crystal_prototype,-and-download_crystal_prototypes">
-<h4>3.1.1. get_crystal_prototypes, get_crystal_prototype, and download_crystal_prototypes<a class="headerlink" href="#3.1.1.-get_crystal_prototypes,-get_crystal_prototype,-and-download_crystal_prototypes" title="Permalink to this headline">¶</a></h4>
+<section id="3.1.1.-get_crystal_prototypes,-get_crystal_prototype,-and-download_crystal_prototypes">
+<h4>3.1.1. get_crystal_prototypes, get_crystal_prototype, and download_crystal_prototypes<a class="headerlink" href="#3.1.1.-get_crystal_prototypes,-get_crystal_prototype,-and-download_crystal_prototypes" title="Permalink to this heading">¶</a></h4>
 <p>These methods extend the generic record methods (see the <a class="reference external" href="https://github.com/lmhale99/potentials/blob/master/doc/4.%20Database%20Class.html">potentials.Database documentation</a>) by including the following record-specific query parameters</p>
 <ul class="simple">
 <li><p><strong>id</strong> (<em>str or list, optional</em>) Prototype ID(s) to search for. These are unique identifiers for each prototype based on comm.</p></li>
@@ -386,6 +374,21 @@ more details.</p>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Found 19 matching crystal_prototype records in local library
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████████████████████████████████████████████████████████████████████████████| 19/19 [00:00&lt;00:00, 78.68it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 Found 19 matching crystal_prototype records in remote library
  - 0 remote records are new
 </pre></div></div>
@@ -717,9 +720,9 @@ Found 19 matching crystal_prototype records in remote library
 </table>
 </div></div>
 </div>
-</div>
-<div class="section" id="3.1.2.-CrystalPrototype-objects">
-<h4>3.1.2. CrystalPrototype objects<a class="headerlink" href="#3.1.2.-CrystalPrototype-objects" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="3.1.2.-CrystalPrototype-objects">
+<h4>3.1.2. CrystalPrototype objects<a class="headerlink" href="#3.1.2.-CrystalPrototype-objects" title="Permalink to this heading">¶</a></h4>
 <p>The CrystalPrototype Record objects is a subclass of <a class="reference external" href="https://github.com/usnistgov/potentials/blob/master/doc/5.%20Record%20Classes.html">potentials.Record</a>, and therefore features all of the common Record attributes and methods. CrystalPrototype additionally has attributes for each of the query term listed above, and ucell, which returns the unit cell of the prototype as an atomman.System. Note that the ucell lacks symbol information and the a lattice parameter is by default set to 1.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -785,13 +788,13 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       7 |       1 |   0.750 |   0.750 |   0.250
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="3.2.-Relaxed-crystals">
-<h3>3.2. Relaxed crystals<a class="headerlink" href="#3.2.-Relaxed-crystals" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="3.2.-Relaxed-crystals">
+<h3>3.2. Relaxed crystals<a class="headerlink" href="#3.2.-Relaxed-crystals" title="Permalink to this heading">¶</a></h3>
 <p>RelaxedCrystal records provide crystal structure information obtained by relaxing crystal prototypes and DFT reference structures using the different potentials in the NIST Interatomic Potentials Repository at 0 K. If you are working with a particular interatomic potential, this provides a convenient means to obtain the already relaxed crystal structure for that potential.</p>
-<div class="section" id="3.2.1.-get_relaxed_crystals,-get_relaxed_crystal-and-download_relaxed_crystals">
-<h4>3.2.1. get_relaxed_crystals, get_relaxed_crystal and download_relaxed_crystals<a class="headerlink" href="#3.2.1.-get_relaxed_crystals,-get_relaxed_crystal-and-download_relaxed_crystals" title="Permalink to this headline">¶</a></h4>
+<section id="3.2.1.-get_relaxed_crystals,-get_relaxed_crystal-and-download_relaxed_crystals">
+<h4>3.2.1. get_relaxed_crystals, get_relaxed_crystal and download_relaxed_crystals<a class="headerlink" href="#3.2.1.-get_relaxed_crystals,-get_relaxed_crystal-and-download_relaxed_crystals" title="Permalink to this heading">¶</a></h4>
 <p>These methods extend the generic record methods (see the <a class="reference external" href="https://github.com/lmhale99/potentials/blob/master/doc/4.%20Database%20Class.html">potentials.Database documentation</a>) by including the following record-specific query parameters</p>
 <ul class="simple">
 <li><p><strong>key</strong> (<em>str or list, optional</em>) UUID4 key(s) to search for. Each entry has a unique random-generated UUID4 key.</p></li>
@@ -820,6 +823,14 @@ always make the initial search as specific as possible.</p>
 <span class="n">fcc_gold_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;cohesive_energy&#39;</span><span class="p">)[[</span><span class="s1">&#39;potential_LAMMPS_id&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;cohesive_energy&#39;</span><span class="p">]]</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|████████████████████████████████████████████████████████████████████████████████| 130/130 [00:08&lt;00:00, 14.39it/s]
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -851,31 +862,31 @@ always make the initial search as specific as possible.</p>
   </thead>
   <tbody>
     <tr>
-      <th>13</th>
+      <th>36</th>
       <td>2012--Norman-G-E--Au--LAMMPS--ipr1</td>
       <td>7.011749</td>
       <td>-5.662467</td>
     </tr>
     <tr>
-      <th>104</th>
+      <th>117</th>
       <td>2012--Norman-G-E--Au--LAMMPS--ipr1</td>
       <td>4.068501</td>
       <td>-4.299363</td>
     </tr>
     <tr>
-      <th>10</th>
+      <th>20</th>
       <td>2012--Norman-G-E--Au--LAMMPS--ipr1</td>
       <td>4.068501</td>
       <td>-4.299363</td>
     </tr>
     <tr>
-      <th>37</th>
+      <th>53</th>
       <td>2012--Norman-G-E--Au--LAMMPS--ipr1</td>
       <td>4.068501</td>
       <td>-4.299363</td>
     </tr>
     <tr>
-      <th>50</th>
+      <th>63</th>
       <td>2004--Zhou-X-W--Cu-Ag-Au--LAMMPS--ipr2</td>
       <td>4.080053</td>
       <td>-3.930005</td>
@@ -887,53 +898,43 @@ always make the initial search as specific as possible.</p>
       <td>...</td>
     </tr>
     <tr>
-      <th>9</th>
+      <th>31</th>
       <td>2020--Starikov-S--Si-Au-Al--LAMMPS--ipr2</td>
       <td>7.842853</td>
       <td>-0.835714</td>
     </tr>
     <tr>
-      <th>14</th>
-      <td>2020--Starikov-S--Si-Au-Al--LAMMPS--ipr1</td>
+      <th>11</th>
+      <td>2020--Starikov-S--Si-Au-Al--LAMMPS--ipr2</td>
       <td>7.842853</td>
       <td>-0.835714</td>
     </tr>
     <tr>
-      <th>47</th>
+      <th>59</th>
       <td>2012--Norman-G-E--Au--LAMMPS--ipr1</td>
       <td>6.210659</td>
       <td>-0.613333</td>
     </tr>
     <tr>
-      <th>103</th>
+      <th>116</th>
       <td>2012--Norman-G-E--Au--LAMMPS--ipr1</td>
       <td>6.210659</td>
       <td>-0.613333</td>
     </tr>
     <tr>
-      <th>49</th>
+      <th>17</th>
       <td>2012--Norman-G-E--Au--LAMMPS--ipr1</td>
       <td>6.210659</td>
       <td>-0.613333</td>
     </tr>
   </tbody>
 </table>
-<p>118 rows × 3 columns</p>
+<p>130 rows × 3 columns</p>
 </div></div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-
-<span></span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="3.2.2.-RelaxedCrystal-objects">
-<h4>3.2.2. RelaxedCrystal objects<a class="headerlink" href="#3.2.2.-RelaxedCrystal-objects" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="3.2.2.-RelaxedCrystal-objects">
+<h4>3.2.2. RelaxedCrystal objects<a class="headerlink" href="#3.2.2.-RelaxedCrystal-objects" title="Permalink to this heading">¶</a></h4>
 <p>Just like CrystalPrototype objects, RelaxedCrystal objects have attributes for all of the query terms plus ucell.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -950,7 +951,7 @@ always make the initial search as specific as possible.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-EAM_Dynamo_AdamsFoilesWolfer_1989_Au__MO_087738844640_000
+EAM_Dynamo_Olsson_2010_Au__MO_228280943430_000
 avect =  [ 4.080,  0.000,  0.000]
 bvect =  [ 0.000,  4.080,  0.000]
 cvect =  [ 0.000,  0.000,  4.080]
@@ -967,13 +968,13 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       3 |       1 |   2.040 |   2.040 |   0.000
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="3.3.-DFT-reference-crystals">
-<h3>3.3. DFT reference crystals<a class="headerlink" href="#3.3.-DFT-reference-crystals" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="3.3.-DFT-reference-crystals">
+<h3>3.3. DFT reference crystals<a class="headerlink" href="#3.3.-DFT-reference-crystals" title="Permalink to this heading">¶</a></h3>
 <p>Reference crystal structures can also be searched for both within the local/NIST database and within the source databases.</p>
-<div class="section" id="3.3.1.-get_reference_crystals,-get_reference_crystal,-download_reference_crystal">
-<h4>3.3.1. get_reference_crystals, get_reference_crystal, download_reference_crystal<a class="headerlink" href="#3.3.1.-get_reference_crystals,-get_reference_crystal,-download_reference_crystal" title="Permalink to this headline">¶</a></h4>
+<section id="3.3.1.-get_reference_crystals,-get_reference_crystal,-download_reference_crystal">
+<h4>3.3.1. get_reference_crystals, get_reference_crystal, download_reference_crystal<a class="headerlink" href="#3.3.1.-get_reference_crystals,-get_reference_crystal,-download_reference_crystal" title="Permalink to this heading">¶</a></h4>
 <p>These methods extend the generic record methods (see the <a class="reference external" href="https://github.com/lmhale99/potentials/blob/master/doc/4.%20Database%20Class.html">potentials.Database documentation</a>) by including the following record-specific query parameters</p>
 <ul class="simple">
 <li><p><strong>id</strong> (<em>str or list, optional</em>) The record id(s) to parse by. For reference crystal records, the id are letters identifying the source database “mp-”, “mvc-”, or “oqmd-”, followed by the source database’s identification number.</p></li>
@@ -987,9 +988,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <li><p><strong>natypes</strong> (<em>int or list, optional</em>) The number(s) of unique atom types to limit the search by.</p></li>
 </ul>
 <p><strong>NOTE:</strong> These methods only return the reference records that are being stored locally or at potentials.nist.gov and do not search the parent databases.</p>
-</div>
-<div class="section" id="3.3.2.-fetch_reference_crystal,-fetch_mp_crystals,-fetch_mp_crystal,-fetch_oqmd_crystal">
-<h4>3.3.2. fetch_reference_crystal, fetch_mp_crystals, fetch_mp_crystal, fetch_oqmd_crystal<a class="headerlink" href="#3.3.2.-fetch_reference_crystal,-fetch_mp_crystals,-fetch_mp_crystal,-fetch_oqmd_crystal" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="3.3.2.-fetch_reference_crystal,-fetch_mp_crystals,-fetch_mp_crystal,-fetch_oqmd_crystal">
+<h4>3.3.2. fetch_reference_crystal, fetch_mp_crystals, fetch_mp_crystal, fetch_oqmd_crystal<a class="headerlink" href="#3.3.2.-fetch_reference_crystal,-fetch_mp_crystals,-fetch_mp_crystal,-fetch_oqmd_crystal" title="Permalink to this heading">¶</a></h4>
 <p>fetch_mp_crystals and fetch_mp_crystal retrieve all or one matching record from the Materials Project based on id. fetch_oqmd_crystal retrieves one record from OQMD based on id.</p>
 <p>fetch_reference_crystal first calls get_reference_crystal, and if that fails to find a match, calls either fetch_mp_crystal or fetch_oqmd_crystal based on a given id.</p>
 <div class="nbinput docutils container">
@@ -1007,12 +1008,12 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Crystal retrieved from Materials Project
+Matching record retrieved from local
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.3.3.-ReferenceCrystal-objects">
-<h4>3.3.3. ReferenceCrystal objects<a class="headerlink" href="#3.3.3.-ReferenceCrystal-objects" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="3.3.3.-ReferenceCrystal-objects">
+<h4>3.3.3. ReferenceCrystal objects<a class="headerlink" href="#3.3.3.-ReferenceCrystal-objects" title="Permalink to this heading">¶</a></h4>
 <p>Same as the others, the ReferenceCrystal objects have attributes for the query terms and ucell.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -1044,23 +1045,14 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       3 |       1 |   2.086 |   2.086 |   0.000
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.3.4.-save_reference_crystal">
-<h4>3.3.4. save_reference_crystal<a class="headerlink" href="#3.3.4.-save_reference_crystal" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="3.3.4.-save_reference_crystal">
+<h4>3.3.4. save_reference_crystal<a class="headerlink" href="#3.3.4.-save_reference_crystal" title="Permalink to this heading">¶</a></h4>
 <p>If you fetch a reference crystal from the parent database, you can then save it to the local database using save_reference_crystal.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -1102,8 +1094,8 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
   </div>
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="1.4.12._DFT_reference_crystal_loading.html"
-                          title="previous chapter">Introduction to atomman: DFT reference crystal loading</a></p>
+    <p class="topless"><a href="1.4.13._primitive_cell_dumping.html"
+                          title="previous chapter">Introduction to atomman: primitive_cell dumping</a></p>
   </div>
   <div>
     <h4>Next topic</h4>
@@ -1127,15 +1119,15 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
           <a href="2._LAMMPS_functionality.html" title="Introduction to atomman: LAMMPS functionality"
              >next</a> |</li>
         <li class="right" >
-          <a href="1.4.12._DFT_reference_crystal_loading.html" title="Introduction to atomman: DFT reference crystal loading"
+          <a href="1.4.13._primitive_cell_dumping.html" title="Introduction to atomman: primitive_cell dumping"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Settings and Library</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
     </div>
   </body>
 </html>

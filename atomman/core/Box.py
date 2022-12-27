@@ -527,7 +527,7 @@ class Box(Shape, object):
                     avect: npt.ArrayLike,
                     bvect: npt.ArrayLike,
                     cvect: npt.ArrayLike,
-                    origin: Optional[: npt.ArrayLike] = None):
+                    origin: Optional[npt.ArrayLike] = None):
         """
         Set the box using the three box vectors.
 

@@ -1,17 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction to atomman: Basic support and analysis tools &#8212; atomman 1.4.4 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Introduction to atomman: Basic support and analysis tools &#8212; atomman 1.4.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -35,7 +38,7 @@
         <li class="right" >
           <a href="2.2._Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Basic support and analysis tools</a></li> 
       </ul>
@@ -51,35 +54,21 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
     border: none;
-    padding: 0;
+    padding: 0 0;
     margin: 0;
     box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -180,7 +169,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    /*background: #f5f5f5;*/
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -246,7 +235,6 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
-    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -294,12 +282,12 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-Basic-support-and-analysis-tools">
-<h1>Introduction to atomman: Basic support and analysis tools<a class="headerlink" href="#Introduction-to-atomman:-Basic-support-and-analysis-tools" title="Permalink to this headline">¶</a></h1>
+<section id="Introduction-to-atomman:-Basic-support-and-analysis-tools">
+<h1>Introduction to atomman: Basic support and analysis tools<a class="headerlink" href="#Introduction-to-atomman:-Basic-support-and-analysis-tools" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
-<div class="section" id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<section id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
 <p>This Notebook outlines some of the other tools in atomman that provide basic support features and simple analysis of the atomistic systems.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
@@ -336,8 +324,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.4
-Notebook executed on 2022-03-17
+atomman version = 1.4.7
+Notebook executed on 2022-10-12
 </pre></div></div>
 </div>
 <p>Construct a demonstration 2x2x2 diamond cubic silicon system</p>
@@ -363,9 +351,9 @@ Notebook executed on 2022-03-17
 64
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.-Elastic-constants">
-<h2>2. Elastic constants<a class="headerlink" href="#2.-Elastic-constants" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="2.-Elastic-constants">
+<h2>2. Elastic constants<a class="headerlink" href="#2.-Elastic-constants" title="Permalink to this heading">¶</a></h2>
 <p>The full elastic constants tensor for a given crystal can be represented with the atomman.ElasticConstants class. The values in an ElasticConstants object can be set and retrieved in a variety of formats and transformed to other Cartesian coordinate systems.</p>
 <p>See the <a class="reference external" href="3.1._ElasticConstants_class.html">3.1. ElasticConstants class Jupyter Notebook</a> for more details and a full description of all of the class methods.</p>
 <div class="nbinput nblast docutils container">
@@ -408,12 +396,12 @@ Cij (GPa) =
  [  0.    0.    0.    0.    0.   79.6]]
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.-Relative-distances-between-atoms">
-<h2>3. Relative distances between atoms<a class="headerlink" href="#3.-Relative-distances-between-atoms" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="3.-Relative-distances-between-atoms">
+<h2>3. Relative distances between atoms<a class="headerlink" href="#3.-Relative-distances-between-atoms" title="Permalink to this heading">¶</a></h2>
 <p>There are a few built-in tools for investigating the relative positions between atoms of the same and different systems.</p>
-<div class="section" id="3.1.-System.dvect()">
-<h3>3.1. System.dvect()<a class="headerlink" href="#3.1.-System.dvect()" title="Permalink to this headline">¶</a></h3>
+<section id="3.1.-System.dvect()">
+<h3>3.1. System.dvect()<a class="headerlink" href="#3.1.-System.dvect()" title="Permalink to this heading">¶</a></h3>
 <p>The System.dvect() method computes the shortest vector(s) between two points or list of points within the System taking into account the System’s periodic dimensions.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -438,9 +426,9 @@ Cij (GPa) =
 [ 4.07325  4.07325 -4.07325]
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.2.-System.dmag()">
-<h3>3.2. System.dmag()<a class="headerlink" href="#3.2.-System.dmag()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.2.-System.dmag()">
+<h3>3.2. System.dmag()<a class="headerlink" href="#3.2.-System.dmag()" title="Permalink to this heading">¶</a></h3>
 <p>The System dmag() method computes the magnitude of the shortest vector(s) between two points or list of points within the System taking into account the System’s periodic dimensions. This is identical to computing dvect above, then finding the magnitude of those vectors, but should be faster.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -471,9 +459,9 @@ Cij (GPa) =
  3.09820588 6.6163557  6.6163557  6.6163557 ]
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.3.-displacement()">
-<h3>3.3. displacement()<a class="headerlink" href="#3.3.-displacement()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.3.-displacement()">
+<h3>3.3. displacement()<a class="headerlink" href="#3.3.-displacement()" title="Permalink to this heading">¶</a></h3>
 <p>The atomman.displacement() function compares two systems with the same number of atoms and calculates the vector differences between all atoms with the same atomic id’s. The vectors returned are the shortest vectors after taking periodic boundaries in consideration, i.e. it uses dvect().</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -507,75 +495,75 @@ Cij (GPa) =
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[2.30367917 2.3487104  2.85970854]
- [2.27531496 1.02050817 1.25967965]
- [1.99799574 1.79240305 2.79155531]
- [1.46566173 0.87350871 1.29437791]
- [2.77683528 2.19979903 1.16142669]
- [0.60495831 1.15905085 1.71790408]
- [0.46916565 0.01687008 0.69069794]
- [0.03807811 0.17934985 1.84228672]
- [1.30814234 2.2749664  2.228111  ]
- [0.4733944  1.82776664 1.3905906 ]
- [0.64635201 2.19211811 1.22608594]
- [2.57601426 0.33474941 2.95331058]
- [1.09514577 2.47585748 0.49684326]
- [0.58881538 0.21115074 0.55100254]
- [1.76572129 2.25280815 2.94703426]
- [1.29744841 0.33726989 2.09833713]
- [1.60520234 0.02979757 1.20061231]
- [0.28008485 1.78521247 0.29061105]
- [1.21434029 0.23657935 0.7577544 ]
- [2.37806405 2.45198497 2.39362906]
- [0.14053644 2.15866906 1.10367296]
- [1.0536264  2.29378046 0.23994123]
- [0.15528608 2.2203562  1.72805651]
- [2.90616602 1.00688418 2.61202397]
- [0.21585405 2.95324745 1.88622874]
- [1.43118836 2.49088101 2.75680438]
- [0.05657582 1.17135651 1.28196146]
- [2.10464253 0.18507456 2.85016199]
- [0.38826712 2.37178757 2.73443301]
- [1.61813321 2.38720787 2.63159538]
- [1.95775363 0.80757433 1.47483392]
- [1.63511724 2.69818564 1.74395684]
- [1.16640353 0.77160045 2.66565507]
- [0.32272071 2.49814439 2.15183727]
- [2.36899807 1.67740462 1.9469423 ]
- [0.2422808  2.5393543  2.4089751 ]
- [1.25833723 0.37773689 0.70414346]
- [0.09379404 2.18908778 1.35098384]
- [2.30804979 0.49560984 0.83050823]
- [1.73813343 2.02976942 1.12679582]
- [2.57592371 0.18490332 2.47941382]
- [2.74878022 2.15525565 0.03469917]
- [2.10352374 1.10580935 2.52521685]
- [1.35452161 1.28921551 2.70993406]
- [0.03276028 1.87242305 2.6855388 ]
- [1.68675533 0.89297636 1.80403308]
- [0.95034231 0.5505729  2.0755478 ]
- [0.04056123 0.02081778 1.3307037 ]
- [0.65271422 2.20230841 1.8556757 ]
- [0.2528307  0.58758373 2.35980699]
- [0.93405983 2.84143804 0.64891983]
- [1.58624429 1.2460871  0.73859355]
- [2.9127833  0.6539877  0.47553949]
- [0.83242444 0.67899395 1.31062329]
- [2.95105346 0.79403734 0.5554988 ]
- [0.39031125 1.58785371 1.2526019 ]
- [1.86368324 2.2306242  0.00973364]
- [0.1094249  2.11421856 2.58857125]
- [2.95233953 1.31099997 0.26150053]
- [0.50435727 0.87342455 2.4600054 ]
- [0.48684772 0.66580478 0.89776317]
- [2.04569564 0.52110356 0.41227405]
- [0.46450444 2.27451199 2.72634176]
- [0.12208499 1.80657146 2.59124352]]
+[[1.16912462 2.37489671 0.70143864]
+ [1.80838338 2.70762057 0.0124293 ]
+ [1.34361928 0.56994466 0.69799685]
+ [0.61570199 2.05851792 2.40890288]
+ [2.00073357 0.81970473 1.36380654]
+ [1.14616143 1.51735336 1.3476155 ]
+ [2.66298425 1.06704412 0.64164461]
+ [0.98271328 1.25134517 2.82875826]
+ [2.98181377 2.2865085  1.37025622]
+ [1.61113297 0.70435306 1.91255968]
+ [1.84687991 2.95868065 2.78928896]
+ [0.30870384 0.04812496 0.20688016]
+ [0.70221724 1.33176618 0.45137652]
+ [2.85612881 2.50863255 2.35073081]
+ [1.99130251 0.13871094 2.69165268]
+ [1.35089731 1.0445077  2.02190478]
+ [2.83456601 1.33638235 2.575502  ]
+ [1.55464091 2.60343431 1.68519289]
+ [2.84147613 0.42269342 1.82781607]
+ [1.39259429 1.01211734 1.98939734]
+ [0.42051544 1.26000587 0.56131789]
+ [0.2369208  0.50425471 0.79425972]
+ [0.39455393 2.84762993 2.13641901]
+ [1.10212394 2.30497549 0.87541787]
+ [1.684216   0.33662717 1.92796789]
+ [2.71411901 2.70864272 2.28398661]
+ [0.28853038 1.91226999 2.94647531]
+ [0.09676668 0.47986329 0.13108621]
+ [0.65064021 2.36849173 2.2796044 ]
+ [2.36737455 1.9345269  2.9372149 ]
+ [2.39957024 0.12723308 0.65311048]
+ [1.40114355 2.56479081 2.87301175]
+ [0.70090025 0.02251016 2.35601614]
+ [2.44121302 0.601899   1.82507288]
+ [0.34233693 0.03216809 0.65855281]
+ [0.34706586 0.31128986 2.67631454]
+ [0.86346186 1.071039   0.62521148]
+ [1.98740885 2.53678356 2.01585074]
+ [2.71375135 1.66458418 1.6131791 ]
+ [2.23822352 2.13642032 1.34202018]
+ [2.77848648 1.2187009  2.65909741]
+ [2.66344789 2.79738404 2.13409217]
+ [1.5489288  2.3282016  0.9371969 ]
+ [2.93606962 0.97146264 1.01837563]
+ [0.58742202 1.52975213 0.30718997]
+ [0.40479764 2.07585567 1.44229201]
+ [0.04869095 0.59456636 1.32034466]
+ [0.41199363 0.82651177 0.25957594]
+ [0.6450686  0.06848265 2.32504394]
+ [2.22601917 2.16009473 1.14260722]
+ [2.57573649 0.59610753 0.99108899]
+ [0.81018207 2.83586885 1.61146542]
+ [0.08819164 2.23703276 1.01273528]
+ [0.01005098 2.3573758  1.80227406]
+ [1.45712799 0.6026855  1.37356601]
+ [2.17115299 0.39407971 0.75768263]
+ [0.19536047 2.43310647 1.86748162]
+ [2.09298196 1.3366475  2.5786101 ]
+ [1.59066132 0.97204905 0.17979897]
+ [2.76167768 1.98324729 2.71207055]
+ [2.22696272 2.3666887  2.85021247]
+ [2.89618792 1.14234164 0.37426527]
+ [0.89488772 1.49978819 2.97024232]
+ [2.42480619 1.15815677 0.95732347]]
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.4.-System.neighborlist()">
-<h3>3.4. System.neighborlist()<a class="headerlink" href="#3.4.-System.neighborlist()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.4.-System.neighborlist()">
+<h3>3.4. System.neighborlist()<a class="headerlink" href="#3.4.-System.neighborlist()" title="Permalink to this heading">¶</a></h3>
 <p>A list of neighbor atoms within a cutoff can be constructed using the System.neighborlist() method. The list of neighbors is returned as an atomman.NeighborList object.</p>
 <p>See the <a class="reference external" href="3.2._NeighborList_class.html">3.2. NeighborList class Jupyter Notebook</a> for more details on how the list is calculated and can be used.</p>
 <p>Parameters</p>
@@ -656,10 +644,10 @@ Neighbors of atom 6 = [ 2 11 33 40]
 [2.35169198 2.35169198 2.35169198 2.35169198]
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="4.-Region-selectors">
-<h2>4. Region selectors<a class="headerlink" href="#4.-Region-selectors" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="4.-Region-selectors">
+<h2>4. Region selectors<a class="headerlink" href="#4.-Region-selectors" title="Permalink to this heading">¶</a></h2>
 <p><em>Added version 1.3.0</em></p>
 <p>A number of geometric shape definitions are available in the atomman.region submodule to help identify regions in space above/below planes or inside/outside of regions. These are useful for constructing systems by slicing away atoms to create nanostructures, or for performing analysis on only select regions.</p>
 <p>See the <a class="reference external" href="3.3._Region_selectors.html">3.3. Region selectors Jupyter Notebook</a> for more details and a list of all available shapes.</p>
@@ -700,12 +688,12 @@ Neighbors of atom 6 = [ 2 11 33 40]
 11 atoms inside sphere
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="5.-Basic-tools">
-<h2>5. Basic tools<a class="headerlink" href="#5.-Basic-tools" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="5.-Basic-tools">
+<h2>5. Basic tools<a class="headerlink" href="#5.-Basic-tools" title="Permalink to this heading">¶</a></h2>
 <p>This lists some of the other basic tools and features in atomman.</p>
-<div class="section" id="5.1.-Atomic-information">
-<h3>5.1. Atomic information<a class="headerlink" href="#5.1.-Atomic-information" title="Permalink to this headline">¶</a></h3>
+<section id="5.1.-Atomic-information">
+<h3>5.1. Atomic information<a class="headerlink" href="#5.1.-Atomic-information" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><strong>atomman.tools.atomic_number()</strong> returns the atomic number associated with an element’s atomic symbol.</p></li>
 <li><p><strong>atomman.tools.atomic_symbol()</strong> returns the elemental symbol associated with an given atomic number.</p></li>
@@ -764,9 +752,9 @@ Fe
 25.986891904
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="5.2.-axes_check()">
-<h3>5.2. axes_check()<a class="headerlink" href="#5.2.-axes_check()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="5.2.-axes_check()">
+<h3>5.2. axes_check()<a class="headerlink" href="#5.2.-axes_check()" title="Permalink to this heading">¶</a></h3>
 <p>The axes_check() function is useful when working in Cartesian systems. Given a (3,3) array representing three 3D Cartesian vectors:</p>
 <ul class="simple">
 <li><p>The three vectors are checked that they are orthogonal and right-handed.</p></li>
@@ -794,9 +782,9 @@ Fe
  [ 0.          1.          0.        ]]
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="5.3.-filltemplate()">
-<h3>5.3. filltemplate()<a class="headerlink" href="#5.3.-filltemplate()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="5.3.-filltemplate()">
+<h3>5.3. filltemplate()<a class="headerlink" href="#5.3.-filltemplate()" title="Permalink to this heading">¶</a></h3>
 <p>The filltemplate() function takes a template and fills in values for delimited template variables.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
@@ -824,9 +812,9 @@ Fe
 My friend Charlie really likes to use templates to program, says that they are delicious!
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="5.4.-indexstr()">
-<h3>5.4. indexstr()<a class="headerlink" href="#5.4.-indexstr()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="5.4.-indexstr()">
+<h3>5.4. indexstr()<a class="headerlink" href="#5.4.-indexstr()" title="Permalink to this heading">¶</a></h3>
 <p>Iterates through all indicies of an array with a given shape, returning both the numeric index and a string representation.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
@@ -851,9 +839,9 @@ index -&gt; (2, 0) , istr -&gt; &#39;[2][0]&#39;
 index -&gt; (2, 1) , istr -&gt; &#39;[2][1]&#39;
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="5.5.-uber_open_rmode">
-<h3>5.5. uber_open_rmode<a class="headerlink" href="#5.5.-uber_open_rmode" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="5.5.-uber_open_rmode">
+<h3>5.5. uber_open_rmode<a class="headerlink" href="#5.5.-uber_open_rmode" title="Permalink to this heading">¶</a></h3>
 <p>uber_open_rmode is a context manager that allows for similar reading of content from a file or from a string variable. It equivalently handles:</p>
 <ul class="simple">
 <li><p>str path name to a file</p></li>
@@ -896,9 +884,9 @@ b&#39;Here I am, read me!&#39;
 b&#39;Here I am, read me!&#39;
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="5.6.-vect_angle()">
-<h3>5.6. vect_angle()<a class="headerlink" href="#5.6.-vect_angle()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="5.6.-vect_angle()">
+<h3>5.6. vect_angle()<a class="headerlink" href="#5.6.-vect_angle()" title="Permalink to this heading">¶</a></h3>
 <p>The vect_angle() function returns the angle between two vectors.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
@@ -919,14 +907,14 @@ b&#39;Here I am, read me!&#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Angle between [ 0.82190188 -0.16527953 -0.94974471] and [-0.03216575 -0.5275421  -0.55407587] =
-52.763036400965284 degrees
-0.9208887085464633 radians
+Angle between [0.64308206 0.07336497 0.64850258] and [0.20905481 0.67129129 0.03455277] =
+71.36482539445016 degrees
+1.2455511732440163 radians
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="5.7.-duplicates_allclose()">
-<h3>5.7. duplicates_allclose()<a class="headerlink" href="#5.7.-duplicates_allclose()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="5.7.-duplicates_allclose()">
+<h3>5.7. duplicates_allclose()<a class="headerlink" href="#5.7.-duplicates_allclose()" title="Permalink to this heading">¶</a></h3>
 <p>Determine duplicates in dataframe based on tolerances. The implementation first uses pandas.DataFrame.duplicated on the <code class="docutils literal notranslate"><span class="pre">dcols</span></code> argument with <code class="docutils literal notranslate"><span class="pre">keep=False</span></code> to keep all duplicates. The duplicate sub-dataframe is then sorted on both <code class="docutils literal notranslate"><span class="pre">dcols</span></code> and <code class="docutils literal notranslate"><span class="pre">fcols</span></code>. A diff between each row is then done on the sorted duplicates dataframe. The float values are then checked for their tolerances.</p>
 <p>Note: False duplicates may be identified if tolerance ranges overlap. Consider dataframe with rows 1,2,3. If row 2 matches row 1 within the tolerances, and row 3 matches row 2 within the tolerances, both rows 2 and 3 will be labeled as tolerances even if row 3 does not match row 1 within the tolerances.</p>
 <p>Parameters - <strong>dataframe</strong> (<em>pandas.DataFrame</em>) The dataframe to search for duplicates - <strong>dcols</strong> (<em>list</em>) The column names that are tested for exact duplicates. - <strong>fcols</strong> (<em>dict</em>) The column names (keys) that are tested using absolute tolerances (values).</p>
@@ -1051,9 +1039,9 @@ Angle between [ 0.82190188 -0.16527953 -0.94974471] and [-0.03216575 -0.5275421 
 </table>
 </div></div>
 </div>
-</div>
-<div class="section" id="5.8.-Miller-index-conversions">
-<h3>5.8. Miller index conversions<a class="headerlink" href="#5.8.-Miller-index-conversions" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="5.8.-Miller-index-conversions">
+<h3>5.8. Miller index conversions<a class="headerlink" href="#5.8.-Miller-index-conversions" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><strong>atomman.tools.miller.vector3to4(indices)</strong> converts vectors from three-term Miller indices to four-term Miller-Bravais indices for hexagonal systems. <em>Updated version 1.2.6</em>: now returns vectors with magnitudes consistent withe given vectors rather than rescaling to the smallest integer representations.</p></li>
 <li><p><strong>atomman.tools.miller.vector4to3(indices)</strong> converts vectors from four-term Miller-Bravais indices to three-term Miller indices. <em>Updated version 1.2.6</em>: now returns vectors with magnitudes consistent withe given vectors rather than rescaling to the smallest integer representations.</p></li>
@@ -1110,17 +1098,17 @@ Angle between [ 0.82190188 -0.16527953 -0.94974471] and [-0.03216575 -0.5275421 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 4 -1  0]
- [-2 -5  3]
- [-2  3 -4]]
+[[ 5 -2 -2]
+ [ 5  3 -3]
+ [ 4  3 -4]]
 
-[[ 3.         -2.         -1.          0.        ]
- [ 0.33333333 -2.66666667  2.33333333  3.        ]
- [-2.33333333  2.66666667 -0.33333333 -4.        ]]
+[[ 4.         -3.         -1.         -2.        ]
+ [ 2.33333333  0.33333333 -2.66666667 -3.        ]
+ [ 1.66666667  0.66666667 -2.33333333 -4.        ]]
 
-[[ 4. -1.  0.]
- [-2. -5.  3.]
- [-2.  3. -4.]]
+[[ 5. -2. -2.]
+ [ 5.  3. -3.]
+ [ 4.  3. -4.]]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1169,17 +1157,17 @@ Angle between [ 0.82190188 -0.16527953 -0.94974471] and [-0.03216575 -0.5275421 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 0  0 -5]
- [-3  5  3]
- [ 1 -3  5]]
+[[ 3 -2  0]
+ [-3  1 -4]
+ [ 2  4 -4]]
 
-[[ 0.  0. -0. -5.]
- [-3.  5. -2.  3.]
- [ 1. -3.  2.  5.]]
+[[ 3. -2. -1.  0.]
+ [-3.  1.  2. -4.]
+ [ 2.  4. -6. -4.]]
 
-[[ 0.  0. -5.]
- [-3.  5.  3.]
- [ 1. -3.  5.]]
+[[ 3. -2.  0.]
+ [-3.  1. -4.]
+ [ 2.  4. -4.]]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1353,9 +1341,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       1 |       1 |   1.430 |   1.430 |   1.430
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="5.9.-Crystal-lattice-identification">
-<h3>5.9. Crystal lattice identification<a class="headerlink" href="#5.9.-Crystal-lattice-identification" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="5.9.-Crystal-lattice-identification">
+<h3>5.9. Crystal lattice identification<a class="headerlink" href="#5.9.-Crystal-lattice-identification" title="Permalink to this heading">¶</a></h3>
 <p><em>Note version 1.4.4</em> These have been added as methods of the Box class. These stand-alone functions are likely to be depreciated in the next major atomman version.</p>
 <p>There are also a few tests for identifying if a supplied box is consistent with a standard representation of a crystal family unit cell.</p>
 <ul class="simple">
@@ -1471,9 +1459,9 @@ istriclinic =    False
 identifyfamily = None
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="5.10.-compositionstr()">
-<h3>5.10. compositionstr()<a class="headerlink" href="#5.10.-compositionstr()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="5.10.-compositionstr()">
+<h3>5.10. compositionstr()<a class="headerlink" href="#5.10.-compositionstr()" title="Permalink to this heading">¶</a></h3>
 <p><em>Added version 1.2.7</em></p>
 <p>Takes a list of symbols and the counts for each and returns a reduced composition string. Used by System.composition.</p>
 <div class="nbinput docutils container">
@@ -1505,9 +1493,9 @@ Composition = Al2Si5
 </pre></div>
 </div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -1577,13 +1565,13 @@ Composition = Al2Si5
         <li class="right" >
           <a href="2.2._Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Basic support and analysis tools</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
     </div>
   </body>
 </html>

@@ -1,17 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction to atomman: Defining atomic systems &#8212; atomman 1.4.4 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Introduction to atomman: Defining atomic systems &#8212; atomman 1.4.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -33,7 +36,7 @@
         <li class="right" >
           <a href="0._Unit_conversions.html" title="Introduction to atomman: Unit conversions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Defining atomic systems</a></li> 
       </ul>
@@ -49,35 +52,21 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
     border: none;
-    padding: 0;
+    padding: 0 0;
     margin: 0;
     box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -178,7 +167,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    /*background: #f5f5f5;*/
+    background: #f5f5f5;
 }
 
 /* override MathJax center alignment in output cells */
@@ -244,7 +233,6 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
-    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -292,12 +280,12 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Introduction-to-atomman:-Defining-atomic-systems">
-<h1>Introduction to atomman: Defining atomic systems<a class="headerlink" href="#Introduction-to-atomman:-Defining-atomic-systems" title="Permalink to this headline">¶</a></h1>
+<section id="Introduction-to-atomman:-Defining-atomic-systems">
+<h1>Introduction to atomman: Defining atomic systems<a class="headerlink" href="#Introduction-to-atomman:-Defining-atomic-systems" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
-<div class="section" id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this headline">¶</a></h2>
+<section id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
 <p>This Notebook provides an introduction to creating and manipulating atomistic systems using atomman.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
@@ -330,20 +318,20 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.4
-Notebook executed on 2022-03-17
+atomman version = 1.4.7
+Notebook executed on 2022-10-12
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2.-Create-a-System">
-<h2>2. Create a System<a class="headerlink" href="#2.-Create-a-System" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="2.-Create-a-System">
+<h2>2. Create a System<a class="headerlink" href="#2.-Create-a-System" title="Permalink to this heading">¶</a></h2>
 <p>Atomic systems are represented with three Python objects: Box, Atoms, and System.</p>
-<div class="section" id="2.1.-Box">
-<h3>2.1. Box<a class="headerlink" href="#2.1.-Box" title="Permalink to this headline">¶</a></h3>
+<section id="2.1.-Box">
+<h3>2.1. Box<a class="headerlink" href="#2.1.-Box" title="Permalink to this heading">¶</a></h3>
 <p>The Box class defines a generic parallelepiped for the system’s boundaries.</p>
 <p>See the <a class="reference external" href="1.1._Box_class.html">1.1. Box class Jupyter Notebook</a> for more detailed information and options.</p>
-<div class="section" id="2.1.1.-Create-Box">
-<h4>2.1.1. Create Box<a class="headerlink" href="#2.1.1.-Create-Box" title="Permalink to this headline">¶</a></h4>
+<section id="2.1.1.-Create-Box">
+<h4>2.1.1. Create Box<a class="headerlink" href="#2.1.1.-Create-Box" title="Permalink to this heading">¶</a></h4>
 <p>Boxes can be defined using a variety of formats. Here, we’ll define a box using lattice parameters.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -358,9 +346,9 @@ Notebook executed on 2022-03-17
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="2.1.2.-Access-Box-properties">
-<h4>2.1.2. Access Box properties<a class="headerlink" href="#2.1.2.-Access-Box-properties" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="2.1.2.-Access-Box-properties">
+<h4>2.1.2. Access Box properties<a class="headerlink" href="#2.1.2.-Access-Box-properties" title="Permalink to this heading">¶</a></h4>
 <p>The string of Box shows four Cartesian vectors: the three box vectors (avect, bvect, and cvect) and the origin position.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -410,14 +398,14 @@ beta  = 90.0
 gamma = 90.0
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="2.2.-Atoms">
-<h3>2.2. Atoms<a class="headerlink" href="#2.2.-Atoms" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="2.2.-Atoms">
+<h3>2.2. Atoms<a class="headerlink" href="#2.2.-Atoms" title="Permalink to this heading">¶</a></h3>
 <p>The Atoms class collects per-atom properties that can be freely assigned. The only limitations are that the number of atoms is constant, and that values for the per-atom properties must be given for all atoms.</p>
 <p>See the <a class="reference external" href="1.2._Atoms_class.html">1.2. Atoms class Jupyter Notebook</a> for more detailed information and options.</p>
-<div class="section" id="2.2.1.-Create-Atoms">
-<h4>2.2.1. Create Atoms<a class="headerlink" href="#2.2.1.-Create-Atoms" title="Permalink to this headline">¶</a></h4>
+<section id="2.2.1.-Create-Atoms">
+<h4>2.2.1. Create Atoms<a class="headerlink" href="#2.2.1.-Create-Atoms" title="Permalink to this heading">¶</a></h4>
 <p>When initializing an Atoms object, all keyword arguments (except natoms and prop) will be interpreted as property names. Values for each property must be given for each atom, or only one value given in which case all atoms will be assigned the same value.</p>
 <p>By default, each Atoms instance has two per-atom properties:</p>
 <ul class="simple">
@@ -440,9 +428,9 @@ gamma = 90.0
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="2.2.2.-Accessing-Atoms-properties">
-<h4>2.2.2. Accessing Atoms properties<a class="headerlink" href="#2.2.2.-Accessing-Atoms-properties" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="2.2.2.-Accessing-Atoms-properties">
+<h4>2.2.2. Accessing Atoms properties<a class="headerlink" href="#2.2.2.-Accessing-Atoms-properties" title="Permalink to this heading">¶</a></h4>
 <p>The string of Atoms shows id, atype, and pos for all atoms.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -558,14 +546,14 @@ atoms.pos[2] -&gt; [0.5 0.  0.5]
 </table>
 </div></div>
 </div>
-</div>
-</div>
-<div class="section" id="2.3.-System">
-<h3>2.3. System<a class="headerlink" href="#2.3.-System" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="2.3.-System">
+<h3>2.3. System<a class="headerlink" href="#2.3.-System" title="Permalink to this heading">¶</a></h3>
 <p>The System class gives a full representation of an atomic configuration by combining an atoms instance, a box instance, periodic boundary condition settings, and a list of element symbols.</p>
 <p>See the <a class="reference external" href="1.3._System_class.html">1.3. System class Jupyter Notebook</a> for more detailed information and options.</p>
-<div class="section" id="2.3.1.-Create-system">
-<h4>2.3.1. Create system<a class="headerlink" href="#2.3.1.-Create-system" title="Permalink to this headline">¶</a></h4>
+<section id="2.3.1.-Create-system">
+<h4>2.3.1. Create system<a class="headerlink" href="#2.3.1.-Create-system" title="Permalink to this heading">¶</a></h4>
 <p>A System is created by combining its components:</p>
 <ul class="simple">
 <li><p><strong>atoms</strong> is an Atoms object.</p></li>
@@ -605,11 +593,11 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       3 |       1 |   0.000 |   2.025 |   2.025
 </pre></div></div>
 </div>
-</div>
-</div>
-</div>
-<div class="section" id="3.-Load-a-System">
-<h2>3. Load a System<a class="headerlink" href="#3.-Load-a-System" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+</section>
+<section id="3.-Load-a-System">
+<h2>3. Load a System<a class="headerlink" href="#3.-Load-a-System" title="Permalink to this heading">¶</a></h2>
 <p>Systems can also be created by loading in atomic configurations from either</p>
 <ul class="simple">
 <li><p>files of many different formats,</p></li>
@@ -617,8 +605,8 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <li><p>records stored in the potentials database.</p></li>
 </ul>
 <p>See the <a class="reference external" href="1.4._Load_and_dump_conversions.html">1.4. Load and dump conversions Jupyter Notebook</a> for more detailed information on all the different available styles and options.</p>
-<div class="section" id="3.1.-Load-from-POSCAR">
-<h3>3.1. Load from POSCAR<a class="headerlink" href="#3.1.-Load-from-POSCAR" title="Permalink to this headline">¶</a></h3>
+<section id="3.1.-Load-from-POSCAR">
+<h3>3.1. Load from POSCAR<a class="headerlink" href="#3.1.-Load-from-POSCAR" title="Permalink to this heading">¶</a></h3>
 <p>Create content in POSCAR format</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
@@ -677,9 +665,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       3 |       1 |   0.000 |   2.025 |   2.025
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.2.-Load-a-database-prototype">
-<h3>3.2. Load a database prototype<a class="headerlink" href="#3.2.-Load-a-database-prototype" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.2.-Load-a-database-prototype">
+<h3>3.2. Load a database prototype<a class="headerlink" href="#3.2.-Load-a-database-prototype" title="Permalink to this heading">¶</a></h3>
 <p>The potentials database stores structure information for many crystal prototypes, i.e. space group + wykoff sites without elemental information. Crystals can easily be created from this by loading the prototype and specifying the element(s) and the necessary lattice constants.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
@@ -738,9 +726,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       3 |       1 |   2.025 |   2.025 |   0.000
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3.3.-Load-a-database-crystal">
-<h3>3.3. Load a database crystal<a class="headerlink" href="#3.3.-Load-a-database-crystal" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="3.3.-Load-a-database-crystal">
+<h3>3.3. Load a database crystal<a class="headerlink" href="#3.3.-Load-a-database-crystal" title="Permalink to this heading">¶</a></h3>
 <p>The potentials database also contains relaxed crystal structures for the hosted interatomic potentials. If you know which potential you want to use, then you can load the appropriate relaxed structure.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -773,14 +761,14 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       3 |       1 |   2.025 |   2.025 |   0.000
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="4.-System-Manipulations">
-<h2>4. System Manipulations<a class="headerlink" href="#4.-System-Manipulations" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="4.-System-Manipulations">
+<h2>4. System Manipulations<a class="headerlink" href="#4.-System-Manipulations" title="Permalink to this heading">¶</a></h2>
 <p>The System class was defined to make it easy for users to manipulate systems and atomic properties. Additionally, there are a few System class methods that assist with some common manipulations.</p>
 <p>See the <a class="reference external" href="1.3._System_class.html">1.3. System class Jupyter Notebook</a> for more detailed information and options.</p>
-<div class="section" id="4.1.-System.rotate()">
-<h3>4.1. System.rotate()<a class="headerlink" href="#4.1.-System.rotate()" title="Permalink to this headline">¶</a></h3>
+<section id="4.1.-System.rotate()">
+<h3>4.1. System.rotate()<a class="headerlink" href="#4.1.-System.rotate()" title="Permalink to this heading">¶</a></h3>
 <p>The rotate() method transforms the system such that the new box vectors correspond to three integer [uvw] crystal vectors with respect to the current box vectors. This ensures that atomic compatibilities across all periodic boundaries.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
@@ -823,9 +811,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
       7 |       1 |   4.296 |   4.296 |   2.025
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="4.2.-System.supersize()">
-<h3>4.2. System.supersize()<a class="headerlink" href="#4.2.-System.supersize()" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="4.2.-System.supersize()">
+<h3>4.2. System.supersize()<a class="headerlink" href="#4.2.-System.supersize()" title="Permalink to this heading">¶</a></h3>
 <p>A larger System (i.e. supercell) can be generated using the supersize() method</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
@@ -920,17 +908,17 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      63 |       1 |  10.023 |  10.023 |   6.075
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="4.3.-Other-Methods">
-<h3>4.3. Other Methods<a class="headerlink" href="#4.3.-Other-Methods" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="4.3.-Other-Methods">
+<h3>4.3. Other Methods<a class="headerlink" href="#4.3.-Other-Methods" title="Permalink to this heading">¶</a></h3>
 <p>Other methods include:</p>
 <ul class="simple">
 <li><p><strong>wrap()</strong> wraps atoms around periodic boundaries and expands non-periodic boundaries to ensure all atom positions are within the box.</p></li>
 <li><p><strong>normalize()</strong> transforms the system such that box vectors and atomic positions are compatible with simulation codes, such as LAMMPS.</p></li>
 </ul>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -1007,13 +995,13 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
         <li class="right" >
           <a href="0._Unit_conversions.html" title="Introduction to atomman: Unit conversions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Defining atomic systems</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
     </div>
   </body>
 </html>
