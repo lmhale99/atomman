@@ -152,7 +152,7 @@ def dislocation_system_basis(ξ_uvw: npt.ArrayLike,
                                 
     # Identify the two crystal vectors that best correspond to m_cart and n_cart
     m_uvw = None
-    n_uvw = None    
+    n_uvw = None
     m_angle_min = 180
     n_angle_min = 180
     
