@@ -247,7 +247,6 @@ def dipole(self,
     if shift is not None or shiftindex is not None:
         self.set_shift(shift, shiftindex, shiftscale)
     shift = self.shift
-    print(shift)
 
     # Apply the rigid body shift to the atoms
     base_system.atoms.pos += shift
