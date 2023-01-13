@@ -141,9 +141,7 @@ def dipole_displacement(dislsol: VolterraDislocation,
     return disp
 
 def dipole(self,
-           m_mult: float,
-           n_mult: float,
-           ξ_mult: float = 1,
+           sizemults: Tuple,
            boxtilt: bool = True,
            numreplicas: int = 5,
            shift: Optional[npt.ArrayLike] = None,
@@ -163,21 +161,12 @@ def dipole(self,
 
     Parameters
     ----------
-    m_mult : float
-        The number of replicas to use for the rotated cell's box vector most
-        aligned with the dislocation solution's m-axis.  This sets the crystal
-        relative distance between the dislocations in the slip plane.  This
-        should be a positive integer and is typically an even number when
-        boxtilt is True.
-    n_mult : float
-        The number of replicas to use for the box vector most aligned with
-        the dislocation solution's n-axis, i.e. the slip plane normal.  This is
-        typically a positive integer, but can be a fraction if boxtilt is True
-        and the resulting tilted vector is a full crystal lattice vector.
-    ξ_mult : float, optional
-        The number of replicas to use for the box vector aligned with the
-        dislocation line.  Default value is 1.  This should be a positive
-        integer.
+    sizemults : tuple
+        The three size multipliers to use when generating the system.  Values
+        should be positive integers if boxtilt is False.  When boxtilt is True,
+        the multipliers are limited to values that result in full lattice
+        vectors once the tilt is added.  Depending on the system, fractional
+        values may be possible, or some integer values not allowed.
     boxtilt : bool, optional
         If True (default) then a tilt will be applied to the system such that
         the resulting periodic configuration will be consistent with a
@@ -185,8 +174,9 @@ def dipole(self,
         surrounded by dislocations of the opposite sign in both the m- and n-
         directions.  This is achieved by adding half of the box vector
         most aligned with the m-axis to the box vector most aligned with the
-        n-axis.  A value of False will not tilt the system, so only the mults
-        will be applied to the rotated cell.
+        n-axis.  A value of False will not tilt the system, so only the
+        sizemults will be applied to the rotated cell. The non-tilted system
+        will have dislocations of the same sign aligned along the n-axis.
     numreplicas : int, optional
         Indicates how many image cells are used for computing the displacement
         field of the dipole. A rectangular grid of images is used
@@ -228,17 +218,19 @@ def dipole(self,
     """
     # Extract box vector orientations
     cutindex = self.cutindex
-    lineindex = self.lineindex
+    #lineindex = self.lineindex
     motionindex = self.motionindex
 
-    # Construct new rotation uvws from mults and boxtilt
-    uvws_prim = self.uvws_prim
-    uvws_dipole = np.empty((3,3))
-    uvws_dipole[motionindex] = m_mult * uvws_prim[motionindex]
-    uvws_dipole[cutindex] = n_mult * uvws_prim[cutindex]
-    uvws_dipole[lineindex] = ξ_mult * uvws_prim[lineindex]
+    # Multiply primitive uvws by sizemults to get dipole rotation uvws
+    uvws_dipole = (np.asarray(sizemults) * self.uvws_prim.T).T
+    
+    # Apply boxtilt
     if boxtilt:
-        uvws_dipole[cutindex] += m_mult / 2 * uvws_prim[motionindex]
+        uvws_dipole[cutindex] += uvws_dipole[motionindex] / 2
+
+    # Check that the uvws are lattice vectors
+    if not np.allclose(uvws_dipole, np.asarray(np.rint(uvws_dipole), dtype='int64')):
+        raise ValueError(f'sizemults (and boxtilt) did not result in int lattice vectors: {uvws_dipole}')
 
     # Create base_system
     base_system = self.ucell_prim.rotate(uvws_dipole)
