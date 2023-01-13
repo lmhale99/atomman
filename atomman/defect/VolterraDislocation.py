@@ -57,14 +57,16 @@ class VolterraDislocation(object):
             The unit cell's box that crystal vectors are taken with respect to.
             If not given, will use a cubic box with a=1 meaning that burgers,
             ξ_uvw and slip_hkl will be interpreted as Cartesian vectors.
-        m : array-like object, optional
-            The m unit vector for the solution.  m, n, and u (dislocation
-            line) should be right-hand orthogonal.  Default value is [1,0,0]
-            (x-axis).
-        n : array-like object, optional
-            The n unit vector for the solution.  m, n, and u (dislocation
-            line) should be right-hand orthogonal.  Default value is [0,1,0]
-            (y-axis). n is normal to the dislocation slip plane.
+        m : str or array-like object, optional
+            The 3D Cartesian unit vector to align with the dislocation solution's m-axis,
+            i.e. the in-plane direction perpendicular to the dislocation line.  Also
+            accepts str values of 'x', 'y', or 'z', in which case the dislocation axis will
+            be aligned with the corresponding Cartesian axis.  Default value is 'x'.
+        n : str or array-like object, optional
+            The 3D Cartesian unit vector to align with the dislocation solution's n-axis,
+            i.e. the slip plane normal. Also accepts str values of 'x', 'y', or 'z', in
+            which case the dislocation axis will be aligned with the corresponding Cartesian
+            axis. Default value is 'y'.
         cart_axes : bool, optional
             Setting this to True will also perform an assertion check that the m- and n-axes
             are both aligned with Cartesian axes. This is a requirement for some of the

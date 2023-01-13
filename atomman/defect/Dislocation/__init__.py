@@ -68,14 +68,17 @@ class Dislocation():
             also creates the rotated cell from a compatible primitive cell,
             thereby the final dislocation configurations can be smaller than
             possible solely from the conventional unit cell.
-        m : array-like object, optional
-            The m unit vector for the dislocation solution.  m, n, and ξ
-            (dislocation line) should be right-hand orthogonal.  Default value
-            is [0,1,0] (y-axis).
-        n : array-like object, optional
-            The n unit vector for the dislocation solution.  m, n, and ξ
-            (dislocation line) should be right-hand orthogonal.  Default value
-            is [0,0,1] (z-axis). n is normal to the dislocation slip plane.
+        m : str or array-like object, optional
+            The Cartesian axis to align with the dislocation solution's m-axis,
+            i.e. the in-plane direction perpendicular to the dislocation line.
+            Can be specified as a 3D vector or str values 'x', 'y', or 'z'.  
+            Default value is 'y' as this corresponds to the optimum alignment
+            for LAMMPS systems.
+        n : str or array-like object, optional
+            The Cartesian axis to align with the dislocation solution's n-axis,
+            i.e. the slip plane normal.  Can be specified as a 3D vector or str
+            values 'x', 'y', or 'z'.  Default value is 'z' as this corresponds
+            to the optimum alignment for LAMMPS systems.
         shift : array-like object, optional
             A rigid body shift to apply to the rotated cell prior to inserting
             the dislocation.  Should be selected such that the ideal slip plane
