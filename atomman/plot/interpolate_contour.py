@@ -44,7 +44,7 @@ def interpolate_contour(system: System,
                         prop_unit: Optional[str] = None,
                         cmap: str = 'jet',
                         fill_value: float = np.nan,
-                        figsize: Optional[tuple] = None,
+                        figsize: Union[int, float, tuple, None] = None,
                         matplotlib_axes: Optional[plt.axes] = None,
                        ) -> Tuple[float, float, Optional[plt.figure]]:
     """
@@ -129,21 +129,21 @@ def interpolate_contour(system: System,
         Value used to fill in for grid points failed to interpolate in the fit.
         If not given, then the default is np.nan, which may cause an error in
         plotting for too narrow xlim and ylim settings.
-    figsize : float or tuple, optional
-        Specifies the size of the figure to create in inches.  If a single value
-        is given, it will be used for the figure's width, and the height will be
-        scaled based on the xlim and ylim values.  Alternatively, both the width
-        and height can be set by passing a tuple of two values, but the plot will
-        not be guaranteed to be "regular" with respect to length dimensions.
+    figsize : int, float or tuple, optional
+        Specifies the size of the figure to create in inches.  Note the plot itself
+        is always made based on an equal aspect ratio of the coordinates.  If a
+        single value is given, then the size of the larger dimension will be set to
+        this and the smaller dimension will be scaled accordingly.  The width or
+        height can be directly set to a specific value by giving (w, None) or
+        (None, w), respectively.  If you give values for both width and height
+        the width value affects the size of the plot and height affects the size
+        of the colorbar if one is included.
     matplotlib_axes : matplotlib.Axes.axes, optional
         An existing matplotlib axes object. If given, the differential displacement
         plot will be added to the specified axes of an existing figure.  This
         allows for subplots to be constructed.  Note that figsize will be ignored
         as the figure would have to be created beforehand and no automatic
         optimum scaling of the figure's dimensions will occur.
-    colorbar: bool, optional
-        If True (default) a colorbar will be added to the plot.
-    header
     
     Returns
     -------
@@ -197,11 +197,33 @@ def interpolate_contour(system: System,
     intsum = intsum * (xlim[1] - xlim[0]) / (xbins-1) * (ylim[1] - ylim[0]) / (ybins-1)
     returning = [intsum, avsum]
     
-    
+    lx = xlim[1] - xlim[0]
+    ly = ylim[1] - ylim[0]
+
     # Create figure if needed
     if matplotlib_axes is None:
         if figsize is None:
-            figsize = (7.7, 7)
+            figsize = [8, None]
+
+        if isinstance(figsize, (int, float)):
+            
+            if lx > ly:
+                width = figsize
+                height = width * ly / lx
+            else:
+                height = figsize
+                width = height * lx / ly
+            figsize = (width, height)
+
+        else:
+            figsize = list(figsize)
+            assert len(figsize) == 2, 'figsize must be a single value or list/tuple of two values'
+            if figsize[0] is None:
+                assert figsize[1] is not None, 'both figsize terms cannot be None'
+                figsize[0] = figsize[1] * lx / ly
+            elif figsize[1] is None:
+                figsize[1] = figsize[0] * ly / lx
+        
         fig = plt.figure(figsize=figsize)
         matplotlib_axes = fig.add_subplot(111)
         returning.append(fig)
@@ -222,7 +244,7 @@ def interpolate_contour(system: System,
     # Add pretty colorbar
     if colorbar:
         ticks = np.linspace(vlim[0], vlim[1], 11, endpoint=True)
-        cbar = fig.colorbar(im, ax=matplotlib_axes, fraction=0.05, pad = 0.05, ticks=ticks)
+        cbar = fig.colorbar(im, ax=matplotlib_axes, fraction=0.05, pad=0.05, ticks=ticks)
         cbar.ax.tick_params(labelsize=15)
    
     # Make axes pretty
