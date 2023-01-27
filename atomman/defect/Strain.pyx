@@ -338,7 +338,7 @@ class Strain():
         # Loop over all atoms
         for i in range(natoms):
             # Get actual p and q for atom i
-            p = p_vectors[i]
+            p = np.asarray(p_vectors[i], dtype=float)
             q = system.dvect(i, neighbors[i])
             
             # Get the matched P and Q
