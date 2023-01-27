@@ -22,7 +22,8 @@ Tutorials
    1.4.10. prototype loading <1.4.10._prototype_loading>
    1.4.11. crystal loading <1.4.11._crystal_loading>
    1.4.12. DFT reference crystal loading <1.4.12._DFT_reference_crystal_loading>
-   1.4.13. primitive cell dumping <1.4.13._primitive_cell_dumping>
+   1.4.13. Primitive cell dumping <1.4.13._Primitive_cell_dumping>
+   1.4.14. Conventional and primitive cell conversion dumping <1.4.14._Conventional_and_primitive_cell_conversion_dumping>
    1.5. Settings and databases <1.5._Settings_and_databases>
    2. LAMMPS functionality <2._LAMMPS_functionality>
    2.1. Potential class <2.1._Potential_class>
@@ -37,8 +38,9 @@ Tutorials
    4.1. Point defect generation <4.1._Point_defect_generation>
    4.2. Free surface generator <4.2._Free_surface_generator>
    4.3. Stacking fault generator <4.3._Stacking_fault_generator>
-   4.4. Dislocation solution and generator <4.4._Dislocation_solution_and_generator>
+   4.4. Volterra dislocation solutions <4.4._Volterra_dislocation_solutions>
    4.5. Gamma surface plotting <4.5._Gamma_surface_plotting>
    4.6. Dislocation analysis tools <4.6._Dislocation_analysis_tools>
    4.7. Semidiscrete variational Peierls-Nabarro model <4.7._Semidiscrete_variational_Peierls-Nabarro_model>
    4.8. Strain class <4.8._Strain_class>
+   4.9. Dislocation configurations generator <4.9._Dislocation_configurations_generator>

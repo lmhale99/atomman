@@ -4,9 +4,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Introduction to atomman: Basic support and analysis tools &#8212; atomman 1.4.7 documentation</title>
+    <title>Introduction to atomman: Basic support and analysis tools &#8212; atomman 1.4.8 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -14,7 +14,6 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -38,7 +37,7 @@
         <li class="right" >
           <a href="2.2._Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Basic support and analysis tools</a></li> 
       </ul>
@@ -54,21 +53,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -169,7 +182,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -235,6 +248,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -324,8 +338,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.7
-Notebook executed on 2022-10-12
+atomman version = 1.4.8
+Notebook executed on 2023-01-27
 </pre></div></div>
 </div>
 <p>Construct a demonstration 2x2x2 diamond cubic silicon system</p>
@@ -495,70 +509,70 @@ Cij (GPa) =
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[1.16912462 2.37489671 0.70143864]
- [1.80838338 2.70762057 0.0124293 ]
- [1.34361928 0.56994466 0.69799685]
- [0.61570199 2.05851792 2.40890288]
- [2.00073357 0.81970473 1.36380654]
- [1.14616143 1.51735336 1.3476155 ]
- [2.66298425 1.06704412 0.64164461]
- [0.98271328 1.25134517 2.82875826]
- [2.98181377 2.2865085  1.37025622]
- [1.61113297 0.70435306 1.91255968]
- [1.84687991 2.95868065 2.78928896]
- [0.30870384 0.04812496 0.20688016]
- [0.70221724 1.33176618 0.45137652]
- [2.85612881 2.50863255 2.35073081]
- [1.99130251 0.13871094 2.69165268]
- [1.35089731 1.0445077  2.02190478]
- [2.83456601 1.33638235 2.575502  ]
- [1.55464091 2.60343431 1.68519289]
- [2.84147613 0.42269342 1.82781607]
- [1.39259429 1.01211734 1.98939734]
- [0.42051544 1.26000587 0.56131789]
- [0.2369208  0.50425471 0.79425972]
- [0.39455393 2.84762993 2.13641901]
- [1.10212394 2.30497549 0.87541787]
- [1.684216   0.33662717 1.92796789]
- [2.71411901 2.70864272 2.28398661]
- [0.28853038 1.91226999 2.94647531]
- [0.09676668 0.47986329 0.13108621]
- [0.65064021 2.36849173 2.2796044 ]
- [2.36737455 1.9345269  2.9372149 ]
- [2.39957024 0.12723308 0.65311048]
- [1.40114355 2.56479081 2.87301175]
- [0.70090025 0.02251016 2.35601614]
- [2.44121302 0.601899   1.82507288]
- [0.34233693 0.03216809 0.65855281]
- [0.34706586 0.31128986 2.67631454]
- [0.86346186 1.071039   0.62521148]
- [1.98740885 2.53678356 2.01585074]
- [2.71375135 1.66458418 1.6131791 ]
- [2.23822352 2.13642032 1.34202018]
- [2.77848648 1.2187009  2.65909741]
- [2.66344789 2.79738404 2.13409217]
- [1.5489288  2.3282016  0.9371969 ]
- [2.93606962 0.97146264 1.01837563]
- [0.58742202 1.52975213 0.30718997]
- [0.40479764 2.07585567 1.44229201]
- [0.04869095 0.59456636 1.32034466]
- [0.41199363 0.82651177 0.25957594]
- [0.6450686  0.06848265 2.32504394]
- [2.22601917 2.16009473 1.14260722]
- [2.57573649 0.59610753 0.99108899]
- [0.81018207 2.83586885 1.61146542]
- [0.08819164 2.23703276 1.01273528]
- [0.01005098 2.3573758  1.80227406]
- [1.45712799 0.6026855  1.37356601]
- [2.17115299 0.39407971 0.75768263]
- [0.19536047 2.43310647 1.86748162]
- [2.09298196 1.3366475  2.5786101 ]
- [1.59066132 0.97204905 0.17979897]
- [2.76167768 1.98324729 2.71207055]
- [2.22696272 2.3666887  2.85021247]
- [2.89618792 1.14234164 0.37426527]
- [0.89488772 1.49978819 2.97024232]
- [2.42480619 1.15815677 0.95732347]]
+[[2.97207058 2.91237588 2.98187135]
+ [2.07308935 2.29115297 2.7482764 ]
+ [1.65755533 2.32482392 0.84620669]
+ [1.11016882 0.48407965 1.62651059]
+ [0.80956758 2.29939005 0.74710788]
+ [0.79451351 0.18042603 1.81219676]
+ [0.05193627 2.47785068 1.79558628]
+ [1.76705472 0.62071999 1.11970385]
+ [2.34132974 1.27948895 1.88013734]
+ [0.2446079  2.51950346 2.07376309]
+ [1.20646643 0.58398075 0.2106546 ]
+ [1.33799556 2.20004553 0.35909187]
+ [2.05656317 1.0977569  2.50177768]
+ [0.48184745 0.9442864  2.73668282]
+ [2.87649369 0.33940013 1.24923782]
+ [1.67110031 1.76238042 0.55427522]
+ [0.76902684 2.70400395 0.64426154]
+ [0.10310567 0.43732673 0.74365027]
+ [0.60171783 2.31545607 0.05654527]
+ [0.36816869 1.33012932 0.7696061 ]
+ [0.25449757 2.48843294 0.27676154]
+ [2.96131632 1.6489115  0.35754219]
+ [1.6295798  1.11464159 2.21011701]
+ [2.05515077 2.85013793 0.35138039]
+ [0.02137412 1.42806028 0.55910765]
+ [0.44150718 0.2674916  2.37491648]
+ [0.74110633 1.10318771 0.48089364]
+ [0.64295705 1.64551805 1.17919136]
+ [1.9988689  2.51926384 1.55455216]
+ [2.36516566 0.38996924 1.3010437 ]
+ [0.63074909 2.89498129 1.13378853]
+ [1.4780858  0.58789916 1.64959838]
+ [1.40282521 0.10210229 2.74405672]
+ [1.51438422 2.33576272 0.31174982]
+ [1.02506066 0.69014345 0.22417547]
+ [1.13814714 1.12586463 1.96985198]
+ [2.77815029 1.80922236 1.14808521]
+ [2.21294406 2.51246438 2.68873976]
+ [0.09391054 2.94198908 1.29405102]
+ [1.30092684 1.41987958 2.58748184]
+ [0.38148705 0.05854909 2.72370152]
+ [2.97648731 2.62479626 2.48933883]
+ [2.07169061 0.114551   1.06377143]
+ [0.27976844 2.54281701 2.97653804]
+ [0.04107001 1.45272679 0.29542091]
+ [1.27903505 2.95461938 0.48213471]
+ [0.72449981 1.07127784 0.82952277]
+ [1.86477666 0.12590626 0.40344997]
+ [1.72911179 1.88542902 2.98982076]
+ [1.51257295 2.71067615 2.97865038]
+ [1.4106577  2.26321645 1.07644582]
+ [2.82674514 2.59443146 0.89072822]
+ [0.2401047  0.48057695 1.40482743]
+ [0.05227187 2.30676649 2.40664988]
+ [2.02462465 2.86591113 1.17528443]
+ [2.49097971 2.65924089 2.12076643]
+ [2.66802797 1.86966193 0.13616753]
+ [1.45340701 0.61796638 0.17324053]
+ [0.78939553 0.42827182 1.06857439]
+ [0.76907481 1.07088791 0.04562934]
+ [0.37712085 0.9016012  1.08057172]
+ [2.27554217 0.91433731 1.64658462]
+ [1.31222839 0.13611267 0.30323947]
+ [2.72693403 0.03473101 0.0691333 ]]
 </pre></div></div>
 </div>
 </section>
@@ -907,9 +921,9 @@ b&#39;Here I am, read me!&#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Angle between [0.64308206 0.07336497 0.64850258] and [0.20905481 0.67129129 0.03455277] =
-71.36482539445016 degrees
-1.2455511732440163 radians
+Angle between [ 0.21710978 -0.70207373 -0.85169179] and [ 0.71285236 -0.50735189  0.35832971] =
+78.84438655649384 degrees
+1.3760941421259718 radians
 </pre></div></div>
 </div>
 </section>
@@ -1098,17 +1112,17 @@ Angle between [0.64308206 0.07336497 0.64850258] and [0.20905481 0.67129129 0.03
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 5 -2 -2]
- [ 5  3 -3]
- [ 4  3 -4]]
+[[ 3  3 -4]
+ [-4  0  5]
+ [-2  3  2]]
 
-[[ 4.         -3.         -1.         -2.        ]
- [ 2.33333333  0.33333333 -2.66666667 -3.        ]
- [ 1.66666667  0.66666667 -2.33333333 -4.        ]]
+[[ 1.          1.         -2.         -4.        ]
+ [-2.66666667  1.33333333  1.33333333  5.        ]
+ [-2.33333333  2.66666667 -0.33333333  2.        ]]
 
-[[ 5. -2. -2.]
- [ 5.  3. -3.]
- [ 4.  3. -4.]]
+[[ 3.  3. -4.]
+ [-4.  0.  5.]
+ [-2.  3.  2.]]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1157,17 +1171,17 @@ Angle between [0.64308206 0.07336497 0.64850258] and [0.20905481 0.67129129 0.03
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[ 3 -2  0]
- [-3  1 -4]
- [ 2  4 -4]]
+[[-4 -3  1]
+ [-4 -3  1]
+ [ 4 -3  5]]
 
-[[ 3. -2. -1.  0.]
- [-3.  1.  2. -4.]
- [ 2.  4. -6. -4.]]
+[[-4. -3.  7.  1.]
+ [-4. -3.  7.  1.]
+ [ 4. -3. -1.  5.]]
 
-[[ 3. -2.  0.]
- [-3.  1. -4.]
- [ 2.  4. -4.]]
+[[-4. -3.  1.]
+ [-4. -3.  1.]
+ [ 4. -3.  5.]]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1565,13 +1579,13 @@ Composition = Al2Si5
         <li class="right" >
           <a href="2.2._Running_LAMMPS_and_the_Log_class.html" title="Introduction to atomman: Running LAMMPS and the Log class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Basic support and analysis tools</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
     </div>
   </body>
 </html>

@@ -1,0 +1,525 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Introduction to atomman: conventional-primitive cell dumping &#8212; atomman 1.4.8 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction to atomman: Settings and Library" href="1.5._Settings_and_databases.html" />
+    <link rel="prev" title="Introduction to atomman: Primitive cell dumping" href="1.4.13._Primitive_cell_dumping.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="1.5._Settings_and_databases.html" title="Introduction to atomman: Settings and Library"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="1.4.13._Primitive_cell_dumping.html" title="Introduction to atomman: Primitive cell dumping"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: conventional-primitive cell dumping</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<section id="Introduction-to-atomman:-conventional-primitive-cell-dumping">
+<h1>Introduction to atomman: conventional-primitive cell dumping<a class="headerlink" href="#Introduction-to-atomman:-conventional-primitive-cell-dumping" title="Permalink to this heading">¶</a></h1>
+<p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
+<p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
+<section id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
+<p>The ‘conventional_to_primitive’ and ‘primitive_to_conventional’ dump styles provide a means of converting between primitive and conventional representations of unit cells in a reversible way. These system conversions are based on the vector_primitive_to_conventional and vector_conventional_to_primitive operations in atomman.tools.miller, which makes it possible to easily switch between the two reference states.</p>
+<p><strong>NOTE</strong>: These conversion methods should only be used on unit cells in which you know what the proper conventional cell setting is. For more general primitive cell identification, use the ‘primitive_cell’ dump method.</p>
+<p><em>Added version 1.4.8</em></p>
+<p><strong>Library Imports</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Standard Python libraries</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="c1"># http://www.numpy.org/</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">atomman</span> <span class="k">as</span> <span class="nn">am</span>
+<span class="kn">import</span> <span class="nn">atomman.unitconvert</span> <span class="k">as</span> <span class="nn">uc</span>
+
+<span class="c1"># Show atomman version</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+atomman version = 1.4.8
+Notebook executed on 2023-01-27
+</pre></div></div>
+</div>
+</section>
+<section id="2.-Dump-conventional_to_primitive">
+<h2>2. Dump conventional_to_primitive<a class="headerlink" href="#2.-Dump-conventional_to_primitive" title="Permalink to this heading">¶</a></h2>
+<p>Transforms a conventional unit cell system of a specified Bravais space lattice setting into a primitive unit cell. The primitive_to_conventional and conventional_to_primitive dump styles are meant to be inverse operations, within floating point precision, to provide compatible primitive and conventional unit cells.</p>
+<p>NOTE: This dump style expects that the original starting system is a conventional unit cell, and only limited checks are performed to assert this! Use the ‘primitive_cell’ dump style for a more comprehensive primitive unit cell identifier.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><p><strong>system</strong> (<em>atomman.System</em>) A conventional unit cell system to find the corresponding primitive unit cell for.</p></li>
+<li><p><strong>setting</strong> (<em>str, optional</em>) The conventional cell space lattice setting. Allowed values are ‘p’ for primitive, ‘f’ for face-centered, ‘i’ for body centered, and ‘a’, ‘b’, or ‘c’ for side-centered.</p></li>
+<li><p><strong>smallshift</strong> (<em>array-like object or None, optional</em>) A small rigid body shift to apply to the atomic positions when searching for which atoms are within the primitive cell. This helps avoid identification issues when atoms are directly on the box boundaries. The default value of None will use a smallshift of [0.001, 0.001, 0.001].</p></li>
+<li><p><strong>rtol</strong> (<em>float, optional</em>) Relative tolerance to use for numpy.isclose. This is used here to check that the conventional cell has atoms in the expected lattice positions for the given setting.</p></li>
+<li><p><strong>atol</strong> (<em>float, optional</em>) Absolute tolerance to use for numpy.isclose. This is used here to check that the conventional cell has atoms in the expected lattice positions for the given setting.</p></li>
+<li><p><strong>check_basis</strong> (<em>bool, optional</em>) If True (default), a quick check will be performed on the system to see if it appears consistent with a Bravais space lattice with the given setting. Turning this check off may be necessary for more complex cases, such as non-conventional cell representations and complex unit cells where no atoms are at the lattice site [0, 0, 0].</p></li>
+<li><p><strong>check_family</strong> (<em>bool, optional</em>) If True (default), then the Bravais space lattice check will include a check that the crystal family is consistent with a Bravais lattice of the given setting. For example, Bravais lattices with setting ‘f’ only exist for cubic and orthogonal cells. This check is not done if either check_family or check_basis is False. Turning this off allows for transformations of non-conventional cells.</p></li>
+<li><p><strong>return_transform</strong> (<em>bool, optional</em>) Indicates if the Cartesian transformation matrix associated with rotating from the conventional cell to primitive cell orientations is returned. Default value is False.</p></li>
+</ul>
+<p>Returns</p>
+<ul class="simple">
+<li><p><strong>p_ucell</strong> (<em>atomman.System</em>) The primitive unit cell obtained by transforming the given conventional unit cell system.</p></li>
+<li><p><strong>transform</strong> (<em>numpy.ndarray</em>) The Cartesian transformation matrix associated with converting from the primitive cell orientation to the conventional cell orientation. Only returned if return_transform is True.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">c_ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;prototype&#39;</span><span class="p">,</span> <span class="s1">&#39;A1--Cu--fcc&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">4.05</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c_ucell</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 4.050,  0.000,  0.000]
+bvect =  [ 0.000,  4.050,  0.000]
+cvect =  [ 0.000,  0.000,  4.050]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 4
+natypes = 1
+symbols = (&#39;Al&#39;,)
+pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   0.000 |   0.000 |   0.000
+      1 |       1 |   0.000 |   2.025 |   2.025
+      2 |       1 |   2.025 |   0.000 |   2.025
+      3 |       1 |   2.025 |   2.025 |   0.000
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">p_ucell</span> <span class="o">=</span> <span class="n">c_ucell</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;conventional_to_primitive&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p_ucell</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 2.864,  0.000,  0.000]
+bvect =  [ 1.432,  2.480,  0.000]
+cvect =  [ 1.432,  0.827,  2.338]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 1
+natypes = 1
+symbols = (&#39;Al&#39;,)
+pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   0.000 |   0.000 |   0.000
+</pre></div></div>
+</div>
+</section>
+<section id="3.-Dump-primitive_to_conventional">
+<h2>3. Dump primitive_to_conventional<a class="headerlink" href="#3.-Dump-primitive_to_conventional" title="Permalink to this heading">¶</a></h2>
+<p>Transforms a primitive unit cell system into a conventional unit cell system of the given Bravais space lattice setting. The primitive_to_conventional and conventional_to_primitive dump styles are meant to be inverse operations, within floating point precision, to provide compatible primitive and conventional unit cells.</p>
+<p>NOTE: This dump style expects that the original starting system is a primitive unit cell, although no checks are performed to assert this!</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><p><strong>system</strong> (<em>atomman.System</em>) A primitive unit cell system to find the corresponding conventional unit cell for.</p></li>
+<li><p><strong>setting</strong> (<em>str, optional</em>) The conventional cell space group lattice setting. Allowed values are ‘p’ for primitive, ‘f’ for face-centered, ‘i’ for body centered, and ‘a’, ‘b’, or ‘c’ for side-centered.</p></li>
+<li><p><strong>return_transform</strong> (<em>bool, optional</em>) Indicates if the Cartesian transformation matrix associated with rotating from the primitive cell to conventional cell orientations is returned. Default value is False.</p></li>
+</ul>
+<p>Returns</p>
+<ul class="simple">
+<li><p><strong>c_ucell</strong> (<em>atomman.System</em>) The conventional unit cell obtained by transforming the given primitive unit cell system.</p></li>
+<li><p><strong>transform</strong> (<em>numpy.ndarray</em>) The Cartesian transformation matrix associated with converting from the primitive cell orientation to the conventional cell orientation. Only returned if return_transform is True.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">c_ucell2</span> <span class="o">=</span> <span class="n">p_ucell</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;primitive_to_conventional&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c_ucell2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 4.050,  0.000,  0.000]
+bvect =  [ 0.000,  4.050,  0.000]
+cvect =  [ 0.000,  0.000,  4.050]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 4
+natypes = 1
+symbols = (&#39;Al&#39;,)
+pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   4.050 |   0.000 |   0.000
+      1 |       1 |   2.025 |   2.025 |   0.000
+      2 |       1 |   0.000 |   2.025 |   2.025
+      3 |       1 |   2.025 |   0.000 |   2.025
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Introduction to atomman: conventional-primitive cell dumping</a><ul>
+<li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
+<li><a class="reference internal" href="#2.-Dump-conventional_to_primitive">2. Dump conventional_to_primitive</a></li>
+<li><a class="reference internal" href="#3.-Dump-primitive_to_conventional">3. Dump primitive_to_conventional</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="1.4.13._Primitive_cell_dumping.html"
+                          title="previous chapter">Introduction to atomman: Primitive cell dumping</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="1.5._Settings_and_databases.html"
+                          title="next chapter">Introduction to atomman: Settings and Library</a></p>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="1.5._Settings_and_databases.html" title="Introduction to atomman: Settings and Library"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="1.4.13._Primitive_cell_dumping.html" title="Introduction to atomman: Primitive cell dumping"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: conventional-primitive cell dumping</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    </div>
+  </body>
+</html>

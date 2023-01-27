@@ -4,9 +4,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Introduction to atomman: Unit conversions &#8212; atomman 1.4.7 documentation</title>
+    <title>Introduction to atomman: Unit conversions &#8212; atomman 1.4.8 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -14,7 +14,6 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="index.html" title="Tutorials"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Unit conversions</a></li> 
       </ul>
@@ -52,21 +51,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -167,7 +180,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -233,6 +246,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -323,8 +337,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.7
-Notebook executed on 2022-10-12
+atomman version = 1.4.8
+Notebook executed on 2023-01-27
 </pre></div></div>
 </div>
 </section>
@@ -461,15 +475,15 @@ ps =       1.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-angstrom = 5.470946841806242e-09
-amu =      4.510557561965496e-26
-eV =       8.435055464123283e-14
-e =        3.360597535874564e-21
-K =        0.0504215802651571
-nm =       5.470946841806242e-08
-g =        0.027163212553625662
-J =        526474.7522290532
-ps =       3.9297442446522326e-13
+angstrom = 1.6280752818079513e-12
+amu =      5.789636067997074e-29
+eV =       3.579151131754351e-24
+e =        3.2222950836805033e-20
+K =        1.6791344609331385
+nm =       1.6280752818079515e-11
+g =        3.4866003362700256e-05
+J =        2.2339304267711294e-05
+ps =       6.431921641234102e-13
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -928,18 +942,18 @@ ps =       3.9297442446522326e-13
 <div class="highlight"><pre>
 {
   &#34;value&#34;: [
-    0.009059677392378203,
-    0.02092901781300947,
-    0.0300663893629268,
-    0.03965579589591802,
-    0.04926180462443053
+    0.009065152165098182,
+    0.0205193531713414,
+    0.029214090438960005,
+    0.04031568801568489,
+    0.05094316759139896
   ],
   &#34;error&#34;: [
-    0.0020993830556601794,
-    0.0019229896098040108,
-    0.0020250869690036865,
-    0.002094662715296287,
-    0.002081642820740343
+    0.0019813572940017257,
+    0.001967916652935869,
+    0.0020180649286272467,
+    0.0019304948405234367,
+    0.0019250795900354624
   ],
   &#34;unit&#34;: &#34;m&#34;
 }
@@ -962,8 +976,8 @@ ps =       3.9297442446522326e-13
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-value = [ 9.05967739 20.92901781 30.06638936 39.6557959  49.26180462] mm
-error = [2.09938306 1.92298961 2.02508697 2.09466272 2.08164282] mm
+value = [ 9.06515217 20.51935317 29.21409044 40.31568802 50.94316759] mm
+error = [1.98135729 1.96791665 2.01806493 1.93049484 1.92507959] mm
 </pre></div></div>
 </div>
 </section>
@@ -997,7 +1011,7 @@ error = [2.09938306 1.92298961 2.02508697 2.09466272 2.08164282] mm
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 57 atm = 0.005775525 GPa
-57 atm = 0.005775524999999999 GPa
+57 atm = 0.005775525 GPa
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1025,8 +1039,8 @@ error = [2.09938306 1.92298961 2.02508697 2.09466272 2.08164282] mm
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-57 s = 6.513941099627281e-05 GPa
-57 s = 5.324981508581029e-09 GPa
+57 s = 4.454248845977556e-16 GPa
+57 s = 4.4378978064780807e-13 GPa
 </pre></div></div>
 </div>
 </section>
@@ -1098,13 +1112,13 @@ error = [2.09938306 1.92298961 2.02508697 2.09466272 2.08164282] mm
         <li class="right" >
           <a href="index.html" title="Tutorials"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Unit conversions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
     </div>
   </body>
 </html>

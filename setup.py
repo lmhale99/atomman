@@ -41,6 +41,8 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Topic :: Scientific/Engineering :: Physics'
     ],
     keywords = [
@@ -64,7 +66,7 @@ setup(
         'cython',
         'requests',
         'toolz',
-        'potentials==0.3.4'
+        'potentials==0.3.5'
     ],
     include_package_data = True,
     zip_safe = False

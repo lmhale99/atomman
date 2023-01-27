@@ -1,5 +1,38 @@
 Updates
 =======
+Version 1.4.8
+-------------
+
+- **atomman.thermo** module added that provides tools and reference models
+  related to thermodynamic calculations.
+
+- **atomman.tools.vect_angle** updated to allow for comparisons of multiple
+  vector values at once.
+
+- **conventional_to_primitive** and **primitive_to_conventional** dump styles
+  added that convert between standard conventional and primitive unit cell
+  settings.  These were created to make it easy to generate compatible cells
+  in the two settings for performing crystal and lattice vector operations.
+
+- **atomman.tools.miller.vector_conventional_to_primitive** and 
+  **atomman.tools.miller.vector_primitive_to_conventional** transformation
+  operations for face-centered basis settings have been changed to coincide
+  with the new dump methods above.
+
+- **atomman.defect.VolterraDislocation** classes now support specifying the m
+  and n dislocation axes using str 'x', 'y', 'z' values.  The dislocation
+  transformation basis code is now integrated into the class as well.
+
+- **atomman.defect.Dislocation** A new init parameter ucell_setting allows for
+  the lattice setting of the ucell to be given so that all lattice vectors can
+  be used and explored rather than just integer crystal vectors relative to
+  ucell.  Also, a dipole method has been added that allows for the generation
+  of stable dislocation dipole atomic configurations.
+
+- **atomman.defect.Strain** bug fix related to numpy changing how irregular
+  arrays are represented.
+
+- **atomman.plot.interpolate_contour** figsize option fixed and improved.
 
 Version 1.4.7
 -------------

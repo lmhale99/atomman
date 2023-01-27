@@ -4,9 +4,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Introduction to atomman: System class &#8212; atomman 1.4.7 documentation</title>
+    <title>Introduction to atomman: System class &#8212; atomman 1.4.8 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -14,7 +14,6 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="1.2._Atoms_class.html" title="Introduction to atomman: Atoms class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: System class</a></li> 
       </ul>
@@ -52,21 +51,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -167,7 +180,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -233,6 +246,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -319,8 +333,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.7
-Notebook executed on 2022-10-12
+atomman version = 1.4.8
+Notebook executed on 2023-01-27
 </pre></div></div>
 </div>
 </section>
@@ -1169,16 +1183,16 @@ symbols = (None,)
 pbc = [ True  True  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   1.728 |   3.462 |   2.282
-      1 |       1 |   9.900 |   4.507 |   0.748
-      2 |       1 |   7.947 |   4.356 |   4.061
-      3 |       1 |   9.225 |   3.922 |   9.696
-      4 |       1 |   8.274 |   3.353 |   0.952
-      5 |       1 |   0.366 |   0.069 |   9.194
-      6 |       1 |   3.264 |   5.051 |   9.692
-      7 |       1 |   2.001 |   2.877 |   6.689
-      8 |       1 |   8.009 |   1.034 |   9.368
-      9 |       1 |   2.138 |   4.593 |   3.392
+      0 |       1 |   5.740 |   5.961 |   5.208
+      1 |       1 |   1.150 |   6.288 |   5.801
+      2 |       1 |   9.678 |   8.804 |   3.329
+      3 |       1 |   8.270 |   5.575 |   4.201
+      4 |       1 |   5.703 |   9.648 |   7.580
+      5 |       1 |   5.786 |   0.261 |   7.091
+      6 |       1 |   2.882 |   7.259 |   2.173
+      7 |       1 |   8.517 |   6.531 |   0.695
+      8 |       1 |   9.465 |   9.807 |   0.219
+      9 |       1 |   0.295 |   0.213 |   4.051
 </pre></div></div>
 </div>
 <p>Atoms are wrapped around periodic boundaries, and non-periodic boundaries are extended to encompass all atoms.</p>
@@ -1200,7 +1214,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 avect =  [ 1.000,  0.000,  0.000]
-bvect =  [ 0.000,  5.052,  0.000]
+bvect =  [ 0.000,  9.808,  0.000]
 cvect =  [ 0.000,  0.000,  1.000]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 10
@@ -1209,16 +1223,16 @@ symbols = (None,)
 pbc = [ True False  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.728 |   3.462 |   0.282
-      1 |       1 |   0.900 |   4.507 |   0.748
-      2 |       1 |   0.947 |   4.356 |   0.061
-      3 |       1 |   0.225 |   3.922 |   0.696
-      4 |       1 |   0.274 |   3.353 |   0.952
-      5 |       1 |   0.366 |   0.069 |   0.194
-      6 |       1 |   0.264 |   5.051 |   0.692
-      7 |       1 |   0.001 |   2.877 |   0.689
-      8 |       1 |   0.009 |   1.034 |   0.368
-      9 |       1 |   0.138 |   4.593 |   0.392
+      0 |       1 |   0.740 |   5.961 |   0.208
+      1 |       1 |   0.150 |   6.288 |   0.801
+      2 |       1 |   0.678 |   8.804 |   0.329
+      3 |       1 |   0.270 |   5.575 |   0.201
+      4 |       1 |   0.703 |   9.648 |   0.580
+      5 |       1 |   0.786 |   0.261 |   0.091
+      6 |       1 |   0.882 |   7.259 |   0.173
+      7 |       1 |   0.517 |   6.531 |   0.695
+      8 |       1 |   0.465 |   9.807 |   0.219
+      9 |       1 |   0.295 |   0.213 |   0.051
 </pre></div></div>
 </div>
 </section>
@@ -1263,9 +1277,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 0.355,  0.607,  0.946]
-bvect =  [ 0.496,  0.692,  0.812]
-cvect =  [ 0.985,  0.886,  0.540]
+avect =  [ 0.783,  0.051,  0.362]
+bvect =  [ 0.170,  0.606,  0.170]
+cvect =  [ 0.635,  0.472,  0.490]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 2
 natypes = 1
@@ -1274,13 +1288,13 @@ pbc = [ True  True  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
-      1 |       1 |   0.918 |   1.093 |   1.149
-a = 1.1789149255589246
-b = 1.1760033512390036
-c = 1.430277383632966
-alpha = 23.80848598585949
-beta = 33.96963819888397
-gamma = 10.31162010412806
+      1 |       1 |   0.794 |   0.564 |   0.511
+a = 0.8644314773692764
+b = 0.6517305262614097
+c = 0.9305746700201263
+alpha = 38.109421624496065
+beta = 29.663367026342616
+gamma = 66.36440438823304
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1307,9 +1321,9 @@ gamma = 10.31162010412806
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 1.179,  0.000,  0.000]
-bvect =  [ 1.157,  0.211,  0.000]
-cvect =  [-1.186, -0.791,  0.116]
+avect =  [ 0.864,  0.000,  0.000]
+bvect =  [ 0.261,  0.597,  0.000]
+cvect =  [ 0.809,  0.445,  0.117]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 2
 natypes = 1
@@ -1317,17 +1331,17 @@ symbols = (None,)
 pbc = [ True  True  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   1.157 |   0.211 |   0.000
-      1 |       1 |   0.575 |  -0.290 |   0.058
-a = 1.1789149255589246
-b = 1.1760033512390036
-c = 1.430277383632966
-alpha = 156.1915140141405
-beta = 146.03036180111602
-gamma = 10.311620104128025
+      0 |       1 |   0.000 |   0.000 |   0.000
+      1 |       1 |   0.967 |   0.521 |   0.059
+a = 0.8644314773692764
+b = 0.6517305262614098
+c = 0.9305746700201263
+alpha = 38.10942162449608
+beta = 29.663367026342616
+gamma = 66.36440438823304
 Box relative positions:
-[[1.91831111e-15 1.00000000e+00 3.88316831e-16]
- [5.00000000e-01 5.00000000e-01 5.00000000e-01]]
+[[0.  0.  0. ]
+ [0.5 0.5 0.5]]
 </pre></div></div>
 </div>
 </section>
@@ -2310,13 +2324,13 @@ direct
         <li class="right" >
           <a href="1.2._Atoms_class.html" title="Introduction to atomman: Atoms class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: System class</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
     </div>
   </body>
 </html>

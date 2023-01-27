@@ -1,0 +1,1061 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Introduction to atomman: Volterra dislocation solutions &#8212; atomman 1.4.8 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="4.5._Gamma_surface_plotting.html" />
+    <link rel="prev" title="Introduction to atomman: Stacking fault generator" href="4.3._Stacking_fault_generator.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="4.5._Gamma_surface_plotting.html" title="&lt;no title&gt;"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="4.3._Stacking_fault_generator.html" title="Introduction to atomman: Stacking fault generator"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Volterra dislocation solutions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<section id="Introduction-to-atomman:-Volterra-dislocation-solutions">
+<h1>Introduction to atomman: Volterra dislocation solutions<a class="headerlink" href="#Introduction-to-atomman:-Volterra-dislocation-solutions" title="Permalink to this heading">¶</a></h1>
+<p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
+<p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
+<section id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
+<p>This Notebook outlines the classes and methods in atomman for obtaining elastic solutions for perfectly straight dislocations, i.e. Volterra dislocation solutions. The Volterra dislocation solutions are useful for both studying idealized dislocation properties and for inserting dislocations into atomic configurations.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="#section2">Section #2</a> details the theory used to obtain the dislocation solutions.</p></li>
+<li><p><a class="reference external" href="#section3">Section #3</a> describes the VolterraDislocation classes that provide the elastic dislocation solutions and the various properties that can be obtained from them.</p></li>
+</ul>
+<p>NOTE: For those wishing to generate atomic configurations containing dislocations, check out the documentation for the Dislocation class. It provides user-friendly methods for constructing some standard dislocation configurations.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Standard Python libraries</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="c1"># http://www.numpy.org/</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">linregress</span>
+
+<span class="c1"># https://github.com/usnistgov/atomman</span>
+<span class="kn">import</span> <span class="nn">atomman</span> <span class="k">as</span> <span class="nn">am</span>
+<span class="kn">import</span> <span class="nn">atomman.unitconvert</span> <span class="k">as</span> <span class="nn">uc</span>
+
+<span class="c1"># https://matplotlib.org/</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="c1"># Show atomman version</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+atomman version = 1.4.8
+Notebook executed on 2023-01-27
+</pre></div></div>
+</div>
+</section>
+<section id="2.-Theory">
+<h2>2. Theory<a class="headerlink" href="#2.-Theory" title="Permalink to this heading">¶</a></h2>
+<p>Dislocation theory is based on computing and using elasticity solutions of dislocations to define what they look like and how they interact with the surrounding material. The Volterra dislocation model assumes that the discontinuity in the crystal due to the dislocation exists as a line singularity. While this assumption does not hold true in real materials, the Volterra solution still provides a decent guess for the long-range stress and strain fields of compact dislocation cores. It also
+provides a useful starting point for developing more complicated dislocation solutions, and can provide good initial guesses for constructing atomic dislocation configurations.</p>
+<p>Solutions of straight dislocations are always defined relative to three orthogonal unit vectors <span class="math notranslate nohighlight">\(\hat{m}\)</span>, <span class="math notranslate nohighlight">\(\hat{n}\)</span>, and <span class="math notranslate nohighlight">\(\hat{\xi}\)</span></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\hat{m}\)</span> is the direction in the slip plane perpendicular to the dislocation’s line direction.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{n}\)</span> is the normal of the dislocation’s slip plane.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{\xi}\)</span> is parallel to the dislocation’s line direction.</p></li>
+</ul>
+<p>Based on these three vectors, we can define a Cartesian coordinate system for the dislocation solution with positions, <span class="math notranslate nohighlight">\(x_i\)</span>, given by</p>
+<div class="math notranslate nohighlight">
+\[x_i = x_1 \hat{m} + x_2 \hat{n} + x_3 \hat{\xi}\]</div>
+<p>For straight dislocations, the elasticity solutions are independent of the <span class="math notranslate nohighlight">\(x_3\)</span> direction and therefore only depend on <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span>.</p>
+<section id="2.1.-Isotropic-solution">
+<h3>2.1. Isotropic solution<a class="headerlink" href="#2.1.-Isotropic-solution" title="Permalink to this heading">¶</a></h3>
+<p>For isotropic materials, the elastic solution for a Volterra dislocation can be given as analytical equations. Variations of the analytical solutions can be found in every textbook on dislocation theory. The particular equations used in atomman match those found in Elementary Dislocation Theory by Weertman and Weertman except with flipped signs. This choice provides the best correspondence with the anisotropic solution described below.</p>
+<p>Isotropic elastic constants can be represented using only two independent terms. The two isotropic elastic constants typically used in the dislocation solutions are the shear modulus, <span class="math notranslate nohighlight">\(\mu\)</span>, and the Poisson’s ratio, <span class="math notranslate nohighlight">\(\nu\)</span>.</p>
+<p>The isotropic displacements, <span class="math notranslate nohighlight">\(u_i\)</span>, for a dislocation centered at <span class="math notranslate nohighlight">\(x_1 = x_2 = 0\)</span> are</p>
+<div class="math notranslate nohighlight">
+\[u_1 = \frac{b_1}{2 \pi} \left[ \theta + \frac{x_1x_2}{2 (1 - \nu) (x_1^2 + x_2^2)} \right]\]</div>
+<div class="math notranslate nohighlight">
+\[u_2 = \frac{b_1}{2 \pi} \left[ -\frac{1 - 2 \nu} {4 (1 - \nu)} \ln(x_1^2 + x_2^2)
+                          + \frac{y^2} {2 (1 - \nu) (x^2 + y^2)} \right]\]</div>
+<div class="math notranslate nohighlight">
+\[u_3 = \frac{b_3}{2 \pi} \theta.\]</div>
+<p>Here (and below), <span class="math notranslate nohighlight">\(\theta\)</span> is the radial angle coordinate</p>
+<div class="math notranslate nohighlight">
+\[\theta=\tan^{-1} (x_2/x_1),\]</div>
+<p>which is taken to range from <span class="math notranslate nohighlight">\(-\pi\)</span> to <span class="math notranslate nohighlight">\(\pi\)</span>.</p>
+<p>The isotropic stress, <span class="math notranslate nohighlight">\(\sigma_{ij}\)</span>, is given by the equations</p>
+<div class="math notranslate nohighlight">
+\[\sigma_{11} = -\frac{\mu b_1}{2 \pi (1 - \nu)} \frac{x_2 (3 x_1^2 + x_2^2)} { (x_1^2 + x_2^2)^2}\]</div>
+<div class="math notranslate nohighlight">
+\[\sigma_{22} = \frac{\mu b_1}{2 \pi (1 - \nu)} \frac{x_2 (x_1^2 - x_2^2)} { (x_1^2 + x_2^2)^2}\]</div>
+<div class="math notranslate nohighlight">
+\[\sigma_{33} = \nu(\sigma_{11} + \sigma_{22})\]</div>
+<div class="math notranslate nohighlight">
+\[\sigma_{12} = \frac{\mu b_1}{2 \pi (1 - \nu)} \frac{x_1(x_1^2 - x_2^2)) }{ (x_1^2 + x_2^2)^2}\]</div>
+<div class="math notranslate nohighlight">
+\[\sigma_{13} =-\frac{\mu b_3}{2 \pi} \frac{x_2}{(x_1^2 + x_2^2)}\]</div>
+<div class="math notranslate nohighlight">
+\[\sigma_{23} = \frac{\mu b_3}{2 \pi} \frac{x_1}{(x_1^2 + x_2^2)}\]</div>
+<p>Analytical solutions for the isotropic strain can be derived from <span class="math notranslate nohighlight">\(\epsilon_{ij} = S_{ijkl} \sigma_{kl}\)</span></p>
+<div class="math notranslate nohighlight">
+\[Q = \frac{b_1}{4 \pi (1 - \nu^2)} \frac{x_2}{(x_1^2 + x_2^2)^2}\]</div>
+<div class="math notranslate nohighlight">
+\[\epsilon_{11} = Q \left[ x_1^2 \left( -3 - \nu + 2 \nu^2 \right) + x_2^2 \left( -1 + \nu + 2 \nu^2 \right) \right]\]</div>
+<div class="math notranslate nohighlight">
+\[\epsilon_{22} = Q \left[ x_1^2 \left( 1 + 3 \nu + 2 \nu^2 \right) + x_2^2 \left( -1 + \nu + 2 \nu^2 \right) \right]\]</div>
+<div class="math notranslate nohighlight">
+\[\epsilon_{33} = 0.0\]</div>
+<div class="math notranslate nohighlight">
+\[\epsilon_{12} = \frac{b_1}{4 \pi (1 - \nu)} \frac{ x_1 (x_1^2 - x_2^2) }{(x_1^2 + x_2^2)^2}\]</div>
+<div class="math notranslate nohighlight">
+\[\epsilon_{13} = -\frac{b_3}{4 \pi} \frac{x_2} {(x_1^2 + x_2^2)}\]</div>
+<div class="math notranslate nohighlight">
+\[\epsilon_{23} =  \frac{b_3}{4 \pi} \frac{x_1} {(x_1^2 + x_2^2)}\]</div>
+<p>The energy coefficient tensor, <span class="math notranslate nohighlight">\(K_{ij}\)</span>, depends on the elastic constants. Only normal components are non-zero for the isotropic case</p>
+<div class="math notranslate nohighlight">
+\[K_{11}^{iso} = K_{22}^{iso} = K_{edge}^{iso} = \frac{\mu}{1 - \nu}\]</div>
+<div class="math notranslate nohighlight">
+\[K_{33}^{iso} = K_{screw}^{iso} = \mu.\]</div>
+<p><strong>Caution</strong>: <span class="math notranslate nohighlight">\(K_{ij}\)</span> may be defined slightly differently in other works depending on if they contain multiplicative factors. If you are comparing atomman’s values to other works, be sure to double check how <span class="math notranslate nohighlight">\(K_{ij}\)</span> and the self-energy equations below are defined.</p>
+<p>The dislocation’s self-energy is the energy per unit length within a ring region around the dislocation line. It depends on <span class="math notranslate nohighlight">\(K_{ij}\)</span> and <span class="math notranslate nohighlight">\(b_i\)</span></p>
+<div class="math notranslate nohighlight">
+\[\frac{W}{l} = \frac{b_i K_{ij} b_j}{4 \pi} \ln{ \left( \frac{R}{r_0} \right)}.\]</div>
+<p>The energy coefficient tensor can also be reduced down to a single coefficient, <span class="math notranslate nohighlight">\(K\)</span>, by accounting for the dislocation character</p>
+<div class="math notranslate nohighlight">
+\[K = \frac{b_i K_{ij} b_j} {b_k b_k}.\]</div>
+<p>With this, the self-energy expression becomes</p>
+<div class="math notranslate nohighlight">
+\[\frac{W}{l} = \frac{K b^2}{4 \pi} \ln{ \left( \frac{R}{r_0} \right)},\]</div>
+<p>Alternatively, everything in the self-energy expression outside the ln term can be grouped together as the pre-ln factor, <span class="math notranslate nohighlight">\(a\)</span></p>
+<div class="math notranslate nohighlight">
+\[\frac{W}{l} = a \ln{ \left( \frac{R}{r_0} \right)}.\]</div>
+</section>
+<section id="2.2.-Anisotropic-solution">
+<h3>2.2. Anisotropic solution<a class="headerlink" href="#2.2.-Anisotropic-solution" title="Permalink to this heading">¶</a></h3>
+<p>The elasticity solution for Volterra dislocations in anisotropic materials was first introduced by <a class="reference external" href="https://doi.org/10.1016/0001-6160(53)90099-6">Eshelby</a>. Starting with the fundamental equations of elasticity</p>
+<div class="math notranslate nohighlight">
+\[\sigma_{ij} = C_{ijkl} \epsilon_{kl}\]</div>
+<div class="math notranslate nohighlight">
+\[\epsilon_{ij} = \frac{1}{2} \left(\frac{\partial u_i}{\partial x_j} + \frac{\partial u_j}{\partial x_i}\right)\]</div>
+<div class="math notranslate nohighlight">
+\[\frac{\partial \sigma_{ij}}{\partial x_j} = 0\]</div>
+<p>Combining these and taking the solution to be independent of <span class="math notranslate nohighlight">\(x_3\)</span> generates the partial differential equation</p>
+<div class="math notranslate nohighlight">
+\[C_{ijkl} \frac{ \partial^2 u_k}{\partial x_j \partial x_l} = 0\]</div>
+<p>Solutions of the partial differential equation are of the form</p>
+<div class="math notranslate nohighlight">
+\[u_k = A_k f(x_1 + p x_2)\]</div>
+<p>Values of <span class="math notranslate nohighlight">\(A_k\)</span> and <span class="math notranslate nohighlight">\(p\)</span> can be found by solving</p>
+<div class="math notranslate nohighlight">
+\[\left[C_{i1k1} + \left(C_{i1k2} + C_{i2k1} \right) p + C_{i2k2} p^2 \right] A_k = 0\]</div>
+<p>The determinate expression is a sixth-order polynomial expression resulting in six complex roots, <span class="math notranslate nohighlight">\(p_\alpha\)</span> with <span class="math notranslate nohighlight">\(\alpha\)</span> ranging 1 to 6. There is also one <span class="math notranslate nohighlight">\(A_{k \alpha}\)</span> corresponding to each root.</p>
+<p>Later, <a class="reference external" href="https://doi.org/10.1080/14786435808565804">Stroh</a> introduced a method for easily solving for the six roots. Another vector, <span class="math notranslate nohighlight">\(L_i\)</span> is defined for each <span class="math notranslate nohighlight">\(\alpha\)</span> root as</p>
+<div class="math notranslate nohighlight">
+\[L_{i \alpha} = \left(C_{i2k1} + p_{\alpha} C_{i2k2} \right) A_{k \alpha}\]</div>
+<p>and a normalization factor, <span class="math notranslate nohighlight">\(k_{\alpha}\)</span>, is introduced as</p>
+<div class="math notranslate nohighlight">
+\[k_{\alpha} = \frac{1}{2 A_{j \alpha} L_{j \alpha}}\]</div>
+<p>Stroh’s method then expresses everything as an eigenvector problem in which the eigenvalues give <span class="math notranslate nohighlight">\(p_{\alpha}\)</span> and the eigenvectors give <span class="math notranslate nohighlight">\(A_{i \alpha}\)</span> and <span class="math notranslate nohighlight">\(L_{i \alpha}\)</span>. Properties of the dislocation can then be computed using these solution parameters</p>
+<div class="math notranslate nohighlight">
+\[u_i = \frac{1}{2 \pi i} \sum_{\alpha}  \pm k_{\alpha} A_{i \alpha} (L_{l \alpha} b_l) \ln{\eta_{\alpha}}\]</div>
+<div class="math notranslate nohighlight">
+\[\sigma_{ij} = \frac{1}{2 \pi i} \sum_{\alpha}  \pm k_{\alpha} C_{ijkl}[m_l + p_{\alpha} n_l] A_{k \alpha} (L_{m \alpha} b_m) \frac{1}{\eta_{\alpha}}\]</div>
+<div class="math notranslate nohighlight">
+\[ \epsilon_{ij} = \frac{1}{4 \pi i} \sum_{\alpha} \pm k_{\alpha} \left(
+[m_i + p_{\alpha} n_i] A_{j \alpha} + [m_j + p_{\alpha} n_j] A_{i \alpha} \right) \left( L_{m\alpha} b_m\right)\frac{1}{\eta_a}\]</div>
+<div class="math notranslate nohighlight">
+\[K_{ij} = i \sum_{\alpha} \pm k_{\alpha} L_{i \alpha} L_{j \alpha}\]</div>
+<p>For the displacement and stress equations, <span class="math notranslate nohighlight">\(\eta\)</span> is an imaginary coordinate that combines <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span> using the computed eigenvalues <span class="math notranslate nohighlight">\(p_{\alpha}\)</span></p>
+<div class="math notranslate nohighlight">
+\[\eta_{\alpha} = x_1 + p_{\alpha} x_2\]</div>
+<p>The self-energy values for the energy coefficient, <span class="math notranslate nohighlight">\(K\)</span>, and the pre-ln factor, <span class="math notranslate nohighlight">\(a\)</span>, can be obtained from <span class="math notranslate nohighlight">\(K_{ij}\)</span> as described above.</p>
+</section>
+</section>
+<section id="3.-Volterra-dislocation-methods-and-objects">
+<h2>3. Volterra dislocation methods and objects<a class="headerlink" href="#3.-Volterra-dislocation-methods-and-objects" title="Permalink to this heading">¶</a></h2>
+<p>A Volterra dislocation solution can be obtained with the solve_volterra_dislocation() function.</p>
+<p><em>Update Version 1.3.2: ξ_uvw, slip_hkl, and box parameters added to make defining systems easier, especially for non-cubic crystals. axes renamed to transform for clarity.</em></p>
+<p><em>Update Version 1.4.8: The m and n parameters now can be given values of ‘x’, ‘y’, or ‘z’ to indicate that they are to be aligned with the corresponding Cartesian axis. The cart_axes parameter has also been added.</em></p>
+<p>Parameters</p>
+<ul class="simple">
+<li><p><strong>C</strong> (<em>atomman.ElasticConstants</em>) The medium’s elastic constants.</p></li>
+<li><p><strong>burgers</strong> (<em>array-like object</em>) The dislocation’s Burgers vector.</p></li>
+<li><p><strong>ξ_uvw</strong> (<em>array-like object</em>) The Miller crystal vector associated with the dislocation’s line direction. Must be given with slip_hkl to identify the transformation matrix to use on C and burgers.</p></li>
+<li><p><strong>slip_hkl</strong> (<em>array-like object</em>) The Miller plane indices associated with the dislocation’s slip plane. Must be given with slip_hkl to identify the transformation matrix to use on C and burgers.</p></li>
+<li><p><strong>transform</strong> (<em>array-like object, optional</em>) A 3x3 set of orthogonal Cartesian vectors that define the transformation matrix to use on C and burgers to convert from the standard (unit cell) and dislocation orientations. The 3 vectors will automatically be converted into unit vectors. Using this is an alternative to using ξ_uvw and slip_hkl.</p></li>
+<li><p><strong>axes</strong> (<em>array-like object, optional</em>) Same as transform. Retained for backwards compatibility.</p></li>
+<li><p><strong>box</strong> (<em>atomman.Box, optional</em>) The unit cell’s box that crystal vectors are taken with respect to. If not given, will use a cubic box with a=1 meaning that burgers, ξ_uvw and slip_hkl will be interpreted as Cartesian vectors.</p></li>
+<li><p><strong>m</strong> (<em>str or array-like object, optional</em>) The 3D Cartesian unit vector to align with the dislocation solution’s m-axis, i.e. the in-plane direction perpendicular to the dislocation line. Also accepts str values of ‘x’, ‘y’, or ‘z’, in which case the dislocation axis will be aligned with the corresponding Cartesian axis. Default value is ‘x’.</p></li>
+<li><p><strong>n</strong> (<em>str or array-like object, optional</em>) The 3D Cartesian unit vector to align with the dislocation solution’s n-axis, i.e. the slip plane normal. Also accepts str values of ‘x’, ‘y’, or ‘z’, in which case the dislocation axis will be aligned with the corresponding Cartesian axis. Default value is ‘y’.</p></li>
+<li><p><strong>cart_axes</strong> (<em>bool, optional</em>) Setting this to True will also perform an assertion check that the m- and n-axes are both aligned with Cartesian axes. This makes it possible for higher-level methods to force such an alignment to make things like atomistic dislocation configuration generation much easier. Default value is False as the elastic solution by itself does not require the limitation.</p></li>
+<li><p><strong>tol</strong> (<em>float</em>) Tolerance parameter used to round off near-zero values. Default value is 1e-8.</p></li>
+</ul>
+<p>Returns</p>
+<ul class="simple">
+<li><p>(<em>atomman.defect.VolterraDislocation</em>) The dislocation solution. This will be an atomman.defect.IsotropicVolterraDislocation object or an atomman.defect.Stroh object depending on if the elastic constants used are isotropic or anisotropic.</p></li>
+</ul>
+<section id="3.1.-Build-solution">
+<h3>3.1. Build solution<a class="headerlink" href="#3.1.-Build-solution" title="Permalink to this heading">¶</a></h3>
+<p>Specify materials properties, namely the unit cell box and the elastic constants.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Rough values for fcc Cu</span>
+
+<span class="c1"># Build box</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">3.6</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">cubic</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
+
+<span class="c1"># Isotropic Cij values</span>
+<span class="c1">#E = uc.set_in_units(130, &#39;GPa&#39;)</span>
+<span class="c1">#Poisson = 0.34</span>
+<span class="c1">#C = am.ElasticConstants(E=E, nu=Poisson)</span>
+
+<span class="c1"># Anisotropic values for Cu</span>
+<span class="n">C11</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">169</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
+<span class="n">C12</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
+<span class="n">C44</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">75.4</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">ElasticConstants</span><span class="p">(</span><span class="n">C11</span><span class="o">=</span><span class="n">C11</span><span class="p">,</span> <span class="n">C12</span><span class="o">=</span><span class="n">C12</span><span class="p">,</span> <span class="n">C44</span><span class="o">=</span><span class="n">C44</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cij in GPa:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Cij</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Cij in GPa:
+[[169.  122.  122.    0.    0.    0. ]
+ [122.  169.  122.    0.    0.    0. ]
+ [122.  122.  169.    0.    0.    0. ]
+ [  0.    0.    0.   75.4   0.    0. ]
+ [  0.    0.    0.    0.   75.4   0. ]
+ [  0.    0.    0.    0.    0.   75.4]]
+</pre></div></div>
+</div>
+<p>Specify the dislocation type. Using box (above) allows for these values to be given as Miller crystal vectors.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># fcc a/2[1 0 -1](1 1 1)</span>
+<span class="n">burgers</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">slip_hkl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># The dislocation&#39;s line direction (ξ_uvw) determines character</span>
+<span class="n">ξ_uvw</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="c1"># 90 degree edge</span>
+<span class="c1">#ξ_uvw = [1, -1, 0] # 60 degree mixed</span>
+<span class="c1">#ξ_uvw = [1, 1, -2] # 30 degree mixed</span>
+<span class="c1">#ξ_uvw = [1, 0, -1] # 0 degree screw, i.e. parallel to burgers</span>
+</pre></div>
+</div>
+</div>
+<p>Specify the orientation for the solution.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">m</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span> <span class="c1"># align m-axis (in-plane, perpendicular to ξ) with the x-axis</span>
+<span class="n">n</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span> <span class="c1"># align n-axis (slip plane normal) with the y-axis</span>
+</pre></div>
+</div>
+</div>
+<p>Create the solution</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">solution</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">solve_volterra_dislocation</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">ξ_uvw</span><span class="o">=</span><span class="n">ξ_uvw</span><span class="p">,</span> <span class="n">slip_hkl</span><span class="o">=</span><span class="n">slip_hkl</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="3.2.-Compute-properties">
+<h4>3.2. Compute properties<a class="headerlink" href="#3.2.-Compute-properties" title="Permalink to this heading">¶</a></h4>
+<p>Check configuration</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Dislocation configuration:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;m:        &#39;</span><span class="p">,</span> <span class="n">solution</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;n:        &#39;</span><span class="p">,</span> <span class="n">solution</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ξ:        &#39;</span><span class="p">,</span> <span class="n">solution</span><span class="o">.</span><span class="n">ξ</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Burgers:  &#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">burgers</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">),</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;|Burgers|:&#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">burgers</span><span class="p">),</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">),</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Character:&#39;</span><span class="p">,</span> <span class="n">solution</span><span class="o">.</span><span class="n">characterangle</span><span class="p">(),</span> <span class="s1">&#39;degrees&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Transformation matrix from standard orientation to dislocation orientation:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Dislocation configuration:
+m:         [1. 0. 0.]
+n:         [0. 1. 0.]
+ξ:         [0. 0. 1.]
+Burgers:   [2.54558441 0.         0.        ] angstrom
+|Burgers|: 2.545584412271571 angstrom
+Character: 90.0 degrees
+
+Transformation matrix from standard orientation to dislocation orientation:
+[[ 0.70710678  0.         -0.70710678]
+ [ 0.57735027  0.57735027  0.57735027]
+ [ 0.40824829 -0.81649658  0.40824829]]
+</pre></div></div>
+</div>
+<p>View solution parameters</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">IsotropicVolterraDislocation</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Solution is isotropic&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;mu -&gt; </span><span class="si">{</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="s2">&quot;GPa&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> GPa&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;nu -&gt; </span><span class="si">{</span><span class="n">solution</span><span class="o">.</span><span class="n">nu</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">Stroh</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Solution is anisotropic&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;p -&gt;&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;A -&gt;&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;L -&gt;&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;k -&gt;&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Solution is anisotropic
+p -&gt;
+[ 5.74325108e-01+1.48063821j  5.74325108e-01-1.48063821j
+ -5.74325108e-01+1.48063821j -5.74325108e-01-1.48063821j
+ -5.55111512e-17+0.39392852j -5.55111512e-17-0.39392852j]
+A -&gt;
+[[ 4.92478068e-01+2.92695902e-01j -1.86741173e-01+9.77580274e-02j
+   6.67206634e-01+0.00000000e+00j]
+ [ 4.92478068e-01-2.92695902e-01j -1.86741173e-01-9.77580274e-02j
+   6.67206634e-01-0.00000000e+00j]
+ [-4.92478068e-01+2.92695902e-01j -1.86741173e-01-9.77580274e-02j
+   6.67206634e-01+0.00000000e+00j]
+ [-4.92478068e-01-2.92695902e-01j -1.86741173e-01+9.77580274e-02j
+   6.67206634e-01-0.00000000e+00j]
+ [ 3.55985935e-16+1.47294255e-01j -7.89087414e-01+0.00000000e+00j
+  -4.27766816e-01-1.31098024e-16j]
+ [ 3.55985935e-16-1.47294255e-01j -7.89087414e-01-0.00000000e+00j
+  -4.27766816e-01+1.31098024e-16j]]
+L -&gt;
+[[ 1.87773573e-01-2.53391120e-01j  1.05996344e-01+1.67934295e-01j
+  -2.23781767e-02-2.06874267e-01j]
+ [ 1.87773573e-01+2.53391120e-01j  1.05996344e-01-1.67934295e-01j
+  -2.23781767e-02+2.06874267e-01j]
+ [ 1.87773573e-01+2.53391120e-01j -1.05996344e-01+1.67934295e-01j
+   2.23781767e-02-2.06874267e-01j]
+ [ 1.87773573e-01-2.53391120e-01j -1.05996344e-01-1.67934295e-01j
+   2.23781767e-02+2.06874267e-01j]
+ [ 1.50398047e-01-1.50200901e-17j -1.18890059e-17+3.81790193e-01j
+   1.59422563e-16+6.54039958e-02j]
+ [ 1.50398047e-01+1.50200901e-17j -1.18890059e-17-3.81790193e-01j
+   1.59422563e-16-6.54039958e-02j]]
+k -&gt;
+[ 8.78792266e-01+1.74127681j  8.78792266e-01-1.74127681j
+ -8.78792266e-01+1.74127681j -8.78792266e-01-1.74127681j
+  2.92248361e-17+1.62818332j  2.92248361e-17-1.62818332j]
+</pre></div></div>
+</div>
+<p><span class="math notranslate nohighlight">\(K_{ij}\)</span>, <span class="math notranslate nohighlight">\(K\)</span>, and pre-ln factor</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;K_tensor (in GPa) -&gt;&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">K_tensor</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;K_coeff -&gt; </span><span class="si">{</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">K_coeff</span><span class="p">,</span> <span class="s2">&quot;GPa&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> GPa&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;preln -&gt; </span><span class="si">{</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">preln</span><span class="p">,</span> <span class="s2">&quot;eV/Å&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1">f</span><span class="si">}</span><span class="s1"> eV/Å&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+K_tensor (in GPa) -&gt;
+[[74.09648694  0.          0.        ]
+ [ 0.         74.9325418  -8.62796136]
+ [ 0.         -8.62796136 44.21693456]]
+
+K_coeff -&gt; 74.096 GPa
+preln -&gt; 0.238480 eV/Å
+</pre></div></div>
+</div>
+<p>Construct a grid of points for evaluating displacement and stress</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Generate spacial grid of points</span>
+<span class="n">xy_max</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="n">num_xy</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">xvals</span> <span class="o">=</span> <span class="n">yvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">xy_max</span><span class="p">,</span> <span class="n">xy_max</span><span class="p">,</span> <span class="n">num_xy</span><span class="p">)</span>
+<span class="n">xvals</span><span class="p">,</span> <span class="n">yvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">xy_max</span><span class="p">,</span> <span class="n">xy_max</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">xy_max</span><span class="p">,</span> <span class="n">xy_max</span><span class="p">,</span> <span class="n">num_xy</span><span class="p">))</span>
+
+<span class="c1"># Convert points to coordinates relative to dislocation system</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">m</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">n</span>
+<span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">xvals</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">yvals</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+<span class="c1"># Identify x, y directions</span>
+<span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">):</span>
+    <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;$x_1$&#39;</span>
+<span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">):</span>
+    <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;$x_2$&#39;</span>
+<span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">):</span>
+    <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;$x_3$&#39;</span>
+<span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">):</span>
+    <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;$x_1$&#39;</span>
+<span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">):</span>
+    <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;$x_2$&#39;</span>
+<span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">):</span>
+    <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;$x_3$&#39;</span>
+</pre></div>
+</div>
+</div>
+<p>Displacements</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Compute displacements</span>
+<span class="n">disp</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">displacement</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="n">disp_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">disp</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xvals</span><span class="p">,</span> <span class="n">yvals</span><span class="p">,</span> <span class="n">disp</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">num_xy</span><span class="p">,</span> <span class="n">num_xy</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=-</span><span class="n">disp_max</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">disp_max</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;$u_</span><span class="se">{{</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="se">}}</span><span class="s1">$&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;large&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;large&#39;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Coordinates and displacements in Angstroms&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Coordinates and displacements in Angstroms
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.4._Volterra_dislocation_solutions_26_1.png" src="../_images/tutorial_4.4._Volterra_dislocation_solutions_26_1.png" />
+</div>
+</div>
+<p>Stress</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Compute stress states</span>
+<span class="n">stress</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">stress</span><span class="p">(</span><span class="n">coords</span><span class="p">),</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="n">stress_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">stress</span><span class="o">.</span><span class="n">max</span><span class="p">())</span> <span class="o">/</span> <span class="mi">10</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">14</span><span class="p">),</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">im</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xvals</span><span class="p">,</span> <span class="n">yvals</span><span class="p">,</span> <span class="n">stress</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">num_xy</span><span class="p">,</span> <span class="n">num_xy</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=-</span><span class="n">stress_max</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">stress_max</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;$\sigma_</span><span class="se">{{</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}{</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="se">}}</span><span class="s1">$&#39;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;large&#39;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;large&#39;</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Stress components in GPa, coordinates in Angstroms&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Stress components in GPa, coordinates in Angstroms
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.4._Volterra_dislocation_solutions_28_1.png" src="../_images/tutorial_4.4._Volterra_dislocation_solutions_28_1.png" />
+</div>
+</div>
+<p>Strain</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Compute stress states</span>
+<span class="n">strain</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">strain</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="n">strain_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">strain</span><span class="o">.</span><span class="n">max</span><span class="p">())</span> <span class="o">/</span> <span class="mi">10</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">14</span><span class="p">),</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">im</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xvals</span><span class="p">,</span> <span class="n">yvals</span><span class="p">,</span> <span class="n">strain</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">num_xy</span><span class="p">,</span> <span class="n">num_xy</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=-</span><span class="n">strain_max</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">strain_max</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;$\epsilon_</span><span class="se">{{</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}{</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="se">}}</span><span class="s1">$&#39;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;large&#39;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;large&#39;</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Strain components, coordinates in Angstroms&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Strain components, coordinates in Angstroms
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.4._Volterra_dislocation_solutions_30_1.png" src="../_images/tutorial_4.4._Volterra_dislocation_solutions_30_1.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="4.-Direct-check-of-strain-energy">
+<h2>4. Direct check of strain energy<a class="headerlink" href="#4.-Direct-check-of-strain-energy" title="Permalink to this heading">¶</a></h2>
+<p>For fun, you can check the nature of the solution by directly computing the dislocation solution’s strain energy and comparing it to the solution’s strain energy coefficients.</p>
+<div class="math notranslate nohighlight">
+\[\frac{W}{l} = \frac{K b^2}{4 \pi} \ln{ \left( \frac{R}{r_0} \right)} = \frac{1}{2} \int_{r_0}^{R} \sigma_{ij} \epsilon_{ij} dr\]</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">self_energy_eval</span><span class="p">(</span><span class="n">dislsol</span><span class="p">,</span> <span class="n">outer_r</span><span class="p">,</span> <span class="n">inner_r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridnum</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Numerically evaluates the elastic strain energy of a Volterra dislocation</span>
+<span class="sd">    within a cylindrical ring centered around the dislocation line.</span>
+
+<span class="sd">    The strain energy is computed by integrating 1/2 σ_ij ϵ_ij dr over a cylindrical</span>
+<span class="sd">    ring region with inner and outer radii. Here, the stress and strain fields are</span>
+<span class="sd">    obtained from the dislocation solution at grid points within the ring, and the</span>
+<span class="sd">    integral is numerically evaluated.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dislsol : atomman.defect.VolterraDislocation</span>
+<span class="sd">        A Volterra dislocation solution.</span>
+<span class="sd">    outer_r : float</span>
+<span class="sd">        The outer radius of the cylindrical ring to use.</span>
+<span class="sd">    inner_r : float, optional</span>
+<span class="sd">        The inner radius of the cylindrical ring to use, i.e. the dislocation core</span>
+<span class="sd">        radius.  If not given, will be taken as 5 * |b|.</span>
+<span class="sd">    gridnum : int, optional</span>
+<span class="sd">        The calculation uses a square grid of size gridnum*gridnum to evaluate the</span>
+<span class="sd">        strain energy density as a function of position.  The numerical integral for</span>
+<span class="sd">        the strain energy then uses the corresponding values with grid points inside</span>
+<span class="sd">        the ring region.  Increasing gridnum increases the computational cost as well</span>
+<span class="sd">        as improves the numerical integral.  Default value is 1000.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    E_strain : float</span>
+<span class="sd">        The computed elastic strain energy within the cylindrical ring.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">inner_r</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inner_r</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dislsol</span><span class="o">.</span><span class="n">burgers</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">outer_r</span> <span class="o">&gt;</span> <span class="n">inner_r</span><span class="p">,</span> <span class="s1">&#39;outer_r must be greater than inner_r&#39;</span>
+
+    <span class="c1"># Build square coordinate grid</span>
+    <span class="n">xy_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">outer_r</span><span class="p">,</span> <span class="n">outer_r</span><span class="p">,</span> <span class="n">gridnum</span><span class="p">)</span>
+    <span class="n">delta_xy</span> <span class="o">=</span> <span class="n">xy_vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xy_vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">xvals</span><span class="p">,</span> <span class="n">yvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xy_vals</span><span class="p">,</span> <span class="n">xy_vals</span><span class="p">)</span>
+    <span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">xvals</span><span class="p">,</span> <span class="n">dislsol</span><span class="o">.</span><span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">yvals</span><span class="p">,</span> <span class="n">dislsol</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="p">(</span><span class="n">xvals</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">yvals</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+    <span class="c1"># Compute elastic strain energy density at the coords</span>
+    <span class="n">ϵ_ij</span> <span class="o">=</span> <span class="n">dislsol</span><span class="o">.</span><span class="n">strain</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
+    <span class="n">σ_ij</span> <span class="o">=</span> <span class="n">dislsol</span><span class="o">.</span><span class="n">stress</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
+    <span class="n">E_density</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;...ij, ...ij -&gt;...&#39;</span><span class="p">,</span> <span class="n">σ_ij</span><span class="p">,</span> <span class="n">ϵ_ij</span><span class="p">)</span>
+
+    <span class="c1"># Remove values where coordinates are not in the ring</span>
+    <span class="n">E_density</span><span class="p">[</span><span class="n">r2</span> <span class="o">&lt;</span> <span class="n">inner_r</span><span class="o">**</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">E_density</span><span class="p">[</span><span class="n">r2</span> <span class="o">&gt;</span> <span class="n">outer_r</span><span class="o">**</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="c1"># Sum energy density and compute the ln term.</span>
+    <span class="n">E_strain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">E_density</span> <span class="o">*</span> <span class="n">delta_xy</span> <span class="o">*</span> <span class="n">delta_xy</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">E_strain</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">bmag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">burgers</span><span class="p">)</span>
+<span class="n">max_outer_r</span> <span class="o">=</span> <span class="mi">250</span> <span class="o">*</span> <span class="n">bmag</span>
+<span class="n">inner_r</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">bmag</span>
+<span class="n">num_r</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">E_strains</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">ln_terms</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">outer_r</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">inner_r</span><span class="p">,</span> <span class="n">max_outer_r</span><span class="p">,</span> <span class="n">num_r</span><span class="p">):</span>
+
+    <span class="c1"># Numerically compute the strain energy between inner_r, outer_r</span>
+    <span class="n">E_strain</span> <span class="o">=</span> <span class="n">self_energy_eval</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">outer_r</span><span class="o">=</span><span class="n">outer_r</span><span class="p">,</span> <span class="n">inner_r</span><span class="o">=</span><span class="n">inner_r</span><span class="p">)</span>
+    <span class="n">E_strains</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">E_strain</span><span class="p">)</span>
+
+    <span class="c1"># Compute the ln term: b^2 / (4 pi) * ln(outer_r/inner_r)</span>
+    <span class="n">ln_term</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">burgers</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">burgers</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">outer_r</span> <span class="o">/</span> <span class="n">inner_r</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">ln_terms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ln_term</span><span class="p">)</span>
+
+<span class="c1"># Plot strain energies vs. the ln terms</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ln_terms</span><span class="p">,</span> <span class="n">E_strains</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Evaluate K_coeff as the slope of the plot</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">linregress</span><span class="p">(</span><span class="n">ln_terms</span><span class="p">,</span> <span class="n">E_strains</span><span class="p">)</span>
+<span class="n">K_coeff</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">slope</span>
+
+<span class="c1"># Print values</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Solution K:&#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">K_coeff</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Evaluated K:&#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">K_coeff</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.4._Volterra_dislocation_solutions_33_0.png" src="../_images/tutorial_4.4._Volterra_dislocation_solutions_33_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Solution K: 74.09648693884509
+Evaluated K: 74.10133673627291
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Introduction to atomman: Volterra dislocation solutions</a><ul>
+<li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
+<li><a class="reference internal" href="#2.-Theory">2. Theory</a><ul>
+<li><a class="reference internal" href="#2.1.-Isotropic-solution">2.1. Isotropic solution</a></li>
+<li><a class="reference internal" href="#2.2.-Anisotropic-solution">2.2. Anisotropic solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#3.-Volterra-dislocation-methods-and-objects">3. Volterra dislocation methods and objects</a><ul>
+<li><a class="reference internal" href="#3.1.-Build-solution">3.1. Build solution</a><ul>
+<li><a class="reference internal" href="#3.2.-Compute-properties">3.2. Compute properties</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#4.-Direct-check-of-strain-energy">4. Direct check of strain energy</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="4.3._Stacking_fault_generator.html"
+                          title="previous chapter">Introduction to atomman: Stacking fault generator</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="4.5._Gamma_surface_plotting.html"
+                          title="next chapter">&lt;no title&gt;</a></p>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="4.5._Gamma_surface_plotting.html" title="&lt;no title&gt;"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="4.3._Stacking_fault_generator.html" title="Introduction to atomman: Stacking fault generator"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Volterra dislocation solutions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    </div>
+  </body>
+</html>

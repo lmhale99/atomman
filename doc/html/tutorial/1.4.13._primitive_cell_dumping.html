@@ -4,9 +4,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Introduction to atomman: primitive_cell dumping &#8212; atomman 1.4.7 documentation</title>
+    <title>Introduction to atomman: Primitive cell dumping &#8212; atomman 1.4.8 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -14,11 +14,10 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction to atomman: Settings and Library" href="1.5._Settings_and_databases.html" />
+    <link rel="next" title="Introduction to atomman: conventional-primitive cell dumping" href="1.4.14._Conventional_and_primitive_cell_conversion_dumping.html" />
     <link rel="prev" title="Introduction to atomman: DFT reference crystal loading" href="1.4.12._DFT_reference_crystal_loading.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -31,14 +30,14 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="1.5._Settings_and_databases.html" title="Introduction to atomman: Settings and Library"
+          <a href="1.4.14._Conventional_and_primitive_cell_conversion_dumping.html" title="Introduction to atomman: conventional-primitive cell dumping"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="1.4.12._DFT_reference_crystal_loading.html" title="Introduction to atomman: DFT reference crystal loading"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: primitive_cell dumping</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Primitive cell dumping</a></li> 
       </ul>
     </div>  
 
@@ -52,21 +51,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -167,7 +180,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -233,6 +246,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -280,8 +294,8 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<section id="Introduction-to-atomman:-primitive_cell-dumping">
-<h1>Introduction to atomman: primitive_cell dumping<a class="headerlink" href="#Introduction-to-atomman:-primitive_cell-dumping" title="Permalink to this heading">¶</a></h1>
+<section id="Introduction-to-atomman:-Primitive-cell-dumping">
+<h1>Introduction to atomman: Primitive cell dumping<a class="headerlink" href="#Introduction-to-atomman:-Primitive-cell-dumping" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <section id="1.-Introduction">
@@ -317,8 +331,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.7
-Notebook executed on 2022-10-12
+atomman version = 1.4.8
+Notebook executed on 2023-01-27
 </pre></div></div>
 </div>
 </section>
@@ -383,7 +397,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
   <div>
     <h3><a href="../index.html">Table of Contents</a></h3>
     <ul>
-<li><a class="reference internal" href="#">Introduction to atomman: primitive_cell dumping</a><ul>
+<li><a class="reference internal" href="#">Introduction to atomman: Primitive cell dumping</a><ul>
 <li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
 <li><a class="reference internal" href="#2.-Dump">2. Dump</a><ul>
 <li><a class="reference internal" href="#2.1.-System.dump(‘primitive_cell’)">2.1. System.dump(‘primitive_cell’)</a></li>
@@ -401,8 +415,8 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
   </div>
   <div>
     <h4>Next topic</h4>
-    <p class="topless"><a href="1.5._Settings_and_databases.html"
-                          title="next chapter">Introduction to atomman: Settings and Library</a></p>
+    <p class="topless"><a href="1.4.14._Conventional_and_primitive_cell_conversion_dumping.html"
+                          title="next chapter">Introduction to atomman: conventional-primitive cell dumping</a></p>
   </div>
         </div>
       </div>
@@ -418,18 +432,18 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="1.5._Settings_and_databases.html" title="Introduction to atomman: Settings and Library"
+          <a href="1.4.14._Conventional_and_primitive_cell_conversion_dumping.html" title="Introduction to atomman: conventional-primitive cell dumping"
              >next</a> |</li>
         <li class="right" >
           <a href="1.4.12._DFT_reference_crystal_loading.html" title="Introduction to atomman: DFT reference crystal loading"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: primitive_cell dumping</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Primitive cell dumping</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
     </div>
   </body>
 </html>

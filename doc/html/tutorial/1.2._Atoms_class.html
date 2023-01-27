@@ -4,9 +4,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Introduction to atomman: Atoms class &#8212; atomman 1.4.7 documentation</title>
+    <title>Introduction to atomman: Atoms class &#8212; atomman 1.4.8 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -14,7 +14,6 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="1.1._Box_class.html" title="Introduction to atomman: Box class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Atoms class</a></li> 
       </ul>
@@ -52,21 +51,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -167,7 +180,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -233,6 +246,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -322,8 +336,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.7
-Notebook executed on 2022-10-12
+atomman version = 1.4.8
+Notebook executed on 2023-01-27
 </pre></div></div>
 </div>
 </section>
@@ -358,16 +372,16 @@ Notebook executed on 2022-10-12
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.447 |   2.533 |   2.372
-      1 |       1 |   3.515 |   2.930 |   1.236
-      2 |       1 |   2.117 |   1.062 |   2.518
-      3 |       1 |   1.514 |   0.737 |   1.895
-      4 |       1 |   1.999 |   1.047 |   0.856
-      5 |       1 |   3.360 |   0.915 |   3.548
-      6 |       1 |   2.661 |   3.744 |   2.317
-      7 |       1 |   3.116 |   3.257 |   2.609
-      8 |       1 |   3.040 |   1.765 |   1.248
-      9 |       1 |   2.006 |   3.954 |   2.345
+      0 |       1 |   1.940 |   1.771 |   2.663
+      1 |       1 |   2.900 |   0.976 |   0.835
+      2 |       1 |   2.160 |   0.700 |   1.812
+      3 |       1 |   2.934 |   1.329 |   2.374
+      4 |       1 |   1.547 |   0.512 |   2.375
+      5 |       1 |   0.600 |   1.342 |   2.365
+      6 |       1 |   3.121 |   1.946 |   0.626
+      7 |       1 |   0.705 |   1.446 |   2.220
+      8 |       1 |   1.296 |   2.138 |   3.396
+      9 |       1 |   2.118 |   0.813 |   3.086
 </pre></div></div>
 </div>
 </section>
@@ -553,16 +567,16 @@ atoms.stress[0] -&gt;
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.447 |   2.533 |   2.372
-      1 |       1 |   3.515 |   2.930 |   1.236
-      2 |       2 |   2.117 |   1.062 |   2.518
-      3 |       1 |   1.514 |   0.737 |   1.895
-      4 |       1 |   1.999 |   1.047 |   0.856
-      5 |       2 |   3.360 |   0.915 |   3.548
-      6 |       1 |   2.661 |   3.744 |   2.317
-      7 |       1 |   3.116 |   3.257 |   2.609
-      8 |       1 |   3.040 |   1.765 |   1.248
-      9 |       1 |   2.006 |   3.954 |   2.345
+      0 |       1 |   1.940 |   1.771 |   2.663
+      1 |       1 |   2.900 |   0.976 |   0.835
+      2 |       2 |   2.160 |   0.700 |   1.812
+      3 |       1 |   2.934 |   1.329 |   2.374
+      4 |       1 |   1.547 |   0.512 |   2.375
+      5 |       2 |   0.600 |   1.342 |   2.365
+      6 |       1 |   3.121 |   1.946 |   0.626
+      7 |       1 |   0.705 |   1.446 |   2.220
+      8 |       1 |   1.296 |   2.138 |   3.396
+      9 |       1 |   2.118 |   0.813 |   3.086
 </pre></div></div>
 </div>
 <p>Alternatively, the atoms object can be copied into a pandas.DataFrame with the Atoms.df() method. This is convenient for viewing and analyzing all per-atom property values at once.</p>
@@ -618,9 +632,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>0</th>
       <td>1</td>
-      <td>3.447285</td>
-      <td>2.532506</td>
-      <td>2.372424</td>
+      <td>1.939885</td>
+      <td>1.771462</td>
+      <td>2.663132</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -634,9 +648,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>3.514516</td>
-      <td>2.930115</td>
-      <td>1.235578</td>
+      <td>2.900363</td>
+      <td>0.976484</td>
+      <td>0.835260</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -650,9 +664,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>2.116695</td>
-      <td>1.061932</td>
-      <td>2.518101</td>
+      <td>2.159911</td>
+      <td>0.700472</td>
+      <td>1.811594</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -666,9 +680,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>3</th>
       <td>1</td>
-      <td>1.514163</td>
-      <td>0.736550</td>
-      <td>1.894892</td>
+      <td>2.933692</td>
+      <td>1.328701</td>
+      <td>2.374061</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -682,9 +696,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>4</th>
       <td>1</td>
-      <td>1.998971</td>
-      <td>1.046947</td>
-      <td>0.856327</td>
+      <td>1.547392</td>
+      <td>0.512485</td>
+      <td>2.374647</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -698,9 +712,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>5</th>
       <td>2</td>
-      <td>3.359814</td>
-      <td>0.915184</td>
-      <td>3.547557</td>
+      <td>0.600376</td>
+      <td>1.342044</td>
+      <td>2.364680</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -714,9 +728,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>6</th>
       <td>1</td>
-      <td>2.660950</td>
-      <td>3.743901</td>
-      <td>2.317262</td>
+      <td>3.121098</td>
+      <td>1.945697</td>
+      <td>0.626049</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -730,9 +744,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>7</th>
       <td>1</td>
-      <td>3.116182</td>
-      <td>3.257117</td>
-      <td>2.609323</td>
+      <td>0.705036</td>
+      <td>1.445861</td>
+      <td>2.219719</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -746,9 +760,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>8</th>
       <td>1</td>
-      <td>3.039714</td>
-      <td>1.764863</td>
-      <td>1.247991</td>
+      <td>1.296260</td>
+      <td>2.137953</td>
+      <td>3.396236</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -762,9 +776,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
     <tr>
       <th>9</th>
       <td>1</td>
-      <td>2.006055</td>
-      <td>3.954029</td>
-      <td>2.345160</td>
+      <td>2.117503</td>
+      <td>0.813014</td>
+      <td>3.086113</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -827,11 +841,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.447 |   2.533 |   2.372
-      1 |       1 |   3.515 |   2.930 |   1.236
-      2 |       2 |   3.360 |   0.915 |   3.548
-      3 |       1 |   3.116 |   3.257 |   2.609
-      4 |       1 |   3.040 |   1.765 |   1.248
+      0 |       1 |   3.121 |   1.946 |   0.626
 </pre></div></div>
 </div>
 </section>
@@ -856,11 +866,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.447 |   2.533 |   2.372
-      1 |       1 |   3.515 |   2.930 |   1.236
-      2 |       2 |   3.360 |   0.915 |   3.548
-      3 |       1 |   3.116 |   3.257 |   2.609
-      4 |       1 |   3.447 |   2.533 |   2.372
+      0 |       1 |   1.940 |   1.771 |   2.663
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -885,29 +891,29 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.447 |   2.533 |   2.372
-      1 |       1 |   3.515 |   2.930 |   1.236
-      2 |       2 |   2.117 |   1.062 |   2.518
-      3 |       1 |   1.514 |   0.737 |   1.895
-      4 |       1 |   1.999 |   1.047 |   0.856
-      5 |       2 |   3.360 |   0.915 |   3.548
-      6 |       1 |   2.661 |   3.744 |   2.317
-      7 |       1 |   3.116 |   3.257 |   2.609
-      8 |       1 |   3.040 |   1.765 |   1.248
-      9 |       1 |   2.006 |   3.954 |   2.345
+      0 |       1 |   1.940 |   1.771 |   2.663
+      1 |       1 |   2.900 |   0.976 |   0.835
+      2 |       2 |   2.160 |   0.700 |   1.812
+      3 |       1 |   2.934 |   1.329 |   2.374
+      4 |       1 |   1.547 |   0.512 |   2.375
+      5 |       2 |   0.600 |   1.342 |   2.365
+      6 |       1 |   3.121 |   1.946 |   0.626
+      7 |       1 |   0.705 |   1.446 |   2.220
+      8 |       1 |   1.296 |   2.138 |   3.396
+      9 |       1 |   2.118 |   0.813 |   3.086
 
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.515 |   2.930 |   1.236
-      1 |       1 |   3.447 |   2.533 |   2.372
-      2 |       2 |   2.117 |   1.062 |   2.518
-      3 |       1 |   1.514 |   0.737 |   1.895
-      4 |       1 |   1.999 |   1.047 |   0.856
-      5 |       2 |   3.360 |   0.915 |   3.548
-      6 |       1 |   2.661 |   3.744 |   2.317
-      7 |       1 |   3.116 |   3.257 |   2.609
-      8 |       1 |   3.040 |   1.765 |   1.248
-      9 |       1 |   2.006 |   3.954 |   2.345
+      0 |       1 |   2.900 |   0.976 |   0.835
+      1 |       1 |   1.940 |   1.771 |   2.663
+      2 |       2 |   2.160 |   0.700 |   1.812
+      3 |       1 |   2.934 |   1.329 |   2.374
+      4 |       1 |   1.547 |   0.512 |   2.375
+      5 |       2 |   0.600 |   1.342 |   2.365
+      6 |       1 |   3.121 |   1.946 |   0.626
+      7 |       1 |   0.705 |   1.446 |   2.220
+      8 |       1 |   1.296 |   2.138 |   3.396
+      9 |       1 |   2.118 |   0.813 |   3.086
 </pre></div></div>
 </div>
 </section>
@@ -935,16 +941,16 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.515 |   2.930 |   1.236
-      1 |       1 |   3.447 |   2.533 |   2.372
-      2 |       2 |   2.117 |   1.062 |   2.518
-      3 |       1 |   1.514 |   0.737 |   1.895
-      4 |       1 |   1.999 |   1.047 |   0.856
-      5 |       2 |   3.360 |   0.915 |   3.548
-      6 |       1 |   2.661 |   3.744 |   2.317
-      7 |       1 |   3.116 |   3.257 |   2.609
-      8 |       1 |   3.040 |   1.765 |   1.248
-      9 |       1 |   2.006 |   3.954 |   2.345
+      0 |       1 |   2.900 |   0.976 |   0.835
+      1 |       1 |   1.940 |   1.771 |   2.663
+      2 |       2 |   2.160 |   0.700 |   1.812
+      3 |       1 |   2.934 |   1.329 |   2.374
+      4 |       1 |   1.547 |   0.512 |   2.375
+      5 |       2 |   0.600 |   1.342 |   2.365
+      6 |       1 |   3.121 |   1.946 |   0.626
+      7 |       1 |   0.705 |   1.446 |   2.220
+      8 |       1 |   1.296 |   2.138 |   3.396
+      9 |       1 |   2.118 |   0.813 |   3.086
      10 |       1 |   0.000 |   0.000 |   0.000
      11 |       1 |   0.000 |   0.000 |   0.000
 </pre></div></div>
@@ -967,20 +973,20 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
 <div class="highlight"><pre>
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.515 |   2.930 |   1.236
-      1 |       1 |   3.447 |   2.533 |   2.372
-      2 |       2 |   2.117 |   1.062 |   2.518
-      3 |       1 |   1.514 |   0.737 |   1.895
-      4 |       1 |   1.999 |   1.047 |   0.856
-      5 |       2 |   3.360 |   0.915 |   3.548
-      6 |       1 |   2.661 |   3.744 |   2.317
-      7 |       1 |   3.116 |   3.257 |   2.609
-      8 |       1 |   3.040 |   1.765 |   1.248
-      9 |       1 |   2.006 |   3.954 |   2.345
-     10 |       1 |   3.515 |   2.930 |   1.236
-     11 |       1 |   3.447 |   2.533 |   2.372
-     12 |       2 |   2.117 |   1.062 |   2.518
-     13 |       1 |   1.514 |   0.737 |   1.895
+      0 |       1 |   2.900 |   0.976 |   0.835
+      1 |       1 |   1.940 |   1.771 |   2.663
+      2 |       2 |   2.160 |   0.700 |   1.812
+      3 |       1 |   2.934 |   1.329 |   2.374
+      4 |       1 |   1.547 |   0.512 |   2.375
+      5 |       2 |   0.600 |   1.342 |   2.365
+      6 |       1 |   3.121 |   1.946 |   0.626
+      7 |       1 |   0.705 |   1.446 |   2.220
+      8 |       1 |   1.296 |   2.138 |   3.396
+      9 |       1 |   2.118 |   0.813 |   3.086
+     10 |       1 |   2.900 |   0.976 |   0.835
+     11 |       1 |   1.940 |   1.771 |   2.663
+     12 |       2 |   2.160 |   0.700 |   1.812
+     13 |       1 |   2.934 |   1.329 |   2.374
 </pre></div></div>
 </div>
 </section>
@@ -1048,13 +1054,13 @@ atoms.prop(&#39;atype&#39;) -&gt; [1 1 2 1 1 2 1 1 1 1]
 atoms.prop(index=slice(1,5)) -&gt;
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   3.447 |   2.533 |   2.372
-      1 |       2 |   2.117 |   1.062 |   2.518
-      2 |       1 |   1.514 |   0.737 |   1.895
-      3 |       1 |   1.999 |   1.047 |   0.856
+      0 |       1 |   1.940 |   1.771 |   2.663
+      1 |       2 |   2.160 |   0.700 |   1.812
+      2 |       1 |   2.934 |   1.329 |   2.374
+      3 |       1 |   1.547 |   0.512 |   2.375
 
 atoms.prop(key=&#39;pos&#39;, index=0) -&gt;
-[3.51451582 2.93011501 1.23557797]
+[2.90036291 0.97648442 0.83525961]
 </pre></div></div>
 </div>
 <p>Values can be set to Atoms using the value parameter. Any values set are copied to the Atoms instance as opposed to assigned by reference.</p>
@@ -1110,16 +1116,16 @@ atoms.prop(&#39;atype&#39;) -&gt; [7 7 7 7 1 7 7 7 7 7]
 calling: atoms.prop(index=9, value=atoms.prop(index=0))
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;stress&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       7 |   3.515 |   2.930 |   1.236
-      1 |       7 |   3.447 |   2.533 |   2.372
-      2 |       7 |   2.117 |   1.062 |   2.518
-      3 |       7 |   1.514 |   0.737 |   1.895
-      4 |       1 |   1.999 |   1.047 |   0.856
-      5 |       7 |   3.360 |   0.915 |   3.548
-      6 |       7 |   2.661 |   3.744 |   2.317
-      7 |       7 |   3.116 |   3.257 |   2.609
-      8 |       7 |   3.040 |   1.765 |   1.248
-      9 |       7 |   3.515 |   2.930 |   1.236
+      0 |       7 |   2.900 |   0.976 |   0.835
+      1 |       7 |   1.940 |   1.771 |   2.663
+      2 |       7 |   2.160 |   0.700 |   1.812
+      3 |       7 |   2.934 |   1.329 |   2.374
+      4 |       1 |   1.547 |   0.512 |   2.375
+      5 |       7 |   0.600 |   1.342 |   2.365
+      6 |       7 |   3.121 |   1.946 |   0.626
+      7 |       7 |   0.705 |   1.446 |   2.220
+      8 |       7 |   1.296 |   2.138 |   3.396
+      9 |       7 |   2.900 |   0.976 |   0.835
 </pre></div></div>
 </div>
 <p>Demonstrate safe copy of prop() using only value parameter.</p>
@@ -1665,13 +1671,13 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;charge&#39;]
         <li class="right" >
           <a href="1.1._Box_class.html" title="Introduction to atomman: Box class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Atoms class</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
     </div>
   </body>
 </html>

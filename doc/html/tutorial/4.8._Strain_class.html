@@ -4,9 +4,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Introduction to atomman: Strain class &#8212; atomman 1.4.7 documentation</title>
+    <title>Introduction to atomman: Strain class &#8212; atomman 1.4.8 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -14,13 +14,12 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="atomman package" href="../atomman.html" />
+    <link rel="next" title="Introduction to atomman: Dislocation solution and generator" href="4.9._Dislocation_configurations_generator.html" />
     <link rel="prev" title="Introduction to atomman: Semidiscrete variational Peierls-Nabarro model" href="4.7._Semidiscrete_variational_Peierls-Nabarro_model.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -33,12 +32,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../atomman.html" title="atomman package"
+          <a href="4.9._Dislocation_configurations_generator.html" title="Introduction to atomman: Dislocation solution and generator"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="4.7._Semidiscrete_variational_Peierls-Nabarro_model.html" title="Introduction to atomman: Semidiscrete variational Peierls-Nabarro model"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Strain class</a></li> 
       </ul>
@@ -54,21 +53,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -169,7 +182,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -235,6 +248,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -324,8 +338,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.7
-Notebook executed on 2022-10-12
+atomman version = 1.4.8
+Notebook executed on 2023-01-27
 </pre></div></div>
 </div>
 </section>
@@ -576,8 +590,8 @@ array([[-1.65340558,  0.        ,  2.33826859],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-First call for G took 4.234004974365234 seconds
-Second call for G took 0.0010006427764892578 seconds
+First call for G took 3.382009267807007 seconds
+Second call for G took 0.0 seconds
 [[[ 9.99998842e-01 -6.52065146e-08 -5.86211323e-08]
   [-1.08196712e-04  9.97999349e-01 -1.94600556e-03]
   [ 8.50971890e-05  2.07595184e-03  1.00097862e+00]]
@@ -921,8 +935,8 @@ estimated Burgers vector: [-0.0041,  2.9144,  0.0015]
   </div>
   <div>
     <h4>Next topic</h4>
-    <p class="topless"><a href="../atomman.html"
-                          title="next chapter">atomman package</a></p>
+    <p class="topless"><a href="4.9._Dislocation_configurations_generator.html"
+                          title="next chapter">Introduction to atomman: Dislocation solution and generator</a></p>
   </div>
         </div>
       </div>
@@ -938,18 +952,18 @@ estimated Burgers vector: [-0.0041,  2.9144,  0.0015]
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../atomman.html" title="atomman package"
+          <a href="4.9._Dislocation_configurations_generator.html" title="Introduction to atomman: Dislocation solution and generator"
              >next</a> |</li>
         <li class="right" >
           <a href="4.7._Semidiscrete_variational_Peierls-Nabarro_model.html" title="Introduction to atomman: Semidiscrete variational Peierls-Nabarro model"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Strain class</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
     </div>
   </body>
 </html>
