@@ -66,7 +66,7 @@ setup(
         'cython',
         'requests',
         'toolz',
-        'potentials==0.3.5'
+        'potentials==0.3.6'
     ],
     include_package_data = True,
     zip_safe = False

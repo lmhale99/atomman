@@ -1,5 +1,13 @@
 Updates
 =======
+
+Version 1.4.9
+-------------
+
+- **atomman.thermo.RDF** updates to support more general use.
+
+- Handling of record queries updated to be consistent with yabadaba 0.2.0.
+
 Version 1.4.8
 -------------
 
