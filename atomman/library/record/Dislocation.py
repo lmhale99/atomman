@@ -16,9 +16,6 @@ from yabadaba import load_query
 import numpy as np
 import numpy.typing as npt
 
-# https://pandas.pydata.org/
-import pandas as pd
-
 class Dislocation(Record):
     """
     Class for representing dislocation records, which collect the parameters
@@ -53,6 +50,11 @@ class Dislocation(Record):
     def xsd_filename(self) -> Tuple[str, str]:
         """tuple: The module path and file name of the record's xsd schema"""
         return ('atomman.library.xsd', f'{self.style}.xsd')
+
+    @property
+    def xsl_filename(self) -> Tuple[str, str]:
+        """tuple: The module path and file name of the record's xsl transformer"""
+        return ('atomman.library.xsl', f'{self.style}.xsl')
 
     @property
     def modelroot(self) -> str:
@@ -168,8 +170,8 @@ class Dislocation(Record):
         self.id = content['id']
         self.character = content['character']
         self.burgers_vector = content['Burgers-vector']
-        self.slip_plane = content['slip-plane']
-        self.line_direction = content['line-direction']
+        self.slip_plane = np.asarray(content['slip-plane'], dtype=int)
+        self.line_direction = np.asarray(content['line-direction'], dtype=int)
         self.family = content['system-family']
         self.__parameters = dict(content['calculation-parameter'])
 
@@ -232,110 +234,21 @@ class Dislocation(Record):
             'key': load_query(
                 style='str_match',
                 name='key', 
-                path=f'{self.modelroot}.key'),
+                path=f'{self.modelroot}.key',
+                description="search by dislocation parameter set's UUID key"),
             'id': load_query(
                 style='str_match',
                 name='id',
-                path=f'{self.modelroot}.id'),
+                path=f'{self.modelroot}.id',
+                description="search by dislocation parameter set's id"),
             'character': load_query(
                 style='str_match',
                 name='character',
-                path=f'{self.modelroot}.character'),
+                path=f'{self.modelroot}.character',
+                description="search by dislocation parameter set's dislocation character"),
             'family': load_query(
                 style='str_match',
                 name='family',
-                path=f'{self.modelroot}.system-family'),
+                path=f'{self.modelroot}.system-family',
+                description="search by the crystal prototype that the dislocation parameter set is for"),
         }
-
-    def pandasfilter(self,
-                     dataframe: pd.DataFrame,
-                     name: Union[str, list, None] = None,
-                     key: Union[str, list, None] = None,
-                     id: Union[str, list, None] = None,
-                     character: Union[str, list, None] = None,
-                     family: Union[str, list, None] = None) -> pd.Series:
-        """
-        Filters a pandas.DataFrame based on kwargs values for the record style.
-        
-        Parameters
-        ----------
-        dataframe : pandas.DataFrame
-            A table of metadata for multiple records of the record style.
-        name : str or list
-            The record name(s) to parse by.
-        id : str or list
-            The record id(s) to parse by.
-        key : str or list
-            The record key(s) to parse by.
-        character : str or list
-            Dislocation character(s) to parse by.
-        family : str or list
-            Parent prototype/reference id(s) to parse by.
-        
-        Returns
-        -------
-        pandas.Series
-            Boolean map of matching values
-        """
-        matches = super().pandasfilter(dataframe, name=name, key=key, id=id,
-                                       character=character, family=family)
-        return matches
-
-    def mongoquery(self,
-                   name: Union[str, list, None] = None,
-                   key: Union[str, list, None] = None,
-                   id: Union[str, list, None] = None,
-                   character: Union[str, list, None] = None,
-                   family: Union[str, list, None] = None) -> dict:
-        """
-        Builds a Mongo-style query based on kwargs values for the record style.
-        
-        Parameters
-        ----------
-        name : str or list
-            The record name(s) to parse by.
-        id : str or list
-            The record id(s) to parse by.
-        key : str or list
-            The record key(s) to parse by.
-        character : str or list
-            Dislocation character(s) to parse by.
-        family : str or list
-            Parent prototype/reference id(s) to parse by.
-        
-        Returns
-        -------
-        dict
-            The Mongo-style query
-        """   
-        mquery = super().mongoquery(name=name, key=key, id=id,
-                                    character=character, family=family)
-        return mquery
-
-    def cdcsquery(self, 
-                  key: Union[str, list, None] = None,
-                  id: Union[str, list, None] = None,
-                  character: Union[str, list, None] = None,
-                  family: Union[str, list, None] = None) -> dict:
-        """
-        Builds a CDCS-style query based on kwargs values for the record style.
-        
-        Parameters
-        ----------
-        id : str or list
-            The record id(s) to parse by.
-        key : str or list
-            The record key(s) to parse by.
-        character : str or list
-            Dislocation character(s) to parse by.
-        family : str or list
-            Parent prototype/reference id(s) to parse by.
-        
-        Returns
-        -------
-        dict
-            The CDCS-style query
-        """
-        mquery = super().cdcsquery(key=key, id=id,
-                                   character=character, family=family)
-        return mquery

@@ -11,9 +11,6 @@ from DataModelDict import DataModelDict as DM
 from yabadaba.record import Record
 from yabadaba import load_query
 
-# https://pandas.pydata.org/
-import pandas as pd
-
 # atomman imports
 import atomman.unitconvert as uc
 from ... import System
@@ -39,10 +36,8 @@ class RelaxedCrystal(Record):
             path, then the default record name is the file name without
             extension.
         """
-        if model is not None:
-            super().__init__(model=model, name=name)
-        elif name is not None:
-            self.name = name
+        self.__ucell = None
+        super().__init__(model=model, name=name)
 
     @property
     def style(self) -> str:
@@ -59,6 +54,11 @@ class RelaxedCrystal(Record):
         """tuple: The module path and file name of the record's xsd schema"""
         return ('atomman.library.xsd', f'{self.style}.xsd')
 
+    @property
+    def xsl_filename(self) -> Tuple[str, str]:
+        """tuple: The module path and file name of the record's xsl transformer"""
+        return ('atomman.library.xsl', f'{self.style}.xsl')
+    
     def load_model(self,
                    model: Union[str, io.IOBase, DM],
                    name: Optional[str] = None):
@@ -73,7 +73,7 @@ class RelaxedCrystal(Record):
             The name to assign to the record.  Often inferred from other
             attributes if not given.
         """
-        super().load_model(model, name=name)        
+        super().load_model(model, name=name)
         crystal = self.model[self.modelroot]
         
         self.__key = crystal['key']
@@ -108,7 +108,7 @@ class RelaxedCrystal(Record):
         # Set name as key if no name given
         try:
             self.name
-        except:
+        except AttributeError:
             self.name = self.key
 
     @property
@@ -323,273 +323,71 @@ class RelaxedCrystal(Record):
             'key': load_query(
                 style='str_match',
                 name='key', 
-                path=f'{self.modelroot}.key'),
+                path=f'{self.modelroot}.key',
+                description="search by relaxed crystal's UUID key"),
             'method': load_query(
                 style='str_match',
                 name='method',
-                path=f'{self.modelroot}.method'),
+                path=f'{self.modelroot}.method',
+                description="search by relaxed crystal's relaxation method"),
             'standing': load_query(
                 style='str_match',
                 name='standing',
-                path=f'{self.modelroot}.standing'),
+                path=f'{self.modelroot}.standing',
+                description="search by relaxed crystal's standing: good or bad"),
             'family': load_query(
                 style='str_match',
                 name='family',
-                path=f'{self.modelroot}.system-info.family'),
+                path=f'{self.modelroot}.system-info.family',
+                description="search by relaxed crystal's family, i.e. prototype or reference crystal"),
             'parent_key': load_query(
                 style='str_match',
                 name='parent_key',
-                path=f'{self.modelroot}.system-info.parent_key'),
+                path=f'{self.modelroot}.system-info.parent_key',
+                description="search by the UUID key of the parent calculation_crystal_space_group record"),
             'potential_LAMMPS_id': load_query(
                 style='str_match',
                 name='potential_LAMMPS_id',
-                path=f'{self.modelroot}.potential-LAMMPS.id'),
+                path=f'{self.modelroot}.potential-LAMMPS.id',
+                description='search bu the implementation id of the potential used'),
             'potential_LAMMPS_key': load_query(
                 style='str_match',
                 name='potential_LAMMPS_key',
-                path=f'{self.modelroot}.potential-LAMMPS.key'),
+                path=f'{self.modelroot}.potential-LAMMPS.key',
+                description='search bu the implementation UUID key of the potential used'),
             'potential_id': load_query(
                 style='str_match',
                 name='potential_id',
-                path=f'{self.modelroot}.potential-LAMMPS.potential.id'),
+                path=f'{self.modelroot}.potential-LAMMPS.potential.id',
+                description='search bu the potential id of the potential used'),
             'potential_key': load_query(
                 style='str_match',
                 name='potential_key',
-                path=f'{self.modelroot}.potential-LAMMPS.potential.key'),
+                path=f'{self.modelroot}.potential-LAMMPS.potential.key',
+                description='search bu the potential UUID key of the potential used'),
             'crystalfamily': load_query(
                 style='str_match',
                 name='crystalfamily',
-                path=f'{self.modelroot}.system-info.cell.crystal-family'),
+                path=f'{self.modelroot}.system-info.cell.crystal-family',
+                description="search by relaxed crystal's crystal family"),
             'composition': load_query(
                 style='str_match',
                 name='composition',
-                path=f'{self.modelroot}.system-info.composition'),
+                path=f'{self.modelroot}.system-info.composition',
+                description="search by relaxed crystal's composition"),
             'symbols': load_query(
                 style='list_contains',
                 name='symbols',
-                path=f'{self.modelroot}.system-info.symbol'),
+                path=f'{self.modelroot}.system-info.symbol',
+                description="search by relaxed crystal's symbols"),
             'natoms': load_query(
                 style='int_match',
                 name='natoms',
-                path=f'{self.modelroot}.atomic-system.atoms.natoms'),
+                path=f'{self.modelroot}.atomic-system.atoms.natoms',
+                description="search by number of atoms in the relaxed crystal"),
             'natypes': load_query(
                 style='int_match',
                 name='natypes',
-                path=f'{self.modelroot}.system-info.cell.natypes'),
+                path=f'{self.modelroot}.system-info.cell.natypes',
+                description="search by number of atom types in the relaxed crystal"),
         }
-
-    def pandasfilter(self,
-                     dataframe: pd.DataFrame,
-                     name: Union[str, list, None] = None,
-                     key: Union[str, list, None] = None,
-                     method: Union[str, list, None] = None,
-                     standing: Union[str, list, None] = None,
-                     family: Union[str, list, None] = None,
-                     parent_key: Union[str, list, None] = None, 
-                     potential_LAMMPS_id: Union[str, list, None] = None,
-                     potential_LAMMPS_key: Union[str, list, None] = None,
-                     potential_id: Union[str, list, None] = None,
-                     potential_key: Union[str, list, None] = None,
-                     crystalfamily: Union[str, list, None] = None,
-                     composition: Union[str, list, None] = None,
-                     symbols: Union[str, list, None] = None,
-                     natoms: Union[int, list, None] = None,
-                     natypes: Union[int, list, None] = None) -> pd.Series:
-        """
-        Filters a pandas.DataFrame based on kwargs values for the record style.
-        
-        Parameters
-        ----------
-        dataframe : pandas.DataFrame
-            A table of metadata for multiple records of the record style.
-        name : str or list
-            The record name(s) to parse by.
-        key : str or list
-            The record key(s) to parse by.
-        method : str, None or list
-            The relaxation method(s) to parse by.  Default value is 'dynamic'.
-            Set to None to access records for all relaxation methods.
-        standing : str, None or list
-            The standing status to parse by.  Default value is 'good'  Set to
-            None to access records for all standings.
-        family : str or list
-            The prototype/reference id(s) that the relaxed crystals are based
-            on to parse by.
-        parent_key : str or list
-            The key(s) of the relaxation calculation records to parse by.
-        potential_LAMMPS_id : str or list
-            LAMMPS potential implementation id(s) to parse by.
-        potential_LAMMPS_key : str or list
-            LAMMPS potential implementation keys(s) to parse by.
-        potential_id : str or list
-            Potential id(s) to parse by.
-        potential_key : str or list
-            Potential key(s) to parse by.
-        crystalfamily : str or list
-            Crystal structure families to parse by.
-        composition : str or list
-            Compositions to parse by.
-        symbols : str or list
-            Element model symbol(s) to parse by.
-        natoms : int or list
-            Number of atoms in the unit cell to parse by.
-        natypes : int or list
-            Number of atom types to parse by.
-        
-        Returns
-        -------
-        pandas.Series, numpy.NDArray
-            Boolean map of matching values
-        """
-        matches = super().pandasfilter(dataframe, name=name, key=key,
-                                       method=method, standing=standing,
-                                       family=family, parent_key=parent_key, 
-                                       potential_LAMMPS_id=potential_LAMMPS_id,
-                                       potential_LAMMPS_key=potential_LAMMPS_key,
-                                       potential_id=potential_id,
-                                       potential_key=potential_key,
-                                       crystalfamily=crystalfamily,
-                                       composition=composition, symbols=symbols,
-                                       natoms=natoms, natypes=natypes)
-        return matches
-
-    def mongoquery(self,
-                   name: Union[str, list, None] = None,
-                   key: Union[str, list, None] = None,
-                   method: Union[str, list, None] = None,
-                   standing: Union[str, list, None] = None,
-                   family: Union[str, list, None] = None,
-                   parent_key: Union[str, list, None] = None, 
-                   potential_LAMMPS_id: Union[str, list, None] = None,
-                   potential_LAMMPS_key: Union[str, list, None] = None,
-                   potential_id: Union[str, list, None] = None,
-                   potential_key: Union[str, list, None] = None,
-                   crystalfamily: Union[str, list, None] = None,
-                   composition: Union[str, list, None] = None,
-                   symbols: Union[str, list, None] = None,
-                   natoms: Union[int, list, None] = None,
-                   natypes: Union[int, list, None] = None) -> dict:
-        """
-        Builds a Mongo-style query based on kwargs values for the record style.
-        
-        Parameters
-        ----------
-        name : str or list
-            The record name(s) to parse by.
-        key : str or list
-            The record key(s) to parse by.
-        method : str, None or list
-            The relaxation method(s) to parse by.  Default value is 'dynamic'.
-            Set to None to access records for all relaxation methods.
-        standing : str, None or list
-            The standing status to parse by.  Default value is 'good'  Set to
-            None to access records for all standings.
-        family : str or list
-            The prototype/reference id(s) that the relaxed crystals are based
-            on to parse by.
-        parent_key : str or list
-            The key(s) of the relaxation calculation records to parse by.
-        potential_LAMMPS_id : str or list
-            LAMMPS potential implementation id(s) to parse by.
-        potential_LAMMPS_key : str or list
-            LAMMPS potential implementation keys(s) to parse by.
-        potential_id : str or list
-            Potential id(s) to parse by.
-        potential_key : str or list
-            Potential key(s) to parse by.
-        crystalfamily : str or list
-            Crystal structure families to parse by.
-        composition : str or list
-            Compositions to parse by.
-        symbols : str or list
-            Element model symbol(s) to parse by.
-        natoms : int or list
-            Number of atoms in the unit cell to parse by.
-        natypes : int or list
-            Number of atom types to parse by.
-        
-        Returns
-        -------
-        dict
-            The Mongo-style query
-        """     
-        mquery = super().mongoquery(name=name, key=key,
-                                    method=method, standing=standing,
-                                    family=family, parent_key=parent_key, 
-                                    potential_LAMMPS_id=potential_LAMMPS_id,
-                                    potential_LAMMPS_key=potential_LAMMPS_key,
-                                    potential_id=potential_id,
-                                    potential_key=potential_key,
-                                    crystalfamily=crystalfamily,
-                                    composition=composition, symbols=symbols,
-                                    natoms=natoms, natypes=natypes)
-        return mquery
-
-    def cdcsquery(self,
-                  key: Union[str, list, None] = None,
-                  method: Union[str, list, None] = None,
-                  standing: Union[str, list, None] = None,
-                  family: Union[str, list, None] = None,
-                  parent_key: Union[str, list, None] = None, 
-                  potential_LAMMPS_id: Union[str, list, None] = None,
-                  potential_LAMMPS_key: Union[str, list, None] = None,
-                  potential_id: Union[str, list, None] = None,
-                  potential_key: Union[str, list, None] = None,
-                  crystalfamily: Union[str, list, None] = None,
-                  composition: Union[str, list, None] = None,
-                  symbols: Union[str, list, None] = None,
-                  natoms: Union[int, list, None] = None,
-                  natypes: Union[int, list, None] = None) -> dict:
-        """
-        Builds a CDCS-style query based on kwargs values for the record style.
-        
-        Parameters
-        ----------
-        key : str or list
-            The record key(s) to parse by.
-        method : str, None or list
-            The relaxation method(s) to parse by.  Default value is 'dynamic'.
-            Set to None to access records for all relaxation methods.
-        standing : str, None or list
-            The standing status to parse by.  Default value is 'good'  Set to
-            None to access records for all standings.
-        family : str or list
-            The prototype/reference id(s) that the relaxed crystals are based
-            on to parse by.
-        parent_key : str or list
-            The key(s) of the relaxation calculation records to parse by.
-        potential_LAMMPS_id : str or list
-            LAMMPS potential implementation id(s) to parse by.
-        potential_LAMMPS_key : str or list
-            LAMMPS potential implementation keys(s) to parse by.
-        potential_id : str or list
-            Potential id(s) to parse by.
-        potential_key : str or list
-            Potential key(s) to parse by.
-        crystalfamily : str or list
-            Crystal structure families to parse by.
-        composition : str or list
-            Compositions to parse by.
-        symbols : str or list
-            Element model symbol(s) to parse by.
-        natoms : int or list
-            Number of atoms in the unit cell to parse by.
-        natypes : int or list
-            Number of atom types to parse by.
-        
-        Returns
-        -------
-        dict
-            The CDCS-style query
-        """
-        mquery = super().cdcsquery(key=key,
-                                    method=method, standing=standing,
-                                    family=family, parent_key=parent_key, 
-                                    potential_LAMMPS_id=potential_LAMMPS_id,
-                                    potential_LAMMPS_key=potential_LAMMPS_key,
-                                    potential_id=potential_id,
-                                    potential_key=potential_key,
-                                    crystalfamily=crystalfamily,
-                                    composition=composition, symbols=symbols,
-                                    natoms=natoms, natypes=natypes)
-        return mquery

@@ -432,11 +432,11 @@ def fetch_reference_crystal(self,
     if 'oqmd-' in id:
         record = self.fetch_oqmd_crystal(id)
         if verbose:
-            print(f'Crystal retrieved from OQMD')
+            print('Crystal retrieved from OQMD')
     else:
         record = self.fetch_mp_crystal(id, api_key=api_key)
         if verbose:
-            print(f'Crystal retrieved from Materials Project')
+            print('Crystal retrieved from Materials Project')
 
     return record
 

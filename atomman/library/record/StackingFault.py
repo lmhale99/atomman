@@ -11,8 +11,6 @@ from DataModelDict import DataModelDict as DM
 from yabadaba import load_query
 from yabadaba.record import Record
 
-# https://pandas.pydata.org/
-import pandas as pd
 class StackingFault(Record):
     """
     Class for representing stacking_fault records, which collect the parameters
@@ -48,6 +46,11 @@ class StackingFault(Record):
     def xsd_filename(self) -> Tuple[str, str]:
         """tuple: The module path and file name of the record's xsd schema"""
         return ('atomman.library.xsd', f'{self.style}.xsd')
+    
+    @property
+    def xsl_filename(self) -> Tuple[str, str]:
+        """tuple: The module path and file name of the record's xsl transformer"""
+        return ('atomman.library.xsl', f'{self.style}.xsl')
     
     @property
     def modelroot(self) -> str:
@@ -162,129 +165,31 @@ class StackingFault(Record):
             'key': load_query(
                 style='str_match',
                 name='key', 
-                path=f'{self.modelroot}.key'),
+                path=f'{self.modelroot}.key',
+                description="search by stacking fault parameter set's UUID key"),
             'id': load_query(
                 style='str_match',
                 name='id',
-                path=f'{self.modelroot}.id'),
+                path=f'{self.modelroot}.id',
+                description="search by stacking fault parameter set's id"),
             'family': load_query(
                 style='str_match',
                 name='family',
-                path=f'{self.modelroot}.system-family'),
+                path=f'{self.modelroot}.system-family',
+                description="search by the crystal prototype that the stacking fault parameter set is for"),
             'hkl': load_query(
                 style='str_match',
                 name='hkl',
-                path=f'{self.modelroot}.calculation-parameter.hkl'),
+                path=f'{self.modelroot}.calculation-parameter.hkl',
+                description="search by the stacking fault parameter set's hkl fault plane"),
             'shiftindex': load_query(
                 style='int_match',
                 name='shiftindex',
-                path=f'{self.modelroot}.calculation-parameter.shiftindex'),
+                path=f'{self.modelroot}.calculation-parameter.shiftindex',
+                description="search by the stacking fault parameter set's shift index"),
             'cutboxvector': load_query(
                 style='str_match',
                 name='cutboxvector',
-                path=f'{self.modelroot}.calculation-parameter.cutboxvector'),
+                path=f'{self.modelroot}.calculation-parameter.cutboxvector',
+                description="search by the stacking fault parameter set's cutboxvector"),
         }
-
-    def pandasfilter(self,
-                     dataframe: pd.DataFrame,
-                     name: Union[str, list, None] = None,
-                     key: Union[str, list, None] = None,
-                     id: Union[str, list, None] = None,
-                     family: Union[str, list, None] = None,
-                     hkl: Union[str, list, None] = None,
-                     shiftindex: Union[int, list, None] = None,
-                     cutboxvector: Union[str, list, None] = None) -> pd.Series:
-        """
-        Filters a pandas.DataFrame based on kwargs values for the record style.
-        
-        Parameters
-        ----------
-        dataframe : pandas.DataFrame
-            A table of metadata for multiple records of the record style.
-        name : str or list
-            The record name(s) to parse by.
-        id : str or list
-            The record id(s) to parse by.
-        key : str or list
-            The record key(s) to parse by.
-        family : str or list
-            Parent prototype/reference id(s) to parse by.
-        hkl : str or list
-            Space delimited fault plane(s) to parse by.
-        shiftindex : int or list
-            shiftindex value(s) to parse by.
-        cutboxvector : str or list
-            cutboxvector value(s) to parse by.
-        
-        Returns
-        -------
-        pandas.Series
-            Boolean map of matching values
-        """
-        matches = super().pandasfilter(dataframe, name=name, key=key, id=id,
-                                       family=family, hkl=hkl, shiftindex=shiftindex,
-                                       cutboxvector=cutboxvector)
-        return matches
-
-    def mongoquery(self, name=None, key=None, id=None,
-                   family=None, hkl=None, shiftindex=None,
-                   cutboxvector=None) -> dict:
-        """
-        Builds a Mongo-style query based on kwargs values for the record style.
-        
-        Parameters
-        ----------
-        name : str or list
-            The record name(s) to parse by.
-        id : str or list
-            The record id(s) to parse by.
-        key : str or list
-            The record key(s) to parse by.
-        family : str or list
-            Parent prototype/reference id(s) to parse by.
-        hkl : str or list
-            Space delimited fault plane(s) to parse by.
-        shiftindex : int or list
-            shiftindex value(s) to parse by.
-        cutboxvector : str or list
-            cutboxvector value(s) to parse by.
-        
-        Returns
-        -------
-        dict
-            The Mongo-style query
-        """   
-        mquery = super().mongoquery(name=name, key=key, id=id,
-                                    family=family, hkl=hkl, shiftindex=shiftindex,
-                                    cutboxvector=cutboxvector)
-        return mquery
-
-    def cdcsquery(self, key=None, id=None, family=None, hkl=None, shiftindex=None,
-                  cutboxvector=None) -> dict:
-        """
-        Builds a CDCS-style query based on kwargs values for the record style.
-        
-        Parameters
-        ----------
-        id : str or list
-            The record id(s) to parse by.
-        key : str or list
-            The record key(s) to parse by.
-        family : str or list
-            Parent prototype/reference id(s) to parse by.
-        hkl : str or list
-            Space delimited fault plane(s) to parse by.
-        shiftindex : int or list
-            shiftindex value(s) to parse by.
-        cutboxvector : str or list
-            cutboxvector value(s) to parse by.
-        
-        Returns
-        -------
-        dict
-            The CDCS-style query
-        """
-        mquery = super().cdcsquery(key=key, id=id,
-                                    family=family, hkl=hkl, shiftindex=shiftindex,
-                                    cutboxvector=cutboxvector)
-        return mquery

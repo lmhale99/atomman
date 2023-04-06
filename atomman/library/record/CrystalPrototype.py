@@ -11,9 +11,6 @@ from DataModelDict import DataModelDict as DM
 from yabadaba.record import Record
 from yabadaba import load_query
 
-# https://pandas.pydata.org/
-import pandas as pd
-
 # atomman imports
 from ... import System
 
@@ -37,11 +34,12 @@ class CrystalPrototype(Record):
             path, then the default record name is the file name without
             extension.
         """
-        if model is not None:
-            super().__init__(model=model, name=name)
-        elif name is not None:
-            self.name = name
+        # Init properties
+        self.__ucell = None
 
+        # Call super init
+        super().__init__(model=model, name=name)
+        
     @property
     def style(self) -> str:
         """str: The record style"""
@@ -57,6 +55,11 @@ class CrystalPrototype(Record):
         """tuple: The module path and file name of the record's xsd schema"""
         return ('atomman.library.xsd', f'{self.style}.xsd')
 
+    @property
+    def xsl_filename(self) -> Tuple[str, str]:
+        """tuple: The module path and file name of the record's xsl transformer"""
+        return ('atomman.library.xsl', f'{self.style}.xsl')
+
     def load_model(self,
                    model: Union[str, io.IOBase, DM],
                    name: Optional[str] = None):
@@ -71,7 +74,7 @@ class CrystalPrototype(Record):
             The name to assign to the record.  Often inferred from other
             attributes if not given.
         """
-        super().load_model(model, name=name)        
+        super().load_model(model, name=name)
         proto = self.model[self.modelroot]
         
         self.__key = proto['key']
@@ -92,7 +95,7 @@ class CrystalPrototype(Record):
         # Set name as id if no name given
         try:
             self.name
-        except:
+        except AttributeError:
             self.name = self.id
 
     @property
@@ -215,213 +218,56 @@ class CrystalPrototype(Record):
             'key': load_query(
                 style='str_match',
                 name='key', 
-                path=f'{self.modelroot}.key'),
+                path=f'{self.modelroot}.key',
+                description="search by crystal prototype's UUID key"),
             'id': load_query(
                 style='str_match',
                 name='id',
-                path=f'{self.modelroot}.id'),
+                path=f'{self.modelroot}.id',
+                description="search by crystal prototype's id"),
             'commonname': load_query(
                 style='str_match',
                 name='commonname',
-                path=f'{self.modelroot}.name'),
+                path=f'{self.modelroot}.name',
+                description="search by crystal prototype's common name"),
             'prototype': load_query(
                 style='str_match',
                 name='prototype',
-                path=f'{self.modelroot}.prototype'),
+                path=f'{self.modelroot}.prototype',
+                description="search by crystal prototype's prototype composition"),
             'pearson': load_query(
                 style='str_match',
                 name='pearson',
-                path=f'{self.modelroot}.Pearson-symbol'),
+                path=f'{self.modelroot}.Pearson-symbol',
+                description="search by crystal prototype's Pearson symbol"),
             'strukturbericht': load_query(
                 style='str_match',
                 name='strukturbericht',
-                path=f'{self.modelroot}.Strukturbericht'),
+                path=f'{self.modelroot}.Strukturbericht',
+                description="search by crystal prototype's Strukturbericht symbol"),
             'sg_number': load_query(
                 style='int_match',
                 name='sg_number',
-                path=f'{self.modelroot}.space-group.number'),
+                path=f'{self.modelroot}.space-group.number',
+                description="search by crystal prototype's space group number"),
             'sg_hm': load_query(
                 style='str_match',
                 name='sg_hm',
-                path=f'{self.modelroot}.space-group.Hermann-Maguin'),
+                path=f'{self.modelroot}.space-group.Hermann-Maguin',
+                description="search by crystal prototype's space group Hermann-Maguin symbol"),
             'sg_schoenflies': load_query(
                 style='str_match',
                 name='sg_schoenflies',
-                path=f'{self.modelroot}.space-group.Schoenflies'),
+                path=f'{self.modelroot}.space-group.Schoenflies',
+                description="search by crystal prototype's space group Schoenflies symbol"),
             'crystalfamily': load_query(
                 style='str_match',
                 name='crystalfamily',
-                path=f'{self.modelroot}.system-info.cell.crystal-family'),
+                path=f'{self.modelroot}.system-info.cell.crystal-family',
+                description="search by crystal prototype's crystal family"),
             'natypes': load_query(
                 style='int_match',
                 name='natypes',
-                path=f'{self.modelroot}.system-info.cell.natypes'),
+                path=f'{self.modelroot}.system-info.cell.natypes',
+                description="search by number of atom types in the crystal prototype"),
         }
-
-    def pandasfilter(self,
-                     dataframe: pd.DataFrame,
-                     name: Union[str, list, None] = None,
-                     id: Union[str, list, None] = None,
-                     key: Union[str, list, None] = None,
-                     commonname: Union[str, list, None] = None,
-                     prototype: Union[str, list, None] = None,
-                     pearson: Union[str, list, None] = None,
-                     strukturbericht: Union[str, list, None] = None,
-                     sg_number: Union[int, list, None] = None,
-                     sg_hm: Union[str, list, None] = None,
-                     sg_schoenflies: Union[str, list, None] = None,
-                     crystalfamily: Union[str, list, None] = None,
-                     natypes: Union[int, list, None] = None) -> pd.Series:
-        """
-        Filters a pandas.DataFrame based on kwargs values for the record style.
-        
-        Parameters
-        ----------
-        dataframe : pandas.DataFrame
-            A table of metadata for multiple records of the record style.
-        name : str or list
-            The record name(s) to parse by.
-        id : str or list
-            The record id(s) to parse by.
-        key : str or list
-            The record key(s) to parse by.
-        commonname : str or list
-            Prototype common name(s) to parse by.
-        prototype : str or list
-            Prototype composition(s) to parse by.
-        pearson : str or list
-            Pearson symbol(s) to parse by.
-        strukturbericht : str or list
-            Prototype Strukturbericht symbol(s) to parse by.
-        sg_number : int or list
-            Space group number(s) to parse by.
-        sg_hm : str or list
-            Space group international symbol(s) to parse by.
-        sg_schoenflies : str or list
-            Space group Schoenflies symbol(s) to parse by.
-        crystalfamily : str or list
-            Crystal structure families to parse by.
-        natypes : int or list
-            Number of atom types to parse by.
-
-        Returns
-        -------
-        pandas.Series
-            Boolean map of matching values
-        """
-        matches = super().pandasfilter(dataframe, name=name, id=id, key=key,
-                                       commonname=commonname, prototype=prototype,
-                                       pearson=pearson, strukturbericht=strukturbericht,
-                                       sg_number=sg_number, sg_hm=sg_hm,
-                                       sg_schoenflies=sg_schoenflies,
-                                       crystalfamily=crystalfamily, natypes=natypes)
-        return matches
-
-    def mongoquery(self, 
-                   name: Union[str, list, None] = None,
-                   id: Union[str, list, None] = None,
-                   key: Union[str, list, None] = None,
-                   commonname: Union[str, list, None] = None,
-                   prototype: Union[str, list, None] = None,
-                   pearson: Union[str, list, None] = None,
-                   strukturbericht: Union[str, list, None] = None,
-                   sg_number: Union[int, list, None] = None,
-                   sg_hm: Union[str, list, None] = None,
-                   sg_schoenflies: Union[str, list, None] = None,
-                   crystalfamily: Union[str, list, None] = None,
-                   natypes: Union[int, list, None] = None) -> dict:
-        """
-        Builds a Mongo-style query based on kwargs values for the record style.
-        
-        Parameters
-        ----------
-        name : str or list
-            The record name(s) to parse by.
-        id : str or list
-            The record id(s) to parse by.
-        key : str or list
-            The record key(s) to parse by.
-        commonname : str or list
-            Prototype common name(s) to parse by.
-        prototype : str or list
-            Prototype composition(s) to parse by.
-        pearson : str or list
-            Pearson symbol(s) to parse by.
-        strukturbericht : str or list
-            Prototype Strukturbericht symbol(s) to parse by.
-        sg_number : int or list
-            Space group number(s) to parse by.
-        sg_hm : str or list
-            Space group international symbol(s) to parse by.
-        sg_schoenflies : str or list
-            Space group Schoenflies symbol(s) to parse by.
-        crystalfamily : str or list
-            Crystal structure families to parse by.
-        natypes : int or list
-            Number of atom types to parse by.
-        
-        Returns
-        -------
-        dict
-            The Mongo-style query
-        """     
-        mquery = super().mongoquery(name=name, id=id, key=key,
-                                    commonname=commonname, prototype=prototype,
-                                    pearson=pearson, strukturbericht=strukturbericht,
-                                    sg_number=sg_number, sg_hm=sg_hm,
-                                    sg_schoenflies=sg_schoenflies,
-                                    crystalfamily=crystalfamily, natypes=natypes)
-        return mquery
-
-    def cdcsquery(self, 
-                  id: Union[str, list, None] = None,
-                  key: Union[str, list, None] = None,
-                  commonname: Union[str, list, None] = None,
-                  prototype: Union[str, list, None] = None,
-                  pearson: Union[str, list, None] = None,
-                  strukturbericht: Union[str, list, None] = None,
-                  sg_number: Union[int, list, None] = None,
-                  sg_hm: Union[str, list, None] = None,
-                  sg_schoenflies: Union[str, list, None] = None,
-                  crystalfamily: Union[str, list, None] = None,
-                  natypes: Union[int, list, None] = None) -> dict:
-        """
-        Builds a CDCS-style query based on kwargs values for the record style.
-        
-        Parameters
-        ----------
-        id : str or list
-            The record id(s) to parse by.
-        key : str or list
-            The record key(s) to parse by.
-        commonname : str or list
-            Prototype common name(s) to parse by.
-        prototype : str or list
-            Prototype composition(s) to parse by.
-        pearson : str or list
-            Pearson symbol(s) to parse by.
-        strukturbericht : str or list
-            Prototype Strukturbericht symbol(s) to parse by.
-        sg_number : int or list
-            Space group number(s) to parse by.
-        sg_hm : str or list
-            Space group international symbol(s) to parse by.
-        sg_schoenflies : str or list
-            Space group Schoenflies symbol(s) to parse by.
-        crystalfamily : str or list
-            Crystal structure families to parse by.
-        natypes : int or list
-            Number of atom types to parse by.
-        
-        Returns
-        -------
-        dict
-            The CDCS-style query
-        """
-        mquery = super().cdcsquery(id=id, key=key,
-                                    commonname=commonname, prototype=prototype,
-                                    pearson=pearson, strukturbericht=strukturbericht,
-                                    sg_number=sg_number, sg_hm=sg_hm,
-                                    sg_schoenflies=sg_schoenflies,
-                                    crystalfamily=crystalfamily, natypes=natypes)
-        return mquery

@@ -12,9 +12,6 @@ from DataModelDict import DataModelDict as DM
 from yabadaba.record import Record
 from yabadaba import load_query
 
-# https://pandas.pydata.org/
-import pandas as pd
-
 # atomman imports
 from ... import System
 
@@ -23,6 +20,38 @@ class ReferenceCrystal(Record):
     Class for representing reference_crystal records that provide the structure
     information for DFT relaxed crystal structures obtained from DFT databases.
     """
+    def __init__(self,
+                 model: Union[str, io.IOBase, DM, None] = None,
+                 name: Optional[str] = None):
+        """
+        Initializes a Record object for a given style.
+        
+        Parameters
+        ----------
+        model : str, file-like object, DataModelDict
+            The contents of the record.
+        name : str, optional
+            The unique name to assign to the record.  If model is a file
+            path, then the default record name is the file name without
+            extension.
+        """
+        # Init properties
+        self.__composition = None
+        self.__symbols = None
+        self.__natoms = None
+        self.__natypes = None
+        self.__crystalfamily = None
+        self.__a = None
+        self.__b = None
+        self.__c = None
+        self.__alpha = None
+        self.__beta = None
+        self.__gamma = None
+        self.__ucell = None
+
+        # Call super init
+        super().__init__(model=model, name=name)
+
     @property
     def style(self) -> str:
         """str: The record style"""
@@ -38,6 +67,11 @@ class ReferenceCrystal(Record):
         """tuple: The module path and file name of the record's xsd schema"""
         return ('atomman.library.xsd', f'{self.style}.xsd')
 
+    @property
+    def xsl_filename(self) -> Tuple[str, str]:
+        """tuple: The module path and file name of the record's xsl transformer"""
+        return ('atomman.library.xsl', f'{self.style}.xsl')
+    
     @property
     def id(self) -> str:
         """str : The unique id for the record"""
@@ -97,7 +131,7 @@ class ReferenceCrystal(Record):
 
     @ucell.setter
     def ucell(self, value: System):
-        if isinstance(value, System):       
+        if isinstance(value, System):
             self.__ucell = value
         else:
             raise TypeError('ucell must be an atomman.System')
@@ -295,7 +329,7 @@ class ReferenceCrystal(Record):
             The name to assign to the record.  Often inferred from other
             attributes if not given.
         """
-        super().load_model(model, name=name)        
+        super().load_model(model, name=name)
         crystal = self.model[self.modelroot]
         
         self.__key = crystal['key']
@@ -321,7 +355,7 @@ class ReferenceCrystal(Record):
         # Set name as id if no name given
         try:
             self.name
-        except:
+        except AttributeError:
             self.name = self.id
 
     def metadata(self) -> dict:
@@ -359,184 +393,46 @@ class ReferenceCrystal(Record):
             'key': load_query(
                 style='str_match',
                 name='key', 
-                path=f'{self.modelroot}.key'),
+                path=f'{self.modelroot}.key',
+                description="search by reference crystal's UUID key"),
             'id': load_query(
                 style='str_match',
                 name='id',
-                path=f'{self.modelroot}.id'),
+                path=f'{self.modelroot}.id',
+                description="search by reference crystal's id"),
             'sourcename': load_query(
                 style='str_match',
                 name='sourcename',
-                path=f'{self.modelroot}.source.name'),
+                path=f'{self.modelroot}.source.name',
+                description='search by name of the source'),
             'sourcelink': load_query(
                 style='str_match',
                 name='sourcelink',
-                path=f'{self.modelroot}.source.link'),
+                path=f'{self.modelroot}.source.link',
+                description='search by URL host link for the source'),
             'crystalfamily': load_query(
                 style='str_match',
                 name='crystalfamily',
-                path=f'{self.modelroot}.system-info.cell.crystal-family'),
+                path=f'{self.modelroot}.system-info.cell.crystal-family',
+                description="search by reference crystal's crystal family"),
             'composition': load_query(
                 style='str_match',
                 name='composition',
-                path=f'{self.modelroot}.system-info.composition'),
+                path=f'{self.modelroot}.system-info.composition',
+                description="search by reference crystal's composition"),
             'symbols': load_query(
                 style='list_contains',
                 name='symbols',
-                path=f'{self.modelroot}.system-info.symbol'),
+                path=f'{self.modelroot}.system-info.symbol',
+                description="search by reference crystal's symbols"),
             'natoms': load_query(
                 style='int_match',
                 name='natoms',
-                path=f'{self.modelroot}.atomic-system.atoms.natoms'),
+                path=f'{self.modelroot}.atomic-system.atoms.natoms',
+                description="search by number of atoms in the reference crystal"),
             'natypes': load_query(
                 style='int_match',
                 name='natypes',
-                path=f'{self.modelroot}.system-info.cell.natypes'),
+                path=f'{self.modelroot}.system-info.cell.natypes',
+                description="search by number of atom types in the reference crystal"),
         }
-
-    def pandasfilter(self,
-                     dataframe: pd.DataFrame,
-                     name: Union[str, list, None] = None,
-                     id: Union[str, list, None] = None,
-                     key: Union[str, list, None] = None,
-                     sourcename: Union[str, list, None] = None,
-                     sourcelink: Union[str, list, None] = None,
-                     crystalfamily: Union[str, list, None] = None,
-                     composition: Union[str, list, None] = None,
-                     symbols: Union[str, list, None] = None,
-                     natoms: Union[int, list, None] = None,
-                     natypes: Union[int, list, None] = None) -> pd.Series:
-        """
-        Filters a pandas.DataFrame based on kwargs values for the record style.
-        
-        Parameters
-        ----------
-        dataframe : pandas.DataFrame
-            A table of metadata for multiple records of the record style.
-        name : str or list
-            The record name(s) to parse by.
-        id : str or list
-            The record id(s) to parse by.
-        key : str or list
-            The record key(s) to parse by.
-        sourcename : str or list
-            The name(s) of source databases to parse by.
-        sourcelink : str or list
-            The URL(s) of source databases to parse by.
-        crystalfamily : str or list
-            Crystal structure families to parse by.
-        composition : str or list
-            Compositions to parse by.
-        symbols : str or list
-            Element model symbol(s) to parse by.
-        natoms : int or list
-            Number of atoms in the unit cell to parse by.
-        natypes : int or list
-            Number of atom types to parse by.
-        
-        Returns
-        -------
-        pandas.Series
-            Boolean map of matching values
-        """
-        matches = super().pandasfilter(dataframe, name=name, id=id, key=key,
-                                       sourcename=sourcename, sourcelink=sourcelink,
-                                       crystalfamily=crystalfamily,
-                                       composition=composition, symbols=symbols,
-                                       natoms=natoms, natypes=natypes)
-        return matches
-
-    def mongoquery(self,
-                   name: Union[str, list, None] = None,
-                   id: Union[str, list, None] = None,
-                   key: Union[str, list, None] = None,
-                   sourcename: Union[str, list, None] = None,
-                   sourcelink: Union[str, list, None] = None,
-                   crystalfamily: Union[str, list, None] = None,
-                   composition: Union[str, list, None] = None,
-                   symbols: Union[str, list, None] = None,
-                   natoms: Union[int, list, None] = None,
-                   natypes: Union[int, list, None] = None) -> dict:
-        """
-        Builds a Mongo-style query based on kwargs values for the record style.
-        
-        Parameters
-        ----------
-        name : str or list
-            The record name(s) to parse by.
-        id : str or list
-            The record id(s) to parse by.
-        key : str or list
-            The record key(s) to parse by.
-        sourcename : str or list
-            The name(s) of source databases to parse by.
-        sourcelink : str or list
-            The URL(s) of source databases to parse by.
-        crystalfamily : str or list
-            Crystal structure families to parse by.
-        composition : str or list
-            Compositions to parse by.
-        symbols : str or list
-            Element model symbol(s) to parse by.
-        natoms : int or list
-            Number of atoms in the unit cell to parse by.
-        natypes : int or list
-            Number of atom types to parse by.
-        
-        Returns
-        -------
-        dict
-            The Mongo-style query
-        """     
-        mquery = super().mongoquery(name=name, id=id, key=key,
-                                    sourcename=sourcename, sourcelink=sourcelink,
-                                    crystalfamily=crystalfamily,
-                                    composition=composition, symbols=symbols,
-                                    natoms=natoms, natypes=natypes)
-        return mquery
-
-    def cdcsquery(self,
-                  id: Union[str, list, None] = None,
-                  key: Union[str, list, None] = None,
-                  sourcename: Union[str, list, None] = None,
-                  sourcelink: Union[str, list, None] = None,
-                  crystalfamily: Union[str, list, None] = None,
-                  composition: Union[str, list, None] = None,
-                  symbols: Union[str, list, None] = None,
-                  natoms: Union[int, list, None] = None,
-                  natypes: Union[int, list, None] = None) -> dict:
-        """
-        Builds a CDCS-style query based on kwargs values for the record style.
-        
-        Parameters
-        ----------
-        id : str or list
-            The record id(s) to parse by.
-        key : str or list
-            The record key(s) to parse by.
-        sourcename : str or list
-            The name(s) of source databases to parse by.
-        sourcelink : str or list
-            The URL(s) of source databases to parse by.
-        crystalfamily : str or list
-            Crystal structure families to parse by.
-        composition : str or list
-            Compositions to parse by.
-        symbols : str or list
-            Element model symbol(s) to parse by.
-        natoms : int or list
-            Number of atoms in the unit cell to parse by.
-        natypes : int or list
-            Number of atom types to parse by.
-        
-        Returns
-        -------
-        dict
-            The CDCS-style query
-        """
-        mquery = super().cdcsquery(id=id, key=key,
-                                    sourcename=sourcename, sourcelink=sourcelink,
-                                    crystalfamily=crystalfamily,
-                                    composition=composition, symbols=symbols,
-                                    natoms=natoms, natypes=natypes)
-        return mquery
