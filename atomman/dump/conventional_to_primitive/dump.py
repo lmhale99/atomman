@@ -105,29 +105,33 @@ def dump(system: System,
         if not is_basis:
             raise ValueError('system atoms do not seem to match indicated setting')
 
-    # Get rotations to convert conventional to 2x2x2 primitive (ensures int uvws)
-    c2p_uvws = miller.vector_primitive_to_conventional(2 * np.identity(3), setting=setting)
+    # Get rotations to convert conventional to 2x2x2 primitive (ensures int uvws), in case of hexagonal lattice
+    # the supercell must be a 3x3x3 primitive
+    if setting == 't1' or setting == 't2':
+        multip = 3
+    else:
+        multip = 2
 
-    # Construct a 2x2x2 primitive supercell by rotating the conventional cell
-    p8_cell, transform = system.rotate(c2p_uvws, return_transform=True)
-
+    cps_uvws = miller.vector_primitive_to_conventional(multip * np.identity(3), setting=setting)
+    # Construct a 2x2x2(or 3x3x3) primitive supercell by rotating the conventional cell
+    p_scell, transform = system.rotate(cps_uvws, return_transform=True)
     # Create a box for the primitive unit cell using half of all three box vects of p8_cell
-    box = Box(vects = p8_cell.box.vects / 2)
+    box = Box(vects = p_scell.box.vects / multip)
 
     # Apply the smallshift to p8_cell atomic positions to avoid boundary issues
-    p8_cell.atoms.pos += smallshift
-    p8_cell.wrap()
+    p_scell.atoms.pos += smallshift
+    p_scell.wrap()
 
     # Identify atoms inside p_box
-    keepindex = box.inside(p8_cell.atoms.pos)
-    assert np.sum(keepindex) == p8_cell.natoms / 8
+    keepindex = box.inside(p_scell.atoms.pos)
+    assert np.sum(keepindex) == p_scell.natoms / multip ** 3
 
     # Reverse smallshift
-    p8_cell.atoms.pos -= smallshift
-    p8_cell.wrap()
+    p_scell.atoms.pos -= smallshift
+    p_scell.wrap()
 
     # Create Atoms by slicing from p8_cell
-    atoms = p8_cell.atoms[keepindex]
+    atoms = p_scell.atoms[keepindex]
     p_ucell = System(box=box, atoms=atoms, symbols=system.symbols)
     p_ucell.wrap()
 
@@ -227,6 +231,18 @@ def check_setting_basis(ucell: System,
                            [0.5, 0.5, 0.0]])
         families = ['monoclinic', 'orthorhombic']
 
+    elif setting == 't1':
+        relpos = np.array([[0.0, 0.0, 0.0],
+                           [2./3., 1./3., 1./3.],
+                           [1./3., 2./3., 2./3.]])
+        families = ['hexagonal']
+
+    elif setting == 't2':
+        relpos = np.array([[0.0, 0.0, 0.0],
+                           [1./3., 2./3., 1./3.],
+                           [2./3., 1./3., 2./3.]])
+        families = ['hexagonal']
+
     else:
         raise ValueError('invalid setting: must be p, i, f, a, b, or c')
 
@@ -237,8 +253,8 @@ def check_setting_basis(ucell: System,
     pos = ucell.box.position_relative_to_cartesian(relpos)
 
     atype = None
-    for p in pos:
 
+    for p in pos:
         # Check for atom at pos
         index = index_of_pos(ucell, p, rtol=rtol, atol=atol)
         if np.sum(index) == 0:
