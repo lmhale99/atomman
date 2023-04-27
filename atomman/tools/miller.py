@@ -240,12 +240,12 @@ def vector_primitive_to_conventional(indices: npt.ArrayLike,
     lattice_vectors['f'] = np.array([[0.5, 0.5, 0.0],
                                      [0.0, 0.5, 0.5],
                                      [0.5, 0.0, 0.5]])
-    lattice_vectors['t1'] = np.array([[-1.0, 1.0, 1.0],
-                                     [2.0, 1.0, 1.0],
+    lattice_vectors['t1'] = np.array([[2.0, 1.0, 1.0],
+                                     [-1.0, 1.0, 1.0],
                                      [-1.0, -2.0, 1.0]]) / 3.
-    lattice_vectors['t2'] = np.array([[-1.0, 1.0, 1.0],
-                                      [2.0, 1.0, 1.0],
-                                      [-1.0, -2.0, 1.0]]) / 3.
+    lattice_vectors['t2'] = np.array([[2.0, 1.0, 1.0],
+                                     [-1.0, 1.0, 1.0],
+                                     [-1.0, -2.0, 1.0]]) / 3.
 
     try:
         lat = lattice_vectors[setting]
@@ -307,11 +307,11 @@ def vector_conventional_to_primitive(indices: npt.ArrayLike,
     lattice_vectors['f'] = np.array([[1.0, -1.0, 1.0],
                                      [1.0, 1.0, -1.0],
                                      [-1.0, 1.0, 1.0]])
-    lattice_vectors['t1'] = np.array([[-1.0, 1.0, 0.0],
-                                      [1.0, 0.0, -1.0],
+    lattice_vectors['t1'] = np.array([[1.0, -1.0, 0.0],
+                                      [0.0, 1.0, -1.0],
                                       [1.0, 1.0, 1.0]])
-    lattice_vectors['t2'] = np.array([[1.0, -1.0, 0.0],
-                                      [-1.0, 0.0, 1.0],
+    lattice_vectors['t2'] = np.array([[-1.0, 1.0, 0.0],
+                                      [1.0, 0.0, -1.0],
                                       [1.0, 1.0, 1.0]])
 
     try:
