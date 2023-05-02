@@ -111,7 +111,7 @@ class Dislocation():
         self.__transform = self.dislsol.transform
 
         # Build rcell and set orientation parameters
-        self.__set_cells(ucell, ξ_uvw, setting=ucell_setting, maxindex=5)
+        self.__set_cells(ucell, ξ_uvw, setting=ucell_setting, maxindex=5, tol=tol)
 
         # Set shift value based on shift parameters
         self.__identify_shifts(tol)
@@ -245,16 +245,21 @@ class Dislocation():
         else:
             raise ValueError('disl_system not built yet: must call monopole() or periodicarray() first')
 
-    def __set_cells(self, ucell, ξ_uvw, setting, maxindex=5):
+    def __set_cells(self, ucell, ξ_uvw, setting, maxindex=5, tol=1e-8):
 
         # Extract dislsol
         dislsol = self.dislsol
 
         # Get primitive cell and associated transformation matrix
         ucell_prim, c2p_transform = ucell.dump('conventional_to_primitive', setting=setting,
-                                                return_transform=True)
+                                                return_transform=True, atol=tol)
 
         # Convert ξ_uvw to the primitive cell
+        if ξ_uvw.shape[-1] == 4:
+            ξ_uvw = miller.vector4to3(ξ_uvw)
+            hexindices = True
+        else:
+            hexindices = False
         ξ_uvw_p = miller.vector_conventional_to_primitive(ξ_uvw, setting=setting)
 
         # Get Cartesian m, n axes relative to ucell_prim
@@ -322,7 +327,11 @@ class Dislocation():
         self.__ucell_prim = ucell_prim
         self.__rcell = rcell
 
-        self.__uvws = miller.vector_primitive_to_conventional(uvws, setting=setting)
+        uvws_conv = miller.vector_primitive_to_conventional(uvws, setting=setting)
+        if hexindices:
+            self.__uvws = miller.vector3to4(uvws_conv)
+        else:
+            self.__uvws = uvws_conv
         self.__uvws_prim = uvws
         self.__lineindex = lineindex
         self.__cutindex = cutindex
