@@ -37,9 +37,11 @@ def dump(system: System,
         A conventional unit cell system to find the corresponding primitive
         unit cell for.
     setting : str, optional
-        The conventional cell space lattice setting. Allowed values are
-        'p' for primitive, 'f' for face-centered, 'i' for body centered, and
-        'a', 'b', or 'c' for side-centered.
+        The lattice setting value.  Allowed values are 'p' for primitive,
+        'i' for body-centered, 'f' for face-centered, 'a', 'b', or 'c' for
+        side-centered, and 't', 't1', or 't2' for hexagonal representations of
+        trigonal systems.  Giving 't' will check if system is consistent with
+        either 't1' or 't2'.
     smallshift : array-like object or None, optional
         A small rigid body shift to apply to the atomic positions when searching
         for which atoms are within the primitive cell.  This helps avoid
@@ -95,39 +97,58 @@ def dump(system: System,
         smallshift = np.array([0.001, 0.001, 0.001])
     else:
         smallshift = np.asarray(smallshift)
-        if smallshift.shape != 3:
+        if smallshift.shape != (3, ):
             raise ValueError('smallshift must be a 3D vector')
 
     # Check that system is of the proper setting
-    if check_basis:
+    if check_basis and setting != 't':
         is_basis = check_setting_basis(system, setting=setting, rtol=rtol, atol=atol,
-                                       check_family=check_family)
+                                        check_family=check_family)
         if not is_basis:
             raise ValueError('system atoms do not seem to match indicated setting')
+    
+    # Check for generic 't' and try to identify if t1 or t2
+    elif check_basis and setting == 't':
+        is_t1 = check_setting_basis(system, setting='t1', rtol=rtol, atol=atol,
+                                    check_family=check_family)
+        is_t2 = check_setting_basis(system, setting='t2', rtol=rtol, atol=atol,
+                                    check_family=check_family)
+        if is_t1:
+            setting = 't1'
+        elif is_t2:
+            setting = 't2'
+        else:
+            raise ValueError('system atoms do not seem to match either t1 or t2 setting')
 
-    # Get rotations to convert conventional to 2x2x2 primitive (ensures int uvws)
-    c2p_uvws = miller.vector_primitive_to_conventional(2 * np.identity(3), setting=setting)
+    # 3x3x3 primitive cell for trigonal-hexagonal transformations
+    # 2x2x2 primitive cell for other transformations
+    if setting in ['t1', 't2', 't']:
+        multip = 3
+    else:
+        multip = 2
 
-    # Construct a 2x2x2 primitive supercell by rotating the conventional cell
-    p8_cell, transform = system.rotate(c2p_uvws, return_transform=True)
-
+    cps_uvws = miller.vector_primitive_to_conventional(multip * np.identity(3), setting=setting)
+    # Construct a 2x2x2 (or 3x3x3) primitive supercell by rotating the conventional cell
+    p_scell, transform = system.rotate(cps_uvws, return_transform=True)
     # Create a box for the primitive unit cell using half of all three box vects of p8_cell
-    box = Box(vects = p8_cell.box.vects / 2)
+    box = Box(vects = p_scell.box.vects / multip)
 
     # Apply the smallshift to p8_cell atomic positions to avoid boundary issues
-    p8_cell.atoms.pos += smallshift
-    p8_cell.wrap()
+    p_scell.atoms.pos += smallshift
+    p_scell.wrap()
 
     # Identify atoms inside p_box
-    keepindex = box.inside(p8_cell.atoms.pos)
-    assert np.sum(keepindex) == p8_cell.natoms / 8
+    keepindex = box.inside(p_scell.atoms.pos)
 
+    num_expected = int(p_scell.natoms / multip ** 3)
+    assert np.sum(keepindex) == num_expected, f'{np.sum(keepindex)} atoms found, {num_expected} expected'
+        
     # Reverse smallshift
-    p8_cell.atoms.pos -= smallshift
-    p8_cell.wrap()
+    p_scell.atoms.pos -= smallshift
+    p_scell.wrap()
 
     # Create Atoms by slicing from p8_cell
-    atoms = p8_cell.atoms[keepindex]
+    atoms = p_scell.atoms[keepindex]
     p_ucell = System(box=box, atoms=atoms, symbols=system.symbols)
     p_ucell.wrap()
 
@@ -155,8 +176,8 @@ def check_setting_basis(ucell: System,
                         atol: float = 1e-08,
                         check_family: bool = True) -> bool:
     """
-    Checks if a unit cell system is consistent with one of the standard 14
-    Bravais space lattices.  For the indicated cell setting, a search is
+    Checks if a unit cell system is consistent with one of the standard
+    conventional cell settings.  For the indicated cell setting, a search is
     performed to verify that atoms of the same type are positioned at the
     lattice site(s), and that the lattice parameters are consistent with a
     crystal family that has that setting.
@@ -170,9 +191,10 @@ def check_setting_basis(ucell: System,
         The unit cell system to check if it appears consistent with the given
         crystal space group lattice setting.
     setting : str
-        The Bravais space lattice setting value.  Allowed values
-        are 'p' for primitive, 'i' for body-centered, 'f' for face-centered,
-        and 'a', 'b', or 'c' for side-centered.
+        The lattice setting value.  Allowed values are 'p' for primitive,
+        'i' for body-centered, 'f' for face-centered, 'a', 'b', or 'c' for
+        side-centered, and 't1' or 't2' for hexagonal representations of
+        trigonal systems.
     rtol : float, optional
         Relative tolerance to use for numpy.isclose.  This is used both to
         check for atoms in the equivalent lattice sites and the crystal family.
@@ -227,8 +249,20 @@ def check_setting_basis(ucell: System,
                            [0.5, 0.5, 0.0]])
         families = ['monoclinic', 'orthorhombic']
 
+    elif setting == 't1':
+        relpos = np.array([[0.0, 0.0, 0.0],
+                           [2.0, 1.0, 1.0],
+                           [1.0, 2.0, 2.0]]) / 3.
+        families = ['hexagonal']
+
+    elif setting == 't2':
+        relpos = np.array([[0.0, 0.0, 0.0],
+                           [1.0, 2.0, 1.0],
+                           [2.0, 1.0, 2.0]]) / 3.
+        families = ['hexagonal']
+
     else:
-        raise ValueError('invalid setting: must be p, i, f, a, b, or c')
+        raise ValueError('invalid setting: must be p, i, f, a, b, c, t, t1 or t2')
 
     # Check that crystal family + setting is a Bravais space lattice
     if check_family and family not in families:
@@ -237,8 +271,8 @@ def check_setting_basis(ucell: System,
     pos = ucell.box.position_relative_to_cartesian(relpos)
 
     atype = None
-    for p in pos:
 
+    for p in pos:
         # Check for atom at pos
         index = index_of_pos(ucell, p, rtol=rtol, atol=atol)
         if np.sum(index) == 0:

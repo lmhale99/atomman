@@ -185,13 +185,14 @@ def vector_crystal_to_cartesian(indices: npt.ArrayLike,
         raise ValueError('Invalid index dimensions')
 
     return indices.dot(box.vects)
-    
+
+
 def vector_primitive_to_conventional(indices: npt.ArrayLike,
                                      setting: str = 'p') -> np.ndarray:
     """
     Converts crystal indices relative to a primitive cell 
     to indices relative to a conventional cell in a specified setting.
-    
+
     Parameters
     ----------
     indices : array-like object
@@ -199,15 +200,15 @@ def vector_primitive_to_conventional(indices: npt.ArrayLike,
         relative to the primitive cell
     setting : str
         Specifies the conventional cell setting: 'p' for primitive,
-        'a', 'b', 'c' for side-centered, 'i' for body-centered, and
-        'f' for face-centered.
-   
+        'a', 'b', 'c' for side-centered, 'i' for body-centered,
+        'f' for face-centered, and 't' for trigonal systems.
+
     Returns
     -------
     numpy.ndarray
         (..., 3) array of [uvw] Miller crystallographic indices
         relative to the conventional cell
-        
+
     Raises
     ------
     ValueError
@@ -221,38 +222,52 @@ def vector_primitive_to_conventional(indices: npt.ArrayLike,
         raise ValueError('Invalid index dimensions')
 
     lattice_vectors = {}
-    lattice_vectors['p'] = np.array([[ 1.0, 0.0, 0.0],
-                                     [ 0.0, 1.0, 0.0],
-                                     [ 0.0, 0.0, 1.0]])
-    lattice_vectors['a'] = np.array([[ 1.0, 0.0, 0.0],
-                                     [ 0.0, 0.5, 0.5],
-                                     [ 0.0,-0.5, 0.5]])
-    lattice_vectors['b'] = np.array([[ 0.5, 0.0, 0.5],
-                                     [ 0.0, 1.0, 0.0],
-                                     [-0.5, 0.0, 0.5]])
-    lattice_vectors['c'] = np.array([[ 0.5, 0.5, 0.0],
-                                     [-0.5, 0.5, 0.0],
-                                     [ 0.0, 0.0, 1.0]])
-    lattice_vectors['i'] = np.array([[ 0.5, 0.5, 0.5],
-                                     [-0.5, 0.5,-0.5],
-                                     [-0.5,-0.5, 0.5]])
-    lattice_vectors['f'] = np.array([[ 0.5, 0.5, 0.0],
-                                     [ 0.0, 0.5, 0.5],
-                                     [ 0.5, 0.0, 0.5]])
+    lattice_vectors['p'] = np.array([[  1.0,  0.0,  0.0],
+                                     [  0.0,  1.0,  0.0],
+                                     [  0.0,  0.0,  1.0]])
     
+    lattice_vectors['a'] = np.array([[  1.0,  0.0,  0.0],
+                                     [  0.0,  0.5,  0.5],
+                                     [  0.0, -0.5,  0.5]])
+    
+    lattice_vectors['b'] = np.array([[  0.5,  0.0,  0.5],
+                                     [  0.0,  1.0,  0.0],
+                                     [ -0.5,  0.0,  0.5]])
+    
+    lattice_vectors['c'] = np.array([[  0.5,  0.5,  0.0],
+                                     [ -0.5,  0.5,  0.0],
+                                     [  0.0,  0.0,  1.0]])
+    
+    lattice_vectors['i'] = np.array([[  0.5,  0.5,  0.5],
+                                     [ -0.5,  0.5, -0.5],
+                                     [ -0.5, -0.5,  0.5]])
+    
+    lattice_vectors['f'] = np.array([[  0.5,  0.5,  0.0],
+                                     [  0.0,  0.5,  0.5],
+                                     [  0.5,  0.0,  0.5]])
+    
+    lattice_vectors['t1'] = np.array([[  2.0,  1.0,  1.0],
+                                      [ -1.0,  1.0,  1.0],
+                                      [ -1.0, -2.0,  1.0]]) / 3.
+    
+    lattice_vectors['t2'] = np.array([[ -2.0, -1.0,  1.0],
+                                      [  1.0, -1.0,  1.0],
+                                      [  1.0,  2.0,  1.0]]) / 3.
+
     try:
         lat = lattice_vectors[setting]
     except:
-        raise ValueError('Unknown lattice setting. Allowed values are: p, a, b, c, i, and f')
-    
+        raise ValueError('Unknown lattice setting. Allowed values are: p, a, b, c, i, t and f')
+
     return indices.dot(lat)
+
 
 def vector_conventional_to_primitive(indices: npt.ArrayLike,
                                      setting: str = 'p') -> np.ndarray:
     """
     Converts crystal indices relative to a conventional cell 
     in a specified setting to indices relative to a primitive cell.
-    
+
     Parameters
     ----------
     indices : array-like object
@@ -260,15 +275,15 @@ def vector_conventional_to_primitive(indices: npt.ArrayLike,
         relative to the conventional cell
     setting : str
         Specifies the conventional cell setting: 'p' for primitive,
-        'a', 'b', 'c' for side-centered, 'i' for body-centered, and
-        'f' for face-centered.
-   
+        'a', 'b', 'c' for side-centered, 'i' for body-centered,
+        'f' for face-centered, and 't1' or 't2' for trigonal systems.
+
     Returns
     -------
     numpy.ndarray
         (..., 3) array of [uvw] Miller crystallographic indices
         relative to the primitive cell
-        
+
     Raises
     ------
     ValueError
@@ -279,32 +294,45 @@ def vector_conventional_to_primitive(indices: npt.ArrayLike,
     indices = np.asarray(indices)
     if indices.shape[-1] != 3:
         raise ValueError('Invalid index dimensions')
-    
+
     lattice_vectors = {}
-    lattice_vectors['p'] = np.array([[ 1.0, 0.0, 0.0],
-                                     [ 0.0, 1.0, 0.0],
-                                     [ 0.0, 0.0, 1.0]])
-    lattice_vectors['a'] = np.array([[ 1.0, 0.0, 0.0],
-                                     [ 0.0, 1.0,-1.0],
-                                     [ 0.0, 1.0, 1.0]])
-    lattice_vectors['b'] = np.array([[ 1.0, 0.0,-1.0],
-                                     [ 0.0, 1.0, 0.0],
-                                     [ 1.0, 0.0, 1.0]])
-    lattice_vectors['c'] = np.array([[ 1.0,-1.0, 0.0],
-                                     [ 1.0, 1.0, 0.0],
-                                     [ 0.0, 0.0, 1.0]])
-    lattice_vectors['i'] = np.array([[ 0.0,-1.0,-1.0],
-                                     [ 1.0, 1.0, 0.0],
-                                     [ 1.0, 0.0, 1.0]])
-    lattice_vectors['f'] = np.array([[ 1.0,-1.0, 1.0],
-                                     [ 1.0, 1.0,-1.0],
-                                     [-1.0, 1.0, 1.0]])
+    lattice_vectors['p'] = np.array([[  1.0,  0.0,  0.0],
+                                     [  0.0,  1.0,  0.0],
+                                     [  0.0,  0.0,  1.0]])
     
+    lattice_vectors['a'] = np.array([[  1.0,  0.0,  0.0],
+                                     [  0.0,  1.0, -1.0],
+                                     [  0.0,  1.0,  1.0]])
+    
+    lattice_vectors['b'] = np.array([[  1.0,  0.0, -1.0],
+                                     [  0.0,  1.0,  0.0],
+                                     [  1.0,  0.0,  1.0]])
+    
+    lattice_vectors['c'] = np.array([[  1.0, -1.0,  0.0],
+                                     [  1.0,  1.0,  0.0],
+                                     [  0.0,  0.0,  1.0]])
+    
+    lattice_vectors['i'] = np.array([[  0.0, -1.0, -1.0],
+                                     [  1.0,  1.0,  0.0],
+                                     [  1.0,  0.0,  1.0]])
+    
+    lattice_vectors['f'] = np.array([[  1.0, -1.0,  1.0],
+                                     [  1.0,  1.0, -1.0],
+                                     [ -1.0,  1.0,  1.0]])
+    
+    lattice_vectors['t1'] = np.array([[  1.0, -1.0,  0.0],
+                                      [  0.0,  1.0, -1.0],
+                                      [  1.0,  1.0,  1.0]])
+    
+    lattice_vectors['t2'] = np.array([[ -1.0,  1.0,  0.0],
+                                      [  0.0, -1.0,  1.0],
+                                      [  1.0,  1.0,  1.0]])
+
     try:
         lat = lattice_vectors[setting]
     except:
-        raise ValueError('Unknown lattice setting. Allowed values are: p, a, b, c, i, and f')
-    
+        raise ValueError('Unknown lattice setting. Allowed values are: p, a, b, c, i, t1, t2, and f')
+
     return indices.dot(lat)
 
 def plane_crystal_to_cartesian(indices: npt.ArrayLike,
