@@ -22,7 +22,8 @@ class ReferenceCrystal(Record):
     """
     def __init__(self,
                  model: Union[str, io.IOBase, DM, None] = None,
-                 name: Optional[str] = None):
+                 name: Optional[str] = None,
+                 database = None):
         """
         Initializes a Record object for a given style.
         
@@ -34,6 +35,8 @@ class ReferenceCrystal(Record):
             The unique name to assign to the record.  If model is a file
             path, then the default record name is the file name without
             extension.
+        database : yabadaba.Database, optional
+            Allows for a default database to be associated with the record.
         """
         # Init properties
         self.__composition = None
@@ -50,7 +53,7 @@ class ReferenceCrystal(Record):
         self.__ucell = None
 
         # Call super init
-        super().__init__(model=model, name=name)
+        super().__init__(model=model, name=name, database=database)
 
     @property
     def style(self) -> str:
