@@ -261,26 +261,26 @@ def table_dump(system,
             df['supos[0]'] = spos[:,0]
             df['supos[1]'] = spos[:,1]
             df['supos[2]'] = spos[:,2]
-    
+
     # Loop over all properties
     for prop in prop_info:
         pname = prop['prop_name']
-        
+
         # loop over all table names and property indexes
         for tname, (index, istr) in zip(prop['table_name'], # pylint: disable=unused-variable
                                         indexstr(prop['shape'])):
-            
+
             # Build name change dict
             key_rename[pname + istr] = tname
-            
+
             # Convert units if needed
             if prop['unit'] is not None:
                 df[pname + istr] = uc.get_in_units(df[pname + istr], prop['unit'])
-    
+
     # Rename and reorganize
     df = df.rename(columns=key_rename)[list(key_rename.values())]
-  
+
     # Generate table
     sep = ' '
     return df.to_csv(path_or_buf=f, sep=sep, index=None, header=False,
-                     float_format=float_format, line_terminator='\n')
+                     float_format=float_format, lineterminator='\n')
