@@ -138,20 +138,20 @@ def dump(system,
                       header=header,
                       float_format=float_format,
                       encoding='ascii',
-                      line_terminator='\n',
+                      lineterminator='\n',
                       )
-    
+
     returns = []
-    
+
     if table is not None:
         returns.append(table)
-    
+
     if return_prop_info is True:
         returns.append(prop_info)
-        
+
     if len(returns) == 1:
         return returns[0]
     elif len(returns) > 1:
         return tuple(returns)
-    
+
     return
