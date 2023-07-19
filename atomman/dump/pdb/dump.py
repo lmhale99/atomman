@@ -5,7 +5,8 @@ from math import ceil
 from typing import Union
 
 def dump(system,
-         f: Union[str, io.IOBase, None] = None):
+         f: Union[str, io.IOBase, None] = None,
+         ignoresymbols: bool = False):
     """
     Dumps the atomic configuration to the pdb format.  Since atomman only tracks
     atomic positions, this simply sets the atomic configurations and cell
@@ -19,6 +20,11 @@ def dump(system,
     f : str or file-like object, optional
         File path or file-like object to write the content to.  If not given,
         then the content is returned as a str.
+    ignoresymbols : bool, optional
+        Setting this to True will save all atom types as unknowns rather than
+        as their element symbols.  This is useful in tricking some pdb-based
+        tools into recognizing the atoms if the model symbols differ from
+        elemental symbols or the element is H. 
     """
     # Build CRYST1 from box information
     a = system.box.a
@@ -49,8 +55,13 @@ def dump(system,
         for atom in range(nitems):
             id = atom + 1
             aid = start + atom
-            symbol = symbols[atype[aid]]
-            lines.append(f'ATOM  {id:5} {symbol:>4} MOL     1    {pos[aid,0]:8.3f}{pos[aid,1]:8.3f}{pos[aid,2]:8.3f}  1.00  0.00          {symbol.upper()}')
+            name = symbols[atype[aid]]
+            if ignoresymbols or name is None:
+                name = 'UNX'
+                symbol = f'X{atype[aid]+1}'
+            else:
+                symbol = name.upper()
+            lines.append(f'HETATM{id:5} {name:4} MOL     1    {pos[aid,0]:8.3f}{pos[aid,1]:8.3f}{pos[aid,2]:8.3f}  1.00  0.00          {symbol:>2}')
         lines.append('ENDMDL')
     lines.append('')
 

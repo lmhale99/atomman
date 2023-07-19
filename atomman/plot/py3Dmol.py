@@ -3,6 +3,7 @@
 from typing import Union, Optional
 
 # http://www.numpy.org/
+import numpy as np
 import numpy.typing as npt
 
 try:
@@ -39,8 +40,10 @@ def view_3d(system: System,
     ----------
     system : atomman.System
         The atomic system to generate the visualization for.
-    atomsize : float
-        The radius size for the atomic spheres.  Default value is 1.
+    atomsize : float or list
+        The radius size(s) for the atomic spheres.  A single value will make
+        all atoms the same size, whereas an iterable allows for each atom type
+        to be sized differently.  Default value is 1.
     prop_name : str
         The name of the per-atom property stored in system that you want to
         color the atoms by.  Default value is 'atype'.
@@ -83,11 +86,20 @@ def view_3d(system: System,
 
     # Init view and add configuration and unit cell
     view = py3Dmol.view(width=width, height=height)
-    view.addModel(system.dump('pdb'), 'pdb')
+    view.addModel(system.dump('pdb', ignoresymbols=True), 'pdb')
     view.addUnitCell()
+
+    # Manage atom sizes
+    if hasattr(atomsize, '__iter__'):
+        assert len(atomsize) == system.natypes
+        atomsize = np.asarray(atomsize, dtype=float)
+        radii = atomsize[system.atoms.atype-1]
+    else:
+        radii = np.full(system.natoms, atomsize, dtype=float)
 
     for i in range(system.natoms):
         color = colors[i]
-        view.setStyle({'model': -1, 'serial': i+1}, {'sphere':{'radius':atomsize, 'color':color}})
+        radius = radii[i]
+        view.setStyle({'model': -1, 'serial': i+1}, {'sphere':{'radius':radius, 'color':color}})
     view.zoomTo()
     view.show()
