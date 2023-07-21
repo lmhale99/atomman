@@ -60,7 +60,7 @@ class Dislocation(Record):
     def modelroot(self) -> str:
         """str: The root element of the content"""
         return 'dislocation'
-    
+
     @property
     def key(self) -> str:
         """str : A UUID4 key assigned to the record"""
@@ -71,7 +71,7 @@ class Dislocation(Record):
     @key.setter
     def key(self, value: str):
         self.__key = str(value)
-    
+
     @property
     def id(self) -> str:
         """str : A unique id assigned to the record"""
@@ -115,7 +115,7 @@ class Dislocation(Record):
     @slip_plane.setter
     def slip_plane(self, value: npt.ArrayLike):
         value = np.asarray(value, dtype=int)
-        assert value.shape == (3,)
+        assert value.shape == (3,) or value.shape == (4,)
         self.__slip_plane = value
 
     @property
@@ -128,7 +128,7 @@ class Dislocation(Record):
     @line_direction.setter
     def line_direction(self, value: npt.ArrayLike):
         value = np.asarray(value, dtype=int)
-        assert value.shape == (3,)
+        assert value.shape == (3,) or value.shape == (4,)
         self.__line_direction = value
 
     @property
@@ -148,7 +148,7 @@ class Dislocation(Record):
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__parameters
-    
+
     def load_model(self,
                    model: Union[str, io.IOBase, DM],
                    name: Optional[str] = None):
@@ -221,10 +221,10 @@ class Dislocation(Record):
         if 'shift' in self.parameters:
             meta['shift'] = self.parameters['shift']
         if 'shiftscale' in self.parameters:
-            meta['shiftscale'] = self.parameters['shiftscale']        
+            meta['shiftscale'] = self.parameters['shiftscale']
         if 'shiftindex' in self.parameters:
             meta['shiftindex'] = self.parameters['shiftindex']
-        
+
         return meta
 
     @property
@@ -233,7 +233,7 @@ class Dislocation(Record):
         return {
             'key': load_query(
                 style='str_match',
-                name='key', 
+                name='key',
                 path=f'{self.modelroot}.key',
                 description="search by dislocation parameter set's UUID key"),
             'id': load_query(

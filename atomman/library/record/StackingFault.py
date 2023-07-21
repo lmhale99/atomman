@@ -46,17 +46,17 @@ class StackingFault(Record):
     def xsd_filename(self) -> Tuple[str, str]:
         """tuple: The module path and file name of the record's xsd schema"""
         return ('atomman.library.xsd', f'{self.style}.xsd')
-    
+
     @property
     def xsl_filename(self) -> Tuple[str, str]:
         """tuple: The module path and file name of the record's xsl transformer"""
         return ('atomman.library.xsl', f'{self.style}.xsl')
-    
+
     @property
     def modelroot(self) -> str:
         """str: The root element of the content"""
         return 'stacking-fault'
-    
+
     @property
     def key(self) -> str:
         """str : A UUID4 key assigned to the record"""
@@ -67,7 +67,7 @@ class StackingFault(Record):
     @key.setter
     def key(self, value: str):
         self.__key = str(value)
-    
+
     @property
     def id(self) -> str:
         """str : A unique id assigned to the record"""
@@ -155,7 +155,7 @@ class StackingFault(Record):
         if 'shiftindex' in self.parameters:
             meta['shiftindex'] = self.parameters['shiftindex']
         meta['cutboxvector'] = self.parameters['cutboxvector']
-        
+
         return meta
 
     @property

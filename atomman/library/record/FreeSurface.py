@@ -50,12 +50,12 @@ class FreeSurface(Record):
     def xsl_filename(self) -> Tuple[str, str]:
         """tuple: The module path and file name of the record's xsl transformer"""
         return ('atomman.library.xsl', f'{self.style}.xsl')
-    
+
     @property
     def modelroot(self) -> str:
         """str: The root element of the content"""
         return 'free-surface'
-    
+
     @property
     def key(self) -> str:
         """str : A UUID4 key assigned to the record"""
@@ -66,7 +66,7 @@ class FreeSurface(Record):
     @key.setter
     def key(self, value: str):
         self.__key = str(value)
-    
+
     @property
     def id(self) -> str:
         """str : A unique id assigned to the record"""
@@ -152,7 +152,7 @@ class FreeSurface(Record):
         if 'shiftindex' in self.parameters:
             meta['shiftindex'] = self.parameters['shiftindex']
         meta['cutboxvector'] = self.parameters['cutboxvector']
-        
+
         return meta
 
     @property
