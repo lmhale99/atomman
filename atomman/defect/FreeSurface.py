@@ -1,23 +1,29 @@
 # coding: utf-8
 # Standard Python libraries
+import io
 from itertools import product
 from typing import Optional, Tuple, Union
+
+# https://github.com/usnistgov/DataModelDict
+from DataModelDict import DataModelDict as DM
 
 # http://www.numpy.org/
 import numpy as np
 import numpy.typing as npt
 
+from yabadaba.record import Record
+
 from . import free_surface_basis
 from ..tools import miller
 from ..region import Plane
-from .. import System
+from .. import System, load
+from ..library import load_record, Database
 
 try:
     import spglib
     has_spglib = True
 except ImportError:
     has_spglib = False
-
 
 class FreeSurface():
     """
@@ -30,6 +36,9 @@ class FreeSurface():
                  cutboxvector: str = 'c',
                  maxindex: Optional[int] = None,
                  conventional_setting: str = 'p',
+                 shift: Optional[npt.ArrayLike] = None,
+                 shiftindex: Optional[int] = None,
+                 shiftscale: bool = False,
                  tol: float = 1e-7):
         """
         Class initializer.  Identifies the proper rotations for the given hkl plane
@@ -50,12 +59,30 @@ class FreeSurface():
             out-of-plane vector.  If not given, will use the largest absolute
             index between the given hkl and the initial in-plane vector guesses.
         conventional_setting : str, optional
-            Allows for rotations of a primitive unit cell to be determined from
-            (hkl) indices specified relative to a conventional unit cell.  Allowed
-            settings: 'p' for primitive (no conversion), 'f' for face-centered,
-            'i' for body-centered, and 'a', 'b', or 'c' for side-centered.  Default
-            behavior is to perform no conversion, i.e. take (hkl) relative to the
-            given ucell.
+            Indicates the space lattice setting of the given unit cell, i.e.
+            'p' for primitive, 'i' for body-centered, 'f' for face-centered,
+            'a', 'b', or 'c' for side-centered and 't1', or 't2' for trigonal
+            in a hexagonal setting.  Setting this with the appropriate
+            conventional unit cell allows for identifying lattice vectors that
+            are not integers with respect to the conventional unit cell.  This
+            also creates the rotated cell from a compatible primitive cell,
+            thereby the final dislocation configurations can be smaller than
+            possible solely from the conventional unit cell.
+        shift : array-like object, optional
+            Applies a shift to all atoms. Different values allow for free surfaces with
+            different termination planes to be selected.  shift is taken as absolute
+            if shiftscale is False, or relative to the rotated cell's box vectors
+            if shiftscale is True.  Cannot be given with shiftindex.  If
+            neither shift nor shiftindex is given then shiftindex = 0 is used.
+        shiftindex : float, optional
+            The index of the identified shifts based on the rotated
+            cell to use.  Different values allow for the selection of different
+            atomic planes neighboring the slip plane.  Cannot be given with shift.
+            If neither shift nor shiftindex is given then shiftindex = 0 is used.
+        shiftscale : bool, optional
+            If False (default), a given shift value will be taken as absolute
+            Cartesian.  If True, a given shift will be taken relative to the
+            rotated cell's box vectors.
         tol : float, optional
             Tolerance parameter used to round off near-zero values.  Default
             value is 1e-8.
@@ -126,6 +153,118 @@ class FreeSurface():
         self.__system = None
         self.__surfacearea = None
 
+        # Set shift
+        self.set_shift(shift=shift, shiftindex=shiftindex, shiftscale=shiftscale)
+
+    @classmethod
+    def fromrecord(cls,
+                   record: Union[str, io.IOBase, DM, Record],
+                   ucell: Union[System, str, io.IOBase],
+                   maxindex: Optional[int] = None,
+                   tol: float = 1e-7):
+        """
+        Construct a FreeSurface object based on parameters in a free_surface
+        record and unit cell information.
+
+        Parameters
+        ----------
+        record : atomman.library.record.FreeSurface, str, file-like object or DataModelDict
+            A FreeSurface record object or the model contents for one.
+        ucell : atomman.System
+            The unit cell to use in generating the system.
+        maxindex : int, optional
+            Max uvw index value to use in identifying the best uvw set for the
+            out-of-plane vector.  If not given, will use the largest absolute
+            index between the given hkl and the initial in-plane vector guesses.
+        tol : float, optional
+            Tolerance parameter used to round off near-zero values.  Default
+            value is 1e-8.
+        """
+        # Create record object if needed
+        if not isinstance(record, Record):
+            record = load_record('free_surface', model=record)
+
+        # Extract parameters in the record
+        hkl = miller.fromstring(record.parameters['hkl'])
+        shiftindex = int(record.parameters.get('shiftindex', 0))
+        cutboxvector = record.parameters['cutboxvector']
+        conventional_setting = record.parameters.get('conventional_setting', 'p')
+
+        return cls(hkl=hkl, ucell=ucell, cutboxvector=cutboxvector,
+                   maxindex=maxindex, shiftindex=shiftindex,
+                   conventional_setting=conventional_setting, tol=tol)
+
+    @classmethod
+    def fromdatabase(cls,
+                     name: Optional[str] = None,
+                     ucell: Optional[System] = None,
+                     database: Optional[Database] = None,
+                     prompt: bool = True,
+                     maxindex: Optional[int] = None,
+                     tol: float = 1e-7,
+                     **kwargs):
+        """
+        Construct a FreeSurface object based on record(s) retrieved from the
+        reference database.
+
+        Parameters
+        ----------
+        name : str or None, optional
+            The name of the free_surface record to retrieve from the database.
+            Alternatively, you can use any other query keyword arguments supported
+            by the free_surface record style (see **kwargs below for more info).
+        ucell : atomman.System or None, optional
+            The unit cell to use in generating the system.  If None (default), then
+            the crystal_prototype record that matches the defect's family setting
+            will be loaded from the database.  Note that if None then the
+            crystal-specific info (lattice constants and symbols) should be given
+            here as kwargs (see below).
+        database : atomman.library.Database or None, optional
+            A Database object to use to fetch the records.  If None (default), then
+            a new Database instance will be created.
+        prompt : bool
+            If prompt=True (default) then a screen input will ask for a selection
+            if multiple matching free_surface (or crystal_prototype) records are
+            found.  If prompt=False, then an error will be thrown if multiple
+            matches are found.
+        maxindex : int, optional
+            Max uvw index value to use in identifying the best uvw set for the
+            out-of-plane vector.  If not given, will use the largest absolute
+            index between the given hkl and the initial in-plane vector guesses.
+        tol : float, optional
+            Tolerance parameter used to round off near-zero values.  Default
+            value is 1e-8.
+        **kwargs : any
+            The recognized kwargs include the query keywords for free_surface
+            records (key, id, family, hkl, shiftindex, cutboxvector), and the
+            crystal-specific parameters recognized by the prototype load style
+            (a, b, c, alpha, beta, gamma, symbols).  The non-trivial
+            crystal-specific parameters should be for the crystal if ucell is
+            not given above as the crystal prototype lacks this information.
+        """
+        # Initialize a database if needed
+        if database is None:
+            database = Database()
+
+        # Extract ucell parameters from kwargs
+        prototype_kwargs = {}
+        prototype_kwargs_names = ['a', 'b', 'c', 'alpha', 'beta', 'gamma', 'symbols']
+        for prototype_kwargs_name in prototype_kwargs_names:
+            if prototype_kwargs_name in kwargs:
+                prototype_kwargs[prototype_kwargs_name] = kwargs.pop(prototype_kwargs_name)
+
+        # Fetch matching defect record
+        record = database.get_record('free_surface', name=name, prompt=prompt, **kwargs)
+
+        # Fetch crystal prototype unit cell if needed
+        if ucell is None:
+            ucell = load('prototype', name=record.family, **prototype_kwargs)
+        else:
+            if len(prototype_kwargs) > 0:
+                raise ValueError('crystal-specific kwargs cannot be given with ucell')
+
+        return cls.fromrecord(record=record, ucell=ucell, maxindex=maxindex, tol=tol)
+
     @property
     def hkl(self) -> np.ndarray:
         """numpy.ndarray : Crystal plane in Miller or Miller-Bravais indices"""
@@ -153,7 +292,10 @@ class FreeSurface():
 
     @property
     def uvws(self) -> np.ndarray:
-        """numpy.ndarray : The conventional Miller or Miller-Bravais crystal vectors associated with the rcell box vectors."""
+        """
+        numpy.ndarray : The conventional Miller or Miller-Bravais crystal
+        vectors associated with the rcell box vectors.
+        """
         return self.__uvws
 
     @property
@@ -165,6 +307,14 @@ class FreeSurface():
     def shifts(self) -> list:
         """list : All shift values that place the fault halfway between atomic layers in rcell."""
         return self.__shifts
+
+    @property
+    def shift(self) -> np.ndarray:
+        """
+        numpy.NDArray : The particular shift value that will be or was used to
+        construct the defect system
+        """
+        return self.__shift
 
     @property
     def system(self) -> System:
@@ -194,6 +344,8 @@ class FreeSurface():
 
     def surface(self,
                 shift: Optional[npt.ArrayLike] = None,
+                shiftindex: Optional[int] = None,
+                shiftscale: bool = None,
                 vacuumwidth: Optional[float] = None,
                 minwidth: Optional[float] = None,
                 sizemults: Optional[list] = None,
@@ -205,7 +357,21 @@ class FreeSurface():
         ----------
         shift : array-like object, optional
             Applies a shift to all atoms. Different values allow for free surfaces with
-            different termination planes to be selected.
+            different termination planes to be selected.  shift is taken as absolute
+            if shiftscale is False, or relative to the rotated cell's box vectors
+            if shiftscale is True.  Cannot be given with shiftindex.  If
+            neither shift nor shiftindex is given then the current value set to the
+            shift attribute will be used.
+        shiftindex : float, optional
+            The index of the identified shifts based on the rotated
+            cell to use.  Different values allow for the selection of different
+            atomic planes neighboring the slip plane.  Cannot be given with shift.
+            If neither shift nor shiftindex is given then the current value set to
+            the shift attribute will be used.
+        shiftscale : bool, optional
+            If False (default), a given shift value will be taken as absolute
+            Cartesian.  If True, a given shift will be taken relative to the
+            rotated cell's box vectors.
         vacuumwidth : float, optional
             If given, the free surface is created by modifying the system's box to insert
             a region of vacuum with this width. This is typically used for DFT calculations
@@ -231,10 +397,9 @@ class FreeSurface():
         """
 
         # Set default function values
-        if shift is None:
-            shift = np.zeros(3)
-        else:
-            shift = np.asarray(shift)
+        if shift is not None or shiftindex is not None:
+            self.set_shift(shift=shift, shiftindex=shiftindex, shiftscale=shiftscale)
+        shift = self.shift
 
         if sizemults is None:
             sizemults = [1, 1, 1]
@@ -410,13 +575,54 @@ class FreeSurface():
                     break
 
             if is_unique:
-                #unique_shifts.insert(0, plane_i.point)
                 unique_indices.append(i)
 
         unique_indices.sort()
-        #unique_shifts = np.array(unique_shifts)
         unique_shifts = self.shifts[unique_indices]
 
         if return_indices is True:
             return unique_shifts, unique_indices
         return unique_shifts
+
+    def set_shift(self,
+                  shift: Optional[npt.ArrayLike] = None,
+                  shiftindex: Optional[int] = None,
+                  shiftscale: bool = False):
+        """
+        Directly set the shift value based on shiftindex, or shift and shiftscale.
+        NOTE that the shift value can alternatively be set during class initialization
+        or when surface() is called.
+
+        Parameters
+        ----------
+        shift : array-like object, optional
+            Applies a shift to all atoms. Different values allow for free surfaces with
+            different termination planes to be selected.  shift is taken as absolute
+            if shiftscale is False, or relative to the rotated cell's box vectors
+            if shiftscale is True.  Cannot be given with shiftindex.  If
+            neither shift nor shiftindex is given then shiftindex = 0 is used.
+        shiftindex : float, optional
+            The index of the identified shifts based on the rotated
+            cell to use.  Different values allow for the selection of different
+            atomic planes neighboring the slip plane.  Cannot be given with shift.
+            If neither shift nor shiftindex is given then shiftindex = 0 is used.
+        shiftscale : bool, optional
+            If False (default), a given shift value will be taken as absolute
+            Cartesian.  If True, a given shift will be taken relative to the
+            rotated cell's box vectors.
+        """
+        # Handle shift parameters
+        if shift is not None:
+            if shiftindex is not None:
+                raise ValueError('shift and shiftindex cannot both be given')
+            if shiftscale is True:
+                self.__shift = miller.vector_crystal_to_cartesian(shift, self.rcell.box)
+            else:
+                self.__shift = np.asarray(shift)
+                assert self.__shift.shape == (3,)
+
+        elif shiftindex is not None:
+            self.__shift = self.shifts[shiftindex]
+
+        else:
+            self.__shift = self.shifts[0]

@@ -9,7 +9,7 @@ import numpy.typing as npt
 
 # atomman imports
 from .. import Box, System
-from ..tools import vect_angle, miller, ishexagonal
+from ..tools import vect_angle, miller
 from ..tools.miller import vector_crystal_to_cartesian
 
 def free_surface_basis(hkl: npt.ArrayLike,

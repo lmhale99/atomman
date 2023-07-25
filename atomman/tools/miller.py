@@ -8,7 +8,7 @@ __all__ = ['plane3to4', 'plane4to3', 'vector3to4', 'vector4to3',
            'plane_crystal_to_cartesian',
            'vector_crystal_to_cartesian',
            'vector_primitive_to_conventional', 
-           'vector_conventional_to_primitive']
+           'vector_conventional_to_primitive', 'fromstring']
 
 def plane3to4(indices: npt.ArrayLike) -> np.ndarray:
     """
@@ -455,3 +455,51 @@ def plane_crystal_to_cartesian(indices: npt.ArrayLike,
 
     # Apply plane_cryst_2_cart to each given set of indices
     return np.apply_along_axis(plane_cryst_2_cart, -1, indices, box)
+
+def fromstring(value):
+    """
+    Reads Miller and Miller-Bravais vector/plane strings and returns a corresponding numpy
+    array.  Values should be space-delimited and surrounded by angle brackets. The
+    values in the brackets should be integers. Fractional arrays can be defined by placing
+    a fraction before the array.
+    
+    Examples:
+    [1 0 0]
+    1/2 [1 1 0]
+    [0 0 0 1]
+    1/3 [1 1 -2 0]
+    
+    Parameters
+    ----------
+    value : str
+        The Miller(-Bravais) vector/plane string to interpret.
+        
+    Returns
+    -------
+    numpy.NDArray
+        The vector/plane as an array of floats.
+    """
+    # Find the str indices of the brackets
+    openindex = value.find('[')
+    closeindex = value.find(']')
+
+    # Get leading fraction
+    if openindex > 0:
+        fraction = value[:openindex]
+        terms = fraction.split('/')
+        assert len(terms) == 2, 'fraction can only have one /'
+        fraction = float(terms[0]) / float(terms[1])
+    else:
+        fraction = 1
+
+     # Legacy reader for just numbers no brackets
+    if openindex == -1:
+        array = np.fromstring(value, dtype=float, sep=' ')
+
+    # Convert the value in brackets into an array
+    else:
+        array = np.fromstring(value[openindex+1: closeindex], dtype=float, sep=' ')
+    assert array.shape in [(3,), (4,)], 'array must have 3 or 4 indices'
+
+    # Apply the fraction and return
+    return fraction * array
