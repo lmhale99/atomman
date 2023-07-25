@@ -504,7 +504,7 @@ class ElasticConstants(object):
     
     def rhombohedral(self, **kwargs):
         """
-        Set values with six or seven independent rhombohedral moduli.
+        Set values with six or seven independent rhombohedral moduli. 
         (2 * C66 = C11 - C12)
         
         Parameters
@@ -516,13 +516,13 @@ class ElasticConstants(object):
         C13 : float
             C13 component of Cij.
         C14 : float
-            C33 component of Cij.
+            C14 component of Cij.
         C15 : float, optional
-            C44 component of Cij.
+            C15 component of Cij.
         C33 : float
-            C66 component of Cij.
+            C33 component of Cij.
         C44 : float
-            C66 component of Cij.
+            C44 component of Cij.
         C66 : float, optional
             C66 component of Cij.
         """
