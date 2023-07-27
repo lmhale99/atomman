@@ -25,8 +25,8 @@ def getversion():
 
 def getreadme():
     """Fetches description from README.rst file"""
-    with open('README.rst', encoding='UTF-8') as f:
-        return f.read()
+    with open('README.rst', encoding='UTF-8') as readme_file:
+        return readme_file.read()
 
 setup(
     name = 'atomman',
@@ -38,7 +38,6 @@ setup(
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
@@ -66,7 +65,7 @@ setup(
         'cython',
         'requests',
         'toolz',
-        'potentials>=0.3.6'
+        'potentials>=0.3.7'
     ],
     include_package_data = True,
     zip_safe = False

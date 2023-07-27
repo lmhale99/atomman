@@ -29,11 +29,16 @@ from . import defect
 set_dump_styles()
 
 # Read version from VERSION file
-__version__ = resources.read_text('atomman', 'VERSION').strip()
+if hasattr(resources, 'files'):
+    __version__ = resources.files('atomman').joinpath('VERSION').read_text(encoding='UTF-8')
+else:
+    __version__ = resources.read_text('atomman', 'VERSION', encoding='UTF-8').strip()
 
 # Build all list
-__all__ = ['__version__'] + dump_all + core_all + load_all
-__all__ += ['load_lammps_potential', 'build_lammps_potential', 'settings']
+__all__ = ['__version__', 'load_lammps_potential', 'build_lammps_potential', 'settings',
+           'tools', 'thermo', 'mep', 'region', 'lammps', 'dump', 'cluster', 'library',
+           'load', 'FileFormatError', 'plot', 'defect']
+__all__ += dump_all + core_all + load_all
 __all__.sort()
 
 # Define default working units

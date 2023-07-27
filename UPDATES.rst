@@ -1,6 +1,48 @@
 Updates
 =======
 
+Version 1.4.10
+-------------
+
+- **atomman.lammps.Log** now has more options during flatten allowing for only
+  a subset of simulation runs to be merged together.  Bug fix related to type
+  identification during flatten.
+
+- **pdb** dump style for protein database file format.  Mostly useful for the
+  plotting tools that natively interpret this format.
+
+- Transformations added to support hexagonal conventional cells of trigonal
+  systems. These 't1' and 't2' options are now available in
+  **atomman.tools.miller.vector_conventional_to_primitive**, 
+  **atomman.tools.miller.vector_primitive_to_conventional**,
+  and the **conventional_to_primitive** and **primitive_to_conventional** dump
+  styles.
+
+- **atomman.tools.miller.fromstring** method added for interpreting formatted
+  string representations of Miller vectors and planes as numpy arrays.
+
+- From **atomman.defect**, **FreeSurface**, **StackingFault** and
+  **Dislocation** now have fromrecord() and fromdatabase() methods.  The
+  fromrecord() methods read in parameters from an associated defect parameter
+  set record, and fromdatabase() allows for a matching defect parameter set
+  record to be fetched from a database. 
+
+- **atomman.defect.Dislocation** updated to recognize Miller-Bravais 4 index
+  vectors and planes.
+
+- All Record classes now have a "database" attribute that sets a default
+  database to associate with the record.  This makes it possible for the Record
+  classes to have methods that fetch additional content from the database as
+  needed.
+
+- **atomman.defect.Boundary** class added for generating phase boundary and
+  grain boundary systems.  The basic core of the generator is there and works
+  for cubic systems.  To be improved in the next few versions as time allows.
+
+- **atomman.plot** has new methods to allow for interactive 3D plots when
+  working in a Jupyter environment.  Substantial changes to these plotting
+  tools likely in subsequent versions of atomman.
+
 Version 1.4.9
 -------------
 
