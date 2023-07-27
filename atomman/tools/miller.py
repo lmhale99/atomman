@@ -479,10 +479,22 @@ def fromstring(value):
     numpy.NDArray
         The vector/plane as an array of floats.
     """
-    # Find the str indices of the brackets
-    openindex = value.find('[')
-    closeindex = value.find(']')
-
+    # Find the str indices of any brackets
+    if value.find('[') > -1:
+        openindex = value.index('[')
+        closeindex = value.index(']')
+    elif value.find('(') > -1:
+        openindex = value.index('(')
+        closeindex = value.index(')')
+    elif value.find('<') > -1:
+        openindex = value.index('<')
+        closeindex = value.index('>')
+    elif value.find('{') > -1:
+        openindex = value.index('{')
+        closeindex = value.index('}')
+    else:
+        openindex = -1
+        
     # Get leading fraction
     if openindex > 0:
         fraction = value[:openindex]
