@@ -4,6 +4,9 @@ import io
 from collections import OrderedDict
 from typing import Optional, Union
 
+import pandas as pd
+pdversion = [int(i) for i in pd.__version__.split('.')]
+
 # atomman imports
 import atomman.unitconvert as uc
 from ...lammps import style
@@ -282,5 +285,9 @@ def table_dump(system,
 
     # Generate table
     sep = ' '
-    return df.to_csv(path_or_buf=f, sep=sep, index=None, header=False,
+    if pdversion[0] > 1 or (pdversion[0] == 1 and pdversion[1] >= 5):
+        return df.to_csv(path_or_buf=f, sep=sep, index=None, header=False,
                      float_format=float_format, lineterminator='\n')
+    else:
+        return df.to_csv(path_or_buf=f, sep=sep, index=None, header=False,
+                     float_format=float_format, line_terminator='\n')

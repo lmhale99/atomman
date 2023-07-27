@@ -4,6 +4,9 @@
 from collections import OrderedDict
 from typing import Optional
 
+import pandas as pd
+pdversion = [int(i) for i in pd.__version__.split('.')]
+
 # atomman imports
 import atomman.unitconvert as uc
 from .process_prop_info import process_prop_info
@@ -77,54 +80,53 @@ def dump(system,
     # Set parameters
     natoms = system.natoms
     key_rename = OrderedDict()
-    
+
     # Set default values
     if prop_info is None:
         if prop_name is None:
             prop_name = system.atoms_prop()
-        
+
         if shape is None and table_name is None:
             shape = []
             for name in prop_name:
                 shape.append(system.atoms.view[name].shape[1:])
-    
+
     # Process conversion parameters
     prop_info = process_prop_info(prop_name=prop_name, table_name=table_name,
                                   shape=shape, unit=unit, dtype=dtype,
                                   prop_info=prop_info)
-    
-    
+
     # Build list of properties to scale
     scale = []
     for prop in prop_info:
         if prop['unit'] == 'scaled':
             scale.append(prop['prop_name'])
             prop['unit'] = None
-    
+
     # Transform to dataframe
     df = system.atoms_df(scale)
-    
+
     # Add a_id values
     df['a_id'] = range(1, natoms+1)
-    
+
     # Loop over all properties
     for prop in prop_info:
         pname = prop['prop_name']
-        
+
         # loop over all table names and property indexes
         for tname, (index, istr) in zip(prop['table_name'], # pylint: disable=unused-variable
                                         indexstr(prop['shape'])):
-            
+
             # Build name change dict
             key_rename[pname + istr] = tname
-            
+
             # Convert units if needed
             if prop['unit'] is not None:
                 df[pname + istr] = uc.get_in_units(df[pname + istr], prop['unit'])
-    
+
     # Rename and reorganize
     df = df.rename(columns=key_rename)[list(key_rename.values())]
-  
+
     # Add extra content if given
     if extra is not None:
         for key, value in extra.items():
@@ -132,14 +134,14 @@ def dump(system,
 
     # Generate table
     sep = ' '
-    table = df.to_csv(path_or_buf=f,
-                      sep=sep,
-                      index=None,
-                      header=header,
-                      float_format=float_format,
-                      encoding='ascii',
-                      lineterminator='\n',
-                      )
+    if pdversion[0] > 1 or (pdversion[0] == 1 and pdversion[1] >= 5):
+        table = df.to_csv(path_or_buf=f, sep=sep, index=None, header=header,
+                        float_format=float_format, encoding='ascii',
+                        lineterminator='\n')
+    else:
+        table = df.to_csv(path_or_buf=f, sep=sep, index=None, header=header,
+                        float_format=float_format, encoding='ascii',
+                        line_terminator='\n')
 
     returns = []
 
