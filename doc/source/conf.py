@@ -24,6 +24,7 @@ sys.path.insert(0, os.path.abspath('../atomman'))
 project = 'atomman'
 copyright = '2018, Lucas Hale'
 author = 'Lucas Hale'
+language = 'en'
 
 import atomman
 # The short X.Y version
