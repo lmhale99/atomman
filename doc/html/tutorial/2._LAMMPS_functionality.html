@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="en">
@@ -6,15 +5,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Introduction to atomman: LAMMPS functionality &#8212; atomman 1.4.8 documentation</title>
+    <title>Introduction to atomman: LAMMPS functionality &#8212; atomman 1.4.10 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: LAMMPS Potentials" href="2.1._Potential_class.html" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="1.5._Settings_and_databases.html" title="Introduction to atomman: Settings and Library"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: LAMMPS functionality</a></li> 
       </ul>
@@ -46,255 +46,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
-
-
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
-
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-div.rendered_html th {
-  font-weight: bold;
-}
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-</style>
-<section id="Introduction-to-atomman:-LAMMPS-functionality">
+  <section id="Introduction-to-atomman:-LAMMPS-functionality">
 <h1>Introduction to atomman: LAMMPS functionality<a class="headerlink" href="#Introduction-to-atomman:-LAMMPS-functionality" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
@@ -306,8 +58,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Standard libraries</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Standard libraries</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
@@ -331,13 +82,19 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2c5effd377cd4aa98cc0b9617eae2d3d", "version_major": 2, "version_minor": 0}</script></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.8
-Notebook executed on 2023-01-27
+atomman version = 1.4.10
+Notebook executed on 2023-07-28
 </pre></div></div>
 </div>
 </section>
@@ -351,8 +108,7 @@ Notebook executed on 2023-01-27
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Load potential based on its unique ID</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load potential based on its unique ID</span>
 <span class="n">pot_id</span> <span class="o">=</span> <span class="s1">&#39;2015--Pascuet-M-I--Al--LAMMPS--ipr1&#39;</span>
 <span class="n">potential</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load_lammps_potential</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">pot_id</span><span class="p">,</span> <span class="n">getfiles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
@@ -366,8 +122,7 @@ Notebook executed on 2023-01-27
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">pot_id</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">pot_id</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
@@ -414,8 +169,7 @@ augt1 = 1
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Show that basic properties can be directly obtained</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show that basic properties can be directly obtained</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;str(potential) -&gt;       &#39;</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;potential.units -&gt;      &#39;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;potential.atom_style -&gt; &#39;</span><span class="p">,</span> <span class="n">potential</span><span class="o">.</span><span class="n">atom_style</span><span class="p">)</span>
@@ -445,8 +199,7 @@ potential.masses() -&gt;    [26.9815]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;potential.pair_info() -&gt;&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;potential.pair_info() -&gt;&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">potential</span><span class="o">.</span><span class="n">pair_info</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -475,8 +228,7 @@ mass 1 26.9815
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.pair_info([&#39;Al&#39;, &#39;Al&#39;, &#39;Al&#39;]) -&gt;&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;potential.pair_info([&#39;Al&#39;, &#39;Al&#39;, &#39;Al&#39;]) -&gt;&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">potential</span><span class="o">.</span><span class="n">pair_info</span><span class="p">([</span><span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="s1">&#39;Al&#39;</span><span class="p">]))</span>
 </pre></div>
 </div>
@@ -515,8 +267,7 @@ mass 3 26.9815
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;crystal&#39;</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;A1--Cu--fcc&#39;</span><span class="p">,</span> <span class="n">potential</span><span class="o">=</span><span class="n">potential</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;crystal&#39;</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;A1--Cu--fcc&#39;</span><span class="p">,</span> <span class="n">potential</span><span class="o">=</span><span class="n">potential</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -550,8 +301,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">system</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">supersize</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">system</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">supersize</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Supercell has&#39;</span><span class="p">,</span> <span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="p">,</span> <span class="s1">&#39;atoms&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -577,8 +327,7 @@ Supercell has 108 atoms
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Save System to &#39;atom.dat&#39; atom data file</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save System to &#39;atom.dat&#39; atom data file</span>
 <span class="n">system_pair_info</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;atom_data&#39;</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="s1">&#39;atom.dat&#39;</span><span class="p">,</span>
                           <span class="n">potential</span><span class="o">=</span><span class="n">potential</span><span class="p">,</span>
                           <span class="n">float_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%.4f</span><span class="s1">&#39;</span><span class="p">,</span>    <span class="c1"># Remove or make larger precision for real runs!</span>
@@ -591,8 +340,7 @@ Supercell has 108 atoms
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">system_pair_info</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">system_pair_info</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -626,8 +374,7 @@ mass 1 26.9815
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;atom.dat&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;atom.dat&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -778,8 +525,7 @@ Atoms # atomic
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">timestep</span> <span class="o">=</span> <span class="n">lmp</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">timestep</span><span class="p">(</span><span class="n">potential</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">timestep</span> <span class="o">=</span> <span class="n">lmp</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">timestep</span><span class="p">(</span><span class="n">potential</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">timestep</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -796,8 +542,7 @@ Atoms # atomic
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">lammps_unit</span> <span class="o">=</span> <span class="n">lmp</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">unit</span><span class="p">(</span><span class="n">potential</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lammps_unit</span> <span class="o">=</span> <span class="n">lmp</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">unit</span><span class="p">(</span><span class="n">potential</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">lammps_unit</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -821,8 +566,7 @@ OrderedDict([(&#39;mass&#39;, &#39;g/mol&#39;), (&#39;length&#39;, &#39;angstrom
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">system_pair_info</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">system_pair_info</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -859,8 +603,7 @@ mass 1 26.9815
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">&lt;system_pair_info&gt;</span>
 
 <span class="s2"># Define temperature and dependent variables</span>
@@ -872,8 +615,8 @@ mass 1 26.9815
 
 <span class="s2"># Define timestep and dependent variables</span>
 <span class="s2">variable deltat equal &lt;timestep&gt;</span>
-<span class="s2">variable Trelax equal 100*$</span><span class="si">{deltat}</span><span class="s2"></span>
-<span class="s2">variable Prelax equal 1000*$</span><span class="si">{deltat}</span><span class="s2"></span>
+<span class="s2">variable Trelax equal 100*$</span><span class="si">{deltat}</span>
+<span class="s2">variable Prelax equal 1000*$</span><span class="si">{deltat}</span>
 
 <span class="s2"># Initialize atomic velocities with twoT</span>
 <span class="s2">velocity all create $</span><span class="si">{twoT}</span><span class="s2"> 124352</span>
@@ -886,10 +629,10 @@ mass 1 26.9815
 <span class="s2">dump mydump all atom 100000 *.dump</span>
 
 <span class="s2"># Specify timestep</span>
-<span class="s2">timestep $</span><span class="si">{deltat}</span><span class="s2"></span>
+<span class="s2">timestep $</span><span class="si">{deltat}</span>
 
 <span class="s2"># Apply npt conditions</span>
-<span class="s2">fix 1 all npt temp $T $T $</span><span class="si">{Trelax}</span><span class="s2"> iso $P $P $</span><span class="si">{Prelax}</span><span class="s2"></span>
+<span class="s2">fix 1 all npt temp $T $T $</span><span class="si">{Trelax}</span><span class="s2"> iso $P $P $</span><span class="si">{Prelax}</span>
 
 <span class="s2"># Run simulation</span>
 <span class="s2">run 100000</span>
@@ -913,8 +656,7 @@ mass 1 26.9815
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">lammps_variable</span> <span class="o">=</span> <span class="p">{}</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lammps_variable</span> <span class="o">=</span> <span class="p">{}</span>
 
 <span class="c1"># Generated above</span>
 <span class="n">lammps_variable</span><span class="p">[</span><span class="s1">&#39;system_pair_info&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">system_pair_info</span>
@@ -946,8 +688,7 @@ mass 1 26.9815
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Generate script from template and lammps_variable</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate script from template and lammps_variable</span>
 <span class="n">script</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">filltemplate</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">lammps_variable</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">)</span>
 
 <span class="c1"># Save script to &#39;nvt.in&#39;</span>
@@ -1028,8 +769,7 @@ run 100000
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">lammps_exe</span> <span class="o">=</span> <span class="s1">&#39;lmp_serial&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lammps_exe</span> <span class="o">=</span> <span class="s1">&#39;lmp&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -1038,8 +778,7 @@ run 100000
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">output</span> <span class="o">=</span> <span class="n">lmp</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">lammps_exe</span><span class="p">,</span> <span class="s1">&#39;nvt.in&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">lmp</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">lammps_exe</span><span class="p">,</span> <span class="s1">&#39;nvt.in&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1054,8 +793,7 @@ run 100000
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">thermo</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">thermo</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 </pre></div>
 </div>
 </div>
@@ -1072,8 +810,7 @@ run 100000
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;thermo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;thermo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 </pre></div>
 </div>
 </div>
@@ -1085,13 +822,12 @@ run 100000
 [&#39;Step&#39;, &#39;Temp&#39;, &#39;Press&#39;, &#39;Lx&#39;, &#39;Ly&#39;, &#39;Lz&#39;]
 </pre></div></div>
 </div>
-<p>Plot temperature vs. run step</p>
+<p>Plot temperature vs. run step</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Pull out data</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Pull out data</span>
 <span class="n">steps</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">thermo</span><span class="o">.</span><span class="n">Step</span>
 <span class="n">temps</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">thermo</span><span class="o">.</span><span class="n">Temp</span>
 
@@ -1110,13 +846,12 @@ run 100000
 <img alt="../_images/tutorial_2._LAMMPS_functionality_53_0.png" src="../_images/tutorial_2._LAMMPS_functionality_53_0.png" />
 </div>
 </div>
-<p>Plot pressure vs. run step (note unit conversions)</p>
+<p>Plot pressure vs. run step (note unit conversions)</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Convert steps to time in atomman working units</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert steps to time in atomman working units</span>
 <span class="n">steps</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">thermo</span><span class="o">.</span><span class="n">Step</span>
 <span class="n">time</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="n">timestep</span><span class="p">,</span> <span class="n">lammps_unit</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="n">steps</span>
 
@@ -1146,8 +881,7 @@ run 100000
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;atom_dump&#39;</span><span class="p">,</span> <span class="s1">&#39;100000.dump&#39;</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;atom_dump&#39;</span><span class="p">,</span> <span class="s1">&#39;100000.dump&#39;</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">box</span><span class="p">)</span>
 <span class="n">system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">()</span>
 </pre></div>
@@ -1158,10 +892,10 @@ run 100000
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [12.191,  0.000,  0.000]
-bvect =  [ 0.000, 12.191,  0.000]
-cvect =  [ 0.000,  0.000, 12.191]
-origin = [-0.021, -0.021, -0.021]
+avect =  [12.181,  0.000,  0.000]
+bvect =  [ 0.000, 12.181,  0.000]
+cvect =  [ 0.000,  0.000, 12.181]
+origin = [-0.016, -0.016, -0.016]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1198,41 +932,41 @@ origin = [-0.021, -0.021, -0.021]
     <tr>
       <th>0</th>
       <td>1</td>
-      <td>0.003687</td>
-      <td>-0.060490</td>
-      <td>-0.023425</td>
+      <td>-0.028500</td>
+      <td>-0.130898</td>
+      <td>-0.030150</td>
       <td>1</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>-0.054033</td>
-      <td>2.032270</td>
-      <td>1.997684</td>
+      <td>-0.032088</td>
+      <td>1.993179</td>
+      <td>2.012840</td>
       <td>2</td>
     </tr>
     <tr>
       <th>2</th>
       <td>1</td>
-      <td>2.055068</td>
-      <td>0.018910</td>
-      <td>1.980677</td>
+      <td>2.080239</td>
+      <td>-0.012001</td>
+      <td>2.006956</td>
       <td>3</td>
     </tr>
     <tr>
       <th>3</th>
       <td>1</td>
-      <td>1.997684</td>
-      <td>2.080987</td>
-      <td>-0.002075</td>
+      <td>1.999465</td>
+      <td>2.038286</td>
+      <td>0.025622</td>
       <td>4</td>
     </tr>
     <tr>
       <th>4</th>
       <td>1</td>
-      <td>4.081188</td>
-      <td>0.036592</td>
-      <td>-0.051009</td>
+      <td>4.097670</td>
+      <td>-0.017704</td>
+      <td>0.050970</td>
       <td>5</td>
     </tr>
     <tr>
@@ -1246,41 +980,41 @@ origin = [-0.021, -0.021, -0.021]
     <tr>
       <th>103</th>
       <td>1</td>
-      <td>6.042340</td>
-      <td>10.090836</td>
-      <td>8.060340</td>
+      <td>6.075682</td>
+      <td>10.146698</td>
+      <td>8.086876</td>
       <td>104</td>
     </tr>
     <tr>
       <th>104</th>
       <td>1</td>
-      <td>8.037871</td>
-      <td>8.044527</td>
-      <td>8.075286</td>
+      <td>8.065986</td>
+      <td>8.103102</td>
+      <td>8.077594</td>
       <td>105</td>
     </tr>
     <tr>
       <th>105</th>
       <td>1</td>
-      <td>8.068666</td>
-      <td>10.122228</td>
-      <td>10.109220</td>
+      <td>8.087157</td>
+      <td>10.226753</td>
+      <td>10.058932</td>
       <td>106</td>
     </tr>
     <tr>
       <th>106</th>
       <td>1</td>
-      <td>10.135773</td>
-      <td>8.173499</td>
-      <td>10.091238</td>
+      <td>10.131947</td>
+      <td>8.219079</td>
+      <td>10.121422</td>
       <td>107</td>
     </tr>
     <tr>
       <th>107</th>
       <td>1</td>
-      <td>10.139345</td>
-      <td>10.137333</td>
-      <td>8.031605</td>
+      <td>10.132604</td>
+      <td>10.137379</td>
+      <td>8.054377</td>
       <td>108</td>
     </tr>
   </tbody>
@@ -1288,13 +1022,180 @@ origin = [-0.021, -0.021, -0.021]
 <p>108 rows × 5 columns</p>
 </div></div>
 </div>
-<p><strong>File Cleanup</strong></p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">pot_id</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">py3Dmol</span><span class="o">.</span><span class="n">view_3d</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div id="3dmolviewer_1690567522995758"  style="position: relative; width: 800px; height: 800px">
+        <p id="3dmolwarning_1690567522995758" style="background-color:#ffcccc;color:black">You appear to be running in JupyterLab (or JavaScript failed to load for some other reason).  You need to install the 3dmol extension: <br>
+        <tt>jupyter labextension install jupyterlab_3dmol</tt></p>
+        </div>
+<script>
+
+var loadScriptAsync = function(uri){
+  return new Promise((resolve, reject) => {
+    //this is to ignore the existence of requirejs amd
+    var savedexports, savedmodule;
+    if (typeof exports !== 'undefined') savedexports = exports;
+    else exports = {}
+    if (typeof module !== 'undefined') savedmodule = module;
+    else module = {}
+
+    var tag = document.createElement('script');
+    tag.src = uri;
+    tag.async = true;
+    tag.onload = () => {
+        exports = savedexports;
+        module = savedmodule;
+        resolve();
+    };
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+});
+};
+
+if(typeof $3Dmolpromise === 'undefined') {
+$3Dmolpromise = null;
+  $3Dmolpromise = loadScriptAsync('https://cdnjs.cloudflare.com/ajax/libs/3Dmol/2.0.1/3Dmol-min.js');
+}
+
+var viewer_1690567522995758 = null;
+var warn = document.getElementById("3dmolwarning_1690567522995758");
+if(warn) {
+    warn.parentNode.removeChild(warn);
+}
+$3Dmolpromise.then(function() {
+viewer_1690567522995758 = $3Dmol.createViewer(document.getElementById("3dmolviewer_1690567522995758"),{backgroundColor:"white"});
+viewer_1690567522995758.zoomTo();
+    viewer_1690567522995758.addModel("CRYST1   12.181   12.181   12.181  90.00  90.00  90.00 P 1\nMODEL     1\nHETATM    1 UNX  MOL     1      -0.013  -0.115  -0.015  1.00  0.00          X1.0\nHETATM    2 UNX  MOL     1      -0.016   2.009   2.028  1.00  0.00          X1.0\nHETATM    3 UNX  MOL     1       2.096   0.004   2.023  1.00  0.00          X1.0\nHETATM    4 UNX  MOL     1       2.015   2.054   0.041  1.00  0.00          X1.0\nHETATM    5 UNX  MOL     1       4.113  -0.002   0.067  1.00  0.00          X1.0\nHETATM    6 UNX  MOL     1       4.047   2.087   2.021  1.00  0.00          X1.0\nHETATM    7 UNX  MOL     1       6.067   0.065   2.080  1.00  0.00          X1.0\nHETATM    8 UNX  MOL     1       6.065   2.017  -0.013  1.00  0.00          X1.0\nHETATM    9 UNX  MOL     1       8.106  -0.020  -0.101  1.00  0.00          X1.0\nHETATM   10 UNX  MOL     1       8.072   1.982   2.022  1.00  0.00          X1.0\nHETATM   11 UNX  MOL     1      10.074  -0.046   2.045  1.00  0.00          X1.0\nHETATM   12 UNX  MOL     1      10.189   2.001  -0.014  1.00  0.00          X1.0\nHETATM   13 UNX  MOL     1       0.006   4.069   0.026  1.00  0.00          X1.0\nHETATM   14 UNX  MOL     1      -0.082   6.036   2.009  1.00  0.00          X1.0\nHETATM   15 UNX  MOL     1       1.971   4.086   2.080  1.00  0.00          X1.0\nHETATM   16 UNX  MOL     1       2.009   6.049  -0.015  1.00  0.00          X1.0\nHETATM   17 UNX  MOL     1       3.991   4.127  -0.019  1.00  0.00          X1.0\nHETATM   18 UNX  MOL     1       4.045   6.121   2.065  1.00  0.00          X1.0\nHETATM   19 UNX  MOL     1       6.122   4.071   2.034  1.00  0.00          X1.0\nHETATM   20 UNX  MOL     1       6.048   6.117   0.035  1.00  0.00          X1.0\nHETATM   21 UNX  MOL     1       8.103   4.011   0.041  1.00  0.00          X1.0\nHETATM   22 UNX  MOL     1       8.059   6.129   2.034  1.00  0.00          X1.0\nHETATM   23 UNX  MOL     1      10.109   3.987   2.041  1.00  0.00          X1.0\nHETATM   24 UNX  MOL     1      10.083   6.098   0.030  1.00  0.00          X1.0\nHETATM   25 UNX  MOL     1      -0.013   8.143  -0.028  1.00  0.00          X1.0\nHETATM   26 UNX  MOL     1      -0.021  10.166   2.033  1.00  0.00          X1.0\nHETATM   27 UNX  MOL     1       2.008   8.097   1.995  1.00  0.00          X1.0\nHETATM   28 UNX  MOL     1       2.103  10.107  -0.027  1.00  0.00          X1.0\nHETATM   29 UNX  MOL     1       4.030   8.061   0.090  1.00  0.00          X1.0\nHETATM   30 UNX  MOL     1       4.056  10.162   2.043  1.00  0.00          X1.0\nHETATM   31 UNX  MOL     1       6.150   8.191   2.016  1.00  0.00          X1.0\nHETATM   32 UNX  MOL     1       6.132  10.108  -0.006  1.00  0.00          X1.0\nHETATM   33 UNX  MOL     1       8.177   8.084   0.006  1.00  0.00          X1.0\nHETATM   34 UNX  MOL     1       8.106  10.223   2.021  1.00  0.00          X1.0\nHETATM   35 UNX  MOL     1      10.152   8.143   1.965  1.00  0.00          X1.0\nHETATM   36 UNX  MOL     1      10.144  10.144  -0.031  1.00  0.00          X1.0\nHETATM   37 UNX  MOL     1       0.016  -0.004   4.015  1.00  0.00          X1.0\nHETATM   38 UNX  MOL     1      -0.021   1.926   6.052  1.00  0.00          X1.0\nHETATM   39 UNX  MOL     1       1.957  -0.021   6.126  1.00  0.00          X1.0\nHETATM   40 UNX  MOL     1       2.032   2.014   4.074  1.00  0.00          X1.0\nHETATM   41 UNX  MOL     1       4.013  -0.026   4.133  1.00  0.00          X1.0\nHETATM   42 UNX  MOL     1       4.130   2.066   6.021  1.00  0.00          X1.0\nHETATM   43 UNX  MOL     1       6.014   0.001   6.134  1.00  0.00          X1.0\nHETATM   44 UNX  MOL     1       6.146   2.092   4.095  1.00  0.00          X1.0\nHETATM   45 UNX  MOL     1       8.044  -0.025   4.020  1.00  0.00          X1.0\nHETATM   46 UNX  MOL     1       8.202   1.998   6.167  1.00  0.00          X1.0\nHETATM   47 UNX  MOL     1      10.180  -0.084   6.079  1.00  0.00          X1.0\nHETATM   48 UNX  MOL     1      10.098   1.904   4.062  1.00  0.00          X1.0\nHETATM   49 UNX  MOL     1      -0.059   4.001   4.134  1.00  0.00          X1.0\nHETATM   50 UNX  MOL     1      -0.032   6.066   6.039  1.00  0.00          X1.0\nHETATM   51 UNX  MOL     1       2.093   4.013   6.123  1.00  0.00          X1.0\nHETATM   52 UNX  MOL     1       1.970   6.131   4.069  1.00  0.00          X1.0\nHETATM   53 UNX  MOL     1       4.056   4.068   4.039  1.00  0.00          X1.0\nHETATM   54 UNX  MOL     1       3.999   6.045   6.096  1.00  0.00          X1.0\nHETATM   55 UNX  MOL     1       6.120   4.164   6.110  1.00  0.00          X1.0\nHETATM   56 UNX  MOL     1       6.148   6.044   4.105  1.00  0.00          X1.0\nHETATM   57 UNX  MOL     1       8.173   4.037   4.068  1.00  0.00          X1.0\nHETATM   58 UNX  MOL     1       8.159   6.052   6.164  1.00  0.00          X1.0\nHETATM   59 UNX  MOL     1      10.199   4.020   6.027  1.00  0.00          X1.0\nHETATM   60 UNX  MOL     1      10.069   6.138   4.024  1.00  0.00          X1.0\nHETATM   61 UNX  MOL     1      -0.001   8.132   3.962  1.00  0.00          X1.0\nHETATM   62 UNX  MOL     1       0.033  10.049   6.056  1.00  0.00          X1.0\nHETATM   63 UNX  MOL     1       2.042   8.046   6.098  1.00  0.00          X1.0\nHETATM   64 UNX  MOL     1       2.051  10.062   4.051  1.00  0.00          X1.0\nHETATM   65 UNX  MOL     1       4.109   8.059   4.071  1.00  0.00          X1.0\nHETATM   66 UNX  MOL     1       3.983  10.145   6.140  1.00  0.00          X1.0\nHETATM   67 UNX  MOL     1       6.043   8.145   6.032  1.00  0.00          X1.0\nHETATM   68 UNX  MOL     1       6.024  10.158   4.067  1.00  0.00          X1.0\nHETATM   69 UNX  MOL     1       8.106   8.155   4.079  1.00  0.00          X1.0\nHETATM   70 UNX  MOL     1       8.105  10.157   6.055  1.00  0.00          X1.0\nHETATM   71 UNX  MOL     1      10.200   8.097   6.091  1.00  0.00          X1.0\nHETATM   72 UNX  MOL     1      10.160  10.117   4.036  1.00  0.00          X1.0\nHETATM   73 UNX  MOL     1      -0.022  -0.031   8.161  1.00  0.00          X1.0\nHETATM   74 UNX  MOL     1       0.035   2.089  10.156  1.00  0.00          X1.0\nHETATM   75 UNX  MOL     1       2.096   0.029  10.127  1.00  0.00          X1.0\nHETATM   76 UNX  MOL     1       2.106   2.081   8.130  1.00  0.00          X1.0\nHETATM   77 UNX  MOL     1       4.058   0.091   8.094  1.00  0.00          X1.0\nHETATM   78 UNX  MOL     1       4.099   2.024  10.227  1.00  0.00          X1.0\nHETATM   79 UNX  MOL     1       6.075   0.028  10.139  1.00  0.00          X1.0\nHETATM   80 UNX  MOL     1       6.047   2.049   8.151  1.00  0.00          X1.0\nHETATM   81 UNX  MOL     1       8.137   0.035   8.101  1.00  0.00          X1.0\nHETATM   82 UNX  MOL     1       8.027   2.048  10.122  1.00  0.00          X1.0\nHETATM   83 UNX  MOL     1      10.157   0.085  10.110  1.00  0.00          X1.0\nHETATM   84 UNX  MOL     1      10.163   2.031   8.171  1.00  0.00          X1.0\nHETATM   85 UNX  MOL     1       0.024   4.050   8.074  1.00  0.00          X1.0\nHETATM   86 UNX  MOL     1      -0.021   6.100  10.152  1.00  0.00          X1.0\nHETATM   87 UNX  MOL     1       2.038   4.080  10.182  1.00  0.00          X1.0\nHETATM   88 UNX  MOL     1       2.049   6.033   8.149  1.00  0.00          X1.0\nHETATM   89 UNX  MOL     1       4.180   4.069   8.123  1.00  0.00          X1.0\nHETATM   90 UNX  MOL     1       4.022   6.162  10.061  1.00  0.00          X1.0\nHETATM   91 UNX  MOL     1       6.130   4.153  10.155  1.00  0.00          X1.0\nHETATM   92 UNX  MOL     1       6.078   6.149   8.205  1.00  0.00          X1.0\nHETATM   93 UNX  MOL     1       8.152   4.039   8.112  1.00  0.00          X1.0\nHETATM   94 UNX  MOL     1       8.140   6.081  10.132  1.00  0.00          X1.0\nHETATM   95 UNX  MOL     1      10.157   4.068  10.124  1.00  0.00          X1.0\nHETATM   96 UNX  MOL     1      10.196   6.127   8.098  1.00  0.00          X1.0\nHETATM   97 UNX  MOL     1       0.130   8.114   8.147  1.00  0.00          X1.0\nHETATM   98 UNX  MOL     1       0.059  10.159  10.156  1.00  0.00          X1.0\nHETATM   99 UNX  MOL     1       2.056   8.117  10.171  1.00  0.00          X1.0\nHETATM  100 UNX  MOL     1       2.035  10.160   8.124  1.00  0.00          X1.0\nHETATM  101 UNX  MOL     1       4.115   8.136   8.111  1.00  0.00          X1.0\nHETATM  102 UNX  MOL     1       4.073  10.224  10.131  1.00  0.00          X1.0\nHETATM  103 UNX  MOL     1       6.131   8.158  10.244  1.00  0.00          X1.0\nHETATM  104 UNX  MOL     1       6.091  10.162   8.102  1.00  0.00          X1.0\nHETATM  105 UNX  MOL     1       8.082   8.119   8.093  1.00  0.00          X1.0\nHETATM  106 UNX  MOL     1       8.103  10.242  10.075  1.00  0.00          X1.0\nHETATM  107 UNX  MOL     1      10.148   8.235  10.137  1.00  0.00          X1.0\nHETATM  108 UNX  MOL     1      10.148  10.153   8.070  1.00  0.00          X1.0\nENDMDL\n","pdb");
+    viewer_1690567522995758.addUnitCell();
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 1},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 2},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 3},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 4},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 5},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 6},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 7},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 8},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 9},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 10},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 11},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 12},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 13},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 14},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 15},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 16},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 17},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 18},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 19},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 20},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 21},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 22},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 23},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 24},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 25},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 26},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 27},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 28},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 29},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 30},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 31},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 32},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 33},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 34},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 35},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 36},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 37},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 38},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 39},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 40},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 41},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 42},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 43},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 44},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 45},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 46},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 47},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 48},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 49},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 50},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 51},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 52},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 53},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 54},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 55},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 56},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 57},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 58},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 59},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 60},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 61},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 62},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 63},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 64},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 65},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 66},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 67},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 68},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 69},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 70},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 71},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 72},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 73},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 74},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 75},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 76},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 77},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 78},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 79},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 80},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 81},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 82},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 83},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 84},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 85},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 86},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 87},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 88},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 89},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 90},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 91},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 92},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 93},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 94},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 95},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 96},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 97},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 98},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 99},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 100},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 101},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 102},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 103},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 104},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 105},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 106},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 107},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.setStyle({"model": -1, "serial": 108},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1690567522995758.zoomTo();
+viewer_1690567522995758.render();
+});
+</script></div>
+</div>
+<p><strong>File Cleanup</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">pot_id</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">):</span>
     <span class="n">fname</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
 <span class="n">Path</span><span class="p">(</span><span class="n">pot_id</span><span class="p">)</span><span class="o">.</span><span class="n">rmdir</span><span class="p">()</span>
 <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;atom.dat&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
@@ -1377,13 +1278,13 @@ origin = [-0.021, -0.021, -0.021]
         <li class="right" >
           <a href="1.5._Settings_and_databases.html" title="Introduction to atomman: Settings and Library"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: LAMMPS functionality</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
     </div>
   </body>
 </html>

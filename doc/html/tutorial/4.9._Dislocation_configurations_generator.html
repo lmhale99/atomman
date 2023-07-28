@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="en">
@@ -6,17 +5,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Introduction to atomman: Dislocation solution and generator &#8212; atomman 1.4.8 documentation</title>
+    <title>Introduction to atomman: Dislocation solution and generator &#8212; atomman 1.4.10 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="atomman package" href="../atomman.html" />
@@ -37,7 +35,7 @@
         <li class="right" >
           <a href="4.8._Strain_class.html" title="Introduction to atomman: Strain class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Dislocation solution and generator</a></li> 
       </ul>
@@ -48,255 +46,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
-
-
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
-
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-div.rendered_html th {
-  font-weight: bold;
-}
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-</style>
-<section id="Introduction-to-atomman:-Dislocation-solution-and-generator">
+  <section id="Introduction-to-atomman:-Dislocation-solution-and-generator">
 <h1>Introduction to atomman: Dislocation solution and generator<a class="headerlink" href="#Introduction-to-atomman:-Dislocation-solution-and-generator" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
@@ -304,18 +54,17 @@ div.rendered_html tbody tr:hover {
 <h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
 <p>This Notebook outlines the Dislocation class in atomman that provides methods for generating a number of standard atomistic dislocation configurations.</p>
 <ul class="simple">
-<li><p><a class="reference external" href="#section2">Section #2</a> details how dislocations are defined so that they can be used to construct the atomic systems.</p></li>
-<li><p><a class="reference external" href="#section3">Section #3</a> introduces the Dislocation class that provides a convenient means of constructing atomic configurations of dislocations.</p></li>
-<li><p><a class="reference external" href="#section4">Section #4</a> shows how the Dislocation class can be used to generate dislocation monopole configurations.</p></li>
-<li><p><a class="reference external" href="#section5">Section #5</a> shows how the Dislocation class can be used to generate periodic array of dislocations configurations.</p></li>
-<li><p><a class="reference external" href="#section6">Section #6</a> shows how the Dislocation class can be used to generate stable dislocation dipole configurations.</p></li>
+<li><p>Section #2 details how dislocations are defined so that they can be used to construct the atomic systems.</p></li>
+<li><p>Section #3 introduces the Dislocation class that provides a convenient means of constructing atomic configurations of dislocations.</p></li>
+<li><p>Section #4 shows how the Dislocation class can be used to generate dislocation monopole configurations.</p></li>
+<li><p>Section #5 shows how the Dislocation class can be used to generate periodic array of dislocations configurations.</p></li>
+<li><p>Section #6 shows how the Dislocation class can be used to generate stable dislocation dipole configurations.</p></li>
 </ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Standard Python libraries</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
@@ -338,13 +87,19 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9b7463d0e71c4173b1778c4eddda7f28", "version_major": 2, "version_minor": 0}</script></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.8
-Notebook executed on 2023-01-27
+atomman version = 1.4.10
+Notebook executed on 2023-07-28
 </pre></div></div>
 </div>
 </section>
@@ -409,7 +164,7 @@ crystal structure.</p>
 <section id="2.3.2.-Note-for-conventional-unit-cells">
 <h4>2.3.2. Note for conventional unit cells<a class="headerlink" href="#2.3.2.-Note-for-conventional-unit-cells" title="Permalink to this heading">¶</a></h4>
 <p>One peculiarity of the above method is that the rotated box vectors, <span class="math notranslate nohighlight">\(\vec{a}_{rot}\)</span>, <span class="math notranslate nohighlight">\(\vec{b}_{rot}\)</span>, and <span class="math notranslate nohighlight">\(\vec{c}_{rot}\)</span>, are limited to Miller crystal vectors of the unit cell with integer indicies. This ensures that the rotated cell box vectors are always lattice vectors. However, if the unit cell is not a primitive cell then some lattice vectors cannot be used as they correspond to fractional Miller indices.</p>
-<p>This limitation can be overcome by knowing what the lattice setting of the conventional unit cell is, i.e. face-centered, body-centered or side-centered. Using pre-defined tranformation matricies that reversibly convert Miller crystal vectors from the conventional setting to a primitive setting, a compatible primitive unit cell can be generated. Then, the above search algorithm can be performed relative to this primitive cell and any crystal vectors used can be converted between the two cell
+<p>This limitation can be overcome by knowing what the lattice setting of the conventional unit cell is, i.e. face-centered, body-centered or side-centered. Using pre-defined tranformation matricies that reversibly convert Miller crystal vectors from the conventional setting to a primitive setting, a compatible primitive unit cell can be generated. Then, the above search algorithm can be performed relative to this primitive cell and any crystal vectors used can be converted between the two cell
 representations. The rotated cell is then constructed based on the primitive cell and integer Miller vectors of the primitive cell, thus allowing for all lattice vectors.</p>
 </section>
 <section id="2.3.3.-Atomic-alignment">
@@ -435,8 +190,8 @@ parameters or based on optimum shift recommendations.</p>
 <li><p><strong>burgers</strong> (<em>array-like object</em>) The dislocation’s Burgers vector given as a Miller or Miller-Bravais vector relative to ucell.</p></li>
 <li><p><strong>ξ_uvw</strong> (<em>array-like object</em>) The dislocation’s line direction given as a Miller or Miller-Bravais vector relative to ucell.</p></li>
 <li><p><strong>slip_hkl</strong> (<em>array-like object</em>) The dislocation’s slip plane given as a Miller or Miller-Bravais plane relative to ucell.</p></li>
-<li><p><strong>m</strong> (<em>str or array-like object, optional</em>) The Cartesian axis to align with the dislocation solution’s m-axis, i.e. the in-plane direction perpendicular to the dislocation line. Can be specified as a 3D vector or str values ‘x’, ‘y’, or ‘z’. Default value is ‘y’ as this corresponds to the optimum alignment for LAMMPS systems.</p></li>
-<li><p><strong>n</strong> (<em>str or array-like object, optional</em>) The Cartesian axis to align with the dislocation solution’s n-axis, i.e. the slip plane normal. Can be specified as a 3D vector or str values ‘x’, ‘y’, or ‘z’. Default value is ‘z’ as this corresponds to the optimum alignment for LAMMPS systems.</p></li>
+<li><p><strong>m</strong> (<em>str or array-like object, optional</em>) The Cartesian axis to align with the dislocation solution’s m-axis, i.e. the in-plane direction perpendicular to the dislocation line. Can be specified as a 3D vector or str values ‘x’, ‘y’, or ‘z’. Default value is ‘y’ as this corresponds to the optimum alignment for LAMMPS systems.</p></li>
+<li><p><strong>n</strong> (<em>str or array-like object, optional</em>) The Cartesian axis to align with the dislocation solution’s n-axis, i.e. the slip plane normal. Can be specified as a 3D vector or str values ‘x’, ‘y’, or ‘z’. Default value is ‘z’ as this corresponds to the optimum alignment for LAMMPS systems.</p></li>
 <li><p><strong>tol</strong> (<em>float</em>) A cutoff tolerance used with obtaining the dislocation solution. Only needs to be changed if there are issues with obtaining a solution.</p></li>
 </ul>
 <p>Shift parameters</p>
@@ -447,8 +202,8 @@ parameters or based on optimum shift recommendations.</p>
 </ul>
 <p>Other options</p>
 <ul class="simple">
-<li><p><strong>ucell_setting</strong> (<em>str, optional</em>) Indicates the space lattice setting of the given unit cell, i.e. p for primitive, i for body-centered, f for face-centered and a, b, or c for side-centered. Setting this with the appropriate conventional unit cell allows for identifying lattice vectors that are not integers with respect to the conventional unit cell. This also creates the rotated cell from a compatible primitive cell, thereby the final dislocation configurations can be smaller than possible
-solely from the conventional unit cell.</p></li>
+<li><p><strong>conventional_setting</strong> (<em>str, optional</em>) Indicates the space lattice setting of the given unit cell, i.e. p for primitive, i for body-centered, f for face-centered and a, b, or c for side-centered. Setting this with the appropriate conventional unit cell allows for identifying lattice vectors that are not integers with respect to the conventional unit cell. This also creates the rotated cell from a compatible primitive cell, thereby the final dislocation configurations can be smaller than
+possible solely from the conventional unit cell.</p></li>
 </ul>
 <section id="3.1.-Define-an-Al-fcc-a/2&lt;110&gt;{111}-Dislocation">
 <h3>3.1. Define an Al fcc a/2&lt;110&gt;{111} Dislocation<a class="headerlink" href="#3.1.-Define-an-Al-fcc-a/2<110>{111}-Dislocation" title="Permalink to this heading">¶</a></h3>
@@ -457,15 +212,14 @@ solely from the conventional unit cell.</p></li>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Rough values for fcc Al</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Rough values for fcc Al</span>
 <span class="n">alat</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.05</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">C11</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">105</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
 <span class="n">C12</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
 <span class="n">C44</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
 
 <span class="c1"># Construct the unit cell from a prototype and specify the ucell setting</span>
-<span class="n">ucell_setting</span> <span class="o">=</span> <span class="s1">&#39;f&#39;</span>
+<span class="n">conventional_setting</span> <span class="o">=</span> <span class="s1">&#39;f&#39;</span>
 <span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;prototype&#39;</span><span class="p">,</span> <span class="s1">&#39;A1--Cu--fcc&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">alat</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ucell</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
@@ -511,8 +265,7 @@ Cij (GPa) =
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># FCC a/2&lt;101&gt;{111} dislocation</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># FCC a/2&lt;101&gt;{111} dislocation</span>
 <span class="n">burgers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">])</span>
 <span class="n">slip_hkl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 
@@ -520,13 +273,13 @@ Cij (GPa) =
 <span class="n">character</span> <span class="o">=</span> <span class="s1">&#39;90-edge&#39;</span>
 
 <span class="k">if</span> <span class="n">character</span> <span class="o">==</span> <span class="s1">&#39;90-edge&#39;</span><span class="p">:</span>
-    <span class="n">ξ_uvw</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+    <span class="n">ξ_uvw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
 <span class="k">elif</span> <span class="n">character</span> <span class="o">==</span> <span class="s1">&#39;60-mixed&#39;</span><span class="p">:</span>
-    <span class="n">ξ_uvw</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+    <span class="n">ξ_uvw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
 <span class="k">elif</span> <span class="n">character</span> <span class="o">==</span> <span class="s1">&#39;30-mixed&#39;</span><span class="p">:</span>
-    <span class="n">ξ_uvw</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">]</span>
+    <span class="n">ξ_uvw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">])</span>
 <span class="k">elif</span> <span class="n">character</span> <span class="o">==</span> <span class="s1">&#39;0-screw&#39;</span><span class="p">:</span>
-    <span class="n">ξ_uvw</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">]</span>
+    <span class="n">ξ_uvw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -535,8 +288,7 @@ Cij (GPa) =
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">fcc_disl</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">Dislocation</span><span class="p">(</span><span class="n">ucell</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">ξ_uvw</span><span class="p">,</span> <span class="n">slip_hkl</span><span class="p">,</span> <span class="n">ucell_setting</span><span class="o">=</span><span class="n">ucell_setting</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fcc_disl</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">Dislocation</span><span class="p">(</span><span class="n">ucell</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">ξ_uvw</span><span class="p">,</span> <span class="n">slip_hkl</span><span class="p">,</span> <span class="n">conventional_setting</span><span class="o">=</span><span class="n">conventional_setting</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -553,9 +305,8 @@ Cij (GPa) =
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;character angle = </span><span class="si">{</span><span class="n">fcc_disl</span><span class="o">.</span><span class="n">dislsol</span><span class="o">.</span><span class="n">characterangle</span><span class="p">()</span><span class="si">}</span><span class="s1"> degrees&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;K_coeff = </span><span class="si">{</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">fcc_disl</span><span class="o">.</span><span class="n">dislsol</span><span class="o">.</span><span class="n">K_coeff</span><span class="p">,</span> <span class="s2">&quot;GPa&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> GPa&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;character angle = </span><span class="si">{</span><span class="n">fcc_disl</span><span class="o">.</span><span class="n">dislsol</span><span class="o">.</span><span class="n">characterangle</span><span class="p">()</span><span class="si">}</span><span class="s1"> degrees&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;K_coeff = </span><span class="si">{</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">fcc_disl</span><span class="o">.</span><span class="n">dislsol</span><span class="o">.</span><span class="n">K_coeff</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;GPa&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> GPa&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;burgers =&#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">fcc_disl</span><span class="o">.</span><span class="n">dislsol</span><span class="o">.</span><span class="n">burgers</span><span class="p">,</span> <span class="s2">&quot;angstrom&quot;</span><span class="p">),</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -583,7 +334,7 @@ burgers = [0.         2.86378246 0.        ] angstrom
 <li><p><strong>lineindex</strong>, <strong>cutindex</strong>, and <strong>motionindex</strong> are integer indices that indicate how the uvws and rcell box vectors are aligned relative to the dislocation solution. These each have a unique value of 0, 1 or 2.</p>
 <ul>
 <li><p><strong>lineindex</strong> indicates which uvw/box vector corresponds to the line direction.</p></li>
-<li><p><strong>cutindex</strong> indicates which uvw/box vector is most aligned with the dislocation solution’s n-axis, i.e. is out-of-plane. The name “cutindex” is used for consistency with the surface and stacking fault generation methods.</p></li>
+<li><p><strong>cutindex</strong> indicates which uvw/box vector is most aligned with the dislocation solution’s n-axis, i.e. is out-of-plane. The name “cutindex” is used for consistency with the surface and stacking fault generation methods.</p></li>
 <li><p><strong>motionindex</strong> indicates which uvw/box vector is most aligned with the dislocation solution’s m-axis. The name “motionindex” is due to the dislocation line moving in this direction during slip.</p></li>
 </ul>
 </li>
@@ -592,8 +343,7 @@ burgers = [0.         2.86378246 0.        ] angstrom
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fcc_disl</span><span class="o">.</span><span class="n">ucell</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">fcc_disl</span><span class="o">.</span><span class="n">ucell</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -622,8 +372,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fcc_disl</span><span class="o">.</span><span class="n">ucell_prim</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">fcc_disl</span><span class="o">.</span><span class="n">ucell_prim</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -649,8 +398,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">fcc_disl</span><span class="o">.</span><span class="n">rcell</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">fcc_disl</span><span class="o">.</span><span class="n">rcell</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -670,7 +418,7 @@ pbc = [ True  True  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   4.960 |   2.864 |   0.000
-      1 |       1 |   2.480 |   1.432 |   7.015
+      1 |       1 |   2.480 |   1.432 |   0.000
       2 |       1 |   1.653 |   2.864 |   2.338
       3 |       1 |   0.827 |   1.432 |   4.677
       4 |       1 |   4.134 |   1.432 |   2.338
@@ -681,8 +429,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rotation uvws wrt ucell =&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rotation uvws wrt ucell =&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">fcc_disl</span><span class="o">.</span><span class="n">uvws</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
 
@@ -737,8 +484,7 @@ motionindex = 1
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Identified shifts =&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Identified shifts =&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">fcc_disl</span><span class="o">.</span><span class="n">shifts</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
 
@@ -768,15 +514,14 @@ The shift currently set to be used = [0.        0.        1.1691343]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Rough values for fcc Al</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Rough values for fcc Al</span>
 <span class="n">alat</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">2.8665</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">C11</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">240</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
 <span class="n">C12</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
 <span class="n">C44</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">115</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
 
 <span class="c1"># Construct the unit cell from a prototype and specify the ucell setting</span>
-<span class="n">ucell_setting</span> <span class="o">=</span> <span class="s1">&#39;i&#39;</span>
+<span class="n">conventional_setting</span> <span class="o">=</span> <span class="s1">&#39;i&#39;</span>
 <span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;prototype&#39;</span><span class="p">,</span> <span class="s1">&#39;A2--W--bcc&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">alat</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Fe&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ucell</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
@@ -815,13 +560,23 @@ Cij (GPa) =
  [  0.   0.   0.   0.   0. 115.]]
 </pre></div></div>
 </div>
-<p>Specify the dislocation type definition and shift</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># FCC a/2&lt;101&gt;{111} dislocation</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">C11</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">240</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
+<span class="n">C12</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
+<span class="n">C44</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">115</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">ElasticConstants</span><span class="p">(</span><span class="n">C11</span><span class="o">=</span><span class="n">C11</span><span class="p">,</span> <span class="n">C12</span><span class="o">=</span><span class="n">C12</span><span class="p">,</span> <span class="n">C44</span><span class="o">=</span><span class="n">C44</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Specify the dislocation type definition and shift</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># bcc a/2&lt;111&gt;{110} dislocation</span>
 <span class="n">burgers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
 <span class="n">slip_hkl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 
@@ -836,11 +591,11 @@ Cij (GPa) =
 </div>
 <p>Initialize the Dislocation object using the above parameters</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">bcc_disl</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">Dislocation</span><span class="p">(</span><span class="n">ucell</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">ξ_uvw</span><span class="p">,</span> <span class="n">slip_hkl</span><span class="p">,</span> <span class="n">ucell_setting</span><span class="o">=</span><span class="n">ucell_setting</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bcc_disl</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">Dislocation</span><span class="p">(</span><span class="n">ucell</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">burgers</span><span class="p">,</span> <span class="n">ξ_uvw</span><span class="p">,</span> <span class="n">slip_hkl</span><span class="p">,</span>
+                                 <span class="n">conventional_setting</span><span class="o">=</span><span class="n">conventional_setting</span><span class="p">,</span>
                                  <span class="n">shift</span><span class="o">=</span><span class="n">shift</span><span class="p">,</span> <span class="n">shiftscale</span><span class="o">=</span><span class="n">shiftscale</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -850,12 +605,11 @@ Cij (GPa) =
 <h3>3.4. Check the bcc Dislocation<a class="headerlink" href="#3.4.-Check-the-bcc-Dislocation" title="Permalink to this heading">¶</a></h3>
 <p>The same parameters listed in 3.2. are now used to check the bcc dislocation.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;character angle = </span><span class="si">{</span><span class="n">bcc_disl</span><span class="o">.</span><span class="n">dislsol</span><span class="o">.</span><span class="n">characterangle</span><span class="p">()</span><span class="si">}</span><span class="s1"> degrees&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;K_coeff = </span><span class="si">{</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">bcc_disl</span><span class="o">.</span><span class="n">dislsol</span><span class="o">.</span><span class="n">K_coeff</span><span class="p">,</span> <span class="s2">&quot;GPa&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> GPa&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;character angle = </span><span class="si">{</span><span class="n">bcc_disl</span><span class="o">.</span><span class="n">dislsol</span><span class="o">.</span><span class="n">characterangle</span><span class="p">()</span><span class="si">}</span><span class="s1"> degrees&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;K_coeff = </span><span class="si">{</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">bcc_disl</span><span class="o">.</span><span class="n">dislsol</span><span class="o">.</span><span class="n">K_coeff</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;GPa&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> GPa&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;burgers =&#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">bcc_disl</span><span class="o">.</span><span class="n">dislsol</span><span class="o">.</span><span class="n">burgers</span><span class="p">,</span> <span class="s2">&quot;angstrom&quot;</span><span class="p">),</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -871,11 +625,10 @@ burgers = [2.48246182 0.         0.        ] angstrom
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">bcc_disl</span><span class="o">.</span><span class="n">ucell</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">bcc_disl</span><span class="o">.</span><span class="n">ucell</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -899,11 +652,10 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">bcc_disl</span><span class="o">.</span><span class="n">ucell_prim</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">bcc_disl</span><span class="o">.</span><span class="n">ucell_prim</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -926,11 +678,10 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">bcc_disl</span><span class="o">.</span><span class="n">rcell</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">bcc_disl</span><span class="o">.</span><span class="n">rcell</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -958,11 +709,10 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rotation uvws wrt ucell =&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rotation uvws wrt ucell =&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">bcc_disl</span><span class="o">.</span><span class="n">uvws</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
 
@@ -1006,11 +756,10 @@ motionindex = 1
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Identified shifts =&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Identified shifts =&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">bcc_disl</span><span class="o">.</span><span class="n">shifts</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
 
@@ -1046,7 +795,7 @@ The shift currently set to be used = [0.         0.         2.70256212]
 the relaxation process.</p>
 <ul class="simple">
 <li><p>A rigid boundary relaxation is one in which the boundary atoms are never adjusted after the initial system construction. As the atoms are held at the elastic dislocation solution, the initial positions tend to be a decent guess for dislocations with compact cores. However, a misfit force will arise at the interface between the boundary and non-boundary atoms that can influence the dislocation structure, energies and behavior. The influence of the misfit force can be minimized by increasing
-the distance between the dislocation core and the boundary region, i.e. increasing the non-periodic dimensions. Also, note that the interaction with the boundary region will be greater for non-compact cores and if the dislocation moves from the center of the atomic configuration.</p></li>
+the distance between the dislocation core and the boundary region, i.e. increasing the non-periodic dimensions. Also, note that the interaction with the boundary region will be greater for non-compact cores and if the dislocation moves from the center of the atomic configuration.</p></li>
 <li><p>A flexible boundary relaxation is one in which the boundary atoms are subjected to an alternative relaxation method, such as the lattice Greens function. This alternative relaxation method allows for the misfit forces at the interface between the boundary and non-boundary atoms to be reduced while preventing the atoms at the non-periodic box boundaries from forming free surfaces. The flexible boundary reduces or eliminates the interaction between the core with the only limit being that the
 dislocation core cannot cross/spread into the boundary region. As this makes it possible to generate smaller systems with less issues, the flexible boundary relaxation makes some dislocation monopoles accessible to DFT.</p></li>
 </ul>
@@ -1073,7 +822,7 @@ shift set during class initialization.</p></li>
 <p>Boundary parameters</p>
 <ul class="simple">
 <li><p><strong>boundaryshape</strong> (<em>str, optional</em>) Indicates the shape of the boundary region to use. Options are ‘cylinder’ (default) and ‘box’. For ‘cylinder’, the non-boundary region is defined by a cylinder with axis along the dislocation line and a radius that ensures the boundary is at least boundarywidth thick. For ‘box’, the boundary region will be exactly boundarywidth thick all around.</p></li>
-<li><p><strong>boundarywidth</strong> (<em>float, optional</em>) The width of the boundary region to apply. Default value is 0.0, i.e. no boundary region. All atoms in the boundary region will have their atype values changed.</p></li>
+<li><p><strong>boundarywidth</strong> (<em>float, optional</em>) The width of the boundary region to apply. Default value is 0.0, i.e. no boundary region. All atoms in the boundary region will have their atype values changed.</p></li>
 <li><p><strong>boundaryscale</strong> (<em>bool, optional</em>) If False (Default), the boundarywidth will be taken as absolute. If True, the boundarywidth will be taken relative to the magnitude of the unit cell’s a box vector.</p></li>
 </ul>
 <p>Return options</p>
@@ -1085,11 +834,10 @@ shift set during class initialization.</p></li>
 <h3>4.3. bcc screw dislocation monopole<a class="headerlink" href="#4.3.-bcc-screw-dislocation-monopole" title="Permalink to this heading">¶</a></h3>
 <p>We’ll use the bcc dislocation as it is a compact core.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span> <span class="o">=</span> <span class="n">bcc_disl</span><span class="o">.</span><span class="n">monopole</span><span class="p">(</span><span class="n">bmin</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span> <span class="o">=</span> <span class="n">bcc_disl</span><span class="o">.</span><span class="n">monopole</span><span class="p">(</span><span class="n">bmin</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span>
                                              <span class="n">boundarywidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">boundaryscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                              <span class="n">return_base_system</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
@@ -1097,11 +845,10 @@ shift set during class initialization.</p></li>
 </div>
 <p>Plotting atomic positions reveals the boundary region shape</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">atype</span> <span class="ow">in</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">atypes</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">atype</span><span class="o">==</span><span class="n">atype</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
              <span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">atype</span><span class="o">==</span><span class="n">atype</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
@@ -1115,7 +862,7 @@ shift set during class initialization.</p></li>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_41_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_41_0.png" />
+<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_42_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_42_0.png" />
 </div>
 </div>
 </section>
@@ -1131,11 +878,10 @@ shift set during class initialization.</p></li>
 </ul>
 <p><strong>WARNING</strong>: No atomic relaxation has been performed here! Depending on the potential used, the predicted core structure may appear differently!</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">alat</span> <span class="o">=</span> <span class="n">bcc_disl</span><span class="o">.</span><span class="n">ucell</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">a</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alat</span> <span class="o">=</span> <span class="n">bcc_disl</span><span class="o">.</span><span class="n">ucell</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">a</span>
 <span class="n">burgers</span> <span class="o">=</span> <span class="n">bcc_disl</span><span class="o">.</span><span class="n">dislsol</span><span class="o">.</span><span class="n">burgers</span>
 
 <span class="c1"># Supersize the systems along the line direction</span>
@@ -1149,11 +895,10 @@ shift set during class initialization.</p></li>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ddmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ddmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
 
 <span class="c1"># Set dict of keyword parameter values (just to make settings same for all plots below)</span>
 <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1169,11 +914,10 @@ shift set during class initialization.</p></li>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">ddmax</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">ddmax</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;x component&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -1183,7 +927,7 @@ shift set during class initialization.</p></li>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_45_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_45_0.png" />
+<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_46_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_46_0.png" />
 </div>
 </div>
 </section>
@@ -1217,7 +961,7 @@ position in the system. This causes issue for slip calculations as the interacti
 <p>One alternative to this is to use a different displacement solution for the boundary region based on applying a linear gradient of displacements to all boundary atoms</p>
 <div class="math notranslate nohighlight">
 \[u_j = \frac{b_j}{2} - \text{sign}(x_2)\left[ \frac{x_1 b_j}{2l} + \frac{b_j}{4}\right],\]</div>
-<p>where <span class="math notranslate nohighlight">\(l\)</span> is the full periodic length of the system in the <span class="math notranslate nohighlight">\(\hat{m}\)</span> direction. The sign switch indicates that the displacements in the two boundary regions are equal but opposite for a given <span class="math notranslate nohighlight">\(x\)</span> coordinate, i.e. the position along the motion direction. At the two <span class="math notranslate nohighlight">\(x\)</span> boundaries, the linear gradient displacements match the dislocation solution displacements on the slip plane.</p>
+<p>where <span class="math notranslate nohighlight">\(l\)</span> is the full periodic length of the system in the <span class="math notranslate nohighlight">\(\hat{m}\)</span> direction. The sign switch indicates that the displacements in the two boundary regions are equal but opposite for a given <span class="math notranslate nohighlight">\(x\)</span> coordinate, i.e. the position along the motion direction. At the two <span class="math notranslate nohighlight">\(x\)</span> boundaries, the linear gradient displacements match the dislocation solution displacements on the slip plane.</p>
 <p>Using the linear gradient of displacements for the boundary regions does not eliminate the misfit forces at the interface between the boundary region, and therefore there will still be interactions between the boundary region and the dislocation. However, that interaction will be independent of the dislocation’s position. The slip behavior of dislocations can therefore be studied by applying shear strains/stresses to the system by adding displacements/forces to the boundary atoms. Some examples:</p>
 <ul class="simple">
 <li><p>Quasistatic calculations in which energy/force relaxations are used after incremental displacements of the boundaries. This can be used to estimate the Peierls barrier, with good estimates requiring very small force relaxation tolerances and very small displacements at each iteration.</p></li>
@@ -1246,7 +990,7 @@ closer to the final relaxed configuration than the compact dislocation core give
 </ul>
 <p>Boundary parameters</p>
 <ul class="simple">
-<li><p><strong>boundarywidth</strong> (<em>float, optional</em>) The width of the boundary region to apply. Default value is 0.0, i.e. no boundary region. All atoms in the boundary region will have their atype values changed and will be displaced by linear displacements.</p></li>
+<li><p><strong>boundarywidth</strong> (<em>float, optional</em>) The width of the boundary region to apply. Default value is 0.0, i.e. no boundary region. All atoms in the boundary region will have their atype values changed and will be displaced by linear displacements.</p></li>
 <li><p><strong>boundaryscale</strong> (<em>bool, optional</em>) If False (Default), the boundarywidth will be taken as absolute. If True, the boundarywidth will be taken relative to the magnitude of the unit cell’s a box vector.</p></li>
 </ul>
 <p>Method options</p>
@@ -1262,22 +1006,20 @@ closer to the final relaxed configuration than the compact dislocation core give
 <section id="5.3.-Small-atomic-system-example,-easy-to-see-atomic-positions">
 <h3>5.3. Small atomic system example, easy to see atomic positions<a class="headerlink" href="#5.3.-Small-atomic-system-example,-easy-to-see-atomic-positions" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span> <span class="o">=</span> <span class="n">fcc_disl</span><span class="o">.</span><span class="n">periodicarray</span><span class="p">(</span><span class="n">bmin</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span> <span class="o">=</span> <span class="n">fcc_disl</span><span class="o">.</span><span class="n">periodicarray</span><span class="p">(</span><span class="n">bmin</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
                                                   <span class="n">boundarywidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">boundaryscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                                   <span class="n">return_base_system</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">atype</span> <span class="ow">in</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">atypes</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">atype</span><span class="o">==</span><span class="n">atype</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
              <span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">atype</span><span class="o">==</span><span class="n">atype</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
@@ -1291,29 +1033,27 @@ closer to the final relaxed configuration than the compact dislocation core give
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_50_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_50_0.png" />
+<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_51_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_51_0.png" />
 </div>
 </div>
 </section>
 <section id="5.4.-Large-atomic-system-example,-more-useful-for-simulations">
 <h3>5.4. Large atomic system example, more useful for simulations<a class="headerlink" href="#5.4.-Large-atomic-system-example,-more-useful-for-simulations" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span> <span class="o">=</span> <span class="n">fcc_disl</span><span class="o">.</span><span class="n">periodicarray</span><span class="p">(</span><span class="n">bmin</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span> <span class="o">=</span> <span class="n">fcc_disl</span><span class="o">.</span><span class="n">periodicarray</span><span class="p">(</span><span class="n">bmin</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
                                                   <span class="n">boundarywidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">boundaryscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                                   <span class="n">return_base_system</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">atype</span> <span class="ow">in</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">atypes</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">atype</span><span class="o">==</span><span class="n">atype</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
              <span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">atype</span><span class="o">==</span><span class="n">atype</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
@@ -1327,17 +1067,16 @@ closer to the final relaxed configuration than the compact dislocation core give
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_53_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_53_0.png" />
+<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_54_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_54_0.png" />
 </div>
 </div>
 <p>For periodic arrays of dislocations, plotting the disregistry gives a good indication of the dislocation’s position and if it has split into partials.</p>
 <p><strong>WARNING</strong>: No atomic relaxation has been performed here! Depending on the potential used, the predicted core structure may appear differently!</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Plot disregistry</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot disregistry</span>
 <span class="n">xi</span><span class="p">,</span> <span class="n">disreg</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">disregistry</span><span class="p">(</span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
@@ -1359,7 +1098,7 @@ closer to the final relaxed configuration than the compact dislocation core give
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_55_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_55_0.png" />
+<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_56_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_56_0.png" />
 </div>
 </div>
 </section>
@@ -1367,11 +1106,10 @@ closer to the final relaxed configuration than the compact dislocation core give
 <h3>5.5. Linear gradient displacements only<a class="headerlink" href="#5.5.-Linear-gradient-displacements-only" title="Permalink to this heading">¶</a></h3>
 <p>Here is a repeat of the two configurations above but using only the linear gradient displacements rather than the Volterra solution.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span> <span class="o">=</span> <span class="n">fcc_disl</span><span class="o">.</span><span class="n">periodicarray</span><span class="p">(</span><span class="n">bmin</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span> <span class="o">=</span> <span class="n">fcc_disl</span><span class="o">.</span><span class="n">periodicarray</span><span class="p">(</span><span class="n">bmin</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
                                                   <span class="n">boundarywidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">boundaryscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                                   <span class="n">linear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                                   <span class="n">return_base_system</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1390,15 +1128,14 @@ closer to the final relaxed configuration than the compact dislocation core give
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_57_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_57_0.png" />
+<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_58_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_58_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span> <span class="o">=</span> <span class="n">fcc_disl</span><span class="o">.</span><span class="n">periodicarray</span><span class="p">(</span><span class="n">bmin</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span> <span class="o">=</span> <span class="n">fcc_disl</span><span class="o">.</span><span class="n">periodicarray</span><span class="p">(</span><span class="n">bmin</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
                                                   <span class="n">boundarywidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">boundaryscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                                   <span class="n">linear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                                   <span class="n">return_base_system</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1425,7 +1162,7 @@ closer to the final relaxed configuration than the compact dislocation core give
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_58_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_58_0.png" />
+<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_59_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_59_0.png" />
 </div>
 </div>
 </section>
@@ -1433,7 +1170,7 @@ closer to the final relaxed configuration than the compact dislocation core give
 <section id="6.-Dislocation-dipole-configuration">
 <h2>6. Dislocation dipole configuration<a class="headerlink" href="#6.-Dislocation-dipole-configuration" title="Permalink to this heading">¶</a></h2>
 <p><em>Added version 1.4.8</em></p>
-<p>A dislocation dipole configuration is an atomic system that contains two parallel dislocations of opposite Burgers vectors. In particular, the configuration method used here corresponds to what is described in <a class="reference external" href="https://doi.org/10.1103/PhysRevB.70.104113">Li et al. Phys Rev B 70, 104113 (2004)</a>. This configuration has been used for atomistic and DFT investigations of compact dislocation cores as it generates a stable dislocation system with a small number of atoms.</p>
+<p>A dislocation dipole configuration is an atomic system that contains two parallel dislocations of opposite Burgers vectors. In particular, the configuration method used here corresponds to what is described in <a class="reference external" href="https://doi.org/10.1103/PhysRevB.70.104113">Li et al. Phys Rev B 70, 104113 (2004)</a>. This configuration has been used for atomistic and DFT investigations of compact dislocation cores as it generates a stable dislocation system with a small number of atoms.</p>
 <section id="6.1.-Boundary-conditions">
 <h3>6.1. Boundary conditions<a class="headerlink" href="#6.1.-Boundary-conditions" title="Permalink to this heading">¶</a></h3>
 <p>The dislocation dipole configuration generated by the Dislocation class has the following boundary conditions</p>
@@ -1457,7 +1194,7 @@ vectors</p>
 coordinates along the <span class="math notranslate nohighlight">\(m\)</span>- and <span class="math notranslate nohighlight">\(n\)</span>-axes.</p>
 <p>The quadripole arrangement of dislocations is constructed by inserting four dislocations into the system such that they form a regular grid of dislocations with alternating Burgers vectors signs. One way to do this is to insert two dislocations with Burgers vector <span class="math notranslate nohighlight">\(\vec{b}\)</span> at positions <span class="math notranslate nohighlight">\([\frac{l}{4}, \frac{h}{4}]\)</span> and <span class="math notranslate nohighlight">\([\frac{3l}{4}, \frac{3h}{4}]\)</span> and insert two dislocations with Burgers vector <span class="math notranslate nohighlight">\(-\vec{b}\)</span> at positions <span class="math notranslate nohighlight">\([\frac{l}{4}, \frac{3h}{4}]\)</span> and
 <span class="math notranslate nohighlight">\([\frac{3l}{4}, \frac{h}{4}]\)</span>. Each dislocation is surrounded by dislocations of opposite sign at distances of <span class="math notranslate nohighlight">\(\pm\frac{l}{2}\)</span> along the <span class="math notranslate nohighlight">\(m\)</span>-axis and <span class="math notranslate nohighlight">\(\pm\frac{h}{2}\)</span> along the <span class="math notranslate nohighlight">\(n\)</span>-axis. Due to this equal spacing, the interaction between any pair of dislocations is cancelled by a dislocation in the opposite direction, thus creating a stable configuration.</p>
-<p>Li et al. showed that the rectangular quadripole configuration can be equivalently represented as a dipole configuration using a periodic cell of half the volume by taking advantage of the periodic boundaries. The 3D box vectors of this smaller dipole cell are</p>
+<p>Li et al. showed that the rectangular quadripole configuration can be equivalently represented as a dipole configuration using a periodic cell of half the volume by taking advantage of the periodic boundaries. The 3D box vectors of this smaller dipole cell are</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(\vec{a}_{dipole} = \vec{a}_{quad}\)</span></p></li>
 <li><p><span class="math notranslate nohighlight">\(\vec{b}_{dipole} = \frac{1}{2}\left( \vec{b}_{quad} + \vec{a}_{quad} + \vec{b} \right)\)</span></p></li>
@@ -1469,7 +1206,7 @@ offset ensures that the arrangement of dislocations remains a regular grid of al
 </section>
 <section id="6.2.-Dipole-displacement-field">
 <h3>6.2. Dipole displacement field<a class="headerlink" href="#6.2.-Dipole-displacement-field" title="Permalink to this heading">¶</a></h3>
-<p>The displacement field for the dislocation dipole is constructed by summing Volterra dislocation displacement solutions for individual dislocations. The process used here follows the work done by <a class="reference external" href="https://doi.org/10.1080/0141861021000051109">Cai et al. Phil Mag 83, 539 (2003)</a>. The total displacement solution for the periodic dipole configuration consists of three components</p>
+<p>The displacement field for the dislocation dipole is constructed by summing Volterra dislocation displacement solutions for individual dislocations. The process used here follows the work done by <a class="reference external" href="https://doi.org/10.1080/0141861021000051109">Cai et al. Phil Mag 83, 539 (2003)</a>. The total displacement solution for the periodic dipole configuration consists of three components</p>
 <ol class="arabic simple">
 <li><p>The displacement solution for a dislocation dipole in an infinite bulk medium.</p></li>
 <li><p>The displacement solution from the dipoles in the periodic images.</p></li>
@@ -1521,11 +1258,10 @@ sizemults will be applied to the rotated cell. The non-tilted system will have d
 <li><p><strong>return_base_system</strong> (<em>bool, optional</em>) If True then the dislocation-free base system corresponding to the dislocation system will also be returned. The base system is used as a reference state for most of the dislocation analysis tools.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span> <span class="o">=</span> <span class="n">bcc_disl</span><span class="o">.</span><span class="n">dipole</span><span class="p">(</span><span class="n">sizemults</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">],</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span> <span class="o">=</span> <span class="n">bcc_disl</span><span class="o">.</span><span class="n">dipole</span><span class="p">(</span><span class="n">sizemults</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">],</span>
                                           <span class="n">boxtilt</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                                           <span class="n">return_base_system</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 
@@ -1544,11 +1280,10 @@ Number of atoms = 231
 <p>We can analyze the configuration with both the disregistry and with differential displacements.</p>
 <p><strong>WARNING</strong>: No atomic relaxation has been performed here! Depending on the potential used, the predicted core structure may appear differently!</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">xi</span><span class="p">,</span> <span class="n">disreg</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">disregistry</span><span class="p">(</span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xi</span><span class="p">,</span> <span class="n">disreg</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">disregistry</span><span class="p">(</span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
 
@@ -1569,26 +1304,24 @@ Number of atoms = 231
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_63_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_63_0.png" />
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Supersize along the line direction</span>
-<span class="n">big_base_system</span> <span class="o">=</span> <span class="n">base_system</span><span class="o">.</span><span class="n">supersize</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">big_disl_system</span> <span class="o">=</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">supersize</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
+<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_64_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_64_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">alat</span> <span class="o">=</span> <span class="n">bcc_disl</span><span class="o">.</span><span class="n">ucell</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">a</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Supersize along the line direction</span>
+<span class="n">big_base_system</span> <span class="o">=</span> <span class="n">base_system</span><span class="o">.</span><span class="n">supersize</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">big_disl_system</span> <span class="o">=</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">supersize</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alat</span> <span class="o">=</span> <span class="n">bcc_disl</span><span class="o">.</span><span class="n">ucell</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">a</span>
 <span class="n">burgers</span> <span class="o">=</span> <span class="n">bcc_disl</span><span class="o">.</span><span class="n">dislsol</span><span class="o">.</span><span class="n">burgers</span>
 
 <span class="c1"># Compute neighbors and dd</span>
@@ -1598,11 +1331,10 @@ Number of atoms = 231
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ddmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>   <span class="c1"># a/2&lt;111&gt; bcc dislocations useb|/2</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ddmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>   <span class="c1"># a/2&lt;111&gt; bcc dislocations useb|/2</span>
 
 <span class="c1"># Set dict of keyword parameter values (just to make settings same for all plots below)</span>
 <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1618,11 +1350,10 @@ Number of atoms = 231
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">ddmax</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">ddmax</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;x component&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -1632,7 +1363,7 @@ Number of atoms = 231
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_67_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_67_0.png" />
+<img alt="../_images/tutorial_4.9._Dislocation_configurations_generator_68_0.png" src="../_images/tutorial_4.9._Dislocation_configurations_generator_68_0.png" />
 </div>
 </div>
 </section>
@@ -1737,13 +1468,13 @@ Number of atoms = 231
         <li class="right" >
           <a href="4.8._Strain_class.html" title="Introduction to atomman: Strain class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Dislocation solution and generator</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
     </div>
   </body>
 </html>

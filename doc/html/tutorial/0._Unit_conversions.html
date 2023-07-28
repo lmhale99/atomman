@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="en">
@@ -6,15 +5,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Introduction to atomman: Unit conversions &#8212; atomman 1.4.8 documentation</title>
+    <title>Introduction to atomman: Unit conversions &#8212; atomman 1.4.10 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Defining atomic systems" href="1._Defining_atomic_systems.html" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="index.html" title="Tutorials"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Unit conversions</a></li> 
       </ul>
@@ -46,255 +46,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
-
-
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
-
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-div.rendered_html th {
-  font-weight: bold;
-}
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-</style>
-<section id="Introduction-to-atomman:-Unit-conversions">
+  <section id="Introduction-to-atomman:-Unit-conversions">
 <h1>Introduction to atomman: Unit conversions<a class="headerlink" href="#Introduction-to-atomman:-Unit-conversions" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
@@ -307,14 +59,13 @@ div.rendered_html tbody tr:hover {
 <li><p>All calculations are performed in the compatible working units.</p></li>
 <li><p>When finished, ‘get’ functions convert values from the working units to whatever units you want.</p></li>
 </ol>
-<p>Note that units are <em>not</em> tracked throughout the calculation, only conversions are performed at the beginning and end. This is advantageous as calculations and functions can be implemented without caring about the units, and there is no extra overhead. The disadvantage is that there is no explicit checking of compatible conversions, although implicit checking is possible (see <a class="reference external" href="#section4">Section #4</a>, or the <a class="reference external" href="https://pypi.python.org/pypi/numericalunits">numericalunits</a> documentation.)</p>
+<p>Note that units are <em>not</em> tracked throughout the calculation, only conversions are performed at the beginning and end. This is advantageous as calculations and functions can be implemented without caring about the units, and there is no extra overhead. The disadvantage is that there is no explicit checking of compatible conversions, although implicit checking is possible (see Section #4, or the <a class="reference external" href="https://pypi.python.org/pypi/numericalunits">numericalunits</a> documentation.)</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Standard Python libraries</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
@@ -332,13 +83,19 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6654e02fe97f47dfa2fc4db31d3ea538", "version_major": 2, "version_minor": 0}</script></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.8
-Notebook executed on 2023-01-27
+atomman version = 1.4.10
+Notebook executed on 2023-07-28
 </pre></div></div>
 </div>
 </section>
@@ -351,8 +108,7 @@ Notebook executed on 2023-01-27
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">unit</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">unit</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 </pre></div>
 </div>
 </div>
@@ -380,8 +136,7 @@ Notebook executed on 2023-01-27
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;angstrom =&#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">unit</span><span class="p">[</span><span class="s1">&#39;angstrom&#39;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;angstrom =&#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">unit</span><span class="p">[</span><span class="s1">&#39;angstrom&#39;</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;amu =     &#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">unit</span><span class="p">[</span><span class="s1">&#39;amu&#39;</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;eV =      &#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">unit</span><span class="p">[</span><span class="s1">&#39;eV&#39;</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;e =       &#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">unit</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">])</span>
@@ -417,8 +172,7 @@ ps =       98.22694750253277
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Reset working units such that length is in &#39;nm&#39;, mass is in &#39;g&#39; and time is in &#39;ps&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset working units such that length is in &#39;nm&#39;, mass is in &#39;g&#39; and time is in &#39;ps&#39;</span>
 <span class="n">uc</span><span class="o">.</span><span class="n">reset_units</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="s1">&#39;nm&#39;</span><span class="p">,</span> <span class="n">mass</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="s1">&#39;ps&#39;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;angstrom =&#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">unit</span><span class="p">[</span><span class="s1">&#39;angstrom&#39;</span><span class="p">])</span>
@@ -449,13 +203,12 @@ J =        0.0009999999999999998
 ps =       1.0
 </pre></div></div>
 </div>
-<p>Alternatively, if you call reset_units without arguments it will use the default numericalunits option and generate random working units. This can be useful for debugging code (see <a class="reference external" href="#section4">Section #4</a>, or the <a class="reference external" href="https://pypi.python.org/pypi/numericalunits">numericalunits</a> documentation).</p>
+<p>Alternatively, if you call reset_units without arguments it will use the default numericalunits option and generate random working units. This can be useful for debugging code (see Section #4, or the <a class="reference external" href="https://pypi.python.org/pypi/numericalunits">numericalunits</a> documentation).</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Reset working units to random values</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset working units to random values</span>
 <span class="n">uc</span><span class="o">.</span><span class="n">reset_units</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;angstrom =&#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">unit</span><span class="p">[</span><span class="s1">&#39;angstrom&#39;</span><span class="p">])</span>
@@ -475,23 +228,22 @@ ps =       1.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-angstrom = 1.6280752818079513e-12
-amu =      5.789636067997074e-29
-eV =       3.579151131754351e-24
-e =        3.2222950836805033e-20
-K =        1.6791344609331385
-nm =       1.6280752818079515e-11
-g =        3.4866003362700256e-05
-J =        2.2339304267711294e-05
-ps =       6.431921641234102e-13
+angstrom = 1.4191243424094714e-12
+amu =      2.8577039616406894e-27
+eV =       5.328594872559533e-26
+e =        1.6325720115916934e-18
+K =        0.17176160943193114
+nm =       1.4191243424094715e-11
+g =        0.0017209495513357104
+J =        3.325847325120542e-07
+ps =       3.2281474606461375e-11
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Return working units to atomman&#39;s default</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Return working units to atomman&#39;s default</span>
 <span class="n">uc</span><span class="o">.</span><span class="n">reset_units</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="s1">&#39;angstrom&#39;</span><span class="p">,</span> <span class="n">mass</span><span class="o">=</span><span class="s1">&#39;amu&#39;</span><span class="p">,</span> <span class="n">energy</span><span class="o">=</span><span class="s1">&#39;eV&#39;</span><span class="p">,</span> <span class="n">charge</span><span class="o">=</span><span class="s1">&#39;e&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -510,8 +262,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Convert volume from angstrom^3 to nm^3</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert volume from angstrom^3 to nm^3</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;10 angstrom^3 =&#39;</span><span class="p">)</span>
 <span class="n">volume</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">uc</span><span class="o">.</span><span class="n">unit</span><span class="p">[</span><span class="s1">&#39;angstrom&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span>
 
@@ -532,8 +283,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Show Pa = kg/(m*s^2)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show Pa = kg/(m*s^2)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;5.5 kg/(m*s^2) =&#39;</span><span class="p">)</span>
 <span class="n">pressure</span> <span class="o">=</span> <span class="mf">5.5</span> <span class="o">*</span> <span class="n">uc</span><span class="o">.</span><span class="n">unit</span><span class="p">[</span><span class="s1">&#39;kg&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">unit</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">uc</span><span class="o">.</span><span class="n">unit</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
@@ -554,8 +304,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Show that conversions work with arrays</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show that conversions work with arrays</span>
 <span class="n">stress</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">],</span>
                    <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">],</span>
                    <span class="p">[</span><span class="mf">1.3</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="mf">3.3</span><span class="p">]])</span> <span class="o">*</span> <span class="n">uc</span><span class="o">.</span><span class="n">unit</span><span class="p">[</span><span class="s1">&#39;GPa&#39;</span><span class="p">]</span>
@@ -582,8 +331,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Convert volume from angstrom^3 to nm^3</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert volume from angstrom^3 to nm^3</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;10 angstrom^3 =&#39;</span><span class="p">)</span>
 <span class="n">volume</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">uc</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;angstrom^3&#39;</span><span class="p">)</span>
 
@@ -604,8 +352,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Show Pa = kg/(m*s^2)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show Pa = kg/(m*s^2)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;5.5 kg/(m*s^2) =&#39;</span><span class="p">)</span>
 <span class="n">pressure</span> <span class="o">=</span> <span class="mf">5.5</span> <span class="o">*</span> <span class="n">uc</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;kg/(m*s^2)&#39;</span><span class="p">)</span>
 
@@ -630,8 +377,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Convert volume from angstrom^3 to nm^3</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert volume from angstrom^3 to nm^3</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;10 angstrom^3 =&#39;</span><span class="p">)</span>
 <span class="n">volume</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;angstrom^3&#39;</span><span class="p">)</span>
 
@@ -652,8 +398,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Show Pa = kg/(m*s^2)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show Pa = kg/(m*s^2)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;5.5 kg/(m*s^2) =&#39;</span><span class="p">)</span>
 <span class="n">pressure</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">5.5</span><span class="p">,</span> <span class="s1">&#39;kg/(m*s^2)&#39;</span><span class="p">)</span>
 
@@ -674,8 +419,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Show that conversions work with arrays</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show that conversions work with arrays</span>
 <span class="n">stress</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">],</span>
                                    <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">],</span>
                                    <span class="p">[</span><span class="mf">1.3</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="mf">3.3</span><span class="p">]]),</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
@@ -703,8 +447,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Convert volume from angstrom^3 to nm^3</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert volume from angstrom^3 to nm^3</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;10 angstrom^3 =&#39;</span><span class="p">)</span>
 <span class="n">volume</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_literal</span><span class="p">(</span><span class="s1">&#39;10 angstrom^3&#39;</span><span class="p">)</span>
 
@@ -725,8 +468,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Show that conversions work with arrays</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show that conversions work with arrays</span>
 <span class="n">stress</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_literal</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;[[1.1, 1.2, 1.3],</span>
 <span class="s2">                            [1.2, 2.2, 2.3],</span>
 <span class="s2">                            [1.3, 2.3, 3.3]] GPa&quot;&quot;&quot;</span><span class="p">)</span>
@@ -757,8 +499,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Set length as 4 nm</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set length as 4 nm</span>
 <span class="n">length</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;nm&#39;</span><span class="p">)</span>
 
 <span class="c1"># Transform length into a model with units in angstrom</span>
@@ -781,8 +522,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Set list of temperatures in K</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set list of temperatures in K</span>
 <span class="n">temperatures</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">50</span><span class="p">],</span> <span class="s1">&#39;K&#39;</span><span class="p">)</span>
 
 <span class="c1"># Transform temperatures into a model with units in K</span>
@@ -815,8 +555,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Set stress tensor in &#39;MPa&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set stress tensor in &#39;MPa&#39;</span>
 <span class="n">stress</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
                                    <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
                                    <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.4</span><span class="p">]]),</span> <span class="s1">&#39;MPa&#39;</span><span class="p">)</span>
@@ -851,8 +590,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Read lmode to set length</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read lmode to set length</span>
 <span class="n">length</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">lmodel</span><span class="p">)</span>
 
 <span class="c1"># Print length in nm</span>
@@ -872,8 +610,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Read tmodel to set temperatures</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read tmodel to set temperatures</span>
 <span class="n">temperatures</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">tmodel</span><span class="p">)</span>
 
 <span class="c1"># Print temperatures in K</span>
@@ -893,8 +630,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Read smodel to set stress</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read smodel to set stress</span>
 <span class="n">stress</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">smodel</span><span class="p">)</span>
 
 <span class="c1"># Print stress in &#39;MPa&#39;</span>
@@ -920,8 +656,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Generate realistic-looking nonsense</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate realistic-looking nonsense</span>
 <span class="n">xcoordinate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.1</span>
 <span class="n">xcoorderror</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">])</span> <span class="o">+</span> <span class="mf">0.02</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.01</span>
 
@@ -942,18 +677,18 @@ ps =       6.431921641234102e-13
 <div class="highlight"><pre>
 {
   &#34;value&#34;: [
-    0.009065152165098182,
-    0.0205193531713414,
-    0.029214090438960005,
-    0.04031568801568489,
-    0.05094316759139896
+    0.01004403654185057,
+    0.020656878915057856,
+    0.029214965887450112,
+    0.040306012922664336,
+    0.04954549658639971
   ],
   &#34;error&#34;: [
-    0.0019813572940017257,
-    0.001967916652935869,
-    0.0020180649286272467,
-    0.0019304948405234367,
-    0.0019250795900354624
+    0.0019546543962901085,
+    0.0019815859329668237,
+    0.0019447626366320926,
+    0.0019429728156574704,
+    0.002085436036518905
   ],
   &#34;unit&#34;: &#34;m&#34;
 }
@@ -964,8 +699,7 @@ ps =       6.431921641234102e-13
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Read realistic-looking nonsense back in</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read realistic-looking nonsense back in</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;value =&#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">value_unit</span><span class="p">(</span><span class="n">model</span><span class="p">),</span> <span class="s1">&#39;mm&#39;</span><span class="p">),</span> <span class="s1">&#39;mm&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;error =&#39;</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">error_unit</span><span class="p">(</span><span class="n">model</span><span class="p">),</span> <span class="s1">&#39;mm&#39;</span><span class="p">),</span> <span class="s1">&#39;mm&#39;</span><span class="p">)</span>
 </pre></div>
@@ -976,8 +710,8 @@ ps =       6.431921641234102e-13
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-value = [ 9.06515217 20.51935317 29.21409044 40.31568802 50.94316759] mm
-error = [1.98135729 1.96791665 2.01806493 1.93049484 1.92507959] mm
+value = [10.04403654 20.65687892 29.21496589 40.30601292 49.54549659] mm
+error = [1.9546544  1.98158593 1.94476264 1.94297282 2.08543604] mm
 </pre></div></div>
 </div>
 </section>
@@ -989,8 +723,7 @@ error = [1.98135729 1.96791665 2.01806493 1.93049484 1.92507959] mm
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Print valid conversion</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print valid conversion</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;57 atm =&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
 <span class="n">time</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">57</span><span class="p">,</span> <span class="s1">&#39;atm&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">),</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
@@ -1011,15 +744,14 @@ error = [1.98135729 1.96791665 2.01806493 1.93049484 1.92507959] mm
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 57 atm = 0.005775525 GPa
-57 atm = 0.005775525 GPa
+57 atm = 0.005775524999999999 GPa
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Print invalid conversion</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print invalid conversion</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;57 s =&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
 <span class="n">time</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mi">57</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">get_in_units</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="s1">&#39;GPa&#39;</span><span class="p">),</span> <span class="s1">&#39;GPa&#39;</span><span class="p">)</span>
@@ -1039,8 +771,8 @@ error = [1.98135729 1.96791665 2.01806493 1.93049484 1.92507959] mm
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-57 s = 4.454248845977556e-16 GPa
-57 s = 4.4378978064780807e-13 GPa
+57 s = 3.111008195072701e-09 GPa
+57 s = 0.0033804807501133854 GPa
 </pre></div></div>
 </div>
 </section>
@@ -1112,13 +844,13 @@ error = [1.98135729 1.96791665 2.01806493 1.93049484 1.92507959] mm
         <li class="right" >
           <a href="index.html" title="Tutorials"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Unit conversions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
     </div>
   </body>
 </html>

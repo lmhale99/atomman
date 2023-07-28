@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="en">
@@ -6,17 +5,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Introduction to atomman: Stacking fault generator &#8212; atomman 1.4.8 documentation</title>
+    <title>Introduction to atomman: Stacking fault generator &#8212; atomman 1.4.10 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Volterra dislocation solutions" href="4.4._Volterra_dislocation_solutions.html" />
@@ -37,7 +35,7 @@
         <li class="right" >
           <a href="4.2._Free_surface_generator.html" title="Introduction to atomman: Free surface generator"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Stacking fault generator</a></li> 
       </ul>
@@ -48,255 +46,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
-
-
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
-
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-div.rendered_html th {
-  font-weight: bold;
-}
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-</style>
-<section id="Introduction-to-atomman:-Stacking-fault-generator">
+  <section id="Introduction-to-atomman:-Stacking-fault-generator">
 <h1>Introduction to atomman: Stacking fault generator<a class="headerlink" href="#Introduction-to-atomman:-Stacking-fault-generator" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
@@ -310,8 +60,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Standard Python libraries</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
@@ -329,13 +78,19 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7ea18797f3fd457da7f30ce266e4e2db", "version_major": 2, "version_minor": 0}</script></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.8
-Notebook executed on 2023-01-27
+atomman version = 1.4.10
+Notebook executed on 2023-07-28
 </pre></div></div>
 </div>
 </section>
@@ -351,7 +106,7 @@ Notebook executed on 2023-01-27
 <p>The first two steps correspond with the construction of a planar-sliced free surface configuration. The corresponding theory for those steps is outlined in the <a class="reference external" href="4.2._Free_surface_generator.html">Free surface configuration generator Notebook</a>.</p>
 <p>Once the free surface has been constructed, a stacking fault configuration can be defined by specifying the location to position the fault plane, and a fault shift <span class="math notranslate nohighlight">\(\mathbf{d}\)</span> to apply. For the plane position, it is usually convenient to select the halfway point in the system. If the system was constructed with an even number of replicas in the direction normal to the fault/surface planes, then placing the fault plane in the middle of the system will result in the fault plane matching the
 free surface plane.</p>
-<p>As the fault plane can be explored in 2 dimensions, the applied shift, <span class="math notranslate nohighlight">\(\mathbf{d}\)</span>, can be expressed using two non-parallel vectors within the fault plane, <span class="math notranslate nohighlight">\(\mathbf{a_1}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{a_2}\)</span>. Taking <span class="math notranslate nohighlight">\(\mathbf{a_1}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{a_2}\)</span> as lattice slip vectors (i.e. vectors between two symmetrically identical lattice sites) will define a 2D cell encompassing all possible unique stacking fault shifts for the fault plane. <span class="math notranslate nohighlight">\(\mathbf{d}\)</span> can then be represented using
+<p>As the fault plane can be explored in 2 dimensions, the applied shift, <span class="math notranslate nohighlight">\(\mathbf{d}\)</span>, can be expressed using two non-parallel vectors within the fault plane, <span class="math notranslate nohighlight">\(\mathbf{a_1}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{a_2}\)</span>. Taking <span class="math notranslate nohighlight">\(\mathbf{a_1}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{a_2}\)</span> as lattice slip vectors (i.e. vectors between two symmetrically identical lattice sites) will define a 2D cell encompassing all possible unique stacking fault shifts for the fault plane. <span class="math notranslate nohighlight">\(\mathbf{d}\)</span> can then be represented using
 fractional coordinates, <span class="math notranslate nohighlight">\(a_1\)</span> and <span class="math notranslate nohighlight">\(a_2\)</span>, relative to <span class="math notranslate nohighlight">\(\mathbf{a_1}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{a_2}\)</span></p>
 <div class="math notranslate nohighlight">
 \[\mathbf{d} = a_1 \mathbf{a_1} + a_2 \mathbf{a_2}\]</div>
@@ -375,7 +130,7 @@ fractional coordinates, <span class="math notranslate nohighlight">\(a_1\)</span
 <li><p><strong>maxindex</strong> (<em>int, optional</em>) Max uvw index value to use in identifying the best uvw set for the out-of-plane vector. If not given, will use the largest absolute index between the given hkl and the initial in-plane vector guesses.</p></li>
 <li><p><strong>a1vect_uvw</strong> (<em>array-like object, optional</em>) The crystal vector to use for one of the two shifting vectors. If not given, will be set to the shortest in-plane box vector of rcell.</p></li>
 <li><p><strong>a2vect_uvw</strong> (<em>array-like object, optional</em>) The crystal vector to use for one of the two shifting vectors. If not given, will be set to the other in-plane box vector of rcell.</p></li>
-<li><p><strong>conventional_setting</strong> (<em>str, optional</em>) Allows for rotations of a primitive unit cell to be determined from (hkl) indices specified relative to a conventional unit cell. Allowed settings: ‘p’ for primitive (no conversion), ‘f’ for face-centered, ‘i’ for body-centered, and ‘a’, ‘b’, or ‘c’ for side-centered. Default behavior is to perform no conversion, i.e. take (hkl) relative to the given ucell.</p></li>
+<li><p><strong>conventional_setting</strong> (<em>str, optional</em>) Allows for rotations of a primitive unit cell to be determined from (hkl) indices specified relative to a conventional unit cell. Allowed settings: ‘p’ for primitive (no conversion), ‘f’ for face-centered, ‘i’ for body-centered, and ‘a’, ‘b’, or ‘c’ for side-centered. Default behavior is to perform no conversion, i.e. take (hkl) relative to the given ucell.</p></li>
 <li><p><strong>tol</strong> (<em>float, optional</em>) Tolerance parameter used to round off near-zero values. Default value is 1e-8.</p></li>
 </ul>
 </section>
@@ -436,8 +191,7 @@ fractional coordinates, <span class="math notranslate nohighlight">\(a_1\)</span
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.05</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.05</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">atoms</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]])</span>
 <span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">cubic</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">)</span>
 </pre></div>
@@ -447,8 +201,7 @@ fractional coordinates, <span class="math notranslate nohighlight">\(a_1\)</span
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plane_hkl</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plane_hkl</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">]</span>
 
 <span class="n">sf</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">StackingFault</span><span class="p">(</span><span class="n">plane_hkl</span><span class="p">,</span> <span class="n">ucell</span><span class="p">)</span>
 </pre></div>
@@ -470,8 +223,7 @@ fractional coordinates, <span class="math notranslate nohighlight">\(a_1\)</span
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">uvws</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">uvws</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -489,8 +241,7 @@ fractional coordinates, <span class="math notranslate nohighlight">\(a_1\)</span
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">rcell</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">rcell</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -528,8 +279,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The crystal shift vectors:&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The crystal shift vectors:&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">a1vect_uvw</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">a2vect_uvw</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The Cartesian shift vectors:&#39;</span><span class="p">)</span>
@@ -558,8 +308,7 @@ optimum grid of shifts.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">sf</span><span class="o">.</span><span class="n">a1vect_uvw</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sf</span><span class="o">.</span><span class="n">a1vect_uvw</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
 <span class="n">sf</span><span class="o">.</span><span class="n">a2vect_uvw</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The crystal shift vectors:&#39;</span><span class="p">)</span>
@@ -596,8 +345,7 @@ The Cartesian shift vectors:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">shifts</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">shifts</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -611,13 +359,12 @@ The Cartesian shift vectors:
  [0.         0.         5.84567148]]
 </pre></div></div>
 </div>
-<p>When building the free surface configuration, the default fault position corresponds to faultpos_rel = 0.5, i.e. it is placed in the center of the system. If the number of replicas in the cut box vector direction are even, then this default fault position will result in the cut and fault planes bisecting the rotated cell along atomically equivalent planes.</p>
+<p>When building the free surface configuration, the default fault position corresponds to faultpos_rel = 0.5, i.e. it is placed in the center of the system. If the number of replicas in the cut box vector direction are even, then this default fault position will result in the cut and fault planes bisecting the rotated cell along atomically equivalent planes.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">surfacesystem</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">shift</span><span class="o">=</span><span class="n">sf</span><span class="o">.</span><span class="n">shifts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">minwidth</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">even</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">surfacesystem</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">shift</span><span class="o">=</span><span class="n">sf</span><span class="o">.</span><span class="n">shifts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">minwidth</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">even</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">surfacesystem</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -700,8 +447,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="si">}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="si">}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">abovefault</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s1"> atoms above the fault&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Relative fault plane position: </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_rel</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -726,8 +472,7 @@ Absolute fault plane position: 14.029611541307906
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_rel</span> <span class="o">=</span> <span class="mf">0.57</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_rel</span> <span class="o">=</span> <span class="mf">0.57</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="si">}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">abovefault</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s1"> atoms above the fault&#39;</span><span class="p">)</span>
@@ -753,8 +498,7 @@ Absolute fault plane position: 15.99375715709101
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_cart</span> <span class="o">=</span> <span class="mf">14.029611541307906</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_cart</span> <span class="o">=</span> <span class="mf">14.029611541307906</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="si">}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">abovefault</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s1"> atoms above the fault&#39;</span><span class="p">)</span>
@@ -784,8 +528,7 @@ Absolute fault plane position: 14.029611541307906
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">faultsystem</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">fault</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">a2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">faultsystem</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">fault</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">a2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atoms in faultsystem are displaced by:&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">displacement</span><span class="p">(</span><span class="n">surfacesystem</span><span class="p">,</span> <span class="n">faultsystem</span><span class="p">))</span>
 </pre></div>
@@ -803,9 +546,7 @@ atoms in faultsystem are displaced by:
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
- [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
- [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
- [ 8.88178420e-16  0.00000000e+00  0.00000000e+00]
+ [ 4.44089210e-16  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
@@ -817,7 +558,9 @@ atoms in faultsystem are displaced by:
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
- [ 8.88178420e-16  0.00000000e+00  0.00000000e+00]
+ [ 4.44089210e-16  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
  [ 0.00000000e+00  0.00000000e+00  0.00000000e+00]
@@ -825,7 +568,7 @@ atoms in faultsystem are displaced by:
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
- [ 1.43189123e+00 -2.22044605e-16  0.00000000e+00]
+ [ 1.43189123e+00 -1.11022302e-16  0.00000000e+00]
  [ 1.43189123e+00 -1.11022302e-16  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
@@ -837,7 +580,7 @@ atoms in faultsystem are displaced by:
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
- [ 1.43189123e+00 -2.22044605e-16  0.00000000e+00]
+ [ 1.43189123e+00 -1.11022302e-16  0.00000000e+00]
  [ 1.43189123e+00 -1.11022302e-16  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
  [ 1.43189123e+00  0.00000000e+00  0.00000000e+00]
@@ -852,8 +595,7 @@ atoms in faultsystem are displaced by:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">for</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">faultsystem</span> <span class="ow">in</span> <span class="n">sf</span><span class="o">.</span><span class="n">iterfaultmap</span><span class="p">(</span><span class="n">num_a1</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">num_a2</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">faultsystem</span> <span class="ow">in</span> <span class="n">sf</span><span class="o">.</span><span class="n">iterfaultmap</span><span class="p">(</span><span class="n">num_a1</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">num_a2</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">displacement</span><span class="p">(</span><span class="n">surfacesystem</span><span class="p">,</span> <span class="n">faultsystem</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;a1 = </span><span class="si">{</span><span class="n">a1</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">, a2 = </span><span class="si">{</span><span class="n">a2</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">, d = [</span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1"> 5.3f</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1"> 5.3f</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s1"> 5.3f</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
 </pre></div>
@@ -886,7 +628,7 @@ a1 = 0.6, a2 = 0.6, d = [ 2.577  1.488  0.000]
 a1 = 0.8, a2 = 0.6, d = [-2.577  1.488  0.000]
 a1 = 0.0, a2 = 0.8, d = [ 1.146  1.984  0.000]
 a1 = 0.2, a2 = 0.8, d = [ 1.718  1.984  0.000]
-a1 = 0.4, a2 = 0.8, d = [ 2.291  1.984  0.000]
+a1 = 0.4, a2 = 0.8, d = [-0.573 -2.976  0.000]
 a1 = 0.6, a2 = 0.8, d = [ 0.000 -2.976  0.000]
 a1 = 0.8, a2 = 0.8, d = [-2.291  1.984  0.000]
 </pre></div></div>
@@ -907,8 +649,7 @@ a1 = 0.8, a2 = 0.8, d = [-2.291  1.984  0.000]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.05</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.05</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">atoms</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]])</span>
 <span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">trigonal</span><span class="p">(</span><span class="n">a</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">)</span>
 </pre></div>
@@ -918,8 +659,7 @@ a1 = 0.8, a2 = 0.8, d = [-2.291  1.984  0.000]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plane_hkl</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plane_hkl</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">]</span>
 <span class="n">conventional_setting</span> <span class="o">=</span> <span class="s1">&#39;f&#39;</span>
 <span class="n">sf</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">StackingFault</span><span class="p">(</span><span class="n">plane_hkl</span><span class="p">,</span> <span class="n">ucell</span><span class="p">,</span> <span class="n">conventional_setting</span><span class="o">=</span><span class="n">conventional_setting</span><span class="p">)</span>
 </pre></div>
@@ -932,8 +672,7 @@ a1 = 0.8, a2 = 0.8, d = [-2.291  1.984  0.000]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">uvws</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">uvws</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -951,8 +690,7 @@ a1 = 0.8, a2 = 0.8, d = [-2.291  1.984  0.000]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">rcell</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">rcell</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -980,8 +718,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The crystal shift vectors:&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The crystal shift vectors:&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">a1vect_uvw</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">a2vect_uvw</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The Cartesian shift vectors:&#39;</span><span class="p">)</span>
@@ -1012,8 +749,7 @@ The Cartesian shift vectors:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">surfacesystem</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">shift</span><span class="o">=</span><span class="n">sf</span><span class="o">.</span><span class="n">shifts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">minwidth</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">even</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">vacuumwidth</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">surfacesystem</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">shift</span><span class="o">=</span><span class="n">sf</span><span class="o">.</span><span class="n">shifts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">minwidth</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">even</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">vacuumwidth</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">surfacesystem</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1055,8 +791,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="si">}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="si">}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">abovefault</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s1"> atoms above the fault&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Relative fault plane position: </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_rel</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -1080,8 +815,7 @@ Absolute fault plane position: 14.029611541307904
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_rel</span> <span class="o">=</span> <span class="mf">0.57</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_rel</span> <span class="o">=</span> <span class="mf">0.57</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="si">}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">abovefault</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s1"> atoms above the fault&#39;</span><span class="p">)</span>
@@ -1107,8 +841,7 @@ Absolute fault plane position: 17.39375715709101
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_cart</span> <span class="o">=</span> <span class="mf">14.029611541307906</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sf</span><span class="o">.</span><span class="n">faultpos_cart</span> <span class="o">=</span> <span class="mf">14.029611541307906</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">natoms</span><span class="si">}</span><span class="s1"> total atoms&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">abovefault</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s1"> atoms above the fault&#39;</span><span class="p">)</span>
@@ -1139,8 +872,7 @@ Absolute fault plane position: 14.029611541307906
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">for</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">faultsystem</span> <span class="ow">in</span> <span class="n">sf</span><span class="o">.</span><span class="n">iterfaultmap</span><span class="p">(</span><span class="n">num_a1</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">num_a2</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">minimum_r</span><span class="o">=</span><span class="mf">0.85</span><span class="o">*</span><span class="n">ucell</span><span class="o">.</span><span class="n">r0</span><span class="p">()):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">faultsystem</span> <span class="ow">in</span> <span class="n">sf</span><span class="o">.</span><span class="n">iterfaultmap</span><span class="p">(</span><span class="n">num_a1</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">num_a2</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">minimum_r</span><span class="o">=</span><span class="mf">0.85</span><span class="o">*</span><span class="n">ucell</span><span class="o">.</span><span class="n">r0</span><span class="p">()):</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">displacement</span><span class="p">(</span><span class="n">surfacesystem</span><span class="p">,</span> <span class="n">faultsystem</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;a1 = </span><span class="si">{</span><span class="n">a1</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">, a2 = </span><span class="si">{</span><span class="n">a2</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">, d = [</span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1"> 5.3f</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1"> 5.3f</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s1"> 5.3f</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
 </pre></div>
@@ -1189,8 +921,7 @@ a1 = 0.8, a2 = 0.8, d = [-0.859 -0.496  0.000]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">3.18</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">3.18</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">c</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">5.17</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">atoms</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]])</span>
 <span class="n">ucell</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">hexagonal</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1201,8 +932,7 @@ a1 = 0.8, a2 = 0.8, d = [-0.859 -0.496  0.000]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plane_hkl</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plane_hkl</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">]</span>
 
 <span class="n">sf</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">StackingFault</span><span class="p">(</span><span class="n">plane_hkl</span><span class="p">,</span> <span class="n">ucell</span><span class="p">)</span>
 </pre></div>
@@ -1216,8 +946,7 @@ a1 = 0.8, a2 = 0.8, d = [-0.859 -0.496  0.000]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">uvws</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">uvws</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1235,8 +964,7 @@ a1 = 0.8, a2 = 0.8, d = [-0.859 -0.496  0.000]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">rcell</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">rcell</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1263,8 +991,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The crystal shift vectors:&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The crystal shift vectors:&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">a1vect_uvw</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">a2vect_uvw</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The Cartesian shift vectors:&#39;</span><span class="p">)</span>
@@ -1370,13 +1097,13 @@ The Cartesian shift vectors:
         <li class="right" >
           <a href="4.2._Free_surface_generator.html" title="Introduction to atomman: Free surface generator"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Stacking fault generator</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
     </div>
   </body>
 </html>

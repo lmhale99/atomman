@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="en">
@@ -6,15 +5,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Introduction to atomman: Running LAMMPS and the Log class &#8212; atomman 1.4.8 documentation</title>
+    <title>Introduction to atomman: Running LAMMPS and the Log class &#8212; atomman 1.4.10 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Basic support and analysis tools" href="3._Basic_support_and_analysis_tools.html" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="2.1._Potential_class.html" title="Introduction to atomman: LAMMPS Potentials"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Running LAMMPS and the Log class</a></li> 
       </ul>
@@ -46,255 +46,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
-
-
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
-
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-div.rendered_html th {
-  font-weight: bold;
-}
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-</style>
-<section id="Introduction-to-atomman:-Running-LAMMPS-and-the-Log-class">
+  <section id="Introduction-to-atomman:-Running-LAMMPS-and-the-Log-class">
 <h1>Introduction to atomman: Running LAMMPS and the Log class<a class="headerlink" href="#Introduction-to-atomman:-Running-LAMMPS-and-the-Log-class" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
@@ -306,8 +58,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Standard libraries</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Standard libraries</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -330,13 +81,19 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "01ff2681fbaa474b87a8824ca5e62cf9", "version_major": 2, "version_minor": 0}</script></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.8
-Notebook executed on 2023-01-27
+atomman version = 1.4.10
+Notebook executed on 2023-07-28
 </pre></div></div>
 </div>
 </section>
@@ -365,8 +122,7 @@ Notebook executed on 2023-01-27
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">#Simple demonstration LAMMPS script</span>
 
 <span class="s2">units metal</span>
@@ -405,9 +161,8 @@ Notebook executed on 2023-01-27
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Define lammps command to use (unique to your computer!)</span>
-<span class="n">lammps_command</span> <span class="o">=</span> <span class="s1">&#39;lmp_mpi&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define lammps command to use (unique to your computer!)</span>
+<span class="n">lammps_command</span> <span class="o">=</span> <span class="s1">&#39;lmp&#39;</span>
 
 <span class="c1"># Run and measure execution time</span>
 <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -424,7 +179,7 @@ Notebook executed on 2023-01-27
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Serial simulation took 105.8065414428711 seconds.
+Serial simulation took 100.34271121025085 seconds.
 </pre></div></div>
 </div>
 <p>Run in parallel on 4 processors</p>
@@ -432,9 +187,8 @@ Serial simulation took 105.8065414428711 seconds.
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Define lammps command to use (unique to your computer!)</span>
-<span class="n">lammps_command</span> <span class="o">=</span> <span class="s1">&#39;lmp_mpi&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define lammps command to use (unique to your computer!)</span>
+<span class="n">lammps_command</span> <span class="o">=</span> <span class="s1">&#39;lmp&#39;</span>
 
 <span class="c1"># Define mpi command to use (unique to your computer!)</span>
 <span class="n">mpi_command</span> <span class="o">=</span> <span class="s1">&#39;C:/Program Files/MPICH2/bin/mpiexec.exe -localonly 4&#39;</span>
@@ -454,7 +208,7 @@ Serial simulation took 105.8065414428711 seconds.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Parallel simulation took 53.661635398864746 seconds.
+Parallel simulation took 34.86727571487427 seconds.
 </pre></div></div>
 </div>
 </section>
@@ -471,8 +225,7 @@ Parallel simulation took 53.661635398864746 seconds.
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;results.lammps_version -&gt;&quot;</span><span class="p">,</span> <span class="n">results</span><span class="o">.</span><span class="n">lammps_version</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;results.lammps_version -&gt;&quot;</span><span class="p">,</span> <span class="n">results</span><span class="o">.</span><span class="n">lammps_version</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;results.lammps_date -&gt;&quot;</span><span class="p">,</span> <span class="n">results</span><span class="o">.</span><span class="n">lammps_date</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -482,8 +235,8 @@ Parallel simulation took 53.661635398864746 seconds.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-results.lammps_version -&gt; 3 Mar 2020
-results.lammps_date -&gt; 2020-03-03
+results.lammps_version -&gt; 23 Jun 2022 - Update 2
+results.lammps_date -&gt; 2022-06-23
 </pre></div></div>
 </div>
 <p>Each simulation captures the associated thermo data lines and the computational performance data in separate pandas.DataFrames.</p>
@@ -491,8 +244,7 @@ results.lammps_date -&gt; 2020-03-03
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">results</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">thermo</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">thermo</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -509,8 +261,7 @@ Index([&#39;Step&#39;, &#39;PotEng&#39;, &#39;Temp&#39;, &#39;Press&#39;, &#39;L
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">results</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">performance</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">performance</span>
 </pre></div>
 </div>
 </div>
@@ -555,51 +306,51 @@ Index([&#39;Step&#39;, &#39;PotEng&#39;, &#39;Temp&#39;, &#39;Press&#39;, &#39;L
   <tbody>
     <tr>
       <th>Pair</th>
-      <td>28.302000</td>
-      <td>28.580000</td>
-      <td>29.033000</td>
-      <td>5.6</td>
-      <td>82.75</td>
+      <td>23.550000</td>
+      <td>23.908000</td>
+      <td>24.237000</td>
+      <td>6.1</td>
+      <td>86.77</td>
     </tr>
     <tr>
       <th>Neigh</th>
-      <td>0.006279</td>
-      <td>0.006364</td>
-      <td>0.006464</td>
+      <td>0.005191</td>
+      <td>0.005289</td>
+      <td>0.005432</td>
       <td>0.1</td>
       <td>0.02</td>
     </tr>
     <tr>
       <th>Comm</th>
-      <td>2.883400</td>
-      <td>3.353000</td>
-      <td>3.642600</td>
-      <td>17.2</td>
-      <td>9.71</td>
+      <td>1.646200</td>
+      <td>1.994800</td>
+      <td>2.372100</td>
+      <td>22.4</td>
+      <td>7.24</td>
     </tr>
     <tr>
       <th>Output</th>
-      <td>0.011838</td>
-      <td>0.012080</td>
-      <td>0.012721</td>
+      <td>0.004185</td>
+      <td>0.004318</td>
+      <td>0.004659</td>
       <td>0.3</td>
-      <td>0.03</td>
+      <td>0.02</td>
     </tr>
     <tr>
       <th>Modify</th>
-      <td>2.045000</td>
-      <td>2.058700</td>
-      <td>2.082700</td>
-      <td>1.0</td>
-      <td>5.96</td>
+      <td>1.403500</td>
+      <td>1.421800</td>
+      <td>1.441100</td>
+      <td>1.4</td>
+      <td>5.16</td>
     </tr>
     <tr>
       <th>Other</th>
       <td>0.000000</td>
-      <td>0.527900</td>
+      <td>0.218100</td>
       <td>0.000000</td>
       <td>0.0</td>
-      <td>1.53</td>
+      <td>0.79</td>
     </tr>
   </tbody>
 </table>
@@ -610,8 +361,7 @@ Index([&#39;Step&#39;, &#39;PotEng&#39;, &#39;Temp&#39;, &#39;Press&#39;, &#39;L
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">for</span> <span class="n">simulation</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">simulations</span><span class="p">:</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">simulation</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">simulations</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">simulation</span><span class="o">.</span><span class="n">thermo</span><span class="o">.</span><span class="n">Step</span><span class="p">,</span> <span class="n">simulation</span><span class="o">.</span><span class="n">thermo</span><span class="o">.</span><span class="n">PotEng</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -627,7 +377,7 @@ Index([&#39;Step&#39;, &#39;PotEng&#39;, &#39;Temp&#39;, &#39;Press&#39;, &#39;L
 </section>
 <section id="4.-Restarting-and-flattening">
 <h2>4. Restarting and flattening<a class="headerlink" href="#4.-Restarting-and-flattening" title="Permalink to this heading">¶</a></h2>
-<p>There is also some built-in functionality for conveniently handling simulations containing multiple runs and/or multiple sequential simulation executions of the same overall run (i.e. restarts).</p>
+<p>There is also some built-in functionality for conveniently handling simulations containing multiple runs and/or multiple sequential simulation executions of the same overall run (i.e. restarts).</p>
 <section id="4.1.-Running-with-restart-script-included">
 <h3>4.1. Running with restart script included<a class="headerlink" href="#4.1.-Running-with-restart-script-included" title="Permalink to this heading">¶</a></h3>
 <p>Create a new demonstration LAMMPS input script that restarts the previous simulation and runs for an additional 10000 steps.</p>
@@ -635,8 +385,7 @@ Index([&#39;Step&#39;, &#39;PotEng&#39;, &#39;Temp&#39;, &#39;Press&#39;, &#39;L
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">restart_script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">restart_script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">#Simple demonstration LAMMPS restart script</span>
 
 <span class="s2">read_restart *.restart</span>
@@ -668,8 +417,7 @@ Index([&#39;Step&#39;, &#39;PotEng&#39;, &#39;Temp&#39;, &#39;Press&#39;, &#39;L
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">lmp</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">lammps_command</span><span class="p">,</span> <span class="n">script</span><span class="o">=</span><span class="n">script</span><span class="p">,</span> <span class="n">mpi_command</span><span class="o">=</span><span class="n">mpi_command</span><span class="p">,</span> <span class="n">restart_script</span><span class="o">=</span><span class="n">restart_script</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -679,8 +427,7 @@ Index([&#39;Step&#39;, &#39;PotEng&#39;, &#39;Temp&#39;, &#39;Press&#39;, &#39;L
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">for</span> <span class="n">logfile</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">iglob</span><span class="p">(</span><span class="s1">&#39;*.lammps&#39;</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">logfile</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">iglob</span><span class="p">(</span><span class="s1">&#39;*.lammps&#39;</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">logfile</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -701,8 +448,7 @@ log.lammps
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">for</span> <span class="n">simulation</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">simulations</span><span class="p">:</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">simulation</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">simulations</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">simulation</span><span class="o">.</span><span class="n">thermo</span><span class="o">.</span><span class="n">Step</span><span class="p">,</span> <span class="n">simulation</span><span class="o">.</span><span class="n">thermo</span><span class="o">.</span><span class="n">PotEng</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -718,19 +464,24 @@ log.lammps
 </section>
 <section id="4.2.-Flattening-data-from-multiple-simulations-together">
 <h3>4.2. Flattening data from multiple simulations together<a class="headerlink" href="#4.2.-Flattening-data-from-multiple-simulations-together" title="Permalink to this heading">¶</a></h3>
-<p><em>Changed version 1.3.7</em> flatten now returns a new Simulation rather than overwriting the current content.</p>
-<p>The Log.flatten() method creates a new Simulation object that combines the thermo data from all of the simulations. flatten takes a single parameter that specifies how thermo lines with duplicate timesteps are treated:</p>
+<p>The Log.flatten() method creates a new Simulation object that combines the thermo data from multiple simulations. The flatten() method works best for simulations that output the same thermo terms.</p>
 <ul class="simple">
-<li><p>‘last’ (default) will use values for each timestep from the last runs where they appear. This is useful for MD restart runs where thermo data from eariler runs may be incomplete if externally stopped.</p></li>
-<li><p>‘first’ will use values for each timestep from the first runs where they appear. This is useful for quasistatic simulations where minimizations are performed under different conditions and only the final relaxed state of each condition is important.</p></li>
-<li><p>‘all’ will use all thermo lines from all simulations including ones with the same timesteps. This is useful for “run 0” simulations of different conditions, or if the timestep is reset.</p></li>
+<li><p><strong>style</strong> (<em>str, optional</em>) Specifies how duplicate time step values are handled, i.e which values to keep:</p>
+<ul>
+<li><p>‘last’ uses the values from the latest simulation (default). This is useful for MD restart runs where thermo data from eariler runs may be incomplete if externally stopped.</p></li>
+<li><p>‘first’ uses the values from the earliest simulation. This is useful for quasistatic simulations where minimizations are performed under different conditions and only the final relaxed state of each condition is important.</p></li>
+<li><p>‘all’ uses all reported lines including ones with duplicate time steps. This is useful for “run 0” simulations of different conditions, or if the timestep is reset.</p></li>
 </ul>
+</li>
+<li><p><strong>firstindex</strong> (<em>int or None, optional</em>) The leading list range index to limit which simulations are included in the merge, i.e. simulations[firstindex:lastindex]. If not given, then the merged simulations will start with the first simulation.</p></li>
+<li><p><strong>lastindex</strong> (<em>int or None, optional</em>) The trailing list range index to limit which simulations are included in the merge, i.e. simulations[firstindex:lastindex]. If not given, then the merged simulations will ekd with the last simulation.</p></li>
+</ul>
+<p><em>Updated version 1.4.10</em> firstindex and lastindex parameters added. <em>Changed version 1.3.7</em> flatten now returns a new Simulation rather than overwriting the current content.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">allsims</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;last&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">allsims</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;last&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">allsims</span><span class="o">.</span><span class="n">thermo</span><span class="o">.</span><span class="n">Step</span><span class="p">,</span> <span class="n">allsims</span><span class="o">.</span><span class="n">thermo</span><span class="o">.</span><span class="n">PotEng</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -748,8 +499,7 @@ log.lammps
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">repr</span><span class="p">(</span><span class="n">allsims</span><span class="o">.</span><span class="n">performance</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">repr</span><span class="p">(</span><span class="n">allsims</span><span class="o">.</span><span class="n">performance</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -772,8 +522,7 @@ log.lammps
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Create a demo script with an error: missing a value in the fix npt line</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a demo script with an error: missing a value in the fix npt line</span>
 <span class="n">bad_script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">#Simple demonstration LAMMPS script</span>
 
@@ -812,8 +561,7 @@ log.lammps
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">try</span><span class="p">:</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">lmp</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">lammps_command</span><span class="p">,</span> <span class="n">script</span><span class="o">=</span><span class="n">bad_script</span><span class="p">,</span> <span class="n">mpi_command</span><span class="o">=</span><span class="n">mpi_command</span><span class="p">)</span>
 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s1">&#39;raised with message&#39;</span><span class="p">)</span>
@@ -827,7 +575,7 @@ log.lammps
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 LammpsError raised with message
-Illegal fix nvt/npt/nph command (../fix_nh.cpp:153)
+Illegal fix nvt/npt/nph command (src/fix_nh.cpp:158)
 Last command: fix 1 all npt temp 100 100 1.0 aniso 0.0 0.0
 
 </pre></div></div>
@@ -837,8 +585,7 @@ Last command: fix 1 all npt temp 100 100 1.0 aniso 0.0 0.0
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;log.lammps&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;log.lammps&#39;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">restart</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">iglob</span><span class="p">(</span><span class="s1">&#39;*.restart&#39;</span><span class="p">):</span>
     <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">restart</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">restart</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">iglob</span><span class="p">(</span><span class="s1">&#39;log-*.lammps&#39;</span><span class="p">):</span>
@@ -903,13 +650,13 @@ Last command: fix 1 all npt temp 100 100 1.0 aniso 0.0 0.0
         <li class="right" >
           <a href="2.1._Potential_class.html" title="Introduction to atomman: LAMMPS Potentials"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Running LAMMPS and the Log class</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
     </div>
   </body>
 </html>

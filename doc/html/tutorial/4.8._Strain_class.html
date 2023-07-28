@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="en">
@@ -6,17 +5,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Introduction to atomman: Strain class &#8212; atomman 1.4.8 documentation</title>
+    <title>Introduction to atomman: Strain class &#8212; atomman 1.4.10 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Dislocation solution and generator" href="4.9._Dislocation_configurations_generator.html" />
@@ -37,7 +35,7 @@
         <li class="right" >
           <a href="4.7._Semidiscrete_variational_Peierls-Nabarro_model.html" title="Introduction to atomman: Semidiscrete variational Peierls-Nabarro model"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Strain class</a></li> 
       </ul>
@@ -48,255 +46,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
-
-
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
-
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-div.rendered_html th {
-  font-weight: bold;
-}
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-</style>
-<section id="Introduction-to-atomman:-Strain-class">
+  <section id="Introduction-to-atomman:-Strain-class">
 <h1>Introduction to atomman: Strain class<a class="headerlink" href="#Introduction-to-atomman:-Strain-class" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
@@ -308,8 +58,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Standard Python libraries</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -333,13 +82,19 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9ada597929fd44e7b75bc3830a9c26e1", "version_major": 2, "version_minor": 0}</script></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.8
-Notebook executed on 2023-01-27
+atomman version = 1.4.10
+Notebook executed on 2023-07-28
 </pre></div></div>
 </div>
 </section>
@@ -418,7 +173,7 @@ Notebook executed on 2023-01-27
 <p>For these reasons, atomman allows for the reference state to be defined in one of two ways:</p>
 <ul class="simple">
 <li><p>The sets of p vectors can be directly specified for each atom. This is convenient for simple systems where a single bulk crystal can be used as the reference for all atoms. Alternatively, an algorithm could be used to determine the optimum crystal and orientation to use on an individual atom basis, then the associated p vectors can be fed in.</p></li>
-<li><p>The p vectors can be determined by supplying a base reference system that represents the current system at an earlier time, i.e. before a defect is inserted and/or deformations are applied. If the base reference system is a bulk single crystal, then this is effectively the same as specifying the individual p vectors for the crystal, but it computes these for you. Alternatively, for highly complex systems, specifying the base reference system amounts to estimating the elastic strain in the
+<li><p>The p vectors can be determined by supplying a base reference system that represents the current system at an earlier time, i.e. before a defect is inserted and/or deformations are applied. If the base reference system is a bulk single crystal, then this is effectively the same as specifying the individual p vectors for the crystal, but it computes these for you. Alternatively, for highly complex systems, specifying the base reference system amounts to estimating the elastic strain in the
 current system relative to the reference system.</p></li>
 </ul>
 </section>
@@ -463,8 +218,7 @@ necessary to capture 8 neighbor atoms. Be sure to place the cutoff roughly halfw
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">base_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;atom_dump&#39;</span><span class="p">,</span> <span class="s1">&#39;files/fcc_Al_base.dump&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;atom_dump&#39;</span><span class="p">,</span> <span class="s1">&#39;files/fcc_Al_base.dump&#39;</span><span class="p">)</span>
 <span class="n">disl_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;atom_dump&#39;</span><span class="p">,</span> <span class="s1">&#39;files/fcc_Al_disl.dump&#39;</span><span class="p">)</span>
 
 <span class="n">alat</span> <span class="o">=</span> <span class="mf">4.05</span>
@@ -478,8 +232,7 @@ necessary to capture 8 neighbor atoms. Be sure to place the cutoff roughly halfw
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Example #1: Give base and disl systems with a cutoff</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example #1: Give base and disl systems with a cutoff</span>
 <span class="n">strain</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">Strain</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="n">basesystem</span><span class="o">=</span><span class="n">base_system</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">)</span>
 <span class="n">strain</span><span class="o">.</span><span class="n">p_vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
@@ -510,8 +263,7 @@ array([[0.0, 2.863785756044706, 0.0],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Example #2: Compute neighbors beforehand, and give p_vectors explicitly</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example #2: Compute neighbors beforehand, and give p_vectors explicitly</span>
 
 <span class="c1"># Compute neighbors for current system</span>
 <span class="n">neighbors</span> <span class="o">=</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">neighborlist</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">)</span>
@@ -571,8 +323,7 @@ array([[-1.65340558,  0.        ,  2.33826859],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">s</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="n">G</span> <span class="o">=</span> <span class="n">strain</span><span class="o">.</span><span class="n">G</span>
 <span class="n">e</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;First call for G took&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">-</span><span class="n">s</span><span class="p">,</span> <span class="s1">&#39;seconds&#39;</span><span class="p">)</span>
@@ -590,9 +341,9 @@ array([[-1.65340558,  0.        ,  2.33826859],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-First call for G took 3.382009267807007 seconds
+First call for G took 1.7440094947814941 seconds
 Second call for G took 0.0 seconds
-[[[ 9.99998842e-01 -6.52065146e-08 -5.86211323e-08]
+[[[ 9.99998842e-01 -6.52065147e-08 -5.86211324e-08]
   [-1.08196712e-04  9.97999349e-01 -1.94600556e-03]
   [ 8.50971890e-05  2.07595184e-03  1.00097862e+00]]
 
@@ -600,7 +351,7 @@ Second call for G took 0.0 seconds
   [-1.05914368e-04  9.97987653e-01 -1.97956797e-03]
   [ 7.95194344e-05  2.03782456e-03  1.00096836e+00]]
 
- [[ 9.99998842e-01 -6.56904834e-08 -6.07762385e-08]
+ [[ 9.99998842e-01 -6.56904835e-08 -6.07762384e-08]
   [-1.07308439e-04  9.97994580e-01 -1.95945363e-03]
   [ 8.23419310e-05  2.05716840e-03  1.00097375e+00]]
 
@@ -610,7 +361,7 @@ Second call for G took 0.0 seconds
   [ 8.99265087e-05  9.98118463e-01  1.91607768e-03]
   [ 6.26711158e-05 -1.81836851e-03  1.00087732e+00]]
 
- [[ 9.99998918e-01  1.91549000e-07 -7.28492609e-07]
+ [[ 9.99998918e-01  1.91549001e-07 -7.28492609e-07]
   [ 8.95165793e-05  9.98111963e-01  1.92753409e-03]
   [ 6.18320365e-05 -1.80755118e-03  1.00086855e+00]]
 
@@ -623,8 +374,7 @@ Second call for G took 0.0 seconds
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">i</span> <span class="o">=</span> <span class="mi">50</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">i</span> <span class="o">=</span> <span class="mi">50</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;properties for atom </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">:&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;G =&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">strain</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
@@ -655,18 +405,18 @@ strain =
 [[ 1.15574139e-06  4.65913745e-05 -2.89545333e-05]
  [ 4.65913745e-05  2.04925444e-03  1.16199882e-04]
  [-2.89545333e-05  1.16199882e-04 -9.14566547e-04]]
-invariant1 = 0.0011358436297335128
-invariant2 = -1.8893796811584699e-06
-invariant3 = -2.2279089906352433e-12
+invariant1 = 0.0011358436297334018
+invariant2 = -1.8893796811590274e-06
+invariant3 = -2.2279089906289465e-12
 rotation =
 [[ 0.00000000e+00 -4.65243980e-05  2.90337299e-05]
  [ 4.65243980e-05  0.00000000e+00  2.00285051e-03]
  [-2.90337299e-05 -2.00285051e-03  0.00000000e+00]]
-angularvelocity = 0.0020036011663635755
+angularvelocity = 0.0020036011663635478
 nye =
-[[ 2.74911698e-12  3.53218404e-12 -6.31474455e-12]
- [ 6.05014858e-13  3.60961236e-12  2.03567127e-12]
- [-2.03526770e-13 -2.93087484e-12 -1.46707150e-12]]
+[[ 2.74910638e-12  3.53221809e-12 -6.31469947e-12]
+ [ 6.05003352e-13  3.60962166e-12  2.03565144e-12]
+ [-2.03664473e-13 -2.93082115e-12 -1.46702416e-12]]
 </pre></div></div>
 </div>
 </section>
@@ -681,8 +431,7 @@ nye =
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">strain</span><span class="o">.</span><span class="n">save_to_system</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">strain</span><span class="o">.</span><span class="n">save_to_system</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">disl_system</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">angularvelocity</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -707,8 +456,7 @@ nye =
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">straindict</span> <span class="o">=</span> <span class="n">strain</span><span class="o">.</span><span class="n">asdict</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">straindict</span> <span class="o">=</span> <span class="n">strain</span><span class="o">.</span><span class="n">asdict</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">straindict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -740,7 +488,7 @@ dict_keys([&#39;strain&#39;, &#39;invariant1&#39;, &#39;invariant2&#39;, &#39;in
 <li><p><strong>plotyaxis</strong> (<em>str or array-like object, optional</em>) Indicates the Cartesian direction associated with the system’s atomic coordinates to align with the plotting y-axis. Values are either 3D unit vectors, or strings ‘x’, ‘y’, or ‘z’ for the Cartesian axes directions. plotxaxis and plotyaxis must be orthogonal. Default value is ‘y’ = [0, 1, 0].</p></li>
 <li><p><strong>xlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting x-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the plotting axis.</p></li>
 <li><p><strong>ylim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting y-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the plotting axis.</p></li>
-<li><p><strong>zlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates normal to the plotting axes (i.e. plotxaxis X plotyaxis) to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the axis.</p></li>
+<li><p><strong>zlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates normal to the plotting axes (i.e. plotxaxis X plotyaxis) to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the axis.</p></li>
 </ul>
 <p>Interpolation grid size</p>
 <ul class="simple">
@@ -750,7 +498,7 @@ dict_keys([&#39;strain&#39;, &#39;invariant1&#39;, &#39;invariant2&#39;, &#39;in
 <p>Additional options</p>
 <ul class="simple">
 <li><p><strong>dots</strong> (<em>bool, optional</em>) If True, then the positions of the atoms are shown as circles. Default value is True.</p></li>
-<li><p><strong>czero</strong> (<em>bool, optional</em>) If True, the range of property values will be centered around zero, i.e. cmax = -cmin. If False, cmax and cmin will be independently selected using the property values. Default value is True.</p></li>
+<li><p><strong>czero</strong> (<em>bool, optional</em>) If True, the range of property values will be centered around zero, i.e. cmax = -cmin. If False, cmax and cmin will be independently selected using the property values. Default value is True.</p></li>
 <li><p><strong>save</strong> (<em>bool, optional</em>) If True, the generated plot will be saved to “name.png”. Default value is False.</p></li>
 <li><p><strong>show</strong> (<em>bool, optional</em>) If True, matplotlib.pyplot.show() is called. Default value is True.</p></li>
 <li><p><strong>length_unit</strong> (<em>str, optional</em>) The units of length to use for the plotting x- and y-axes. Default value is ‘angstrom’.</p></li>
@@ -774,8 +522,7 @@ dict_keys([&#39;strain&#39;, &#39;invariant1&#39;, &#39;invariant2&#39;, &#39;in
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">settings</span> <span class="o">=</span> <span class="p">{}</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">settings</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;plotxaxis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Set the plotting x-axis to be aligned with the system&#39;s Cartesian y-axis</span>
 <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;plotyaxis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># Set the plotting y-axis to be aligned with the system&#39;s Cartesian z-axis</span>
 <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;xlim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>    <span class="c1"># Sets the range limits along the plotting x-axis</span>
@@ -791,8 +538,7 @@ dict_keys([&#39;strain&#39;, &#39;invariant1&#39;, &#39;invariant2&#39;, &#39;in
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Make contour plots for the strain invariants</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make contour plots for the strain invariants</span>
 <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;invariant1&#39;</span><span class="p">,</span> <span class="n">dots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
 <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;invariant2&#39;</span><span class="p">,</span> <span class="n">dots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
 <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;invariant3&#39;</span><span class="p">,</span> <span class="n">dots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
@@ -829,8 +575,7 @@ dict_keys([&#39;strain&#39;, &#39;invariant1&#39;, &#39;invariant2&#39;, &#39;in
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># plot Nye tensor components related to dislocations</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot Nye tensor components related to dislocations</span>
 <span class="n">intsum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">intsum</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;nye&#39;</span><span class="p">,</span> <span class="n">prop_index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">intsum</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">interpolate_contour</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="s1">&#39;nye&#39;</span><span class="p">,</span> <span class="n">prop_index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -864,8 +609,7 @@ dict_keys([&#39;strain&#39;, &#39;invariant1&#39;, &#39;invariant2&#39;, &#39;in
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">burgers</span> <span class="o">=</span> <span class="n">alat</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mf">0.5</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">burgers</span> <span class="o">=</span> <span class="n">alat</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mf">0.5</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;actual Burgers vector:    [</span><span class="si">{</span><span class="n">burgers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">burgers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">burgers</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;estimated Burgers vector: [</span><span class="si">{</span><span class="n">intsum</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">intsum</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">intsum</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s1"> 7.4f</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
@@ -957,13 +701,13 @@ estimated Burgers vector: [-0.0041,  2.9144,  0.0015]
         <li class="right" >
           <a href="4.7._Semidiscrete_variational_Peierls-Nabarro_model.html" title="Introduction to atomman: Semidiscrete variational Peierls-Nabarro model"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Strain class</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
     </div>
   </body>
 </html>

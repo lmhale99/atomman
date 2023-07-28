@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="en">
@@ -6,17 +5,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Introduction to atomman: Box class &#8212; atomman 1.4.8 documentation</title>
+    <title>Introduction to atomman: Box class &#8212; atomman 1.4.10 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to atomman: Atoms class" href="1.2._Atoms_class.html" />
@@ -37,7 +35,7 @@
         <li class="right" >
           <a href="1._Defining_atomic_systems.html" title="Introduction to atomman: Defining atomic systems"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Box class</a></li> 
       </ul>
@@ -48,255 +46,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
-
-
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
-
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-div.rendered_html th {
-  font-weight: bold;
-}
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-</style>
-<section id="Introduction-to-atomman:-Box-class">
+  <section id="Introduction-to-atomman:-Box-class">
 <h1>Introduction to atomman: Box class<a class="headerlink" href="#Introduction-to-atomman:-Box-class" title="Permalink to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
@@ -314,8 +64,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Standard Python libraries</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Standard Python libraries</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># http://www.numpy.org/</span>
@@ -333,13 +82,19 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "bffe9c18f2d447de96f6524a781fbc0e", "version_major": 2, "version_minor": 0}</script></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.8
-Notebook executed on 2023-01-27
+atomman version = 1.4.10
+Notebook executed on 2023-07-28
 </pre></div></div>
 </div>
 <p>Create a default box with vects that are normal unit vectors.</p>
@@ -347,8 +102,7 @@ Notebook executed on 2023-01-27
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
 </pre></div>
@@ -384,8 +138,7 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Individual box vectors</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Individual box vectors</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.avect -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">avect</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.bvect -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">bvect</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.cvect -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">cvect</span><span class="p">)</span>
@@ -471,7 +224,7 @@ box.volume -&gt; 1.0
 </section>
 <section id="3.-Initializing-and-setting-Box-parameters">
 <h2>3. Initializing and setting Box parameters<a class="headerlink" href="#3.-Initializing-and-setting-Box-parameters" title="Permalink to this heading">¶</a></h2>
-<p>Only a few of the parameters listed in <a class="reference external" href="#section2">Section #2</a> can be directly set. This is done as setting some of the parameters independent of others can lead to ambiguous answers. For better control, set() functions are defined that allow for the setting of complete parameter sets for defining the box.</p>
+<p>Only a few of the parameters listed in Section #2 can be directly set. This is done as setting some of the parameters independent of others can lead to ambiguous answers. For better control, set() functions are defined that allow for the setting of complete parameter sets for defining the box.</p>
 <section id="3.1.-Direct-setting-box-vects-and-origin">
 <h3>3.1. Direct setting box vects and origin<a class="headerlink" href="#3.1.-Direct-setting-box-vects-and-origin" title="Permalink to this heading">¶</a></h3>
 <p>Only vects and origin can be directly set.</p>
@@ -479,8 +232,7 @@ box.volume -&gt; 1.0
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Set avect, bvect, cvect and origin with random vectors</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set avect, bvect, cvect and origin with random vectors</span>
 <span class="n">box</span><span class="o">.</span><span class="n">vects</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">box</span><span class="o">.</span><span class="n">origin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
@@ -492,10 +244,10 @@ box.volume -&gt; 1.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 1.662,  3.910,  3.732]
-bvect =  [ 1.818,  0.447,  2.045]
-cvect =  [ 2.744,  0.059,  0.661]
-origin = [ 0.894,  0.322,  0.234]
+avect =  [ 0.758,  0.421,  3.528]
+bvect =  [ 1.131,  2.927,  0.314]
+cvect =  [ 0.966,  2.736,  3.084]
+origin = [ 0.540,  0.499,  0.814]
 </pre></div></div>
 </div>
 </section>
@@ -513,8 +265,7 @@ origin = [ 0.894,  0.322,  0.234]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Use set with vects (default origin is [0,0,0])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use set with vects (default origin is [0,0,0])</span>
 <span class="n">box</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">vects</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
 </pre></div>
@@ -535,8 +286,7 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Use set with avect, bvect, cvect (default origin is [0,0,0])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use set with avect, bvect, cvect (default origin is [0,0,0])</span>
 <span class="n">box</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">avect</span><span class="o">=</span><span class="p">[</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">bvect</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">cvect</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
 </pre></div>
@@ -557,8 +307,7 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Use set with a, b, c and alpha (default angles are 90, origin is [0,0,0])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use set with a, b, c and alpha (default angles are 90, origin is [0,0,0])</span>
 <span class="n">box</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">4.3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">3.2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mf">8.1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">110</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
@@ -595,8 +344,7 @@ box.gamma -&gt; 90.0
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Use set with xlo, xhi, ylo, yhi, zlo, zhi and xy (default tilts are 0)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use set with xlo, xhi, ylo, yhi, zlo, zhi and xy (default tilts are 0)</span>
 <span class="n">box</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlo</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">xhi</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">ylo</span><span class="o">=-</span><span class="mf">2.1</span><span class="p">,</span> <span class="n">yhi</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">zlo</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">zhi</span><span class="o">=</span><span class="mf">3.1</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
@@ -639,8 +387,7 @@ box.yz -&gt; 0.0
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Use set with lx, ly, lz and xz (default tilts are 0, origin is [0,0,0])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use set with lx, ly, lz and xz (default tilts are 0, origin is [0,0,0])</span>
 <span class="n">box</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">lx</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">ly</span><span class="o">=</span><span class="mi">57</span><span class="p">,</span> <span class="n">lz</span><span class="o">=</span><span class="mi">112</span><span class="p">,</span> <span class="n">xz</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
@@ -691,8 +438,7 @@ box.yz -&gt; 0.0
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;am.Box.cubic(4.25) -&gt;&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;am.Box.cubic(4.25) -&gt;&#39;</span><span class="p">)</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">cubic</span><span class="p">(</span><span class="mf">4.25</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.a -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.b -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
@@ -721,8 +467,7 @@ box.gamma -&gt; 90.0
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;am.Box.hexagonal(3.12, 5.14) -&gt;&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;am.Box.hexagonal(3.12, 5.14) -&gt;&#39;</span><span class="p">)</span>
 <span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">hexagonal</span><span class="p">(</span><span class="mf">3.12</span><span class="p">,</span> <span class="mf">5.14</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.a -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.b -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
@@ -758,8 +503,7 @@ box.gamma -&gt; 119.99999999999999
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">xml</span><span class="p">())</span>
@@ -781,8 +525,7 @@ box.gamma -&gt; 119.99999999999999
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">length_unit</span><span class="o">=</span><span class="s1">&#39;nm&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">length_unit</span><span class="o">=</span><span class="s1">&#39;nm&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -800,8 +543,7 @@ box.gamma -&gt; 119.99999999999999
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -820,8 +562,7 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">box</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -847,9 +588,9 @@ origin = [ 0.000,  0.000,  0.000]
 <ul>
 <li><p>avect, bvect, cvect are right-handed.</p></li>
 <li><p>Only certain components of the lattice vectors are allowed to be non-zero:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">avect</span> <span class="o">=</span> <span class="p">[</span><span class="n">lx</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
-<span class="n">bvect</span> <span class="o">=</span> <span class="p">[</span><span class="n">xy</span><span class="p">,</span>  <span class="n">ly</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
-<span class="n">cvect</span> <span class="o">=</span> <span class="p">[</span><span class="n">xz</span><span class="p">,</span>  <span class="n">yz</span><span class="p">,</span>  <span class="n">lz</span><span class="p">]</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>avect = [lx, 0.0, 0.0]
+bvect = [xy,  ly, 0.0]
+cvect = [xz,  yz,  lz]
 </pre></div>
 </div>
 </li>
@@ -864,8 +605,7 @@ origin = [ 0.000,  0.000,  0.000]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># The current box was defined with LAMMPS parameters, therefore is compatible</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The current box was defined with LAMMPS parameters, therefore is compatible</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.is_lammps_norm() -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">is_lammps_norm</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -882,8 +622,7 @@ box.is_lammps_norm() -&gt; True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Define a non-lammps compatible box using set(avect, bvect, cvect)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a non-lammps compatible box using set(avect, bvect, cvect)</span>
 <span class="n">box</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">avect</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">bvect</span><span class="o">=</span><span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">cvect</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">14</span><span class="p">])</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;box.is_lammps_norm() -&gt;&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">is_lammps_norm</span><span class="p">())</span>
@@ -903,8 +642,7 @@ box.is_lammps_norm() -&gt; False
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">try</span><span class="p">:</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
     <span class="n">box</span><span class="o">.</span><span class="n">lx</span>
 <span class="k">except</span> <span class="ne">AssertionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;AssertionError:&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
@@ -928,8 +666,7 @@ AssertionError: Box is not normalized for LAMMPS style parameters
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Build random list of points</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build random list of points</span>
 <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 </pre></div>
@@ -940,34 +677,33 @@ AssertionError: Box is not normalized for LAMMPS style parameters
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[1.74070727 8.66918196 6.42182555]
- [0.54947855 8.98247496 1.77842325]
- [8.21016054 7.64403012 2.35741817]
- [9.52706553 8.44276562 7.28952289]
- [8.28081618 0.43374871 9.00936321]
- [0.12795354 3.81570766 3.68672317]
- [1.23187404 5.32381245 8.03752623]
- [6.24525094 7.01346796 7.3937727 ]
- [2.50641755 8.17171589 0.19383807]
- [2.71306594 3.64038916 9.71388488]
- [8.68104432 7.78447395 5.70183837]
- [3.33286587 1.96889681 0.54968902]
- [7.18759972 6.02037467 9.44866049]
- [9.77390879 3.93063882 1.56105651]
- [4.43461394 3.07789405 8.9855505 ]
- [5.13011361 5.35695335 4.26823854]
- [7.66817295 9.98478882 2.07913434]
- [5.76501255 7.31882359 2.86954951]
- [3.02297012 2.89519725 9.92716695]
- [5.43303343 9.48570629 5.71615022]]
+[[0.55155781 2.49380003 9.3967093 ]
+ [3.3184798  1.20799191 7.13164885]
+ [9.01978498 6.83706011 4.93770814]
+ [2.28427281 8.89576691 1.36390599]
+ [9.13244568 8.95582225 0.6753787 ]
+ [8.82825304 5.60954094 4.37509114]
+ [8.72884521 6.66389441 0.27514523]
+ [7.71076227 9.11630048 7.75768688]
+ [9.48224726 2.40686471 8.43615747]
+ [3.19980874 3.80016388 2.24761004]
+ [4.48075767 6.73926091 1.42195919]
+ [1.61078464 5.56715807 7.12491481]
+ [7.72580749 7.54518157 4.28075216]
+ [1.18750119 3.26711573 4.83214076]
+ [7.90676427 8.19921855 8.48659655]
+ [7.98902068 0.54456826 0.9633501 ]
+ [4.12189515 2.0876842  8.70759034]
+ [5.96837357 2.66878026 8.14396448]
+ [9.64936991 5.17531275 8.63342089]
+ [6.50309524 6.88621626 1.06736169]]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Points inside:&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Points inside:&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">inside</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Points outside:&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">outside</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
@@ -981,10 +717,10 @@ AssertionError: Box is not normalized for LAMMPS style parameters
 <div class="highlight"><pre>
 Points inside:
 [ True  True  True  True  True  True  True  True  True  True  True  True
-  True  True  True  True False  True  True False]
+  True  True  True  True  True  True  True  True]
 Points outside:
 [False False False False False False False False False False False False
- False False False False  True False False  True]
+ False False False False False False False False]
 </pre></div></div>
 </div>
 </section>
@@ -1002,8 +738,7 @@ Points outside:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Define an orthogonal box</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define an orthogonal box</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">2.51</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">b</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">3.13</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
 <span class="n">c</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.07</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
@@ -1015,8 +750,7 @@ Points outside:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">box</span><span class="o">.</span><span class="n">vector_crystal_to_cartesian</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="o">.</span><span class="n">vector_crystal_to_cartesian</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1033,8 +767,7 @@ array([2.51, 3.13, 4.07])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">box</span><span class="o">.</span><span class="n">plane_crystal_to_cartesian</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="o">.</span><span class="n">plane_crystal_to_cartesian</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1051,8 +784,7 @@ array([0.70300632, 0.56375267, 0.43354935])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">relpos</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">relpos</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
 <span class="n">cartpos</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">position_relative_to_cartesian</span><span class="p">(</span><span class="n">relpos</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">cartpos</span><span class="p">)</span>
 
@@ -1089,8 +821,7 @@ array([0.70300632, 0.56375267, 0.43354935])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;identifyfamily =&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">identifyfamily</span><span class="p">())</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;identifyfamily =&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">identifyfamily</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;iscubic =       &#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">iscubic</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ishexagonal =   &#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">ishexagonal</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;istetragonal =  &#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">istetragonal</span><span class="p">())</span>
@@ -1182,13 +913,13 @@ istriclinic =    False
         <li class="right" >
           <a href="1._Defining_atomic_systems.html" title="Introduction to atomman: Defining atomic systems"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Box class</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
     </div>
   </body>
 </html>
