@@ -42,7 +42,11 @@ def set_dump_styles():
     ignorelist = ['__pycache__']
 
     # Dynamically import calculation styles
-    for style in resources.contents(__name__):
+    if hasattr(resources, 'files'):
+        styles = (resource.name for resource in resources.files(__name__).iterdir())
+    else:
+        styles = resources.contents(__name__)
+    for style in styles:
 
         # Only import subfolders not in ignorelist
         if '.' not in style and style not in ignorelist:

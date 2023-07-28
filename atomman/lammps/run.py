@@ -102,7 +102,7 @@ def run(lammps_command: str,
         command += mpi_command + ' '
     
     # Add lammps_command
-    command += lammps_command + ' '
+    command += Path(lammps_command).as_posix() + ' '
 
     # Add logfile
     if logfile is None:
