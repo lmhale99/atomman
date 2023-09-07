@@ -106,6 +106,7 @@ class Dislocation():
             Only needs to be changed if there are issues with obtaining a
             solution.
         """
+        
         # Generate the dislocation solution
         self.__dislsol = solve_volterra_dislocation(C, burgers, ξ_uvw=ξ_uvw,
                                                     slip_hkl=slip_hkl, m=m, n=n,
@@ -367,6 +368,7 @@ class Dislocation():
                                                 return_transform=True, atol=tol)
 
         # Convert ξ_uvw to the primitive cell
+        ξ_uvw = np.asarray(ξ_uvw, dtype=float)
         if ξ_uvw.shape[-1] == 4:
             ξ_uvw = miller.vector4to3(ξ_uvw)
             hexindices = True
