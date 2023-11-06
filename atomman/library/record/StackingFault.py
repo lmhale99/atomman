@@ -80,6 +80,20 @@ class StackingFault(Record):
         self.__id = str(value)
 
     @property
+    def url(self) -> Optional[str]:
+        """str : A URL where a copy of the record can be found"""
+        if self.model is None:
+            raise AttributeError('No model information loaded')
+        return self.__url
+
+    @url.setter
+    def url(self, value: Optional[str]):
+        if value is None:
+            self.__url = None
+        else:
+            self.__url = str(value)
+
+    @property
     def family(self) -> str:
         """str : The prototype/reference id the defect is defined for"""
         if self.model is None:
@@ -116,6 +130,7 @@ class StackingFault(Record):
 
         self.key = content['key']
         self.id = content['id']
+        self.url = content.get('URL', None)
         self.family = content['system-family']
         self.__parameters = dict(content['calculation-parameter'])
 
@@ -133,6 +148,8 @@ class StackingFault(Record):
 
         content['key'] = self.key
         content['id'] = self.id
+        if self.url is not None:
+            content['URL'] = self.url
         content['system-family'] = self.family
         content['calculation-parameter'] = DM(self.parameters)
 
@@ -147,7 +164,9 @@ class StackingFault(Record):
         """
         meta = {}
         meta['name'] = self.name
+        meta['key'] = self.key
         meta['id'] = self.id
+        meta['url'] = self.url
         meta['family'] = self.family
         meta['hkl'] = self.parameters['hkl']
         meta['a1vect_uvw'] = self.parameters['a1vect_uvw']

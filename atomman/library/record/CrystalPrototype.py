@@ -82,6 +82,7 @@ class CrystalPrototype(Record):
         
         self.__key = proto['key']
         self.__id = proto['id']
+        self.__url = proto.get('URL', None)
         self.__commonname = proto['name']
         self.__prototype = proto['prototype']
         self.__pearson = proto['Pearson-symbol']
@@ -114,6 +115,13 @@ class CrystalPrototype(Record):
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__key
+    
+    @property
+    def url(self) -> Optional[str]:
+        """str : A URL where a copy of the record can be found"""
+        if self.model is None:
+            raise AttributeError('No model information loaded')
+        return self.__url
 
     @property
     def commonname(self) -> str:
@@ -202,6 +210,7 @@ class CrystalPrototype(Record):
         params['name'] = self.name
         params['key'] = self.key
         params['id'] = self.id
+        params['url'] = self.url
         params['commonname'] = self.commonname
         params['prototype'] = self.prototype
         params['pearson'] = self.pearson

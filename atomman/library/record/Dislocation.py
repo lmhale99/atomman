@@ -84,6 +84,20 @@ class Dislocation(Record):
         self.__id = str(value)
 
     @property
+    def url(self) -> Optional[str]:
+        """str : A URL where a copy of the record can be found"""
+        if self.model is None:
+            raise AttributeError('No model information loaded')
+        return self.__url
+
+    @url.setter
+    def url(self, value: Optional[str]):
+        if value is None:
+            self.__url = None
+        else:
+            self.__url = str(value)
+
+    @property
     def character(self) -> str:
         """str : The dislocation's character"""
         if self.model is None:
@@ -168,6 +182,7 @@ class Dislocation(Record):
 
         self.key = content['key']
         self.id = content['id']
+        self.url = content.get('URL', None)
         self.character = content['character']
         self.burgers_vector = content['Burgers-vector']
         self.slip_plane = np.asarray(content['slip-plane'], dtype=int)
@@ -189,6 +204,8 @@ class Dislocation(Record):
 
         content['key'] = self.key
         content['id'] = self.id
+        if self.url is not None:
+            content['URL'] = self.url
         content['character'] = self.character
         content['Burgers-vector'] = self.burgers_vector
         content['slip-plane'] = self.slip_plane.tolist()
@@ -207,7 +224,9 @@ class Dislocation(Record):
         """
         meta = {}
         meta['name'] = self.name
+        meta['key'] = self.key
         meta['id'] = self.id
+        meta['url'] = self.url
         meta['character'] = self.character
         meta['burgers_vector'] = self.burgers_vector
         meta['slip_plane'] = self.slip_plane

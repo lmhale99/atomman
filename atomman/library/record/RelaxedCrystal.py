@@ -80,16 +80,53 @@ class RelaxedCrystal(Record):
         crystal = self.model[self.modelroot]
         
         self.__key = crystal['key']
+        self.__url = crystal.get('URL', None)
         self.__method = crystal['method']
         self.__standing = crystal['standing']
 
         self.__potential_LAMMPS_id = crystal['potential-LAMMPS']['id']
         self.__potential_LAMMPS_key = crystal['potential-LAMMPS']['key']
+        self.__potential_LAMMPS_url = crystal['potential-LAMMPS'].get('URL', None)
+
         self.__potential_id = crystal['potential-LAMMPS']['potential']['id']
         self.__potential_key = crystal['potential-LAMMPS']['potential']['key']
+        self.__potential_url = crystal['potential-LAMMPS']['potential'].get('URL', None)
+
+        try:
+            self.__temperature = uc.value_unit(crystal['phase-state']['temperature'])
+        except KeyError:
+            self.__temperature = 0.0
+        try:
+            self.__pressure_xx = uc.value_unit(crystal['phase-state']['pressure-xx'])
+        except KeyError:
+            self.__pressure_xx = 0.0
+        try:
+            self.__pressure_yy = uc.value_unit(crystal['phase-state']['pressure-yy'])
+        except KeyError:
+            self.__pressure_yy = 0.0
+        try:
+            self.__pressure_zz = uc.value_unit(crystal['phase-state']['pressure-zz'])
+        except KeyError:
+            self.__pressure_zz = 0.0
+        try:
+            self.__pressure_xy = uc.value_unit(crystal['phase-state']['pressure-xy'])
+        except KeyError:
+            self.__pressure_xy = 0.0
+        try:
+            self.__pressure_xz = uc.value_unit(crystal['phase-state']['pressure-xz'])
+        except KeyError:
+            self.__pressure_xz = 0.0
+        try:
+            self.__pressure_yz = uc.value_unit(crystal['phase-state']['pressure-yz'])
+        except KeyError:
+            self.__pressure_yz = 0.0
 
         self.__family = crystal['system-info']['family']
+        self.__family_url = crystal['system-info'].get('family-URL', None)
+
         self.__parent_key = crystal['system-info']['parent_key']
+        self.__parent_url = crystal['system-info'].get('parent-URL', None)
+
         self.__symbols = crystal['system-info'].aslist('symbol')
         self.__composition = crystal['system-info']['composition']
         self.__crystalfamily = crystal['system-info']['cell']['crystal-family']
@@ -122,6 +159,13 @@ class RelaxedCrystal(Record):
         return self.__key
 
     @property
+    def url(self) -> Optional[str]:
+        """str : A URL where a copy of the record can be found"""
+        if self.model is None:
+            raise AttributeError('No model information loaded')
+        return self.__url
+
+    @property
     def method(self) -> str:
         """str : Indicates the relaxation method used: box, static or dynamic"""
         if self.model is None:
@@ -143,11 +187,25 @@ class RelaxedCrystal(Record):
         return self.__family
 
     @property
+    def family_url(self) -> Optional[str]:
+        """str : A URL where a copy of the family record can be found"""
+        if self.model is None:
+            raise AttributeError('No model information loaded')
+        return self.__family_url
+
+    @property
     def parent_key(self) -> str:
         """str : The key assigned to the record of the relaxation calculation used"""
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__parent_key
+
+    @property
+    def parent_url(self) -> Optional[str]:
+        """str : A URL where a copy of the parent record can be found"""
+        if self.model is None:
+            raise AttributeError('No model information loaded')
+        return self.__parent_url
 
     @property
     def potential_LAMMPS_id(self) -> str:
@@ -164,6 +222,13 @@ class RelaxedCrystal(Record):
         return self.__potential_LAMMPS_key
 
     @property
+    def potential_LAMMPS_url(self) -> Optional[str]:
+        """str : A URL where a copy of the potential_LAMMPS record can be found"""
+        if self.model is None:
+            raise AttributeError('No model information loaded')
+        return self.__potential_LAMMPS_url
+
+    @property
     def potential_id(self) -> str:
         """str : The id of the potential model used to relax the crystal"""
         if self.model is None:
@@ -176,6 +241,62 @@ class RelaxedCrystal(Record):
         if self.model is None:
             raise AttributeError('No model information loaded')
         return self.__potential_key
+
+    @property
+    def potential_url(self) -> Optional[str]:
+        """str : A URL where a copy of the potential model record can be found"""
+        if self.model is None:
+            raise AttributeError('No model information loaded')
+        return self.__potential_url
+
+    @property
+    def temperature(self) -> float:
+        """float : The target temperature used during relaxation"""
+        if self.model is None:
+            raise AttributeError('No model information loaded')
+        return self.__temperature
+
+    @property
+    def pressure_xx(self) -> float:
+        """float : The target xx pressure component used during relaxation"""
+        if self.model is None:
+            raise AttributeError('No model information loaded')
+        return self.__pressure_xx
+
+    @property
+    def pressure_yy(self) -> float:
+        """float : The target yy pressure component used during relaxation"""
+        if self.model is None:
+            raise AttributeError('No model information loaded')
+        return self.__pressure_yy
+
+    @property
+    def pressure_zz(self) -> float:
+        """float : The target zz pressure component used during relaxation"""
+        if self.model is None:
+            raise AttributeError('No model information loaded')
+        return self.__pressure_zz
+    
+    @property
+    def pressure_xy(self) -> float:
+        """float : The target xy pressure component used during relaxation"""
+        if self.model is None:
+            raise AttributeError('No model information loaded')
+        return self.__pressure_xy
+    
+    @property
+    def pressure_xz(self) -> float:
+        """float : The target xz pressure component used during relaxation"""
+        if self.model is None:
+            raise AttributeError('No model information loaded')
+        return self.__pressure_xz
+    
+    @property
+    def pressure_yz(self) -> float:
+        """float : The target yz pressure component used during relaxation"""
+        if self.model is None:
+            raise AttributeError('No model information loaded')
+        return self.__pressure_yz
 
     @property
     def cohesive_energy(self) -> float:
@@ -291,6 +412,7 @@ class RelaxedCrystal(Record):
         params = {}
         params['name'] = self.name
         params['key'] = self.key
+        params['url'] = self.url
         params['method'] = self.method
         params['standing'] = self.standing
         params['family'] = self.family
@@ -301,6 +423,14 @@ class RelaxedCrystal(Record):
         params['potential_id'] = self.potential_id
         params['potential_key'] = self.potential_key
         
+        params['temperature'] = self.temperature
+        #params['pressure_xx'] = self.pressure_xx
+        #params['pressure_yy'] = self.pressure_yy
+        #params['pressure_zz'] = self.pressure_zz
+        #params['pressure_xy'] = self.pressure_xy
+        #params['pressure_xz'] = self.pressure_xz
+        #params['pressure_yz'] = self.pressure_yz
+
         params['crystalfamily'] = self.crystalfamily
         params['natypes'] = self.natypes
         params['symbols'] = self.symbols
@@ -368,6 +498,11 @@ class RelaxedCrystal(Record):
                 name='potential_key',
                 path=f'{self.modelroot}.potential-LAMMPS.potential.key',
                 description='search bu the potential UUID key of the potential used'),
+            'temperature': load_query(
+                style='float_match',
+                name='temperature',
+                path=f'{self.modelroot}.phase-state.temperature.value',
+                description='search by temperature in Kelvin'),
             'crystalfamily': load_query(
                 style='str_match',
                 name='crystalfamily',
