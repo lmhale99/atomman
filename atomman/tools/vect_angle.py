@@ -1,4 +1,5 @@
 # coding: utf-8
+from typing import Optional, Union
 
 # http://www.numpy.org/
 import numpy as np
@@ -6,24 +7,24 @@ import numpy.typing as npt
 
 def vect_angle(vect1: npt.ArrayLike,
                vect2: npt.ArrayLike,
-               unit: str = 'degree') -> float:
+               unit: str = 'degree') -> Union[float, np.ndarray]:
     """
-    Returns the angle between two vectors.
+    Returns the angle(s) between two sets of vectors.
     
     Parameters
     ----------
     vect1 : array-like object
-        First vector.
+        First vector or set of vectors.
     vect2 : array-like object
-        Second vector.
+        Second vector or set of vectors.
     unit : str
         Specifies unit of returned angle: 'degree' or 'radian'. Default value
         is 'degree'.
         
     Returns
     -------
-    float
-        The angle between vect1 and vect2.
+    float or numpy.NDArray
+        The angle(s) between vect1 and vect2.
     """
     # Convert to numpy arrays if needed
     vect1 = np.asarray(vect1)
