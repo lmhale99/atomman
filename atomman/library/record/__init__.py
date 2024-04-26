@@ -12,4 +12,5 @@ recordmanager.import_style('free_surface', '.FreeSurface', __name__)
 recordmanager.import_style('stacking_fault', '.StackingFault', __name__)
 recordmanager.import_style('point_defect', '.PointDefect', __name__)
 recordmanager.import_style('dislocation', '.Dislocation', __name__)
+recordmanager.import_style('grain_boundary', '.GrainBoundary', __name__)
 

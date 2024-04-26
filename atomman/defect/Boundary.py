@@ -7,9 +7,12 @@ from math import ceil
 import numpy as np
 import numpy.typing as npt
 
+from scipy.spatial.transform import Rotation
+
 # Local imports
 from .. import System
-from ..tools import vect_angle, iaslist, aslist
+from ..tools import vect_angle, iaslist, miller
+
 
 class Boundary():
     """
@@ -20,9 +23,12 @@ class Boundary():
                  ucell2: System,
                  uvws1: npt.ArrayLike,
                  uvws2: npt.ArrayLike,
-                 cutboxvector: str = 'b',
+                 conventional_setting1: str = 'p',
+                 conventional_setting2: str = 'p',
+                 cutboxvector: str = 'c',
                  zerostrain: bool = False,
-                 maxmult: int = 10):
+                 maxmult: int = 10,
+                 tol: float = 1e-8):
         """
         Class initializer.  This is generic to allow for either a grain or
         phase boundary to be specified.
@@ -30,18 +36,30 @@ class Boundary():
         Parameters
         ----------
         ucell1 : atomman.System
-            The reference unit cell to use for the top grain.
+            The reference unit cell to use for the first grain.
         ucell2 : atomman.System
-            The reference unit cell to use for the bottom grain.
+            The reference unit cell to use for the second grain.
         uvws1 : array-like object
-            The three Miller crystal vectors to use for orienting the top
-            grain.
+            The three Miller(-Bravais) crystal vectors of ucell1 to use for
+            orienting the first grain such that each crystal vector will be
+            aligned with one of the box vectors of the final configuration.
         uvws2 : array-like object
-            The three Miller crystal vectors to use for orienting the bottom
-            grain.
+            The three Miller(-Bravais) crystal vectors of ucell2 to use for
+            orienting the second grain such that each crystal vector will be
+            aligned with one of the box vectors of the final configuration.
+        conventional_setting1 : str, optional
+            Specifies which conventional lattice setting that ucell1 is in.
+            The default value of 'p' takes ucell to be primitive, in which case
+            the uvws1 values must be integers.  This must be specified
+            in order to access non-integer lattice vectors for uvws1. 
+        conventional_setting2 : str, optional
+            Specifies which conventional lattice setting that ucell1 is in.
+            The default value of 'p' takes ucell to be primitive, in which case
+            the uvws1 values must be integers.  This must be specified
+            in order to access non-integer lattice vectors for uvws1. 
         cutboxvector : str, optional
             Indicates which of the three box vectors that the boundary will
-            be placed along. Default value is 'b'.
+            be placed along. Default value is 'c'.
         zerostrain : bool, optional
             Setting this as True will check to see if the orientations of the
             two grains are fully compatible without introducing strain.  This
@@ -62,14 +80,41 @@ class Boundary():
         self.__uvws2 = uvws2
         self.__cutboxvector = cutboxvector
 
+        # Generate compatible primitive unit cells and associated transformation matrixes
+        ucell_prim1, transform_c1_to_p1 = ucell1.dump('conventional_to_primitive',
+                                                     setting=conventional_setting1,
+                                                     return_transform=True, atol=tol)
+        ucell_prim2, transform_c2_to_p2 = ucell2.dump('conventional_to_primitive',
+                                                      setting=conventional_setting2,
+                                                      return_transform=True, atol=tol)
+
+        # Convert uvws1 to the primitive cell
+        uvws1 = np.asarray(uvws1, dtype=float)
+        if uvws1.shape[-1] == 4:
+            uvws1 = miller.vector4to3(uvws1)
+        uvws_prim1 = miller.vector_conventional_to_primitive(uvws1, setting=conventional_setting1)
+
+        # Convert uvws2 to the primitive cell
+        uvws2 = np.asarray(uvws2, dtype=float)
+        if uvws2.shape[-1] == 4:
+            uvws2 = miller.vector4to3(uvws2)
+        uvws_prim2 = miller.vector_conventional_to_primitive(uvws2, setting=conventional_setting1)
+
+        # Save primitive cell settings
+        self.__ucell_prim1 = ucell_prim1
+        self.__ucell_prim2 = ucell_prim2
+        self.__transform_c1_to_p1 = Rotation.from_matrix(transform_c1_to_p1)
+        self.__transform_c2_to_p2 = Rotation.from_matrix(transform_c2_to_p2)
+        self.__uvws_prim1 = uvws_prim1
+        self.__uvws_prim2 = uvws_prim2
+
         # Create rotated cells
-        rcell1, transform1 = ucell1.rotate(uvws1, return_transform=True)
-        rcell2, transform2 = ucell2.rotate(uvws2, return_transform=True)
-        self.__ucell2 = ucell2
+        rcell1, transform_p1_to_r1 = ucell_prim1.rotate(uvws_prim1, return_transform=True)
+        rcell2, transform_p2_to_r2 = ucell_prim2.rotate(uvws_prim2, return_transform=True)
         self.__rcell1 = rcell1
         self.__rcell2 = rcell2
-        self.__transform1 = transform1
-        self.__transform2 = transform2
+        self.__transform_p1_to_r1 = Rotation.from_matrix(transform_p1_to_r1)
+        self.__transform_p2_to_r2 = Rotation.from_matrix(transform_p2_to_r2)
 
         # Check boxvectors
         if cutboxvector == 'a':
@@ -102,83 +147,85 @@ class Boundary():
         if zerostrain:
             strain = self.identifymults(maxmult)[2]
             if not np.allclose(strain, np.zeros(3)):
-                raise ValueError('no zero strain configuration found')
-
-    @classmethod
-    def grain(cls,
-              ucell: System,
-              uvws1,
-              uvws2,
-              cutboxvector='b',
-              maxmult: int = 10):
-        """
-        Class method to initialize for grain boundary configurations.  In
-        comparison to the default init, this sets the same ucell for both
-        grains and requires the zero strain check.
-
-        Parameters
-        ----------
-        ucell : atomman.System
-            The unit cell to use for both top and bottom grains.
-        uvws1 : array-like object
-            The three Miller crystal vectors to use for orienting the top
-            grain.
-        uvws2 : array-like object
-            The three Miller crystal vectors to use for orienting the bottom
-            grain.
-        cutboxvector : str, optional
-            Indicates which of the three box vectors that the boundary will
-            be placed along. Default value is 'b'.
-        maxmult : int, optional
-            The max integer multiplier to use for the zero strain check if
-            zerostrain is True.
-        """
-        return cls(ucell, ucell, uvws1, uvws2, cutboxvector=cutboxvector,
-                   zerostrain=True, maxmult=maxmult)
+                raise ValueError('no zero strain configuration found') 
 
     @property
     def uvws1(self) -> np.ndarray:
-        """numpy.NDArray: The three rotational Miller vectors used on the top grain"""
+        """numpy.NDArray: The three crystal vectors used to orient the first grain expressed as Miller(-Bravais) vectors of ucell1"""
         return self.__uvws1
 
     @property
     def uvws2(self) -> np.ndarray:
-        """numpy.NDArray: The three rotational Miller vectors used on the bottom grain"""
+        """numpy.NDArray: The three crystal vectors used to orient the second grain expressed as Miller(-Bravais) vectors of ucell2"""
         return self.__uvws2
 
     @property
+    def uvws_prim1(self) -> np.ndarray:
+        """numpy.NDArray: The three crystal vectors used to orient the first grain expressed as Miller vectors of ucell_prim1"""
+        return self.__uvws_prim1
+
+    @property
+    def uvws_prim2(self) -> np.ndarray:
+        """numpy.NDArray: The three crystal vectors used to orient the second grain expressed as Miller vectors of ucell_prim2"""
+        return self.__uvws_prim2
+
+    @property
     def ucell1(self) -> System:
-        """atomman.System: The reference unit cell for the top grain."""
+        """atomman.System: The conventional reference unit cell for the first grain."""
         return self.__ucell1
 
     @property
     def ucell2(self) -> System:
-        """atomman.System: The reference unit cell for the bottom grain."""
+        """atomman.System: The conventional reference unit cell for the second grain."""
         return self.__ucell2
+    
+    @property
+    def ucell_prim1(self) -> System:
+        """atomman.System: The primitive reference unit cell for the first grain."""
+        return self.__ucell_prim1
+
+    @property
+    def ucell_prim2(self) -> System:
+        """atomman.System: The primitive reference unit cell for the second grain."""
+        return self.__ucell_prim2
 
     @property
     def rcell1(self) -> System:
-        """atomman.System: The rotated cell for the top grain."""
+        """atomman.System: The rotated cell for the first grain."""
         return self.__rcell1
 
     @property
     def rcell2(self) -> System:
-        """atomman.System: The rotated cell for the bottom grain."""
+        """atomman.System: The rotated cell for the second grain."""
         return self.__rcell2
 
     @property
-    def transform1(self) -> np.ndarray:
+    def transform_c1_to_p1(self) -> Rotation:
         """
-        numpy.NDArray: The Cartesian transformation associated with ucell1 being rotated to rcell1
+        scipy.spatial.transform.Rotation: The Cartesian rotation associated with ucell1 to ucell_prim1
         """
-        return self.__transform1
+        return self.__transform_c1_to_p1
 
     @property
-    def transform2(self) -> np.ndarray:
+    def transform_c2_to_p2(self) -> Rotation:
         """
-        numpy.NDArray: The Cartesian transformation associated with ucell2 being rotated to rcell2
+        scipy.spatial.transform.Rotation: The Cartesian rotation associated with ucell2 to ucell_prim2
         """
-        return self.__transform2
+        return self.__transform_c2_to_p2
+
+    @property
+    def transform_p1_to_r1(self) -> Rotation:
+        """
+        scipy.spatial.transform.Rotation: The Cartesian rotation associated with ucell_prim1 to rcell1
+        """
+        return self.__transform_p1_to_r1
+
+    @property
+    def transform_p2_to_r2(self) -> Rotation:
+        """
+        scipy.spatial.transform.Rotation: The Cartesian rotation associated with ucell_prim2 to rcell2
+        """
+        return self.__transform_p2_to_r2
 
     @property
     def cutboxvector(self) -> str:
@@ -326,11 +373,11 @@ class Boundary():
                  maxmult: Optional[int] = None,
                  minwidth: Optional[float] = None,
                  freesurface: bool = False,
-                 straintype='top',
-                 shift1=0.0,
-                 shift2=0.0,
-                 deletewidth=0.1,
-                 deletefrom='top'):
+                 straintype: str = 'top',
+                 shift1: float = 0.0,
+                 shift2: float = 0.0,
+                 deleter: float = 0.1,
+                 deletefrom: str = 'top'):
         """
         Generates a phase/grain boundary configuration.
 
@@ -381,7 +428,7 @@ class Boundary():
             vectors.  This is taken relative to the rcell's c vector or b
             vector if cutboxvector='c', so it should range between 0 and 1.
             Default value is 0.0.
-        deletewidth: float, optional
+        deleter: float, optional
             Any atoms in the separate grains closer than this distance will
             have one atom of the pair deleted to prevent overlapping atoms.
             Varying this value can possibly result in a lower energy
@@ -430,7 +477,7 @@ class Boundary():
         self.applystrain(system1, system2, straintype)
         system = self.mergesystems(system1, system2, freesurface)
         self.applyshift(system, shift1, shift2, system1.natoms)
-        newsystem, natoms1 = self.deleteoverlaps(system, deletewidth, deletefrom, system1.natoms)
+        newsystem, natoms1 = self.deleteoverlaps(system, deleter, deletefrom, system1.natoms)
 
         return newsystem, natoms1
 
@@ -493,13 +540,13 @@ class Boundary():
         system.atoms.pos[:natoms1] += shift
         system.wrap()
 
-    def deleteoverlaps(self, system, deletewidth, deletefrom, natoms1):
+    def deleteoverlaps(self, system, deleter, deletefrom, natoms1):
         """
         """
         # Build neighborlist
         cutoff = 1.2
-        if deletewidth > cutoff:
-            cutoff = deletewidth + 0.2
+        if deleter > cutoff:
+            cutoff = deleter + 0.2
         nlist = system.neighborlist(cutoff=cutoff)
 
         dup = set()
@@ -509,13 +556,13 @@ class Boundary():
 
             dmag = system.dmag(i, nlist[i])
             if nlist.coord[i] == 1:
-                if dmag < deletewidth:
+                if dmag < deleter:
                     if deletefrom == 'top':
                         dup.add(i)
                     elif deletefrom == 'bottom':
                         dup.update(nlist[i])
             else:
-                dups = nlist[i][dmag < deletewidth]
+                dups = nlist[i][dmag < deleter]
 
                 if deletefrom == 'top' and np.any(dups >= natoms1):
                     dup.add(i)
@@ -539,7 +586,7 @@ class Boundary():
                           straintype = 'top',
                           shifts1 = 0.0,
                           shifts2 = 0.0,
-                          deletewidths = 0.1,
+                          deleters = 0.1,
                           deletefrom = 'top'):
         """
         Generates multiple proposed phase/grain boundary configurations for the
@@ -601,8 +648,8 @@ class Boundary():
             all values.  If an int is given, then that number of equally-
             spaced shifts will be explored between 0 <= shift1 < 1.  Default
             value is 0.0 (no shift, no iteration).
-        deletewidths: float or list, optional
-            One or more interatomic spacing cutoff widths to explore for
+        deleters: float or list, optional
+            One or more interatomic spacing cutoffs to explore for
             identifying overlapping atoms between the two grains.  If multiple
             values are given, systems are yielded only if they differ from
             the previous system with the same in-plane shift.  Default value is
@@ -628,7 +675,7 @@ class Boundary():
         # Set up values to iterate over
         shifts1 = self.interpret_shifts(shifts1)
         shifts2 = self.interpret_shifts(shifts2)
-        deletewidths = [float(i) for i in iaslist(deletewidths)]
+        deleters = [float(i) for i in iaslist(deleters)]
         if deletefrom == 'both':
             deletefroms = ['top', 'bottom']
         else:
@@ -641,7 +688,7 @@ class Boundary():
 
                     # deletewidth must be inner loop to do the natoms check
                     natoms = -999999
-                    for deletewidth in deletewidths:
+                    for deleter in deleters:
                         system, natoms1 = self.boundary(mults1=mults1,
                                                         mults2=mults2,
                                                         maxmult=maxmult,
@@ -650,7 +697,7 @@ class Boundary():
                                                         straintype=straintype,
                                                         shift1=shift1,
                                                         shift2=shift2,
-                                                        deletewidth=deletewidth,
+                                                        deleter=deleter,
                                                         deletefrom=deletefrom)
 
                         # Only yield systems where a different number of atoms was deleted
