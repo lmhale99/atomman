@@ -147,6 +147,8 @@ def dipole(self,
            shift: Optional[npt.ArrayLike] = None,
            shiftindex: Optional[int] = None,
            shiftscale: bool = False,
+           center: Optional[npt.ArrayLike] = None,
+           centerscale: bool = False,
            return_base_system: bool = False
            ) -> Union[System, Tuple[System, System]]:
     """
@@ -203,6 +205,16 @@ def dipole(self,
         If False (default), a given shift value will be taken as absolute
         Cartesian.  If True, a given shift will be taken relative to the
         rotated cell's box vectors.
+    center : array-like object or None, optional
+        Indicates where the dislocations are positioned in the configuration
+        relative to the default locations.  For dipole configurations, the
+        default locations are at relative positions of (1/4, 1/2) and 
+        (3/4, 1/2) of the box dimensions of the final configuration that
+        correspond to the dislocation solution's m- and n-axes.
+    centerscale : bool, optional
+        If False (default), a given center value will be taken as absolute
+        Cartesian.  If True, a given center will be taken relative to the
+        rotated cell's box vectors.
     return_base_system : bool, optional
         If True then the dislocation-free base system corresponding to the
         dislocation system will also be returned.  The base system is used
@@ -239,6 +251,14 @@ def dipole(self,
     if shift is not None or shiftindex is not None:
         self.set_shift(shift, shiftindex, shiftscale)
     shift = self.shift
+    
+    # Handle center parameter
+    if center is None:
+        center = np.array([0,0,0])
+    else:
+        center = np.asarray(center)
+    if centerscale:
+        center = self.rcell.box.vector_crystal_to_cartesian(center)
 
     # Apply the rigid body shift to the atoms
     base_system.atoms.pos += shift
@@ -260,7 +280,7 @@ def dipole(self,
     # Compute displacement solution
     mvect = base_system.box.vects[motionindex]
     nvect = base_system.box.vects[cutindex]
-    disp = self.dipole_displacement(self.dislsol, base_system.atoms.pos,
+    disp = self.dipole_displacement(self.dislsol, base_system.atoms.pos - center,
                                     x1, x2, mvect, nvect, N=numreplicas)
 
     # Create the dislocation system

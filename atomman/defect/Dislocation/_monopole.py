@@ -139,6 +139,8 @@ def monopole(self,
              shift: Optional[npt.ArrayLike] = None,
              shiftindex: Optional[int] = None,
              shiftscale: bool = False,
+             center: Optional[npt.ArrayLike] = None,
+             centerscale: bool = False,
              boundaryshape: str = 'cylinder',
              boundarywidth: float = 0.0,
              boundaryscale: bool = False,
@@ -200,6 +202,14 @@ def monopole(self,
         If False (default), a given shift value will be taken as absolute
         Cartesian.  If True, a given shift will be taken relative to the
         rotated cell's box vectors.
+    center : array-like object or None, optional
+        Indicates where the dislocation is positioned in the system relative
+        to the default position at (0, 0) along the box vectors associated
+        with the dislocation solution's m- and n-axes.
+    centerscale : bool, optional
+        If False (default), a given center value will be taken as absolute
+        Cartesian.  If True, a given center will be taken relative to the
+        rotated cell's box vectors.
     boundaryshape : str, optional
         Indicates the shape of the boundary region to use.  Options are
         'cylinder' (default) and 'box'.  For 'cylinder', the non-boundary
@@ -233,6 +243,7 @@ def monopole(self,
         sizemults = [2,2,2]
         sizemults[self.lineindex] = 1
     else:
+        sizemults = deepcopy(sizemults)
         try:
             assert len(sizemults) == 3
             assert isinstance(sizemults[0], int) and sizemults[0] > 0
@@ -277,6 +288,14 @@ def monopole(self,
         self.set_shift(shift, shiftindex, shiftscale)
     shift = self.shift
 
+    # Handle center parameter
+    if center is None:
+        center = np.array([0,0,0])
+    else:
+        center = np.asarray(center)
+    if centerscale:
+        center = self.rcell.box.vector_crystal_to_cartesian(center)
+
     # Handle boundary parameters
     if boundaryscale is True:
         boundarywidth = boundarywidth * self.ucell.box.a
@@ -290,7 +309,7 @@ def monopole(self,
 
     # Copy the system and displace atoms according to the dislocation solution
     disl_system = deepcopy(base_system)
-    disl_system.atoms.pos += self.dislsol.displacement(disl_system.atoms.pos)
+    disl_system.atoms.pos += self.dislsol.displacement(disl_system.atoms.pos - center)
     disl_system.pbc = [False, False, False]
     disl_system.pbc[self.lineindex] = True
     disl_system.wrap()

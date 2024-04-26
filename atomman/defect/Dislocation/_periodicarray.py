@@ -51,6 +51,8 @@ def periodicarray(self,
                   shift: Optional[npt.ArrayLike] = None,
                   shiftindex: Optional[int] = None,
                   shiftscale: bool = False,
+                  center: Optional[npt.ArrayLike] = None,
+                  centerscale: bool = False,
                   boundarywidth: float = 0.0,
                   boundaryscale: bool = False,
                   linear: bool = False,
@@ -110,6 +112,14 @@ def periodicarray(self,
     shiftscale : bool, optional
         If False (default), a given shift value will be taken as absolute
         Cartesian.  If True, a given shift will be taken relative to the
+        rotated cell's box vectors.
+    center : array-like object or None, optional
+        Indicates where the dislocation is positioned in the system relative
+        to the default position at (0, 0) along the box vectors associated
+        with the dislocation solution's m- and n-axes.
+    centerscale : bool, optional
+        If False (default), a given center value will be taken as absolute
+        Cartesian.  If True, a given center will be taken relative to the
         rotated cell's box vectors.
     boundarywidth : float, optional
         The width of the boundary region to apply.  Default value is 0.0,
@@ -198,6 +208,14 @@ def periodicarray(self,
         self.set_shift(shift, shiftindex, shiftscale)
     shift = self.shift
 
+    # Handle center parameter
+    if center is None:
+        center = np.array([0,0,0])
+    else:
+        center = np.asarray(center)
+    if centerscale:
+        center = self.rcell.box.vector_crystal_to_cartesian(center)
+
     # Handle boundary parameters
     if boundaryscale is True:
         boundarywidth = boundarywidth * self.ucell.box.a
@@ -208,7 +226,7 @@ def periodicarray(self,
     base_system.wrap()
 
     # Create the dislocation system
-    disl_system = self.build_disl_array(base_system, linear=linear,
+    disl_system = self.build_disl_array(base_system, center, linear=linear,
                                         bwidth=boundarywidth, cutoff=cutoff)
     # Trim deleted atoms from base_system
     base_system = base_system.atoms_ix[disl_system.atoms.old_id]
@@ -232,6 +250,7 @@ def periodicarray(self,
 
 def build_disl_array(self,
                      base_system: System,
+                     center: npt.ArrayLike,
                      linear: bool = False,
                      bwidth: Optional[float] = None,
                      cutoff: Optional[float] = None,
@@ -336,7 +355,7 @@ def build_disl_array(self,
                            pbc=newpbc, symbols=base_system.symbols)
 
     # Apply linear gradient shift to all atoms
-    testsystem.atoms.pos += linear_displacement(pos, burgers, length, m, n)
+    testsystem.atoms.pos += linear_displacement(pos - center, burgers, length, m, n)
     testsystem.atoms.old_id = range(testsystem.natoms)
 
     # Identify atoms at the motionindex boundary to include in the duplicate check
@@ -384,7 +403,7 @@ def build_disl_array(self,
 
     if linear:
         # Use only linear displacements
-        disp = linear_displacement(disl_system.atoms.pos, burgers, length, m, n)
+        disp = linear_displacement(disl_system.atoms.pos - center, burgers, length, m, n)
     
     else:
         # Identify boundary atoms
@@ -396,9 +415,9 @@ def build_disl_array(self,
         ii = np.where((y <= miny + bwidth) | (y >= maxy - bwidth))
         
         # Use dislsol in middle and linear displacements at boundary
-        disp = self.dislsol.displacement(disl_system.atoms.pos)
+        disp = self.dislsol.displacement(disl_system.atoms.pos - center)
         disp[:, cutindex] -= disp[:, cutindex].mean()
-        disp[ii] = linear_displacement(disl_system.atoms.pos[ii], burgers,
+        disp[ii] = linear_displacement(disl_system.atoms.pos[ii] - center, burgers,
                                        length, m, n)
     
     # Displace atoms and wrap
