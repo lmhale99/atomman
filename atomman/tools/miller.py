@@ -8,7 +8,8 @@ __all__ = ['plane3to4', 'plane4to3', 'vector3to4', 'vector4to3',
            'plane_crystal_to_cartesian',
            'vector_crystal_to_cartesian',
            'vector_primitive_to_conventional', 
-           'vector_conventional_to_primitive', 'fromstring']
+           'vector_conventional_to_primitive', 'fromstring', 
+           'all_indices', 'reduce_indices']
 
 def plane3to4(indices: npt.ArrayLike) -> np.ndarray:
     """
@@ -515,3 +516,70 @@ def fromstring(value):
 
     # Apply the fraction and return
     return fraction * array
+
+def all_indices(maxindex: int = 10,
+                reduce: bool = False) -> np.ndarray:
+    """
+    Generates an array containing all Miller indices where each individual
+    index value is an integer independently ranging from -maxindex to maxindex. 
+
+    Parameters
+    ----------
+    maxindex : int, optional
+        The maximum absolute index to use: u,v,w (or h,k,l) can all
+        independently vary from -maxindex to maxindex.  Default value is 10.
+    reduce : bool, optional
+        Setting this to True will return only the indices sets that are unique
+        after reducing to their smallest integer values.  Default value of
+        False will return all indices even those that are multiples of others.
+
+    Returns 
+    -------
+    indices : numpy.NDArray
+        All integer Miller [uvw] or (hkl) indices within the maxindex range.
+    """
+    # Individual indices independently range -maxindex to maxindex
+    i = np.arange(-maxindex, maxindex+1)
+    
+    # Build grid, combine and transform
+    u, v, w = np.meshgrid(i, i, i)
+    indices = np.vstack([u.flat, v.flat, w.flat]).T
+    
+    # Remove [0,0,0]
+    indices = indices[np.abs(indices).sum(axis=1) != 0]
+
+    # Reduce and remove duplicates
+    if reduce:
+        indices = reduce_indices(indices)
+        indices = np.unique(indices, axis=0)
+
+    return indices
+
+def reduce_indices(indices: npt.ArrayLike) -> np.array:
+    """
+    Given an array of one or more Miller(-Bravais) indices reduce them to the
+    smallest integer representation.
+    
+    Parameters
+    ----------
+    indices : Array-like object
+        An array of ints with shapes (...,3) or (...,4) that represent one
+        or more Miller(-Bravais) crystal vectors.
+
+    Returns
+    -------
+    numpy.ndarray
+        The reduced indices
+    """
+    indices = np.asarray(indices)
+    if indices.shape[-1] != 3 and indices.shape[-1] != 4:
+        raise ValueError('Invalid indices dimensions')
+    
+    # Get gcd of each vector
+    n = np.gcd.reduce(indices, axis=-1)
+
+    # Divide each vector by the corresponding gcd
+    red_indices = (indices.T // n).T
+
+    return red_indices
+

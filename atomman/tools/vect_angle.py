@@ -35,7 +35,8 @@ def vect_angle(vect1: npt.ArrayLike,
     u_vect2 = (vect2.T / np.linalg.norm(vect2, axis=-1)).T
     
     # calculate cosine angle between vectors
-    cosine = np.dot(u_vect1, u_vect2)
+    #cosine = np.dot(u_vect1, u_vect2)
+    cosine = np.einsum('...i,...i', u_vect1, u_vect2)
     
     # Clean up any invalid numbers due to rounding
     try:

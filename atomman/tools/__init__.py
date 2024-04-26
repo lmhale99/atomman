@@ -9,6 +9,7 @@ from potentials.tools.atomic_info import __all__ as atomic_info_all
 from .boolean import boolean
 from .axes_check import axes_check
 from .compositionstr import compositionstr
+from .approx_rational import approx_rational
 from .duplicates_allclose import duplicates_allclose
 from .vect_angle import vect_angle
 from .indexstr import indexstr
