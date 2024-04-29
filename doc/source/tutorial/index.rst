@@ -25,6 +25,7 @@ Tutorials
    1.4.13. primitive cell dumping <1.4.13._primitive_cell_dumping>
    1.4.14. Conventional and primitive cell conversion dumping <1.4.14._Conventional_and_primitive_cell_conversion_dumping>
    1.4.15. pdb dumping <1.4.15._pdb_dumping>
+   1.4.16. LAMMPS NEB replica dumping<1.4.16._LAMMPS_NEB_replica_dumping>
    1.5. Settings and databases <1.5._Settings_and_databases>
    2. LAMMPS functionality <2._LAMMPS_functionality>
    2.1. Potential class <2.1._Potential_class>
@@ -45,3 +46,4 @@ Tutorials
    4.7. Semidiscrete variational Peierls-Nabarro model <4.7._Semidiscrete_variational_Peierls-Nabarro_model>
    4.8. Strain class <4.8._Strain_class>
    4.9. Dislocation configurations generator <4.9._Dislocation_configurations_generator>
+   4.10 Differential Displacement Maps <4.10_Differential_Displacement_Maps>

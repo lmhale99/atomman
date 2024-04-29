@@ -1,8 +1,30 @@
 Updates
 =======
 
+Version 1.4.11
+--------------
+
+- The structure generation methods of **atomman.defect.Dislocation** now all
+  have a center parameter that allows for the dislocation's position to be
+  shifted.  This is useful for setting up NEB runs.
+
+- **atomman.lammps.run** now supports lammps_command paths that contain spaces.
+
+- **atomman.defect.Boundary** has been further improved and some supporting
+  tools developed.  Not fully finalized yet.
+
+- **neb_replica** dump style added that creates the atomic configurations used
+  by LAMMPS for defining the final (and intermediate) replicas.
+  
+- More tools and operations related to Miller crystal vectors and planes have
+  been added.  These should make it possible for future revisions of the
+  defect generators to be simplified and made more uniform.
+
+- Record classes have been updated to support a URL field for assigning
+  persistent identification (PID) values once uploaded to a CDCS database.
+
 Version 1.4.10
--------------
+--------------
 
 - **atomman.lammps.Log** now has more options during flatten allowing for only
   a subset of simulation runs to be merged together.  Bug fix related to type
