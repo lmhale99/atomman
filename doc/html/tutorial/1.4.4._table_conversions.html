@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Introduction to atomman: table conversions &#8212; atomman 1.4.10 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <title>Introduction to atomman: table conversions &#8212; atomman 1.4.11 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=eeb27264" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <script src="../_static/documentation_options.js?v=651a37ba"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="1.4.3._CIF_conversions.html" title="Introduction to atomman: CIF conversions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: table conversions</a></li> 
       </ul>
@@ -47,11 +47,11 @@
           <div class="body" role="main">
             
   <section id="Introduction-to-atomman:-table-conversions">
-<h1>Introduction to atomman: table conversions<a class="headerlink" href="#Introduction-to-atomman:-table-conversions" title="Permalink to this heading">¶</a></h1>
+<h1>Introduction to atomman: table conversions<a class="headerlink" href="#Introduction-to-atomman:-table-conversions" title="Link to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <section id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Link to this heading">¶</a></h2>
 <p>Atomic configuration data is often expressed in a tabular form as it is an efficient way of representing per-atom properties. Many commn formats, such as the xyz format, are little more than this. In atomman, the table load/dump style provides a means of converting to/from a generic table format. As such, the table-style converter can be used to help with defining converters from more specific tabular formats.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
@@ -75,19 +75,13 @@
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "33686692e1bf4af0bcd9510e70f51401", "version_major": 2, "version_minor": 0}</script></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.10
-Notebook executed on 2023-07-28
+atomman version = 1.4.11
+Notebook executed on 2024-04-29
 </pre></div></div>
 </div>
 <p>Generate test system information (CsCl)</p>
@@ -214,7 +208,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;charge&#39;, &#39;st
 </div>
 </section>
 <section id="2.-System.dump('table')">
-<h2>2. System.dump(‘table’)<a class="headerlink" href="#2.-System.dump('table')" title="Permalink to this heading">¶</a></h2>
+<h2>2. System.dump(‘table’)<a class="headerlink" href="#2.-System.dump('table')" title="Link to this heading">¶</a></h2>
 <p>Parameters</p>
 <ul class="simple">
 <li><p><strong>f</strong> (<em>str or file-like object, optional</em>) File path or file-like object to write the table to. If not given, then the table is returned as a string.</p></li>
@@ -318,7 +312,7 @@ atype pos[0] pos[1] pos[2] charge stress[0][0] stress[0][1] stress[0][2] stress[
 </div>
 </section>
 <section id="3.-atomman.load('table')">
-<h2>3. atomman.load(‘table’)<a class="headerlink" href="#3.-atomman.load('table')" title="Permalink to this heading">¶</a></h2>
+<h2>3. atomman.load(‘table’)<a class="headerlink" href="#3.-atomman.load('table')" title="Link to this heading">¶</a></h2>
 <p>Parameters</p>
 <ul class="simple">
 <li><p><strong>table</strong> (<em>str or file-like object</em>) The table content, file path or file-like object containing the content to read.</p></li>
@@ -545,13 +539,13 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;charge&#39;, &#39;st
         <li class="right" >
           <a href="1.4.3._CIF_conversions.html" title="Introduction to atomman: CIF conversions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: table conversions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     </div>
   </body>
 </html>

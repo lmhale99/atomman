@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Introduction to atomman: Gamma surface plotting &#8212; atomman 1.4.10 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <title>Introduction to atomman: Gamma surface plotting &#8212; atomman 1.4.11 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=eeb27264" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <script src="../_static/documentation_options.js?v=651a37ba"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="4.4._Volterra_dislocation_solutions.html" title="Introduction to atomman: Volterra dislocation solutions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Gamma surface plotting</a></li> 
       </ul>
@@ -47,11 +47,11 @@
           <div class="body" role="main">
             
   <section id="Introduction-to-atomman:-Gamma-surface-plotting">
-<h1>Introduction to atomman: Gamma surface plotting<a class="headerlink" href="#Introduction-to-atomman:-Gamma-surface-plotting" title="Permalink to this heading">¶</a></h1>
+<h1>Introduction to atomman: Gamma surface plotting<a class="headerlink" href="#Introduction-to-atomman:-Gamma-surface-plotting" title="Link to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <section id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Link to this heading">¶</a></h2>
 <p>This Notebook outlines the GammaSurface class and the various stacking fault plots that it can generate. See the <a class="reference external" href="4.3._Stacking_fault_generator.html">4.3. Stacking fault generator Notebook</a> for generating systems containing stacking faults.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
@@ -81,24 +81,18 @@
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d4760d90b7de4e65b8a50e1c493e6b4e", "version_major": 2, "version_minor": 0}</script></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.10
-Notebook executed on 2023-07-28
+atomman version = 1.4.11
+Notebook executed on 2024-04-29
 </pre></div></div>
 </div>
 </section>
 <section id="2.-Underlying-theory">
-<h2>2. Underlying theory<a class="headerlink" href="#2.-Underlying-theory" title="Permalink to this heading">¶</a></h2>
+<h2>2. Underlying theory<a class="headerlink" href="#2.-Underlying-theory" title="Link to this heading">¶</a></h2>
 <p>Generalized stacking fault energy maps (<span class="math notranslate nohighlight">\(\gamma\)</span>-surfaces) provide 2D maps of the stacking fault energy associated with arbitrary shifts along a crystallographic fault plane. Typically, the fault plane corresponds to one of the crystal’s slip planes and the stacking fault energies and pathways influence dislocation structures and dislocation slip.</p>
 <p>A <span class="math notranslate nohighlight">\(\gamma\)</span>-surface is defined by the crystal and the fault plane. Starting in an unfaulted configuration, the atoms on one side of the fault plane are shifted by a vector <span class="math notranslate nohighlight">\(\mathbf{d}\)</span> which is within the fault plane. The generalized stacking fault energy for a given shift, <span class="math notranslate nohighlight">\(\gamma_{gsf}(\mathbf{d})\)</span>, is computed as the difference in potential energy, <span class="math notranslate nohighlight">\(U\)</span> of the shifted configuration relative to the corresponding unshifted configuration (<span class="math notranslate nohighlight">\(\mathbf{d}=\mathbf{0}\)</span>)
 divided by the fault plane area, <span class="math notranslate nohighlight">\(A_{fault}\)</span></p>
@@ -123,10 +117,10 @@ coordinates, <span class="math notranslate nohighlight">\(a_1\)</span> and <span
 between 0 and 1 for use in retrieving values from the fitted models.</p>
 </section>
 <section id="3.-Defining-gamma-surface-data">
-<h2>3. Defining gamma surface data<a class="headerlink" href="#3.-Defining-gamma-surface-data" title="Permalink to this heading">¶</a></h2>
+<h2>3. Defining gamma surface data<a class="headerlink" href="#3.-Defining-gamma-surface-data" title="Link to this heading">¶</a></h2>
 <p>The atomman.defect.GammaSurface class offers interpolation and plotting options for generalized stacking fault data.</p>
 <section id="3.1.-Setting-values">
-<h3>3.1. Setting values<a class="headerlink" href="#3.1.-Setting-values" title="Permalink to this heading">¶</a></h3>
+<h3>3.1. Setting values<a class="headerlink" href="#3.1.-Setting-values" title="Link to this heading">¶</a></h3>
 <p>The stacking fault data can be set directly either during class initialization or by using the GammaSurface.set() method.</p>
 <p>Parameters:</p>
 <ul class="simple">
@@ -160,7 +154,7 @@ between 0 and 1 for use in retrieving values from the fitted models.</p>
 </div>
 </section>
 <section id="3.2.-Class-attributes">
-<h3>3.2. Class attributes<a class="headerlink" href="#3.2.-Class-attributes" title="Permalink to this heading">¶</a></h3>
+<h3>3.2. Class attributes<a class="headerlink" href="#3.2.-Class-attributes" title="Link to this heading">¶</a></h3>
 <p>The GammaSurface class has the following attributes for the data</p>
 <ul class="simple">
 <li><p><strong>a1vect, a2vect</strong> the two shifting vectors as given.</p></li>
@@ -324,7 +318,7 @@ origin = [ 0.000,  0.000,  0.000]
 </div>
 </section>
 <section id="3.3.-Saving-and-loading-data-model">
-<h3>3.3. Saving and loading data model<a class="headerlink" href="#3.3.-Saving-and-loading-data-model" title="Permalink to this heading">¶</a></h3>
+<h3>3.3. Saving and loading data model<a class="headerlink" href="#3.3.-Saving-and-loading-data-model" title="Link to this heading">¶</a></h3>
 <p>The GammaSurface.model() method allows for the saving and loading of a GammaSurface object’s data as a JSON/XML data model.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -335,7 +329,7 @@ origin = [ 0.000,  0.000,  0.000]
 <p>Returns</p>
 <p>(<em>DataModelDict</em>) A data model containing the stacking fault data of the GammaSurface object. Returned if model is not given.</p>
 <section id="3.3.1.-Save-data-model">
-<h4>3.3.1. Save data model<a class="headerlink" href="#3.3.1.-Save-data-model" title="Permalink to this heading">¶</a></h4>
+<h4>3.3.1. Save data model<a class="headerlink" href="#3.3.1.-Save-data-model" title="Link to this heading">¶</a></h4>
 <p>Calling GammaSurface.model() without supplying the ‘model’ parameter will return a data model of the content.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -349,7 +343,7 @@ origin = [ 0.000,  0.000,  0.000]
 </div>
 </section>
 <section id="3.3.2.-Load-data-model">
-<h4>3.3.2. Load data model<a class="headerlink" href="#3.3.2.-Load-data-model" title="Permalink to this heading">¶</a></h4>
+<h4>3.3.2. Load data model<a class="headerlink" href="#3.3.2.-Load-data-model" title="Link to this heading">¶</a></h4>
 <p>The saved data can then be loaded by using the ‘model’ parameter when initializing a GammaSurface, or with the GammaSurface.model() method.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -363,9 +357,9 @@ origin = [ 0.000,  0.000,  0.000]
 </section>
 </section>
 <section id="4.-Plotting-methods">
-<h2>4. Plotting methods<a class="headerlink" href="#4.-Plotting-methods" title="Permalink to this heading">¶</a></h2>
+<h2>4. Plotting methods<a class="headerlink" href="#4.-Plotting-methods" title="Link to this heading">¶</a></h2>
 <section id="4.1.-E_gsf_line_plot()">
-<h3>4.1. <strong>E_gsf_line_plot()</strong><a class="headerlink" href="#4.1.-E_gsf_line_plot()" title="Permalink to this heading">¶</a></h3>
+<h3>4.1. <strong>E_gsf_line_plot()</strong><a class="headerlink" href="#4.1.-E_gsf_line_plot()" title="Link to this heading">¶</a></h3>
 <p>Generates a line plot for the interpolated generalized stacking fault energy along a specified vector in the (a1, a2) plane.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -432,7 +426,7 @@ origin = [ 0.000,  0.000,  0.000]
 </div>
 </section>
 <section id="4.2.-delta_line_plot()">
-<h3>4.2. <strong>delta_line_plot()</strong><a class="headerlink" href="#4.2.-delta_line_plot()" title="Permalink to this heading">¶</a></h3>
+<h3>4.2. <strong>delta_line_plot()</strong><a class="headerlink" href="#4.2.-delta_line_plot()" title="Link to this heading">¶</a></h3>
 <p>Generates a line plot for the interpolated relaxation distances along a specified vector in the (a1, a2) plane.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -497,7 +491,7 @@ origin = [ 0.000,  0.000,  0.000]
 </div>
 </section>
 <section id="4.3.-E_gsf_surface_plot()">
-<h3>4.3. <strong>E_gsf_surface_plot()</strong><a class="headerlink" href="#4.3.-E_gsf_surface_plot()" title="Permalink to this heading">¶</a></h3>
+<h3>4.3. <strong>E_gsf_surface_plot()</strong><a class="headerlink" href="#4.3.-E_gsf_surface_plot()" title="Link to this heading">¶</a></h3>
 <p>Creates a 2D surface plot from the stacking fault energy values.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -571,7 +565,7 @@ origin = [ 0.000,  0.000,  0.000]
 </div>
 </section>
 <section id="4.4.-delta_surface_plot()">
-<h3>4.4. <strong>delta_surface_plot()</strong><a class="headerlink" href="#4.4.-delta_surface_plot()" title="Permalink to this heading">¶</a></h3>
+<h3>4.4. <strong>delta_surface_plot()</strong><a class="headerlink" href="#4.4.-delta_surface_plot()" title="Link to this heading">¶</a></h3>
 <p>Creates a 2D surface plot from the relaxation distance values.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -603,7 +597,7 @@ origin = [ 0.000,  0.000,  0.000]
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-F:\Python-packages\atomman\atomman\defect\GammaSurface.py:1145: UserWarning: The input coordinates to pcolormesh are interpreted as cell centers, but are not monotonically increasing or decreasing. This may lead to incorrectly calculated cell edges, in which case, please supply explicit cell edges to pcolormesh.
+/home/lmh1/Python-packages/atomman/atomman/defect/GammaSurface.py:1145: UserWarning: The input coordinates to pcolormesh are interpreted as cell centers, but are not monotonically increasing or decreasing. This may lead to incorrectly calculated cell edges, in which case, please supply explicit cell edges to pcolormesh.
   plt.pcolormesh(x_grid, y_grid, C, **kwargs)
 </pre></div></div>
 </div>
@@ -654,13 +648,13 @@ F:\Python-packages\atomman\atomman\defect\GammaSurface.py:1145: UserWarning: The
 </section>
 </section>
 <section id="5.-Minimum-energy-slip-path">
-<h2>5. Minimum energy slip path<a class="headerlink" href="#5.-Minimum-energy-slip-path" title="Permalink to this heading">¶</a></h2>
+<h2>5. Minimum energy slip path<a class="headerlink" href="#5.-Minimum-energy-slip-path" title="Link to this heading">¶</a></h2>
 <p><em>Added version 1.3.7</em></p>
 <p>The path() and build_path() methods allow for the construction of atomman.mep.Path objects where the energy function associated with the path coordinates is automatically set using the generalized stacking fault energy. path() allows for all 2D coordinates along the path to be specified, while build_path() allows for a path to be constructed based only on the endpoints and optionally one intermediate junction point.</p>
 <p><strong>Documentation coming soon…</strong></p>
 </section>
 <section id="6.-Utility-methods">
-<h2>6. Utility methods<a class="headerlink" href="#6.-Utility-methods" title="Permalink to this heading">¶</a></h2>
+<h2>6. Utility methods<a class="headerlink" href="#6.-Utility-methods" title="Link to this heading">¶</a></h2>
 <p>The remaining class methods are utility methods for generating the plots. Many are focused on transforming between different coordinate systems:</p>
 <ol class="arabic simple">
 <li><p>(a1, a2) : fractional coordinates along a1vect and a2vect.</p></li>
@@ -669,7 +663,7 @@ F:\Python-packages\atomman\atomman\defect\GammaSurface.py:1145: UserWarning: The
 </ol>
 <p>Transforming from (a1, a2) to pos requires a1vect, a2vect, and optionally the box. Transforming from pos to (x, y) requires specifying which Cartesian vector to align with the x-axis of the plot.</p>
 <section id="6.1.-E_gsf()">
-<h3>6.1. E_gsf()<a class="headerlink" href="#6.1.-E_gsf()" title="Permalink to this heading">¶</a></h3>
+<h3>6.1. E_gsf()<a class="headerlink" href="#6.1.-E_gsf()" title="Link to this heading">¶</a></h3>
 <p>Returns values for generalized stacking fault energy interpolated from the raw data. Values can be obtained relative to a1, a2 fractional coordinates, x, y plotting coordinates, or pos Cartesian coordinates.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -701,13 +695,13 @@ F:\Python-packages\atomman\atomman\defect\GammaSurface.py:1145: UserWarning: The
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Close to E_isf = 127.08436673732088 mJ/m^2
-Close to E_usf = 471.02588197516076 mJ/m^2
+Close to E_isf = 127.08436673732754 mJ/m^2
+Close to E_usf = 471.02588197516434 mJ/m^2
 </pre></div></div>
 </div>
 </section>
 <section id="6.2-delta()">
-<h3>6.2 delta()<a class="headerlink" href="#6.2-delta()" title="Permalink to this heading">¶</a></h3>
+<h3>6.2 delta()<a class="headerlink" href="#6.2-delta()" title="Link to this heading">¶</a></h3>
 <p>Returns values for the relaxation distance interpolated from the raw data. Values can be obtained relative to a1, a2 fractional coordinates, x, y plotting coordinates, or pos Cartesian coordinates.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -739,13 +733,13 @@ Close to E_usf = 471.02588197516076 mJ/m^2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Close to δ_isf = 0.04908088528015231 angstrom
-Close to δ_usf = 0.3865334761953565 angstrom
+Close to δ_isf = 0.049080885280148756 angstrom
+Close to δ_usf = 0.38653347619535694 angstrom
 </pre></div></div>
 </div>
 </section>
 <section id="6.3-Conversion-methods">
-<h3>6.3 Conversion methods<a class="headerlink" href="#6.3-Conversion-methods" title="Permalink to this heading">¶</a></h3>
+<h3>6.3 Conversion methods<a class="headerlink" href="#6.3-Conversion-methods" title="Link to this heading">¶</a></h3>
 <p>Parameters as defined above</p>
 <ul class="simple">
 <li><p><strong>a12_to_pos(a1, a2, a1vect=None, a2vect=None)</strong></p></li>
@@ -839,13 +833,13 @@ Close to δ_usf = 0.3865334761953565 angstrom
         <li class="right" >
           <a href="4.4._Volterra_dislocation_solutions.html" title="Introduction to atomman: Volterra dislocation solutions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Gamma surface plotting</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     </div>
   </body>
 </html>

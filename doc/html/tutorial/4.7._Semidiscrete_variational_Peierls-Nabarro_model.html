@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Introduction to atomman: Semidiscrete variational Peierls-Nabarro model &#8212; atomman 1.4.10 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <title>Introduction to atomman: Semidiscrete variational Peierls-Nabarro model &#8212; atomman 1.4.11 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=eeb27264" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <script src="../_static/documentation_options.js?v=651a37ba"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="4.6._Dislocation_analysis_tools.html" title="Introduction to atomman: Dislocation analysis tools"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Semidiscrete variational Peierls-Nabarro model</a></li> 
       </ul>
@@ -47,11 +47,11 @@
           <div class="body" role="main">
             
   <section id="Introduction-to-atomman:-Semidiscrete-variational-Peierls-Nabarro-model">
-<h1>Introduction to atomman: Semidiscrete variational Peierls-Nabarro model<a class="headerlink" href="#Introduction-to-atomman:-Semidiscrete-variational-Peierls-Nabarro-model" title="Permalink to this heading">¶</a></h1>
+<h1>Introduction to atomman: Semidiscrete variational Peierls-Nabarro model<a class="headerlink" href="#Introduction-to-atomman:-Semidiscrete-variational-Peierls-Nabarro-model" title="Link to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <section id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Link to this heading">¶</a></h2>
 <p>This Notebook outlines how to calculate semidiscrete variational Peierls-Nabarro models of dislocation disregistries. This calculation method gives a prediction for a dislocation structure using only the material’s elastic constants and the generalized stacking fault energy map associated with the dislocation’s slip plane.</p>
 <p><strong>NOTE:</strong> the calculation process is complex and may be refined over time resulting in changes to the involved functions and classes. For this reason, be aware of the atomman version used.</p>
 <p><strong>Library Imports</strong></p>
@@ -82,28 +82,22 @@
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9273589ab5c5457daa1cc8d09a551e40", "version_major": 2, "version_minor": 0}</script></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.10
-Notebook executed on 2023-07-28
+atomman version = 1.4.11
+Notebook executed on 2024-04-29
 </pre></div></div>
 </div>
 </section>
 <section id="2.-Theory">
-<h2>2. Theory<a class="headerlink" href="#2.-Theory" title="Permalink to this heading">¶</a></h2>
+<h2>2. Theory<a class="headerlink" href="#2.-Theory" title="Link to this heading">¶</a></h2>
 <p>The equations and calculations used are based on the original semidiscrete variational Peierls-Nabarro by Bulatov, et. al [<a class="reference external" href="https://doi.org/10.1103/PhysRevLett.78.4221">1</a>, <a class="reference external" href="https://doi.org/10.1103/PhysRevB.62.3099">2</a>, <a class="reference external" href="https://doi.org/10.1080/09500830050143778">3</a>], as well as additional and alternate terms [<a class="reference external" href="https://doi.org/10.1016/S0022-5096(98)00057-X">4</a>, <a class="reference external" href="https://doi.org/10.1088/1751-8113/42/2/025208">5</a>, <a class="reference external" href="https://doi.org/10.1016/j.scriptamat.2016.04.013">6</a>,
 <a class="reference external" href="https://doi.org/10.1016/j.commatsci.2017.01.038">7</a>, <a class="reference external" href="https://doi.org/10.1016/j.scriptamat.2009.04.047">8</a>]. The discussion here is very brief and it is left to the reader to see the referenced papers for more details.</p>
 <section id="2.1.-Disregistry-and-dislocation-density">
-<h3>2.1. Disregistry and dislocation density<a class="headerlink" href="#2.1.-Disregistry-and-dislocation-density" title="Permalink to this heading">¶</a></h3>
+<h3>2.1. Disregistry and dislocation density<a class="headerlink" href="#2.1.-Disregistry-and-dislocation-density" title="Link to this heading">¶</a></h3>
 <p>The disregistry of a dislocation, <span class="math notranslate nohighlight">\(\delta_i\)</span>, is defined as the difference in the displacement just above and below the slip plane taken as a function of the coordinate <span class="math notranslate nohighlight">\(\xi\)</span> that is along the slip plane and perpendicular to the dislocation line.</p>
 <div class="math notranslate nohighlight">
 \[\delta_i(\xi) = u_i^+(\xi) - u_i^-(\xi)\]</div>
@@ -117,7 +111,7 @@ Notebook executed on 2023-07-28
 \[\int_{-\infty}^{+\infty}{\rho_i(\xi) d\xi} = b_i\]</div>
 </section>
 <section id="2.2.-Semidiscrete-variational-Peierls-Nabarro-model">
-<h3>2.2. Semidiscrete variational Peierls-Nabarro model<a class="headerlink" href="#2.2.-Semidiscrete-variational-Peierls-Nabarro-model" title="Permalink to this heading">¶</a></h3>
+<h3>2.2. Semidiscrete variational Peierls-Nabarro model<a class="headerlink" href="#2.2.-Semidiscrete-variational-Peierls-Nabarro-model" title="Link to this heading">¶</a></h3>
 <p>The semidiscrete variational Peierls-Nabarro (SDVPN) model expresses the energy of a dislocation as a summation of different energy terms, each of which is a function of <span class="math notranslate nohighlight">\(\delta_i\)</span>. Here, the general dislocation energy equation is</p>
 <div class="math notranslate nohighlight">
 \[U_{dislocation} = U_{elastic} + U_{misfit} + U_{stress} + U_{surface} + U_{nonlocal}\]</div>
@@ -125,7 +119,7 @@ Notebook executed on 2023-07-28
 that minimizes the dislocation’s energy.</p>
 </section>
 <section id="2.3.-Elastic-energy">
-<h3>2.3. Elastic energy<a class="headerlink" href="#2.3.-Elastic-energy" title="Permalink to this heading">¶</a></h3>
+<h3>2.3. Elastic energy<a class="headerlink" href="#2.3.-Elastic-energy" title="Link to this heading">¶</a></h3>
 <p>The elastic energy is due to the elastic energy of the dislocation. It contains two components: a configuration-dependent part associated with the interaction of the dislocation at one position interacting with the dislocation at another point, and a configuration-independent part associated with the dislocation’s long-range strain field. The elastic energy is expressed as</p>
 <div class="math notranslate nohighlight">
 \[U_{elastic} = \frac{1}{4\pi} \sum_i{\left[ \sum_j{\left( \chi(i, j, \Delta \xi) K_{lm} \rho_l[i] \rho_m[j] \right)} \right]} + \frac{1}{4\pi} K_{lm} b_l b_m \ln{(L)},\]</div>
@@ -140,13 +134,13 @@ that minimizes the dislocation’s energy.</p>
 <p><strong>NOTE:</strong> slightly different forms for <span class="math notranslate nohighlight">\(U_{elastic}\)</span> are found in the references due to how the different authors define the energy coefficient tensor, <span class="math notranslate nohighlight">\(K_{lm}\)</span>. Here, <span class="math notranslate nohighlight">\(K_{lm}\)</span> is defined such that in the isotropic case <span class="math notranslate nohighlight">\(K_{33} = K_{screw} = \mu\)</span>, and <span class="math notranslate nohighlight">\(K_{11} = K_{edge} = \frac{\mu}{1-\nu}\)</span> where <span class="math notranslate nohighlight">\(\mu\)</span> is the shear modulus and <span class="math notranslate nohighlight">\(\nu\)</span> is the Poisson’s ratio.</p>
 </section>
 <section id="2.4.-Misfit-energy">
-<h3>2.4. Misfit energy<a class="headerlink" href="#2.4.-Misfit-energy" title="Permalink to this heading">¶</a></h3>
+<h3>2.4. Misfit energy<a class="headerlink" href="#2.4.-Misfit-energy" title="Link to this heading">¶</a></h3>
 <p>The misfit energy arises from the disregistry within the dislocation spreading coinciding with crystallographically unfavorable configurations. This energy is calculated by mapping the dislocation’s disregistry onto a generalized stacking fault energy map, i.e <span class="math notranslate nohighlight">\(\gamma\)</span> surface</p>
 <div class="math notranslate nohighlight">
 \[U_{misfit} = \sum_i \gamma(\delta_l[i]) \Delta \xi.\]</div>
 </section>
 <section id="2.5.-Stress-energy">
-<h3>2.5. Stress energy<a class="headerlink" href="#2.5.-Stress-energy" title="Permalink to this heading">¶</a></h3>
+<h3>2.5. Stress energy<a class="headerlink" href="#2.5.-Stress-energy" title="Link to this heading">¶</a></h3>
 <p>The stress energy computes the energy due to an externally applied stress, <span class="math notranslate nohighlight">\(\tau_{ij}\)</span>, interacting with the dislocation line. Two forms have been used in SDVPN models: the original full stress form</p>
 <div class="math notranslate nohighlight">
 \[U_{stress} = -\frac{1}{2} \sum_i{ \left[ \left(\xi[i]^2 - \xi[i-1]^2 \right) \rho_l[i] \tau_{2l} \right]},\]</div>
@@ -156,14 +150,14 @@ that minimizes the dislocation’s energy.</p>
 <p>The two should be equivalent except for a configuration-independent constant.</p>
 </section>
 <section id="2.6.-Surface-energy">
-<h3>2.6. Surface energy<a class="headerlink" href="#2.6.-Surface-energy" title="Permalink to this heading">¶</a></h3>
+<h3>2.6. Surface energy<a class="headerlink" href="#2.6.-Surface-energy" title="Link to this heading">¶</a></h3>
 <p>The surface energy is a correction term introduced by [<a class="reference external" href="https://doi.org/10.1088/1751-8113/42/2/025208">5</a>] to account for the surface effect along the slip plane. The discrete gradient formulation by [<a class="reference external" href="https://doi.org/10.1016/j.scriptamat.2016.04.013">6</a>] is used by atomman</p>
 <div class="math notranslate nohighlight">
 \[U_{surface} = \sum_{j=1}^3 {\frac{\beta_{lj}}{4} \sum_i {\rho_l[i]^2 \Delta \xi }}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\beta_{lj}\)</span> is a coefficient tensor. Terms in the coefficient tensor can be</p>
 </section>
 <section id="2.7.-Nonlocal-energy">
-<h3>2.7. Nonlocal energy<a class="headerlink" href="#2.7.-Nonlocal-energy" title="Permalink to this heading">¶</a></h3>
+<h3>2.7. Nonlocal energy<a class="headerlink" href="#2.7.-Nonlocal-energy" title="Link to this heading">¶</a></h3>
 <p>The nonlocal energy is an alternate correction term introduced by [<a class="reference external" href="https://doi.org/10.1016/S0022-5096(98)00057-X">4</a>] to account for the nonlocal interactions directly. It is of the form</p>
 <div class="math notranslate nohighlight">
 \[U_{nonlocal} = \sum_m{ \alpha_m \sum_i{ \delta_l[i] \left(\delta_l[i] - \frac{\delta_l[i+m] + \delta_l[i-m]}{2} \right) \Delta \xi }}\]</div>
@@ -171,7 +165,7 @@ that minimizes the dislocation’s energy.</p>
 </section>
 </section>
 <section id="3.-Methodology-overview">
-<h2>3. Methodology overview<a class="headerlink" href="#3.-Methodology-overview" title="Permalink to this heading">¶</a></h2>
+<h2>3. Methodology overview<a class="headerlink" href="#3.-Methodology-overview" title="Link to this heading">¶</a></h2>
 <p>Due to the complex nature of the calculation, this section provides a general overview of the steps involved in setting up and running the calculation shown in the remainder of the Notebook.</p>
 <ol class="arabic simple">
 <li><p><span class="math notranslate nohighlight">\(U_{elastic}\)</span> requires the energy coefficient tensor, <span class="math notranslate nohighlight">\(K_{ij}\)</span>, which is related to a material’s elastic constants and the orientation of the slip plane and elastic constants.</p>
@@ -200,9 +194,9 @@ that minimizes the dislocation’s energy.</p>
 </ol>
 </section>
 <section id="4.-Initialize-SDVPN-using-GammaSurface-and-VolterraDislocation">
-<h2>4. Initialize SDVPN using GammaSurface and VolterraDislocation<a class="headerlink" href="#4.-Initialize-SDVPN-using-GammaSurface-and-VolterraDislocation" title="Permalink to this heading">¶</a></h2>
+<h2>4. Initialize SDVPN using GammaSurface and VolterraDislocation<a class="headerlink" href="#4.-Initialize-SDVPN-using-GammaSurface-and-VolterraDislocation" title="Link to this heading">¶</a></h2>
 <section id="4.1.-Load-\gamma-surface-results">
-<h3>4.1. Load <span class="math notranslate nohighlight">\(\gamma\)</span> surface results<a class="headerlink" href="#4.1.-Load-\gamma-surface-results" title="Permalink to this heading">¶</a></h3>
+<h3>4.1. Load <span class="math notranslate nohighlight">\(\gamma\)</span> surface results<a class="headerlink" href="#4.1.-Load-\gamma-surface-results" title="Link to this heading">¶</a></h3>
 <p>The atomman.defect.GammaSurface class loads and represents generalized stacking fault data.</p>
 <p>See <a class="reference external" href="4.5._Gamma_surface_plotting.html">4.5. Gamma surface plotting Notebook</a> for more details on this class.</p>
 <div class="nbinput docutils container">
@@ -267,9 +261,9 @@ a1vect, a2vect used:
 </div>
 </section>
 <section id="4.2.-Get-a-Volterra-dislocation-solution">
-<h3>4.2. Get a Volterra dislocation solution<a class="headerlink" href="#4.2.-Get-a-Volterra-dislocation-solution" title="Permalink to this heading">¶</a></h3>
+<h3>4.2. Get a Volterra dislocation solution<a class="headerlink" href="#4.2.-Get-a-Volterra-dislocation-solution" title="Link to this heading">¶</a></h3>
 <p>The model uses Volterra solutions to compute the interaction stresses. A Volterra solution can easily be found using the solve_volterra_dislocation.</p>
-<p>See <a class="reference external" href="4.4._Dislocation_solution_and_generator.html">4.4. Dislocation solution and generator Notebook</a> for more details on the solve_volterra_dislocation function.</p>
+<p>See <a class="reference external" href="4.4._Volterra_dislocation_solutions.html">4.4. Volterra dislocation solutions Jupyter Notebook</a> for more details on the solve_volterra_dislocation function.</p>
 <p><strong>Note</strong>: The slip plane used here must match the slip plane of the gamma surface, otherwise SDVPN will not know how to relate the two!</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -318,7 +312,7 @@ Cij in GPa:
 </div>
 </section>
 <section id="4.3.-Initializing-an-SDVPN-object">
-<h3>4.3. Initializing an SDVPN object<a class="headerlink" href="#4.3.-Initializing-an-SDVPN-object" title="Permalink to this heading">¶</a></h3>
+<h3>4.3. Initializing an SDVPN object<a class="headerlink" href="#4.3.-Initializing-an-SDVPN-object" title="Link to this heading">¶</a></h3>
 <p>The Volterra dislocation solution and gamma surface provide all of the materials properties associated with the dislocation problem. During initialization, verification checks will be performed to make certain that the dislocation solution and gamma surface are compatible.</p>
 <p>There are many parameters that can be set during initialization. The first three are the most important, and the remainder are associated with settings listed in the theory section above. All the settings parameters (tau and below) can also be changed later.</p>
 <p>Parameters</p>
@@ -356,10 +350,10 @@ Cij in GPa:
 </section>
 </section>
 <section id="5.-Generate-initial-disregistry">
-<h2>5. Generate initial disregistry<a class="headerlink" href="#5.-Generate-initial-disregistry" title="Permalink to this heading">¶</a></h2>
+<h2>5. Generate initial disregistry<a class="headerlink" href="#5.-Generate-initial-disregistry" title="Link to this heading">¶</a></h2>
 <p>Solving the SDVPN model requires starting with an initial guess of the disregistry.</p>
 <section id="5.1-Initial-disregistry">
-<h3>5.1 Initial disregistry<a class="headerlink" href="#5.1-Initial-disregistry" title="Permalink to this heading">¶</a></h3>
+<h3>5.1 Initial disregistry<a class="headerlink" href="#5.1-Initial-disregistry" title="Link to this heading">¶</a></h3>
 <p><strong>pn_arctan_disregistry()</strong></p>
 <p>The atomman.defect.pn_arctan_disregistry() function computes the classic Peierls-Nabarro arctan disregistry for an array of points x</p>
 <div class="math notranslate nohighlight">
@@ -429,7 +423,7 @@ Transformed Burgers vector = [2.86043063 0.         0.        ]
 </div>
 </section>
 <section id="5.2-Check-initial-disregistry">
-<h3>5.2 Check initial disregistry<a class="headerlink" href="#5.2-Check-initial-disregistry" title="Permalink to this heading">¶</a></h3>
+<h3>5.2 Check initial disregistry<a class="headerlink" href="#5.2-Check-initial-disregistry" title="Link to this heading">¶</a></h3>
 <p>The SDVPN class has some built-in methods for checking the disregistry profile and the corresponding energy values.</p>
 <ul class="simple">
 <li><p><strong>total_energy(), misfit_energy(), elastic_energy(), longrange_energy(), stress_energy(), nonlocal_energy() and surface_energy()</strong> return the values for the different energy terms based on the current disregistry.</p></li>
@@ -452,13 +446,13 @@ Transformed Burgers vector = [2.86043063 0.         0.        ]
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Dislocation energy terms in eV/Å:
-Misfit energy =     0.15241997612248678
-Elastic energy =    -0.21141715213385232
-Long-range energy = 2.3123103911189946
+Misfit energy =     0.15241997612248637
+Elastic energy =    -0.21141715213385728
+Long-range energy = 2.3123103911190483
 Stress energy =     -0.0
 Surface energy =    0.0
 Nonlocal energy =   0.0
-Total energy =      2.253313215107629
+Total energy =      2.2533132151076773
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -512,10 +506,10 @@ Total energy =      2.253313215107629
 </section>
 </section>
 <section id="6.-Solve-SDVPN-model">
-<h2>6. Solve SDVPN model<a class="headerlink" href="#6.-Solve-SDVPN-model" title="Permalink to this heading">¶</a></h2>
+<h2>6. Solve SDVPN model<a class="headerlink" href="#6.-Solve-SDVPN-model" title="Link to this heading">¶</a></h2>
 <p>Calling the SDVPN.solve() method will perform the energy minimization based on the current values of x, disregistry, and the various settings parameters. Initial x and disregistry values can be passed to solve() along with new values for the different settings parameters (tau and below for the class initialization parameters).</p>
 <section id="6.1.-Call-solve-the-first-time">
-<h3>6.1. Call solve the first time<a class="headerlink" href="#6.1.-Call-solve-the-first-time" title="Permalink to this heading">¶</a></h3>
+<h3>6.1. Call solve the first time<a class="headerlink" href="#6.1.-Call-solve-the-first-time" title="Link to this heading">¶</a></h3>
 <p>Since x and disregistry have been set using the identified initial values, the minimization will start from there. Also note all options are as specified above.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -533,12 +527,12 @@ Total energy =      2.253313215107629
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 11
-         Function evaluations: 31672
+         Function evaluations: 30465
 </pre></div></div>
 </div>
 </section>
 <section id="6.2.-Check-results">
-<h3>6.2. Check results<a class="headerlink" href="#6.2.-Check-results" title="Permalink to this heading">¶</a></h3>
+<h3>6.2. Check results<a class="headerlink" href="#6.2.-Check-results" title="Link to this heading">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
@@ -555,13 +549,13 @@ Optimization terminated successfully.
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Dislocation energy terms in eV/Å:
-Misfit energy =     0.15773037600126952
-Elastic energy =    -0.25615441125278854
-Long-range energy = 2.3123103911189946
+Misfit energy =     0.15773145037745306
+Elastic energy =    -0.2561554799063438
+Long-range energy = 2.3123103911190483
 Stress energy =     -0.0
 Surface energy =    0.0
 Nonlocal energy =   0.0
-Total energy =      2.2138863558674755
+Total energy =      2.2138863615901574
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -573,7 +567,7 @@ Total energy =      2.2138863558674755
 </div>
 </section>
 <section id="6.3.-Repeat-minimization">
-<h3>6.3. Repeat minimization<a class="headerlink" href="#6.3.-Repeat-minimization" title="Permalink to this heading">¶</a></h3>
+<h3>6.3. Repeat minimization<a class="headerlink" href="#6.3.-Repeat-minimization" title="Link to this heading">¶</a></h3>
 <p>The disregistry found after relaxing will replace the initial values in the class. Subsequent calls to solve() will then use the previous run’s final results as the initial starting place. Doing repeated solves is recommended as it can help further refine the results as the minimization algorithms (especially Powell) benefit from restarts.</p>
 <p>Also, note that you can change the various options and settings for subsequent runs. This can save time if you wish to see relaxed disregistries for multiple different settings, like different stress states, as the two relaxed disregistry states are likely closer to each other than the arbitrary initial state.</p>
 <div class="nbinput docutils container">
@@ -593,48 +587,48 @@ Total energy =      2.2138863558674755
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 3790
+         Function evaluations: 3662
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 3785
+         Function evaluations: 3662
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 3710
+         Function evaluations: 3980
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 3837
+         Function evaluations: 4075
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 3951
+         Function evaluations: 4380
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 4376
+         Function evaluations: 4623
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 4493
+         Function evaluations: 4670
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 4554
+         Function evaluations: 4689
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 4503
+         Function evaluations: 4857
 Optimization terminated successfully.
          Current function value: 2.213886
          Iterations: 1
-         Function evaluations: 4571
+         Function evaluations: 4671
 </pre></div></div>
 </div>
 </section>
 <section id="6.4.-Check-results">
-<h3>6.4. Check results<a class="headerlink" href="#6.4.-Check-results" title="Permalink to this heading">¶</a></h3>
+<h3>6.4. Check results<a class="headerlink" href="#6.4.-Check-results" title="Link to this heading">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
@@ -651,13 +645,13 @@ Optimization terminated successfully.
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Dislocation energy terms in eV/Å:
-Misfit energy =     0.15770921002385463
-Elastic energy =    -0.2561337894922829
-Long-range energy = 2.3123103911189946
+Misfit energy =     0.15770923335588422
+Elastic energy =    -0.2561338128115782
+Long-range energy = 2.3123103911190483
 Stress energy =     -0.0
 Surface energy =    0.0
 Nonlocal energy =   0.0
-Total energy =      2.213885811650566
+Total energy =      2.213885811663354
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -718,7 +712,7 @@ Total energy =      2.213885811650566
 </section>
 </section>
 <section id="7.-Save-and-load-results">
-<h2>7. Save and load results<a class="headerlink" href="#7.-Save-and-load-results" title="Permalink to this heading">¶</a></h2>
+<h2>7. Save and load results<a class="headerlink" href="#7.-Save-and-load-results" title="Link to this heading">¶</a></h2>
 <p>The model() method outputs a data model containing all input settings and the current disregistry vectors. This can then be saved to JSON or XML and stored for later. The content can then be read in during SDVPN initialization using the model parameter or using the load() method of an already created SDVPN object.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -756,13 +750,13 @@ Total energy =      2.213885811650566
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Dislocation energy terms in eV/Å:
-Misfit energy =     0.15770921002385463
-Elastic energy =    -0.2561337894922829
-Long-range energy = 2.3123103911189946
+Misfit energy =     0.15770923335588422
+Elastic energy =    -0.2561338128115782
+Long-range energy = 2.3123103911190483
 Stress energy =     -0.0
 Surface energy =    0.0
 Nonlocal energy =   0.0
-Total energy =      2.213885811650566
+Total energy =      2.213885811663354
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -774,7 +768,7 @@ Total energy =      2.213885811650566
 </div>
 </section>
 <section id="8.-Peierls-stress-estimates">
-<h2>8. Peierls stress estimates<a class="headerlink" href="#8.-Peierls-stress-estimates" title="Permalink to this heading">¶</a></h2>
+<h2>8. Peierls stress estimates<a class="headerlink" href="#8.-Peierls-stress-estimates" title="Link to this heading">¶</a></h2>
 <p>The SDVPN method can provide an extremely rough estimate of the Peierls stress (typically within 10x of atomistic results). This can be done by</p>
 <ol class="arabic simple">
 <li><p>Relaxing the dislocation structure as above.</p></li>
@@ -879,13 +873,13 @@ Total energy =      2.213885811650566
         <li class="right" >
           <a href="4.6._Dislocation_analysis_tools.html" title="Introduction to atomman: Dislocation analysis tools"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Semidiscrete variational Peierls-Nabarro model</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     </div>
   </body>
 </html>

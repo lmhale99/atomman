@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Introduction to atomman: conventional-primitive cell dumping &#8212; atomman 1.4.10 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <title>Introduction to atomman: conventional-primitive cell dumping &#8212; atomman 1.4.11 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=eeb27264" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <script src="../_static/documentation_options.js?v=651a37ba"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="1.4.13._primitive_cell_dumping.html" title="Introduction to atomman: Primitive cell dumping"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: conventional-primitive cell dumping</a></li> 
       </ul>
@@ -47,11 +47,11 @@
           <div class="body" role="main">
             
   <section id="Introduction-to-atomman:-conventional-primitive-cell-dumping">
-<h1>Introduction to atomman: conventional-primitive cell dumping<a class="headerlink" href="#Introduction-to-atomman:-conventional-primitive-cell-dumping" title="Permalink to this heading">¶</a></h1>
+<h1>Introduction to atomman: conventional-primitive cell dumping<a class="headerlink" href="#Introduction-to-atomman:-conventional-primitive-cell-dumping" title="Link to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <section id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Link to this heading">¶</a></h2>
 <p>The ‘conventional_to_primitive’ and ‘primitive_to_conventional’ dump styles provide a means of converting between primitive and conventional representations of unit cells in a reversible way. These system conversions are based on the vector_primitive_to_conventional and vector_conventional_to_primitive operations in atomman.tools.miller, which makes it possible to easily switch between the two reference states.</p>
 <p><strong>NOTE</strong>: These conversion methods should only be used on unit cells in which you know what the proper conventional cell setting is. For more general primitive cell identification, use the ‘primitive_cell’ dump method.</p>
 <p><em>Added version 1.4.8</em></p>
@@ -77,24 +77,18 @@
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "810511593b1e4c038dfc7b30990e3850", "version_major": 2, "version_minor": 0}</script></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.10
-Notebook executed on 2023-07-28
+atomman version = 1.4.11
+Notebook executed on 2024-04-29
 </pre></div></div>
 </div>
 </section>
 <section id="2.-Dump-conventional_to_primitive">
-<h2>2. Dump conventional_to_primitive<a class="headerlink" href="#2.-Dump-conventional_to_primitive" title="Permalink to this heading">¶</a></h2>
+<h2>2. Dump conventional_to_primitive<a class="headerlink" href="#2.-Dump-conventional_to_primitive" title="Link to this heading">¶</a></h2>
 <p>Transforms a conventional unit cell system of a specified Bravais space lattice setting into a primitive unit cell. The primitive_to_conventional and conventional_to_primitive dump styles are meant to be inverse operations, within floating point precision, to provide compatible primitive and conventional unit cells.</p>
 <p>NOTE: This dump style expects that the original starting system is a conventional unit cell, and only limited checks are performed to assert this! Use the ‘primitive_cell’ dump style for a more comprehensive primitive unit cell identifier.</p>
 <p>Parameters</p>
@@ -172,7 +166,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </div>
 </section>
 <section id="3.-Dump-primitive_to_conventional">
-<h2>3. Dump primitive_to_conventional<a class="headerlink" href="#3.-Dump-primitive_to_conventional" title="Permalink to this heading">¶</a></h2>
+<h2>3. Dump primitive_to_conventional<a class="headerlink" href="#3.-Dump-primitive_to_conventional" title="Link to this heading">¶</a></h2>
 <p>Transforms a primitive unit cell system into a conventional unit cell system of the given Bravais space lattice setting. The primitive_to_conventional and conventional_to_primitive dump styles are meant to be inverse operations, within floating point precision, to provide compatible primitive and conventional unit cells.</p>
 <p>NOTE: This dump style expects that the original starting system is a primitive unit cell, although no checks are performed to assert this!</p>
 <p>Parameters</p>
@@ -210,7 +204,7 @@ symbols = (&#39;Al&#39;,)
 pbc = [ True  True  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.000 |   0.000 |   0.000
+      0 |       1 |   4.050 |   0.000 |   0.000
       1 |       1 |   2.025 |   2.025 |   0.000
       2 |       1 |   0.000 |   2.025 |   2.025
       3 |       1 |   2.025 |   0.000 |   2.025
@@ -267,13 +261,13 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
         <li class="right" >
           <a href="1.4.13._primitive_cell_dumping.html" title="Introduction to atomman: Primitive cell dumping"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: conventional-primitive cell dumping</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     </div>
   </body>
 </html>

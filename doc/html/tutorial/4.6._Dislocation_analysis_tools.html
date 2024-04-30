@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Introduction to atomman: Dislocation analysis tools &#8212; atomman 1.4.10 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <title>Introduction to atomman: Dislocation analysis tools &#8212; atomman 1.4.11 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=eeb27264" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <script src="../_static/documentation_options.js?v=651a37ba"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="4.5._Gamma_surface_plotting.html" title="Introduction to atomman: Gamma surface plotting"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Dislocation analysis tools</a></li> 
       </ul>
@@ -47,11 +47,11 @@
           <div class="body" role="main">
             
   <section id="Introduction-to-atomman:-Dislocation-analysis-tools">
-<h1>Introduction to atomman: Dislocation analysis tools<a class="headerlink" href="#Introduction-to-atomman:-Dislocation-analysis-tools" title="Permalink to this heading">¶</a></h1>
+<h1>Introduction to atomman: Dislocation analysis tools<a class="headerlink" href="#Introduction-to-atomman:-Dislocation-analysis-tools" title="Link to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <section id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Link to this heading">¶</a></h2>
 <p>This Notebook describes the analysis tools contained in atomman.defect for finding and characterizing dislocations.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
@@ -81,31 +81,25 @@
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "59d140f9d566454895d07ed8a07d7a43", "version_major": 2, "version_minor": 0}</script></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.10
-Notebook executed on 2023-07-28
+atomman version = 1.4.11
+Notebook executed on 2024-04-29
 </pre></div></div>
 </div>
 </section>
 <section id="1.1.-Load-atomic-systems">
-<h2>1.1. Load atomic systems<a class="headerlink" href="#1.1.-Load-atomic-systems" title="Permalink to this heading">¶</a></h2>
+<h2>1.1. Load atomic systems<a class="headerlink" href="#1.1.-Load-atomic-systems" title="Link to this heading">¶</a></h2>
 <p>A system containing a single Al <span class="math notranslate nohighlight">\(\frac{a}{2}\)</span>&lt;111&gt; edge dislocation was created by</p>
 <ol class="arabic simple">
 <li><p>Using the Dislocation class to solve the elasticity solution for the dislocation.</p></li>
 <li><p>Generating a dislocation monopole and base reference system using Dislocation’s monopole method.</p></li>
 <li><p>Performing a short low temerature anneal and energy minimization to relax the atomic configuration. During relaxation, the system is kept periodic along the dislocation line, but is non-periodic in the other two directions. Atoms at the edge of the non-periodic directions are held fixed.</p></li>
 </ol>
-<p>All atomic dislocation analysis tools identify and characterize the presence of defects in an atomic system by comparing the local atomic environment around every atom to a reference state. Some of the tools in atomman do this by directly mapping each atom in the defect system to a corresponding defect-free base system. Using the <a class="reference external" href="4.4._Dislocation_solution_and_generator.html">Dislocation class</a> allows for the appropriate base system to be constructed along with the unrelaxed dislocation
+<p>All atomic dislocation analysis tools identify and characterize the presence of defects in an atomic system by comparing the local atomic environment around every atom to a reference state. Some of the tools in atomman do this by directly mapping each atom in the defect system to a corresponding defect-free base system. Using the <a class="reference external" href="4.9._Dislocation_configurations_generator.html">Dislocation class</a> allows for the appropriate base system to be constructed along with the unrelaxed dislocation
 configuration.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -178,7 +172,7 @@ array([0.        , 2.86378246, 0.        ])
 </div>
 </section>
 <section id="2.-Slip-vector">
-<h2>2. Slip vector<a class="headerlink" href="#2.-Slip-vector" title="Permalink to this heading">¶</a></h2>
+<h2>2. Slip vector<a class="headerlink" href="#2.-Slip-vector" title="Link to this heading">¶</a></h2>
 <p>The slip vector is useful for characterizing the path that dislocations have moved between a current state and a reference state. It characterizes how much crystal slip happens between every atom and their nearest neighbors. The burgers vector of any moving dislocation can be estimated by looking at the magnitude and direction of the slip vector of any atoms that the dislocation passed by. The slip vector was originally outlined in <a class="reference external" href="http://dx.doi.org/10.1103/PhysRevLett.87.165507">Zimmerman, et. al, Phys Rev Lett 87,
 165507</a>.</p>
 <div class="math notranslate nohighlight">
@@ -187,7 +181,7 @@ array([0.        , 2.86378246, 0.        ])
 <p><strong>Note 1</strong>: To be general with any crystal and dislocation, the slip vector computed here is <em>not</em> scaled by the number of slipped neighbors like it is in the original formulation. This means that the value of the slip vector returned will be a multiple of the Burgers vector that caused the slip. To estimate the Burgers vector of a dislocation that moved along a slip plane, the slip vector value needs to be divided by the total number of neighbor atoms that are across the slip plane.</p>
 <p><strong>Note 2</strong>: The reference system does not need to be of a perfect crystal and can simply be an earlier state. With this choice, the slip vector will reveal the slip deformation that occurred between the two states of the system. This can be useful for identifying how dislocations move in highly deformed/defective systems.</p>
 <section id="2.1.-slip_vector()">
-<h3>2.1. slip_vector()<a class="headerlink" href="#2.1.-slip_vector()" title="Permalink to this heading">¶</a></h3>
+<h3>2.1. slip_vector()<a class="headerlink" href="#2.1.-slip_vector()" title="Link to this heading">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><p><strong>system_0</strong> (<em>atomman.system</em>) The base/reference system to use.</p></li>
@@ -314,7 +308,7 @@ estimated Burgers vector: [ 0.7035,  1.4935, -0.0257]
 </section>
 </section>
 <section id="3.-Disregistry">
-<h2>3. Disregistry<a class="headerlink" href="#3.-Disregistry" title="Permalink to this heading">¶</a></h2>
+<h2>3. Disregistry<a class="headerlink" href="#3.-Disregistry" title="Link to this heading">¶</a></h2>
 <p>The disregistry, <span class="math notranslate nohighlight">\(\delta_i\)</span> characterizes the planar spreading of a dislocation in direction <span class="math notranslate nohighlight">\(\xi\)</span> along a slip plane by measuring the difference in the displacements between the atomic planes of atoms just above, <span class="math notranslate nohighlight">\(u_i^+\)</span>, and below, <span class="math notranslate nohighlight">\(u_i^-\)</span>, the mathematical slip plane. The displacements are taken relative to a perfect crystal base configuration.</p>
 <div class="math notranslate nohighlight">
 \[\delta_i(\xi) = u_i^+(\xi) - u_i^-(\xi)\]</div>
@@ -326,7 +320,7 @@ estimated Burgers vector: [ 0.7035,  1.4935, -0.0257]
 <li><p>The disregistry is computed for all unique <span class="math notranslate nohighlight">\(\xi\)</span> coordinates by finding the difference in the interpolated <span class="math notranslate nohighlight">\(u_i^+\)</span> and <span class="math notranslate nohighlight">\(u_i^-\)</span> displacements.</p></li>
 </ol>
 <section id="3.1.-disregistry()">
-<h3>3.1. disregistry()<a class="headerlink" href="#3.1.-disregistry()" title="Permalink to this heading">¶</a></h3>
+<h3>3.1. disregistry()<a class="headerlink" href="#3.1.-disregistry()" title="Link to this heading">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><p><strong>basesystem</strong> (<em>atomman.System</em>) A perfect reference system with atoms directly corresponding to atoms in dislsystem.</p></li>
@@ -371,11 +365,11 @@ estimated Burgers vector: [ 0.7035,  1.4935, -0.0257]
 </section>
 </section>
 <section id="4.-Nye-tensor">
-<h2>4. Nye tensor<a class="headerlink" href="#4.-Nye-tensor" title="Permalink to this heading">¶</a></h2>
+<h2>4. Nye tensor<a class="headerlink" href="#4.-Nye-tensor" title="Link to this heading">¶</a></h2>
 <p><em>Update version 1.3.7</em>: The Strain class has been added that provides a faster, more user-friendly interface for computing the same properties as the nye_tensor function. It is recommended to use it instead - See the <a class="reference external" href="4.8._Strain_class.html">4.8. Strain class Juptyer Notebook</a> for a description of the class and examples.</p>
 </section>
 <section id="5.-Differential-displacement-maps">
-<h2>5. Differential displacement maps<a class="headerlink" href="#5.-Differential-displacement-maps" title="Permalink to this heading">¶</a></h2>
+<h2>5. Differential displacement maps<a class="headerlink" href="#5.-Differential-displacement-maps" title="Link to this heading">¶</a></h2>
 <p>Dislocation core structures can also be characterized using differential displacement maps as first used by <a class="reference external" href="https://doi.org/10.1080/14786437008238490">Vitek, Perrin and Bowen</a>.</p>
 <p>For every pair of neighboring atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span>, a differential displacement vector, <span class="math notranslate nohighlight">\(d_{i \alpha \beta}\)</span> is computed as</p>
 <div class="math notranslate nohighlight">
@@ -385,7 +379,7 @@ estimated Burgers vector: [ 0.7035,  1.4935, -0.0257]
 in more detail below.</p>
 <p><em>Update version 1.3.2</em> A DifferentialDisplacement class was introduced to make it easier to generate differential displacement maps and to allow for more options with different materials systems by separating the differential displacement calculation from the plotting. The class is meant to replace the old differential_displacement function.</p>
 <section id="5.1.-DifferentialDisplacement-initialization/solve">
-<h3>5.1. DifferentialDisplacement initialization/solve<a class="headerlink" href="#5.1.-DifferentialDisplacement-initialization/solve" title="Permalink to this heading">¶</a></h3>
+<h3>5.1. DifferentialDisplacement initialization/solve<a class="headerlink" href="#5.1.-DifferentialDisplacement-initialization/solve" title="Link to this heading">¶</a></h3>
 <p>Computing the differential displacement requires comparing the relative position vectors between a defect-free base system and a defect system for all pairs of neighbor atoms. Therefore, the calculation requires two compatible systems and a list of neighboring atoms.</p>
 <ul class="simple">
 <li><p><strong>system_0</strong> (<em>atomman.system</em>) The defect-free base system to use.</p></li>
@@ -416,7 +410,7 @@ in more detail below.</p>
 </div>
 </section>
 <section id="5.2.-DifferentialDisplacement-plotting">
-<h3>5.2. DifferentialDisplacement plotting<a class="headerlink" href="#5.2.-DifferentialDisplacement-plotting" title="Permalink to this heading">¶</a></h3>
+<h3>5.2. DifferentialDisplacement plotting<a class="headerlink" href="#5.2.-DifferentialDisplacement-plotting" title="Link to this heading">¶</a></h3>
 <p>DifferentialDisplacement.plot() creates a differential displacement map as a matplotlib figure. There are many options to help control what is plotted as well as give you options for tweaking how the plots look.</p>
 <ul class="simple">
 <li><p><strong>component</strong> (<em>str or array-like object</em>) Indicates the component(s) of the differential displacement to plot. Values of ‘x’, ‘y’, or ‘z’ will plot the component along that Cartesian direction. A value of ‘projection’ will plot the differential displacement vectors as projected onto the plotting plane, thereby showing the two components perpendicular to the line direction. If a 3D vector is given, then the component parallel to that direction will be used.</p></li>
@@ -439,7 +433,7 @@ in more detail below.</p>
 <li><p>(<em>matplotlib.Figure</em>) The generated figure. This is returned to allow users to further modify it after creation.</p></li>
 </ul>
 <section id="5.2.1.-Common-plotting-variations">
-<h4>5.2.1. Common plotting variations<a class="headerlink" href="#5.2.1.-Common-plotting-variations" title="Permalink to this heading">¶</a></h4>
+<h4>5.2.1. Common plotting variations<a class="headerlink" href="#5.2.1.-Common-plotting-variations" title="Link to this heading">¶</a></h4>
 <p>Plot has a large number of parameters to allow for a wide range of variations and to give users the ability to tinker with the plots to make them look better if needed.</p>
 <p>As the differential displacement values are 3D vectors, the plots focus on showing one or two components</p>
 <ul class="simple">
@@ -475,7 +469,7 @@ dislocations tend to split into partials separated by a stacking fault width. Th
 </div>
 </section>
 <section id="5.2.2.-The-Cartesian-components">
-<h4>5.2.2. The Cartesian components<a class="headerlink" href="#5.2.2.-The-Cartesian-components" title="Permalink to this heading">¶</a></h4>
+<h4>5.2.2. The Cartesian components<a class="headerlink" href="#5.2.2.-The-Cartesian-components" title="Link to this heading">¶</a></h4>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
@@ -542,7 +536,7 @@ dislocations tend to split into partials separated by a stacking fault width. Th
 </div>
 </section>
 <section id="5.2.3.-Parallel-to-Burgers-(or-any-other-Cartesian-vector)">
-<h4>5.2.3. Parallel to Burgers (or any other Cartesian vector)<a class="headerlink" href="#5.2.3.-Parallel-to-Burgers-(or-any-other-Cartesian-vector)" title="Permalink to this heading">¶</a></h4>
+<h4>5.2.3. Parallel to Burgers (or any other Cartesian vector)<a class="headerlink" href="#5.2.3.-Parallel-to-Burgers-(or-any-other-Cartesian-vector)" title="Link to this heading">¶</a></h4>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
@@ -565,7 +559,7 @@ dislocations tend to split into partials separated by a stacking fault width. Th
 </div>
 </section>
 <section id="5.2.4.-Radial">
-<h4>5.2.4. Radial<a class="headerlink" href="#5.2.4.-Radial" title="Permalink to this heading">¶</a></h4>
+<h4>5.2.4. Radial<a class="headerlink" href="#5.2.4.-Radial" title="Link to this heading">¶</a></h4>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
@@ -589,7 +583,7 @@ dislocations tend to split into partials separated by a stacking fault width. Th
 </section>
 </section>
 <section id="5.3.-Raw-differential-displacement-data">
-<h3>5.3. Raw differential displacement data<a class="headerlink" href="#5.3.-Raw-differential-displacement-data" title="Permalink to this heading">¶</a></h3>
+<h3>5.3. Raw differential displacement data<a class="headerlink" href="#5.3.-Raw-differential-displacement-data" title="Link to this heading">¶</a></h3>
 <p>The raw data used to generate the plots can also be retrieved as attributes of the DifferentialDisplacement objects.</p>
 <ul class="simple">
 <li><p><strong>ddvectors</strong> are the computed differential displacement vectors for each pair of neighbor atoms. Note that these are the full raw values computed during the class initialization and therefore have not been normalized with ddmax.</p></li>
@@ -740,13 +734,13 @@ dislocations tend to split into partials separated by a stacking fault width. Th
         <li class="right" >
           <a href="4.5._Gamma_surface_plotting.html" title="Introduction to atomman: Gamma surface plotting"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Dislocation analysis tools</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     </div>
   </body>
 </html>

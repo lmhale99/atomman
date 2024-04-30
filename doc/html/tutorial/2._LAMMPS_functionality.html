@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Introduction to atomman: LAMMPS functionality &#8212; atomman 1.4.10 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <title>Introduction to atomman: LAMMPS functionality &#8212; atomman 1.4.11 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=eeb27264" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <script src="../_static/documentation_options.js?v=651a37ba"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="1.5._Settings_and_databases.html" title="Introduction to atomman: Settings and Library"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: LAMMPS functionality</a></li> 
       </ul>
@@ -47,11 +47,11 @@
           <div class="body" role="main">
             
   <section id="Introduction-to-atomman:-LAMMPS-functionality">
-<h1>Introduction to atomman: LAMMPS functionality<a class="headerlink" href="#Introduction-to-atomman:-LAMMPS-functionality" title="Permalink to this heading">¶</a></h1>
+<h1>Introduction to atomman: LAMMPS functionality<a class="headerlink" href="#Introduction-to-atomman:-LAMMPS-functionality" title="Link to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <section id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Link to this heading">¶</a></h2>
 <p>This Notebook provides an introduction to interacting with LAMMPS using atomman by working through a demonstration simulation.</p>
 <p><strong>Library Imports</strong></p>
 <div class="nbinput docutils container">
@@ -82,27 +82,21 @@
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2c5effd377cd4aa98cc0b9617eae2d3d", "version_major": 2, "version_minor": 0}</script></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.10
-Notebook executed on 2023-07-28
+atomman version = 1.4.11
+Notebook executed on 2024-04-29
 </pre></div></div>
 </div>
 </section>
 <section id="2.-Interatomic-Potential-Control">
-<h2>2. Interatomic Potential Control<a class="headerlink" href="#2.-Interatomic-Potential-Control" title="Permalink to this heading">¶</a></h2>
+<h2>2. Interatomic Potential Control<a class="headerlink" href="#2.-Interatomic-Potential-Control" title="Link to this heading">¶</a></h2>
 <p>LAMMPS is capable of using a wide array of interatomic potential styles, which are defined through a combination of LAMMPS commands and potential parameter files. In atomman, the LAMMPS commands can be automatically generated using the Potentials class and structured data model files.</p>
 <section id="2.1.-Load-potential-from-database">
-<h3>2.1. Load potential from database<a class="headerlink" href="#2.1.-Load-potential-from-database" title="Permalink to this heading">¶</a></h3>
+<h3>2.1. Load potential from database<a class="headerlink" href="#2.1.-Load-potential-from-database" title="Link to this heading">¶</a></h3>
 <p>Any LAMMPS-compatible potential in the NIST Interatomic Potentials Repository can be loaded/downloaded using load_lammps_potential().</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -116,9 +110,9 @@ Notebook executed on 2023-07-28
 </div>
 </section>
 <section id="2.2.-Potential-parameter-files">
-<h3>2.2. Potential parameter files<a class="headerlink" href="#2.2.-Potential-parameter-files" title="Permalink to this heading">¶</a></h3>
+<h3>2.2. Potential parameter files<a class="headerlink" href="#2.2.-Potential-parameter-files" title="Link to this heading">¶</a></h3>
 <p>Setting getfiles=True will copy/download the potential parameter files from the local/remote library database to the current working directory in a subfolder matching the potential’s id.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
@@ -130,39 +124,9 @@ Notebook executed on 2023-07-28
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam
-re(1,1) =   2.86378
-attrac(1,1) = 0.39558
-repuls(1,1) = 0.09806
-Cmin(1,1,1) = 1.00769
-Cmax(1,1,1) = 2.31407
-#
-rc = 5.0
-delr = 0.1
-augt1 = 1
-
-
-2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam
-# References:
-# elt        lat     z       ielement     atwt
-# alpha      b0      b1      b2           b3    alat    esub    asub
-# t0         t1              t2           t3            rozero  ibar
-#
-&#39;Al&#39;        &#39;fcc&#39;   12.     13           26.9815
-  4.68604   1.56205   5.39270   5.29601  -1.00047   4.05000   3.35999   1.06859
-1.0  -1.54917  -1.28508  10.01041 1.0 0
-
-
-</pre></div></div>
-</div>
 </section>
 <section id="2.3.-lammps.Potential-Class">
-<h3>2.3. lammps.Potential Class<a class="headerlink" href="#2.3.-lammps.Potential-Class" title="Permalink to this heading">¶</a></h3>
+<h3>2.3. lammps.Potential Class<a class="headerlink" href="#2.3.-lammps.Potential-Class" title="Link to this heading">¶</a></h3>
 <p>The load_lammps_potential() function returns a Potential object that can be used to explore properties of the potential and generate LAMMPS input commands.</p>
 <p>Basic properties can be directly obtained.</p>
 <div class="nbinput docutils container">
@@ -218,7 +182,7 @@ print &#34;Parameter file(s) can be downloaded at:&#34;
 print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/Al.meam&#34;
 print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/library-Al.meam&#34;
 pair_style meam
-pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al
+pair_coeff * * library-Al.meam Al Al.meam Al
 mass 1 26.9815
 
 
@@ -247,7 +211,7 @@ print &#34;Parameter file(s) can be downloaded at:&#34;
 print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/Al.meam&#34;
 print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/library-Al.meam&#34;
 pair_style meam
-pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al Al Al
+pair_coeff * * library-Al.meam Al Al.meam Al Al Al
 mass 1 26.9815
 mass 2 26.9815
 mass 3 26.9815
@@ -258,9 +222,9 @@ mass 3 26.9815
 </section>
 </section>
 <section id="3.-Generate-initial-system">
-<h2>3. Generate initial system<a class="headerlink" href="#3.-Generate-initial-system" title="Permalink to this heading">¶</a></h2>
+<h2>3. Generate initial system<a class="headerlink" href="#3.-Generate-initial-system" title="Link to this heading">¶</a></h2>
 <section id="3.1.-Load-relaxed-crystal">
-<h3>3.1. Load relaxed crystal<a class="headerlink" href="#3.1.-Load-relaxed-crystal" title="Permalink to this heading">¶</a></h3>
+<h3>3.1. Load relaxed crystal<a class="headerlink" href="#3.1.-Load-relaxed-crystal" title="Link to this heading">¶</a></h3>
 <p>A crystalline system can be easily generated using a unit cell system either defined in atomman, imported from another format, or accessed from the potentials database. For simplicity, here we will get the relaxed fcc structure for the potential.</p>
 <p>Load fcc prototype with Al lattice constant</p>
 <div class="nbinput docutils container">
@@ -295,7 +259,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </div>
 </section>
 <section id="3.2.-Manipulate-system">
-<h3>3.2. Manipulate system<a class="headerlink" href="#3.2.-Manipulate-system" title="Permalink to this heading">¶</a></h3>
+<h3>3.2. Manipulate system<a class="headerlink" href="#3.2.-Manipulate-system" title="Link to this heading">¶</a></h3>
 <p>More complicated atomic configurations can then be generated by manipulating the seed system and the atoms contained within. Here, we’ll limit the manipulations to making the system a 3x3x3 supercell of itself.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -316,7 +280,7 @@ Supercell has 108 atoms
 </div>
 </section>
 <section id="3.3.-Save-to-atom-data-file">
-<h3>3.3. Save to atom data file<a class="headerlink" href="#3.3.-Save-to-atom-data-file" title="Permalink to this heading">¶</a></h3>
+<h3>3.3. Save to atom data file<a class="headerlink" href="#3.3.-Save-to-atom-data-file" title="Link to this heading">¶</a></h3>
 <p>System.dump(‘atom_data’) outputs the system to a LAMMPS atom data file. Quick notes on the parameters used here</p>
 <ul class="simple">
 <li><p>Giving potential allows for the appropriate units and atom_style settings to be used.</p></li>
@@ -363,7 +327,7 @@ print &#34;Parameter file(s) can be downloaded at:&#34;
 print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/Al.meam&#34;
 print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/library-Al.meam&#34;
 pair_style meam
-pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al
+pair_coeff * * library-Al.meam Al Al.meam Al
 mass 1 26.9815
 
 
@@ -507,7 +471,7 @@ Atoms # atomic
 </section>
 </section>
 <section id="4.-Converting-to/from-LAMMPS-units">
-<h2>4. Converting to/from LAMMPS units<a class="headerlink" href="#4.-Converting-to/from-LAMMPS-units" title="Permalink to this heading">¶</a></h2>
+<h2>4. Converting to/from LAMMPS units<a class="headerlink" href="#4.-Converting-to/from-LAMMPS-units" title="Link to this heading">¶</a></h2>
 <p>LAMMPS performs its calculations with values in one of multiple sets of pre-defined units. The atomman.lammps.style submodule has some useful functions when working with different units options.</p>
 <p><strong>atomman.lammps.style.timestep()</strong></p>
 <p>The lammps.style.timestep() function returns the default timestep value for a given LAMMPS units option.</p>
@@ -557,10 +521,10 @@ OrderedDict([(&#39;mass&#39;, &#39;g/mol&#39;), (&#39;length&#39;, &#39;angstrom
 </div>
 </section>
 <section id="5.-Composing-LAMMPS-Input-Scripts">
-<h2>5. Composing LAMMPS Input Scripts<a class="headerlink" href="#5.-Composing-LAMMPS-Input-Scripts" title="Permalink to this heading">¶</a></h2>
+<h2>5. Composing LAMMPS Input Scripts<a class="headerlink" href="#5.-Composing-LAMMPS-Input-Scripts" title="Link to this heading">¶</a></h2>
 <p>LAMMPS scripts can easily be constructed by combining the system_info generated from System.dump(‘atom_data’), the pair_info from Potential.pair_info(), and any user-defined input lines. This allows for specific simulation actions to easily be perfored across different potentials or initial configurations.</p>
 <section id="5.1.-Show-content-generated-in-previous-sections">
-<h3>5.1. Show content generated in previous sections<a class="headerlink" href="#5.1.-Show-content-generated-in-previous-sections" title="Permalink to this heading">¶</a></h3>
+<h3>5.1. Show content generated in previous sections<a class="headerlink" href="#5.1.-Show-content-generated-in-previous-sections" title="Link to this heading">¶</a></h3>
 <p>Show system_pair_info generated in Section 3.3.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
@@ -589,7 +553,7 @@ print &#34;Parameter file(s) can be downloaded at:&#34;
 print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/Al.meam&#34;
 print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/library-Al.meam&#34;
 pair_style meam
-pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al
+pair_coeff * * library-Al.meam Al Al.meam Al
 mass 1 26.9815
 
 
@@ -597,7 +561,7 @@ mass 1 26.9815
 </div>
 </section>
 <section id="5.2.-Write-LAMMPS-input-script-template">
-<h3>5.2. Write LAMMPS input script template<a class="headerlink" href="#5.2.-Write-LAMMPS-input-script-template" title="Permalink to this heading">¶</a></h3>
+<h3>5.2. Write LAMMPS input script template<a class="headerlink" href="#5.2.-Write-LAMMPS-input-script-template" title="Link to this heading">¶</a></h3>
 <p>LAMMPS scripts can be dynamically generated using Python functions or templates that take the above info lines and other values as parameters. Here, we demonstrate a LAMMPS input template script where all fields to be filled in in Python are delimited with &lt;&gt; brackets.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -642,7 +606,7 @@ mass 1 26.9815
 </div>
 </section>
 <section id="5.3.-Fill-in-the-template-with-atomman.tools.filltemplate()">
-<h3>5.3. Fill in the template with atomman.tools.filltemplate()<a class="headerlink" href="#5.3.-Fill-in-the-template-with-atomman.tools.filltemplate()" title="Permalink to this heading">¶</a></h3>
+<h3>5.3. Fill in the template with atomman.tools.filltemplate()<a class="headerlink" href="#5.3.-Fill-in-the-template-with-atomman.tools.filltemplate()" title="Link to this heading">¶</a></h3>
 <p>The template can then be easily filled in with the atomman.tools.filltemplate() function.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -680,7 +644,7 @@ mass 1 26.9815
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;system_pair_info&#39;: &#39;units metal\natom_style atomic\n\nboundary p p p\nread_data atom.dat\n\nprint &#34;Potential 2015--Pascuet-M-I--Al--LAMMPS--ipr1 listed in the NIST Interatomic Potentials Repository:&#34;\nprint &#34;https://www.ctcms.nist.gov/potentials/entry/2015--Pascuet-M-I-Fernandez-J-R--Al/2015--Pascuet-M-I--Al--LAMMPS--ipr1.html&#34;\nprint &#34;Publication(s) related to the potential:&#34;\nprint &#34;https://doi.org/10.1016/j.jnucmat.2015.09.030&#34;\nprint &#34;Parameter file(s) can be downloaded at:&#34;\nprint &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/Al.meam&#34;\nprint &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/library-Al.meam&#34;\npair_style meam\npair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\\Al.meam Al\nmass 1 26.9815\n\n&#39;, &#39;timestep&#39;: 0.001, &#39;temperature&#39;: 100, &#39;pressure&#39;: 0.0}
+{&#39;system_pair_info&#39;: &#39;units metal\natom_style atomic\n\nboundary p p p\nread_data atom.dat\n\nprint &#34;Potential 2015--Pascuet-M-I--Al--LAMMPS--ipr1 listed in the NIST Interatomic Potentials Repository:&#34;\nprint &#34;https://www.ctcms.nist.gov/potentials/entry/2015--Pascuet-M-I-Fernandez-J-R--Al/2015--Pascuet-M-I--Al--LAMMPS--ipr1.html&#34;\nprint &#34;Publication(s) related to the potential:&#34;\nprint &#34;https://doi.org/10.1016/j.jnucmat.2015.09.030&#34;\nprint &#34;Parameter file(s) can be downloaded at:&#34;\nprint &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/Al.meam&#34;\nprint &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/library-Al.meam&#34;\npair_style meam\npair_coeff * * library-Al.meam Al Al.meam Al\nmass 1 26.9815\n\n&#39;, &#39;timestep&#39;: 0.001, &#39;temperature&#39;: 100, &#39;pressure&#39;: 0.0}
 </pre></div></div>
 </div>
 <p>Fill in template</p>
@@ -721,7 +685,7 @@ print &#34;Parameter file(s) can be downloaded at:&#34;
 print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/Al.meam&#34;
 print &#34;https://www.ctcms.nist.gov/potentials/Download/2015--Pascuet-M-I-Fernandez-J-R--Al/1/library-Al.meam&#34;
 pair_style meam
-pair_coeff * * 2015--Pascuet-M-I--Al--LAMMPS--ipr1\library-Al.meam Al 2015--Pascuet-M-I--Al--LAMMPS--ipr1\Al.meam Al
+pair_coeff * * library-Al.meam Al Al.meam Al
 mass 1 26.9815
 
 
@@ -762,14 +726,14 @@ run 100000
 </section>
 </section>
 <section id="6.-Run-LAMMPS">
-<h2>6. Run LAMMPS<a class="headerlink" href="#6.-Run-LAMMPS" title="Permalink to this heading">¶</a></h2>
+<h2>6. Run LAMMPS<a class="headerlink" href="#6.-Run-LAMMPS" title="Link to this heading">¶</a></h2>
 <p>The LAMMPS simulation can be ran from within Python using the run() function.</p>
 <p>Specify your lammps executable</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lammps_exe</span> <span class="o">=</span> <span class="s1">&#39;lmp&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lammps_exe</span> <span class="o">=</span> <span class="s1">&#39;/home/lmh1/LAMMPS/2022-06-23/src/lmp_mpi&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -785,7 +749,7 @@ run 100000
 <p>The resulting simulation data is returned as a Log object, which containes the thermo data from the log.lammps files.</p>
 </section>
 <section id="7.-Analyzing-Thermo-Results">
-<h2>7. Analyzing Thermo Results<a class="headerlink" href="#7.-Analyzing-Thermo-Results" title="Permalink to this heading">¶</a></h2>
+<h2>7. Analyzing Thermo Results<a class="headerlink" href="#7.-Analyzing-Thermo-Results" title="Link to this heading">¶</a></h2>
 <p>Data for each simulation run/minimization is stored in the returned Log object. Each Simulation has a thermo property that is a pandas.DataFrame of the LAMMPS thermo data.</p>
 <p><em>Updated version 1.3.7</em>: Each simulation is now represented using a Simulation class rather than a dictionary.</p>
 <p>Show thermo data column names for the first (and only) simulation run.</p>
@@ -875,7 +839,7 @@ run 100000
 </div>
 </section>
 <section id="8-Reading-in-dump-files">
-<h2>8 Reading in dump files<a class="headerlink" href="#8-Reading-in-dump-files" title="Permalink to this heading">¶</a></h2>
+<h2>8 Reading in dump files<a class="headerlink" href="#8-Reading-in-dump-files" title="Link to this heading">¶</a></h2>
 <p>Finally, any dump files generated by the LAMMPS simulation can be loaded into atomman as Systems.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
@@ -892,10 +856,10 @@ run 100000
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [12.181,  0.000,  0.000]
-bvect =  [ 0.000, 12.181,  0.000]
-cvect =  [ 0.000,  0.000, 12.181]
-origin = [-0.016, -0.016, -0.016]
+avect =  [12.184,  0.000,  0.000]
+bvect =  [ 0.000, 12.184,  0.000]
+cvect =  [ 0.000,  0.000, 12.184]
+origin = [-0.017, -0.017, -0.017]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -932,41 +896,41 @@ origin = [-0.016, -0.016, -0.016]
     <tr>
       <th>0</th>
       <td>1</td>
-      <td>-0.028500</td>
-      <td>-0.130898</td>
-      <td>-0.030150</td>
+      <td>-0.065207</td>
+      <td>0.005483</td>
+      <td>-0.067225</td>
       <td>1</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>-0.032088</td>
-      <td>1.993179</td>
-      <td>2.012840</td>
+      <td>0.015215</td>
+      <td>1.971269</td>
+      <td>2.016629</td>
       <td>2</td>
     </tr>
     <tr>
       <th>2</th>
       <td>1</td>
-      <td>2.080239</td>
-      <td>-0.012001</td>
-      <td>2.006956</td>
+      <td>1.960085</td>
+      <td>-0.049912</td>
+      <td>1.947913</td>
       <td>3</td>
     </tr>
     <tr>
       <th>3</th>
       <td>1</td>
-      <td>1.999465</td>
-      <td>2.038286</td>
-      <td>0.025622</td>
+      <td>2.036744</td>
+      <td>2.018590</td>
+      <td>0.026100</td>
       <td>4</td>
     </tr>
     <tr>
       <th>4</th>
       <td>1</td>
-      <td>4.097670</td>
-      <td>-0.017704</td>
-      <td>0.050970</td>
+      <td>4.021746</td>
+      <td>-0.062975</td>
+      <td>0.013582</td>
       <td>5</td>
     </tr>
     <tr>
@@ -980,41 +944,41 @@ origin = [-0.016, -0.016, -0.016]
     <tr>
       <th>103</th>
       <td>1</td>
-      <td>6.075682</td>
-      <td>10.146698</td>
-      <td>8.086876</td>
+      <td>6.007576</td>
+      <td>10.140925</td>
+      <td>8.201928</td>
       <td>104</td>
     </tr>
     <tr>
       <th>104</th>
       <td>1</td>
-      <td>8.065986</td>
-      <td>8.103102</td>
-      <td>8.077594</td>
+      <td>8.188295</td>
+      <td>8.184810</td>
+      <td>8.220727</td>
       <td>105</td>
     </tr>
     <tr>
       <th>105</th>
       <td>1</td>
-      <td>8.087157</td>
-      <td>10.226753</td>
-      <td>10.058932</td>
+      <td>8.018944</td>
+      <td>10.181569</td>
+      <td>10.211785</td>
       <td>106</td>
     </tr>
     <tr>
       <th>106</th>
       <td>1</td>
-      <td>10.131947</td>
-      <td>8.219079</td>
-      <td>10.121422</td>
+      <td>10.180948</td>
+      <td>8.081238</td>
+      <td>10.182349</td>
       <td>107</td>
     </tr>
     <tr>
       <th>107</th>
       <td>1</td>
-      <td>10.132604</td>
-      <td>10.137379</td>
-      <td>8.054377</td>
+      <td>10.151513</td>
+      <td>10.160260</td>
+      <td>8.191060</td>
       <td>108</td>
     </tr>
   </tbody>
@@ -1034,8 +998,8 @@ origin = [-0.016, -0.016, -0.016]
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="3dmolviewer_1690567522995758"  style="position: relative; width: 800px; height: 800px">
-        <p id="3dmolwarning_1690567522995758" style="background-color:#ffcccc;color:black">You appear to be running in JupyterLab (or JavaScript failed to load for some other reason).  You need to install the 3dmol extension: <br>
+<div id="3dmolviewer_1714421502699783"  style="position: relative; width: 800px; height: 800px">
+        <p id="3dmolwarning_1714421502699783" style="background-color:#ffcccc;color:black">You appear to be running in JupyterLab (or JavaScript failed to load for some other reason).  You need to install the 3dmol extension: <br>
         <tt>jupyter labextension install jupyterlab_3dmol</tt></p>
         </div>
 <script>
@@ -1067,137 +1031,138 @@ $3Dmolpromise = null;
   $3Dmolpromise = loadScriptAsync('https://cdnjs.cloudflare.com/ajax/libs/3Dmol/2.0.1/3Dmol-min.js');
 }
 
-var viewer_1690567522995758 = null;
-var warn = document.getElementById("3dmolwarning_1690567522995758");
+var viewer_1714421502699783 = null;
+var warn = document.getElementById("3dmolwarning_1714421502699783");
 if(warn) {
     warn.parentNode.removeChild(warn);
 }
 $3Dmolpromise.then(function() {
-viewer_1690567522995758 = $3Dmol.createViewer(document.getElementById("3dmolviewer_1690567522995758"),{backgroundColor:"white"});
-viewer_1690567522995758.zoomTo();
-    viewer_1690567522995758.addModel("CRYST1   12.181   12.181   12.181  90.00  90.00  90.00 P 1\nMODEL     1\nHETATM    1 UNX  MOL     1      -0.013  -0.115  -0.015  1.00  0.00          X1.0\nHETATM    2 UNX  MOL     1      -0.016   2.009   2.028  1.00  0.00          X1.0\nHETATM    3 UNX  MOL     1       2.096   0.004   2.023  1.00  0.00          X1.0\nHETATM    4 UNX  MOL     1       2.015   2.054   0.041  1.00  0.00          X1.0\nHETATM    5 UNX  MOL     1       4.113  -0.002   0.067  1.00  0.00          X1.0\nHETATM    6 UNX  MOL     1       4.047   2.087   2.021  1.00  0.00          X1.0\nHETATM    7 UNX  MOL     1       6.067   0.065   2.080  1.00  0.00          X1.0\nHETATM    8 UNX  MOL     1       6.065   2.017  -0.013  1.00  0.00          X1.0\nHETATM    9 UNX  MOL     1       8.106  -0.020  -0.101  1.00  0.00          X1.0\nHETATM   10 UNX  MOL     1       8.072   1.982   2.022  1.00  0.00          X1.0\nHETATM   11 UNX  MOL     1      10.074  -0.046   2.045  1.00  0.00          X1.0\nHETATM   12 UNX  MOL     1      10.189   2.001  -0.014  1.00  0.00          X1.0\nHETATM   13 UNX  MOL     1       0.006   4.069   0.026  1.00  0.00          X1.0\nHETATM   14 UNX  MOL     1      -0.082   6.036   2.009  1.00  0.00          X1.0\nHETATM   15 UNX  MOL     1       1.971   4.086   2.080  1.00  0.00          X1.0\nHETATM   16 UNX  MOL     1       2.009   6.049  -0.015  1.00  0.00          X1.0\nHETATM   17 UNX  MOL     1       3.991   4.127  -0.019  1.00  0.00          X1.0\nHETATM   18 UNX  MOL     1       4.045   6.121   2.065  1.00  0.00          X1.0\nHETATM   19 UNX  MOL     1       6.122   4.071   2.034  1.00  0.00          X1.0\nHETATM   20 UNX  MOL     1       6.048   6.117   0.035  1.00  0.00          X1.0\nHETATM   21 UNX  MOL     1       8.103   4.011   0.041  1.00  0.00          X1.0\nHETATM   22 UNX  MOL     1       8.059   6.129   2.034  1.00  0.00          X1.0\nHETATM   23 UNX  MOL     1      10.109   3.987   2.041  1.00  0.00          X1.0\nHETATM   24 UNX  MOL     1      10.083   6.098   0.030  1.00  0.00          X1.0\nHETATM   25 UNX  MOL     1      -0.013   8.143  -0.028  1.00  0.00          X1.0\nHETATM   26 UNX  MOL     1      -0.021  10.166   2.033  1.00  0.00          X1.0\nHETATM   27 UNX  MOL     1       2.008   8.097   1.995  1.00  0.00          X1.0\nHETATM   28 UNX  MOL     1       2.103  10.107  -0.027  1.00  0.00          X1.0\nHETATM   29 UNX  MOL     1       4.030   8.061   0.090  1.00  0.00          X1.0\nHETATM   30 UNX  MOL     1       4.056  10.162   2.043  1.00  0.00          X1.0\nHETATM   31 UNX  MOL     1       6.150   8.191   2.016  1.00  0.00          X1.0\nHETATM   32 UNX  MOL     1       6.132  10.108  -0.006  1.00  0.00          X1.0\nHETATM   33 UNX  MOL     1       8.177   8.084   0.006  1.00  0.00          X1.0\nHETATM   34 UNX  MOL     1       8.106  10.223   2.021  1.00  0.00          X1.0\nHETATM   35 UNX  MOL     1      10.152   8.143   1.965  1.00  0.00          X1.0\nHETATM   36 UNX  MOL     1      10.144  10.144  -0.031  1.00  0.00          X1.0\nHETATM   37 UNX  MOL     1       0.016  -0.004   4.015  1.00  0.00          X1.0\nHETATM   38 UNX  MOL     1      -0.021   1.926   6.052  1.00  0.00          X1.0\nHETATM   39 UNX  MOL     1       1.957  -0.021   6.126  1.00  0.00          X1.0\nHETATM   40 UNX  MOL     1       2.032   2.014   4.074  1.00  0.00          X1.0\nHETATM   41 UNX  MOL     1       4.013  -0.026   4.133  1.00  0.00          X1.0\nHETATM   42 UNX  MOL     1       4.130   2.066   6.021  1.00  0.00          X1.0\nHETATM   43 UNX  MOL     1       6.014   0.001   6.134  1.00  0.00          X1.0\nHETATM   44 UNX  MOL     1       6.146   2.092   4.095  1.00  0.00          X1.0\nHETATM   45 UNX  MOL     1       8.044  -0.025   4.020  1.00  0.00          X1.0\nHETATM   46 UNX  MOL     1       8.202   1.998   6.167  1.00  0.00          X1.0\nHETATM   47 UNX  MOL     1      10.180  -0.084   6.079  1.00  0.00          X1.0\nHETATM   48 UNX  MOL     1      10.098   1.904   4.062  1.00  0.00          X1.0\nHETATM   49 UNX  MOL     1      -0.059   4.001   4.134  1.00  0.00          X1.0\nHETATM   50 UNX  MOL     1      -0.032   6.066   6.039  1.00  0.00          X1.0\nHETATM   51 UNX  MOL     1       2.093   4.013   6.123  1.00  0.00          X1.0\nHETATM   52 UNX  MOL     1       1.970   6.131   4.069  1.00  0.00          X1.0\nHETATM   53 UNX  MOL     1       4.056   4.068   4.039  1.00  0.00          X1.0\nHETATM   54 UNX  MOL     1       3.999   6.045   6.096  1.00  0.00          X1.0\nHETATM   55 UNX  MOL     1       6.120   4.164   6.110  1.00  0.00          X1.0\nHETATM   56 UNX  MOL     1       6.148   6.044   4.105  1.00  0.00          X1.0\nHETATM   57 UNX  MOL     1       8.173   4.037   4.068  1.00  0.00          X1.0\nHETATM   58 UNX  MOL     1       8.159   6.052   6.164  1.00  0.00          X1.0\nHETATM   59 UNX  MOL     1      10.199   4.020   6.027  1.00  0.00          X1.0\nHETATM   60 UNX  MOL     1      10.069   6.138   4.024  1.00  0.00          X1.0\nHETATM   61 UNX  MOL     1      -0.001   8.132   3.962  1.00  0.00          X1.0\nHETATM   62 UNX  MOL     1       0.033  10.049   6.056  1.00  0.00          X1.0\nHETATM   63 UNX  MOL     1       2.042   8.046   6.098  1.00  0.00          X1.0\nHETATM   64 UNX  MOL     1       2.051  10.062   4.051  1.00  0.00          X1.0\nHETATM   65 UNX  MOL     1       4.109   8.059   4.071  1.00  0.00          X1.0\nHETATM   66 UNX  MOL     1       3.983  10.145   6.140  1.00  0.00          X1.0\nHETATM   67 UNX  MOL     1       6.043   8.145   6.032  1.00  0.00          X1.0\nHETATM   68 UNX  MOL     1       6.024  10.158   4.067  1.00  0.00          X1.0\nHETATM   69 UNX  MOL     1       8.106   8.155   4.079  1.00  0.00          X1.0\nHETATM   70 UNX  MOL     1       8.105  10.157   6.055  1.00  0.00          X1.0\nHETATM   71 UNX  MOL     1      10.200   8.097   6.091  1.00  0.00          X1.0\nHETATM   72 UNX  MOL     1      10.160  10.117   4.036  1.00  0.00          X1.0\nHETATM   73 UNX  MOL     1      -0.022  -0.031   8.161  1.00  0.00          X1.0\nHETATM   74 UNX  MOL     1       0.035   2.089  10.156  1.00  0.00          X1.0\nHETATM   75 UNX  MOL     1       2.096   0.029  10.127  1.00  0.00          X1.0\nHETATM   76 UNX  MOL     1       2.106   2.081   8.130  1.00  0.00          X1.0\nHETATM   77 UNX  MOL     1       4.058   0.091   8.094  1.00  0.00          X1.0\nHETATM   78 UNX  MOL     1       4.099   2.024  10.227  1.00  0.00          X1.0\nHETATM   79 UNX  MOL     1       6.075   0.028  10.139  1.00  0.00          X1.0\nHETATM   80 UNX  MOL     1       6.047   2.049   8.151  1.00  0.00          X1.0\nHETATM   81 UNX  MOL     1       8.137   0.035   8.101  1.00  0.00          X1.0\nHETATM   82 UNX  MOL     1       8.027   2.048  10.122  1.00  0.00          X1.0\nHETATM   83 UNX  MOL     1      10.157   0.085  10.110  1.00  0.00          X1.0\nHETATM   84 UNX  MOL     1      10.163   2.031   8.171  1.00  0.00          X1.0\nHETATM   85 UNX  MOL     1       0.024   4.050   8.074  1.00  0.00          X1.0\nHETATM   86 UNX  MOL     1      -0.021   6.100  10.152  1.00  0.00          X1.0\nHETATM   87 UNX  MOL     1       2.038   4.080  10.182  1.00  0.00          X1.0\nHETATM   88 UNX  MOL     1       2.049   6.033   8.149  1.00  0.00          X1.0\nHETATM   89 UNX  MOL     1       4.180   4.069   8.123  1.00  0.00          X1.0\nHETATM   90 UNX  MOL     1       4.022   6.162  10.061  1.00  0.00          X1.0\nHETATM   91 UNX  MOL     1       6.130   4.153  10.155  1.00  0.00          X1.0\nHETATM   92 UNX  MOL     1       6.078   6.149   8.205  1.00  0.00          X1.0\nHETATM   93 UNX  MOL     1       8.152   4.039   8.112  1.00  0.00          X1.0\nHETATM   94 UNX  MOL     1       8.140   6.081  10.132  1.00  0.00          X1.0\nHETATM   95 UNX  MOL     1      10.157   4.068  10.124  1.00  0.00          X1.0\nHETATM   96 UNX  MOL     1      10.196   6.127   8.098  1.00  0.00          X1.0\nHETATM   97 UNX  MOL     1       0.130   8.114   8.147  1.00  0.00          X1.0\nHETATM   98 UNX  MOL     1       0.059  10.159  10.156  1.00  0.00          X1.0\nHETATM   99 UNX  MOL     1       2.056   8.117  10.171  1.00  0.00          X1.0\nHETATM  100 UNX  MOL     1       2.035  10.160   8.124  1.00  0.00          X1.0\nHETATM  101 UNX  MOL     1       4.115   8.136   8.111  1.00  0.00          X1.0\nHETATM  102 UNX  MOL     1       4.073  10.224  10.131  1.00  0.00          X1.0\nHETATM  103 UNX  MOL     1       6.131   8.158  10.244  1.00  0.00          X1.0\nHETATM  104 UNX  MOL     1       6.091  10.162   8.102  1.00  0.00          X1.0\nHETATM  105 UNX  MOL     1       8.082   8.119   8.093  1.00  0.00          X1.0\nHETATM  106 UNX  MOL     1       8.103  10.242  10.075  1.00  0.00          X1.0\nHETATM  107 UNX  MOL     1      10.148   8.235  10.137  1.00  0.00          X1.0\nHETATM  108 UNX  MOL     1      10.148  10.153   8.070  1.00  0.00          X1.0\nENDMDL\n","pdb");
-    viewer_1690567522995758.addUnitCell();
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 1},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 2},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 3},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 4},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 5},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 6},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 7},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 8},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 9},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 10},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 11},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 12},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 13},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 14},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 15},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 16},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 17},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 18},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 19},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 20},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 21},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 22},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 23},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 24},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 25},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 26},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 27},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 28},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 29},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 30},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 31},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 32},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 33},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 34},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 35},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 36},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 37},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 38},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 39},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 40},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 41},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 42},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 43},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 44},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 45},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 46},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 47},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 48},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 49},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 50},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 51},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 52},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 53},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 54},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 55},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 56},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 57},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 58},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 59},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 60},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 61},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 62},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 63},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 64},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 65},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 66},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 67},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 68},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 69},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 70},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 71},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 72},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 73},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 74},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 75},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 76},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 77},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 78},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 79},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 80},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 81},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 82},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 83},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 84},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 85},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 86},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 87},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 88},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 89},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 90},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 91},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 92},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 93},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 94},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 95},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 96},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 97},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 98},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 99},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 100},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 101},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 102},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 103},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 104},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 105},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 106},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 107},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.setStyle({"model": -1, "serial": 108},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
-    viewer_1690567522995758.zoomTo();
-viewer_1690567522995758.render();
+viewer_1714421502699783 = $3Dmol.createViewer(document.getElementById("3dmolviewer_1714421502699783"),{backgroundColor:"white"});
+viewer_1714421502699783.zoomTo();
+    viewer_1714421502699783.addModel("CRYST1   12.184   12.184   12.184  90.00  90.00  90.00 P 1\nMODEL     1\nHETATM    1 UNX  MOL     1      -0.048   0.022  -0.050  1.00  0.00          X1.0\nHETATM    2 UNX  MOL     1       0.032   1.988   2.033  1.00  0.00          X1.0\nHETATM    3 UNX  MOL     1       1.977  -0.033   1.965  1.00  0.00          X1.0\nHETATM    4 UNX  MOL     1       2.054   2.035   0.043  1.00  0.00          X1.0\nHETATM    5 UNX  MOL     1       4.039  -0.046   0.030  1.00  0.00          X1.0\nHETATM    6 UNX  MOL     1       4.002   2.002   1.969  1.00  0.00          X1.0\nHETATM    7 UNX  MOL     1       6.095   0.059   1.969  1.00  0.00          X1.0\nHETATM    8 UNX  MOL     1       6.049   2.059  -0.039  1.00  0.00          X1.0\nHETATM    9 UNX  MOL     1       8.149   0.075   0.029  1.00  0.00          X1.0\nHETATM   10 UNX  MOL     1       8.072   2.094   2.060  1.00  0.00          X1.0\nHETATM   11 UNX  MOL     1      10.143  -0.041   2.008  1.00  0.00          X1.0\nHETATM   12 UNX  MOL     1      10.217   2.068  -0.014  1.00  0.00          X1.0\nHETATM   13 UNX  MOL     1      -0.032   4.043   0.018  1.00  0.00          X1.0\nHETATM   14 UNX  MOL     1       0.049   6.117   2.072  1.00  0.00          X1.0\nHETATM   15 UNX  MOL     1       2.016   4.065   2.081  1.00  0.00          X1.0\nHETATM   16 UNX  MOL     1       2.043   6.076   0.028  1.00  0.00          X1.0\nHETATM   17 UNX  MOL     1       4.082   4.093  -0.018  1.00  0.00          X1.0\nHETATM   18 UNX  MOL     1       4.106   6.064   2.017  1.00  0.00          X1.0\nHETATM   19 UNX  MOL     1       6.095   4.117   1.967  1.00  0.00          X1.0\nHETATM   20 UNX  MOL     1       6.142   6.155  -0.033  1.00  0.00          X1.0\nHETATM   21 UNX  MOL     1       8.120   4.083   0.026  1.00  0.00          X1.0\nHETATM   22 UNX  MOL     1       8.183   6.048   2.054  1.00  0.00          X1.0\nHETATM   23 UNX  MOL     1      10.192   4.029   2.052  1.00  0.00          X1.0\nHETATM   24 UNX  MOL     1      10.236   6.024   0.033  1.00  0.00          X1.0\nHETATM   25 UNX  MOL     1       0.036   8.090   0.020  1.00  0.00          X1.0\nHETATM   26 UNX  MOL     1       0.027  10.147   2.086  1.00  0.00          X1.0\nHETATM   27 UNX  MOL     1       2.062   8.097   1.982  1.00  0.00          X1.0\nHETATM   28 UNX  MOL     1       1.973  10.171   0.061  1.00  0.00          X1.0\nHETATM   29 UNX  MOL     1       4.101   8.161   0.002  1.00  0.00          X1.0\nHETATM   30 UNX  MOL     1       4.093  10.164   2.018  1.00  0.00          X1.0\nHETATM   31 UNX  MOL     1       6.084   8.122   2.026  1.00  0.00          X1.0\nHETATM   32 UNX  MOL     1       6.105  10.155  -0.049  1.00  0.00          X1.0\nHETATM   33 UNX  MOL     1       8.261   8.059   0.019  1.00  0.00          X1.0\nHETATM   34 UNX  MOL     1       8.131  10.111   1.879  1.00  0.00          X1.0\nHETATM   35 UNX  MOL     1      10.143   8.163   2.025  1.00  0.00          X1.0\nHETATM   36 UNX  MOL     1      10.185  10.164  -0.025  1.00  0.00          X1.0\nHETATM   37 UNX  MOL     1      -0.028   0.047   4.027  1.00  0.00          X1.0\nHETATM   38 UNX  MOL     1       0.061   2.052   6.063  1.00  0.00          X1.0\nHETATM   39 UNX  MOL     1       1.996  -0.037   6.088  1.00  0.00          X1.0\nHETATM   40 UNX  MOL     1       2.029   2.042   4.023  1.00  0.00          X1.0\nHETATM   41 UNX  MOL     1       4.026   0.012   4.044  1.00  0.00          X1.0\nHETATM   42 UNX  MOL     1       4.003   2.039   6.102  1.00  0.00          X1.0\nHETATM   43 UNX  MOL     1       6.121  -0.034   5.970  1.00  0.00          X1.0\nHETATM   44 UNX  MOL     1       5.988   2.076   4.015  1.00  0.00          X1.0\nHETATM   45 UNX  MOL     1       8.094  -0.093   3.995  1.00  0.00          X1.0\nHETATM   46 UNX  MOL     1       8.130   1.988   6.115  1.00  0.00          X1.0\nHETATM   47 UNX  MOL     1      10.151  -0.066   6.181  1.00  0.00          X1.0\nHETATM   48 UNX  MOL     1      10.191   2.000   4.131  1.00  0.00          X1.0\nHETATM   49 UNX  MOL     1      -0.048   4.048   4.068  1.00  0.00          X1.0\nHETATM   50 UNX  MOL     1      -0.064   5.996   6.054  1.00  0.00          X1.0\nHETATM   51 UNX  MOL     1       2.066   4.095   6.083  1.00  0.00          X1.0\nHETATM   52 UNX  MOL     1       2.050   6.149   4.051  1.00  0.00          X1.0\nHETATM   53 UNX  MOL     1       4.104   3.995   4.014  1.00  0.00          X1.0\nHETATM   54 UNX  MOL     1       4.084   6.138   6.046  1.00  0.00          X1.0\nHETATM   55 UNX  MOL     1       6.025   4.085   6.144  1.00  0.00          X1.0\nHETATM   56 UNX  MOL     1       6.063   6.128   4.040  1.00  0.00          X1.0\nHETATM   57 UNX  MOL     1       8.027   4.080   4.041  1.00  0.00          X1.0\nHETATM   58 UNX  MOL     1       8.079   6.102   6.020  1.00  0.00          X1.0\nHETATM   59 UNX  MOL     1      10.097   4.041   6.132  1.00  0.00          X1.0\nHETATM   60 UNX  MOL     1      10.157   6.078   4.120  1.00  0.00          X1.0\nHETATM   61 UNX  MOL     1      -0.044   8.155   4.087  1.00  0.00          X1.0\nHETATM   62 UNX  MOL     1      -0.014  10.140   6.107  1.00  0.00          X1.0\nHETATM   63 UNX  MOL     1       2.033   8.070   6.078  1.00  0.00          X1.0\nHETATM   64 UNX  MOL     1       1.982  10.162   4.041  1.00  0.00          X1.0\nHETATM   65 UNX  MOL     1       4.096   8.132   4.058  1.00  0.00          X1.0\nHETATM   66 UNX  MOL     1       4.023  10.148   6.090  1.00  0.00          X1.0\nHETATM   67 UNX  MOL     1       6.126   8.148   6.092  1.00  0.00          X1.0\nHETATM   68 UNX  MOL     1       6.065  10.197   3.975  1.00  0.00          X1.0\nHETATM   69 UNX  MOL     1       8.122   8.136   4.057  1.00  0.00          X1.0\nHETATM   70 UNX  MOL     1       8.052  10.095   6.155  1.00  0.00          X1.0\nHETATM   71 UNX  MOL     1      10.179   8.142   6.179  1.00  0.00          X1.0\nHETATM   72 UNX  MOL     1      10.090  10.169   4.092  1.00  0.00          X1.0\nHETATM   73 UNX  MOL     1      -0.053   0.021   8.099  1.00  0.00          X1.0\nHETATM   74 UNX  MOL     1       0.035   2.033  10.067  1.00  0.00          X1.0\nHETATM   75 UNX  MOL     1       1.937   0.001  10.107  1.00  0.00          X1.0\nHETATM   76 UNX  MOL     1       2.063   2.108   8.101  1.00  0.00          X1.0\nHETATM   77 UNX  MOL     1       4.144   0.009   8.075  1.00  0.00          X1.0\nHETATM   78 UNX  MOL     1       4.021   1.984  10.184  1.00  0.00          X1.0\nHETATM   79 UNX  MOL     1       6.127   0.050  10.231  1.00  0.00          X1.0\nHETATM   80 UNX  MOL     1       6.056   1.980   8.106  1.00  0.00          X1.0\nHETATM   81 UNX  MOL     1       8.039  -0.040   8.137  1.00  0.00          X1.0\nHETATM   82 UNX  MOL     1       8.170   2.010  10.118  1.00  0.00          X1.0\nHETATM   83 UNX  MOL     1      10.131  -0.024  10.174  1.00  0.00          X1.0\nHETATM   84 UNX  MOL     1      10.146   2.054   8.071  1.00  0.00          X1.0\nHETATM   85 UNX  MOL     1      -0.026   4.079   8.129  1.00  0.00          X1.0\nHETATM   86 UNX  MOL     1       0.045   6.138  10.159  1.00  0.00          X1.0\nHETATM   87 UNX  MOL     1       2.039   4.046  10.245  1.00  0.00          X1.0\nHETATM   88 UNX  MOL     1       1.999   6.119   8.077  1.00  0.00          X1.0\nHETATM   89 UNX  MOL     1       4.012   4.146   8.166  1.00  0.00          X1.0\nHETATM   90 UNX  MOL     1       4.103   6.076  10.126  1.00  0.00          X1.0\nHETATM   91 UNX  MOL     1       6.112   4.020  10.103  1.00  0.00          X1.0\nHETATM   92 UNX  MOL     1       6.155   6.148   8.119  1.00  0.00          X1.0\nHETATM   93 UNX  MOL     1       8.067   4.024   8.090  1.00  0.00          X1.0\nHETATM   94 UNX  MOL     1       8.191   6.003  10.182  1.00  0.00          X1.0\nHETATM   95 UNX  MOL     1      10.242   4.067  10.138  1.00  0.00          X1.0\nHETATM   96 UNX  MOL     1      10.128   6.099   8.124  1.00  0.00          X1.0\nHETATM   97 UNX  MOL     1       0.033   8.045   8.099  1.00  0.00          X1.0\nHETATM   98 UNX  MOL     1       0.025  10.088  10.163  1.00  0.00          X1.0\nHETATM   99 UNX  MOL     1       2.078   8.069  10.169  1.00  0.00          X1.0\nHETATM  100 UNX  MOL     1       2.072  10.202   8.181  1.00  0.00          X1.0\nHETATM  101 UNX  MOL     1       4.090   8.128   8.181  1.00  0.00          X1.0\nHETATM  102 UNX  MOL     1       3.963  10.162  10.197  1.00  0.00          X1.0\nHETATM  103 UNX  MOL     1       6.163   8.125  10.126  1.00  0.00          X1.0\nHETATM  104 UNX  MOL     1       6.024  10.158   8.219  1.00  0.00          X1.0\nHETATM  105 UNX  MOL     1       8.205   8.202   8.237  1.00  0.00          X1.0\nHETATM  106 UNX  MOL     1       8.036  10.198  10.229  1.00  0.00          X1.0\nHETATM  107 UNX  MOL     1      10.198   8.098  10.199  1.00  0.00          X1.0\nHETATM  108 UNX  MOL     1      10.168  10.177   8.208  1.00  0.00          X1.0\nENDMDL\n","pdb");
+    viewer_1714421502699783.addUnitCell();
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 1},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 2},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 3},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 4},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 5},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 6},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 7},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 8},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 9},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 10},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 11},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 12},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 13},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 14},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 15},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 16},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 17},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 18},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 19},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 20},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 21},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 22},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 23},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 24},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 25},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 26},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 27},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 28},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 29},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 30},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 31},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 32},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 33},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 34},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 35},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 36},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 37},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 38},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 39},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 40},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 41},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 42},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 43},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 44},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 45},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 46},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 47},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 48},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 49},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 50},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 51},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 52},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 53},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 54},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 55},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 56},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 57},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 58},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 59},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 60},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 61},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 62},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 63},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 64},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 65},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 66},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 67},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 68},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 69},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 70},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 71},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 72},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 73},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 74},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 75},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 76},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 77},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 78},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 79},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 80},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 81},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 82},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 83},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 84},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 85},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 86},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 87},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 88},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 89},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 90},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 91},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 92},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 93},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 94},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 95},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 96},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 97},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 98},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 99},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 100},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 101},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 102},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 103},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 104},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 105},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 106},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 107},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.setStyle({"model": -1, "serial": 108},{"sphere": {"radius": 1.0, "color": "#7dff7a"}});
+    viewer_1714421502699783.zoomTo();
+viewer_1714421502699783.render();
 });
 </script></div>
 </div>
 <p><strong>File Cleanup</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">pot_id</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">):</span>
     <span class="n">fname</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
-<span class="n">Path</span><span class="p">(</span><span class="n">pot_id</span><span class="p">)</span><span class="o">.</span><span class="n">rmdir</span><span class="p">()</span>
+<span class="n">Path</span><span class="p">(</span><span class="s1">&#39;Al.meam&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+<span class="n">Path</span><span class="p">(</span><span class="s1">&#39;library-Al.meam&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
 <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;atom.dat&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
 <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;nvt.in&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
 <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;log.lammps&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
@@ -1278,13 +1243,13 @@ viewer_1690567522995758.render();
         <li class="right" >
           <a href="1.5._Settings_and_databases.html" title="Introduction to atomman: Settings and Library"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: LAMMPS functionality</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     </div>
   </body>
 </html>

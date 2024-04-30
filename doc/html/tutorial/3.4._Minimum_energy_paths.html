@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Introduction to atomman: Minimum energy paths &#8212; atomman 1.4.10 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <title>Introduction to atomman: Minimum energy paths &#8212; atomman 1.4.11 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=eeb27264" />
+    <script src="../_static/documentation_options.js?v=651a37ba"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="3.3._Region_selectors.html" title="Introduction to atomman: Region selectors"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Minimum energy paths</a></li> 
       </ul>
@@ -46,26 +46,26 @@
           <div class="body" role="main">
             
   <section id="Introduction-to-atomman:-Minimum-energy-paths">
-<h1>Introduction to atomman: Minimum energy paths<a class="headerlink" href="#Introduction-to-atomman:-Minimum-energy-paths" title="Permalink to this heading">¶</a></h1>
+<h1>Introduction to atomman: Minimum energy paths<a class="headerlink" href="#Introduction-to-atomman:-Minimum-energy-paths" title="Link to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <section id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Link to this heading">¶</a></h2>
 <p><em>New version 1.3.7</em></p>
 <p>This Notebook outlines the mep subpackage of atomman that provides tools for identifying minimum energy pathways. These tools were designed primarily for finding relaxed energy paths along 2D energy maps, but may also work for more complex problems.</p>
 <p><strong>NOTE #1</strong> This documentation uses the term “energy” for the output of the evaluation function and the term “force” for the derivative of the evaluation function with respect to the coordinates. This does not mean that the evaluation function needs to be in units of energy, just that it is a function analogous to energy.</p>
 <p><strong>Note #2</strong> The atomman.mep module is relatively new and only contains a few options at the moment. The code has been designed with modularity in mind, so additional methods can hopefully be added in the future without requiring too many changes to the existing design.</p>
 </section>
 <section id="2.-Theory-and-Methodology">
-<h2>2. Theory and Methodology<a class="headerlink" href="#2.-Theory-and-Methodology" title="Permalink to this heading">¶</a></h2>
+<h2>2. Theory and Methodology<a class="headerlink" href="#2.-Theory-and-Methodology" title="Link to this heading">¶</a></h2>
 <p>Minimum energy paths are transition paths from one (meta)stable state to another in which each point along the path is located at a minimum for all directions tangent to the path’s line. Another way of stating this is that every point along the path has a gradient of zero for all directions except along the path’s line. The minimum energy path for a transition is important as it marks the most likely states that the system will occupy during a transition and it provides an accurate means of
 identifying the transition barrier.</p>
 <p>The atomman.mep module contains Path classes. Each Path class provides - A representation of a path along an energy surface as a series of coordinates, - Methods that allow for the integration of the path towards the minimum energy path using a particular relaxation algorithm, and - Tools for viewing the path, as well as the energies and forces along the path.</p>
 </section>
 <section id="3.-BasePath-class-and-common-setup">
-<h2>3. BasePath class and common setup<a class="headerlink" href="#3.-BasePath-class-and-common-setup" title="Permalink to this heading">¶</a></h2>
+<h2>3. BasePath class and common setup<a class="headerlink" href="#3.-BasePath-class-and-common-setup" title="Link to this heading">¶</a></h2>
 <section id="3.1.-Path-initialization">
-<h3>3.1. Path initialization<a class="headerlink" href="#3.1.-Path-initialization" title="Permalink to this heading">¶</a></h3>
+<h3>3.1. Path initialization<a class="headerlink" href="#3.1.-Path-initialization" title="Link to this heading">¶</a></h3>
 <p>All Path classes are children of BasePath, which defines the commonly shared methods and attributes.</p>
 <p>A Path can be initialized with the following parameters</p>
 <ul class="simple">
@@ -77,13 +77,13 @@ identifying the transition barrier.</p>
 </ul>
 </section>
 <section id="3.2.-gradientfxn,-gradientkwargs-and-integratorfxn">
-<h3>3.2. gradientfxn, gradientkwargs and integratorfxn<a class="headerlink" href="#3.2.-gradientfxn,-gradientkwargs-and-integratorfxn" title="Permalink to this heading">¶</a></h3>
+<h3>3.2. gradientfxn, gradientkwargs and integratorfxn<a class="headerlink" href="#3.2.-gradientfxn,-gradientkwargs-and-integratorfxn" title="Link to this heading">¶</a></h3>
 <p>The gradientfxn and gradientkwargs define the function to use for evaluating the gradient of coord. The atomman.mep.gradient module collects the following gradient methods - <strong>atomman.mep.gradient.central_difference(energyfxn, coord, shift=1e-5)</strong> computes the gradient of coord using central difference. For each dimension, the energy is evaluated at coord<span class="math notranslate nohighlight">\(\pm\)</span>shift and the gradient computed as the difference of the shifted energies divided by 2*shift.</p>
-<p>The integratorfxn defines the integration scheme to use to iterate coord forward by timestep in the direction given by the ratefxn to produce a new set of coord. The atomman.mep.integrator module collects the following integration methods - <strong>atomman.mep.integrator.euler(ratefxn, coord, timestep, **kwargs)</strong> uses the Euler integration method - newcoord = coord + timestep * ratefxn(<strong>kwargs) - **atomman.mep.integrator.rungekutta(ratefxn, coord, timestep, **kwargs)</strong> uses the Runge-Kutta
+<p>The integratorfxn defines the integration scheme to use to iterate coord forward by timestep in the direction given by the ratefxn to produce a new set of coord. The atomman.mep.integrator module collects the following integration methods - <strong>atomman.mep.integrator.euler(ratefxn, coord, timestep, **kwargs)</strong> uses the Euler integration method - newcoord = coord + timestep * ratefxn(**kwargs) - <strong>atomman.mep.integrator.rungekutta(ratefxn, coord, timestep, **kwargs)</strong> uses the Runge-Kutta
 integration method, which uses a higher order estimate based on four shifts of coord. - k1 = timestep * ratefxn(coord, <strong>kwargs) - k2 = timestep * ratefxn(coord - 0.5 * k1,</strong> kwargs) - k3 = timestep * ratefxn(coord - 0.5 * k2, **kwargs) - k4 = timestep * ratefxn(coord - k3, **kwargs) - newcoord = coord + k1 / 6 + k2 / 3 + k3 / 3 + k4 / 6</p>
 </section>
 <section id="3.3.-Common-Path-attributes">
-<h3>3.3. Common Path attributes<a class="headerlink" href="#3.3.-Common-Path-attributes" title="Permalink to this heading">¶</a></h3>
+<h3>3.3. Common Path attributes<a class="headerlink" href="#3.3.-Common-Path-attributes" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><strong>coord</strong> (<em>numpy.NDArray</em>) is the array of coordinates along the path.</p></li>
 <li><p><strong>arccoord</strong> (<em>numpy.NDArray</em>) computes the arc length coordinates for coord. This is the cumulative sum of the radial distances between each set of neighboring points along the path.</p></li>
@@ -96,7 +96,7 @@ integration method, which uses a higher order estimate based on four shifts of c
 </ul>
 </section>
 <section id="3.4.-Common-Path-methods">
-<h3>3.4. Common Path methods<a class="headerlink" href="#3.4.-Common-Path-methods" title="Permalink to this heading">¶</a></h3>
+<h3>3.4. Common Path methods<a class="headerlink" href="#3.4.-Common-Path-methods" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><strong>energy(coord=None)</strong> computes the energy using energyfxn for the set/given coord points.</p></li>
 <li><p><strong>grad_energy(coord=None)</strong> computes the gradient of the energy using energyfxn and gradientfxn for the set/given coord points.</p></li>
@@ -108,10 +108,10 @@ integration method, which uses a higher order estimate based on four shifts of c
 </section>
 </section>
 <section id="4.-ISMPath">
-<h2>4. ISMPath<a class="headerlink" href="#4.-ISMPath" title="Permalink to this heading">¶</a></h2>
+<h2>4. ISMPath<a class="headerlink" href="#4.-ISMPath" title="Link to this heading">¶</a></h2>
 <p>The ISMPath class uses the improved string method (ISM) [link?] to compute the minimum energy pathways.</p>
 <section id="4.1.-Improved-string-method-theory">
-<h3>4.1. Improved string method theory<a class="headerlink" href="#4.1.-Improved-string-method-theory" title="Permalink to this heading">¶</a></h3>
+<h3>4.1. Improved string method theory<a class="headerlink" href="#4.1.-Improved-string-method-theory" title="Link to this heading">¶</a></h3>
 <p>In the improved string method, each relaxation step involves</p>
 <ol class="arabic simple">
 <li><p>An initial path guess is given where all coordinates along the path are equally spaced according to the arc length coordinates.</p></li>
@@ -126,7 +126,7 @@ end/climbing points not adjusted.</div>
 </div>
 </section>
 <section id="4.2.-ISMPath-specific-methods-and-attributes">
-<h3>4.2. ISMPath specific methods and attributes<a class="headerlink" href="#4.2.-ISMPath-specific-methods-and-attributes" title="Permalink to this heading">¶</a></h3>
+<h3>4.2. ISMPath specific methods and attributes<a class="headerlink" href="#4.2.-ISMPath-specific-methods-and-attributes" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><strong>default_timestep</strong> (<em>float</em>) is the default relaxation timestep calculated as 0.05 * min(0.2, N^-1), where N is the number of coord points.</p></li>
 <li><p><strong>default_tolerance</strong> (<em>float</em>) is the default relaxation tolerance calculated as max(N^-4, 1e-10), where N is the number of coord points.</p></li>
@@ -134,7 +134,7 @@ end/climbing points not adjusted.</div>
 <li><p><strong>interpolate_point(arccoord)</strong> constructs a cubic spline interpolation based on the current coord and corresponding arccoord values. The given arccoord parameter values are then used to interpolate new coord values. The method returns a new ISMPath object with the interpolated coord values.</p></li>
 </ul>
 <section id="4.2.1.-ISMPath.step()">
-<h4>4.2.1. ISMPath.step()<a class="headerlink" href="#4.2.1.-ISMPath.step()" title="Permalink to this heading">¶</a></h4>
+<h4>4.2.1. ISMPath.step()<a class="headerlink" href="#4.2.1.-ISMPath.step()" title="Link to this heading">¶</a></h4>
 <p>Performs a single string relaxation step.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -147,7 +147,7 @@ end/climbing points not adjusted.</div>
 </ul>
 </section>
 <section id="4.2.2.-ISMPath.relax()">
-<h4>4.2.2. ISMPath.relax()<a class="headerlink" href="#4.2.2.-ISMPath.relax()" title="Permalink to this heading">¶</a></h4>
+<h4>4.2.2. ISMPath.relax()<a class="headerlink" href="#4.2.2.-ISMPath.relax()" title="Link to this heading">¶</a></h4>
 <p>Perform multiple relaxation and/or climb steps until either the maximum coordinate displacement per step drops below a tolerance or the maximum number of steps is reached.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -230,13 +230,13 @@ end/climbing points not adjusted.</div>
         <li class="right" >
           <a href="3.3._Region_selectors.html" title="Introduction to atomman: Region selectors"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Minimum energy paths</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     </div>
   </body>
 </html>

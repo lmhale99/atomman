@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Introduction to atomman: Volterra dislocation solutions &#8212; atomman 1.4.10 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <title>Introduction to atomman: Volterra dislocation solutions &#8212; atomman 1.4.11 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=eeb27264" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <script src="../_static/documentation_options.js?v=651a37ba"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="4.3._Stacking_fault_generator.html" title="Introduction to atomman: Stacking fault generator"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Volterra dislocation solutions</a></li> 
       </ul>
@@ -47,11 +47,11 @@
           <div class="body" role="main">
             
   <section id="Introduction-to-atomman:-Volterra-dislocation-solutions">
-<h1>Introduction to atomman: Volterra dislocation solutions<a class="headerlink" href="#Introduction-to-atomman:-Volterra-dislocation-solutions" title="Permalink to this heading">¶</a></h1>
+<h1>Introduction to atomman: Volterra dislocation solutions<a class="headerlink" href="#Introduction-to-atomman:-Volterra-dislocation-solutions" title="Link to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <section id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Link to this heading">¶</a></h2>
 <p>This Notebook outlines the classes and methods in atomman for obtaining elastic solutions for perfectly straight dislocations, i.e. Volterra dislocation solutions. The Volterra dislocation solutions are useful for both studying idealized dislocation properties and for inserting dislocations into atomic configurations.</p>
 <ul class="simple">
 <li><p>Section #2 details the theory used to obtain the dislocation solutions.</p></li>
@@ -87,24 +87,18 @@
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8d75a4e2b497475dbdffd001d88d5ab4", "version_major": 2, "version_minor": 0}</script></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.10
-Notebook executed on 2023-07-28
+atomman version = 1.4.11
+Notebook executed on 2024-04-29
 </pre></div></div>
 </div>
 </section>
 <section id="2.-Theory">
-<h2>2. Theory<a class="headerlink" href="#2.-Theory" title="Permalink to this heading">¶</a></h2>
+<h2>2. Theory<a class="headerlink" href="#2.-Theory" title="Link to this heading">¶</a></h2>
 <p>Dislocation theory is based on computing and using elasticity solutions of dislocations to define what they look like and how they interact with the surrounding material. The Volterra dislocation model assumes that the discontinuity in the crystal due to the dislocation exists as a line singularity. While this assumption does not hold true in real materials, the Volterra solution still provides a decent guess for the long-range stress and strain fields of compact dislocation cores. It also
 provides a useful starting point for developing more complicated dislocation solutions, and can provide good initial guesses for constructing atomic dislocation configurations.</p>
 <p>Solutions of straight dislocations are always defined relative to three orthogonal unit vectors <span class="math notranslate nohighlight">\(\hat{m}\)</span>, <span class="math notranslate nohighlight">\(\hat{n}\)</span>, and <span class="math notranslate nohighlight">\(\hat{\xi}\)</span></p>
@@ -118,7 +112,7 @@ provides a useful starting point for developing more complicated dislocation sol
 \[x_i = x_1 \hat{m} + x_2 \hat{n} + x_3 \hat{\xi}\]</div>
 <p>For straight dislocations, the elasticity solutions are independent of the <span class="math notranslate nohighlight">\(x_3\)</span> direction and therefore only depend on <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span>.</p>
 <section id="2.1.-Isotropic-solution">
-<h3>2.1. Isotropic solution<a class="headerlink" href="#2.1.-Isotropic-solution" title="Permalink to this heading">¶</a></h3>
+<h3>2.1. Isotropic solution<a class="headerlink" href="#2.1.-Isotropic-solution" title="Link to this heading">¶</a></h3>
 <p>For isotropic materials, the elastic solution for a Volterra dislocation can be given as analytical equations. Variations of the analytical solutions can be found in every textbook on dislocation theory. The particular equations used in atomman match those found in Elementary Dislocation Theory by Weertman and Weertman except with flipped signs. This choice provides the best correspondence with the anisotropic solution described below.</p>
 <p>Isotropic elastic constants can be represented using only two independent terms. The two isotropic elastic constants typically used in the dislocation solutions are the shear modulus, <span class="math notranslate nohighlight">\(\mu\)</span>, and the Poisson’s ratio, <span class="math notranslate nohighlight">\(\nu\)</span>.</p>
 <p>The isotropic displacements, <span class="math notranslate nohighlight">\(u_i\)</span>, for a dislocation centered at <span class="math notranslate nohighlight">\(x_1 = x_2 = 0\)</span> are</p>
@@ -181,7 +175,7 @@ provides a useful starting point for developing more complicated dislocation sol
 \[\frac{W}{l} = a \ln{ \left( \frac{R}{r_0} \right)}.\]</div>
 </section>
 <section id="2.2.-Anisotropic-solution">
-<h3>2.2. Anisotropic solution<a class="headerlink" href="#2.2.-Anisotropic-solution" title="Permalink to this heading">¶</a></h3>
+<h3>2.2. Anisotropic solution<a class="headerlink" href="#2.2.-Anisotropic-solution" title="Link to this heading">¶</a></h3>
 <p>The elasticity solution for Volterra dislocations in anisotropic materials was first introduced by <a class="reference external" href="https://doi.org/10.1016/0001-6160(53)90099-6">Eshelby</a>. Starting with the fundamental equations of elasticity</p>
 <div class="math notranslate nohighlight">
 \[\sigma_{ij} = C_{ijkl} \epsilon_{kl}\]</div>
@@ -222,7 +216,7 @@ provides a useful starting point for developing more complicated dislocation sol
 </section>
 </section>
 <section id="3.-Volterra-dislocation-methods-and-objects">
-<h2>3. Volterra dislocation methods and objects<a class="headerlink" href="#3.-Volterra-dislocation-methods-and-objects" title="Permalink to this heading">¶</a></h2>
+<h2>3. Volterra dislocation methods and objects<a class="headerlink" href="#3.-Volterra-dislocation-methods-and-objects" title="Link to this heading">¶</a></h2>
 <p>A Volterra dislocation solution can be obtained with the solve_volterra_dislocation() function.</p>
 <p><em>Update Version 1.3.2: ξ_uvw, slip_hkl, and box parameters added to make defining systems easier, especially for non-cubic crystals. axes renamed to transform for clarity.</em></p>
 <p><em>Update Version 1.4.8: The m and n parameters now can be given values of ‘x’, ‘y’, or ‘z’ to indicate that they are to be aligned with the corresponding Cartesian axis. The cart_axes parameter has also been added.</em></p>
@@ -245,7 +239,7 @@ provides a useful starting point for developing more complicated dislocation sol
 <li><p>(<em>atomman.defect.VolterraDislocation</em>) The dislocation solution. This will be an atomman.defect.IsotropicVolterraDislocation object or an atomman.defect.Stroh object depending on if the elastic constants used are isotropic or anisotropic.</p></li>
 </ul>
 <section id="3.1.-Build-solution">
-<h3>3.1. Build solution<a class="headerlink" href="#3.1.-Build-solution" title="Permalink to this heading">¶</a></h3>
+<h3>3.1. Build solution<a class="headerlink" href="#3.1.-Build-solution" title="Link to this heading">¶</a></h3>
 <p>Specify materials properties, namely the unit cell box and the elastic constants.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -324,7 +318,7 @@ Cij in GPa:
 </div>
 </div>
 <section id="3.2.-Compute-properties">
-<h4>3.2. Compute properties<a class="headerlink" href="#3.2.-Compute-properties" title="Permalink to this heading">¶</a></h4>
+<h4>3.2. Compute properties<a class="headerlink" href="#3.2.-Compute-properties" title="Link to this heading">¶</a></h4>
 <p>Check configuration</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -392,39 +386,39 @@ Transformation matrix from standard orientation to dislocation orientation:
 <div class="highlight"><pre>
 Solution is anisotropic
 p -&gt;
-[ 5.74325108e-01+1.48063821j  5.74325108e-01-1.48063821j
- -5.74325108e-01+1.48063821j -5.74325108e-01-1.48063821j
- -5.55111512e-17+0.39392852j -5.55111512e-17-0.39392852j]
+[-5.74325108e-01+1.48063821j -5.74325108e-01-1.48063821j
+  5.74325108e-01+1.48063821j  5.74325108e-01-1.48063821j
+  5.55111512e-17+0.39392852j  5.55111512e-17-0.39392852j]
 A -&gt;
-[[ 4.92478068e-01+2.92695902e-01j -1.86741173e-01+9.77580274e-02j
-   6.67206634e-01+0.00000000e+00j]
- [ 4.92478068e-01-2.92695902e-01j -1.86741173e-01-9.77580274e-02j
-   6.67206634e-01-0.00000000e+00j]
- [-4.92478068e-01+2.92695902e-01j -1.86741173e-01-9.77580274e-02j
+[[-4.92478068e-01+2.92695902e-01j -1.86741173e-01-9.77580274e-02j
    6.67206634e-01+0.00000000e+00j]
  [-4.92478068e-01-2.92695902e-01j -1.86741173e-01+9.77580274e-02j
    6.67206634e-01-0.00000000e+00j]
- [ 3.55985935e-16+1.47294255e-01j -7.89087414e-01+0.00000000e+00j
-  -4.27766816e-01-1.31098024e-16j]
- [ 3.55985935e-16-1.47294255e-01j -7.89087414e-01-0.00000000e+00j
-  -4.27766816e-01+1.31098024e-16j]]
+ [-4.92478068e-01-2.92695902e-01j  1.86741173e-01-9.77580274e-02j
+  -6.67206634e-01+0.00000000e+00j]
+ [-4.92478068e-01+2.92695902e-01j  1.86741173e-01+9.77580274e-02j
+  -6.67206634e-01-0.00000000e+00j]
+ [-5.43914941e-17+1.47294255e-01j -7.89087414e-01+0.00000000e+00j
+  -4.27766816e-01-1.48780831e-16j]
+ [-5.43914941e-17-1.47294255e-01j -7.89087414e-01-0.00000000e+00j
+  -4.27766816e-01+1.48780831e-16j]]
 L -&gt;
-[[ 1.87773573e-01-2.53391120e-01j  1.05996344e-01+1.67934295e-01j
-  -2.23781767e-02-2.06874267e-01j]
- [ 1.87773573e-01+2.53391120e-01j  1.05996344e-01-1.67934295e-01j
-  -2.23781767e-02+2.06874267e-01j]
- [ 1.87773573e-01+2.53391120e-01j -1.05996344e-01+1.67934295e-01j
+[[ 1.87773573e-01+2.53391120e-01j -1.05996344e-01+1.67934295e-01j
    2.23781767e-02-2.06874267e-01j]
  [ 1.87773573e-01-2.53391120e-01j -1.05996344e-01-1.67934295e-01j
    2.23781767e-02+2.06874267e-01j]
- [ 1.50398047e-01-1.50200901e-17j -1.18890059e-17+3.81790193e-01j
-   1.59422563e-16+6.54039958e-02j]
- [ 1.50398047e-01+1.50200901e-17j -1.18890059e-17-3.81790193e-01j
-   1.59422563e-16-6.54039958e-02j]]
+ [-1.87773573e-01+2.53391120e-01j -1.05996344e-01-1.67934295e-01j
+   2.23781767e-02+2.06874267e-01j]
+ [-1.87773573e-01-2.53391120e-01j -1.05996344e-01+1.67934295e-01j
+   2.23781767e-02-2.06874267e-01j]
+ [ 1.50398047e-01+1.23270043e-16j  2.06745348e-16+3.81790193e-01j
+  -1.45716273e-16+6.54039958e-02j]
+ [ 1.50398047e-01-1.23270043e-16j  2.06745348e-16-3.81790193e-01j
+  -1.45716273e-16-6.54039958e-02j]]
 k -&gt;
-[ 8.78792266e-01+1.74127681j  8.78792266e-01-1.74127681j
- -8.78792266e-01+1.74127681j -8.78792266e-01-1.74127681j
-  2.92248361e-17+1.62818332j  2.92248361e-17-1.62818332j]
+[-8.78792266e-01+1.74127681j -8.78792266e-01-1.74127681j
+  8.78792266e-01+1.74127681j  8.78792266e-01-1.74127681j
+ -6.22524811e-16+1.62818332j -6.22524811e-16-1.62818332j]
 </pre></div></div>
 </div>
 <p><span class="math notranslate nohighlight">\(K_{ij}\)</span>, <span class="math notranslate nohighlight">\(K\)</span>, and pre-ln factor</p>
@@ -610,7 +604,7 @@ Strain components, coordinates in Angstroms
 </section>
 </section>
 <section id="4.-Direct-check-of-strain-energy">
-<h2>4. Direct check of strain energy<a class="headerlink" href="#4.-Direct-check-of-strain-energy" title="Permalink to this heading">¶</a></h2>
+<h2>4. Direct check of strain energy<a class="headerlink" href="#4.-Direct-check-of-strain-energy" title="Link to this heading">¶</a></h2>
 <p>For fun, you can check the nature of the solution by directly computing the dislocation solution’s strain energy and comparing it to the solution’s strain energy coefficients.</p>
 <div class="math notranslate nohighlight">
 \[\frac{W}{l} = \frac{K b^2}{4 \pi} \ln{ \left( \frac{R}{r_0} \right)} = \frac{1}{2} \int_{r_0}^{R} \sigma_{ij} \epsilon_{ij} dr\]</div>
@@ -725,8 +719,8 @@ Strain components, coordinates in Angstroms
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Solution K: 74.09648693884509
-Evaluated K: 74.10133673627291
+Solution K: 74.09648693884493
+Evaluated K: 74.10133673627267
 </pre></div></div>
 </div>
 </section>
@@ -791,13 +785,13 @@ Evaluated K: 74.10133673627291
         <li class="right" >
           <a href="4.3._Stacking_fault_generator.html" title="Introduction to atomman: Stacking fault generator"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Volterra dislocation solutions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     </div>
   </body>
 </html>

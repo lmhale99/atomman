@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Introduction to atomman: System class &#8212; atomman 1.4.10 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <title>Introduction to atomman: System class &#8212; atomman 1.4.11 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=eeb27264" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <script src="../_static/documentation_options.js?v=651a37ba"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="1.2._Atoms_class.html" title="Introduction to atomman: Atoms class"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: System class</a></li> 
       </ul>
@@ -47,11 +47,11 @@
           <div class="body" role="main">
             
   <section id="Introduction-to-atomman:-System-class">
-<h1>Introduction to atomman: System class<a class="headerlink" href="#Introduction-to-atomman:-System-class" title="Permalink to this heading">¶</a></h1>
+<h1>Introduction to atomman: System class<a class="headerlink" href="#Introduction-to-atomman:-System-class" title="Link to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <section id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Link to this heading">¶</a></h2>
 <p>The System class represents an atomic system configuration by combining an <a class="reference external" href="1.2._Atoms_class.html">Atoms</a> object with a <a class="reference external" href="1.1._Box_class.html">Box</a> object. Additional System methods and attributes deal with boundary conditions and the interaction between the underlying Atoms and Box objects.</p>
 <p><strong>NOTE</strong>: The underlying structure of Atoms changed with version 1.2 to be more efficient and easier to work with. Changes have been made to the System class to reflect this.</p>
 <p><strong>Library Imports</strong></p>
@@ -79,26 +79,20 @@
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2a232233aa6a44abb301415a3f43e4da", "version_major": 2, "version_minor": 0}</script></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.10
-Notebook executed on 2023-07-28
+atomman version = 1.4.11
+Notebook executed on 2024-04-29
 </pre></div></div>
 </div>
 </section>
 <section id="2.-Basics">
-<h2>2. Basics<a class="headerlink" href="#2.-Basics" title="Permalink to this heading">¶</a></h2>
+<h2>2. Basics<a class="headerlink" href="#2.-Basics" title="Link to this heading">¶</a></h2>
 <section id="2.1.-Initialization-Options">
-<h3>2.1. Initialization Options<a class="headerlink" href="#2.1.-Initialization-Options" title="Permalink to this heading">¶</a></h3>
+<h3>2.1. Initialization Options<a class="headerlink" href="#2.1.-Initialization-Options" title="Link to this heading">¶</a></h3>
 <p>Parameters</p>
 <ul class="simple">
 <li><p><strong>atoms</strong> (<em>atomman.Atoms, optional</em>) The underlying Atoms object to build system around.</p></li>
@@ -193,7 +187,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </section>
 </section>
 <section id="3.-Built-in-Attributes">
-<h2>3. Built-in Attributes<a class="headerlink" href="#3.-Built-in-Attributes" title="Permalink to this heading">¶</a></h2>
+<h2>3. Built-in Attributes<a class="headerlink" href="#3.-Built-in-Attributes" title="Link to this heading">¶</a></h2>
 <p>Each System instance has these built-in attributes:</p>
 <ul class="simple">
 <li><p><strong>atoms</strong> (<em>atomman.Atoms</em>) the underlying <a class="reference external" href="1.2._Atoms_class.html">Atoms</a> object.</p></li>
@@ -368,10 +362,10 @@ system.natypes -&gt; 1
 </div>
 </section>
 <section id="4.-Scaling-Additions">
-<h2>4. Scaling Additions<a class="headerlink" href="#4.-Scaling-Additions" title="Permalink to this heading">¶</a></h2>
+<h2>4. Scaling Additions<a class="headerlink" href="#4.-Scaling-Additions" title="Link to this heading">¶</a></h2>
 <p>Since atomic positions are stored in absolute Cartesian coordinates, the system has methods for scaling/unscaling vectors relative to the box and which modify methods and attributes of the underlying Atoms and Box classes.</p>
 <section id="4.1.-scale()-and-unscale()">
-<h3>4.1. scale() and unscale()<a class="headerlink" href="#4.1.-scale()-and-unscale()" title="Permalink to this heading">¶</a></h3>
+<h3>4.1. scale() and unscale()<a class="headerlink" href="#4.1.-scale()-and-unscale()" title="Link to this heading">¶</a></h3>
 <p><em>Updated version 1.4.4:</em> These methods are now aliases of Box.position_relative_to_cartesian() and Box.position_cartesian_to_relative(). System.scale() and System.unscale() are marked for depreciation in the next major atomman version in favor of the more informatively named Box methods.</p>
 <ul class="simple">
 <li><p>scale() is for absolute Cartesian -&gt; relative box coordinates.</p></li>
@@ -426,7 +420,7 @@ pos -&gt;
 </div>
 </section>
 <section id="4.2.-atoms_prop()">
-<h3>4.2. atoms_prop()<a class="headerlink" href="#4.2.-atoms_prop()" title="Permalink to this heading">¶</a></h3>
+<h3>4.2. atoms_prop()<a class="headerlink" href="#4.2.-atoms_prop()" title="Link to this heading">¶</a></h3>
 <p>The atoms_prop() method extends the <a class="reference external" href="1.2._Atoms_class.html">atoms.prop()</a> method by adding a scale parameter option.</p>
 <ul class="simple">
 <li><p>scale=False (default): the property values are returned exactly as they are stored, i.e. this is the same as calling system.atoms.prop().</p></li>
@@ -473,7 +467,7 @@ system.atoms_prop(&#39;pos&#39;, 2, scale=True) -&gt; [0.5 0.  0.5]
 </div>
 </section>
 <section id="4.3.-atoms_df()">
-<h3>4.3. atoms_df()<a class="headerlink" href="#4.3.-atoms_df()" title="Permalink to this heading">¶</a></h3>
+<h3>4.3. atoms_df()<a class="headerlink" href="#4.3.-atoms_df()" title="Link to this heading">¶</a></h3>
 <p>The atoms_df() method extends the <a class="reference external" href="1.2._Atoms_class.html">atoms.df()</a> method with an optional scale parameter.</p>
 <ul class="simple">
 <li><p>scale=False (defaut): the property values are returned exactly as they are stored, i.e. this is the same as calling system.atoms.df()</p></li>
@@ -779,7 +773,7 @@ system.atoms_prop(&#39;pos&#39;, 2, scale=True) -&gt; [0.5 0.  0.5]
 </div>
 </section>
 <section id="4.4.-box_set()">
-<h3>4.4. box_set()<a class="headerlink" href="#4.4.-box_set()" title="Permalink to this heading">¶</a></h3>
+<h3>4.4. box_set()<a class="headerlink" href="#4.4.-box_set()" title="Link to this heading">¶</a></h3>
 <p>The box_set() method extends the <a class="reference external" href="1.1._Box_class.html">box.set()</a> method to include an optional scale parameter. This is necessary to define how atomic positions are affected by the change in box dimensions.</p>
 <ul class="simple">
 <li><p>scale=False (defaut): the absolute Cartesian coordinates of the atoms are held fixed as the box is changed. This is equivalent to calling box.set() directly.</p></li>
@@ -892,9 +886,9 @@ system.atoms_prop(&#39;pos&#39;, scale=True) =
 </section>
 </section>
 <section id="5.-Built-in-manipulations">
-<h2>5. Built-in manipulations<a class="headerlink" href="#5.-Built-in-manipulations" title="Permalink to this heading">¶</a></h2>
+<h2>5. Built-in manipulations<a class="headerlink" href="#5.-Built-in-manipulations" title="Link to this heading">¶</a></h2>
 <section id="5.1.-wrap()">
-<h3>5.1. wrap()<a class="headerlink" href="#5.1.-wrap()" title="Permalink to this heading">¶</a></h3>
+<h3>5.1. wrap()<a class="headerlink" href="#5.1.-wrap()" title="Link to this heading">¶</a></h3>
 <p>The wrap method adjusts the atoms and box to ensure that all atomic positions are contained within the box. For atoms with positions beyond the box boundaries:</p>
 <ul class="simple">
 <li><p>If the boundary condition is periodic (as defined in pbc) then the atom’s position is folded to an equivalent position within the boundaries for that dimension.</p></li>
@@ -925,16 +919,16 @@ symbols = (None,)
 pbc = [ True  True  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   1.606 |   7.000 |   8.532
-      1 |       1 |   3.063 |   5.131 |   0.241
-      2 |       1 |   4.818 |   0.227 |   6.601
-      3 |       1 |   1.211 |   5.209 |   6.137
-      4 |       1 |   6.486 |   3.397 |   4.472
-      5 |       1 |   4.579 |   3.230 |   6.800
-      6 |       1 |   0.912 |   2.931 |   3.182
-      7 |       1 |   2.676 |   7.325 |   7.008
-      8 |       1 |   7.293 |   8.072 |   0.085
-      9 |       1 |   0.399 |   7.924 |   4.086
+      0 |       1 |   3.208 |   0.963 |   0.701
+      1 |       1 |   9.325 |   9.682 |   0.688
+      2 |       1 |   1.161 |   2.090 |   8.450
+      3 |       1 |   6.132 |   0.828 |   9.739
+      4 |       1 |   0.960 |   0.008 |   4.948
+      5 |       1 |   7.726 |   8.181 |   7.174
+      6 |       1 |   1.056 |   1.688 |   2.894
+      7 |       1 |   3.526 |   9.602 |   9.333
+      8 |       1 |   0.307 |   4.185 |   3.060
+      9 |       1 |   3.072 |   9.627 |   8.682
 </pre></div></div>
 </div>
 <p>Atoms are wrapped around periodic boundaries, and non-periodic boundaries are extended to encompass all atoms.</p>
@@ -955,7 +949,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 avect =  [ 1.000,  0.000,  0.000]
-bvect =  [ 0.000,  8.073,  0.000]
+bvect =  [ 0.000,  9.683,  0.000]
 cvect =  [ 0.000,  0.000,  1.000]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 10
@@ -964,21 +958,21 @@ symbols = (None,)
 pbc = [ True False  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   0.606 |   7.000 |   0.532
-      1 |       1 |   0.063 |   5.131 |   0.241
-      2 |       1 |   0.818 |   0.227 |   0.601
-      3 |       1 |   0.211 |   5.209 |   0.137
-      4 |       1 |   0.486 |   3.397 |   0.472
-      5 |       1 |   0.579 |   3.230 |   0.800
-      6 |       1 |   0.912 |   2.931 |   0.182
-      7 |       1 |   0.676 |   7.325 |   0.008
-      8 |       1 |   0.293 |   8.072 |   0.085
-      9 |       1 |   0.399 |   7.924 |   0.086
+      0 |       1 |   0.208 |   0.963 |   0.701
+      1 |       1 |   0.325 |   9.682 |   0.688
+      2 |       1 |   0.161 |   2.090 |   0.450
+      3 |       1 |   0.132 |   0.828 |   0.739
+      4 |       1 |   0.960 |   0.008 |   0.948
+      5 |       1 |   0.726 |   8.181 |   0.174
+      6 |       1 |   0.056 |   1.688 |   0.894
+      7 |       1 |   0.526 |   9.602 |   0.333
+      8 |       1 |   0.307 |   4.185 |   0.060
+      9 |       1 |   0.072 |   9.627 |   0.682
 </pre></div></div>
 </div>
 </section>
 <section id="5.2.-normalize()">
-<h3>5.2. normalize()<a class="headerlink" href="#5.2.-normalize()" title="Permalink to this heading">¶</a></h3>
+<h3>5.2. normalize()<a class="headerlink" href="#5.2.-normalize()" title="Link to this heading">¶</a></h3>
 <p>The box vectors for a system may not be compatible with certain codes, such as LAMMPS. The normalize() method helps with this by converting incompatible systems to a compatible representation.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -1017,9 +1011,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 0.916,  0.987,  0.134]
-bvect =  [ 0.632,  0.776,  0.045]
-cvect =  [ 0.956,  0.120,  0.260]
+avect =  [ 0.362,  0.117,  0.433]
+bvect =  [ 0.285,  0.498,  0.284]
+cvect =  [ 0.502,  0.344,  0.460]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 2
 natypes = 1
@@ -1028,13 +1022,13 @@ pbc = [ True  True  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   0.000 |   0.000 |   0.000
-      1 |       1 |   1.252 |   0.942 |   0.219
-a = 1.3531584111523982
-b = 1.001997135729699
-c = 0.9979128041630667
-alpha = 44.815705569540626
-beta = 40.31945400541226
-gamma = 4.8496247644506445
+      1 |       1 |   0.575 |   0.480 |   0.588
+a = 0.5764813377650477
+b = 0.640181680893545
+c = 0.7632007394471146
+alpha = 24.32057393003292
+beta = 16.700319253896822
+gamma = 39.59254765877076
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1060,9 +1054,9 @@ gamma = 4.8496247644506445
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-avect =  [ 1.353,  0.000,  0.000]
-bvect =  [ 0.998,  0.085,  0.000]
-cvect =  [-0.761,  0.594,  0.253]
+avect =  [ 0.576,  0.000,  0.000]
+bvect =  [ 0.493,  0.408,  0.000]
+cvect =  [-0.731, -0.207,  0.071]
 origin = [ 0.000,  0.000,  0.000]
 natoms = 2
 natypes = 1
@@ -1070,22 +1064,22 @@ symbols = (None,)
 pbc = [ True  True  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
-      0 |       1 |   1.353 |   0.000 |   0.000
-      1 |       1 |   0.795 |   0.339 |   0.126
-a = 1.3531584111523982
-b = 1.001997135729699
-c = 0.9979128041630667
-alpha = 135.1842944304594
-beta = 139.68054599458776
-gamma = 4.8496247644506445
+      0 |       1 |   0.000 |   0.000 |   0.000
+      1 |       1 |   0.169 |   0.100 |   0.036
+a = 0.5764813377650477
+b = 0.640181680893545
+c = 0.7632007394471146
+alpha = 155.67942606996712
+beta = 163.29968074610318
+gamma = 39.59254765877076
 Box relative positions:
-[[1.00000000e+00 1.10291284e-15 2.22044605e-16]
- [5.00000000e-01 5.00000000e-01 5.00000000e-01]]
+[[0.  0.  0. ]
+ [0.5 0.5 0.5]]
 </pre></div></div>
 </div>
 </section>
 <section id="5.3.-rotate()">
-<h3>5.3. rotate()<a class="headerlink" href="#5.3.-rotate()" title="Permalink to this heading">¶</a></h3>
+<h3>5.3. rotate()<a class="headerlink" href="#5.3.-rotate()" title="Link to this heading">¶</a></h3>
 <p>The System class also has a built-in rotate() method that can be used to rotate the system to a new orientation. The rotated system will be expanded to retain periodicity across its boundaries.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -1168,7 +1162,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   6.185 |   0.875 |   2.143
       1 |       1 |   2.474 |   0.875 |   4.285
-      2 |       1 |   3.711 |   0.000 |   2.143
+      2 |       1 |   3.711 |   5.248 |   2.143
       3 |       1 |   3.711 |   2.624 |   2.143
       4 |       1 |   4.948 |   1.749 |   4.285
       5 |       1 |   4.948 |   4.373 |   4.285
@@ -1182,12 +1176,12 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 Transformation matrix:
 [[ 4.08248290e-01  4.08248290e-01 -8.16496581e-01]
  [ 5.77350269e-01  5.77350269e-01  5.77350269e-01]
- [ 7.07106781e-01 -7.07106781e-01 -9.45142073e-17]]
+ [ 7.07106781e-01 -7.07106781e-01 -2.22044605e-16]]
 </pre></div></div>
 </div>
 </section>
 <section id="5.4.-supersize()">
-<h3>5.4. supersize()<a class="headerlink" href="#5.4.-supersize()" title="Permalink to this heading">¶</a></h3>
+<h3>5.4. supersize()<a class="headerlink" href="#5.4.-supersize()" title="Link to this heading">¶</a></h3>
 <p>A supercell version of a system can be generated using the supersize() method.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -1237,7 +1231,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   6.185 |  -9.622 |  -2.143
       1 |       1 |   2.474 |  -9.622 |  -0.000
-      2 |       1 |   3.711 | -10.496 |  -2.143
+      2 |       1 |   3.711 |  -5.248 |  -2.143
       3 |       1 |   3.711 |  -7.872 |  -2.143
       4 |       1 |   4.948 |  -8.747 |  -0.000
       5 |       1 |   4.948 |  -6.123 |  -0.000
@@ -1249,7 +1243,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      11 |       1 |   2.474 |  -6.997 |  -0.000
      12 |       1 |  13.607 |  -9.622 |  -2.143
      13 |       1 |   9.896 |  -9.622 |  -0.000
-     14 |       1 |  11.133 | -10.496 |  -2.143
+     14 |       1 |  11.133 |  -5.248 |  -2.143
      15 |       1 |  11.133 |  -7.872 |  -2.143
      16 |       1 |  12.370 |  -8.747 |  -0.000
      17 |       1 |  12.370 |  -6.123 |  -0.000
@@ -1261,7 +1255,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      23 |       1 |   9.896 |  -6.997 |  -0.000
      24 |       1 |   6.185 |  -4.373 |  -2.143
      25 |       1 |   2.474 |  -4.373 |  -0.000
-     26 |       1 |   3.711 |  -5.248 |  -2.143
+     26 |       1 |   3.711 |   0.000 |  -2.143
      27 |       1 |   3.711 |  -2.624 |  -2.143
      28 |       1 |   4.948 |  -3.499 |  -0.000
      29 |       1 |   4.948 |  -0.875 |  -0.000
@@ -1273,7 +1267,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      35 |       1 |   2.474 |  -1.749 |  -0.000
      36 |       1 |  13.607 |  -4.373 |  -2.143
      37 |       1 |   9.896 |  -4.373 |  -0.000
-     38 |       1 |  11.133 |  -5.248 |  -2.143
+     38 |       1 |  11.133 |   0.000 |  -2.143
      39 |       1 |  11.133 |  -2.624 |  -2.143
      40 |       1 |  12.370 |  -3.499 |  -0.000
      41 |       1 |  12.370 |  -0.875 |  -0.000
@@ -1285,7 +1279,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      47 |       1 |   9.896 |  -1.749 |  -0.000
      48 |       1 |   6.185 |  -9.622 |   2.143
      49 |       1 |   2.474 |  -9.622 |   4.285
-     50 |       1 |   3.711 | -10.496 |   2.143
+     50 |       1 |   3.711 |  -5.248 |   2.143
      51 |       1 |   3.711 |  -7.872 |   2.143
      52 |       1 |   4.948 |  -8.747 |   4.285
      53 |       1 |   4.948 |  -6.123 |   4.285
@@ -1297,7 +1291,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      59 |       1 |   2.474 |  -6.997 |   4.285
      60 |       1 |  13.607 |  -9.622 |   2.143
      61 |       1 |   9.896 |  -9.622 |   4.285
-     62 |       1 |  11.133 | -10.496 |   2.143
+     62 |       1 |  11.133 |  -5.248 |   2.143
      63 |       1 |  11.133 |  -7.872 |   2.143
      64 |       1 |  12.370 |  -8.747 |   4.285
      65 |       1 |  12.370 |  -6.123 |   4.285
@@ -1309,7 +1303,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      71 |       1 |   9.896 |  -6.997 |   4.285
      72 |       1 |   6.185 |  -4.373 |   2.143
      73 |       1 |   2.474 |  -4.373 |   4.285
-     74 |       1 |   3.711 |  -5.248 |   2.143
+     74 |       1 |   3.711 |   0.000 |   2.143
      75 |       1 |   3.711 |  -2.624 |   2.143
      76 |       1 |   4.948 |  -3.499 |   4.285
      77 |       1 |   4.948 |  -0.875 |   4.285
@@ -1321,7 +1315,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      83 |       1 |   2.474 |  -1.749 |   4.285
      84 |       1 |  13.607 |  -4.373 |   2.143
      85 |       1 |   9.896 |  -4.373 |   4.285
-     86 |       1 |  11.133 |  -5.248 |   2.143
+     86 |       1 |  11.133 |   0.000 |   2.143
      87 |       1 |  11.133 |  -2.624 |   2.143
      88 |       1 |  12.370 |  -3.499 |   4.285
      89 |       1 |  12.370 |  -0.875 |   4.285
@@ -1335,7 +1329,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </div>
 </section>
 <section id="5.5.-atoms_ix">
-<h3>5.5. atoms_ix<a class="headerlink" href="#5.5.-atoms_ix" title="Permalink to this heading">¶</a></h3>
+<h3>5.5. atoms_ix<a class="headerlink" href="#5.5.-atoms_ix" title="Link to this heading">¶</a></h3>
 <p><em>Added version 1.2.5</em></p>
 <p>The atoms_ix extends the indexing functionality of the Atoms class to operate at the System level. This allows for systems containing a subset of the atoms to be easily generated.</p>
 <div class="nbinput docutils container">
@@ -1356,7 +1350,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   2.474 |  -9.622 |  -0.000
-      1 |       1 |   3.711 | -10.496 |  -2.143
+      1 |       1 |   3.711 |  -5.248 |  -2.143
       2 |       1 |   0.000 | -10.496 |  -4.285
       3 |       1 |   7.422 |  -7.872 |  -0.000
 </pre></div></div>
@@ -1387,7 +1381,7 @@ pbc = [ True  True  True]
 per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   2.474 |  -9.622 |  -0.000
-      1 |       1 |   3.711 | -10.496 |  -2.143
+      1 |       1 |   3.711 |  -5.248 |  -2.143
       2 |       1 |   0.000 | -10.496 |  -4.285
       3 |       1 |   7.422 |  -7.872 |  -0.000
 </pre></div></div>
@@ -1430,7 +1424,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </div>
 </section>
 <section id="5.6.-atoms_extend()">
-<h3>5.6. atoms_extend()<a class="headerlink" href="#5.6.-atoms_extend()" title="Permalink to this heading">¶</a></h3>
+<h3>5.6. atoms_extend()<a class="headerlink" href="#5.6.-atoms_extend()" title="Link to this heading">¶</a></h3>
 <p><em>Added version 1.2.8</em></p>
 <p>The atoms_extend() method allows the extend() method of the Atoms class to operate at the System level. This allows for new Systems to be generated by copying the current System object with additional atoms.</p>
 <p>Parameters - <strong>value</strong> (<em>atomman.Atoms or int</em>) An int value will result in the atoms object being extended by that number of atoms, with all per-atom properties having default values (atype = 1, everything else = 0). For an Atoms value, the current atoms list will be extended by the correct number of atoms and all per-atom properties in value will be copied over. Any properties defined in one Atoms object and not the other will be set to default values. - <strong>scale</strong> (<em>bool, optional</em>) Flag
@@ -1506,9 +1500,9 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
 </section>
 </section>
 <section id="6.-Built-in-analysis-tools">
-<h2>6. Built-in analysis tools<a class="headerlink" href="#6.-Built-in-analysis-tools" title="Permalink to this heading">¶</a></h2>
+<h2>6. Built-in analysis tools<a class="headerlink" href="#6.-Built-in-analysis-tools" title="Link to this heading">¶</a></h2>
 <section id="6.1.-dvect()-and-dmag()">
-<h3>6.1. dvect() and dmag()<a class="headerlink" href="#6.1.-dvect()-and-dmag()" title="Permalink to this heading">¶</a></h3>
+<h3>6.1. dvect() and dmag()<a class="headerlink" href="#6.1.-dvect()-and-dmag()" title="Link to this heading">¶</a></h3>
 <p>The dvect() and dmag() methods calculate the shortest vector difference between two positions, accounting for the system’s periodic boundaries. dvect returns the vector(s), while dmag returns the magnitudes of the vectors.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -1556,27 +1550,27 @@ system.dvect(12, 7) -&gt;
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 system.dmag(34, system.atoms.pos) -&gt;
-[ 5.24811395  3.03        2.62405697  4.28506709  5.02468656  6.77528597
+[ 5.24811395  3.03        5.02468656  4.28506709  5.02468656  6.77528597
   6.6037319   2.62405697  7.42195392  2.62405697  5.24811395  5.02468656
-  3.03        6.77528597  5.02468656  6.06        5.02468656  6.77528597
+  3.03        6.77528597  6.6037319   6.06        5.02468656  6.77528597
   5.02468656  6.6037319   4.28506709  7.87217092  9.09        7.87217092
-  6.06        4.28506709  5.02468656  3.03        5.02468656  4.28506709
+  6.06        4.28506709  2.62405697  3.03        5.02468656  4.28506709
   5.02468656  5.02468656  6.77528597  2.62405697  0.          2.62405697
-  4.28506709  7.42195392  6.6037319   5.24811395  5.02468656  4.28506709
+  4.28506709  7.42195392  5.02468656  5.24811395  5.02468656  4.28506709
   2.62405697  7.87217092  3.03        7.87217092  7.42195392  6.6037319
-  6.77528597  3.03        5.02468656  6.06        5.02468656  6.77528597
+  6.77528597  3.03        6.6037319   6.06        5.02468656  6.77528597
   7.87217092  2.62405697  7.42195392  5.02468656  6.77528597  5.02468656
-  5.24811395  6.77528597  6.6037319   7.42195392  5.02468656  6.77528597
+  5.24811395  6.77528597  7.87217092  7.42195392  5.02468656  6.77528597
   6.6037319   6.6037319   4.28506709  8.96286087 10.04937311  7.87217092
-  7.42195392  4.28506709  6.6037319   5.24811395  5.02468656  4.28506709
+  7.42195392  4.28506709  5.02468656  5.24811395  5.02468656  4.28506709
   6.6037319   5.02468656  6.77528597  5.02468656  4.28506709  2.62405697
-  6.06        7.42195392  7.87217092  6.77528597  5.02468656  4.28506709
+  6.06        7.42195392  6.6037319   6.77528597  5.02468656  4.28506709
   5.02468656  7.87217092  3.03        8.96286087  8.57013419  6.6037319 ]
 </pre></div></div>
 </div>
 </section>
 <section id="6.2.-neighborlist()">
-<h3>6.2. neighborlist()<a class="headerlink" href="#6.2.-neighborlist()" title="Permalink to this heading">¶</a></h3>
+<h3>6.2. neighborlist()<a class="headerlink" href="#6.2.-neighborlist()" title="Link to this heading">¶</a></h3>
 <p>The neighborlist() method returns a <a class="reference external" href="3.2._NeighborList_class.html">NeighborList class</a> object for the system.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -1665,7 +1659,7 @@ np.linalg.norm(system.dvect(4, neighbors[4]), axis=1) -&gt;
 </div>
 </section>
 <section id="6.3.-r0()">
-<h3>6.3. r0()<a class="headerlink" href="#6.3.-r0()" title="Permalink to this heading">¶</a></h3>
+<h3>6.3. r0()<a class="headerlink" href="#6.3.-r0()" title="Link to this heading">¶</a></h3>
 <p><em>added version 1.3.2</em></p>
 <p>The r0() method identifies the shortest interatomic spacing for the system.</p>
 <p>Parameters</p>
@@ -1692,7 +1686,7 @@ np.linalg.norm(system.dvect(4, neighbors[4]), axis=1) -&gt;
 </section>
 </section>
 <section id="7.-model()-and-dump()">
-<h2>7. model() and dump()<a class="headerlink" href="#7.-model()-and-dump()" title="Permalink to this heading">¶</a></h2>
+<h2>7. model() and dump()<a class="headerlink" href="#7.-model()-and-dump()" title="Link to this heading">¶</a></h2>
 <p><em>model() added version 1.2.7</em></p>
 <p>A JSON/XML equivalent data model representation of the Systems object can be generated using the model() method.</p>
 <p>Parameters</p>
@@ -1721,7 +1715,7 @@ np.linalg.norm(system.dvect(4, neighbors[4]), axis=1) -&gt;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#34;atomic-system&#34;: {&#34;box&#34;: {&#34;avect&#34;: {&#34;value&#34;: [14.843907841266057, 0.0, 0.0]}, &#34;bvect&#34;: {&#34;value&#34;: [0.0, 10.496227893867395, 0.0]}, &#34;cvect&#34;: {&#34;value&#34;: [0.0, 0.0, 8.570134187980956]}, &#34;origin&#34;: {&#34;value&#34;: [0.0, -10.496227893867395, -4.285067093990478]}}, &#34;periodic-boundary-condition&#34;: [true, true, true], &#34;atom-type-symbol&#34;: &#34;V&#34;, &#34;atoms&#34;: {&#34;natoms&#34;: 96, &#34;property&#34;: [{&#34;name&#34;: &#34;atype&#34;, &#34;data&#34;: {&#34;value&#34;: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}}, {&#34;name&#34;: &#34;pos&#34;, &#34;data&#34;: {&#34;value&#34;: [6.184961600527525, -9.621542236045112, -2.1425335469952396, 2.473984640211009, -9.621542236045114, -8.881784197001252e-16, 3.7109769603165144, -10.496227893867395, -2.1425335469952396, 3.7109769603165144, -7.872170920400547, -2.142533546995239, 4.947969280422018, -8.746856578222829, -8.881784197001252e-16, 4.9479692804220194, -6.12279960475598, -8.881784197001252e-16, 6.184961600527524, -6.9974852625782615, -2.1425335469952396, 0.0, -10.496227893867395, -4.285067093990478, 7.421953920633027, -7.872170920400547, -8.881784197001252e-16, 1.2369923201055044, -8.746856578222829, -2.1425335469952396, 1.2369923201055035, -6.12279960475598, -2.142533546995239, 2.473984640211009, -6.997485262578262, -8.881784197001252e-16, 13.606915521160554, -9.621542236045112, -2.1425335469952396, 9.895938560844037, -9.621542236045114, -8.881784197001252e-16, 11.132930880949543, -10.496227893867395, -2.1425335469952396, 11.132930880949543, -7.872170920400547, -2.142533546995239, 12.369923201055046, -8.746856578222829, -8.881784197001252e-16, 12.369923201055048, -6.12279960475598, -8.881784197001252e-16, 13.606915521160554, -6.9974852625782615, -2.1425335469952396, 7.421953920633029, -10.496227893867395, -4.285067093990478, 14.843907841266056, -7.872170920400547, -8.881784197001252e-16, 8.658946240738532, -8.746856578222829, -2.1425335469952396, 8.658946240738532, -6.12279960475598, -2.142533546995239, 9.895938560844037, -6.997485262578262, -8.881784197001252e-16, 6.184961600527525, -4.373428289111415, -2.1425335469952396, 2.473984640211009, -4.373428289111415, -8.881784197001252e-16, 3.7109769603165144, -5.248113946933698, -2.1425335469952396, 3.7109769603165144, -2.624056973466849, -2.142533546995239, 4.947969280422018, -3.498742631289131, -8.881784197001252e-16, 4.9479692804220194, -0.8746856578222815, -8.881784197001252e-16, 6.184961600527524, -1.7493713156445647, -2.1425335469952396, 0.0, -5.248113946933698, -4.285067093990478, 7.421953920633027, -2.624056973466849, -8.881784197001252e-16, 1.2369923201055044, -3.498742631289131, -2.1425335469952396, 1.2369923201055035, -0.8746856578222815, -2.142533546995239, 2.473984640211009, -1.7493713156445647, -8.881784197001252e-16, 13.606915521160554, -4.373428289111415, -2.1425335469952396, 9.895938560844037, -4.373428289111415, -8.881784197001252e-16, 11.132930880949543, -5.248113946933698, -2.1425335469952396, 11.132930880949543, -2.624056973466849, -2.142533546995239, 12.369923201055046, -3.498742631289131, -8.881784197001252e-16, 12.369923201055048, -0.8746856578222815, -8.881784197001252e-16, 13.606915521160554, -1.7493713156445647, -2.1425335469952396, 7.421953920633029, -5.248113946933698, -4.285067093990478, 14.843907841266056, -2.624056973466849, -8.881784197001252e-16, 8.658946240738532, -3.498742631289131, -2.1425335469952396, 8.658946240738532, -0.8746856578222815, -2.142533546995239, 9.895938560844037, -1.7493713156445647, -8.881784197001252e-16, 6.184961600527525, -9.621542236045112, 2.1425335469952396, 2.473984640211009, -9.621542236045114, 4.2850670939904765, 3.7109769603165144, -10.496227893867395, 2.1425335469952396, 3.7109769603165144, -7.872170920400547, 2.1425335469952396, 4.947969280422018, -8.746856578222829, 4.2850670939904765, 4.9479692804220194, -6.12279960475598, 4.2850670939904765, 6.184961600527524, -6.9974852625782615, 2.1425335469952396, 0.0, -10.496227893867395, 0.0, 7.421953920633027, -7.872170920400547, 4.2850670939904765, 1.2369923201055044, -8.746856578222829, 2.1425335469952396, 1.2369923201055035, -6.12279960475598, 2.1425335469952396, 2.473984640211009, -6.997485262578262, 4.2850670939904765, 13.606915521160554, -9.621542236045112, 2.1425335469952396, 9.895938560844037, -9.621542236045114, 4.2850670939904765, 11.132930880949543, -10.496227893867395, 2.1425335469952396, 11.132930880949543, -7.872170920400547, 2.1425335469952396, 12.369923201055046, -8.746856578222829, 4.2850670939904765, 12.369923201055048, -6.12279960475598, 4.2850670939904765, 13.606915521160554, -6.9974852625782615, 2.1425335469952396, 7.421953920633029, -10.496227893867395, 0.0, 14.843907841266056, -7.872170920400547, 4.2850670939904765, 8.658946240738532, -8.746856578222829, 2.1425335469952396, 8.658946240738532, -6.12279960475598, 2.1425335469952396, 9.895938560844037, -6.997485262578262, 4.2850670939904765, 6.184961600527525, -4.373428289111415, 2.1425335469952396, 2.473984640211009, -4.373428289111415, 4.2850670939904765, 3.7109769603165144, -5.248113946933698, 2.1425335469952396, 3.7109769603165144, -2.624056973466849, 2.1425335469952396, 4.947969280422018, -3.498742631289131, 4.2850670939904765, 4.9479692804220194, -0.8746856578222815, 4.2850670939904765, 6.184961600527524, -1.7493713156445647, 2.1425335469952396, 0.0, -5.248113946933698, 0.0, 7.421953920633027, -2.624056973466849, 4.2850670939904765, 1.2369923201055044, -3.498742631289131, 2.1425335469952396, 1.2369923201055035, -0.8746856578222815, 2.1425335469952396, 2.473984640211009, -1.7493713156445647, 4.2850670939904765, 13.606915521160554, -4.373428289111415, 2.1425335469952396, 9.895938560844037, -4.373428289111415, 4.2850670939904765, 11.132930880949543, -5.248113946933698, 2.1425335469952396, 11.132930880949543, -2.624056973466849, 2.1425335469952396, 12.369923201055046, -3.498742631289131, 4.2850670939904765, 12.369923201055048, -0.8746856578222815, 4.2850670939904765, 13.606915521160554, -1.7493713156445647, 2.1425335469952396, 7.421953920633029, -5.248113946933698, 0.0, 14.843907841266056, -2.624056973466849, 4.2850670939904765, 8.658946240738532, -3.498742631289131, 2.1425335469952396, 8.658946240738532, -0.8746856578222815, 2.1425335469952396, 9.895938560844037, -1.7493713156445647, 4.2850670939904765], &#34;shape&#34;: [96, 3], &#34;unit&#34;: &#34;angstrom&#34;}}]}}}
+{&#34;atomic-system&#34;: {&#34;box&#34;: {&#34;avect&#34;: {&#34;value&#34;: [14.843907841266057, 0.0, 0.0]}, &#34;bvect&#34;: {&#34;value&#34;: [0.0, 10.496227893867395, 0.0]}, &#34;cvect&#34;: {&#34;value&#34;: [0.0, 0.0, 8.570134187980956]}, &#34;origin&#34;: {&#34;value&#34;: [0.0, -10.496227893867395, -4.285067093990478]}}, &#34;periodic-boundary-condition&#34;: [true, true, true], &#34;atom-type-symbol&#34;: &#34;V&#34;, &#34;atoms&#34;: {&#34;natoms&#34;: 96, &#34;property&#34;: [{&#34;name&#34;: &#34;atype&#34;, &#34;data&#34;: {&#34;value&#34;: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}}, {&#34;name&#34;: &#34;pos&#34;, &#34;data&#34;: {&#34;value&#34;: [6.184961600527525, -9.621542236045114, -2.1425335469952396, 2.4739846402110097, -9.621542236045114, -8.881784197001252e-16, 3.7109769603165144, -5.248113946933698, -2.1425335469952396, 3.7109769603165144, -7.872170920400547, -2.142533546995239, 4.9479692804220194, -8.746856578222829, -8.881784197001252e-16, 4.9479692804220194, -6.122799604755978, -8.881784197001252e-16, 6.184961600527525, -6.997485262578263, -2.1425335469952396, 0.0, -10.496227893867395, -4.285067093990478, 7.421953920633027, -7.872170920400547, -8.881784197001252e-16, 1.2369923201055044, -8.746856578222829, -2.1425335469952396, 1.2369923201055035, -6.12279960475598, -2.142533546995239, 2.473984640211009, -6.997485262578263, -8.881784197001252e-16, 13.606915521160554, -9.621542236045114, -2.1425335469952396, 9.895938560844039, -9.621542236045114, -8.881784197001252e-16, 11.132930880949543, -5.248113946933698, -2.1425335469952396, 11.132930880949543, -7.872170920400547, -2.142533546995239, 12.369923201055048, -8.746856578222829, -8.881784197001252e-16, 12.369923201055048, -6.122799604755978, -8.881784197001252e-16, 13.606915521160554, -6.997485262578263, -2.1425335469952396, 7.421953920633029, -10.496227893867395, -4.285067093990478, 14.843907841266056, -7.872170920400547, -8.881784197001252e-16, 8.658946240738532, -8.746856578222829, -2.1425335469952396, 8.658946240738532, -6.12279960475598, -2.142533546995239, 9.895938560844037, -6.997485262578263, -8.881784197001252e-16, 6.184961600527525, -4.373428289111415, -2.1425335469952396, 2.4739846402110097, -4.373428289111415, -8.881784197001252e-16, 3.7109769603165144, 0.0, -2.1425335469952396, 3.7109769603165144, -2.624056973466849, -2.142533546995239, 4.9479692804220194, -3.498742631289132, -8.881784197001252e-16, 4.9479692804220194, -0.8746856578222797, -8.881784197001252e-16, 6.184961600527525, -1.7493713156445647, -2.1425335469952396, 0.0, -5.248113946933698, -4.285067093990478, 7.421953920633027, -2.624056973466849, -8.881784197001252e-16, 1.2369923201055044, -3.498742631289131, -2.1425335469952396, 1.2369923201055035, -0.8746856578222815, -2.142533546995239, 2.473984640211009, -1.7493713156445647, -8.881784197001252e-16, 13.606915521160554, -4.373428289111415, -2.1425335469952396, 9.895938560844039, -4.373428289111415, -8.881784197001252e-16, 11.132930880949543, 0.0, -2.1425335469952396, 11.132930880949543, -2.624056973466849, -2.142533546995239, 12.369923201055048, -3.498742631289132, -8.881784197001252e-16, 12.369923201055048, -0.8746856578222797, -8.881784197001252e-16, 13.606915521160554, -1.7493713156445647, -2.1425335469952396, 7.421953920633029, -5.248113946933698, -4.285067093990478, 14.843907841266056, -2.624056973466849, -8.881784197001252e-16, 8.658946240738532, -3.498742631289131, -2.1425335469952396, 8.658946240738532, -0.8746856578222815, -2.142533546995239, 9.895938560844037, -1.7493713156445647, -8.881784197001252e-16, 6.184961600527525, -9.621542236045114, 2.1425335469952396, 2.4739846402110097, -9.621542236045114, 4.2850670939904765, 3.7109769603165144, -5.248113946933698, 2.1425335469952396, 3.7109769603165144, -7.872170920400547, 2.1425335469952396, 4.9479692804220194, -8.746856578222829, 4.2850670939904765, 4.9479692804220194, -6.122799604755978, 4.2850670939904765, 6.184961600527525, -6.997485262578263, 2.1425335469952396, 0.0, -10.496227893867395, 0.0, 7.421953920633027, -7.872170920400547, 4.2850670939904765, 1.2369923201055044, -8.746856578222829, 2.1425335469952396, 1.2369923201055035, -6.12279960475598, 2.1425335469952396, 2.473984640211009, -6.997485262578263, 4.2850670939904765, 13.606915521160554, -9.621542236045114, 2.1425335469952396, 9.895938560844039, -9.621542236045114, 4.2850670939904765, 11.132930880949543, -5.248113946933698, 2.1425335469952396, 11.132930880949543, -7.872170920400547, 2.1425335469952396, 12.369923201055048, -8.746856578222829, 4.2850670939904765, 12.369923201055048, -6.122799604755978, 4.2850670939904765, 13.606915521160554, -6.997485262578263, 2.1425335469952396, 7.421953920633029, -10.496227893867395, 0.0, 14.843907841266056, -7.872170920400547, 4.2850670939904765, 8.658946240738532, -8.746856578222829, 2.1425335469952396, 8.658946240738532, -6.12279960475598, 2.1425335469952396, 9.895938560844037, -6.997485262578263, 4.2850670939904765, 6.184961600527525, -4.373428289111415, 2.1425335469952396, 2.4739846402110097, -4.373428289111415, 4.2850670939904765, 3.7109769603165144, 0.0, 2.1425335469952396, 3.7109769603165144, -2.624056973466849, 2.1425335469952396, 4.9479692804220194, -3.498742631289132, 4.2850670939904765, 4.9479692804220194, -0.8746856578222797, 4.2850670939904765, 6.184961600527525, -1.7493713156445647, 2.1425335469952396, 0.0, -5.248113946933698, 0.0, 7.421953920633027, -2.624056973466849, 4.2850670939904765, 1.2369923201055044, -3.498742631289131, 2.1425335469952396, 1.2369923201055035, -0.8746856578222815, 2.1425335469952396, 2.473984640211009, -1.7493713156445647, 4.2850670939904765, 13.606915521160554, -4.373428289111415, 2.1425335469952396, 9.895938560844039, -4.373428289111415, 4.2850670939904765, 11.132930880949543, 0.0, 2.1425335469952396, 11.132930880949543, -2.624056973466849, 2.1425335469952396, 12.369923201055048, -3.498742631289132, 4.2850670939904765, 12.369923201055048, -0.8746856578222797, 4.2850670939904765, 13.606915521160554, -1.7493713156445647, 2.1425335469952396, 7.421953920633029, -5.248113946933698, 0.0, 14.843907841266056, -2.624056973466849, 4.2850670939904765, 8.658946240738532, -3.498742631289131, 2.1425335469952396, 8.658946240738532, -0.8746856578222815, 2.1425335469952396, 9.895938560844037, -1.7493713156445647, 4.2850670939904765], &#34;shape&#34;: [96, 3], &#34;unit&#34;: &#34;angstrom&#34;}}]}}}
 </pre></div></div>
 </div>
 <p>Any stored model information can then be reloaded in as a new System object by passing the ‘model’ parameter to the class initializer.</p>
@@ -1750,7 +1744,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      id |   atype |  pos[0] |  pos[1] |  pos[2]
       0 |       1 |   6.185 |  -9.622 |  -2.143
       1 |       1 |   2.474 |  -9.622 |  -0.000
-      2 |       1 |   3.711 | -10.496 |  -2.143
+      2 |       1 |   3.711 |  -5.248 |  -2.143
       3 |       1 |   3.711 |  -7.872 |  -2.143
       4 |       1 |   4.948 |  -8.747 |  -0.000
       5 |       1 |   4.948 |  -6.123 |  -0.000
@@ -1762,7 +1756,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      11 |       1 |   2.474 |  -6.997 |  -0.000
      12 |       1 |  13.607 |  -9.622 |  -2.143
      13 |       1 |   9.896 |  -9.622 |  -0.000
-     14 |       1 |  11.133 | -10.496 |  -2.143
+     14 |       1 |  11.133 |  -5.248 |  -2.143
      15 |       1 |  11.133 |  -7.872 |  -2.143
      16 |       1 |  12.370 |  -8.747 |  -0.000
      17 |       1 |  12.370 |  -6.123 |  -0.000
@@ -1774,7 +1768,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      23 |       1 |   9.896 |  -6.997 |  -0.000
      24 |       1 |   6.185 |  -4.373 |  -2.143
      25 |       1 |   2.474 |  -4.373 |  -0.000
-     26 |       1 |   3.711 |  -5.248 |  -2.143
+     26 |       1 |   3.711 |   0.000 |  -2.143
      27 |       1 |   3.711 |  -2.624 |  -2.143
      28 |       1 |   4.948 |  -3.499 |  -0.000
      29 |       1 |   4.948 |  -0.875 |  -0.000
@@ -1786,7 +1780,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      35 |       1 |   2.474 |  -1.749 |  -0.000
      36 |       1 |  13.607 |  -4.373 |  -2.143
      37 |       1 |   9.896 |  -4.373 |  -0.000
-     38 |       1 |  11.133 |  -5.248 |  -2.143
+     38 |       1 |  11.133 |   0.000 |  -2.143
      39 |       1 |  11.133 |  -2.624 |  -2.143
      40 |       1 |  12.370 |  -3.499 |  -0.000
      41 |       1 |  12.370 |  -0.875 |  -0.000
@@ -1798,7 +1792,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      47 |       1 |   9.896 |  -1.749 |  -0.000
      48 |       1 |   6.185 |  -9.622 |   2.143
      49 |       1 |   2.474 |  -9.622 |   4.285
-     50 |       1 |   3.711 | -10.496 |   2.143
+     50 |       1 |   3.711 |  -5.248 |   2.143
      51 |       1 |   3.711 |  -7.872 |   2.143
      52 |       1 |   4.948 |  -8.747 |   4.285
      53 |       1 |   4.948 |  -6.123 |   4.285
@@ -1810,7 +1804,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      59 |       1 |   2.474 |  -6.997 |   4.285
      60 |       1 |  13.607 |  -9.622 |   2.143
      61 |       1 |   9.896 |  -9.622 |   4.285
-     62 |       1 |  11.133 | -10.496 |   2.143
+     62 |       1 |  11.133 |  -5.248 |   2.143
      63 |       1 |  11.133 |  -7.872 |   2.143
      64 |       1 |  12.370 |  -8.747 |   4.285
      65 |       1 |  12.370 |  -6.123 |   4.285
@@ -1822,7 +1816,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      71 |       1 |   9.896 |  -6.997 |   4.285
      72 |       1 |   6.185 |  -4.373 |   2.143
      73 |       1 |   2.474 |  -4.373 |   4.285
-     74 |       1 |   3.711 |  -5.248 |   2.143
+     74 |       1 |   3.711 |   0.000 |   2.143
      75 |       1 |   3.711 |  -2.624 |   2.143
      76 |       1 |   4.948 |  -3.499 |   4.285
      77 |       1 |   4.948 |  -0.875 |   4.285
@@ -1834,7 +1828,7 @@ per-atom properties = [&#39;atype&#39;, &#39;pos&#39;]
      83 |       1 |   2.474 |  -1.749 |   4.285
      84 |       1 |  13.607 |  -4.373 |   2.143
      85 |       1 |   9.896 |  -4.373 |   4.285
-     86 |       1 |  11.133 |  -5.248 |   2.143
+     86 |       1 |  11.133 |   0.000 |   2.143
      87 |       1 |  11.133 |  -2.624 |   2.143
      88 |       1 |  12.370 |  -3.499 |   4.285
      89 |       1 |  12.370 |  -0.875 |   4.285
@@ -1872,7 +1866,7 @@ V
 direct
 4.1666666666667e-01 8.3333333333333e-02 2.5000000000000e-01
 1.6666666666667e-01 8.3333333333333e-02 5.0000000000000e-01
-2.5000000000000e-01 0.0000000000000e+00 2.5000000000000e-01
+2.5000000000000e-01 5.0000000000000e-01 2.5000000000000e-01
 2.5000000000000e-01 2.5000000000000e-01 2.5000000000000e-01
 3.3333333333333e-01 1.6666666666667e-01 5.0000000000000e-01
 3.3333333333333e-01 4.1666666666667e-01 5.0000000000000e-01
@@ -1884,7 +1878,7 @@ direct
 1.6666666666667e-01 3.3333333333333e-01 5.0000000000000e-01
 9.1666666666667e-01 8.3333333333333e-02 2.5000000000000e-01
 6.6666666666667e-01 8.3333333333333e-02 5.0000000000000e-01
-7.5000000000000e-01 0.0000000000000e+00 2.5000000000000e-01
+7.5000000000000e-01 5.0000000000000e-01 2.5000000000000e-01
 7.5000000000000e-01 2.5000000000000e-01 2.5000000000000e-01
 8.3333333333333e-01 1.6666666666667e-01 5.0000000000000e-01
 8.3333333333333e-01 4.1666666666667e-01 5.0000000000000e-01
@@ -1896,7 +1890,7 @@ direct
 6.6666666666667e-01 3.3333333333333e-01 5.0000000000000e-01
 4.1666666666667e-01 5.8333333333333e-01 2.5000000000000e-01
 1.6666666666667e-01 5.8333333333333e-01 5.0000000000000e-01
-2.5000000000000e-01 5.0000000000000e-01 2.5000000000000e-01
+2.5000000000000e-01 1.0000000000000e+00 2.5000000000000e-01
 2.5000000000000e-01 7.5000000000000e-01 2.5000000000000e-01
 3.3333333333333e-01 6.6666666666667e-01 5.0000000000000e-01
 3.3333333333333e-01 9.1666666666667e-01 5.0000000000000e-01
@@ -1908,7 +1902,7 @@ direct
 1.6666666666667e-01 8.3333333333333e-01 5.0000000000000e-01
 9.1666666666667e-01 5.8333333333333e-01 2.5000000000000e-01
 6.6666666666667e-01 5.8333333333333e-01 5.0000000000000e-01
-7.5000000000000e-01 5.0000000000000e-01 2.5000000000000e-01
+7.5000000000000e-01 1.0000000000000e+00 2.5000000000000e-01
 7.5000000000000e-01 7.5000000000000e-01 2.5000000000000e-01
 8.3333333333333e-01 6.6666666666667e-01 5.0000000000000e-01
 8.3333333333333e-01 9.1666666666667e-01 5.0000000000000e-01
@@ -1920,7 +1914,7 @@ direct
 6.6666666666667e-01 8.3333333333333e-01 5.0000000000000e-01
 4.1666666666667e-01 8.3333333333333e-02 7.5000000000000e-01
 1.6666666666667e-01 8.3333333333333e-02 1.0000000000000e+00
-2.5000000000000e-01 0.0000000000000e+00 7.5000000000000e-01
+2.5000000000000e-01 5.0000000000000e-01 7.5000000000000e-01
 2.5000000000000e-01 2.5000000000000e-01 7.5000000000000e-01
 3.3333333333333e-01 1.6666666666667e-01 1.0000000000000e+00
 3.3333333333333e-01 4.1666666666667e-01 1.0000000000000e+00
@@ -1932,7 +1926,7 @@ direct
 1.6666666666667e-01 3.3333333333333e-01 1.0000000000000e+00
 9.1666666666667e-01 8.3333333333333e-02 7.5000000000000e-01
 6.6666666666667e-01 8.3333333333333e-02 1.0000000000000e+00
-7.5000000000000e-01 0.0000000000000e+00 7.5000000000000e-01
+7.5000000000000e-01 5.0000000000000e-01 7.5000000000000e-01
 7.5000000000000e-01 2.5000000000000e-01 7.5000000000000e-01
 8.3333333333333e-01 1.6666666666667e-01 1.0000000000000e+00
 8.3333333333333e-01 4.1666666666667e-01 1.0000000000000e+00
@@ -1944,7 +1938,7 @@ direct
 6.6666666666667e-01 3.3333333333333e-01 1.0000000000000e+00
 4.1666666666667e-01 5.8333333333333e-01 7.5000000000000e-01
 1.6666666666667e-01 5.8333333333333e-01 1.0000000000000e+00
-2.5000000000000e-01 5.0000000000000e-01 7.5000000000000e-01
+2.5000000000000e-01 1.0000000000000e+00 7.5000000000000e-01
 2.5000000000000e-01 7.5000000000000e-01 7.5000000000000e-01
 3.3333333333333e-01 6.6666666666667e-01 1.0000000000000e+00
 3.3333333333333e-01 9.1666666666667e-01 1.0000000000000e+00
@@ -1956,7 +1950,7 @@ direct
 1.6666666666667e-01 8.3333333333333e-01 1.0000000000000e+00
 9.1666666666667e-01 5.8333333333333e-01 7.5000000000000e-01
 6.6666666666667e-01 5.8333333333333e-01 1.0000000000000e+00
-7.5000000000000e-01 5.0000000000000e-01 7.5000000000000e-01
+7.5000000000000e-01 1.0000000000000e+00 7.5000000000000e-01
 7.5000000000000e-01 7.5000000000000e-01 7.5000000000000e-01
 8.3333333333333e-01 6.6666666666667e-01 1.0000000000000e+00
 8.3333333333333e-01 9.1666666666667e-01 1.0000000000000e+00
@@ -2045,13 +2039,13 @@ direct
         <li class="right" >
           <a href="1.2._Atoms_class.html" title="Introduction to atomman: Atoms class"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: System class</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     </div>
   </body>
 </html>

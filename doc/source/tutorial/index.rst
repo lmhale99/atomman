@@ -25,7 +25,8 @@ Tutorials
    1.4.13. primitive cell dumping <1.4.13._primitive_cell_dumping>
    1.4.14. Conventional and primitive cell conversion dumping <1.4.14._Conventional_and_primitive_cell_conversion_dumping>
    1.4.15. pdb dumping <1.4.15._pdb_dumping>
-   1.4.16. LAMMPS NEB replica dumping<1.4.16._LAMMPS_NEB_replica_dumping>
+   1.4.16. LAMMPS NEB replica dumping-Copy1 <1.4.16._LAMMPS_NEB_replica_dumping-Copy1>
+   1.4.16. LAMMPS NEB replica dumping <1.4.16._LAMMPS_NEB_replica_dumping>
    1.5. Settings and databases <1.5._Settings_and_databases>
    2. LAMMPS functionality <2._LAMMPS_functionality>
    2.1. Potential class <2.1._Potential_class>

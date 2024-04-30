@@ -175,7 +175,7 @@ class StackingFault(FreeSurface):
         name : str or None, optional
             The name of the stacking_fault record to retrieve from the database.
             Alternatively, you can use any other query keyword arguments supported
-            by the stacking_fault record style (see **kwargs below for more info).
+            by the stacking_fault record style (see \*\*kwargs below for more info).
         ucell : atomman.System or None, optional
             The unit cell to use in generating the system.  If None (default), then
             the crystal_prototype record that matches the defect's family setting

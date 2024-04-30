@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Introduction to atomman: Differential displacement maps &#8212; atomman 1.4.11 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=eeb27264" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <script src="../_static/documentation_options.js?v=651a37ba"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="atomman package" href="../atomman.html" />
+    <link rel="prev" title="Introduction to atomman: Dislocation solution and generator" href="4.9._Dislocation_configurations_generator.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../atomman.html" title="atomman package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="4.9._Dislocation_configurations_generator.html" title="Introduction to atomman: Dislocation solution and generator"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Differential displacement maps</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="Introduction-to-atomman:-Differential-displacement-maps">
+<h1>Introduction to atomman: Differential displacement maps<a class="headerlink" href="#Introduction-to-atomman:-Differential-displacement-maps" title="Link to this heading">¶</a></h1>
+<p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
+<p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
+<section id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Link to this heading">¶</a></h2>
+<p>This Notebook provides usage details and examples for generating differential displacement (dd) maps for analyzing dislocation structures.</p>
+<p><strong>Library Imports</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Standard Python libraries</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="c1"># http://www.numpy.org/</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># https://matplotlib.org/</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="c1"># https://github.com/usnistgov/atomman</span>
+<span class="kn">import</span> <span class="nn">atomman</span> <span class="k">as</span> <span class="nn">am</span>
+<span class="kn">import</span> <span class="nn">atomman.unitconvert</span> <span class="k">as</span> <span class="nn">uc</span>
+
+<span class="c1"># Show atomman version</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+atomman version = 1.4.11
+Notebook executed on 2024-04-29
+</pre></div></div>
+</div>
+</section>
+<section id="2.-Theory">
+<h2>2. Theory<a class="headerlink" href="#2.-Theory" title="Link to this heading">¶</a></h2>
+<p>Dislocation core structures can also be characterized using differential displacement maps as first used by <a class="reference external" href="https://doi.org/10.1080/14786437008238490">Vitek, Perrin and Bowen</a>.</p>
+<p>For every pair of neighboring atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span>, a differential displacement vector, <span class="math notranslate nohighlight">\(d_{i \alpha \beta}\)</span> is computed as</p>
+<div class="math notranslate nohighlight">
+\[d_{i \alpha \beta} =  x_{i \alpha \beta} - X_{i \alpha \beta}\]</div>
+<p>where <span class="math notranslate nohighlight">\(x_{i \alpha \beta}\)</span> is the vector difference between atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in the current (defect) configuration, and <span class="math notranslate nohighlight">\(X_{i \alpha \beta}\)</span> is the vector difference between atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in the reference (perfect crystal) configuration.</p>
+<p>Plots are then constructed where atomic positions are shown as circles with arrows representing components of <span class="math notranslate nohighlight">\(d_{i \alpha \beta}\)</span>. The arrows are centered halfway between the two atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> for which that particular <span class="math notranslate nohighlight">\(d_{i \alpha \beta}\)</span> was computed. For most variations, the direction of the arrows indicate the two atoms <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> that <span class="math notranslate nohighlight">\(d_{i \alpha \beta}\)</span> was computed for. Various plotting options and variations are described
+in more detail below.</p>
+<p><em>Update version 1.3.2</em> A DifferentialDisplacement class was introduced to make it easier to generate differential displacement maps and to allow for more options with different materials systems by separating the differential displacement calculation from the plotting. The class is meant to replace the old differential_displacement function.</p>
+</section>
+<section id="3.-Generating-dd-maps-with-the-DifferentialDisplacement-class">
+<h2>3. Generating dd maps with the DifferentialDisplacement class<a class="headerlink" href="#3.-Generating-dd-maps-with-the-DifferentialDisplacement-class" title="Link to this heading">¶</a></h2>
+<p>The atomman.defect.DifferentialDisplacement class allows for the creation of differential displacement maps in two steps: 1. The dd vectors are computed for all atoms when a DifferentialDisplacement object is initialized. 2. A dd map is constructed using the calculated vectors by calling DifferentialDisplacement.plot().</p>
+<p>These operations are separated out so that the dd vectors themselves only need to be computed once per system rather than every time that plot is called. This is beneficial as depending on your system you may wish to plot different components of the dd vectors and/or modify some of the numerous plotting options to improve the appearance of the figures.</p>
+<section id="3.1.-DifferentialDisplacement-initialization/solve">
+<h3>3.1. DifferentialDisplacement initialization/solve<a class="headerlink" href="#3.1.-DifferentialDisplacement-initialization/solve" title="Link to this heading">¶</a></h3>
+<p>The differential displacement vectors are computed when a DifferentialDisplacement object is initialized.</p>
+<ul class="simple">
+<li><p><strong>system_0</strong> (<em>atomman.system</em>) The defect-free base system to use that has atom ids compatible and consistent with system_1.</p></li>
+<li><p><strong>system_1</strong> (<em>atomman.system</em>) The defect system to use.</p></li>
+<li><p><strong>neighbors</strong> (<em>atomman.NeighborList, optional</em>) The neighbor list to use when computing the dd vectors. This should be computed for system_0 if reference=0 and from system_1 if reference=1.</p></li>
+<li><p><strong>cutoff</strong> (<em>float, optional</em>) A cutoff distance for computing a neighbor list if neighbors is not directly given. If reference = 0, then system_0 will be used to generate the list. If reference = 1, then system_1 will be used to generate the list.</p></li>
+<li><p><strong>reference</strong> (<em>int, optional</em>) Indicates which of two systems (0 or 1) that the atom positions shown in the map are to be taken from. This is typically 1 as that will show how the atoms have moved due to the presence of the dislocation. A value of 0 can be useful if you wish to see the dd vectors mapped onto the ideal crystal.</p></li>
+</ul>
+<p><strong>Caution!!!</strong>: The dd vector algorithm directly compares the relative position vectors for pairs of atoms in the two systems according to the atom ids. As such, care must be taken to ensure that the atom ids remain consistent and compatible between the two systems. It should be as if system_0 is system_1 except for the lack of the dislocation(s). The easiest way to do this is to have the Dislocation class return a base system when a dislocation system is constructed as the base system generated
+will be designed to be compatible. Also, if you replicate the systems after generating them you need to avoid wrapping atoms around the periodic boundaries prior to replicating otherwise the wrapped atoms will be computed as having large dd vectors.</p>
+</section>
+<section id="3.1.1.-Computing-the-neighbor-list-and-the-dd-vectors">
+<h3>3.1.1. Computing the neighbor list and the dd vectors<a class="headerlink" href="#3.1.1.-Computing-the-neighbor-list-and-the-dd-vectors" title="Link to this heading">¶</a></h3>
+<p>Either system_0 or system_1 can be used as the reference state for identifying neighbors and plotting atomic positions.</p>
+<ul class="simple">
+<li><p>Using system_1 as the reference state will overlay the differential displacement vectors onto the relaxed atomic positions. This provides insight for the dislocation both in terms of its atomic nature and core spreading. This is the more common representation, especially for dislocations with large edge components.</p></li>
+<li><p>Using system_0 as the reference state will overlay the differential displacement vectors onto a perfect crystal. This indicates how the crystal needs to be deformed to introduce the dislocation.</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load dislocation configurations that were previously constructed using Dislocation class</span>
+<span class="n">base_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;atom_dump&#39;</span><span class="p">,</span> <span class="s1">&#39;files/fcc_Al_base.dump&#39;</span><span class="p">)</span>
+<span class="n">disl_system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;atom_dump&#39;</span><span class="p">,</span> <span class="s1">&#39;files/fcc_Al_disl.dump&#39;</span><span class="p">)</span>
+<span class="n">alat</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">4.05</span><span class="p">,</span> <span class="s1">&#39;Å&#39;</span><span class="p">)</span>
+<span class="n">burgers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">alat</span> <span class="o">/</span> <span class="mi">2</span><span class="o">**</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+
+<span class="n">base_neighbors</span> <span class="o">=</span> <span class="n">base_system</span><span class="o">.</span><span class="n">neighborlist</span><span class="p">(</span><span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">)</span>
+<span class="n">disl_neighbors</span> <span class="o">=</span> <span class="n">disl_system</span><span class="o">.</span><span class="n">neighborlist</span><span class="p">(</span><span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.9</span><span class="o">*</span><span class="n">alat</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dd</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">DifferentialDisplacement</span><span class="p">(</span><span class="n">base_system</span><span class="p">,</span> <span class="n">disl_system</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">=</span><span class="n">disl_neighbors</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># or</span>
+<span class="c1">#dd = am.defect.DifferentialDisplacement(base_system, disl_system, neighbors=base_neighbors, reference=0)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="3.1.2.-Raw-differential-displacement-data">
+<h3>3.1.2. Raw differential displacement data<a class="headerlink" href="#3.1.2.-Raw-differential-displacement-data" title="Link to this heading">¶</a></h3>
+<p>The dd vector data can be retrieved without generating a plot using the following attributes.</p>
+<ul class="simple">
+<li><p><strong>ddvectors</strong> are the computed differential displacement vectors for each pair of neighbor atoms. Note that these are the full raw values computed during the class initialization and have not been normalized with ddmax.</p></li>
+<li><p><strong>arrowcenters</strong> are the center positions for each of the differential displacement vector arrows. These points are the midpoints between the pair of neighbor atoms used to compute the differential displacement vectors.</p></li>
+<li><p><strong>arrowuvectors</strong> are the unit vectors associated with the relative position vectors for each pair of neighbor atoms used to compute the differential displacement vectors. These are used by all component options except for ‘projection’ to determine the direction of the plotted dd vectors.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">ddvectors</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">ddvectors</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(387340, 3)
+[[ 0.00030753  0.00574007  0.0056176 ]
+ [ 0.00015473  0.00286493  0.00279437]
+ [-0.0001565  -0.00285422 -0.00276553]
+ ...
+ [-0.00012418  0.00269864 -0.00278591]
+ [-0.00012418  0.00269864 -0.00278591]
+ [-0.00025094  0.00539228 -0.00554786]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">arrowcenters</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">arrowcenters</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(387340, 3)
+[[   2.4866357  -112.592277   -109.13996141]
+ [   1.24650369 -113.30966101 -109.14137303]
+ [   3.72645929 -114.74441346 -109.14415298]
+ ...
+ [   5.38094613  108.99060147 -118.48030553]
+ [   7.86105735  108.99060147 -118.48030553]
+ [   6.62093836  109.70789473 -118.48168651]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">arrowuvectors</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dd</span><span class="o">.</span><span class="n">arrowuvectors</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(387340, 3)
+[[ 1.07171033e-04  9.99998078e-01  1.95767095e-03]
+ [-8.65578157e-01  5.00772906e-01  9.75316053e-04]
+ [ 8.65579630e-01 -5.00770378e-01 -9.65254013e-04]
+ ...
+ [-8.65627722e-01  5.00687230e-01 -9.72312841e-04]
+ [ 8.65605989e-01  5.00724801e-01 -9.72385803e-04]
+ [-8.74616512e-05  9.99998127e-01 -1.93360212e-03]]
+</pre></div></div>
+</div>
+</section>
+<section id="3.2.-DifferentialDisplacement-plotting">
+<h3>3.2. DifferentialDisplacement plotting<a class="headerlink" href="#3.2.-DifferentialDisplacement-plotting" title="Link to this heading">¶</a></h3>
+<p>DifferentialDisplacement.plot() creates a differential displacement map as a matplotlib figure. There are many options to help control what is plotted as well as give you options for tweaking how the plots look.</p>
+<p>Basic parameters - <strong>component</strong> (<em>str or array-like object</em>) Indicates the component(s) of the differential displacement to plot. - Values of ‘x’, ‘y’, or ‘z’ will plot the component along that Cartesian direction. - A value of ‘projection’ will plot the differential displacement vectors as projected onto the plotting plane, thereby showing the two components perpendicular to the line direction. This is commonly used with screw dislocations to show the “edge” displacements. - If a 3D vector is
+given, then the component parallel to that direction will be used. Useful for mixed dislocations as you can plot along the Burgers vector direction. - <strong>ddmax</strong> (<em>float or None</em>) The maximum dd vector length allowed. Values will be kept between +-ddmax by wrapping values with larger absolute values around by adding/subtracting 2*ddmax. This normalization helps make it so the dd vectors are large only near the dislocation cores and not along the planes where the dislocations have slipped. - The
+typical value for full dislocations is |b|/2. - For fcc a/2&lt;110&gt; dislocations and basal hcp dislocations, |b|/4 is used as it makes the dd vectors small both in the bulk crystal and in the stacking fault region. - If ddmax is set to None, then no wrapping is done and the dd vectors will reflect all slip that occurred in transforming from system_0 to system_1. - <strong>plotxaxis</strong> (<em>str or array-like object, optional</em>) Indicates the Cartesian direction associated with the system’s atomic coordinates
+to align with the plotting x-axis. Values are either 3D unit vectors, or strings ‘x’, ‘y’, or ‘z’ for the Cartesian axes directions. plotxaxis and plotyaxis must be orthogonal. Default value is ‘x’ = [1, 0, 0]. Typically, this is selected to align with the dislocation solution’s m-axis. - <strong>plotyaxis</strong> (<em>str or array-like object, optional</em>) Indicates the Cartesian direction associated with the system’s atomic coordinates to align with the plotting y-axis. Values are either 3D unit vectors, or
+strings ‘x’, ‘y’, or ‘z’ for the Cartesian axes directions. plotxaxis and plotyaxis must be orthogonal. Default value is ‘y’ = [0, 1, 0]. Typically, this is selected to align with the dislocation solution’s n-axis. - <strong>figsize</strong> (<em>float or tuple, optional</em>) Specifies the size of the figure to create in inches. If a single value is given, it will be used for the figure’s width, and the height will be scaled based on the xlim and ylim values. Alternatively, both the width and height can be set by
+passing a tuple of two values, but the plot will not be guaranteed to be “regular” with respect to length dimensions. - <strong>matplotlib_axes</strong> (<em>matplotlib.Axes.axes, optional</em>) Provides aAn existing matplotlib axes objec to add the plot to rather than creating a new plott. Th allows for subplots to be constructed. Note that figsize will be igno as the figure would have to be created beforehand and no autom optimum scaling of the figure’s dimensions will occur.</p>
+<p>Plot range limits - <strong>xlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting x-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min and max atomic coordinates along the plotting axis. - <strong>ylim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates along the plotting y-axis to include in the fit. Values are taken in the specified length_unit. If not given, then the limits are set based on min
+and max atomic coordinates along the plotting axis. - <strong>zlim</strong> (<em>tuple, optional</em>) The minimum and maximum coordinates normal to the plotting axes (i.e. plotxaxis X plotyaxis) to include in the fit. Values are taken in the specified length_unit. The optimum zlim should encompass only a single periodic slice along this direction. If not given, then the limits are set based on min and max atomic coordinates along the axis.</p>
+<p>DD vector arrow options - <strong>arrowscale</strong> (<em>float, optional</em>) Scaling factor for the magnitude of the differential displacement arrows. Default value is 1: no scaling, vectors are in units of length. For major components, this is often set such that the max differential displacement component after wrapping (see normfactor) is scaled to the distance between the atom pairs in the plot. For minor components, this is often set to a large value simply to make the components visible. - <strong>arrowwidth</strong>
+(<em>float, optional</em>) Scaling factor to use for the width of the plotted arrows. Default value is 0.005 = 1/200.</p>
+<p>Atom circle options - <strong>atomcolor</strong> (<em>str or list, optional</em>) Matplotlib color name(s) to use to display the atoms. If str, that color will be assigned to all atypes. If list, must give a color value or None for each atype. Default value (None) will use cmap instead. Note: atomcolor and atomcmap can be used together as long as exactly one color or cmap is given for each unique atype. - <strong>atomcmap</strong> (<em>str or list, optional</em>) Matplotlib colormap name(s) to use to display the atoms. Atoms will be
+colored based on their positions and scaled using zlim. If str, that cmap will be assigned to all atypes. If list, must give a cmap value or None for each atype. Default value (None) will use ‘hsv’ cmap. Note: atomcolor and atomcmap can be used together as long as exactly one color or cmap is given for each unique atype. - <strong>use0z</strong> (<em>bool, optional</em>) This is used for atoms if atomcmap is used. If False (default), the z coordinates from the reference system will be used for zlim and atomcmap
+colors. If True, the z coordinates will be used from system0 even if system1 is the reference system. - <strong>atomsize</strong> (<em>float, optional</em>) The circle radius size to use for the plotted atom positions in units of length. Default value is 0.5.</p>
+<p>Returns</p>
+<ul class="simple">
+<li><p>(<em>matplotlib.Figure</em>) The generated figure. This is returned to allow users to further modify it after creation.</p></li>
+</ul>
+<section id="3.2.1.-Common-plotting-settings">
+<h4>3.2.1. Common plotting settings<a class="headerlink" href="#3.2.1.-Common-plotting-settings" title="Link to this heading">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create dict of common plotting parameter values for all</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;ddmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>     <span class="c1"># Use |b|/4 for a/2&lt;110&gt; fcc dislocations</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;plotxaxis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span>                         <span class="c1"># Align plotting x-axis with the Cartesian y-axis, which is aligned with dislocation m-axis</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;plotyaxis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;z&#39;</span>                         <span class="c1"># Align plotting y-axis with the Cartesian z-axis, which is aligned with dislocation n-axis</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>                            <span class="c1"># Plots will be &quot;regular&quot; if only one size value is given</span>
+
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;xlim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>                        <span class="c1"># Plotting limits for the plotting x-axis.  Large as this is along the slip plane</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;ylim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>                          <span class="c1"># Plotting limits for the plotting y-axis.  Small as this is perpendicular to the slip plane</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;zlim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">alat</span> <span class="o">*</span> <span class="mi">6</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">)</span>   <span class="c1"># Should be one periodic length of the crystal along the dislocation line direction</span>
+
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;arrowwidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">50</span>                       <span class="c1"># Made bigger to make arrows easier to see</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;arrowscale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.4</span>                        <span class="c1"># Typically chosen to make arrows of length ddmax touch the corresponding atom circles</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="3.2.2.-Plotting-the-different-component-options">
+<h4>3.2.2. Plotting the different component options<a class="headerlink" href="#3.2.2.-Plotting-the-different-component-options" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>‘x’</strong>, <strong>‘y’</strong>, and <strong>‘z’</strong> plot the components of the dd vectors along the corresponding Cartesian axes of the system.</p></li>
+<li><p>The components of the dd vectors along an arbitrary Cartesian direction can be plotted by specifying a vector for the the component option. This is useful for mixed dislocations where the Burgers vector does not align with any of the Cartesian axes.</p></li>
+<li><p><strong>‘projection’</strong> plots the projection of the dd vectors onto the plotting plane. This is primarily used by screw dislocations to view the localized edge displacements due to the dislocations.</p></li>
+</ul>
+<p><strong>Note</strong>: There is a difference in what the directions of the plotted arrows represent for the component options and the projection option. For the component options, the direction of the arrows are always aligned with the relative position vectors of the pair of atoms that each dd vector is associated with. For the projection option, the arrows are the 2D projection of the dd vectors and therefore have a 2D direction.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;x component&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;y component&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;z component&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">burgers</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Parallel to Burgers&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;projection&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;In-plane projection&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.10_Differential_Displacement_Maps_18_0.png" src="../_images/tutorial_4.10_Differential_Displacement_Maps_18_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.10_Differential_Displacement_Maps_18_1.png" src="../_images/tutorial_4.10_Differential_Displacement_Maps_18_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.10_Differential_Displacement_Maps_18_2.png" src="../_images/tutorial_4.10_Differential_Displacement_Maps_18_2.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.10_Differential_Displacement_Maps_18_3.png" src="../_images/tutorial_4.10_Differential_Displacement_Maps_18_3.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.10_Differential_Displacement_Maps_18_4.png" src="../_images/tutorial_4.10_Differential_Displacement_Maps_18_4.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="3.2.3.-Adding-plots-as-subplots">
+<h3>3.2.3. Adding plots as subplots<a class="headerlink" href="#3.2.3.-Adding-plots-as-subplots" title="Link to this heading">¶</a></h3>
+<p>Multiple dd plots can be included in the same figure object by first creating a figure and subplots and passing the specific axes in using the matplotlib_axes parameter.</p>
+<p>One caveat with this is that the figure size is controlled by the figsize parameter of the figure definition and not by the DifferentialDisplacement.plot() figsize parameter. As such, making the plots look regular with comparable x,y coordinate spacings may require testing different combinations of size values.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">6.1</span><span class="p">))</span>
+<span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;x component&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;y component&#39;</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;z component&#39;</span><span class="p">)</span>
+
+<span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">matplotlib_axes</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">matplotlib_axes</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">matplotlib_axes</span><span class="o">=</span><span class="n">ax3</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.10_Differential_Displacement_Maps_20_0.png" src="../_images/tutorial_4.10_Differential_Displacement_Maps_20_0.png" />
+</div>
+</div>
+</section>
+<section id="3.2.4.-Changing-the-atom-colors">
+<h3>3.2.4. Changing the atom colors<a class="headerlink" href="#3.2.4.-Changing-the-atom-colors" title="Link to this heading">¶</a></h3>
+<p>The default settings color the atoms based on their out-of-plane coordinates relative to the zlim values.</p>
+<p>If there are multiple atom types in your system, the atomcmap and atomcolor parameters can be lists allowing for different color schemes for each atype. The atomcmap and atomcolor styles can be mixed by using list values in which each element of the two lists has a color/map value in one list and a None value in the other. For example, atomcmap=[‘hsv’, None], atomcolor=[None, ‘black’] will make the first atom type have variable colors and the second atom type to always be black.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Redo the original for reference</span>
+<span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;x component&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Color atoms based on out-of-plane coordinates of base system</span>
+<span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">use0z</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;x component (use0z=True)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Use a different color map for the atoms</span>
+<span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">atomcmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;x component (atomcmap=&quot;bwr&quot;)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Color all atoms the same color</span>
+<span class="n">dd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">atomcolor</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;x component (atomcolor=&quot;grey&quot;)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.10_Differential_Displacement_Maps_22_0.png" src="../_images/tutorial_4.10_Differential_Displacement_Maps_22_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.10_Differential_Displacement_Maps_22_1.png" src="../_images/tutorial_4.10_Differential_Displacement_Maps_22_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.10_Differential_Displacement_Maps_22_2.png" src="../_images/tutorial_4.10_Differential_Displacement_Maps_22_2.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.10_Differential_Displacement_Maps_22_3.png" src="../_images/tutorial_4.10_Differential_Displacement_Maps_22_3.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="3.3.-Combined-DD-map-and-Nye-tensor-plots">
+<h2>3.3. Combined DD map and Nye tensor plots<a class="headerlink" href="#3.3.-Combined-DD-map-and-Nye-tensor-plots" title="Link to this heading">¶</a></h2>
+<p>The Nye tensor provides an alternate means of visualizing the local distortions due to the presence of a dislocation. Nye tensor plots in atomman using the atomman.defect.Strain class. This section outlines how to generate a combined figure which overlays dd vectors onto Nye tensor plots.</p>
+<p>The DifferentialDisplacement.plot_with_nye method generates the combined DD map and Nye tensor plots. It takes all of the same parameters as the basic plot() method with extra settings for controlling how the Nye tensor is displayed.</p>
+<p>Nye tensor parameters</p>
+<ul class="simple">
+<li><p><strong>strain</strong>: An atomman.defect.Strain object to use for computing the Nye tensor values.</p></li>
+<li><p><strong>cmap</strong>: The name of the matplotlib color map to use with the Nye tensor. The default value is ‘bwr’.</p></li>
+<li><p><strong>vlim</strong>: The minimum and maximum values to use when mapping the Nye tensor values to the color map. The default behavior is to use the range of the associated Nye tensor component.</p></li>
+<li><p><strong>xbins</strong>: The number of interpolation bins to use along the plotting x-axis direction for the Nye tensor. Note that the total bins for the plot is xbins*ybins. Default value is 200.</p></li>
+<li><p><strong>ybins</strong>: The number of interpolation bins to use along the plotting x-axis direction for the Nye tensor. Note that the total bins for the plot is xbins*ybins. Default value is 200.</p></li>
+<li><p><strong>colorbar</strong>: Boolean indicating if the plot will include a color bar scale for the Nye tensor values. Default value is True.</p></li>
+<li><p><strong>fill_value</strong>: The Nye tensor values to use in any grid bins in which interpolation is not possible. The default value of np.nan may result in errors being thrown when the plotting range exceeds the system dimensions.</p></li>
+</ul>
+<section id="3.3.1.-Use-the-Strain-class-to-compute-the-Nye-tensor-values">
+<h3>3.3.1. Use the Strain class to compute the Nye tensor values<a class="headerlink" href="#3.3.1.-Use-the-Strain-class-to-compute-the-Nye-tensor-values" title="Link to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compute Nye tensors using the Strain class and the neighbors lists</span>
+<span class="n">strain</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">defect</span><span class="o">.</span><span class="n">Strain</span><span class="p">(</span><span class="n">disl_system</span><span class="p">,</span> <span class="n">neighbors</span><span class="o">=</span><span class="n">disl_neighbors</span><span class="p">,</span> <span class="n">basesystem</span><span class="o">=</span><span class="n">base_system</span><span class="p">,</span> <span class="n">baseneighbors</span><span class="o">=</span><span class="n">base_neighbors</span><span class="p">)</span>
+<span class="n">strain</span><span class="o">.</span><span class="n">solve_nye</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="3.3.2.-Define-the-common-plotting-parameters-to-use.">
+<h3>3.3.2. Define the common plotting parameters to use.<a class="headerlink" href="#3.3.2.-Define-the-common-plotting-parameters-to-use." title="Link to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Copy all parameters from the pure dd plots above</span>
+<span class="n">params2</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+<span class="c1"># Add Nye tensor specific parameters</span>
+<span class="n">params2</span><span class="p">[</span><span class="s1">&#39;strain&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">strain</span>
+<span class="c1">#params2[&#39;zlim&#39;] = (0, bmag + 0.5)</span>
+<span class="n">params2</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;bwr&#39;</span>
+
+<span class="c1"># Set vlim based on all Nye components</span>
+<span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">strain</span><span class="o">.</span><span class="n">nye</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="n">params2</span><span class="p">[</span><span class="s1">&#39;vlim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">vmax</span><span class="p">,</span> <span class="n">vmax</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="3.3.3.-Plot">
+<h3>3.3.3. Plot<a class="headerlink" href="#3.3.3.-Plot" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dd</span><span class="o">.</span><span class="n">plot_with_nye</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;x component&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">dd</span><span class="o">.</span><span class="n">plot_with_nye</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;y component&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">dd</span><span class="o">.</span><span class="n">plot_with_nye</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;z component&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.10_Differential_Displacement_Maps_29_0.png" src="../_images/tutorial_4.10_Differential_Displacement_Maps_29_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.10_Differential_Displacement_Maps_29_1.png" src="../_images/tutorial_4.10_Differential_Displacement_Maps_29_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4.10_Differential_Displacement_Maps_29_2.png" src="../_images/tutorial_4.10_Differential_Displacement_Maps_29_2.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Introduction to atomman: Differential displacement maps</a><ul>
+<li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
+<li><a class="reference internal" href="#2.-Theory">2. Theory</a></li>
+<li><a class="reference internal" href="#3.-Generating-dd-maps-with-the-DifferentialDisplacement-class">3. Generating dd maps with the DifferentialDisplacement class</a><ul>
+<li><a class="reference internal" href="#3.1.-DifferentialDisplacement-initialization/solve">3.1. DifferentialDisplacement initialization/solve</a></li>
+<li><a class="reference internal" href="#3.1.1.-Computing-the-neighbor-list-and-the-dd-vectors">3.1.1. Computing the neighbor list and the dd vectors</a></li>
+<li><a class="reference internal" href="#3.1.2.-Raw-differential-displacement-data">3.1.2. Raw differential displacement data</a></li>
+<li><a class="reference internal" href="#3.2.-DifferentialDisplacement-plotting">3.2. DifferentialDisplacement plotting</a><ul>
+<li><a class="reference internal" href="#3.2.1.-Common-plotting-settings">3.2.1. Common plotting settings</a></li>
+<li><a class="reference internal" href="#3.2.2.-Plotting-the-different-component-options">3.2.2. Plotting the different component options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#3.2.3.-Adding-plots-as-subplots">3.2.3. Adding plots as subplots</a></li>
+<li><a class="reference internal" href="#3.2.4.-Changing-the-atom-colors">3.2.4. Changing the atom colors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#3.3.-Combined-DD-map-and-Nye-tensor-plots">3.3. Combined DD map and Nye tensor plots</a><ul>
+<li><a class="reference internal" href="#3.3.1.-Use-the-Strain-class-to-compute-the-Nye-tensor-values">3.3.1. Use the Strain class to compute the Nye tensor values</a></li>
+<li><a class="reference internal" href="#3.3.2.-Define-the-common-plotting-parameters-to-use.">3.3.2. Define the common plotting parameters to use.</a></li>
+<li><a class="reference internal" href="#3.3.3.-Plot">3.3.3. Plot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="4.9._Dislocation_configurations_generator.html"
+                          title="previous chapter">Introduction to atomman: Dislocation solution and generator</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../atomman.html"
+                          title="next chapter">atomman package</a></p>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../atomman.html" title="atomman package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="4.9._Dislocation_configurations_generator.html" title="Introduction to atomman: Dislocation solution and generator"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Differential displacement maps</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
+    </div>
+  </body>
+</html>

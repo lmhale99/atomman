@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Introduction to atomman: LAMMPS NEB replica dumping &#8212; atomman 1.4.11 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=eeb27264" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <script src="../_static/documentation_options.js?v=651a37ba"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction to atomman: Settings and Library" href="1.5._Settings_and_databases.html" />
+    <link rel="prev" title="Introduction to atomman: LAMMPS NEB replica dumping" href="1.4.16._LAMMPS_NEB_replica_dumping-Copy1.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="1.5._Settings_and_databases.html" title="Introduction to atomman: Settings and Library"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="1.4.16._LAMMPS_NEB_replica_dumping-Copy1.html" title="Introduction to atomman: LAMMPS NEB replica dumping"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: LAMMPS NEB replica dumping</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="Introduction-to-atomman:-LAMMPS-NEB-replica-dumping">
+<h1>Introduction to atomman: LAMMPS NEB replica dumping<a class="headerlink" href="#Introduction-to-atomman:-LAMMPS-NEB-replica-dumping" title="Link to this heading">¶</a></h1>
+<p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
+<p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
+<section id="1.-Introduction">
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Link to this heading">¶</a></h2>
+<p>The ‘neb_replica’ dump style is specifically used for setting up NEB calculations in LAMMPS. LAMMPS sets up NEB calculations by first defining the system for the first replica as is normally done in LAMMPS for other calculations. The initial configurations in the other replicas are then defined by providing positions for the subset of atoms in the system that are to be subjected to NEB forces during the calculation. These replica files only contain atom ids and positions for the NEB atoms.
+Depending on the LAMMPS options, either a single final replica can be defined and intermediate ones are generated based on linear displacements, or atomic positions can be defined for all replicas with a separate replica file for each.</p>
+<p><strong>Note:</strong> The generated files only contain atom ids and positions for a subset of atoms. As such, this style does not provide a complete description of a system and should only be used for setting up LAMMPS NEB calculations</p>
+<p><em>Added version 1.4.11</em></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Standard Python libraries</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="c1"># http://www.numpy.org/</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">atomman</span> <span class="k">as</span> <span class="nn">am</span>
+<span class="kn">import</span> <span class="nn">atomman.unitconvert</span> <span class="k">as</span> <span class="nn">uc</span>
+
+<span class="c1"># Show atomman version</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atomman version =&#39;</span><span class="p">,</span> <span class="n">am</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Show date of Notebook execution</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook executed on&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+atomman version = 1.4.11
+Notebook executed on 2024-04-29
+</pre></div></div>
+</div>
+<p>Generate test system information (CsCl)</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate box</span>
+<span class="n">alat</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">set_in_units</span><span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span class="n">box</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">alat</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">alat</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">alat</span><span class="p">)</span>
+
+<span class="c1"># Generate atoms with atype, pos, and a_id properties</span>
+<span class="n">atype</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">pos</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]]</span>
+<span class="n">a_id</span> <span class="o">=</span> <span class="p">[</span><span class="mi">499</span><span class="p">,</span> <span class="mi">500</span><span class="p">]</span>
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">Atoms</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">atype</span><span class="o">=</span><span class="n">atype</span><span class="p">,</span> <span class="n">a_id</span><span class="o">=</span><span class="n">a_id</span><span class="p">)</span>
+
+<span class="c1"># Build system from box and atoms, and scale atoms</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">System</span><span class="p">(</span><span class="n">atoms</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Cs&#39;</span><span class="p">,</span> <span class="s1">&#39;Cl&#39;</span><span class="p">])</span>
+
+<span class="c1"># Print system information</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+<span class="n">system</span><span class="o">.</span><span class="n">atoms_df</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+avect =  [ 3.200,  0.000,  0.000]
+bvect =  [ 0.000,  3.200,  0.000]
+cvect =  [ 0.000,  0.000,  3.200]
+origin = [ 0.000,  0.000,  0.000]
+natoms = 2
+natypes = 2
+symbols = (&#39;Cs&#39;, &#39;Cl&#39;)
+pbc = [ True  True  True]
+per-atom properties = [&#39;atype&#39;, &#39;pos&#39;, &#39;a_id&#39;]
+     id |   atype |  pos[0] |  pos[1] |  pos[2]
+      0 |       1 |   0.000 |   0.000 |   0.000
+      1 |       2 |   1.600 |   1.600 |   1.600
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>atype</th>
+      <th>pos[0]</th>
+      <th>pos[1]</th>
+      <th>pos[2]</th>
+      <th>a_id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>499</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>1.6</td>
+      <td>1.6</td>
+      <td>1.6</td>
+      <td>500</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="2.-System.dump('neb_replica')">
+<h2>2. System.dump(‘neb_replica’)<a class="headerlink" href="#2.-System.dump('neb_replica')" title="Link to this heading">¶</a></h2>
+<p>Generates a LAMMPS NEB replica file based on the System. <strong>Note</strong>: this format only captures per-atom data for each atom’s id and position. Therefore, it does not offer a lossless representation of a System object.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li><p><strong>f</strong> (<em>str or file-like object, option</em>) File path or file-like object to write the content to. If not given, then the content is returned as a str.</p></li>
+<li><p><strong>id_key</strong> (<em>str, optional</em>) The name of the atoms property of system to use for the atomic ids. If not given, then the indices of the atoms will be used which should only be done if the atoms in the given system have the same number and order as the reference system used for the initial/first replica. This atoms property should map the moved atoms to the corresponding ids of the initial/first replica.</p></li>
+<li><p><strong>id_start0</strong> (<em>bool, optional</em>) LAMMPS ids start at 1 whereas atomman uses atom indices which start at 0. If idstart0 is True (default) then this indicates that the id_key values are relative to the atomman atoms indices and should be increased by 1 when dumped. If False, then the id_key values are used as is and assumed to be relative to the LAMMPS atom ids.</p></li>
+<li><p><strong>float_format</strong> (<em>str, optional</em>) c-style formatting string for floating point values. Default value is ‘%.13f’.replica</p></li>
+</ul>
+<p>Returns</p>
+<ul class="simple">
+<li><p><strong>neb_replica_str</strong> (<em>str</em>) The configuration of the neb replica, returned if f is not given.</p></li>
+</ul>
+<p>Usage notes: The dump style will include all atoms in the System, but typically you only want a subset of atoms from the original reference system. You can achieve this by defining a new system with only the NEB-subjected atoms in it or by using atoms_ix to slice the system.</p>
+<p>The default settings for this dump style will set the atom ids to be equal to their atom index+1. This should only be used if the atoms to be subjected to NEB forces correspond to the first atoms in the original system, or the replicas contain all atoms of the original system (i.e. all atoms are to be subjected to NEB forces).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">replica</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;neb_replica&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">replica</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2
+1 0.0000000000000 0.0000000000000 0.0000000000000
+2 1.6000000000000 1.6000000000000 1.6000000000000
+
+</pre></div></div>
+</div>
+<p>For most cases, you will want to set an id_key property to associate with the atom ids. The id_start0 parameter then controls if id_key values start at 0 (like is used for the atomman atomic indices) or at 1 (like is used for the LAMMPS atom ids).</p>
+<p>With id_start0=True (default) all ids are equal to a_id+1.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="n">replica</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;neb_replica&#39;</span><span class="p">,</span> <span class="n">id_key</span><span class="o">=</span><span class="s1">&#39;a_id&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">replica</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2
+500 0.0000000000000 0.0000000000000 0.0000000000000
+501 1.6000000000000 1.6000000000000 1.6000000000000
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># With id_start0=False all ids are equal to a_id</span>
+<span class="n">replica</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;neb_replica&#39;</span><span class="p">,</span> <span class="n">id_key</span><span class="o">=</span><span class="s1">&#39;a_id&#39;</span><span class="p">,</span> <span class="n">id_start0</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">replica</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2
+499 0.0000000000000 0.0000000000000 0.0000000000000
+500 1.6000000000000 1.6000000000000 1.6000000000000
+
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Introduction to atomman: LAMMPS NEB replica dumping</a><ul>
+<li><a class="reference internal" href="#1.-Introduction">1. Introduction</a></li>
+<li><a class="reference internal" href="#2.-System.dump('neb_replica')">2. System.dump(‘neb_replica’)</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="1.4.16._LAMMPS_NEB_replica_dumping-Copy1.html"
+                          title="previous chapter">Introduction to atomman: LAMMPS NEB replica dumping</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="1.5._Settings_and_databases.html"
+                          title="next chapter">Introduction to atomman: Settings and Library</a></p>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="1.5._Settings_and_databases.html" title="Introduction to atomman: Settings and Library"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="1.4.16._LAMMPS_NEB_replica_dumping-Copy1.html" title="Introduction to atomman: LAMMPS NEB replica dumping"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Introduction to atomman: LAMMPS NEB replica dumping</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
+    </div>
+  </body>
+</html>

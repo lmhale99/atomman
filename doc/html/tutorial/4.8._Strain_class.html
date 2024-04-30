@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Introduction to atomman: Strain class &#8212; atomman 1.4.10 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/basic.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <title>Introduction to atomman: Strain class &#8212; atomman 1.4.11 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=eeb27264" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <script src="../_static/documentation_options.js?v=651a37ba"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="4.7._Semidiscrete_variational_Peierls-Nabarro_model.html" title="Introduction to atomman: Semidiscrete variational Peierls-Nabarro model"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Strain class</a></li> 
       </ul>
@@ -47,11 +47,11 @@
           <div class="body" role="main">
             
   <section id="Introduction-to-atomman:-Strain-class">
-<h1>Introduction to atomman: Strain class<a class="headerlink" href="#Introduction-to-atomman:-Strain-class" title="Permalink to this heading">¶</a></h1>
+<h1>Introduction to atomman: Strain class<a class="headerlink" href="#Introduction-to-atomman:-Strain-class" title="Link to this heading">¶</a></h1>
 <p><strong>Lucas M. Hale</strong>, <a class="reference external" href="mailto:lucas&#46;hale&#37;&#52;&#48;nist&#46;gov?Subject=ipr-demo">lucas<span>&#46;</span>hale<span>&#64;</span>nist<span>&#46;</span>gov</a>, <em>Materials Science and Engineering Division, NIST</em>.</p>
 <p><a class="reference external" href="http://www.nist.gov/public_affairs/disclaimer.cfm">Disclaimers</a></p>
 <section id="1.-Introduction">
-<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Permalink to this heading">¶</a></h2>
+<h2>1. Introduction<a class="headerlink" href="#1.-Introduction" title="Link to this heading">¶</a></h2>
 <p>This Notebook outlines the Strain class which provides a convenient interface for computing a per-atom strain estimate and related properties.</p>
 <p><em>New version 1.3.7</em>: The Strain class has been added that provides a faster, more user-friendly interface for computing the same properties as the older nye_tensor function.</p>
 <div class="nbinput docutils container">
@@ -82,27 +82,21 @@
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9ada597929fd44e7b75bc3830a9c26e1", "version_major": 2, "version_minor": 0}</script></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-atomman version = 1.4.10
-Notebook executed on 2023-07-28
+atomman version = 1.4.11
+Notebook executed on 2024-04-29
 </pre></div></div>
 </div>
 </section>
 <section id="2.-Theory">
-<h2>2. Theory<a class="headerlink" href="#2.-Theory" title="Permalink to this heading">¶</a></h2>
+<h2>2. Theory<a class="headerlink" href="#2.-Theory" title="Link to this heading">¶</a></h2>
 <p>The Strain class computes the elastic strain correspondence tensor on a per-atom basis by comparing the local environment around each atom in a current state to the corresponding local environment around the same atom in a reference state.</p>
 <section id="2.1.-Strain-correspodence-tensor">
-<h3>2.1. Strain correspodence tensor<a class="headerlink" href="#2.1.-Strain-correspodence-tensor" title="Permalink to this heading">¶</a></h3>
+<h3>2.1. Strain correspodence tensor<a class="headerlink" href="#2.1.-Strain-correspodence-tensor" title="Link to this heading">¶</a></h3>
 <p>The algorithm used here follows the one outlined in <a class="reference external" href="http://dx.doi.org/10.1016/j.actamat.2004.11.027">Hartley, C. &amp; Mishin, Y. (2005). Acta Materialia 53, 1313-1321.</a> and <a class="reference external" href="http://dx.doi.org/10.1016/j.msea.2005.03.076">Hartley, C. S. &amp; Mishin, Y. (2005). Materials Science and Engineering: A 400-401, 18-21.</a>, as well as code obtained from Yuri Mishin.</p>
 <p>The local environment around each atom <span class="math notranslate nohighlight">\(\alpha\)</span> is characterized by finding the relative position vectors between atom <span class="math notranslate nohighlight">\(\alpha\)</span> and all neighboring atoms within a set cutoff distance of atom <span class="math notranslate nohighlight">\(\alpha\)</span>. This is done separately for both the reference and current states, leading to two lists of vectors per atom:</p>
 <ul class="simple">
@@ -120,7 +114,7 @@ Notebook executed on 2023-07-28
 \[Q_{i \alpha \delta} G_{ij \alpha} = P_{j \alpha \delta}\]</div>
 </section>
 <section id="2.2.-Derived-properties">
-<h3>2.2. Derived properties<a class="headerlink" href="#2.2.-Derived-properties" title="Permalink to this heading">¶</a></h3>
+<h3>2.2. Derived properties<a class="headerlink" href="#2.2.-Derived-properties" title="Link to this heading">¶</a></h3>
 <p>Various strain properties can then be computed using <span class="math notranslate nohighlight">\(G_{ij \alpha}\)</span>:</p>
 <ul class="simple">
 <li><p>strain tensor</p></li>
@@ -148,7 +142,7 @@ Notebook executed on 2023-07-28
 \[\omega_{\alpha} = \sqrt{R_{12 \alpha}^2 + R_{13 \alpha}^2 + R_{23 \alpha}^2}\]</div>
 </section>
 <section id="2.3.-Nye-tensor">
-<h3>2.3. Nye tensor<a class="headerlink" href="#2.3.-Nye-tensor" title="Permalink to this heading">¶</a></h3>
+<h3>2.3. Nye tensor<a class="headerlink" href="#2.3.-Nye-tensor" title="Link to this heading">¶</a></h3>
 <p>The Nye tensor, <span class="math notranslate nohighlight">\(N_{ij \alpha}\)</span>, is related to <span class="math notranslate nohighlight">\(G_{i j \alpha}\)</span> as</p>
 <div class="math notranslate nohighlight">
 \[N_{km \alpha} = - \epsilon_{ijk} \partial_i G_{m j \alpha},\]</div>
@@ -160,10 +154,10 @@ Notebook executed on 2023-07-28
 </section>
 </section>
 <section id="3.-Calculation-parameter-options">
-<h2>3. Calculation parameter options<a class="headerlink" href="#3.-Calculation-parameter-options" title="Permalink to this heading">¶</a></h2>
+<h2>3. Calculation parameter options<a class="headerlink" href="#3.-Calculation-parameter-options" title="Link to this heading">¶</a></h2>
 <p>The strain predictions using this algorithm will vary depending on how some of the input parameters are set.</p>
 <section id="3.1.-Reference-state-selection">
-<h3>3.1. Reference state selection<a class="headerlink" href="#3.1.-Reference-state-selection" title="Permalink to this heading">¶</a></h3>
+<h3>3.1. Reference state selection<a class="headerlink" href="#3.1.-Reference-state-selection" title="Link to this heading">¶</a></h3>
 <p>Ideally, the choice of reference state should correspond to a perfect bulk crystal at zero pressure. This reference will result in the calculation finding the elastic component of the strain as any plastic effects are ignored due to crystal symmetry translations. However, identifying the ideal reference state may be challenging for complex systems. Some possible issues being</p>
 <ul class="simple">
 <li><p>The reference state corresponds to a specific crystal structure. If the deformation leads to a phase transformation, then the atoms in question will have different strains depending on which reference phase is used for which atom.</p></li>
@@ -178,17 +172,17 @@ current system relative to the reference system.</p></li>
 </ul>
 </section>
 <section id="3.2.-Neighbor-cutoff">
-<h3>3.2. Neighbor cutoff<a class="headerlink" href="#3.2.-Neighbor-cutoff" title="Permalink to this heading">¶</a></h3>
+<h3>3.2. Neighbor cutoff<a class="headerlink" href="#3.2.-Neighbor-cutoff" title="Link to this heading">¶</a></h3>
 <p>The cutoff distance used for identifying the p/q vectors does influence the results. If the cutoff distance is too large, then the calculated strain for a given point will be averaged over a larger region. This could result in less pronounced strain peaks near defects. If the cutoff distance is too small, then the number of p/q vectors may be too small to give a good estimate of strain. From practical experience, a good cutoff seems to be one that encompasses the fewest number of neighbor shells
 necessary to capture 8 neighbor atoms. Be sure to place the cutoff roughly halfway between neighbor shells to help keep the number of neighbor atoms close to the same for deformed configurations. These are practical suggestions and not hard rules, so it is recommended to try a few different cutoffs to see how they affect predictions.</p>
 </section>
 <section id="3.3.-Angle-cutoff">
-<h3>3.3. Angle cutoff<a class="headerlink" href="#3.3.-Angle-cutoff" title="Permalink to this heading">¶</a></h3>
+<h3>3.3. Angle cutoff<a class="headerlink" href="#3.3.-Angle-cutoff" title="Link to this heading">¶</a></h3>
 <p>The <span class="math notranslate nohighlight">\(\theta_{max}\)</span> parameter can also influence the calculated strain properties. As the p-q matching algorithm is based on angles, the <span class="math notranslate nohighlight">\(\theta_{max}\)</span> parameter helps avoid false matches by ignoring q vectors oriented far from any p vectors. The choice of <span class="math notranslate nohighlight">\(\theta_{max}\)</span> has the biggest influence on deformations and defects with large rotational components. For guidance, the original choice for fcc is 27 degrees, which is close to half of the 60 degree angle between p vectors.</p>
 </section>
 </section>
 <section id="4.-Strain-class">
-<h2>4. Strain class<a class="headerlink" href="#4.-Strain-class" title="Permalink to this heading">¶</a></h2>
+<h2>4. Strain class<a class="headerlink" href="#4.-Strain-class" title="Link to this heading">¶</a></h2>
 <p>The Strain class provides a convenient and fast means of computing the various strain properties. In design, it offers an improvement over the old nye_tensor function in that:</p>
 <ul class="simple">
 <li><p>Constructing p_vectors from a reference system is now built in (rather than calling nye_tensor_p).</p></li>
@@ -213,7 +207,7 @@ necessary to capture 8 neighbor atoms. Be sure to place the cutoff roughly halfw
 <li><p><strong>baseneighbors</strong> (<em>atomman.NeighborList, optional</em>) The neighbor list associated with basesystem to use. If basesystem is given, then either baseneighbors or cutoff must be given, or basesystem must have a neighbors attribute.</p></li>
 </ul>
 <section id="4.1.-Load-systems">
-<h3>4.1. Load systems<a class="headerlink" href="#4.1.-Load-systems" title="Permalink to this heading">¶</a></h3>
+<h3>4.1. Load systems<a class="headerlink" href="#4.1.-Load-systems" title="Link to this heading">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -227,7 +221,7 @@ necessary to capture 8 neighbor atoms. Be sure to place the cutoff roughly halfw
 </div>
 </section>
 <section id="4.2.-Initialize-strain-class">
-<h3>4.2. Initialize strain class<a class="headerlink" href="#4.2.-Initialize-strain-class" title="Permalink to this heading">¶</a></h3>
+<h3>4.2. Initialize strain class<a class="headerlink" href="#4.2.-Initialize-strain-class" title="Link to this heading">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -307,7 +301,7 @@ array([[-1.65340558,  0.        ,  2.33826859],
 </div>
 </section>
 <section id="4.3.-Class-properties">
-<h3>4.3. Class properties<a class="headerlink" href="#4.3.-Class-properties" title="Permalink to this heading">¶</a></h3>
+<h3>4.3. Class properties<a class="headerlink" href="#4.3.-Class-properties" title="Link to this heading">¶</a></h3>
 <p>All of the strain-related properties can be retrieved as class attributes. Each property is computed the first time that it is retrieved and the values are retained.</p>
 <ul class="simple">
 <li><p><strong>G</strong> is the strain correspondence tensor for each atom. As all the other properties depend on this, it will be first computed when any property is called.</p></li>
@@ -341,17 +335,17 @@ array([[-1.65340558,  0.        ,  2.33826859],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-First call for G took 1.7440094947814941 seconds
-Second call for G took 0.0 seconds
-[[[ 9.99998842e-01 -6.52065147e-08 -5.86211324e-08]
+First call for G took 0.5554335117340088 seconds
+Second call for G took 1.52587890625e-05 seconds
+[[[ 9.99998842e-01 -6.52065145e-08 -5.86211324e-08]
   [-1.08196712e-04  9.97999349e-01 -1.94600556e-03]
   [ 8.50971890e-05  2.07595184e-03  1.00097862e+00]]
 
- [[ 9.99998842e-01 -6.61154254e-08 -6.29769612e-08]
+ [[ 9.99998842e-01 -6.61154255e-08 -6.29769613e-08]
   [-1.05914368e-04  9.97987653e-01 -1.97956797e-03]
   [ 7.95194344e-05  2.03782456e-03  1.00096836e+00]]
 
- [[ 9.99998842e-01 -6.56904835e-08 -6.07762384e-08]
+ [[ 9.99998842e-01 -6.56904834e-08 -6.07762385e-08]
   [-1.07308439e-04  9.97994580e-01 -1.95945363e-03]
   [ 8.23419310e-05  2.05716840e-03  1.00097375e+00]]
 
@@ -398,30 +392,30 @@ Second call for G took 0.0 seconds
 <div class="highlight"><pre>
 properties for atom 50:
 G =
-[[ 9.99998844e-01 -6.69765095e-08 -7.91966162e-08]
+[[ 9.99998844e-01 -6.69765096e-08 -7.91966162e-08]
  [-9.31157725e-05  9.97950746e-01 -2.11905039e-03]
  [ 5.79882631e-05  1.88665063e-03  1.00091457e+00]]
 strain =
 [[ 1.15574139e-06  4.65913745e-05 -2.89545333e-05]
  [ 4.65913745e-05  2.04925444e-03  1.16199882e-04]
  [-2.89545333e-05  1.16199882e-04 -9.14566547e-04]]
-invariant1 = 0.0011358436297334018
-invariant2 = -1.8893796811590274e-06
-invariant3 = -2.2279089906289465e-12
+invariant1 = 0.001135843629734512
+invariant2 = -1.8893796811584978e-06
+invariant3 = -2.2279089908446916e-12
 rotation =
 [[ 0.00000000e+00 -4.65243980e-05  2.90337299e-05]
  [ 4.65243980e-05  0.00000000e+00  2.00285051e-03]
  [-2.90337299e-05 -2.00285051e-03  0.00000000e+00]]
-angularvelocity = 0.0020036011663635478
+angularvelocity = 0.002003601166363404
 nye =
-[[ 2.74910638e-12  3.53221809e-12 -6.31469947e-12]
- [ 6.05003352e-13  3.60962166e-12  2.03565144e-12]
- [-2.03664473e-13 -2.93082115e-12 -1.46702416e-12]]
+[[ 2.74909833e-12  3.53220365e-12 -6.31473093e-12]
+ [ 6.05171533e-13  3.60954111e-12  2.03581255e-12]
+ [-2.03635294e-13 -2.93086739e-12 -1.46697690e-12]]
 </pre></div></div>
 </div>
 </section>
 <section id="4.4.-Save-to-system">
-<h3>4.4. Save to system<a class="headerlink" href="#4.4.-Save-to-system" title="Permalink to this heading">¶</a></h3>
+<h3>4.4. Save to system<a class="headerlink" href="#4.4.-Save-to-system" title="Link to this heading">¶</a></h3>
 <p>The save_to_system() method will calculate the properties, if needed, and save the values as per-atom properties of the current system.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -446,7 +440,7 @@ nye =
 </div>
 </section>
 <section id="4.5.-asdict">
-<h3>4.5. asdict<a class="headerlink" href="#4.5.-asdict" title="Permalink to this heading">¶</a></h3>
+<h3>4.5. asdict<a class="headerlink" href="#4.5.-asdict" title="Link to this heading">¶</a></h3>
 <p>The asdict() method will return the computed properties in the form of a dictionary. This directly corresponds to the results of calling the old nye_tensor() function except that the property names have changed slightly.</p>
 <p>Parameters</p>
 <ul class="simple">
@@ -472,7 +466,7 @@ dict_keys([&#39;strain&#39;, &#39;invariant1&#39;, &#39;invariant2&#39;, &#39;in
 </section>
 </section>
 <section id="5.-Plotting">
-<h2>5. Plotting<a class="headerlink" href="#5.-Plotting" title="Permalink to this heading">¶</a></h2>
+<h2>5. Plotting<a class="headerlink" href="#5.-Plotting" title="Link to this heading">¶</a></h2>
 <p>All of the properties computed with the Strain class are done so on a per-atom basis, but they represent discrete measurements of continuum properties. The atomman.plot.interpolate_contour() function interpolates the measured discrete per-atom values into a continuum contour plot estimate. This provides a mapping of the per-atom properties as pseudo-continuum properties.</p>
 <p>Basic parameters</p>
 <ul class="simple">
@@ -511,7 +505,7 @@ dict_keys([&#39;strain&#39;, &#39;invariant1&#39;, &#39;invariant2&#39;, &#39;in
 <li><p><strong>avsum</strong> (<em>float</em>) The average property value taken across all plotting bins.</p></li>
 </ul>
 <section id="5.1.-Plot-settings">
-<h3>5.1. Plot settings<a class="headerlink" href="#5.1.-Plot-settings" title="Permalink to this heading">¶</a></h3>
+<h3>5.1. Plot settings<a class="headerlink" href="#5.1.-Plot-settings" title="Link to this heading">¶</a></h3>
 <p>The plotting function has a large number of parameters that can alter and affect the final plot. Here, a number of the common values are pulled out and defined separately for clarity.</p>
 <p>Notes:</p>
 <ul class="simple">
@@ -533,7 +527,7 @@ dict_keys([&#39;strain&#39;, &#39;invariant1&#39;, &#39;invariant2&#39;, &#39;in
 </div>
 </section>
 <section id="5.2.-Examples">
-<h3>5.2. Examples<a class="headerlink" href="#5.2.-Examples" title="Permalink to this heading">¶</a></h3>
+<h3>5.2. Examples<a class="headerlink" href="#5.2.-Examples" title="Link to this heading">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
@@ -569,7 +563,7 @@ dict_keys([&#39;strain&#39;, &#39;invariant1&#39;, &#39;invariant2&#39;, &#39;in
 </div>
 </section>
 <section id="5.3.-Nye-tensor-plots">
-<h3>5.3. Nye tensor plots<a class="headerlink" href="#5.3.-Nye-tensor-plots" title="Permalink to this heading">¶</a></h3>
+<h3>5.3. Nye tensor plots<a class="headerlink" href="#5.3.-Nye-tensor-plots" title="Link to this heading">¶</a></h3>
 <p>The Nye tensor provides information about the dislocation content within a system. For a single straight dislocation, the first component of the Nye tensor should correspond to the dislocation’s line direction. The second component then determines if the plots are for the screw component, the edge component, or the slip-plane normal component.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
@@ -701,13 +695,13 @@ estimated Burgers vector: [-0.0041,  2.9144,  0.0015]
         <li class="right" >
           <a href="4.7._Semidiscrete_variational_Peierls-Nabarro_model.html" title="Introduction to atomman: Semidiscrete variational Peierls-Nabarro model"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">atomman 1.4.11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Tutorials</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Introduction to atomman: Strain class</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     </div>
   </body>
 </html>
