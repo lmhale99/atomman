@@ -147,13 +147,13 @@ def second_inplane_uvw(box: Box,
     is_in_plane = np.isclose(np.einsum('...i,...i', planenormal, carts), 0.0)
     uvws = uvws[is_in_plane]
     carts = carts[is_in_plane]
-    
+
     # Find all second vectors that give the smallest cell area
     cell_areas = np.linalg.norm(np.cross(cart1, carts), axis=1)
     is_min_area = np.isclose(cell_areas, cell_areas[~np.isclose(cell_areas, 0.0)].min())
     uvws = uvws[is_min_area]
     carts = carts[is_min_area]
-    mags = mags[is_min_area]
+    #mags = mags[is_min_area]
     
     # Find angles between the in-plane vectors
     angles = vect_angle(cart1, carts)
