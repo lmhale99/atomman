@@ -99,12 +99,12 @@ def nlist(system, double cutoff, Py_ssize_t initialsize=20, Py_ssize_t deltasize
     cdef double[:] dmag2
     
     # Define neighbors list and assignment terms
-    cdef Py_ssize_t uj, vj,
+    cdef Py_ssize_t uj, vj
     cdef long long[:, :] neighbors = np.empty((natoms, maxneighbors+1), dtype=np.int64)
     for i in range(natoms):
         neighbors[i, 0] = 0
     cdef long long[:, :] newneighbors
-    cdef bint new
+    cdef bint isnew
 
     # Determine orthogonal superbox that fully encompasses the system
     for j in range(3):
@@ -277,7 +277,7 @@ def nlist(system, double cutoff, Py_ssize_t initialsize=20, Py_ssize_t deltasize
                     vindex = longlist[v]
             
                     if uindex != vindex:
-                        new = True
+                        isnew = True
                         uj = -1
                         vj = -1
                         
@@ -285,7 +285,7 @@ def nlist(system, double cutoff, Py_ssize_t initialsize=20, Py_ssize_t deltasize
                         for j in range(1, neighbors[uindex, 0] + 1):
                             # Check uindex's neighbors for vindex
                             if neighbors[uindex, j] == vindex:
-                                new = False
+                                isnew = False
                                 break
                             elif neighbors[uindex, j] > vindex:
                                 uj = j
@@ -293,7 +293,7 @@ def nlist(system, double cutoff, Py_ssize_t initialsize=20, Py_ssize_t deltasize
                         if uj == -1:
                             uj = neighbors[uindex, 0] + 1
 
-                        if new:
+                        if isnew:
                             # Find vj position to insert uindex
                             for j in range(1, neighbors[vindex, 0] + 1):
                                 if neighbors[vindex, j] > uindex:
