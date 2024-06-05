@@ -145,7 +145,7 @@ def run(lammps_command: str,
     
     # Convert LAMMPS error to a Python error if failed
     except subprocess.CalledProcessError as e:
-        raise LammpsError(e.output)
+        raise LammpsError(e.output.strip())
     
     # Initialize Log object
     log = Log()
