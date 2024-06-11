@@ -10,7 +10,7 @@ from DataModelDict import DataModelDict as DM
 
 # https://github.com/usnistgov/yabadaba
 from yabadaba.record import Record
-from yabadaba import load_query
+from yabadaba import load_query, load_value
 
 # http://www.numpy.org/
 import numpy as np
@@ -41,6 +41,8 @@ class Dislocation(Record):
         """
         super().__init__(model=model, name=name, database=database)
 
+    ########################## Basic metadata fields ##########################
+
     @property
     def style(self) -> str:
         """str: The record style"""
@@ -61,107 +63,143 @@ class Dislocation(Record):
         """str: The root element of the content"""
         return 'dislocation'
 
+    ####################### Define Values and attributes #######################
+
+    def _init_value_objects(self) -> list:
+        """
+        Method that defines the value objects for the Record.  This should
+        1. Call the method's super() to get default Value objects.
+        2. Use yabadaba.load_value() to build Value objects that are set to
+           private attributes of self.
+        3. Append the list returned by the super() with the new Value objects.
+
+        Returns
+        -------
+        value_objects: A list of all value objects.
+        """
+        value_objects = super()._init_value_objects()
+        
+        self.__key = load_value('str', 'key', self, valuerequired=True)
+        value_objects.append(self.__key)
+
+        self.__id = load_value('str', 'id', self, valuerequired=True)
+        value_objects.append(self.__id)
+
+        self.__url = load_value('str', 'url', self, modelpath='URL')
+        value_objects.append(self.__url)
+
+        self.__character = load_value('str', 'character', self, valuerequired=True)
+        value_objects.append(self.__character)
+
+        self.__burgers_vector = load_value('str', 'burgers_vector', self, valuerequired=True)
+        value_objects.append(self.__burgers_vector)
+
+        self.__slip_plane = load_value('intarray', 'slip_plane', self, valuerequired=True)
+        value_objects.append(self.__slip_plane)
+
+        self.__line_direction = load_value('intarray', 'line_direction', self, valuerequired=True)
+        value_objects.append(self.__line_direction)
+
+        self.__family = load_value('str', 'family', self, valuerequired=True)
+        value_objects.append(self.__family)
+
+        meta['slip_hkl'] = self.parameters['slip_hkl']
+        meta['ξ_uvw'] = self.parameters['ξ_uvw']
+        meta['burgers'] = self.parameters['burgers']
+        meta['m'] = self.parameters['m']
+        meta['n'] = self.parameters['n']
+        if 'shift' in self.parameters:
+            meta['shift'] = self.parameters['shift']
+        if 'shiftscale' in self.parameters:
+            meta['shiftscale'] = self.parameters['shiftscale']
+        if 'shiftindex' in self.parameters:
+            meta['shiftindex'] = self.parameters['shiftindex']
+
+
+        return value_objects
+
     @property
     def key(self) -> str:
         """str : A UUID4 key assigned to the record"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__key
+        return self.__key.value
 
     @key.setter
-    def key(self, value: str):
-        self.__key = str(value)
+    def key(self, val: str):
+        self.__key.value = val
 
     @property
     def id(self) -> str:
         """str : A unique id assigned to the record"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__id
+        return self.__id.value
 
     @id.setter
-    def id(self, value: str):
-        self.__id = str(value)
+    def id(self, val: str):
+        self.__id.value = val
 
     @property
     def url(self) -> Optional[str]:
         """str : A URL where a copy of the record can be found"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__url
+        return self.__url.value
 
     @url.setter
-    def url(self, value: Optional[str]):
-        if value is None:
-            self.__url = None
-        else:
-            self.__url = str(value)
+    def url(self, val: Optional[str]):
+        self.__url.value = val
 
     @property
     def character(self) -> str:
         """str : The dislocation's character"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__character
+        return self.__character.value
 
     @character.setter
-    def character(self, value: str):
-        self.__character = str(value)
+    def character(self, val: str):
+        self.__character.value = val
 
     @property
     def burgers_vector(self) -> str:
         """str : String representation of the dislocation's Burgers vector"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__burgers_vector
+        return self.__burgers_vector.value
 
     @burgers_vector.setter
-    def burgers_vector(self, value: str):
-        self.__burgers_vector = str(value)
+    def burgers_vector(self, val: str):
+        self.__burgers_vector.value = val
 
     @property
     def slip_plane(self) -> np.ndarray:
         """numpy.NDArray : The dislocation's slip plane"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return deepcopy(self.__slip_plane)
+        return deepcopy(self.__slip_plane.value)
 
     @slip_plane.setter
-    def slip_plane(self, value: npt.ArrayLike):
+    def slip_plane(self, val: npt.ArrayLike):
         value = np.asarray(value, dtype=int)
         assert value.shape == (3,) or value.shape == (4,)
-        self.__slip_plane = value
+        self.__slip_plane.value = val
 
     @property
     def line_direction(self) -> np.ndarray:
         """numpy.NDArray : The dislocation's slip plane"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return deepcopy(self.__line_direction)
+        return deepcopy(self.__line_direction.value)
 
     @line_direction.setter
-    def line_direction(self, value: npt.ArrayLike):
+    def line_direction(self, val: npt.ArrayLike):
         value = np.asarray(value, dtype=int)
         assert value.shape == (3,) or value.shape == (4,)
-        self.__line_direction = value
+        self.__line_direction.value = val
 
     @property
     def family(self) -> str:
         """str : The prototype/reference id the defect is defined for"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__family
+        return self.__family.value
 
     @family.setter
-    def family(self, value: str):
-        self.__family = str(value)
+    def family(self, val: str):
+        self.__family.value = val
 
     @property
     def parameters(self) -> dict:
         """dict : Defect parameters for atomman structure generator"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__parameters
+        return {
+
+        }
 
     def load_model(self,
                    model: Union[str, io.IOBase, DM],
