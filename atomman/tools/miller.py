@@ -8,7 +8,8 @@ __all__ = ['plane3to4', 'plane4to3', 'vector3to4', 'vector4to3',
            'plane_crystal_to_cartesian',
            'vector_crystal_to_cartesian',
            'vector_primitive_to_conventional', 
-           'vector_conventional_to_primitive', 'fromstring', 
+           'vector_conventional_to_primitive',
+           'fromstring', 'tostring',
            'all_indices', 'reduce_indices']
 
 def plane3to4(indices: npt.ArrayLike) -> np.ndarray:
@@ -516,6 +517,93 @@ def fromstring(value):
 
     # Apply the fraction and return
     return fraction * array
+
+def tostring(array, bracket='[]'):
+    """
+    Converts a 3-index Miller or 4-index Miller-Bravais vector/plane into a
+    representative string.  This is the inverse of the fromstring operation.
+    
+    The values in the allowed vectors are limited to what is generally allowed
+    for full lattice vectors/planes:
+    - For planes, all values must be integers
+    - For 3-index vectors, all values must be multiples of 1/2
+    - For 4-index vectors, all values must be multiples of 1/3
+
+    Note that this is a simple conversion of the numbers and does not actively
+    check that the fractional vectors correspond to actual lattice vectors.
+    Such checks would require using the other tools in the Miller module that
+    convert between different representations of the vectors.
+
+    Parameters
+    ----------
+    array : array-like object
+        The 3-index Miller or 4-index Miller-Bravais vector/plane given as an
+        array or list.
+    bracket : str, optional
+        The bracket style to use for surrounding the indices in the string.
+        '[]' and '<>' indicate vectors, and '()' and '{}' indicate planes.
+
+    Returns
+    -------
+    str
+        The string representation of the vector/plane given as an optional
+        fraction followed by bracketed space-delimited integers.
+    """
+
+    # Check dimensions
+    array = np.asarray(array)
+    if array.shape != (3,) and array.shape != (4,):
+        raise ValueError('array must be 1D with 3 or 4 terms, i.e. a shape of (3,) or (4,)')
+
+    # Handle brackets
+    if bracket in ['[]', '<>']:
+        vector = True
+    elif bracket in ['()', '{}']:
+        vector = False
+    else:
+        raise ValueError("Invalid bracket style: allowed styles are '[]', '<>', '()', and '{}'")
+
+    # Convert float to int values
+    if np.issubdtype(array.dtype, float):
+        
+        # Check if all values are ints (works for vectors and planes)
+        intarray = np.asarray(np.around(array), dtype=int)
+        if np.allclose(array, intarray):
+            array = intarray
+            frac = ''
+
+        # Throw error for non-integer plane indices
+        elif vector is False:
+            raise ValueError('plane indices must be integers')
+
+        # Check if 3-index vector values are multiples of 1/2
+        elif array.shape == (3,):
+            int2array = np.asarray(np.around(2 * array), dtype=int)
+            if np.allclose(2 * array, int2array):
+                array = int2array
+                frac = '1/2 '
+            else:
+                raise ValueError('3-index vector values must be multiples of 1/2')
+
+        # Check if 4-index vector values are multiples of 1/3
+        else:
+            int3array = np.asarray(np.around(3 * array), dtype=int)
+            if np.allclose(3 * array, int3array):
+                array = int3array
+                frac = '1/3 '
+            else:
+                raise ValueError('4-index vector values must be multiples of 1/3')
+
+    # Check that any non-float values are (converted to) ints
+    else:
+        array = np.asarray(array, int)
+        frac = ''
+
+    # Generate the string
+    if array.shape == (3,):
+        return f'{frac}{bracket[0]}{array[0]} {array[1]} {array[2]}{bracket[1]}'
+    else:
+        return f'{frac}{bracket[0]}{array[0]} {array[1]} {array[2]} {array[3]}{bracket[1]}'
 
 def all_indices(maxindex: int = 10,
                 reduce: bool = False) -> np.ndarray:
