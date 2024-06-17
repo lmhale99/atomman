@@ -100,7 +100,7 @@ def load(table: Union[str, io.IOBase],
     
     # Read in table to dataframe
     with uber_open_rmode(table) as f:
-        df = pd.read_csv(f, delim_whitespace=True, names=table_name, skiprows=skiprows,
+        df = pd.read_csv(f, sep="\s+", names=table_name, skiprows=skiprows,
                          nrows=nrows, comment=comment, header=header, usecols=usecols)
     if 'id' in df:
         df = df.sort_values('id')

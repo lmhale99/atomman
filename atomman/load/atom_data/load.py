@@ -301,7 +301,7 @@ def read_atoms(data, system, atom_style, units, atomsstart, atomscolumns):
             
             # Read image flags
             with uber_open_rmode(data) as f:
-                imageflags = pd.read_csv(f, delim_whitespace=True, names=['bx', 'by', 'bz'],
+                imageflags = pd.read_csv(f, sep="\s+", names=['bx', 'by', 'bz'],
                                         skiprows=atomsstart, nrows=system.natoms, comment='#',
                                         header=None, usecols=range(ncols, atomscolumns),
                                         dtype='int64')
