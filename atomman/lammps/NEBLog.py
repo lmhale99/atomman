@@ -102,8 +102,8 @@ class NEBLog(object):
                     nrows = i - 4
 
         # Second pass
-        self.__minrun = pd.read_csv(neblog, names=column_names, skiprows=3, nrows=nrows, delim_whitespace=True, skip_blank_lines=True)
-        self.__climbrun = pd.read_csv(neblog, names=column_names, skiprows=climb_start, delim_whitespace=True, skip_blank_lines=True)
+        self.__minrun = pd.read_csv(neblog, names=column_names, skiprows=3, nrows=nrows, sep="\s+", skip_blank_lines=True)
+        self.__climbrun = pd.read_csv(neblog, names=column_names, skiprows=climb_start, sep="\s+", skip_blank_lines=True)
         
         self.__logs = []
         for i in range(self.nreplicas):
