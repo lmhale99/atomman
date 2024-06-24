@@ -80,41 +80,38 @@ class Dislocation(Record):
         value_objects = super()._init_value_objects()
         
         self.__key = load_value('str', 'key', self, valuerequired=True)
-        value_objects.append(self.__key)
-
         self.__id = load_value('str', 'id', self, valuerequired=True)
-        value_objects.append(self.__id)
-
         self.__url = load_value('str', 'url', self, modelpath='URL')
-        value_objects.append(self.__url)
+        self.__family = load_value('str', 'family', self, valuerequired=True,
+                                   modelpath='system-family')
+        self.__family_url = load_value('str', 'family_url', self,
+                                   modelpath='system-family-URL')
+        self.__character = load_value('str', 'character', self, valuerequired=True,
+                                      allowedvalues=['screw', 'edge', 'mixed'])
+        self.__slip_hkl = load_value('miller', 'slip_hkl', self, valuerequired=True,
+                                     modelpath='calculation-parameter.slip_hkl',
+                                     bracket='()')
+        self.__line_uvw = load_value('miller', 'line_uvw', self, valuerequired=True,
+                                     modelpath='calculation-parameter.line_uvw',
+                                     bracket='[]')
+        self.__burgers_uvw = load_value('miller', 'burgers_uvw', self, valuerequired=True,
+                                        modelpath='calculation-parameter.burgers_uvw',
+                                        bracket='[]')
+        self.__m = load_value('unitvector', 'm', self,
+                                  modelpath='calculation-parameter.m')
+        self.__n = load_value('unitvector', 'n', self,
+                                  modelpath='calculation-parameter.n')
+        self.__shift = load_value('vector', 'shift', self,
+                                  modelpath='calculation-parameter.shift')
+        self.__shiftscale = load_value('bool', 'shiftscale', self,
+                                       modelpath='calculation-parameter.shiftscale')
+        self.__shiftindex = load_value('int', 'shiftindex', self,
+                                       modelpath='calculation-parameter.shiftindex')
 
-        self.__character = load_value('str', 'character', self, valuerequired=True)
-        value_objects.append(self.__character)
-
-        self.__burgers_vector = load_value('str', 'burgers_vector', self, valuerequired=True)
-        value_objects.append(self.__burgers_vector)
-
-        self.__slip_plane = load_value('intarray', 'slip_plane', self, valuerequired=True)
-        value_objects.append(self.__slip_plane)
-
-        self.__line_direction = load_value('intarray', 'line_direction', self, valuerequired=True)
-        value_objects.append(self.__line_direction)
-
-        self.__family = load_value('str', 'family', self, valuerequired=True)
-        value_objects.append(self.__family)
-
-        meta['slip_hkl'] = self.parameters['slip_hkl']
-        meta['ξ_uvw'] = self.parameters['ξ_uvw']
-        meta['burgers'] = self.parameters['burgers']
-        meta['m'] = self.parameters['m']
-        meta['n'] = self.parameters['n']
-        if 'shift' in self.parameters:
-            meta['shift'] = self.parameters['shift']
-        if 'shiftscale' in self.parameters:
-            meta['shiftscale'] = self.parameters['shiftscale']
-        if 'shiftindex' in self.parameters:
-            meta['shiftindex'] = self.parameters['shiftindex']
-
+        value_objects.extend([
+            self.__key, self.__id, self.__url, self.__family, self.__family_url, self.__character,
+            self.__slip_hkl, self.__line_uvw, self.__burgers_uvw, self.__m, self.__n, 
+            self.__shift, self.__shiftscale, self.__shiftindex])
 
         return value_objects
 
@@ -146,46 +143,6 @@ class Dislocation(Record):
         self.__url.value = val
 
     @property
-    def character(self) -> str:
-        """str : The dislocation's character"""
-        return self.__character.value
-
-    @character.setter
-    def character(self, val: str):
-        self.__character.value = val
-
-    @property
-    def burgers_vector(self) -> str:
-        """str : String representation of the dislocation's Burgers vector"""
-        return self.__burgers_vector.value
-
-    @burgers_vector.setter
-    def burgers_vector(self, val: str):
-        self.__burgers_vector.value = val
-
-    @property
-    def slip_plane(self) -> np.ndarray:
-        """numpy.NDArray : The dislocation's slip plane"""
-        return deepcopy(self.__slip_plane.value)
-
-    @slip_plane.setter
-    def slip_plane(self, val: npt.ArrayLike):
-        value = np.asarray(value, dtype=int)
-        assert value.shape == (3,) or value.shape == (4,)
-        self.__slip_plane.value = val
-
-    @property
-    def line_direction(self) -> np.ndarray:
-        """numpy.NDArray : The dislocation's slip plane"""
-        return deepcopy(self.__line_direction.value)
-
-    @line_direction.setter
-    def line_direction(self, val: npt.ArrayLike):
-        value = np.asarray(value, dtype=int)
-        assert value.shape == (3,) or value.shape == (4,)
-        self.__line_direction.value = val
-
-    @property
     def family(self) -> str:
         """str : The prototype/reference id the defect is defined for"""
         return self.__family.value
@@ -195,117 +152,124 @@ class Dislocation(Record):
         self.__family.value = val
 
     @property
-    def parameters(self) -> dict:
-        """dict : Defect parameters for atomman structure generator"""
-        return {
+    def family_url(self) -> Optional[str]:
+        """str : A URL where a copy of the family record can be found"""
+        return self.__family_url.value
 
-        }
-
-    def load_model(self,
-                   model: Union[str, io.IOBase, DM],
-                   name: Optional[str] = None):
-        """
-        Loads record contents from a given model.
-
-        Parameters
-        ----------
-        model : str or DataModelDict
-            The model contents of the record to load.
-        name : str, optional
-            The name to assign to the record.  Often inferred from other
-            attributes if not given.
-        """
-        super().load_model(model, name=name)
-        content = self.model[self.modelroot]
-
-        self.key = content['key']
-        self.id = content['id']
-        self.url = content.get('URL', None)
-        self.character = content['character']
-        self.burgers_vector = content['Burgers-vector']
-        self.slip_plane = np.asarray(content['slip-plane'], dtype=int)
-        self.line_direction = np.asarray(content['line-direction'], dtype=int)
-        self.family = content['system-family']
-        self.__parameters = dict(content['calculation-parameter'])
-
-    def build_model(self) -> DM:
-        """
-        Returns the object info as data model content
-        
-        Returns
-        ----------
-        DataModelDict
-            The data model content.
-        """
-        model = DM()
-        model[self.modelroot] = content = DM()
-
-        content['key'] = self.key
-        content['id'] = self.id
-        if self.url is not None:
-            content['URL'] = self.url
-        content['character'] = self.character
-        content['Burgers-vector'] = self.burgers_vector
-        content['slip-plane'] = self.slip_plane.tolist()
-        content['line-direction'] = self.line_direction.tolist()
-        content['system-family'] = self.family
-        content['calculation-parameter'] = DM(self.parameters)
-
-        self._set_model(model)
-        return model
-
-    def metadata(self) -> dict:
-        """
-        Generates a dict of simple metadata values associated with the record.
-        Useful for quickly comparing records and for building pandas.DataFrames
-        for multiple records of the same style.
-        """
-        meta = {}
-        meta['name'] = self.name
-        meta['key'] = self.key
-        meta['id'] = self.id
-        meta['url'] = self.url
-        meta['character'] = self.character
-        meta['burgers_vector'] = self.burgers_vector
-        meta['slip_plane'] = self.slip_plane
-        meta['line_direction'] = self.line_direction
-        meta['family'] = self.family
-        meta['slip_hkl'] = self.parameters['slip_hkl']
-        meta['ξ_uvw'] = self.parameters['ξ_uvw']
-        meta['burgers'] = self.parameters['burgers']
-        meta['m'] = self.parameters['m']
-        meta['n'] = self.parameters['n']
-        if 'shift' in self.parameters:
-            meta['shift'] = self.parameters['shift']
-        if 'shiftscale' in self.parameters:
-            meta['shiftscale'] = self.parameters['shiftscale']
-        if 'shiftindex' in self.parameters:
-            meta['shiftindex'] = self.parameters['shiftindex']
-
-        return meta
+    @family_url.setter
+    def family_url(self, val: Optional[str]):
+        self.__family_url.value = val
 
     @property
-    def queries(self) -> dict:
-        """dict: Query objects and their associated parameter names."""
-        return {
-            'key': load_query(
-                style='str_match',
-                name='key',
-                path=f'{self.modelroot}.key',
-                description="search by dislocation parameter set's UUID key"),
-            'id': load_query(
-                style='str_match',
-                name='id',
-                path=f'{self.modelroot}.id',
-                description="search by dislocation parameter set's id"),
-            'character': load_query(
-                style='str_match',
-                name='character',
-                path=f'{self.modelroot}.character',
-                description="search by dislocation parameter set's dislocation character"),
-            'family': load_query(
-                style='str_match',
-                name='family',
-                path=f'{self.modelroot}.system-family',
-                description="search by the crystal prototype that the dislocation parameter set is for"),
-        }
+    def character(self) -> str:
+        """str : The dislocation's character"""
+        return self.__character.value
+
+    @character.setter
+    def character(self, val: str):
+        self.__character.value = val
+
+    @property
+    def slip_hkl(self) -> np.ndarray:
+        """numpy.ndarray : The dislocation's slip plane"""
+        return self.__slip_hkl.value
+
+    @slip_hkl.setter
+    def slip_hkl(self, val: Union[str, npt.ArrayLike]):
+        self.__slip_hkl.value = val
+    
+    @property
+    def slip_hkl_str(self) -> str:
+        """str: The string representation of slip_hkl"""
+        return self.__slip_hkl.str
+    
+    @property
+    def line_uvw(self) -> np.ndarray:
+        """numpy.ndarray : The dislocation's slip plane"""
+        return self.__line_uvw.value
+
+    @line_uvw.setter
+    def line_uvw(self, val: Union[str, npt.ArrayLike]):
+        self.__line_uvw.value = val
+
+    @property
+    def line_uvw_str(self) -> str:
+        """str: The string representation of line_uvw"""
+        return self.__line_uvw.str
+
+    @property
+    def burgers_uvw(self) -> np.ndarray:
+        """numpy.ndarray : The dislocation's Burgers vector"""
+        return self.__burgers_uvw.value
+
+    @burgers_uvw.setter
+    def burgers_uvw(self, val: Union[str, npt.ArrayLike]):
+        self.__burgers_uvw.value = val
+
+    @property
+    def burgers_uvw_str(self) -> str:
+        """str: The string representation of burgers_uvw"""
+        return self.__burgers_uvw.str
+    
+    @property
+    def m(self) -> np.ndarray:
+        """np.ndarray: The Cartesian unit vector to align with the dislocation solution's m-axis"""
+        return self.__m.value
+
+    @m.setter
+    def m(self, val: Union[str, npt.ArrayLike]):
+        self.__m.value = val
+
+    @property
+    def n(self) -> np.ndarray:
+        """np.ndarray: The Cartesian unit vector to align with the dislocation solution's n-axis"""
+        return self.__n.value
+
+    @n.setter
+    def n(self, val: Union[str, npt.ArrayLike]):
+        self.__n.value = val
+
+    @property
+    def shift(self) -> Optional[np.ndarray]:
+        """np.ndarray or None: A rigid body shift to apply to the atoms in the system before inserting the dislocation"""
+        return self.__shift.value
+    
+    @shift.setter
+    def shift(self, val: Union[str, npt.ArrayLike, None]):
+        self.__shift.value = val
+
+    @property
+    def shiftscale(self) -> Optional[bool]:
+        """bool or None: Indicates if shift is absolute Cartesian (False) or to be scaled relative to the rcell (True)"""
+        return self.__shiftscale.value
+    
+    @shiftscale.setter
+    def shiftscale(self, val: Optional[bool]):
+        self.__shiftscale.value = val
+
+    @property
+    def shiftindex(self) -> Optional[int]:
+        """int or None: The shift index to use for positioning the slip plane between planes of atoms"""
+        return self.__shiftindex.value
+
+    @shiftindex.setter
+    def shiftindex(self, val: Optional[int]):
+        self.__shiftindex.value = val
+
+    @property
+    def parameters(self) -> dict:
+        """dict : Defect parameters for atomman structure generator"""
+        p = {}
+        p['slip_hkl'] = self.slip_hkl_str
+        p['line_uvw'] = self.line_uvw_str
+        p['burgers_uvw'] = self.burgers_uvw_str
+        p['m'] = f"{self.m[0]} {self.m[1]} {self.m[2]}"
+        p['n'] = f"{self.n[0]} {self.n[1]} {self.n[2]}"
+        if self.shift is not None:
+            p['shift'] = f"{self.shift[0]} {self.shift[1]} {self.shift[2]}"
+        if self.shiftscale is not None:
+            p['shiftscale'] = str(self.shiftscale)
+        if self.shiftindex is not None:
+            p['shiftindex'] = str(self.shiftindex)
+
+        return p

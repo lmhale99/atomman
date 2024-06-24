@@ -4,12 +4,15 @@
 import io
 from typing import Optional, Union, Tuple
 
+import numpy as np
+import numpy.typing as npt
+
 # https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
 
 # https://github.com/usnistgov/yabadaba
 from yabadaba.record import Record
-from yabadaba import load_query, load_value
+from yabadaba import load_value
 
 class StackingFault(Record):
     """
@@ -75,166 +78,149 @@ class StackingFault(Record):
         """
         value_objects = super()._init_value_objects()
         
-        self.__question = load_value('longstr', 'question', self)
-        value_objects.append(self.__question)
+        self.__key = load_value('str', 'key', self, valuerequired=True)
+        self.__id = load_value('str', 'id', self, valuerequired=True)
+        self.__url = load_value('str', 'url', self, modelpath='URL')
+        self.__family = load_value('str', 'family', self, valuerequired=True,
+                                   modelpath='system-family')
+        self.__family_url = load_value('str', 'family_url', self,
+                                   modelpath='system-family-URL')
+        self.__hkl = load_value('miller', 'hkl', self, valuerequired=True,
+                                modelpath='calculation-parameter.hkl',
+                                bracket='()')
+        self.__a1vect_uvw = load_value('miller', 'a1vect_uvw', self, valuerequired=True,
+                                modelpath='calculation-parameter.a1vect_uvw',
+                                bracket='[]')
+        self.__a2vect_uvw = load_value('miller', 'a2vect_uvw', self, valuerequired=True,
+                                modelpath='calculation-parameter.a2vect_uvw',
+                                bracket='[]')
+        self.__shiftindex = load_value('int', 'shiftindex', self,
+                                       modelpath='calculation-parameter.shiftindex')
+        self.__cutboxvector = load_value('str', 'cutboxvector', self, valuerequired=True,
+                                         modelpath='calculation-parameter.cutboxvector',
+                                         defaultvalue='c', allowedvalues=['a', 'b', 'c'])
 
-        self.__answer = load_value('longstr', 'answer', self)
-        value_objects.append(self.__answer)
+        value_objects.extend([
+            self.__key, self.__id, self.__url, self.__family, self.__family_url,
+            self.__hkl, self.__a1vect_uvw, self.__a2vect_uvw, 
+            self.__shiftindex, self.__cutboxvector])
 
         return value_objects
     
     @property
     def key(self) -> str:
         """str : A UUID4 key assigned to the record"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__key
+        return self.__key.value
 
     @key.setter
-    def key(self, value: str):
-        self.__key = str(value)
+    def key(self, val: str):
+        self.__key.value = val
 
     @property
     def id(self) -> str:
         """str : A unique id assigned to the record"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__id
+        return self.__id.value
 
     @id.setter
-    def id(self, value: str):
-        self.__id = str(value)
+    def id(self, val: str):
+        self.__id.value = val
 
     @property
     def url(self) -> Optional[str]:
         """str : A URL where a copy of the record can be found"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__url
+        return self.__url.value
 
     @url.setter
-    def url(self, value: Optional[str]):
-        if value is None:
-            self.__url = None
-        else:
-            self.__url = str(value)
+    def url(self, val: Optional[str]):
+        self.__url.value = val
 
     @property
     def family(self) -> str:
         """str : The prototype/reference id the defect is defined for"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__family
+        return self.__family.value
 
     @family.setter
-    def family(self, value: str):
-        self.__family = str(value)
+    def family(self, val: str):
+        self.__family.value = val
+
+    @property
+    def family_url(self) -> Optional[str]:
+        """str : A URL where a copy of the family record can be found"""
+        return self.__family_url.value
+
+    @family_url.setter
+    def family_url(self, val: Optional[str]):
+        self.__family_url.value = val
+
+    @property
+    def hkl(self) -> np.ndarray:
+        """numpy.ndarray : The Miller-(Bravais) plane"""
+        return self.__hkl.value
+    
+    @hkl.setter
+    def hkl(self, val: Union[str, npt.ArrayLike]):
+        self.__hkl.value = val
+
+    @property
+    def hkl_str(self) -> str:
+        """str: The string representation of hkl"""
+        return self.__hkl.str
+
+    @property
+    def a1vect_uvw(self) -> np.ndarray:
+        """numpy.ndarray: The first in-plane shift vector"""
+        return self.__a1vect_uvw.value
+
+    @a1vect_uvw.setter
+    def a1vect_uvw(self, val: Union[str, npt.ArrayLike]):
+        self.__a1vect_uvw.value = val
+
+    @property
+    def a1vect_uvw_str(self) -> str:
+        """str: The string representation of a1vect_uvw"""
+        return self.__a1vect_uvw.str
+
+    @property
+    def a2vect_uvw(self) -> np.ndarray:
+        """numpy.ndarray: The second in-plane shift vector"""
+        return self.__a2vect_uvw.value
+
+    @a2vect_uvw.setter
+    def a2vect_uvw(self, val: Union[str, npt.ArrayLike]):
+        self.__a2vect_uvw.value = val
+
+    @property
+    def a2vect_uvw_str(self) -> str:
+        """str: The string representation of a2vect_uvw"""
+        return self.__a2vect_uvw.str
+
+    @property
+    def shiftindex(self) -> int:
+        """int: The shift index to use for positioning the fault plane between planes of atoms"""
+        return self.__shiftindex.value
+    
+    @shiftindex.setter
+    def shiftindex(self, val: Optional[int]):
+        self.__shiftindex.value = val
+
+    @property
+    def cutboxvector(self) -> str:
+        """str: The box vector (a, b, or c) that the plane is cutting along"""
+        return self.__cutboxvector.value
+
+    @cutboxvector.setter
+    def cutboxvector(self, val: str):
+        self.__cutboxvector.value = val
 
     @property
     def parameters(self) -> dict:
         """dict : Defect parameters for atomman structure generator"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__parameters
+        p = {}
+        p['hkl'] = self.hkl_str
+        p['a1vect_uvw'] = self.a1vect_uvw_str
+        p['a2vect_uvw'] = self.a2vect_uvw_str
+        if self.shiftindex is not None:
+            p['shiftindex'] = str(self.shiftindex)
+        p['cutboxvector'] = self.cutboxvector
 
-    def load_model(self,
-                   model: Union[str, io.IOBase, DM],
-                   name: Optional[str] = None):
-        """
-        Loads record contents from a given model.
-
-        Parameters
-        ----------
-        model : str or DataModelDict
-            The model contents of the record to load.
-        name : str, optional
-            The name to assign to the record.  Often inferred from other
-            attributes if not given.
-        """
-        super().load_model(model, name=name)
-        content = self.model[self.modelroot]
-
-        self.key = content['key']
-        self.id = content['id']
-        self.url = content.get('URL', None)
-        self.family = content['system-family']
-        self.__parameters = dict(content['calculation-parameter'])
-
-    def build_model(self) -> DM:
-        """
-        Returns the object info as data model content
-        
-        Returns
-        ----------
-        DataModelDict
-            The data model content.
-        """
-        model = DM()
-        model[self.modelroot] = content = DM()
-
-        content['key'] = self.key
-        content['id'] = self.id
-        if self.url is not None:
-            content['URL'] = self.url
-        content['system-family'] = self.family
-        content['calculation-parameter'] = DM(self.parameters)
-
-        self._set_model(model)
-        return model
-
-    def metadata(self) -> dict:
-        """
-        Generates a dict of simple metadata values associated with the record.
-        Useful for quickly comparing records and for building pandas.DataFrames
-        for multiple records of the same style.
-        """
-        meta = {}
-        meta['name'] = self.name
-        meta['key'] = self.key
-        meta['id'] = self.id
-        meta['url'] = self.url
-        meta['family'] = self.family
-        meta['hkl'] = self.parameters['hkl']
-        meta['a1vect_uvw'] = self.parameters['a1vect_uvw']
-        meta['a2vect_uvw'] = self.parameters['a2vect_uvw']
-        if 'shiftindex' in self.parameters:
-            meta['shiftindex'] = self.parameters['shiftindex']
-        meta['cutboxvector'] = self.parameters['cutboxvector']
-
-        return meta
-
-    @property
-    def queries(self) -> dict:
-        """dict: Query objects and their associated parameter names."""
-        return {
-            'key': load_query(
-                style='str_match',
-                name='key', 
-                path=f'{self.modelroot}.key',
-                description="search by stacking fault parameter set's UUID key"),
-            'id': load_query(
-                style='str_match',
-                name='id',
-                path=f'{self.modelroot}.id',
-                description="search by stacking fault parameter set's id"),
-            'family': load_query(
-                style='str_match',
-                name='family',
-                path=f'{self.modelroot}.system-family',
-                description="search by the crystal prototype that the stacking fault parameter set is for"),
-            'hkl': load_query(
-                style='str_match',
-                name='hkl',
-                path=f'{self.modelroot}.calculation-parameter.hkl',
-                description="search by the stacking fault parameter set's hkl fault plane"),
-            'shiftindex': load_query(
-                style='int_match',
-                name='shiftindex',
-                path=f'{self.modelroot}.calculation-parameter.shiftindex',
-                description="search by the stacking fault parameter set's shift index"),
-            'cutboxvector': load_query(
-                style='str_match',
-                name='cutboxvector',
-                path=f'{self.modelroot}.calculation-parameter.cutboxvector',
-                description="search by the stacking fault parameter set's cutboxvector"),
-        }
+        return p

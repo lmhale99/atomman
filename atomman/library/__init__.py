@@ -1,5 +1,6 @@
 
 # Import records and load local record styles
+from .value import valuemanager
 from .record import recordmanager, load_record
 
 from .Database import Database
