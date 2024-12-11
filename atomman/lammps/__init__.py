@@ -18,9 +18,9 @@ class LammpsError(Exception):
 from . import style
 from .Log import Log
 from .NEBLog import NEBLog
-from .Potential import Potential
+from .Potential import Potential, PotentialLAMMPS, PotentialLAMMPSKIM
 from .run import run
 from .normalize import normalize
 from .checkversion import checkversion
 __all__ = ['LammpsError', 'style', 'run', 'normalize', 'Potential', 'Log',
-           'NEBLog', 'checkversion']
+           'PotentialLAMMPS', 'PotentialLAMMPSKIM', 'NEBLog', 'checkversion']
