@@ -1,0 +1,92 @@
+{
+    "potential-LAMMPS": {
+        "key": "7687807f-6355-4bef-bdc3-dc0dc944e106",
+        "id": "hybrid-demo--LAMMPS--v3",
+        "potential": {
+            "key": "14226c15-561c-44d4-96ad-ad51304a3606",
+            "id": "hybrid-demo"
+        },
+        "units": "metal",
+        "atom_style": "atom",
+        "atom": [
+            {
+                "element": "Cu"
+            },
+            {
+                "element": "H"
+            }
+        ],
+        "pair_style": {
+            "type": "hybrid",
+            "term": [
+                {
+                    "option": "eam/alloy"
+                },
+                {
+                    "option": "lj/cut"
+                },
+                {
+                    "parameter": 5.0
+                }
+            ]
+        },
+        "pair_coeff": [
+            {
+                "interaction": {
+                    "symbol": [
+                        "Cu"
+                    ]
+                },
+                "term": [
+                    {
+                        "option": "eam/alloy"
+                    },
+                    {
+                        "file": "cu.eam.alloy"
+                    },
+                    {
+                        "symbols": true
+                    }
+                ]
+            },
+            {
+                "interaction": {
+                    "symbol": [
+                        "Cu",
+                        "H"
+                    ]
+                },
+                "term": [
+                    {
+                        "option": "lj/cut"
+                    },
+                    {
+                        "parameter": 3.5
+                    },
+                    {
+                        "parameter": 3.0
+                    }
+                ]
+            },
+            {
+                "interaction": {
+                    "symbol": [
+                        "H",
+                        "H"
+                    ]
+                },
+                "term": [
+                    {
+                        "option": "lj/cut"
+                    },
+                    {
+                        "parameter": 1.2
+                    },
+                    {
+                        "parameter": 2.4
+                    }
+                ]
+            }
+        ]
+    }
+}

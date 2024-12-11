@@ -1,0 +1,55 @@
+{
+    "potential-LAMMPS": {
+        "key": "c6623d40-a3f2-4b2f-948a-3b277f174116",
+        "id": "comb-demo--LAMMPS--v2",
+        "potential": {
+            "key": "5ec2aac4-3dd4-4f5c-afb4-21749577c038",
+            "id": "comb-demo"
+        },
+        "units": "nano",
+        "atom_style": "charge",
+        "atom": [
+            {
+                "element": "O"
+            },
+            {
+                "element": "Cu"
+            },
+            {
+                "element": "Ni"
+            }
+        ],
+        "pair_style": {
+            "type": "comb",
+            "term": {
+                "option": "polar_off"
+            }
+        },
+        "pair_coeff": {
+            "term": [
+                {
+                    "file": "file.comb"
+                },
+                {
+                    "symbols": true
+                }
+            ]
+        },
+        "command": {
+            "term": [
+                {
+                    "option": "fix"
+                },
+                {
+                    "option": "qeq/comb"
+                },
+                {
+                    "parameter": 10
+                },
+                {
+                    "parameter": 0.0001
+                }                
+            ]
+        }
+    }
+}
