@@ -1,5 +1,6 @@
 import pytest
 import numpy as np
+import warnings
 
 from atomman.plot.interpolate_contour import __grid_interpolate
 
@@ -12,7 +13,9 @@ def test_grid_interpolate():
     ylim = (0, 1)
 
     # extrapolation occurs
-    grid = __grid_interpolate(x, y, v, xlim=xlim, ylim=ylim)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        grid = __grid_interpolate(x, y, v, xlim=xlim, ylim=ylim)
     assert np.any(np.isnan(grid))
 
     # fill in extrapolated points
