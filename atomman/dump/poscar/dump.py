@@ -76,7 +76,7 @@ def dump(system,
     
     for i in range(1, int(uatype.max()+1)):
         count = counts[uatype==i]
-        if count == []:
+        if count.size == 0:
             count = 0
         else:
             count = count[0]
