@@ -52,14 +52,15 @@ def dump(system,
     allsymbols = symbols[atype-1]
     
     # Get atomic information
-    positions = system.atoms.pos
+    spos = system.atoms_prop('pos', scale=True)
     prop = {}
     for p in system.atoms_prop():
         if p != 'atype' and p != 'pos':
             prop[p] = system.atoms_prop(key=p)
     
     # Build Atoms
-    aseatoms = ase.Atoms(symbols=allsymbols, positions=positions, pbc=pbc, cell=cell)
+    aseatoms = ase.Atoms(symbols=allsymbols, scaled_positions=spos,
+                         pbc=pbc, cell=cell)
     
     if return_prop is True:
         return aseatoms, prop

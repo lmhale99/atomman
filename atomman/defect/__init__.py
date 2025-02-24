@@ -30,11 +30,14 @@ from .StackingFault import StackingFault
 from .pn_arctan_disregistry import pn_arctan_disregistry
 from .pn_arctan_disldensity import pn_arctan_disldensity
 from .SDVPN import SDVPN
+from .surface_energy_estimate import surface_energy_estimate
+from .SurfaceEnergyEstimator import SurfaceEnergyEstimator
 
 __all__ = ['differential_displacement', 'disregistry', 'dislocation_array',
            'slip_vector', 'nye_tensor', 'nye_tensor_p', 'Stroh', 'FreeSurface',
            'StackingFault', 'Dislocation', 'Strain', 'dislocation_dipole_displacement',
            'GammaSurface', 'free_surface_basis', 'pn_arctan_disregistry',
-           'pn_arctan_disldensity', 'SDVPN', 'Boundary', 'GrainBoundary', 'TiltGrainBoundaryHelper']
+           'pn_arctan_disldensity', 'SDVPN', 'Boundary', 'GrainBoundary', 'TiltGrainBoundaryHelper', 
+           'surface_energy_estimate', 'SurfaceEnergyEstimator']
 __all__.extend(point_all)
 __all__.sort()

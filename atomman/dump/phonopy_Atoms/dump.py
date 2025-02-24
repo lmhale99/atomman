@@ -52,14 +52,14 @@ def dump(system,
     allsymbols = symbols[atype-1].tolist()
     
     # Get atomic information
-    positions = system.atoms.pos
+    spos = system.atoms_prop('pos', scale=True)
     prop = {}
     for p in system.atoms_prop():
         if p != 'atype' and p != 'pos':
             prop[p] = system.atoms_prop(key=p)
     
     # Build Atoms
-    phonopyatoms = PhonopyAtoms(symbols=allsymbols, positions=positions,
+    phonopyatoms = PhonopyAtoms(symbols=allsymbols, scaled_positions=spos,
                                 pbc=pbc, cell=cell)
     
     if return_prop is True:
