@@ -16,9 +16,10 @@ class VectorValue(Value):
                  metadatakey: Union[str, bool, None] = None,
                  metadataparent: Optional[str] = None,
                  modelpath: Optional[str] = None,
+                 description: Optional[str] = None,
                  allowedlengths: Union[int, tuple, None] = None):
         """
-        Initialize a general Parameter object.
+        Initialize a Value object.
 
         Parameters
         ----------
@@ -49,6 +50,9 @@ class VectorValue(Value):
             The period-delimited path after the record root element for
             where the parameter will be found in the built data model.  If set
             to None (default) then name will be used for modelpath.
+        description: str or None, optional
+            A short description for the value.  If not given, then the record name
+            will be used.
         allowedlengths: int, tuple, or None, optional
             The length(s) that the vector can have.  The default value of None
             will perform no checks.
@@ -68,7 +72,7 @@ class VectorValue(Value):
         super().__init__(name, record, defaultvalue=defaultvalue,
                          valuerequired=valuerequired, allowedvalues=allowedvalues,
                          metadatakey=metadatakey, metadataparent=metadataparent,
-                         modelpath=modelpath)
+                         modelpath=modelpath, description=description)
     
     @property
     def allowedlengths(self):

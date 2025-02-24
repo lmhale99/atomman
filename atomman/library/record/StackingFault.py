@@ -1,18 +1,10 @@
 # coding: utf-8
 
 # Standard Python imports
-import io
-from typing import Optional, Union, Tuple
-
-import numpy as np
-import numpy.typing as npt
-
-# https://github.com/usnistgov/DataModelDict
-from DataModelDict import DataModelDict as DM
+from typing import Tuple
 
 # https://github.com/usnistgov/yabadaba
 from yabadaba.record import Record
-from yabadaba import load_value
 
 class StackingFault(Record):
     """
@@ -20,25 +12,6 @@ class StackingFault(Record):
     necessary for atomman to generate and evaluate a particular generalized
     stacking fault map.
     """
-    def __init__(self,
-                 model: Union[str, io.IOBase, DM, None] = None,
-                 name: Optional[str] = None,
-                 database = None):
-        """
-        Initializes a Record object for a given style.
-        
-        Parameters
-        ----------
-        model : str, file-like object, DataModelDict
-            The contents of the record.
-        name : str, optional
-            The unique name to assign to the record.  If model is a file
-            path, then the default record name is the file name without
-            extension.
-        database : yabadaba.Database, optional
-            Allows for a default database to be associated with the record.
-        """
-        super().__init__(model=model, name=name, database=database)
 
     ########################## Basic metadata fields ##########################
 
@@ -64,153 +37,51 @@ class StackingFault(Record):
 
     ####################### Define Values and attributes #######################
 
-    def _init_value_objects(self) -> list:
+    def _init_values(self):
         """
         Method that defines the value objects for the Record.  This should
-        1. Call the method's super() to get default Value objects.
-        2. Use yabadaba.load_value() to build Value objects that are set to
-           private attributes of self.
-        3. Append the list returned by the super() with the new Value objects.
-
-        Returns
-        -------
-        value_objects: A list of all value objects.
+        call the super of this method, then use self._add_value to create new Value objects.
+        Note that the order values are defined matters
+        when build_model is called!!!
         """
-        value_objects = super()._init_value_objects()
         
-        self.__key = load_value('str', 'key', self, valuerequired=True)
-        self.__id = load_value('str', 'id', self, valuerequired=True)
-        self.__url = load_value('str', 'url', self, modelpath='URL')
-        self.__family = load_value('str', 'family', self, valuerequired=True,
-                                   modelpath='system-family')
-        self.__family_url = load_value('str', 'family_url', self,
-                                   modelpath='system-family-URL')
-        self.__hkl = load_value('miller', 'hkl', self, valuerequired=True,
-                                modelpath='calculation-parameter.hkl',
-                                bracket='()')
-        self.__a1vect_uvw = load_value('miller', 'a1vect_uvw', self, valuerequired=True,
-                                modelpath='calculation-parameter.a1vect_uvw',
-                                bracket='[]')
-        self.__a2vect_uvw = load_value('miller', 'a2vect_uvw', self, valuerequired=True,
-                                modelpath='calculation-parameter.a2vect_uvw',
-                                bracket='[]')
-        self.__shiftindex = load_value('int', 'shiftindex', self,
-                                       modelpath='calculation-parameter.shiftindex')
-        self.__cutboxvector = load_value('str', 'cutboxvector', self, valuerequired=True,
-                                         modelpath='calculation-parameter.cutboxvector',
-                                         defaultvalue='c', allowedvalues=['a', 'b', 'c'])
+        self._add_value('str', 'key', valuerequired=True)
+        self._add_value('str', 'id', valuerequired=True)
+        self._add_value('str', 'url', modelpath='URL')
+        self._add_value('str', 'family', valuerequired=True,
+                        modelpath='system-family')
+        self._add_value('str', 'family_url', 
+                        modelpath='system-family-URL')
+        self._add_value('miller', 'hkl', valuerequired=True,
+                        modelpath='calculation-parameter.hkl',
+                        bracket='()')
+        self._add_value('miller', 'a1vect_uvw', valuerequired=True,
+                        modelpath='calculation-parameter.a1vect_uvw',
+                        bracket='[]')
+        self._add_value('miller', 'a2vect_uvw', valuerequired=True,
+                        modelpath='calculation-parameter.a2vect_uvw',
+                        bracket='[]')
+        self._add_value('int', 'shiftindex',
+                        modelpath='calculation-parameter.shiftindex')
+        self._add_value('str', 'cutboxvector', valuerequired=True,
+                        modelpath='calculation-parameter.cutboxvector',
+                        defaultvalue='c', allowedvalues=['a', 'b', 'c'])
 
-        value_objects.extend([
-            self.__key, self.__id, self.__url, self.__family, self.__family_url,
-            self.__hkl, self.__a1vect_uvw, self.__a2vect_uvw, 
-            self.__shiftindex, self.__cutboxvector])
-
-        return value_objects
     
-    @property
-    def key(self) -> str:
-        """str : A UUID4 key assigned to the record"""
-        return self.__key.value
-
-    @key.setter
-    def key(self, val: str):
-        self.__key.value = val
-
-    @property
-    def id(self) -> str:
-        """str : A unique id assigned to the record"""
-        return self.__id.value
-
-    @id.setter
-    def id(self, val: str):
-        self.__id.value = val
-
-    @property
-    def url(self) -> Optional[str]:
-        """str : A URL where a copy of the record can be found"""
-        return self.__url.value
-
-    @url.setter
-    def url(self, val: Optional[str]):
-        self.__url.value = val
-
-    @property
-    def family(self) -> str:
-        """str : The prototype/reference id the defect is defined for"""
-        return self.__family.value
-
-    @family.setter
-    def family(self, val: str):
-        self.__family.value = val
-
-    @property
-    def family_url(self) -> Optional[str]:
-        """str : A URL where a copy of the family record can be found"""
-        return self.__family_url.value
-
-    @family_url.setter
-    def family_url(self, val: Optional[str]):
-        self.__family_url.value = val
-
-    @property
-    def hkl(self) -> np.ndarray:
-        """numpy.ndarray : The Miller-(Bravais) plane"""
-        return self.__hkl.value
-    
-    @hkl.setter
-    def hkl(self, val: Union[str, npt.ArrayLike]):
-        self.__hkl.value = val
-
     @property
     def hkl_str(self) -> str:
         """str: The string representation of hkl"""
-        return self.__hkl.str
-
-    @property
-    def a1vect_uvw(self) -> np.ndarray:
-        """numpy.ndarray: The first in-plane shift vector"""
-        return self.__a1vect_uvw.value
-
-    @a1vect_uvw.setter
-    def a1vect_uvw(self, val: Union[str, npt.ArrayLike]):
-        self.__a1vect_uvw.value = val
+        return self.get_value('hkl').str
 
     @property
     def a1vect_uvw_str(self) -> str:
         """str: The string representation of a1vect_uvw"""
-        return self.__a1vect_uvw.str
-
-    @property
-    def a2vect_uvw(self) -> np.ndarray:
-        """numpy.ndarray: The second in-plane shift vector"""
-        return self.__a2vect_uvw.value
-
-    @a2vect_uvw.setter
-    def a2vect_uvw(self, val: Union[str, npt.ArrayLike]):
-        self.__a2vect_uvw.value = val
+        return self.get_value('a1vect_uvw').str
 
     @property
     def a2vect_uvw_str(self) -> str:
         """str: The string representation of a2vect_uvw"""
-        return self.__a2vect_uvw.str
-
-    @property
-    def shiftindex(self) -> int:
-        """int: The shift index to use for positioning the fault plane between planes of atoms"""
-        return self.__shiftindex.value
-    
-    @shiftindex.setter
-    def shiftindex(self, val: Optional[int]):
-        self.__shiftindex.value = val
-
-    @property
-    def cutboxvector(self) -> str:
-        """str: The box vector (a, b, or c) that the plane is cutting along"""
-        return self.__cutboxvector.value
-
-    @cutboxvector.setter
-    def cutboxvector(self, val: str):
-        self.__cutboxvector.value = val
+        return self.get_value('a2vect_uvw').str
 
     @property
     def parameters(self) -> dict:

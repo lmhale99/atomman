@@ -19,15 +19,18 @@ class SystemModelValue(Value):
         return self.modelpath.split('.')[-1]
 
     def set_value_mod(self, val: Union[System, DM, None]):
+        
         if isinstance(val, System):
             return val
         
         if val is None:
             try:
                 val = self.record.model
+                if val is None:
+                    return None
             except:
                 return None
-            
+        
         return load('system_model', val, key=self.loadkey)
 
     def build_model_value(self):

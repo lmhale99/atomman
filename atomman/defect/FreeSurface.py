@@ -212,7 +212,7 @@ class FreeSurface():
         name : str or None, optional
             The name of the free_surface record to retrieve from the database.
             Alternatively, you can use any other query keyword arguments supported
-            by the free_surface record style (see \*\*kwargs below for more info).
+            by the free_surface record style (see **kwargs below for more info).
         ucell : atomman.System or None, optional
             The unit cell to use in generating the system.  If None (default), then
             the crystal_prototype record that matches the defect's family setting
@@ -508,6 +508,12 @@ class FreeSurface():
         vects, positions, numbers = self.ucell.dump('spglib_cell')
         rotated_vects = np.dot(vects, self.transform.T)
         dataset = spglib.get_symmetry_dataset((rotated_vects, positions, numbers), symprec=symprec)
+
+        # Compatibility fix for newspglib
+        if hasattr(dataset, 'rotations'):
+            dataset = {'rotations': dataset.rotations,
+                       'translations': dataset.translations,
+                       'primitive_lattice': dataset.primitive_lattice}
 
         # Convert operations to Cartesian
         operations = []

@@ -222,7 +222,7 @@ class Log():
         # Use pandas to read all thermo data at once
         thermo = pd.read_csv(log_info, header=header,
                                 nrows=footer-header,
-                                sep="\s+",
+                                sep=r"\s+",
                                 skip_blank_lines=True)
 
         # Reset file pointer

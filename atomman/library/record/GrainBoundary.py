@@ -1,45 +1,16 @@
 # coding: utf-8
 
 # Standard Python imports
-import io
-from typing import Optional, Union, Tuple
-
-# https://github.com/usnistgov/DataModelDict
-from DataModelDict import DataModelDict as DM
+from typing import Tuple
 
 # https://github.com/usnistgov/yabadaba
 from yabadaba.record import Record
-from yabadaba import load_query, load_value
 
 class GrainBoundary(Record):
     """
     Class for representing grain_boundary records, which collect the parameters
     necessary for atomman to generate a particular grain boundary.
     """
-    def __init__(self,
-                 model: Union[str, io.IOBase, DM, None] = None,
-                 name: Optional[str] = None,
-                 database = None):
-        """
-        Initializes a Record object for a given style.
-        
-        Parameters
-        ----------
-        model : str, file-like object, DataModelDict
-            The contents of the record.
-        name : str, optional
-            The unique name to assign to the record.  If model is a file
-            path, then the default record name is the file name without
-            extension.
-        database : yabadaba.Database, optional
-            Allows for a default database to be associated with the record.
-        """
-        # Initialize values
-        self.gbtype = ''
-        self.axis = ''
-        self.misorientation = 0.0
-        
-        super().__init__(model=model, name=name, database=database)
 
     ########################## Basic metadata fields ##########################
 
@@ -65,205 +36,57 @@ class GrainBoundary(Record):
 
     ####################### Define Values and attributes #######################
 
-    def _init_value_objects(self) -> list:
+    def _init_values(self):
         """
         Method that defines the value objects for the Record.  This should
-        1. Call the method's super() to get default Value objects.
-        2. Use yabadaba.load_value() to build Value objects that are set to
-           private attributes of self.
-        3. Append the list returned by the super() with the new Value objects.
-
-        Returns
-        -------
-        value_objects: A list of all value objects.
+        call the super of this method, then use self._add_value to create new Value objects.
+        Note that the order values are defined matters
+        when build_model is called!!!
         """
-        value_objects = super()._init_value_objects()
         
-        self.__question = load_value('longstr', 'question', self)
-        value_objects.append(self.__question)
-
-        self.__answer = load_value('longstr', 'answer', self)
-        value_objects.append(self.__answer)
-
-        return value_objects
-
-    @property
-    def key(self) -> str:
-        """str : A UUID4 key assigned to the record"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__key
-
-    @key.setter
-    def key(self, value: str):
-        self.__key = str(value)
-
-    @property
-    def id(self) -> str:
-        """str : A unique id assigned to the record"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__id
-
-    @id.setter
-    def id(self, value: str):
-        self.__id = str(value)
-
-    @property
-    def url(self) -> Optional[str]:
-        """str : A URL where a copy of the record can be found"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__url
-
-    @url.setter
-    def url(self, value: Optional[str]):
-        if value is None:
-            self.__url = None
-        else:
-            self.__url = str(value)
-
-    @property
-    def family(self) -> str:
-        """str : The prototype/reference id the defect is defined for"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__family
-
-    @family.setter
-    def family(self, value: str):
-        self.__family = str(value)
-
-    @property
-    def gbtype(self):
-        """str : The grain boundary type"""
-        return self.__gbtype
-    
-    @gbtype.setter
-    def gbtype(self, val: str):
-        self.__gbtype = str(val)
-
-    @property
-    def axis(self):
-        """str : The grain boundary tilt/twist axis"""
-        return self.__axis
-    
-    @axis.setter
-    def axis(self, val: str):
-        self.__axis = str(val)
-
-    @property
-    def misorientation(self):
-        """float : The grain boundary misorientation angle"""
-        return self.__misorientation
-    
-    @misorientation.setter
-    def misorientation(self, val: float):
-        self.__misorientation = float(val)
-
+        self._add_value('str', 'key', valuerequired=True)
+        self._add_value('str', 'id',  valuerequired=True)
+        self._add_value('str', 'url', modelpath='URL')
+        self._add_value('str', 'family', valuerequired=True,
+                        modelpath='system-family')
+        self._add_value('str', 'family_url',
+                        modelpath='system-family-URL')
+        self._add_value('str', 'type')
+        self._add_value('str', 'axis')
+        self._add_value('float', 'misorientation-angle')
+        self._add_value('vector', 'auvw1', # or miller?
+                        modelpath='calculation-parameter.auvw1')
+        self._add_value('vector', 'buvw1', # or miller?
+                        modelpath='calculation-parameter.buvw1')
+        self._add_value('vector', 'cuvw1', # or miller?
+                        modelpath='calculation-parameter.cuvw1')
+        self._add_value('vector', 'auvw2', # or miller?
+                        modelpath='calculation-parameter.auvw2')
+        self._add_value('vector', 'buvw2', # or miller?
+                        modelpath='calculation-parameter.buvw2')
+        self._add_value('vector', 'cuvw2', # or miller?
+                        modelpath='calculation-parameter.cuvw2')        
+        self._add_value('str', 'cutboxvector', valuerequired=True,
+                        modelpath='calculation-parameter.cutboxvector',
+                        defaultvalue='c', allowedvalues=['a', 'b', 'c'])
+        self._add_value('str', 'cellsetting', valuerequired=True,
+                        modelpath='calculation-parameter.cellsetting',
+                        defaultvalue='p',
+                        allowedvalues=['p', 'i', 'f', 'a', 'b', 'c']) #t, t1, t2???
+        
     @property
     def parameters(self) -> dict:
         """dict : Defect parameters for atomman structure generator"""
-        if self.model is None:
-            raise AttributeError('No model information loaded')
-        return self.__parameters
+        p = {}
+        p['auvw1'] = f"{self.auvw1[0]} {self.auvw1[1]} {self.auvw1[2]}"
+        p['buvw1'] = f"{self.buvw1[0]} {self.buvw1[1]} {self.buvw1[2]}"
+        p['cuvw1'] = f"{self.cuvw1[0]} {self.cuvw1[1]} {self.cuvw1[2]}"
+        p['auvw2'] = f"{self.auvw2[0]} {self.auvw2[1]} {self.auvw2[2]}"
+        p['buvw2'] = f"{self.buvw2[0]} {self.buvw2[1]} {self.buvw2[2]}"
+        p['cuvw2'] = f"{self.cuvw2[0]} {self.cuvw2[1]} {self.cuvw2[2]}"
+        p['cutboxvector'] = self.cutboxvector
+        if self.cellsetting is not None:
+            p['cellsetting'] = self.cellsetting
 
-    def load_model(self,
-                   model: Union[str, io.IOBase, DM],
-                   name: Optional[str] = None):
-        """
-        Loads record contents from a given model.
-
-        Parameters
-        ----------
-        model : str or DataModelDict
-            The model contents of the record to load.
-        name : str, optional
-            The name to assign to the record.  Often inferred from other
-            attributes if not given.
-        """
-        super().load_model(model, name=name)
-        content = self.model[self.modelroot]
-
-        self.key = content['key']
-        self.id = content['id']
-        self.url = content.get('URL', None)
-        self.family = content['system-family']
-        self.gbtype = content['type']
-        self.axis = content['axis']
-        self.misorientation = content['misorientation-angle']
-        self.__parameters = dict(content['calculation-parameter'])
-
-    def build_model(self) -> DM:
-        """
-        Returns the object info as data model content
-        
-        Returns
-        ----------
-        DataModelDict
-            The data model content.
-        """
-        model = DM()
-        model[self.modelroot] = content = DM()
-
-        content['key'] = self.key
-        content['id'] = self.id
-        if self.url is not None:
-            content['URL'] = self.url
-        content['system-family'] = self.family
-        content['type'] = self.gbtype
-        content['axis'] = self.axis
-        content['misorientation-angle'] = self.misorientation
-        content['calculation-parameter'] = DM(self.parameters)
-
-        self._set_model(model)
-        return model
-
-    def metadata(self) -> dict:
-        """
-        Generates a dict of simple metadata values associated with the record.
-        Useful for quickly comparing records and for building pandas.DataFrames
-        for multiple records of the same style.
-        """
-        meta = {}
-        meta['name'] = self.name
-        meta['key'] = self.key
-        meta['id'] = self.id
-        meta['url'] = self.url
-        meta['family'] = self.family
-        meta['type'] = self.gbtype
-        meta['axis'] = self.axis
-        meta['misorientation'] = self.misorientation
-
-        return meta
-
-    @property
-    def queries(self) -> dict:
-        """dict: Query objects and their associated parameter names."""
-        return {
-            'key': load_query(
-                style='str_match',
-                name='key', 
-                path=f'{self.modelroot}.key',
-                description="search by free surface parameter set's UUID key"),
-            'id': load_query(
-                style='str_match',
-                name='id',
-                path=f'{self.modelroot}.id',
-                description="search by free surface parameter set's id"),
-            'family': load_query(
-                style='str_match',
-                name='family',
-                path=f'{self.modelroot}.system-family',
-                description="search by the crystal prototype that the free surface parameter set is for"),
-            'type': load_query(
-                style='str_match',
-                name='type',
-                path=f'{self.modelroot}.type',
-                description="search by the grain boundary type"),
-            'axis': load_query(
-                style='str_match',
-                name='axis',
-                path=f'{self.modelroot}.axis',
-                description="search by the grain boundary tilt/twist axis"),
-        }
+        return p
+    
