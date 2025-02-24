@@ -3,9 +3,6 @@
 # Standard Python imports
 from typing import Optional, Union
 
-# https://github.com/usnistgov/potentials
-from potentials.record.BasePotentialLAMMPS import BasePotentialLAMMPS
-
 # atomman imports
 from . import Database
 
@@ -17,7 +14,7 @@ def load_lammps_potential(name: Union[str, list, None] = None,
                           units: Union[str, list, None] = None,
                           atom_style: Union[str, list, None] = None,
                           pair_style: Union[str, list, None] = None,
-                          status: Union[str, list, None] = 'active',
+                          status: Union[str, list, None] = None,
                           symbols: Union[str, list, None] = None,
                           elements: Union[str, list, None] = None,
                           pot_dir_style: Optional[str] = None,
@@ -29,7 +26,7 @@ def load_lammps_potential(name: Union[str, list, None] = None,
                           database: Optional[Database] = None,
                           getfiles: bool = False,
                           prompt: bool = True,
-                          verbose: bool = False) -> BasePotentialLAMMPS:
+                          verbose: bool = False):
     """
     Loads a LAMMPS potential from the NIST Interatomic Potentials Repository
     or from a local copy of the repository.  Will issue a prompt if
@@ -118,8 +115,7 @@ def load_lammps_potential(name: Union[str, list, None] = None,
     if database is None:
         database = Database()
     
-    lmppot = database.get_lammps_potential(local=local, remote=remote, 
-                                           name=name, key=key, id=id,
+    lmppot = database.get_lammps_potential(name=name, key=key, id=id,
                                            potid=potid, potkey=potkey,
                                            units=units, atom_style=atom_style,
                                            pair_style=pair_style, status=status,
@@ -127,7 +123,8 @@ def load_lammps_potential(name: Union[str, list, None] = None,
                                            pot_dir_style=pot_dir_style,
                                            kim_models=kim_models,
                                            kim_api_directory=kim_api_directory,
-                                           kim_models_file=kim_models_file, 
+                                           kim_models_file=kim_models_file,
+                                           local=local, remote=remote,
                                            prompt=prompt, verbose=verbose)
 
     if getfiles is True:
