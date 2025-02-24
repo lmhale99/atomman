@@ -514,7 +514,12 @@ class GammaSurface(object):
         coeffs = np.array([a1vect, a2vect, a3vect]).T
         if pos.ndim == 2:
             coeffs = np.array([coeffs])
-        a123 = np.linalg.solve(coeffs, pos)
+            pos = pos.reshape(pos.shape + (1,))
+
+            a123 = np.linalg.solve(coeffs, pos).reshape(pos.shape[:-1])
+        else:
+            a123 = np.linalg.solve(coeffs, pos)
+
         assert np.allclose(a123[...,2], 0.0, atol=1e-6), np.abs(a123[...,2]).max()
 
         # Return a1, a2
