@@ -25,10 +25,22 @@ def checkversion(lammps_command: str) -> dict:
         If lammps fails to run
     """
     # Run lammps_command with empty script and no log file
-    try:
-        log = run(lammps_command, script='', logfile=None)
-    except:
-        raise ValueError(f'Failed to run simulation with lammps_command {lammps_command}')
+    tries = 0
+    success = False
+    while tries < 10:
+        try:
+            log = run(lammps_command, script='', logfile=None)
+        except OSError as err:
+            tries += 1
+            if tries >= 10:
+                raise ValueError(f'Failed to run simulation with lammps_command {lammps_command}') from err
+        except:
+            raise ValueError(f'Failed to run simulation with lammps_command {lammps_command}')
+        else:
+            success = True
+            break
+    if not success:
+        raise ValueError(f'Failed to run simulation with lammps_command {lammps_command} after 10 tries')
         
     # Extract lammps version and date info
     version_info = {}
