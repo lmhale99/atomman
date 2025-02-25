@@ -6,23 +6,30 @@ Version 1.5.0
 
 - Overhaul of the Record objects with the new yabadaba version that greatly
   reduces the code and better generalizes record interactions.
+
 - Fixes to support numpy 2.0.
+
 - **atomman.lammps.run** now has a partition parameter to support multi-replica
   simulations, like NEB and temperature-accelerated dynamics.  Updates (again)
   to hopefully print better error messages extracted from LAMMPS runs.
-- **atomman.defect.SurfaceEnergyEstimator** and 
+
+- **atomman.defect.SurfaceEnergyEstimator** and
   **atomman.defect.surface_energy_estimate()** added that provide quick
   estimates of high index free surface energies based on a few low index values.
   The former is a class for performing the calculations, and the latter a
   function.
+
 - Bug fix for **ase_Atoms** dump to use scaled positions instead of absolute to
   ensure box and atoms remain aligned with the loss of box origin control.
+
 - **atomman.tools.miller.tostring** method added for generating Miller indices
   strings for planes and vectors.  This serves as the inverse function of
   fromstring.
+
 - **standard_cell** dump style added that serves as a wrapper around the
   more generalized spglib.standardize_cell() method for identifying and
-  normalizing systems to their corresponding unit cells. 
+  normalizing systems to their corresponding unit cells.
+
 - **Database.fetch_mp_crystal(s)** have been updated for the new Materials
   Project APIs.
 
