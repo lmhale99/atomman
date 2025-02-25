@@ -12,8 +12,9 @@ def dump(system: System,
          symprec: float = 1e-5,
          normalize: Optional[str] = 'lammps') -> System:
     """
-    Converts a given system into a primitive unit cell.  NOTE: This works best for small systems,
-    e.g. conventional unit cells or relatively small and standard supercells.
+    Wrapper around spglib.find_primitive() that finds a primitive unit
+    cell for the system.  This works best for small systems where atoms are
+    already close to or at ideal positions.
 
     Parameters
     ----------
