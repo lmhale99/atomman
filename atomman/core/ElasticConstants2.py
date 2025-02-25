@@ -802,61 +802,76 @@ class ElasticConstants(object):
             symmetries.
         """
 
-        if crystal_system == 'triclinic':
-            return ElasticConstants(Cij = self.Cij)
+        c = self.Cij
+        c_dict = {}
+
+        if crystal_system == 'isotropic':
+            c_dict['mu'] = self.shear()
+            c_dict['K'] = self.bulk()
+
+        elif crystal_system == 'cubic':
+            c_dict['C11'] = (c[0,0] + c[1,1] + c[2,2]) / 3
+            c_dict['C12'] = (c[0,1] + c[0,2] + c[1,2]) / 3
+            c_dict['C44'] = (c[3,3] + c[4,4] + c[5,5]) / 3
+
+        elif crystal_system == 'hexagonal':
+            c_dict['C11'] = (c[0,0] + c[1,1]) / 2
+            c_dict['C33'] = c[2,2]
+            c_dict['C12'] = (c[0,1] + (c[0,0] - 2*c[5,5])) / 2
+            c_dict['C13'] = (c[0,2] + c[1,2]) / 2
+            c_dict['C44'] = (c[3,3] + c[4,4]) / 2
+
+        elif crystal_system == 'tetragonal':
+            c_dict['C11'] = (c[0,0] + c[1,1]) / 2
+            c_dict['C33'] = c[2,2]
+            c_dict['C12'] = c[0,1]
+            c_dict['C13'] = (c[0,2] + c[1,2]) / 2
+            c_dict['C16'] = (c[0,5] - c[1,5]) / 2
+            c_dict['C44'] = (c[3,3] + c[4,4]) / 2
+            c_dict['C66'] = c[5,5]
+
+        elif crystal_system == 'rhombohedral':
+            c_dict['C11'] = (c[0,0] + c[1,1]) / 2
+            c_dict['C33'] = c[2,2]
+            c_dict['C12'] = (c[0,1] + (c[0,0] - 2*c[5,5])) / 2
+            c_dict['C13'] = (c[0,2] + c[1,2]) / 2
+            c_dict['C14'] = (c[0,3] - c[1,3]) / 2
+            c_dict['C15'] = (c[0,4] - c[1,4] - c[3,5]) / 3
+            c_dict['C44'] = (c[3,3] + c[4,4]) / 2
+
+        elif crystal_system == 'orthorhombic':
+            c_dict['C11'] = c[0,0]
+            c_dict['C22'] = c[1,1]
+            c_dict['C33'] = c[2,2]
+            c_dict['C12'] = c[0,1]
+            c_dict['C13'] = c[0,2]
+            c_dict['C23'] = c[1,2]
+            c_dict['C44'] = c[3,3]
+            c_dict['C55'] = c[4,4]
+            c_dict['C66'] = c[5,5]
+
+        elif crystal_system == 'monoclinic':
+            c_dict['C11'] = c[0,0]
+            c_dict['C22'] = c[1,1]
+            c_dict['C33'] = c[2,2]
+            c_dict['C12'] = c[0,1]
+            c_dict['C13'] = c[0,2]
+            c_dict['C15'] = c[0,4]
+            c_dict['C23'] = c[1,2]
+            c_dict['C25'] = c[1,4]
+            c_dict['C35'] = c[2,4]
+            c_dict['C46'] = c[3,5]
+            c_dict['C44'] = c[3,3]
+            c_dict['C55'] = c[4,4]
+            c_dict['C66'] = c[5,5]
+
+        elif crystal_system == 'triclinic':
+            c_dict['Cij'] = c
 
         else:
-            c = self.Cij
-            c_dict = {}
+            raise ValueError('Invalid crystal_system: ' + crystal_system)
 
-            if crystal_system == 'isotropic':
-                c_dict['mu'] = self.shear()
-                c_dict['K'] = self.bulk()
-
-            elif crystal_system == 'cubic':
-                c_dict['C11'] = (c[0,0] + c[1,1] + c[2,2]) / 3
-                c_dict['C12'] = (c[0,1] + c[0,2] + c[1,2]) / 3
-                c_dict['C44'] = (c[3,3] + c[4,4] + c[5,5]) / 3
-
-            elif crystal_system == 'hexagonal':
-                c_dict['C11'] = (c[0,0] + c[1,1]) / 2
-                c_dict['C33'] = c[2,2]
-                c_dict['C12'] = (c[0,1] + (c[0,0] - 2*c[5,5])) / 2
-                c_dict['C13'] = (c[0,2] + c[1,2]) / 2
-                c_dict['C44'] = (c[3,3] + c[4,4]) / 2
-
-            elif crystal_system == 'tetragonal':
-                c_dict['C11'] = (c[0,0] + c[1,1]) / 2
-                c_dict['C33'] = c[2,2]
-                c_dict['C12'] = c[0,1]
-                c_dict['C13'] = (c[0,2] + c[1,2]) / 2
-                c_dict['C16'] = (c[0,5] - c[1,5]) / 2
-                c_dict['C44'] = (c[3,3] + c[4,4]) / 2
-                c_dict['C66'] = c[5,5]
-
-            elif crystal_system == 'rhombohedral':
-                c_dict['C11'] = (c[0,0] + c[1,1]) / 2
-                c_dict['C33'] = c[2,2]
-                c_dict['C12'] = (c[0,1] + (c[0,0] - 2*c[5,5])) / 2
-                c_dict['C13'] = (c[0,2] + c[1,2]) / 2
-                c_dict['C14'] = (c[0,3] - c[1,3]) / 2
-                c_dict['C15'] = (c[0,4] - c[1,4] - c[3,5]) / 3
-                c_dict['C44'] = (c[3,3] + c[4,4]) / 2
-
-            elif crystal_system == 'orthorhombic':
-                c_dict['C11'] = c[0,0]
-                c_dict['C22'] = c[1,1]
-                c_dict['C33'] = c[2,2]
-                c_dict['C12'] = c[0,1]
-                c_dict['C13'] = c[0,2]
-                c_dict['C23'] = c[1,2]
-                c_dict['C44'] = c[3,3]
-                c_dict['C55'] = c[4,4]
-                c_dict['C66'] = c[5,5]
-            else:
-                raise ValueError('Invalid crystal_system: ' + crystal_system)
-
-            return ElasticConstants(**c_dict)
+        return ElasticConstants(**c_dict)
 
     def is_normal(self,
                   crystal_system: str,
