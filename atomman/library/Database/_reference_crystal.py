@@ -16,7 +16,7 @@ import pandas as pd
 import requests
 
 # atomman imports
-from ...load import load
+from ... import Atoms, Box, System, load
 from ..record import load_record
 from ...tools import aslist
 
@@ -379,6 +379,7 @@ def download_reference_crystals(self,
 def fetch_reference_crystal(self,
                             id: str,
                             api_key: Optional[str] = None,
+                            api_key_file: Union[str, Path, None] = None,
                             local: Optional[bool] = None,
                             remote: Optional[bool] = None, 
                             refresh_cache: bool = False,
@@ -395,9 +396,12 @@ def fetch_reference_crystal(self,
         The reference crystal's unique id.  Combines a database tag "mp-" or
         "oqmd-" and the DFT database's entry id.
     api_key : str, optional
-        The user's Materials Project API key or path to a file containing the
-        key. Only needed for fetching structures from Materials Project and if
-        the key is not set to the "MAPI_KEY" environment variable.
+        The user's Materials Project API key given as a str.  Either api_key
+        or api_key_file are required to retrieve from Materials Project.
+    api_key_file : str or Path, optional
+        The path to a file containing only the user's Materials Project API
+        key.  Either api_key or api_key_file are required to retrieve from
+        Materials Project.
     local : bool, optional
         Indicates if the local location is to be searched.  Default value
         matches the value set when the database was initialized.
@@ -434,15 +438,16 @@ def fetch_reference_crystal(self,
         if verbose:
             print('Crystal retrieved from OQMD')
     else:
-        record = self.fetch_mp_crystal(id, api_key=api_key)
+        record = self.fetch_mp_crystal(id, api_key=api_key, api_key_file=api_key_file)
         if verbose:
             print('Crystal retrieved from Materials Project')
 
     return record
 
-def fetch_mp_crystals(self,
-                      id: str,
-                      api_key: Optional[str] = None) -> list:
+def fetch_mp_crystals(self, 
+                      id: Union[str, list],
+                      api_key: Optional[str] = None,
+                      api_key_file: Union[Path, str, None] = None) -> list:
     """
     Retrieves reference crystals from Materials Project based on id(s).
 
@@ -451,56 +456,101 @@ def fetch_mp_crystals(self,
     id : str or list
         The structure id(s) of the crystals to retrieve.
     api_key : str, optional
-        The user's Materials Project API key or path to a file containing the key.
-        If not given, will use the "MAPI_KEY" environment variable.
+        The user's Materials Project API key given as a str.  Either api_key
+        or api_key_file are required.
+    api_key_file : str or Path, optional
+        The path to a file containing only the user's Materials Project API
+        key.  Either api_key or api_key_file are required.
     
     Returns
     -------
     list
         All matching reference crystals retrieved.
     """
+    def load_pymatgen_structure_json(structure: dict):
+    
+        # Build box
+        a = structure['lattice']['a']
+        b = structure['lattice']['b']
+        c = structure['lattice']['c']
+        alpha = structure['lattice']['alpha']
+        beta = structure['lattice']['beta']
+        gamma = structure['lattice']['gamma']
+        box = Box(a=a, b=b, c=c, alpha=alpha, beta=beta, gamma=gamma)
 
-    # Function-specific imports
-     # http://pymatgen.org
-    import pymatgen as pmg
-    from pymatgen.ext.matproj import MPRester
-    try:
-        # import from newer pymatgen
-        from pymatgen.core import Structure
+        # Init symbols, atype and pos
+        symbols = []
+        nsites = len(structure['sites'])
+        atype = np.empty(nsites, dtype=int)
+        pos = np.empty((nsites, 3))
 
-    except ModuleNotFoundError:
-        # Import from older pymatgen
-        from pymatgen import Structure
+        # Extract symbols, atype and pos from sites
+        for i, site in enumerate(structure['sites']):
+            if len(site['species']) > 1:
+                raise ValueError('Can only do structures where each site is fully occupied by a single element')
+            element = site['species'][0]['element']
+            if element not in symbols:
+                symbols.append(element)
+            atype[i] = symbols.index(element) + 1
+            pos[i] = np.array(site['abc'])
 
-    # Open connection to Materials Project
+        # Build atoms and ucell system
+        atoms = Atoms(atype=atype, pos=pos)
+        ucell = System(atoms=atoms, box=box, symbols=symbols, scale=True)
+
+        return ucell
+    
+    # Check api_key(_file) values
+    if api_key_file is not None:
+        if api_key is not None:
+            raise ValueError('Cannot give both api_key and api_key_value')
+        with open(Path(api_key_file)) as f:
+            api_key = f.read().strip()
+    elif api_key is None:
+        raise ValueError('either api_key or api_key_file must be given')
+            
+    
+    # Build query headers and params
+    headers = {"x-api-key": api_key}
+    params = {
+        "material_ids": ','.join(aslist(id)),
+        "deprecated": False,
+        '_per_page': 100,
+        '_skip': 0,
+        '_limit': 100,
+        '_fields': 'material_id,symmetry,structure',
+        '_all_fields': False,
+        'license': 'BY-C'
+    }
+    
+    # Perform REST call
+    r = requests.get('https://api.materialsproject.org/materials/core/', headers=headers, params=params)
+    data = r.json()['data']
+    
     records = []
-    with MPRester(api_key) as m:
-
-        # Download missing entries
-        try:
-            entries = m.query({"material_id": {"$in": aslist(id)}}, ['material_id', 'cif'])
-        except:
-            raise ValueError('Failed to find Materials Project information')
-        else:
-            # Convert cif to model and save
-            for entry in entries:
-                entry_id = entry['material_id']
-                struct = Structure.from_str(entry['cif'], fmt='cif')
-                struct = pmg.symmetry.analyzer.SpacegroupAnalyzer(struct).get_conventional_standard_structure()
-
-                # Build record content
-                # Build basic record content
-                record = load_record('reference_crystal', name=entry_id)
-                record.sourcename = "Materials Project"
-                record.sourcelink = "https://materialsproject.org/"
-                record.ucell = load('pymatgen_Structure', struct).normalize()
-                records.append(record)
+    for crystal in data:
+        mp_id = crystal['material_id']
+        
+        # Load structure
+        ucell = load_pymatgen_structure_json(crystal['structure'])
+        
+        # Standardize the cell
+        ucell = ucell.dump('standardize_cell')
+        
+        # Build record content
+        # Build basic record content
+        record = load_record('reference_crystal', name=mp_id)
+        record.sourcename = "Materials Project"
+        record.sourcelink = "https://materialsproject.org/"
+        record.ucell = ucell
+        records.append(record)
     
     return records
 
 def fetch_mp_crystal(self,
                      id: str,
-                     api_key: Optional[str] = None) -> Record:
+                     api_key: Optional[str] = None,
+                     api_key_file: Union[Path, str, None] = None) -> Record:
     """
     Retrieves a single reference crystal from Materials Project based on id.
 
@@ -509,8 +559,11 @@ def fetch_mp_crystal(self,
     id : str
         The structure id of the crystal to retrieve.
     api_key : str, optional
-        The user's Materials Project API key. If not given, will use "MAPI_KEY"
-        environment variable.
+        The user's Materials Project API key given as a str.  Either api_key
+        or api_key_file are required.
+    api_key_file : str or Path, optional
+        The path to a file containing only the user's Materials Project API
+        key.  Either api_key or api_key_file are required.
     
     Returns
     -------
@@ -522,7 +575,7 @@ def fetch_mp_crystal(self,
         with open(api_key) as f:
             api_key = f.read().strip()
 
-    records = self.fetch_mp_crystals(id, api_key=api_key)
+    records = self.fetch_mp_crystals(id, api_key=api_key, api_key_file=api_key_file)
     if len(records) == 1:
         return records[0]
     else:
