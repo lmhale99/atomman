@@ -26,7 +26,7 @@ Version 1.5.0
   strings for planes and vectors.  This serves as the inverse function of
   fromstring.
 
-- **standard_cell** dump style added that serves as a wrapper around the
+- **standardize_cell** dump style added that serves as a wrapper around the
   more generalized spglib.standardize_cell() method for identifying and
   normalizing systems to their corresponding unit cells.
 
