@@ -1,21 +1,15 @@
 import os
 from setuptools import setup, find_packages
-from setuptools.extension import Extension
+from Cython.Build import cythonize
 
-try:
-    from Cython.Build import cythonize
-except:
-    USE_CYTHON = False
-    EXT = '.c'
-else:
-    USE_CYTHON = True
-    EXT = '.pyx'
-
-extensions = [Extension("*", ["atomman/core/*" + EXT]),
-              Extension("*", ["atomman/defect/*" + EXT])]
-
-if USE_CYTHON:
-    extensions = cythonize(extensions)
+# Compile cython code files
+extensions = cythonize([
+    "atomman/core/dmag.pyx",
+    "atomman/core/dvect.pyx",
+    "atomman/core/nlist.pyx",
+    "atomman/defect/slip_vector.pyx",
+    "atomman/defect/Strain.pyx",
+])
 
 def getversion():
     """Fetches version information from VERSION file"""
