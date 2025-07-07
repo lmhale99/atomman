@@ -1055,4 +1055,58 @@ class Box(Shape, object):
         elif self.istriclinic(rtol=rtol, atol=atol):
             return 'triclinic'
         else:
-            None    
+            None
+
+    def d_hkl(self, plane_hkl):
+        """
+        Compute the interplanar spacing for a lattice plane.  Note this feature
+        is expected to be used for only unit cell boxes!
+
+        Parameters
+        ----------
+        plane_hkl : array-like
+            The 3 index Miller or 4 index Miller-Bravais lattice plane.  Values
+            typically are ints, but can be floats if the cell basis is not
+            primitive.
+
+        Returns
+        -------
+        d_hkl : float
+            The spacing between the lattice planes of the given type.
+        """
+        # Check hkl values
+        plane_hkl = np.asarray(plane_hkl)
+        if plane_hkl.shape == (4,):
+            if not self.ishexagonal():
+                raise ValueError('Box is not hexagonal: cannot use 4 index Miller-Bravais plane')
+            plane_hkl = miller.plane4to3(plane_hkl)
+        elif plane_hkl.shape != (3,):
+            raise ValueError('plane_hkl must have 3 or 4 indices')
+        h = plane_hkl[0]
+        k = plane_hkl[1]
+        l = plane_hkl[2]
+
+        a = self.a
+        b = self.b
+        c = self.c
+
+        # Compute sin and cos of the angles
+        sin_alpha = np.sin(self.alpha / 180 * np.pi)
+        sin_beta =  np.sin(self.beta  / 180 * np.pi)
+        sin_gamma = np.sin(self.gamma / 180 * np.pi)
+        cos_alpha = np.cos(self.alpha / 180 * np.pi)
+        cos_beta =  np.cos(self.beta  / 180 * np.pi)
+        cos_gamma = np.cos(self.gamma / 180 * np.pi)
+
+        # Compute the triclinic 1/d_hkl^2 formula
+        numerator = (
+            h**2 / a**2 * sin_alpha**2 +
+            k**2 / b**2 * sin_beta**2 +
+            l**2 / c**2 * sin_gamma**2 +
+            (2 * k * l / b * c) * (cos_beta * cos_gamma - cos_alpha) +
+            (2 * h * l / a * c) * (cos_gamma * cos_alpha - cos_beta) +
+            (2 * h * k / a * b) * (cos_alpha * cos_beta - cos_gamma))
+        denominator = (1 - cos_alpha**2 - cos_beta**2 - cos_gamma**2 +
+                       2 * cos_alpha * cos_beta * cos_gamma)
+        
+        return (numerator / denominator)**-0.5
