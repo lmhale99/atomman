@@ -2,7 +2,7 @@
 
 # Standard Python imports
 import io
-from typing import Union
+from typing import Union, Optional
 
 # http://www.numpy.org/
 import numpy as np
@@ -37,15 +37,126 @@ class NeighborList(object):
             Specifies the number of extra neighbor positions to allow each atom
             when the number of neighbors exceeds the underlying array size.
             Default value is 10.
+        nlist : array-like object, optional
+            An array consisting of int values, where each row is associated with
+            an atom, the first value in each row is that atom's coordination, and
+            all subsequent values (up to the coordination number) are indices of
+            the neighboring atoms.
         """
+        # Load from model
         if 'model' in kwargs:
             model = kwargs.pop('model')
             self.load(model, **kwargs)
+        
+        # Convert from existing nlist array
+        elif 'nlist' in kwargs:
+            nlist = kwargs.pop('nlist')
+            assert len(kwargs) == 0
+            self.__nlist = nlist
+            self.__coord = nlist[:, 0]
+            self.__neighbors = nlist[:, 1:]
+        
+        # Build new neighbor list
         else:
             system = kwargs.pop('system')
             cutoff = kwargs.pop('cutoff')
             self.build(system, cutoff, **kwargs)
-    
+
+
+    @classmethod
+    def freud(cls,
+              system,
+              cutoff: Optional[float] = None,
+              coord: Optional[int] = None,
+              return_bonds: bool = False):
+        """
+        Use the AABBQuery from the freud Python package to build the neighbor
+        list.  This has better performance than the native atomman method and
+        allows for searching by number of neighbors, but requires additional
+        package installs. 
+
+        Parameters
+        ----------
+        system : atomman.System
+            The system to calculate the neighbor list for. 
+        cutoff : float, optional
+            Radial cutoff distance for identifying neighbors.  Either cutoff
+            or coord are required.
+        coord : int, optional
+            Number of neighbors to find for each atom.  Either cutoff
+            or coord are required.
+        return_bonds : bool, optional
+            If True, then the method will also return the list of bonds
+            found by the AABBQuery.  Useful if you also want the dmag vects
+            for all neighbor pairs.
+        """
+        try:
+            import freud
+        except ModuleNotFoundError as e:
+            raise ModuleNotFoundError('package freud must be installed for this method') from e
+        
+        # Build freud query terms dict
+        if cutoff is not None:
+            if coord is not None:
+                raise ValueError('cutoff and coord cannot both be given')
+            query_terms = dict(
+                mode = 'ball',
+                r_max = cutoff,
+                exclude_ii = True)
+            
+        elif coord is not None:
+            query_terms = dict(
+                mode = 'nearest',
+                num_neighbors = coord,
+                exclude_ii = True)
+        
+        else:
+            raise ValueError('either cutoff or coord must be given')
+
+        # Convert atomman system into freud box and points
+        box, points = system.dump('freud')
+
+        # Build query object and perform the query
+        aq = freud.locality.AABBQuery(box, points)      
+        bonds = aq.query(points, query_terms)
+        coord = 15
+        # Find max coord
+        if coord is None:
+            coord = 0       # coord is max coord across all atoms
+            last_i = -1
+            c = 0           # c is current coord count for atom i
+            for bond in bonds:
+                i, j, dmag = bond
+                if i != last_i:
+                    if c > coord:
+                        coord = c
+                    last_i = i
+                    c = 1
+                else:
+                    c += 1
+
+        # Build nlist
+        nlist = np.empty((system.natoms, coord+1), dtype=np.int64)
+        nlist[:, 0] = 0
+
+        for bond in bonds:
+            i, j, dmag = bond
+            
+            # Increase atom's coordination
+            nlist[i, 0] += 1
+            
+            # Add j to the nlist row
+            nlist[i, nlist[i, 0]] = j
+
+        # Initialize neighborlist object
+        neighbors = cls(nlist=nlist)
+
+        if return_bonds:
+            return neighbors, bonds
+        else:
+            return neighbors
+        
+
     @property
     def coord(self) -> np.ndarray:
         """numpy.ndarray: The atomic coordination numbers"""
