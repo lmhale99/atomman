@@ -1,6 +1,46 @@
 Updates
 =======
 
+Version 1.5.1
+-------------
+
+- **atomman.unitconvert** has been updated to use yabadaba.UnitConverter
+  ensuring full compatibility between unit conversions with the two packages.
+  Despite the code changing, atomman.unitconvert should still behave
+  identically to before. **WARNING**: make sure yabadaba is at least version
+  0.3.2 to fix a bug associated this change!!!
+
+- **atomman.defect.GRIP** added that manages inputs for the grand-canonical
+  interface predictor (GRIP) algorithm for grain boundary generation and
+  relaxation.
+  
+- **atomman.defect.GrainBoundary.from_model** class method is added that reads
+  in grain boundary configuration information from a grain_boundary record.
+
+- **atomman.defect.GrainBoundary.dlat** method added that computes the lattice
+  thickness for the grain boundary interface, which is used by GRIP.
+
+- Miller vector support added to **atomman.library.record.GrainBoundary**.
+
+- Some code cleanup and reorganization in **atomman.defect.Boundary.dlat**.
+
+- **atomman.Box.d_hkl** method added for computing interplanar spacings.
+
+- **atomman.mep.ISMPath** updated to use tqdm for the calculation status 
+  progress rather than print statements.
+  
+- **atomman.defect.InterstitialSite** added, which uses Voronoi analysis to
+  identify interstitial sites in a given system.
+
+- **atomman.lammps.newseed** method added that generates a new
+  LAMMPS-compatible random number seed.  **atomman.lammps.seed** method added
+  that tests if a given int can be used as a LAMMPS random number seed.
+
+- **atomman.lammps.run** tinkered with again related to trying to get the
+  LAMMPS errors to be passed to python in an informative way.
+
+- Minor doc and docstring updates for typos and syntax warnings.
+
 Version 1.5.0
 -------------
 
