@@ -3,6 +3,8 @@
 # Standard Python imports
 from typing import Tuple
 
+import numpy as np
+
 # https://github.com/usnistgov/yabadaba
 from yabadaba.record import Record
 
@@ -54,17 +56,17 @@ class GrainBoundary(Record):
         self._add_value('str', 'type')
         self._add_value('str', 'axis')
         self._add_value('float', 'misorientation-angle')
-        self._add_value('vector', 'auvw1', # or miller?
+        self._add_value('miller', 'auvw1',
                         modelpath='calculation-parameter.auvw1')
-        self._add_value('vector', 'buvw1', # or miller?
+        self._add_value('miller', 'buvw1',
                         modelpath='calculation-parameter.buvw1')
-        self._add_value('vector', 'cuvw1', # or miller?
+        self._add_value('miller', 'cuvw1',
                         modelpath='calculation-parameter.cuvw1')
-        self._add_value('vector', 'auvw2', # or miller?
+        self._add_value('miller', 'auvw2',
                         modelpath='calculation-parameter.auvw2')
-        self._add_value('vector', 'buvw2', # or miller?
+        self._add_value('miller', 'buvw2', 
                         modelpath='calculation-parameter.buvw2')
-        self._add_value('vector', 'cuvw2', # or miller?
+        self._add_value('miller', 'cuvw2',
                         modelpath='calculation-parameter.cuvw2')        
         self._add_value('str', 'cutboxvector', valuerequired=True,
                         modelpath='calculation-parameter.cutboxvector',
@@ -72,21 +74,27 @@ class GrainBoundary(Record):
         self._add_value('str', 'cellsetting', valuerequired=True,
                         modelpath='calculation-parameter.cellsetting',
                         defaultvalue='p',
-                        allowedvalues=['p', 'i', 'f', 'a', 'b', 'c']) #t, t1, t2???
-        
+                        allowedvalues=['p', 'i', 'f', 'a', 'b', 'c', 't', 't1', 't2'])
+    
+    @property
+    def uvws1(self):
+        """numpy.ndarray: All three rotation vectors for grain 1"""
+        return np.array([self.auvw1, self.buvw1, self.cuvw1])
+
+    @property
+    def uvws2(self):
+        """numpy.ndarray: All three rotation vectors for grain 2"""
+        return np.array([self.auvw2, self.buvw2, self.cuvw2])
+
     @property
     def parameters(self) -> dict:
         """dict : Defect parameters for atomman structure generator"""
         p = {}
-        p['auvw1'] = f"{self.auvw1[0]} {self.auvw1[1]} {self.auvw1[2]}"
-        p['buvw1'] = f"{self.buvw1[0]} {self.buvw1[1]} {self.buvw1[2]}"
-        p['cuvw1'] = f"{self.cuvw1[0]} {self.cuvw1[1]} {self.cuvw1[2]}"
-        p['auvw2'] = f"{self.auvw2[0]} {self.auvw2[1]} {self.auvw2[2]}"
-        p['buvw2'] = f"{self.buvw2[0]} {self.buvw2[1]} {self.buvw2[2]}"
-        p['cuvw2'] = f"{self.cuvw2[0]} {self.cuvw2[1]} {self.cuvw2[2]}"
+        p['uvws1'] = self.uvws1
+        p['uvws2'] = self.uvws2
         p['cutboxvector'] = self.cutboxvector
         if self.cellsetting is not None:
-            p['cellsetting'] = self.cellsetting
+            p['conventional_setting'] = self.cellsetting
 
         return p
     

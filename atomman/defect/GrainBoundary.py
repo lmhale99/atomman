@@ -8,11 +8,14 @@ from scipy.spatial.transform import Rotation
 import numpy as np
 import numpy.typing as npt
 
+from DataModelDict import DataModelDict as DM
+
 # Local imports
 from .Boundary import Boundary
 from .TiltGrainBoundaryHelper import TiltGrainBoundaryHelper
-from .. import System
+from .. import System, Box
 from ..tools import approx_rational
+from ..library.record.GrainBoundary import GrainBoundary as GBRecord
 
 
 class GrainBoundary(Boundary):
@@ -54,13 +57,7 @@ class GrainBoundary(Boundary):
             Indicates which of the three box vectors that the boundary will
             be placed along. Default value is 'c'.
         maxmult : int, optional
-            The max integer multiplier to use for the zero strain check if
-            zerostrain is True.
-        
-        Returns
-        -------
-        atomman.defect.Boundary
-            The Boundary object for a grain boundary.
+            The max integer multiplier to use for the zero strain check.
         """
         # Call Boundary's init using the single ucell
         super().__init__(ucell, ucell, uvws1, uvws2, 
@@ -74,6 +71,37 @@ class GrainBoundary(Boundary):
         rvects2 = self.transform_p2_to_r2.apply(self.ucell.box.vects)
         self.transform = np.linalg.lstsq(rvects1, rvects2, rcond=None)[0].T
         self.__transform_r1_to_r2 = Rotation.from_matrix(np.linalg.lstsq(rvects1, rvects2, rcond=None)[0].T)
+
+    @classmethod
+    def from_model(cls,
+                   ucell: System,
+                   record: GBRecord,
+                   maxmult: int = 10):
+        """
+        Allows for the grain boundary settings to be loaded from a grain_boundary
+        record rather than manually specifying the inputs.
+
+        Parameters
+        ----------
+        ucell : atomman.System
+            The reference unit cell to use for both grains.
+        record : str, path, DataModelDict.DataModelDict or atomman.library.record.GrainBoundary
+            A grain_boundary-style record containing the input settings to load.
+            Can be given as a file path, str file contents, DataModelDict contents,
+            or a GrainBoundary record object.
+        maxmult : int, optional
+            The max integer multiplier to use for the zero strain check.
+        
+        Returns
+        -------
+        atomman.defect.GrainBoundary
+        """
+        # Extract inputs from the grain_boundary record
+        if not isinstance(record, GBRecord):
+            record = GBRecord(model = record)
+        obj = cls(ucell, maxmult=maxmult, **record.parameters)
+
+        return obj
 
     @classmethod
     def symmetric_tilt(cls,
@@ -176,3 +204,33 @@ class GrainBoundary(Boundary):
 
         # Sigma is the least common multiplier of the denominators
         return np.lcm.reduce(denominators)
+    
+    def dlat(self,
+             precision: int = 6) -> float:
+        """
+        Computes the lattice thickness for the grain boundary by building a
+        lattice system for the primitive cell and finding the distance between
+        atoms perpendicular to the grain boundary plane.
+        
+        Parameters
+        ----------
+        precision : int, optional
+            The rounding precision to use in identifying unique atom
+            coordinates.  Default value is 6.
+
+        Returns
+        -------
+        float
+            The distance between two lattice atom positions in the direction
+            perpendicular to the grain boundary plane.
+        """
+        # Construct a lattice system from the primitive unit cell and 1 atom
+        latticesystem = System(box=Box(vects=self.ucell_prim.box.vects))
+        
+        # Rotate and supersize
+        testsystem = latticesystem.rotate(self.uvws_prim1).supersize(2, 2, 2)
+        
+        # Find the difference between the two nearest atom positions perpendicular to the cut
+        unique_z = sorted(list(set(testsystem.atoms.pos[:, self.cutindex].round(precision))))
+        return unique_z[1] - unique_z[0]
+    

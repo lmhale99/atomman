@@ -88,17 +88,9 @@ class Boundary():
                                                       setting=conventional_setting2,
                                                       return_transform=True, atol=tol)
 
-        # Convert uvws1 to the primitive cell
-        uvws1 = np.asarray(uvws1, dtype=float)
-        if uvws1.shape[-1] == 4:
-            uvws1 = miller.vector4to3(uvws1)
-        uvws_prim1 = miller.vector_conventional_to_primitive(uvws1, setting=conventional_setting1)
-
-        # Convert uvws2 to the primitive cell
-        uvws2 = np.asarray(uvws2, dtype=float)
-        if uvws2.shape[-1] == 4:
-            uvws2 = miller.vector4to3(uvws2)
-        uvws_prim2 = miller.vector_conventional_to_primitive(uvws2, setting=conventional_setting1)
+        # Handle uvws inputs
+        uvws1, uvws_prim1 = interpret_rotation_uvws(uvws1, conventional_setting=conventional_setting1)
+        uvws2, uvws_prim2 = interpret_rotation_uvws(uvws2, conventional_setting=conventional_setting2)
 
         # Save primitive cell settings
         self.__ucell_prim1 = ucell_prim1
@@ -111,6 +103,8 @@ class Boundary():
         # Create rotated cells
         rcell1, transform_p1_to_r1 = ucell_prim1.rotate(uvws_prim1, return_transform=True)
         rcell2, transform_p2_to_r2 = ucell_prim2.rotate(uvws_prim2, return_transform=True)
+        clean_wrap(rcell1)
+        clean_wrap(rcell1)
         self.__rcell1 = rcell1
         self.__rcell2 = rcell2
         self.__transform_p1_to_r1 = Rotation.from_matrix(transform_p1_to_r1)
@@ -543,6 +537,9 @@ class Boundary():
     def deleteoverlaps(self, system, deleter, deletefrom, natoms1):
         """
         """
+        if deleter == 0.0:
+            return system, natoms1
+
         # Build neighborlist
         cutoff = 1.2
         if deleter > cutoff:
@@ -721,3 +718,86 @@ class Boundary():
             return np.linspace(0, 1, num=int(val), endpoint=False)
 
         return [float(i) for i in iaslist(val)]
+
+
+def interpret_rotation_uvws(*uvws,
+                            conventional_setting='p'):
+    """
+    Interprets the three rotation uvws for a crystal.
+    
+    Parameters
+    ----------
+    uvws : list, array
+        The three Miller uvw vectors or Miller-Bravais uvtw vectors that the
+        unit cell should be rotated to align with.  The three vectors can
+        either be given directly or within a list.  Each value in the list can
+        itself be an array-like object or a str representation of a Miller
+        vector.
+    conventional_setting : str, optional
+        Indicates the conventional lattice setting associated with the Miller
+        vectors given.  Default value is 'p' for a primitive unit cell.
+        
+    Returns
+    -------
+    uvws_conv : numpy.ndarray
+        3x3 array of Miller vector indices relative to the conventional unit cell.
+    uvws_prim : numpy.ndarray
+        3x3 array of Miller vector indices relative to the primitive unit cell.
+    
+    Raises
+    ------
+    ValueError
+        If the generated uvws_prim indices are not integer values.    
+    """
+    # Check for valid len of uvws
+    if len(uvws) == 1:
+        uvws = uvws[0] 
+    if len(uvws) != 3:
+        raise ValueError('invalid uvws: 3 values expected')
+    
+    # Convert given uvws into uvws_conv array
+    uvws_conv = []
+    for uvw in uvws:
+        if isinstance(uvw, str):
+            uvw = miller.fromstring(uvw)
+        else:
+            uvw = np.asarray(uvw, dtype=float)
+            
+        if uvw.shape == (4,):
+            uvw = miller.vector4to3(uvw)
+        elif uvw.shape != (3,):
+            raise ValueError('invalid uvws: each uvw must have 3 or 4 indices')
+        
+        uvws_conv.append(uvw)
+    uvws_conv = np.array(uvws_conv)
+    
+    
+    # Convert uvws1 to the primitive cell
+    uvws_prim = miller.vector_conventional_to_primitive(uvws_conv, setting=conventional_setting)
+    
+    # Check that uvws_prim are ints
+    uvws_prim_int = np.array(np.rint(uvws_prim), dtype=int)
+    if np.allclose(uvws_prim, uvws_prim_int):
+        uvws_prim = uvws_prim_int
+    else:
+        raise ValueError('primitive Miller vector indices are not all ints, therefore they are not lattice vectors!')
+    
+    return uvws_conv, uvws_prim
+
+def clean_wrap(system, atol=1e-7):
+    """
+    Wrap atoms around periodic boundaries cleanly
+
+    Parameters
+    ----------
+    system : atomman.System
+        The atomic system to wrap the atoms for.
+    atol : float
+        The absolute tolerance to use for identifying atoms on a boundary.
+        Default value is 1e-7.
+    """
+    # Safely wrap atoms into the rcells
+    system.atoms.pos += atol
+    system.wrap()
+    system.atoms.pos -= atol
+    system.atoms.pos[np.isclose(system.atoms.pos, 0.0, atol=atol, rtol=0)] = 0
