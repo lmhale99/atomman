@@ -5,6 +5,8 @@ from __future__ import annotations
 import time
 from typing import Optional, Union
 
+from tqdm import trange
+
 # http://www.numpy.org/
 import numpy as np
 import numpy.typing as npt
@@ -219,10 +221,13 @@ class ISMPath(BasePath):
 
         if verbose and relaxsteps > 0:
             print('Starting relaxation steps', flush=True)
-        
+            itersteps = trange(relaxsteps)
+        else:
+            itersteps = range(relaxsteps)
+
         # Perform the relaxation steps
         s = time.time()
-        for i in range(relaxsteps):
+        for i in itersteps:
             
             # Step forward
             newpath = currentpath.step(timestep=timestep)
@@ -230,6 +235,9 @@ class ISMPath(BasePath):
             # Calculate max displacement from step
             d = np.linalg.norm(newpath.coord - currentpath.coord, axis=-1).max() / timestep
             
+            if verbose:
+                itersteps.set_postfix(tolerance=f'{d:.14e}')
+
             # Update currentpath to newpath
             currentpath = newpath
 
@@ -238,11 +246,11 @@ class ISMPath(BasePath):
                 break
         
         e = time.time()
-        if verbose and relaxsteps > 0:
-            print(f'Number of relax steps performed: {i+1}')
-            print(f'Final max displacement: {d}')
-            print(f'Run time: {e-s} seconds')
-            print(flush=True)
+        #if verbose and relaxsteps > 0:
+        #    print(f'Number of relax steps performed: {i+1}')
+        #    print(f'Final max displacement: {d}')
+        #    print(f'Run time: {e-s} seconds')
+        #    print(flush=True)
         
         # --------- Identify climb coordiates(s) -------- #
         
@@ -256,18 +264,24 @@ class ISMPath(BasePath):
         
         if verbose and climbsteps > 0:
             print(f'Starting climbing steps with {len(climbindex)} climbing points', flush=True)
+            itersteps = trange(climbsteps)
+        else:
+            itersteps = range(climbsteps)
         
         # ----------------- Climbing steps ---------------- #
         
         # Perform the climb steps
         s = time.time()
-        for i in range(climbsteps):
+        for i in itersteps:
             
             # Step forward
             newpath = currentpath.step(timestep=timestep, climbindex=climbindex)
             
             # Calculate max displacement
             d = np.linalg.norm(newpath.coord - currentpath.coord, axis=-1).max() / timestep
+            
+            if verbose:
+                itersteps.set_postfix(tolerance=f'{d:.14e}')
             
             # Update currentpath to newpath
             currentpath = newpath
@@ -278,8 +292,8 @@ class ISMPath(BasePath):
         
         e = time.time()
         if verbose and climbsteps > 0:
-            print(f'Number of climb steps performed: {i+1}')
-            print(f'Final max displacement: {d}')
+            #print(f'Number of climb steps performed: {i+1}')
+            #print(f'Final max displacement: {d}')
             print(f'Run time: {e-s} seconds')
             print(f'Max energy before climb = {energy.max()}', flush=True)
             print(f'Max energy after climb = {currentpath.energy().max()}')
