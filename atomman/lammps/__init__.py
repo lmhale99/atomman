@@ -22,5 +22,7 @@ from .Potential import Potential, PotentialLAMMPS, PotentialLAMMPSKIM
 from .run import run
 from .normalize import normalize
 from .checkversion import checkversion
+from .seed import seed, seedmax, newseed
 __all__ = ['LammpsError', 'style', 'run', 'normalize', 'Potential', 'Log',
-           'PotentialLAMMPS', 'PotentialLAMMPSKIM', 'NEBLog', 'checkversion']
+           'PotentialLAMMPS', 'PotentialLAMMPSKIM', 'NEBLog', 'checkversion',
+           'seed', 'seedmax', 'newseed']
