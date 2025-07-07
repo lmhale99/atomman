@@ -11,6 +11,7 @@ from .axes_check import axes_check
 from .compositionstr import compositionstr
 from .approx_rational import approx_rational
 from .duplicates_allclose import duplicates_allclose
+from .duplicated_allclose import duplicated_allclose, newrows_allclose
 from .vect_angle import vect_angle
 from .indexstr import indexstr
 from .filltemplate import filltemplate
@@ -20,7 +21,7 @@ from . import miller
 
 __all__ = ['axes_check', 'boolean', 'compositionstr', 'duplicates_allclose', 'vect_angle',
            'uber_open_rmode', 'indexstr', 'filltemplate', 'miller', 'aslist',
-           'iaslist', 'screen_input']
+           'iaslist', 'screen_input', 'duplicated_allclose', 'newrows_allclose']
 __all__.extend(atomic_info_all)
 __all__.extend(crystalsystem_all)
 __all__.sort()
