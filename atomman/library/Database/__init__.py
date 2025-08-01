@@ -56,5 +56,5 @@ class Database(potentials.Database):
                              overwrite=overwrite, verbose=verbose)
 
         self.download_crystal_prototypes(overwrite=overwrite, verbose=verbose)
-        self.download_relaxed_crystals(overwrite=overwrite, verbose=verbose)
+        #self.download_relaxed_crystals(overwrite=overwrite, verbose=verbose)
         #self.download_reference_crystals(overwrite=overwrite, verbose=verbose)
