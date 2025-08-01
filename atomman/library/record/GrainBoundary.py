@@ -55,7 +55,8 @@ class GrainBoundary(Record):
                         modelpath='system-family-URL')
         self._add_value('str', 'type')
         self._add_value('str', 'axis')
-        self._add_value('float', 'misorientation-angle')
+        self._add_value('float', 'misorientation',
+                        modelpath='misorientation-angle')
         self._add_value('miller', 'auvw1',
                         modelpath='calculation-parameter.auvw1')
         self._add_value('miller', 'buvw1',
@@ -67,7 +68,7 @@ class GrainBoundary(Record):
         self._add_value('miller', 'buvw2', 
                         modelpath='calculation-parameter.buvw2')
         self._add_value('miller', 'cuvw2',
-                        modelpath='calculation-parameter.cuvw2')        
+                        modelpath='calculation-parameter.cuvw2')
         self._add_value('str', 'cutboxvector', valuerequired=True,
                         modelpath='calculation-parameter.cutboxvector',
                         defaultvalue='c', allowedvalues=['a', 'b', 'c'])
