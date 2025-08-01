@@ -824,12 +824,12 @@ class Box(Shape, object):
             If cartpos dimensions are not (..., 3).
         """
         # Check/convert cartpos
-        value = np.asarray(cartpos, dtype=float)
+        cartpos = np.asarray(cartpos, dtype=float)
         if cartpos.shape[-1] != 3:
             raise ValueError('Invalid position dimensions')
 
         # Convert and return
-        return np.inner((value - self.origin), self.reciprocal_vects)
+        return np.inner((cartpos - self.origin), self.reciprocal_vects)
 
     def iscubic(self, 
                 rtol: float = 1e-05,

@@ -115,13 +115,13 @@ def promptfxn(df):
     header = '#  family               symbols  alat    Ecoh    method  standing'
     print(header)
 
-    js = df.sort_values('cohesive_energy').index
+    js = df.sort_values('Ecoh (eV/atom)').index
     for i, j in enumerate(js):
         crystal = df.loc[j]
         row =  f'{i+1:2} {crystal.family:20.20} '
         row += f'{"".join(crystal.symbols):8.8} '
         row += f'{crystal.a:7.4f} '
-        row += f'{crystal.cohesive_energy:7.4f} '
+        row += f'{crystal["Ecoh (eV/atom)"]:7.4f} '
         row += f'{crystal.method:7.7} '
         row += f'{crystal.standing:4.4}'
         print(row)
