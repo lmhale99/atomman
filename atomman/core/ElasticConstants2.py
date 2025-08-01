@@ -16,7 +16,7 @@ from DataModelDict import DataModelDict as DM
 from ..tools import axes_check
 import atomman.unitconvert as uc
 
-class ElasticConstants(object):
+class ElasticConstants2(object):
     """Class for storing and converting elastic constant values"""
 
     def __init__(self, **kwargs):
@@ -252,7 +252,7 @@ class ElasticConstants(object):
 
     def transform(self,
                   axes: npt.ArrayLike,
-                  tol: float = 1e-8) -> ElasticConstants:
+                  tol: float = 1e-8) -> ElasticConstants2:
         """
         Transforms the elastic constant matrix based on the supplied axes.
         
@@ -276,7 +276,7 @@ class ElasticConstants(object):
         C = np.einsum('ghij,ghmn,mnkl->ijkl', Q, self.Cijkl, Q)
         C[abs(C / C.max()) < tol] = 0.0
 
-        return ElasticConstants(Cijkl=C)
+        return ElasticConstants2(Cijkl=C)
 
     def isotropic(self, *,
                   C11: Optional[float] = None,
@@ -781,7 +781,10 @@ class ElasticConstants(object):
                              [C15, C25, C35, C45, C55, C56],
                              [C16, C26, C36, C46, C56, C66]])
 
-    def normalized_as(self, crystal_system: str) -> ElasticConstants:
+    def normalized_as(self,
+                      crystal_system: str,
+                      return_dict: bool = False
+                      ) -> Union[dict, ElasticConstants2]:
         """
         Returns a new ElasticConstants object where values of the current are
         averaged or zeroed out according to a standard crystal system setting.
@@ -794,12 +797,20 @@ class ElasticConstants(object):
         crystal_system : str
             Indicates the crystal system representation to use when building a
             data model.
+        return_dict: bool, optional
+            If False (default), a new ElasticConstants object will be returned.
+            If set to True, a dict containing only the unique lattice constants
+            for the crystal_system will be returned.
             
         Returns
         -------
         atomman.ElasticConstants
             The elastic constants normalized according to the crystal system
-            symmetries.
+            symmetries. Returned if return_dict is False.
+        dict
+            A dict containing only the unique elastic constants for the given 
+            crystal_system.  For 'isotropic', mu and K are used.  For all
+            others, the unique Cij values will be used
         """
 
         c = self.Cij
@@ -871,7 +882,9 @@ class ElasticConstants(object):
         else:
             raise ValueError('Invalid crystal_system: ' + crystal_system)
 
-        return ElasticConstants(**c_dict)
+        if return_dict:
+            return c_dict
+        return ElasticConstants2(**c_dict)
 
     def is_normal(self,
                   crystal_system: str,
@@ -940,7 +953,7 @@ class ElasticConstants(object):
                 for C in model['C']:
                     key = 'C' + C['ij'][0] + C['ij'][2]
                     c_dict[key] = uc.value_unit(C['stiffness'])
-                self.Cij = ElasticConstants(**c_dict).Cij
+                self.Cij = ElasticConstants2(**c_dict).Cij
 
         # Return DataModelDict if model not given
         else:

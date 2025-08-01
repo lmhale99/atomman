@@ -6,8 +6,9 @@ from .NeighborList import NeighborList
 from .Atoms import Atoms
 from .Box import Box
 from .ElasticConstants import ElasticConstants
+from .ElasticConstants2 import ElasticConstants2
 from .System import System
 from .displacement import displacement
 
 __all__ = ['displacement', 'dvect', 'dmag', 'nlist', 'Atoms', 'Box',
-           'ElasticConstants', 'NeighborList', 'System']
+           'ElasticConstants', 'ElasticConstants2', 'NeighborList', 'System']
