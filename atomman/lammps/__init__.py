@@ -8,7 +8,10 @@ class LammpsError(Exception):
         
         message = args[0]
         try:
-            message = message[message.index('ERROR:') + 7:]
+            # Crop message to only what appears after ERROR(something):
+            error_index = message.rindex('ERROR')
+            crop_index = message[error_index:].index(':') + error_index + 1
+            message = message[crop_index:].strip()
         except:
             pass
         args = (message, ) + args[1:]
