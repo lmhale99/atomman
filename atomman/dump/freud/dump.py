@@ -1,13 +1,15 @@
+# Standard Python imports
 from typing import Tuple
 
+# https://freud.readthedocs.io/en/latest/index.html
 import freud
 
+# http://www.numpy.org/
 import numpy as np
-import numpy.typing as npt
 
 from ... import System
 
-def dump(system) -> Tuple[freud.box.Box, np.ndarray]:
+def dump(system: System) -> Tuple[freud.box.Box, np.ndarray]:
     """
     Convert an atomman.system into a freud.box.Box and an array of coordinate points. 
 
