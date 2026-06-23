@@ -1,6 +1,6 @@
 from typing import Optional
 import secrets
-              
+
 seedmax: int = 900000000
 """int: The max random number generator seed LAMMPS supports"""
 

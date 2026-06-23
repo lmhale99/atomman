@@ -97,10 +97,11 @@ class NEBLog(object):
             climb_start = None
             nrows = None
             for i in range(3, len(lines)):
-                if lines[i][:4] == 'Step':
+                terms = lines[i].strip().split()
+                if terms[0] == 'Step':
                     climb_start = i + 1
                     nrows = i - 4
-
+        print(climb_start, nrows)
         # Second pass
         self.__minrun = pd.read_csv(neblog, names=column_names, skiprows=3, nrows=nrows, sep=r"\s+", skip_blank_lines=True)
         self.__climbrun = pd.read_csv(neblog, names=column_names, skiprows=climb_start, sep=r"\s+", skip_blank_lines=True)

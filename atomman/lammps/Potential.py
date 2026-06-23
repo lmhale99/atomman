@@ -9,9 +9,8 @@ from DataModelDict import DataModelDict as DM
 
 # https://github.com/usnistgov/potentials
 from potentials import load_record
-from potentials.record.PotentialLAMMPS import PotentialLAMMPS
-from potentials.record.PotentialLAMMPSKIM import PotentialLAMMPSKIM
 
+from ..typing import lammpspotential
 
 def Potential(model: Union[str, io.IOBase],
               name: Optional[str] = None,
@@ -20,7 +19,7 @@ def Potential(model: Union[str, io.IOBase],
               potkey: Optional[str] = None,
               potid: Optional[str] = None,
               symbolset: Union[str, list, None] = None
-              ):
+              ) -> lammpspotential:
     """
     Class initializer switch for PotentialLAMMPS or PotentialLAMMPSKIM objects.
 

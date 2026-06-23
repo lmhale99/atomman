@@ -1,9 +1,8 @@
-# coding: utf-8
 # Standard Python libraries
 import io
 from collections import OrderedDict
 from typing import Optional, Tuple, Union
-                        
+
 # atomman imports
 import atomman.unitconvert as uc
 from ... import Atoms, Box, System

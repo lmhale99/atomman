@@ -5,13 +5,14 @@ import io
 from collections import OrderedDict
 from copy import deepcopy
 from typing import Optional, Tuple, Union
+import datetime
 
 # http://www.numpy.org/
 import numpy as np
 
-from potentials.record.BasePotentialLAMMPS import BasePotentialLAMMPS
 
 # atomman imports
+from ...typing import lammpspotential
 import atomman.unitconvert as uc
 from .atoms_prop_info import atoms_prop_info
 from .velocities_prop_info import velocities_prop_info
@@ -23,11 +24,14 @@ def dump(system,
          atom_style: Optional[str] = None,
          units: Optional[str] = None,
          natypes: Optional[int] = None,
-         potential: Optional[BasePotentialLAMMPS] = None,
-         float_format: str = '%.13f',
+         potential: Optional[lammpspotential] = None,
+         float_format: str = '%.17e',
          return_info: bool = True,
          prompt: bool = False,
          comments: bool = True,
+         tilt_large: bool = False,
+         triclinic: bool = False,
+         lammps_date: datetime.date = datetime.date(2020, 10, 29),
          safecopy: bool = False) -> Optional[Union[str, Tuple[str, str]]]:
     """
     Write a LAMMPS-style atom data file from a System.
@@ -69,6 +73,10 @@ def dump(system,
         Used if return_pair_info is True. If comments is True (default), then
         metadata comments associated with the potential will be included in the
         pair_info.
+    triclinic : bool, optional
+        If True then the box tilt parameters will always be included ensuring
+        that the box in LAMMPS is triclinic.  If False (default), the tilts
+        will not be included for orthorhombic boxes.
     safecopy : bool, optional
         The LAMMPS data format requires all atoms to be inside box bounds, i.e.
         "wrapped".  If safecopy is True then a copy of the system is made to
@@ -118,7 +126,7 @@ def dump(system,
     content += '%i atom types\n' % natypes
     
     # Write box content
-    content += box_content(system, units, float_format)
+    content += box_content(system, units, float_format, triclinic=triclinic)
 
     # Write atom info
     content += atoms_content(system, imageflags, atom_style, units, float_format)
@@ -152,7 +160,8 @@ def dump(system,
         if potential is not None:
             read_info = potential.pair_data_info(f, system.pbc, symbols=system.symbols,
                                                 masses=system.masses,atom_style=atom_style,
-                                                units=units, prompt=prompt, comments=comments)
+                                                units=units, prompt=prompt, comments=comments,
+                                                lammps_date=lammps_date, tilt_large=tilt_large)
         else:
             read_info = info_content(system, f, atom_style=None, units=None)
 
@@ -164,7 +173,10 @@ def dump(system,
     elif len(returns) > 1:
         return tuple(returns)
 
-def box_content(system, units: str, float_format: str) -> str:
+def box_content(system,
+                units: str,
+                float_format: str,
+                triclinic: bool) -> str:
     """
     Generates the data file lines associated with box dimensions.
 
@@ -199,7 +211,7 @@ def box_content(system, units: str, float_format: str) -> str:
     content += xf2 % (xlo, xhi) +' xlo xhi\n'
     content += xf2 % (ylo, yhi) +' ylo yhi\n'
     content += xf2 % (zlo, zhi) +' zlo zhi\n'
-    if xy != 0.0 or xz != 0.0 or yz != 0.0:
+    if triclinic or xy != 0.0 or xz != 0.0 or yz != 0.0:
         content += xf3 % (xy, xz, yz) + ' xy xz yz\n'
 
     return content

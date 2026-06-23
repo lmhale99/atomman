@@ -1,9 +1,9 @@
-# coding: utf-8
 # Standard Python libraries
+import sys
 from pathlib import Path
 import shlex
 import subprocess
-from typing import Optional
+from typing import Optional, Tuple
 
 # atomman imports
 from . import Log, LammpsError
@@ -14,8 +14,10 @@ def run(lammps_command: str,
         mpi_command: Optional[str] = None,
         restart_script_name: Optional[str] = None,
         restart_script: Optional[str] = None,
+        restart_filename: Optional[str] = None,
+        restart_lognum: Optional[int] = None,
         partition: Optional[str] = None,
-        logfile: str = 'log.lammps',
+        logfile: Optional[str] = 'log.lammps',
         screen: bool = True,
         suffix: Optional[str] = None) -> Log:
     """
@@ -36,12 +38,27 @@ def run(lammps_command: str,
         None (no mpi).
     restart_script_name : str, optional
         Path to an alternate LAMMPS input script file to use for restart runs.
-        If given, the restart script will be used if the specified logfile
-        already exists.  Requires logfile to not be None.
+        Restart scripts will be used instead of the regular scripts if they are
+        given, logfile already exists, and if restart_filename is given at least
+        one matching file is found.  Requires logfile to not be None.
     restart_script : str, optional
         Alternate LAMMPS script command lines to use for restart runs.
-        If given, the restart script will be used if the specified logfile
-        already exists.  Requires logfile to not be None.
+        Restart scripts will be used instead of the regular scripts if they are
+        given, logfile already exists, and if restart_filename is given at least
+        one matching file is found.  Requires logfile to not be None.
+    restart_filename : str or None, optional
+        File name (with wildcards) indicating the restart files the simulation
+        would start from if they exist.  If given, restart scripts will not be
+        used unless at least one matching file is found to exist.
+    restart_lognum : int or None, optional
+        Handling of restart scripts is done in two steps: initial checks
+        for existing log files and reading in all log files after running.
+        If the initial checks are handled externally beforehand, the lognum
+        setting (i.e. how many previous log files there are) can be passed in
+        allowing for them to still all be read in afterwards.  Note: this cannot
+        be used with restart_script or restart_script_name so it is your
+        responsibility to set script or script_name based on if it is a
+        restarted calculation or not!
     partition : str or None, optional
         The LAMMPS partition setting to use for the calculation.  This is
         required for calculations like NEB that run multiple simulations at
@@ -67,38 +84,31 @@ def run(lammps_command: str,
 
     # Check if either restart_script_name or restart_script is given
     if restart_script_name is not None or restart_script is not None:
+        if restart_lognum is not None:
+            raise  ValueError('cannot give restart_lognum with restart_script or restart_script_name: restart is assumed!')
         if restart_script_name is not None and restart_script is not None:
             raise  ValueError('Cannot give both restart_script and restart_script_name')
         if logfile is None:
             raise ValueError('logfile must be given to automatically determine restart status')
-        else:
-            logfile = Path(logfile)
         
-        # Check if simulation was previously started by looking for the logfile
-        if logfile.is_file():
-            logname = logfile.stem
-            logext = logfile.suffix
-            
+        # Count previous log files
+        logname, logext, lognum = restart_check(logfile, restart_filename)
+
+        if lognum > 0:
             # Replace script parameters with restart_script parameters
             script = restart_script
             script_name = restart_script_name
-            
-            # Search for any earlier log files with the name log-*.lammps
-            maxlogid = 0
-            for oldlog in Path().glob(f'{logname}-*{logext}'):
-                logid = int(oldlog.stem.split('-')[-1])
-                if logid > maxlogid:
-                    maxlogid = logid
-            
-            # Rename old logfile to keep it from being overwritten
-            lognum = maxlogid + 1
-            logfile.rename(f'{logname}-{lognum}{logext}')
-        else:
-            lognum = 0
+
+    # Set lognum value if given
+    elif restart_lognum is not None:
+        lognum = restart_lognum
+        logname = logext = None
+
+    # Set default lognum value
     else:
         lognum = 0
+        logname = logext = None
     
-
     # Initialize the run command
     command = ''
 
@@ -107,7 +117,9 @@ def run(lammps_command: str,
         command += mpi_command + ' '
     
     # Add lammps_command
-    command += f'"{Path(lammps_command).as_posix()}" '
+    terms = shlex.split(lammps_command)
+    terms[0] = Path(terms[0]).as_posix()
+    command += ' '.join(terms) + ' '
 
     # Add logfile
     if logfile is None:
@@ -145,19 +157,152 @@ def run(lammps_command: str,
     
     # Convert LAMMPS error to a Python error if failed
     except subprocess.CalledProcessError as e:
-        raise LammpsError(e.output) from e
+        if screen is False and logfile != 'none':
+            with open(logfile) as f:
+                output = f.read()
+        else:
+            output = e.output
+        raise LammpsError(output) from e
     
+    # Read log contents from screen output if generated
+    if screen is True:
+        logfile = output.stdout
+
+    # Read in all log files to a Log object
+    log = read_logs(logfile, logname, logext, lognum)
+    
+    return log
+
+def restart_check(logfile,
+                  restart_filename: Optional[str] = None
+                  ) -> Tuple[str, str, int]:
+    """
+    Checks for existing log and restart files to determine if a previously
+    incomplete simulation is to be restarted.  If found, the previous log file
+    will be renamed to prevent it from being overwritten.
+
+    USAGE: This is used internally by run().  If you wish to use it separately,
+    pass the returned lognum value to run() or read_logs().
+
+    Parameters
+    ----------
+    logfile : str
+        The path to the logfile to check for.
+    restart_filename : str or None
+        If given, the check will also verify that at least one matching restart
+        files also exists.  Ideally, this should always be given but is optional
+        for backwards compatibility with older atomman versions.
+    
+    Returns
+    -------
+    logname : str
+        The log file prefix of the previous simulation runs, which matches the
+        given logfile's stem.
+    logext : str
+        The log file extension of the previous simulation runs, which matches the
+        given logfile's extension.
+    lognum : int
+        The number of previous log files found.  If 0, then a new simulation
+        should be started rather than a restart.
+    """
+
+    # Count existing restart files
+    if restart_filename is None:
+        num_restarts = 1
+    else:
+        num_restarts = len([fname for fname in Path().glob(restart_filename)])
+
+    # Check if simulation was previously started by looking for the logfile
+    # (and at least one restart file)
+    logfile = Path(logfile)
+    if logfile.is_file() and num_restarts > 0:
+        logname = logfile.stem
+        logext = logfile.suffix
+        
+        # Search for any earlier log files with the name log-*.lammps
+        maxlogid = 0
+        for oldlog in Path().glob(f'{logname}-*{logext}'):
+            logid = int(oldlog.stem.split('-')[-1])
+            if logid > maxlogid:
+                maxlogid = logid
+        
+        # Rename old logfile to keep it from being overwritten
+        lognum = maxlogid + 1
+        logfile.rename(f'{logname}-{lognum}{logext}')
+    else:
+        lognum = 0
+        logname = logext = None
+
+    return logname, logext, lognum
+
+def read_logs(logfile: str,
+              logname: Optional[str] = None,
+              logext: Optional[str] = None,
+              lognum: int = 0) -> Log:
+    """
+    Creates a Log object based on either a single LAMMPS run or multiple
+    LAMMPS restart runs.  For single runs, this is essentially equivalent
+    to Log.read().
+
+    Parameters
+    ----------
+    logfile : str
+        The log file name or contents for the final LAMMPS run.
+    logname : str or None, optional
+        The log file prefix that any previous log files have.
+        Previous log files should be named {logname}-{i}{logext},
+        where i ranges from 1 up to and including lognum.  Optional
+        if logfile is a file named {logname}{logext}.
+    logext : str or None, optional
+        The log file extension that any previous log files have.
+        Previous log files should be named {logname}-{i}{logext},
+        where i ranges from 1 up to and including lognum.  Optional
+        if logfile is a file named {logname}{logext}.
+    lognum : int, optional
+        The total number of previous log files.
+        Previous log files should be named {logname}-{i}{logext},
+        where i ranges from 1 up to and including lognum.  Default
+        value is 0, i.e. no previous log files.
+    
+    Returns
+    -------
+    atomman.lammps.Log
+        The interpreted log contents for the log file(s).
+    """
     # Initialize Log object
     log = Log()
+
+    # Identify logname and logext if needed
+    if lognum > 0 and (logname is None or logext is None):
+        logfile = Path(logfile)
+        if not logfile.is_file():
+            raise ValueError('logname and logext must be given if logfile is not a file name!')
+        logname = logfile.stem
+        logext = logfile.suffix
     
     # Read in all old runs
     for i in range(1, lognum+1):
         log.read(f'{logname}-{i}{logext}')
     
     # Read in current run
-    if screen:
-        log.read(output.stdout)
-    else:
-        log.read(logfile)
+    log.read(logfile)
     
     return log
+
+
+def run_libtest() -> Log:
+    """
+    Runs a subprocess to test building a new lammps.lammps object.  Used to
+    verify the LAMMPS Python interface works and extract version information
+    """
+
+    # Build Python script that creates a lammps.lammps object and does no simulation.
+    script = '\n'.join(["import lammps", "lmp = lammps.lammps(cmdargs=['-l', 'none'])", "lmp.close()"])
+    output = subprocess.run([sys.executable], input=script, check=True, capture_output=True, text=True)
+    
+    # Initialize Log object and read screen output
+    log = Log()
+    log.read(output.stdout)
+    
+    return log
+    
