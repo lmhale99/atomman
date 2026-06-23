@@ -1,11 +1,7 @@
 # coding: utf-8
 
 # Standard Python libraries
-import ast
-from typing import Optional
-
-# https://pypi.python.org/pypi/numericalunits
-import numericalunits as nu
+from typing import Optional, Union
 
 # https://github.com/usnistgov/DataModelDict
 from DataModelDict import DataModelDict as DM
@@ -19,6 +15,9 @@ from yabadaba import unitconvert as unitconvert_obj
 
 # NOTES: This module now serves as a wrapper around yabadaba.unitconvert!
 
+# Local imports
+from . import typing as amt
+
 
 unit = unitconvert_obj.unit
 
@@ -28,7 +27,6 @@ def build_unit():
     can be retrieved by their string names.
     """
     unitconvert_obj.build_unit()
-    #unit.update(unitconvert_obj.unit)
 
 def reset_units(seed: Optional[int] = None, **kwargs):
     """
@@ -61,9 +59,8 @@ def reset_units(seed: Optional[int] = None, **kwargs):
         the working unit parameters are given.
     """
     unitconvert_obj.reset_units(seed=seed, **kwargs)
-    #unit.update(unitconvert_obj.unit)
 
-def set_literal(term: str) -> npt.ArrayLike:
+def set_literal(term: str) -> np.ndarray:
     """
     Convert string 'value unit' to numbers in working units.
     
@@ -86,17 +83,19 @@ def set_literal(term: str) -> npt.ArrayLike:
     """
     return unitconvert_obj.set_literal(term)
 
-def set_in_units(value: npt.ArrayLike,
-                 units: str) -> npt.ArrayLike:
+def set_in_units(value: amt.unitfloat,
+                 units: Optional[str] = None) -> np.ndarray:
     """
-    Convert value from specified units to working units.
-    
     Parameters
     ----------
-    value : array-like object
-        A numerical value or list/array of values.
-    units : str
-        The units that value is in.
+    value : str, float or array-like object
+        A numerical value or list/array of values.  String values will be
+        interpreted using set_literal() and may therefore optionally contain
+        units information.  If a string value contains units information, do
+        not give it separately to the units parameter!
+    units : str or None
+        The units that the value is in.  The default value of None will either
+        do no conversion or use units defined in a string value.
         
     Returns
     -------
@@ -105,17 +104,18 @@ def set_in_units(value: npt.ArrayLike,
     """
     return unitconvert_obj.set_in_units(value=value, units=units)
 
-def get_in_units(value: npt.ArrayLike,
-                 units: str) -> npt.ArrayLike:
+def get_in_units(value: Union[float, npt.ArrayLike],
+                 units: Optional[str] = None) -> np.ndarray:
     """
     Convert value from working units to specified units.
     
     Parameters
     ----------
-    value : array-like object
+    value : float or array-like object
         A numerical value or list/array of values.
-    units : str
-        The units to convert value to (from working units).
+    units : str or None
+        The units to convert value to (from working units).  A value
+        of None will do no conversion.
         
     Returns
     -------
@@ -124,7 +124,7 @@ def get_in_units(value: npt.ArrayLike,
     """
     return unitconvert_obj.get_in_units(value=value, units=units)
 
-def value_unit(term: dict) -> npt.ArrayLike:
+def value_unit(term: dict) -> np.ndarray:
     """
     Reads numerical value from dictionary containing 'value' and 'unit' keys.
     
@@ -142,7 +142,7 @@ def value_unit(term: dict) -> npt.ArrayLike:
     """
     return unitconvert_obj.value_unit(term=term)
     
-def error_unit(term: dict) -> npt.ArrayLike:
+def error_unit(term: dict) -> np.ndarray:
     """
     Reads numerical error from dictionary containing 'error' and 'unit' keys.
     
@@ -160,7 +160,7 @@ def error_unit(term: dict) -> npt.ArrayLike:
     """
     return unitconvert_obj.error_unit(term=term)
     
-def model(value: npt.ArrayLike,
+def model(value: Union[float, npt.ArrayLike],
           units: Optional[str] = None,
           error: Optional[npt.ArrayLike] = None) -> DM:
     """
@@ -197,13 +197,13 @@ def parse(units: Optional[str]) -> float:
     ----------
     units : str or None
         String consisting of defined unit names, operators, and numerical 
-        values to interpret.
+        values to interpret.  If units is None or == 'scaled', then the returned
+            value will be 1.0, i.e. no unit conversion.
         
     Returns
     -------
     float
         The scaling factor for converting numbers in the given units to
-        working units. If units is None or == 'scaled', then this value is
-        1.0.
+        working units.
     """
     return unitconvert_obj.parse(units=units)
