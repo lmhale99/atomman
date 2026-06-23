@@ -44,34 +44,48 @@ class Dislocation(Record):
         when build_model is called!!!
         """
         
-        self._add_value('str', 'key', valuerequired=True)
-        self._add_value('str', 'id',  valuerequired=True)
-        self._add_value('str', 'url', modelpath='URL')
+        self._add_value('str', 'key', valuerequired=True,
+                        description='UUID4 key for the record')
+        self._add_value('str', 'id',  valuerequired=True,
+                        description='Unique ID for the record')
+        self._add_value('str', 'url', modelpath='URL',
+                        description='URL where the record can be found')
         self._add_value('str', 'family', valuerequired=True,
-                        modelpath='system-family')
+                        modelpath='system-family',
+                        description='Reference structure family')
         self._add_value('str', 'family_url',
-                        modelpath='system-family-URL')
+                        modelpath='system-family-URL',
+                        description='URL where the reference structure family can be found')
         self._add_value('str', 'character', valuerequired=True,
-                        allowedvalues=['screw', 'edge', 'mixed'])
+                        allowedvalues=['screw', 'edge', 'mixed'],
+                        description='Dislocation character (screw, edge or mixed)')
         self._add_value('miller', 'slip_hkl', valuerequired=True,
                         modelpath='calculation-parameter.slip_hkl',
-                        bracket='()')
+                        bracket='()',
+                        description='Miller slip plane')
         self._add_value('miller', 'line_uvw', valuerequired=True,
                         modelpath='calculation-parameter.line_uvw',
-                        bracket='[]')
+                        bracket='[]',
+                        description='Miller line vector')
         self._add_value('miller', 'burgers_uvw', valuerequired=True,
                         modelpath='calculation-parameter.burgers_uvw',
-                        bracket='[]')
+                        bracket='[]',
+                        description='Miller Burgers vector')
         self._add_value('unitvector', 'm',
-                        modelpath='calculation-parameter.m')
+                        modelpath='calculation-parameter.m',
+                        description="Cartesian vector for the dislocation solution's m-axis")
         self._add_value('unitvector', 'n',
-                        modelpath='calculation-parameter.n')
+                        modelpath='calculation-parameter.n',
+                        description="Cartesian vector for the dislocation solution's n-axis")
         self._add_value('vector', 'shift',
-                        modelpath='calculation-parameter.shift')
+                        modelpath='calculation-parameter.shift',
+                        description='Rigid body shift vector to apply before inserting the dislocation')
         self._add_value('bool', 'shiftscale',
-                        modelpath='calculation-parameter.shiftscale')
+                        modelpath='calculation-parameter.shiftscale',
+                        description='Indicates if shift is Cartesian (False) or box relative (True)')
         self._add_value('int', 'shiftindex',
-                        modelpath='calculation-parameter.shiftindex')
+                        modelpath='calculation-parameter.shiftindex',
+                        description='Sets the rigid body shift vector to one of the default values by index.')
    
     @property
     def slip_hkl_str(self) -> str:
