@@ -1,4 +1,3 @@
-# coding: utf-8
 # Standard Python libraries
 import io
 from itertools import product
@@ -13,6 +12,7 @@ import numpy.typing as npt
 
 from yabadaba.record import Record
 
+from ..typing import millerindices
 from . import free_surface_basis
 from ..tools import miller
 from ..region import Plane
@@ -31,7 +31,7 @@ class FreeSurface():
     """
 
     def __init__(self,
-                 hkl: npt.ArrayLike,
+                 hkl: millerindices,
                  ucell: System,
                  cutboxvector: str = 'c',
                  maxindex: Optional[int] = None,
@@ -46,7 +46,7 @@ class FreeSurface():
 
         Parameters
         ----------
-        hkl : array-like object
+        hkl : array-like object or str
             The free surface plane to generate expressed in either 3 indices
             Miller (hkl) format or 4 indices Miller-Bravais (hkil) format.
         ucell : atomman.System

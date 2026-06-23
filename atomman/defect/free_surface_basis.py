@@ -8,11 +8,12 @@ import numpy as np
 import numpy.typing as npt
 
 # atomman imports
+from ..typing import millerindices
 from .. import Box, System
 from ..tools import vect_angle, miller
 from ..tools.miller import vector_crystal_to_cartesian
 
-def free_surface_basis(hkl: npt.ArrayLike,
+def free_surface_basis(hkl: millerindices,
                        box: Optional[Box] = None,
                        cutboxvector: str = 'c',
                        maxindex: Optional[int] = None,
@@ -33,7 +34,7 @@ def free_surface_basis(hkl: npt.ArrayLike,
 
     Parameters
     ----------
-    hkl : array-like object
+    hkl : array-like object or str
         The free surface plane to generate expressed in either 3 indices
         Miller (hkl) format or 4 indices Miller-Bravais (hkil) format.
     box : atomman.Box, optional
@@ -84,6 +85,8 @@ def free_surface_basis(hkl: npt.ArrayLike,
         box = Box()
 
     # Check hkl values
+    if isinstance(hkl, str):
+        hkl = miller.fromstring(hkl)
     hkl = np.asarray(hkl)
 
     # Convert hkil to hkl

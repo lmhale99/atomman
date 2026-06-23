@@ -1,4 +1,3 @@
-# coding: utf-8
 # Standard Python libraries
 import io
 from copy import deepcopy
@@ -13,6 +12,7 @@ import numpy.typing as npt
 from yabadaba.record import Record
 
 # atomman imports
+from ..typing import millerindices
 from ..tools import miller
 from . import FreeSurface
 from .. import System, load
@@ -23,12 +23,12 @@ class StackingFault(FreeSurface):
     Class for generating stacking fault atomic configurations. 
     """
     def __init__(self,
-                 hkl: npt.ArrayLike,
+                 hkl: millerindices,
                  ucell: System,
                  cutboxvector: str = 'c',
                  maxindex: Optional[int] = None,
-                 a1vect_uvw: Optional[npt.ArrayLike] = None,
-                 a2vect_uvw: Optional[npt.ArrayLike] = None,
+                 a1vect_uvw: Optional[millerindices] = None,
+                 a2vect_uvw: Optional[millerindices] = None,
                  conventional_setting: str = 'p',
                  shift: Optional[npt.ArrayLike] = None,
                  shiftindex: Optional[int] = None,
@@ -40,7 +40,7 @@ class StackingFault(FreeSurface):
         
         Parameters
         ----------
-        hkl : array-like object
+        hkl : array-like object or str
             The free surface plane to generate expressed in either 3 indices
             Miller (hkl) format or 4 indices Miller-Bravais (hkil) format.
         ucell : atomman.System
@@ -52,10 +52,10 @@ class StackingFault(FreeSurface):
             Max uvw index value to use in identifying the best uvw set for the
             out-of-plane vector.  If not given, will use the largest absolute
             index between the given hkl and the initial in-plane vector guesses.
-        a1vect_uvw : array-like object, optional
+        a1vect_uvw : array-like object or str, optional
             The crystal vector to use for one of the two shifting vectors.  If
             not given, will be set to the shortest in-plane lattice vector.
-        a2vect_uvw : array-like object, optional
+        a2vect_uvw : array-like object or str, optional
             The crystal vector to use for one of the two shifting vectors.  If
             not given, will be set to the shortest in-plane lattice vector not
             parallel to a1vect_uvw.
@@ -105,8 +105,14 @@ class StackingFault(FreeSurface):
 
         # Set given a1vect_uvw and a2vect_uvw values
         elif a1vect_uvw is not None and a2vect_uvw is not None:
-            self.a1vect_uvw = a1vect_uvw
-            self.a2vect_uvw = a2vect_uvw
+            
+            if isinstance(a1vect_uvw, str):
+                a1vect_uvw = miller.fromstring(a1vect_uvw)
+            self.a1vect_uvw = np.asarray(a1vect_uvw)
+            
+            if isinstance(a2vect_uvw, str):
+                a2vect_uvw = miller.fromstring(a2vect_uvw)
+            self.a2vect_uvw = np.asarray(a2vect_uvw)
 
         else:
             raise ValueError('a1vect_uvw and a2vect_uvw either both need to be given or not given')
@@ -329,7 +335,7 @@ class StackingFault(FreeSurface):
             raise AttributeError('system not yet built. Use build_system() or surface().')
 
     @property
-    def abovefault(self) -> list:
+    def abovefault(self) -> np.ndarray:
         """list : Indices of all atoms in system above the slip plane."""
         if self.__abovefault is not None:
             return self.__abovefault
