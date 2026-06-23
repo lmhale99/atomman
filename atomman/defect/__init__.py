@@ -36,6 +36,8 @@ from .SDVPN import SDVPN
 from .surface_energy_estimate import surface_energy_estimate
 from .SurfaceEnergyEstimator import SurfaceEnergyEstimator
 
+from .Polycrystal import Polycrystal
+
 __all__ = ['differential_displacement', 'disregistry', 'dislocation_array',
            'InterstitialSite', 'interstitial_site_finder',
            'slip_vector', 'nye_tensor', 'nye_tensor_p', 'Stroh', 'FreeSurface',
@@ -43,6 +45,7 @@ __all__ = ['differential_displacement', 'disregistry', 'dislocation_array',
            'GammaSurface', 'free_surface_basis', 'pn_arctan_disregistry',
            'pn_arctan_disldensity', 'SDVPN',
            'Boundary', 'GrainBoundary', 'GRIP', 'TiltGrainBoundaryHelper', 
-           'surface_energy_estimate', 'SurfaceEnergyEstimator']
+           'surface_energy_estimate', 'SurfaceEnergyEstimator',
+           'Polycrystal']
 __all__.extend(point_all)
 __all__.sort()

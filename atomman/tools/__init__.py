@@ -18,10 +18,12 @@ from .filltemplate import filltemplate
 from .crystalsystem import *
 from .crystalsystem import __all__ as crystalsystem_all
 from . import miller
+from .random_rotation import random_rotation
 
 __all__ = ['axes_check', 'boolean', 'compositionstr', 'duplicates_allclose', 'vect_angle',
            'uber_open_rmode', 'indexstr', 'filltemplate', 'miller', 'aslist',
-           'iaslist', 'screen_input', 'duplicated_allclose', 'newrows_allclose']
+           'iaslist', 'screen_input', 'duplicated_allclose', 'newrows_allclose',
+           'approx_rational', 'random_rotation']
 __all__.extend(atomic_info_all)
 __all__.extend(crystalsystem_all)
 __all__.sort()
