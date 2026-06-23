@@ -19,6 +19,7 @@ class Test_atom_data:
         # dump system1 to content1
         content1 = system1.dump('atom_data', atom_style=atom_style,
                                 units=units, potential=potential,
+                                float_format='%.13e',
                                 return_info=False)
 
         # load content1 to system2
@@ -29,6 +30,7 @@ class Test_atom_data:
         # dump system2 to content2
         content2 = system2.dump('atom_data', atom_style=atom_style,
                                 units=units, potential=potential,
+                                float_format='%.13e',
                                 return_info=False)
 
         # Check that the two dumps are equivalent
