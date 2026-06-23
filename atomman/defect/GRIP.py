@@ -66,25 +66,37 @@ class GRIP(Record):
                             '"uniform" will uniformly sample from the range provided',
                             'and is the only currently supported style.']))
         
-        # Sizemults input settings
-        self._add_value('int', 'sizemults_max1', defaultvalue=3,
-                        modelpath='input-parameter.sizemults.max1',
+        # Sizemult input settings
+        self._add_value('int', 'sizemult_min1', defaultvalue=1,
+                        modelpath='input-parameter.sizemult.min1',
+                        description=' '.join([
+                            'The minimum size multiplier to use for the first in-plane',
+                            'box vector. The multiplier to use will be selected between',
+                            'the min1 and max1 values inclusively.  Default value is 1.']))
+        self._add_value('int', 'sizemult_max1', defaultvalue=3,
+                        modelpath='input-parameter.sizemult.max1',
                         description=' '.join([
                             'The maximum size multiplier to use for the first in-plane',
-                            'box vector. The selected sample will be between 1 and this',
-                            'value inclusively. Default value is 3.']))
-        self._add_value('int', 'sizemults_max2', defaultvalue=3,
-                        modelpath='input-parameter.sizemults.max2',
+                            'box vector. The multiplier to use will be selected between',
+                            'the min1 and max1 values inclusively. Default value is 3.']))
+        self._add_value('int', 'sizemult_min2', defaultvalue=1,
+                        modelpath='input-parameter.sizemult.min2',
+                        description=' '.join([
+                            'The minimum size multiplier to use for the second in-plane',
+                            'box vector. The multiplier to use will be selected between',
+                            'the min2 and max2 values inclusively.  Default value is 1.']))
+        self._add_value('int', 'sizemult_max2', defaultvalue=3,
+                        modelpath='input-parameter.sizemult.max2',
                         description=' '.join([
                             'The maximum size multiplier to use for the second in-plane',
-                            'box vector. The selected sample will be between 1 and this',
-                            'value inclusively. Default value is 3.']))
-        self._add_value('str', 'sizemults_sample_style',
-                        modelpath='input-parameter.sizemults.sample_style',
+                            'box vector. The multiplier to use will be selected between',
+                            'the min2 and max2 values inclusively. Default value is 3.']))
+        self._add_value('str', 'sizemult_sample_style',
+                        modelpath='input-parameter.sizemult.sample_style',
                         defaultvalue='exponential',
                         allowedvalues=['uniform', 'exponential'],
                         description=' '.join([
-                            'Indicates the sample style to use for the sizemults.',
+                            'Indicates the sample style to use for the size multipliers.',
                             '"exponential" (default) will place higher sample weights',
                             'on smaller sizemults. "uniform" will equally sample from',
                             'the sizemults range.']))
@@ -165,10 +177,15 @@ class GRIP(Record):
                             'atoms in grain 2.  Default value is 0.0.']))
 
         # Interstitial site settings
-        self._add_value('int', 'interstitial_max_num', defaultvalue=2,
-                        modelpath='input-parameter.interstitial.max_num',
+        self._add_value('int', 'interstitial_min', defaultvalue=0,
+                        modelpath='input-parameter.interstitial.min',
                         description=' '.join([
-                            "Specifies the max number of interstitial sites to fill.",
+                            "The minimum number of interstitial sites to fill."
+                            "Default value is 0."]))
+        self._add_value('int', 'interstitial_max', defaultvalue=2,
+                        modelpath='input-parameter.interstitial.max',
+                        description=' '.join([
+                            "The max number of interstitial sites to fill.",
                             "Note that the actual max may be less if the number of",
                             "atoms or the number of interstitial sites at the grain",
                             "boundary are smaller.  Default value is 2."]))
@@ -263,6 +280,10 @@ class GRIP(Record):
         Selects the two in-plane vector shifts to apply to the system using
         random uniform samples.
         """
+        # Check delta value
+        if self.shift_delta <= 0 or self.shift_delta > 1:
+            raise ValueError('shift_delta values must be between > 0 and <= 1')
+
         # Build array of possible shifts to sample from 
         possibleshifts = np.arange(0, 1, self.shift_delta)
 
@@ -280,16 +301,22 @@ class GRIP(Record):
         """
         Selects random sizemults values for the two in-plane box vectors.
         """
+        # Check min, max values
+        if self.sizemult_min1 <= 0 or self.sizemult_min2 <= 0:
+            raise ValueError('sizemult_min values must be > 0')
+        if self.sizemult_max1 < self.sizemult_min1 or self.sizemult_max2 < self.sizemult_min2:
+            raise ValueError('sizemult_max values must be >= the corresponding sizemult_min values')
+        
         # Build array of all possible sizemults
-        sizemults1 = np.arange(1, self.sizemults_max1 + 1)
-        sizemults2 = np.arange(1, self.sizemults_max2 + 1)
+        sizemults1 = np.arange(self.sizemult_min1, self.sizemult_max1 + 1)
+        sizemults2 = np.arange(self.sizemult_min2, self.sizemult_max2 + 1)
 
-        if self.sizemults_sample_style == 'uniform':
+        if self.sizemult_sample_style == 'uniform':
             # Uniformly sample from allowed values
             self.sizemult1 = rng.choice(sizemults1)
             self.sizemult2 = rng.choice(sizemults2)
 
-        elif self.sizemults_sample_style == 'exponential':
+        elif self.sizemult_sample_style == 'exponential':
             # Place higher weights on smaller systems
             sizemultsweights1 = np.exp(-sizemults1) / np.sum(np.exp(-sizemults1))
             sizemultsweights2 = np.exp(-sizemults2) / np.sum(np.exp(-sizemults2))
@@ -299,7 +326,7 @@ class GRIP(Record):
             self.sizemult2 = rng.choice(sizemults2, p=sizemultsweights2)
     
         else:
-            raise ValueError('Unsupported sizemults_sample_style value')
+            raise ValueError('Unsupported sizemult_sample_style value')
         
         if verbose:
             print('sizemult1:', self.sizemult1)
@@ -312,7 +339,14 @@ class GRIP(Record):
         Select a random number of runsteps and temperature for performing the
         MD relaxation.
         """
-        
+        # Check runstep settings
+        if self.runsteps_min < 0:
+            raise ValueError('runsteps_min must be > 0')
+        if self.runsteps_min > self.runsteps_max:
+            raise ValueError('runsteps_max must be >= runsteps_min')
+        if self.runsteps_chance < 0.0 or self.runsteps_chance > 1.0:
+            raise ValueError('runsteps_chance must be between 0 and 1')
+
         if rng.random() > self.runsteps_chance:
             # Skip MD run if probability check fails 
             self.runsteps = 0
@@ -339,6 +373,12 @@ class GRIP(Record):
         Select a random number of runsteps and temperature for performing the
         MD relaxation.
         """
+        # Check temperature settings
+        if self.temperature_min < 0:
+            raise ValueError('temperature_min must be > 0')
+        if self.temperature_min > self.temperature_max:
+            raise ValueError('temperature_max must be >= temperature_min')
+        
         if self.runsteps == 0:
             self.temperature = 0.0
 
@@ -400,7 +440,15 @@ class GRIP(Record):
                        verbose: bool):
         """
         Randomly selects atoms for deletion from the grain boundary.
-        """        
+        """
+        # Check delete settings
+        if self.delete_min < 0 or self.delete_min > 1.0:
+            raise ValueError('delete_min must be between 0 and 1')
+        if self.delete_max < 0 or self.delete_max > 1.0:
+            raise ValueError('delete_max must be between 0 and 1')
+        if self.delete_max < self.delete_min:
+            raise ValueError('delete_max must be >= delete_min')
+        
         # GB plane region ranges from min coord in top grain to that plus dlat
         dlat = gb.dlat(decimals) - 10**-decimals
         mincoord = system.atoms.pos[:natoms1, gb.cutindex].min()
@@ -479,8 +527,15 @@ class GRIP(Record):
         boundary, then randomly selects a random number of atoms to move into
         randomly selected interstitial sites.
         """
+        # Check interstitial values
+        if self.interstitial_min < 0 or self.interstitial_max < 0:
+            raise ValueError('interstitial_min and interstitial_max must be >= 0')
+        if self.interstitial_max <self.interstitial_min:
+            raise ValueError('interstitial_max must be >= interstitial_min')
+        
         # Quick return if max is 0
-        if self.interstitial_max_num <= 0:
+        if self.interstitial_max == 0:
+            self.ninterstitials = 0
             return
         
         # Create slice of the atomic system around the grain boundary
@@ -512,10 +567,16 @@ class GRIP(Record):
             print('# atoms for interstitial shifts:', len(atom_ids))
 
         # Select max number to move based on max_num, num atoms and num sites
-        max_num = min([self.interstitial_max_num, len(sites), len(atom_ids)])
+        max_num = min([self.interstitial_max, len(sites), len(atom_ids)])
 
-        # Pick a random number of atoms to move from 0 to max_num
-        nmove = int(rng.integers(0, max_num, endpoint=True))
+        # Check that interstitial_min is not > max_num
+        if max_num > self.interstitial_min:
+            min_num = self.interstitial_min
+        else:
+            min_num = max_num
+
+        # Pick a random number of atoms to move from min_num to max_num
+        nmove = int(rng.integers(min_num, max_num, endpoint=True))
 
         if verbose:
             print('# atoms being shifted:', nmove)
