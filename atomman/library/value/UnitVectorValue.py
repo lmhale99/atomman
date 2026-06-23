@@ -13,6 +13,7 @@ class UnitVectorValue(Value):
                  defaultvalue: Optional[Any] = None,
                  valuerequired: bool = False,
                  allowedvalues: Optional[tuple] = None,
+                 allowcustomvalue: bool = False,
                  metadatakey: Union[str, bool, None] = None,
                  metadataparent: Optional[str] = None,
                  modelpath: Optional[str] = None,
@@ -37,6 +38,11 @@ class UnitVectorValue(Value):
         allowedvalues : tuple or None, optional
             A list/tuple of values that the parameter is restricted to have.
             Setting this to None (default) indicates any value is allowed.
+        allowcustomvalue : bool, optional
+            Determines how allowedvalues is interpreted. If False (default) then
+            values are restricted to what is listed in allowedvalues.  If True,
+            then the value is not restricted and allowedvalues becomes a list of
+            recommended values.
         metadatakey: str, bool or None, optional
             The key name to use for the property when constructing the record
             metadata dict.  If set to None (default) then name will be used for
@@ -71,6 +77,7 @@ class UnitVectorValue(Value):
 
         super().__init__(name, record, defaultvalue=defaultvalue,
                          valuerequired=valuerequired, allowedvalues=allowedvalues,
+                         allowcustomvalue=allowcustomvalue,
                          metadatakey=metadatakey, metadataparent=metadataparent,
                          modelpath=modelpath, description=description)
     
