@@ -23,6 +23,7 @@ from . import Atoms, Box, dvect, dmag, NeighborList
 from ..lammps import normalize as lmp_normalize
 from ..tools import indexstr, miller, ishexagonal, aslist
 from .. import dump
+from ..thermo import RDF
 
 class System(object):
     """
@@ -825,6 +826,33 @@ class System(object):
             kwargs['system'] = self
         return NeighborList(**kwargs)
     
+    def rdf(self,
+            nbins: int = 400,
+            rmin: float = 0.0,
+            rmax: float = 10.0,
+            **kwargs):
+        """
+        Compute the radial distribution function for the system.
+
+        Parameters
+        ----------
+        nbins : int
+            The number of bins to use.  Default is 400.
+        rmin : float
+            The minimum radial distance to include. Default is 0.0.
+        rmax : float
+            The maximum radial distance to include. Default is 10.0.
+        **kwargs
+            Any other keyword arguments recognized by the RDF class
+            initialization that do not conflict with the r, g, coord
+            and density values computed from the system.
+        
+        Returns
+        -------
+        RDF : The radial distribution object.
+        """
+        return RDF.from_system(self, nbins=nbins, rmin=rmin, rmax=rmax, **kwargs)
+
     def r0(self,
            neighbors: Optional[NeighborList] = None) -> float:
         """
