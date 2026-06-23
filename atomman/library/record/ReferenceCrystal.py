@@ -44,7 +44,7 @@ class ReferenceCrystal(Record):
         when build_model is called!!!
         """
         
-        self._add_value('str', 'key', valuerequired=True)
+        self._add_value('str', 'key', valuerequired=True, )
         self._add_value('str', 'id', valuerequired=True)
         self._add_value('str', 'url', modelpath='URL')
         self._add_value('str', 'sourcename', valuerequired=True,
@@ -59,11 +59,11 @@ class ReferenceCrystal(Record):
                         modelpath='system-info.cell.crystal-family')
         self._add_value('int', 'natypes', valuerequired=True,
                         modelpath='system-info.cell.natypes')
-        self._add_value('float', 'a', valuerequired=True,
+        self._add_value('float', 'a', valuerequired=True, unit='angstrom',
                         modelpath='system-info.cell.a')
-        self._add_value('float', 'b', valuerequired=True,
+        self._add_value('float', 'b', valuerequired=True, unit='angstrom',
                         modelpath='system-info.cell.b')
-        self._add_value('float', 'c', valuerequired=True,
+        self._add_value('float', 'c', valuerequired=True, unit='angstrom',
                         modelpath='system-info.cell.c')
         self._add_value('float', 'alpha', valuerequired=True,
                         modelpath='system-info.cell.alpha')
