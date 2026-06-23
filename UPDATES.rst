@@ -1,6 +1,24 @@
 Updates
 =======
 
+Version 1.5.2
+-------------
+
+- **atomman.ElasticConstants2** added as an alternative.  This likely
+  behaves the same as the original, but with improvements in representations
+  of the various crystal families.  Separate for now as I haven't had the
+  chance to fully verify it.
+
+- **atomman.library.Database.download_all() no longer downloads relaxed_crystal
+  records.  There are too many for this method to be practical.
+
+- **atomman.lammps.run** now reads errors from log files if screen = False.
+  This should hopefully avoid LAMMPSErrors that have no message.
+
+- bug fixes for atomman.Box.position_cartesian_to_relative(),
+  atomman.library.Database.get_relaxed_crystal(), atomman.defect.GrainBoundary,
+  and atomman.defect.TiltGrainBoundaryHelper.
+
 Version 1.5.1
 -------------
 

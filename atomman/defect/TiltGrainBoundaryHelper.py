@@ -134,7 +134,7 @@ class TiltGrainBoundaryHelper():
     def transform_c_to_p(self) -> Rotation:
         """
         scipy.spatial.transform.Rotation: The rotation transformation for changing from
-        ucell's Cartesian system to ucell_prim's.        
+        ucell's Cartesian system to ucell_prim's.
         """
         return self.__transform_c_to_p
 
@@ -336,7 +336,7 @@ class TiltGrainBoundaryHelper():
         """
         # Get axis vector and ucell's box
         box = self.ucell.box
-        axis_cart = self.axis_cart
+        axis_cart = self.axis_cart_prim
         
         # Initial handling of in1_uvw
         in1_uvw = np.asarray(in1_uvw)
