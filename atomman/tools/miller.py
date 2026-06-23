@@ -458,7 +458,7 @@ def plane_crystal_to_cartesian(indices: npt.ArrayLike,
     # Apply plane_cryst_2_cart to each given set of indices
     return np.apply_along_axis(plane_cryst_2_cart, -1, indices, box)
 
-def fromstring(value):
+def fromstring(value: str) -> np.ndarray:
     """
     Reads Miller and Miller-Bravais vector/plane strings and returns a corresponding numpy
     array.  Values should be space-delimited and surrounded by angle brackets. The
@@ -518,7 +518,7 @@ def fromstring(value):
     # Apply the fraction and return
     return fraction * array
 
-def tostring(array, bracket='[]'):
+def tostring(array: npt.ArrayLike, bracket: str = '[]') -> str:
     """
     Converts a 3-index Miller or 4-index Miller-Bravais vector/plane into a
     representative string.  This is the inverse of the fromstring operation.
