@@ -19,6 +19,7 @@ def run(lammps_command: str,
         partition: Optional[str] = None,
         logfile: Optional[str] = 'log.lammps',
         screen: bool = True,
+        return_log: bool = True,
         suffix: Optional[str] = None) -> Log:
     """
     Calls LAMMPS to run. Returns a Log object of the screen/logfile output.
@@ -70,6 +71,10 @@ def run(lammps_command: str,
         If True (default), then the resulting Log object is built from the
         LAMMPS screen output.  If False, then LAMMPS outputs no screen info
         and the Log object will be built by reading logfile.
+    return_log : bool, optional
+        Setting this to False skips reading in any log files and makes the
+        method return None.  Useful for complex simulations in which you
+        do not analyze the raw log data.
     suffix : str, optional
         Allows for the LAMMPS suffix option to be specified to use any of the
         accelerated versions of pair styles if available.
@@ -168,10 +173,11 @@ def run(lammps_command: str,
     if screen is True:
         logfile = output.stdout
 
-    # Read in all log files to a Log object
-    log = read_logs(logfile, logname, logext, lognum)
+    if return_log:
+        # Read in all log files to a Log object
+        log = read_logs(logfile, logname, logext, lognum)
     
-    return log
+        return log
 
 def restart_check(logfile,
                   restart_filename: Optional[str] = None

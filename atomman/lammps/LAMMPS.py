@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from pathlib import Path
 import shlex
+import shutil
 
 from typing import Optional, Union
 import datetime
@@ -501,7 +502,8 @@ class ExtendLAMMPS():
 
     def end_and_get_log(self,
                         scriptname: Optional[str] = None,
-                        partition: Optional[str] = None):
+                        partition: Optional[str] = None,
+                        return_log: bool = True):
         """
         Clears the saved script, optionally saving it.
 
@@ -533,9 +535,9 @@ class ExtendLAMMPS():
             log = run(self.lammps_command, script=script, script_name=script_name,
                       mpi_command=self.mpi_command, logfile=self.logfile,
                       restart_lognum = self.lognumber, partition=partition,
-                      screen=screen)
+                      return_log=return_log, screen=screen)
         
-        elif self.logfile != 'none':
+        elif self.logfile != 'none' and return_log:
             # LAMMPSLIB reads in log files if they exist
             log = read_logs(self.logfile, lognum=self.lognumber)
             
@@ -951,12 +953,14 @@ def LAMMPS(*args: Union[str, LAMMPSobj],
             return args[0]
 
         elif isinstance(args[0], str):
-            # Check if the first part of the argument is a file path
+
+            # Check if the first part of the argument is a file
             exe = shlex.split(args[0])[0]
-            if Path(exe).is_file():
+            if Path(exe).is_file() or (shutil.which(exe) is not None and Path(shutil.which(exe)).is_file()):
                 if lammps_command is not None:
                     raise ValueError('lammps_command seems to have been given twice')
                 lammps_command = args[0]
+                        
             else:
                 if name != '':
                     raise ValueError('name seems to have been given twice')
@@ -968,7 +972,7 @@ def LAMMPS(*args: Union[str, LAMMPSobj],
 
     elif len(args) > 1:
         raise ValueError('this function can only interpret one non-keyword argument')
-    
+
     # Build a LAMMPSEXE object
     if lammps_command is not None:
         if name != '' or cmdargs is not None or ptr is not None or comm is not None:
