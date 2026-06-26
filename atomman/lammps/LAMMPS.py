@@ -954,9 +954,9 @@ def LAMMPS(*args: Union[str, LAMMPSobj],
 
         elif isinstance(args[0], str):
 
-            # Check if the first part of the argument is a file
+            # Check if the first part of the argument is an executable
             exe = shlex.split(args[0])[0]
-            if Path(exe).is_file() or (shutil.which(exe) is not None and Path(shutil.which(exe)).is_file()):
+            if shutil.which(exe) is not None:
                 if lammps_command is not None:
                     raise ValueError('lammps_command seems to have been given twice')
                 lammps_command = args[0]
