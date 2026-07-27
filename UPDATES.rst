@@ -1,6 +1,22 @@
 Updates
 =======
 
+Version 1.5.3
+-------------
+
+- **atomman.lammps.LAMMPS** added that provides a common interface for setting
+  up LAMMPS calculations that can then be executed either by calling a LAMMPS
+  executable or by interacting with the LAMMPS library interface.
+
+- **atomman.thermo.GreenKubo** added, which contains classes that support
+  Green-Kubo calculations.  These make it easy to compute the auto-correlation
+  functions from tabulated data and to estimate optimum cutoff distances to use
+  for the integral evaluations.
+
+- **atomman.ElasticConstants** now uses the new version, previously known as
+  ElasticConstants2.
+
+
 Version 1.5.2
 -------------
 
