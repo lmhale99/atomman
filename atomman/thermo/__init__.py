@@ -4,8 +4,11 @@ from .PartialStructureFactor import PartialStructureFactor
 from .IdealGas import IdealGas
 from .EinsteinSolid import EinsteinSolid
 from .UhlenbeckFordModel import UhlenbeckFordModel
+from .GreenKubo import GreenKubo, GreenKuboKappa, GreenKuboMu
 
-__all__ = ['RDF', 'StructureFactor', 'PartialStructureFactor', 'IdealGas', 'EinsteinSolid', 'UhlenbeckFordModel']
+__all__ = ['RDF', 'StructureFactor', 'PartialStructureFactor',
+           'IdealGas', 'EinsteinSolid', 'UhlenbeckFordModel',
+           'GreenKubo', 'GreenKuboKappa', 'GreenKuboMu']
 
 from potentials.record import recordmanager
 
