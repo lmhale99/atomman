@@ -1021,24 +1021,27 @@ class System(object):
         new_spos = new_spos.reshape(new_shape)
         
         # Use broadcasting to create arrays to add to spos
-        test = np.empty(mults[0] * self.natoms)
-        test.shape = (self.natoms, mults[0])
+        test = np.empty((self.natoms, mults[0]))
+        #test = np.empty(mults[0] * self.natoms)
+        #test.shape = (self.natoms, mults[0])
         test[:] = np.arange(mults[0])
         x = test.T.flatten()
 
-        test = np.empty(mults[1] * len(x))
-        test.shape = (len(x), mults[1])
+        test = np.empty((len(x), mults[1]))
+        #test = np.empty(mults[1] * len(x))
+        #test.shape = (len(x), mults[1])
         test[:] = np.arange(mults[1])
         y = test.T.flatten()
-        test.shape = (mults[1], len(x))
+        test = test.reshape((mults[1], len(x)))
         test[:] = x
         x = test.flatten()
 
-        test = np.empty(mults[2] * len(x))
-        test.shape = (len(x), mults[2])
+        test = np.empty((len(x), mults[2]))
+        #test = np.empty(mults[2] * len(x))
+        #test.shape = (len(x), mults[2])
         test[:] = np.arange(mults[2])
         z = test.T.flatten()
-        test.shape = (mults[2], len(x))
+        test = test.reshape((mults[2], len(x)))
         test[:] = x
         x = test.flatten()
         test[:] = y
