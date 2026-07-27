@@ -1,7 +1,5 @@
-# coding: utf-8
-
-# Standard Python imports
-from importlib import resources
+from importlib.metadata import version
+__version__ = version('atomman')
 
 # potentials imports
 from potentials import build_lammps_potential, settings
@@ -28,12 +26,6 @@ from . import defect
 
 # Set dump styles
 set_dump_styles()
-
-# Read version from VERSION file
-if hasattr(resources, 'files'):
-    __version__ = resources.files('atomman').joinpath('VERSION').read_text(encoding='UTF-8')
-else:
-    __version__ = resources.read_text('atomman', 'VERSION', encoding='UTF-8').strip()
 
 # Build all list
 __all__ = ['__version__', 'typing', 'load_lammps_potential', 'build_lammps_potential', 'settings',

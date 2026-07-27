@@ -1,8 +1,84 @@
-[build-system]
-requires = [
-    "setuptools>=42",
-    #"wheel",
-    "numpy>=1.19.0",
-    "Cython>=0.29.21"
+[project]
+name = "atomman"
+version = "1.5.3"
+description = "Atomistic Manipulation Toolkit: Create, manipulate, and analyze atomic configurations"
+readme = "README.rst"
+requires-python = ">=3.8"
+dependencies = [
+    'xmltodict',
+    'ipython',
+    'DataModelDict',
+    'numericalunits',
+    'numpy>=1.15',
+    'matplotlib',
+    'scipy',
+    'pandas',
+    'cython',
+    'requests',
+    'toolz',
+    'potentials>=0.4.2',
+    'yabadaba>=0.3.2'
 ]
+authors = [
+  {name = "Lucas Hale", email = "lucas.hale@nist.gov"}
+]
+license = "NIST-Software"
+keywords = [
+    'atom',
+    'atomic',
+    'atomistic',
+    'molecular dynamics'
+]
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Science/Research',
+    'Natural Language :: English',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
+    'Programming Language :: Python :: 3.14',
+    'Topic :: Scientific/Engineering :: Physics'
+]
+
+[project.urls]
+Homepage = "https://github.com/usnistgov/atomman/"
+Documentation = "https://www.ctcms.nist.gov/potentials/atomman/"
+Repository = "https://github.com/usnistgov/atomman.git"
+
+[project.optional-dependencies]
+plot = [
+    "nglview>=4.0.1",
+    "plotly>=6.9.0",
+    "py3dmol>=2.5.5",
+]
+convert = [
+    "ase>=3.23.0",
+    "diffpy-structure>=3.1.0",
+    "freud>=0.1.2",
+    "phonopy>=2.30.0",
+    "pymatgen>=2023.8.10",
+    "spglib>=2.4.0",
+]
+
+[tool.uv.sources]
+DataModelDict = { path = "../DataModelDict", editable = true }
+cdcs = { path = "../pycdcs", editable = true }
+yabadaba = { path = "../yabadaba", editable = true }
+potentials = { path = "../potentials", editable = true }
+
+[dependency-groups]
+dev = [
+    "pytest>=7.4.4",
+]
+
+[build-system]
+requires = ["setuptools>=61", "cython>=0.29.21", "numpy>=1.19.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ['atomman']
