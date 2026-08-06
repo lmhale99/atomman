@@ -16,6 +16,7 @@ Version 1.5.3
 - **atomman.ElasticConstants** now uses the new version, previously known as
   ElasticConstants2.
 
+- Bug fixes related to newer versions of pandas and phonopy.
 
 Version 1.5.2
 -------------
