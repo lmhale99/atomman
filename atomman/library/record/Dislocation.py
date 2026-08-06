@@ -8,8 +8,8 @@ from yabadaba.record import Record
 
 class Dislocation(Record):
     """
-    Class for representing dislocation records, which collect the parameters
-    necessary for atomman to generate a particular dislocation type.
+    Record that collects input parameters for creating atomic configurations
+    of dislocations using atomman.
     """
 
     ########################## Basic metadata fields ##########################
@@ -44,48 +44,72 @@ class Dislocation(Record):
         when build_model is called!!!
         """
         
-        self._add_value('str', 'key', valuerequired=True,
-                        description='UUID4 key for the record')
-        self._add_value('str', 'id',  valuerequired=True,
-                        description='Unique ID for the record')
-        self._add_value('str', 'url', modelpath='URL',
-                        description='URL where the record can be found')
-        self._add_value('str', 'family', valuerequired=True,
-                        modelpath='system-family',
-                        description='Reference structure family')
+        self._add_value('str', 'key',
+                        valuerequired = True,
+                        description = 'the UUID4 key for the record')
+        
+        self._add_value('str', 'id',
+                        valuerequired = True,
+                        description = 'the unique ID for the record')
+        
+        self._add_value('str', 'url',
+                        modelpath = 'URL',
+                        description = 'a URL where the record can be found')
+        
+        self._add_value('str', 'family',
+                        valuerequired = True,
+                        modelpath = 'system-family',
+                        description = 'the ID of the reference structure family')
+        
         self._add_value('str', 'family_url',
-                        modelpath='system-family-URL',
-                        description='URL where the reference structure family can be found')
-        self._add_value('str', 'character', valuerequired=True,
-                        allowedvalues=['screw', 'edge', 'mixed'],
-                        description='Dislocation character (screw, edge or mixed)')
-        self._add_value('miller', 'slip_hkl', valuerequired=True,
-                        modelpath='calculation-parameter.slip_hkl',
-                        bracket='()',
-                        description='Miller slip plane')
-        self._add_value('miller', 'line_uvw', valuerequired=True,
-                        modelpath='calculation-parameter.line_uvw',
-                        bracket='[]',
-                        description='Miller line vector')
-        self._add_value('miller', 'burgers_uvw', valuerequired=True,
-                        modelpath='calculation-parameter.burgers_uvw',
-                        bracket='[]',
-                        description='Miller Burgers vector')
+                        modelpath = 'system-family-URL',
+                        description = 'a URL where the reference structure family can be found')
+        
+        self._add_value('str', 'character',
+                        valuerequired = True,
+                        allowedvalues = (
+                            'screw',
+                            'edge',
+                            'mixed'),
+                        description = 'the dislocation character (screw, edge or mixed)')
+        
+        self._add_value('miller', 'slip_hkl',
+                        valuerequired = True,
+                        modelpath = 'calculation-parameter.slip_hkl',
+                        bracket = '()',
+                        description = 'the Miller(-Bravais) slip plane')
+        
+        self._add_value('miller', 'line_uvw',
+                        valuerequired = True,
+                        modelpath = 'calculation-parameter.line_uvw',
+                        bracket = '[]',
+                        description = 'the Miller(-Bravais) line vector')
+        
+        self._add_value('miller', 'burgers_uvw',
+                        valuerequired = True,
+                        modelpath = 'calculation-parameter.burgers_uvw',
+                        bracket = '[]',
+                        description = 'the Miller(-Bravais) Burgers vector')
+        
         self._add_value('unitvector', 'm',
-                        modelpath='calculation-parameter.m',
-                        description="Cartesian vector for the dislocation solution's m-axis")
+                        modelpath = 'calculation-parameter.m',
+                        description = "the Cartesian vector for the dislocation solution's m-axis")
+        
         self._add_value('unitvector', 'n',
-                        modelpath='calculation-parameter.n',
-                        description="Cartesian vector for the dislocation solution's n-axis")
+                        modelpath = 'calculation-parameter.n',
+                        description = "the Cartesian vector for the dislocation solution's n-axis")
+        
         self._add_value('vector', 'shift',
-                        modelpath='calculation-parameter.shift',
-                        description='Rigid body shift vector to apply before inserting the dislocation')
+                        modelpath = 'calculation-parameter.shift',
+                        description = 'the rigid body shift vector that is applied to the atomic system before inserting the dislocation controlling where the center of the dislocation is located relative to the atoms')
+        
         self._add_value('bool', 'shiftscale',
-                        modelpath='calculation-parameter.shiftscale',
-                        description='Indicates if shift is Cartesian (False) or box relative (True)')
+                        modelpath = 'calculation-parameter.shiftscale',
+                        description = 'indicates if shift is Cartesian (False) or in box relative units (True)')
+        
         self._add_value('int', 'shiftindex',
-                        modelpath='calculation-parameter.shiftindex',
-                        description='Sets the rigid body shift vector to one of the default values by index.')
+                        modelpath = 'calculation-parameter.shiftindex',
+                        description = 'the shift index parameter for identifying which atomic planes the dislocation is positioned in between')
    
     @property
     def slip_hkl_str(self) -> str:

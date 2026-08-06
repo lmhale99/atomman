@@ -44,35 +44,81 @@ class ReferenceCrystal(Record):
         when build_model is called!!!
         """
         
-        self._add_value('str', 'key', valuerequired=True, )
-        self._add_value('str', 'id', valuerequired=True)
-        self._add_value('str', 'url', modelpath='URL')
-        self._add_value('str', 'sourcename', valuerequired=True,
-                        modelpath='source.name')
-        self._add_value('str', 'sourcelink', valuerequired=True,
-                        modelpath='source.link')
-        self._add_value('strlist', 'symbols', valuerequired=True,
-                        modelpath='system-info.symbol')
-        self._add_value('str', 'composition', valuerequired=True,
-                        modelpath='system-info.composition')
+        self._add_value('str', 'key',
+                        valuerequired = True,
+                        description = 'the UUID4 key for the record')
+
+        self._add_value('str', 'id',
+                        valuerequired = True,
+                        description = 'the unique ID for the record')
+
+        self._add_value('str', 'url',
+                        modelpath = 'URL',
+                        description = 'a URL where the record can be found')
+
+        self._add_value('str', 'sourcename',
+                        valuerequired = True,
+                        modelpath = 'source.name',
+                        description = 'the ID for the crystal used by the source site')
+        
+        self._add_value('str', 'sourcelink',
+                        valuerequired = True,
+                        modelpath = 'source.link',
+                        description = 'a URL for the site where the crystal was retrieved')
+        
+        self._add_value('strlist', 'symbols',
+                        valuerequired = True,
+                        modelpath = 'system-info.symbol',
+                        description = 'the potential element symbols in the crystal')
+        
+        self._add_value('str', 'composition',
+                        valuerequired = True,
+                        modelpath = 'system-info.composition',
+                        description = 'the composition of the unit cell')
+        
         self._add_value('str', 'crystalfamily',
-                        modelpath='system-info.cell.crystal-family')
-        self._add_value('int', 'natypes', valuerequired=True,
-                        modelpath='system-info.cell.natypes')
-        self._add_value('float', 'a', valuerequired=True, unit='angstrom',
-                        modelpath='system-info.cell.a')
-        self._add_value('float', 'b', valuerequired=True, unit='angstrom',
-                        modelpath='system-info.cell.b')
-        self._add_value('float', 'c', valuerequired=True, unit='angstrom',
-                        modelpath='system-info.cell.c')
-        self._add_value('float', 'alpha', valuerequired=True,
-                        modelpath='system-info.cell.alpha')
-        self._add_value('float', 'beta', valuerequired=True,
-                        modelpath='system-info.cell.beta')
-        self._add_value('float', 'gamma', valuerequired=True,
-                        modelpath='system-info.cell.gamma')
-        self._add_value('system_model', 'ucell', valuerequired=True,
-                        modelpath="atomic-system")
+                        modelpath = 'system-info.cell.crystal-family',
+                        description = 'the crystal family of the unit cell: cubic, hexagonal, etc')
+        
+        self._add_value('int', 'natypes',
+                        valuerequired = True,
+                        modelpath = 'system-info.cell.natypes',
+                        description = 'the number of unique atom types in the unit cell')
+        
+        self._add_value('float', 'a',
+                        valuerequired = True,
+                        modelpath = 'system-info.cell.a',
+                        description = 'the a lattice constant for the unit cell')
+                        
+        self._add_value('float', 'b',
+                        valuerequired = True,
+                        modelpath = 'system-info.cell.b',
+                        description = 'the b lattice constant for the unit cell')
+                        
+        self._add_value('float', 'c',
+                        valuerequired = True,
+                        modelpath = 'system-info.cell.c',
+                        description = 'the c lattice constant for the unit cell')
+                        
+        self._add_value('float', 'alpha',
+                        valuerequired = True,
+                        modelpath = 'system-info.cell.alpha',
+                        description = 'the alpha lattice angle for the unit cell')
+                        
+        self._add_value('float', 'beta',
+                        valuerequired = True,
+                        modelpath = 'system-info.cell.beta',
+                        description = 'the beta lattice angle for the unit cell')
+                        
+        self._add_value('float', 'gamma',
+                        valuerequired = True,
+                        modelpath = 'system-info.cell.gamma',
+                        description = 'the gamma lattice angle for the unit cell')
+                        
+        self._add_value('system_model', 'ucell',
+                        valuerequired = True,
+                        modelpath = "atomic-system",
+                        description = 'the unit cell for the crystal')
 
     @property
     def defaultname(self) -> Optional[str]:

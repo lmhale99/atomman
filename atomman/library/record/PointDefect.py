@@ -8,9 +8,8 @@ from yabadaba.record import Record
 
 class PointDefectParameters(Record):
     """
-    Class for representing the parameters section of the PointDefect record
-    below.  Each parameter set describes a single point defect generation
-    operation, with some point defects requiring multiple such operations.
+    Defines the input parameters to atomman.defect.point() for a point defect
+    generation operation.
     """
     ########################## Basic metadata fields ##########################
 
@@ -34,11 +33,25 @@ class PointDefectParameters(Record):
         when build_model is called!!!
         """
         
-        self._add_value('str', 'ptd_type', allowedvalues=['v', 'i', 's', 'db'])
-        self._add_value('int', 'atype')
-        self._add_value('vector', 'pos')
-        self._add_value('vector', 'db_vect')
-        self._add_value('bool', 'scale')
+        self._add_value('str', 'ptd_type',
+                        allowedvalues = (
+                            'v',
+                            'i',
+                            's',
+                            'db'),
+                        description = '')
+        
+        self._add_value('int', 'atype',
+                        description = '')
+
+        self._add_value('vector', 'pos',
+                        description = '')
+
+        self._add_value('vector', 'db_vect',
+                        description = '')
+
+        self._add_value('bool', 'scale',
+                        description = '')
 
     @property
     def parameters(self) -> dict:
@@ -58,8 +71,8 @@ class PointDefectParameters(Record):
 
 class PointDefect(Record):
     """
-    Class for representing point_defect records, which collect the parameters
-    necessary for atomman to generate a particular point defect.
+    Record that collects input parameters for creating atomic configurations
+    of point defects and point defect clusters.
     """
 
     ########################## Basic metadata fields ##########################
@@ -94,16 +107,32 @@ class PointDefect(Record):
         when build_model is called!!!
         """
         
-        self._add_value('str', 'key', valuerequired=True)
-        self._add_value('str', 'id',  valuerequired=True)
-        self._add_value('str', 'url', modelpath='URL')
-        self._add_value('str', 'family', valuerequired=True,
-                        modelpath='system-family')
+        self._add_value('str', 'key',
+                        valuerequired = True,
+                        description = 'the UUID4 key for the record')
+
+        self._add_value('str', 'id',
+                        valuerequired = True,
+                        description = 'the unique ID for the record')
+
+        self._add_value('str', 'url',
+                        modelpath = 'URL',
+                        description = 'a URL where the record can be found')
+
+        self._add_value('str', 'family',
+                        valuerequired = True,
+                        modelpath = 'system-family',
+                        description = 'the ID of the reference structure family')
+        
         self._add_value('str', 'family_url',
-                        modelpath='system-family-URL')
-        self._add_value('record', 'parameter_records', recordclass=PointDefectParameters,
-                        modelpath='calculation-parameter',
-                        metadatakey='parameters')
+                        modelpath = 'system-family-URL',
+                        description = 'a URL where the reference structure family can be found')
+        
+        self._add_value('record', 'parameter_records',
+                        recordclass = PointDefectParameters,
+                        modelpath = 'calculation-parameter',
+                        metadatakey = 'parameters',
+                        description = 'the point defect generation operations')
         
     @property
     def parameters(self) -> list:

@@ -8,9 +8,8 @@ from yabadaba.record import Record
 
 class StackingFault(Record):
     """
-    Class for representing stacking_fault records, which collect the parameters
-    necessary for atomman to generate and evaluate a particular generalized
-    stacking fault map.
+    Record that collects input parameters for creating atomic configurations
+    to evaluate a particular generalized stacking fault map.
     """
 
     ########################## Basic metadata fields ##########################
@@ -45,27 +44,58 @@ class StackingFault(Record):
         when build_model is called!!!
         """
         
-        self._add_value('str', 'key', valuerequired=True)
-        self._add_value('str', 'id', valuerequired=True)
-        self._add_value('str', 'url', modelpath='URL')
-        self._add_value('str', 'family', valuerequired=True,
-                        modelpath='system-family')
+        self._add_value('str', 'key',
+                        valuerequired = True,
+                        description = 'the UUID4 key for the record')
+
+        self._add_value('str', 'id',
+                        valuerequired = True,
+                        description = 'the unique ID for the record')
+
+        self._add_value('str', 'url',
+                        modelpath = 'URL',
+                        description = 'a URL where the record can be found')
+
+        self._add_value('str', 'family',
+                        valuerequired = True,
+                        modelpath = 'system-family',
+                        description = 'the ID of the reference structure family')
+        
         self._add_value('str', 'family_url', 
-                        modelpath='system-family-URL')
-        self._add_value('miller', 'hkl', valuerequired=True,
-                        modelpath='calculation-parameter.hkl',
-                        bracket='()')
-        self._add_value('miller', 'a1vect_uvw', valuerequired=True,
-                        modelpath='calculation-parameter.a1vect_uvw',
-                        bracket='[]')
-        self._add_value('miller', 'a2vect_uvw', valuerequired=True,
-                        modelpath='calculation-parameter.a2vect_uvw',
-                        bracket='[]')
+                        modelpath = 'system-family-URL',
+                        description = 'a URL where the family reference system record can be found')
+        
+        self._add_value('miller', 'hkl',
+                        valuerequired = True,
+                        modelpath = 'calculation-parameter.hkl',
+                        bracket = '()',
+                        description = 'the Miller(-Bravais) plane for the stacking fault')
+        
+        self._add_value('miller', 'a1vect_uvw',
+                        valuerequired = True,
+                        modelpath = 'calculation-parameter.a1vect_uvw',
+                        bracket = '[]',
+                        description = 'one of the two in-plane lattice vectors that defines the periodic 2D generalized fault cell')
+        
+        self._add_value('miller', 'a2vect_uvw',
+                        valuerequired = True,
+                        modelpath = 'calculation-parameter.a2vect_uvw',
+                        bracket = '[]',
+                        description = 'one of the two in-plane lattice vectors that defines the periodic 2D generalized fault cell')
+        
         self._add_value('int', 'shiftindex',
-                        modelpath='calculation-parameter.shiftindex')
-        self._add_value('str', 'cutboxvector', valuerequired=True,
-                        modelpath='calculation-parameter.cutboxvector',
-                        defaultvalue='c', allowedvalues=['a', 'b', 'c'])
+                        modelpath = 'calculation-parameter.shiftindex',
+                        description = 'the shift index parameter for identifying which atomic planes to slice between (i.e. this determines the termination plane)')
+        
+        self._add_value('str', 'cutboxvector',
+                        valuerequired = True,
+                        modelpath = 'calculation-parameter.cutboxvector',
+                        defaultvalue = 'c',
+                        allowedvalues = (
+                            'a',
+                            'b',
+                            'c'),
+                        description = 'indicates which system box vector is not in the stacking fault plane')
 
     
     @property

@@ -10,8 +10,8 @@ from yabadaba.record import Record
 
 class GrainBoundary(Record):
     """
-    Class for representing grain_boundary records, which collect the parameters
-    necessary for atomman to generate a particular grain boundary.
+    Record that collects input parameters for creating atomic configurations
+    of grain boundaries with a particular orientation.
     """
 
     ########################## Basic metadata fields ##########################
@@ -46,36 +46,86 @@ class GrainBoundary(Record):
         when build_model is called!!!
         """
         
-        self._add_value('str', 'key', valuerequired=True)
-        self._add_value('str', 'id',  valuerequired=True)
-        self._add_value('str', 'url', modelpath='URL')
-        self._add_value('str', 'family', valuerequired=True,
-                        modelpath='system-family')
+        self._add_value('str', 'key',
+                        valuerequired = True,
+                        description = 'the UUID4 key for the record')
+
+        self._add_value('str', 'id',
+                        valuerequired = True,
+                        description = 'the unique ID for the record')
+
+        self._add_value('str', 'url',
+                        modelpath = 'URL',
+                        description = 'a URL where the record can be found')
+
+        self._add_value('str', 'family',
+                        valuerequired = True,
+                        modelpath = 'system-family',
+                        description = 'the ID of the reference structure family')
+        
         self._add_value('str', 'family_url',
-                        modelpath='system-family-URL')
-        self._add_value('str', 'type')
-        self._add_value('str', 'axis')
+                        modelpath = 'system-family-URL',
+                        description = 'a URL where the reference structure family can be found')
+        
+        self._add_value('str', 'type',
+                        description = 'the category type of the grain boundary')
+
+        self._add_value('str', 'axis',
+                        description = 'the tilt/twist axis if there is one')
+
         self._add_value('float', 'misorientation',
-                        modelpath='misorientation-angle')
+                        modelpath = 'misorientation-angle',
+                        description = 'the misorientation angle between the two grains')
+        
         self._add_value('miller', 'auvw1',
-                        modelpath='calculation-parameter.auvw1')
+                        modelpath = 'calculation-parameter.auvw1',
+                        description = "the Miller-(Bravais) crystal vector of grain 1 that is aligned with the system's a box vector")
+        
         self._add_value('miller', 'buvw1',
-                        modelpath='calculation-parameter.buvw1')
+                        modelpath = 'calculation-parameter.buvw1',
+                        description = "the Miller-(Bravais) crystal vector of grain 1 that is aligned with the system's b box vector")
+        
         self._add_value('miller', 'cuvw1',
-                        modelpath='calculation-parameter.cuvw1')
+                        modelpath = 'calculation-parameter.cuvw1',
+                        description = "the Miller-(Bravais) crystal vector of grain 1 that is aligned with the system's c box vector")
+        
         self._add_value('miller', 'auvw2',
-                        modelpath='calculation-parameter.auvw2')
+                        modelpath = 'calculation-parameter.auvw2',
+                        description = "the Miller-(Bravais) crystal vector of grain 2 that is aligned with the system's a box vector")
+        
         self._add_value('miller', 'buvw2', 
-                        modelpath='calculation-parameter.buvw2')
+                        modelpath = 'calculation-parameter.buvw2',
+                        description = "the Miller-(Bravais) crystal vector of grain 2 that is aligned with the system's b box vector")
+        
         self._add_value('miller', 'cuvw2',
-                        modelpath='calculation-parameter.cuvw2')
-        self._add_value('str', 'cutboxvector', valuerequired=True,
-                        modelpath='calculation-parameter.cutboxvector',
-                        defaultvalue='c', allowedvalues=['a', 'b', 'c'])
-        self._add_value('str', 'cellsetting', valuerequired=True,
-                        modelpath='calculation-parameter.cellsetting',
-                        defaultvalue='p',
-                        allowedvalues=['p', 'i', 'f', 'a', 'b', 'c', 't', 't1', 't2'])
+                        modelpath = 'calculation-parameter.cuvw2',
+                        description = "the Miller-(Bravais) crystal vector of grain 2 that is aligned with the system's c box vector")
+        
+        self._add_value('str', 'cutboxvector',
+                        valuerequired = True,
+                        modelpath = 'calculation-parameter.cutboxvector',
+                        defaultvalue = 'c',
+                        allowedvalues = (
+                            'a',
+                            'b',
+                            'c'),
+                        description = 'indicates which system box vector is not in the grain boundary interface plane')
+        
+        self._add_value('str', 'cellsetting',
+                        valuerequired = True,
+                        modelpath = 'calculation-parameter.cellsetting',
+                        defaultvalue = 'p',
+                        allowedvalues = (
+                            'p',
+                            'i',
+                            'f',
+                            'a',
+                            'b',
+                            'c',
+                            't',
+                            't1',
+                            't2'),
+                        description = 'the crystal cell setting associated with the reference structure family (primitive, face-centered, etc) which allows for non-integer lattice vectors to be discovered')
     
     @property
     def uvws1(self):

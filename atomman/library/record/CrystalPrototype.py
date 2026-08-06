@@ -44,30 +44,72 @@ class CrystalPrototype(Record):
         when build_model is called!!!
         """
         
-        self._add_value('str', 'key', valuerequired=True)
-        self._add_value('str', 'id', valuerequired=True)
-        self._add_value('str', 'url', modelpath='URL')
-        self._add_value('str', 'commonname', valuerequired=True, 
-                        modelpath='name')
-        self._add_value('str', 'prototype', valuerequired=True)
-        self._add_value('str', 'pearson', valuerequired=True,
-                        modelpath='Pearson-symbol')
-        self._add_value('str', 'strukturbericht', valuerequired=True,
-                        modelpath='Strukturbericht')
-        self._add_value('int', 'sg_number', valuerequired=True,
-                        modelpath='space-group.number')
-        self._add_value('str', 'sg_hm', valuerequired=True,
-                        modelpath='space-group.Hermann-Maguin')
-        self._add_value('str', 'sg_schoenflies', valuerequired=True,
-                        modelpath='space-group.Schoenflies')
-        self._add_value('base', 'wykoff', valuerequired=True,
-                        modelpath='space-group.Wykoff', metadatakey=False)
-        self._add_value('str', 'crystalfamily', valuerequired=True,
-                        modelpath='system-info.cell.crystal-family')
-        self._add_value('int', 'natypes', valuerequired=True,
-                        modelpath='system-info.cell.natypes')
-        self._add_value('system_model', 'ucell', valuerequired=True,
-                        modelpath="atomic-system")
+        self._add_value('str', 'key',
+                        valuerequired = True,
+                        description = 'the UUID4 key for the record')
+
+        self._add_value('str', 'id',
+                        valuerequired = True,
+                        description = 'the unique ID for the record')
+
+        self._add_value('str', 'url',
+                        modelpath = 'URL',
+                        description = 'a URL where the record can be found')
+
+        self._add_value('str', 'commonname',
+                        valuerequired = True, 
+                        modelpath = 'name',
+                        description = 'a common name for the prototype')
+        
+        self._add_value('str', 'prototype',
+                        valuerequired = True,
+                        description = 'the prototype composition associated with the prototype')
+
+        self._add_value('str', 'pearson',
+                        valuerequired = True,
+                        modelpath = 'Pearson-symbol',
+                        description = 'The Pearson symbol associated with the prototype')
+        
+        self._add_value('str', 'strukturbericht',
+                        valuerequired = True,
+                        modelpath = 'Strukturbericht',
+                        description = 'the Strukturbericht symbol associated with the prototype')
+        
+        self._add_value('int', 'sg_number',
+                        valuerequired = True,
+                        modelpath = 'space-group.number',
+                        description = "the space group number for the prototype's space group")
+        
+        self._add_value('str', 'sg_hm',
+                        valuerequired = True,
+                        modelpath = 'space-group.Hermann-Maguin',
+                        description = "the Hermann-Maguin symbol for the prototype's space group")
+        
+        self._add_value('str', 'sg_schoenflies',
+                        valuerequired = True,
+                        modelpath = 'space-group.Schoenflies',
+                        description = "the Schoenflies symbol for the prototype's space group")
+        
+        self._add_value('base', 'wykoff',
+                        valuerequired = True,
+                        modelpath = 'space-group.Wykoff',
+                        metadatakey = False,
+                        description = 'the occupied Wykoff sites')
+        
+        self._add_value('str', 'crystalfamily',
+                        valuerequired = True,
+                        modelpath = 'system-info.cell.crystal-family',
+                        description = 'the crystal family of the unit cell: cubic, hexagonal, etc')
+        
+        self._add_value('int', 'natypes',
+                        valuerequired = True,
+                        modelpath = 'system-info.cell.natypes',
+                        description = 'the number of unique atom types in the unit cell')
+        
+        self._add_value('system_model', 'ucell',
+                        valuerequired = True,
+                        modelpath = "atomic-system",
+                        description = 'the unit cell for the crystal')
 
     @property
     def defaultname(self) -> Optional[str]:
