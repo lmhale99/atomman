@@ -60,7 +60,7 @@ def dump(system,
     
     # Build Atoms
     phonopyatoms = PhonopyAtoms(symbols=allsymbols, scaled_positions=spos,
-                                pbc=pbc, cell=cell)
+                                cell=cell)
     
     if return_prop is True:
         return phonopyatoms, prop
