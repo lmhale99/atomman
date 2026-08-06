@@ -117,7 +117,7 @@ def load(table: Union[str, io.IOBase],
             continue
         
         # Get values
-        value = df[prop['table_name']].values.reshape((natoms,) + prop['shape'])
+        value = df[prop['table_name']].to_numpy(copy=True).reshape((natoms,) + prop['shape'])
         
         if prop['unit'] is not None:
             if prop['unit'] == "scaled":
