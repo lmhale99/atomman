@@ -236,6 +236,7 @@ class GreenKubo():
         # Read the column header
         terms = lines[2].split()
         step_index = terms.index('TimeDelta') - 1
+        num_index = terms.index('Ncount') - 1
         data_index = terms.index(name) - 1
        
         i = 3
@@ -251,17 +252,19 @@ class GreenKubo():
 
         time = np.empty(count) 
         acf = np.empty(count)
+        acfsamples = np.empty(count, dtype=int)
 
         for j, line in enumerate(lines[i-count:i]):
             terms = line.split()
             time[j] = float(terms[step_index])
+            acfsamples[j] = int(terms[num_index])
             acf[j] = float(terms[data_index])
 
         # Convert time and acf values
         time = time * timestep
         acf = uc.set_in_units(acf, unit)
 
-        return cls(time=time, acf=acf)
+        return cls(time=time, acf=acf, acfsamples=acfsamples)
 
     @property
     def x(self) -> Optional[np.ndarray]:
@@ -290,6 +293,7 @@ class GreenKubo():
 
     def fluctuation(self,
                     delta: int,
+                    absmean: bool = False,
                     batchsize: int = 100) -> np.ndarray:
         """
         Evaluates the "fluctuation" function of the auto-correlation function
@@ -302,6 +306,9 @@ class GreenKubo():
         ----------
         delta : int
             The rolling window size for evaluating the fluctuation.
+        absmean : bool, optional
+            False (default) will use the rolling mean of the ACF values while
+            True will use the rolling mean of the abs(ACF) values.
         batchsize : int, optional
             Indicates how many std evaluations to make at a time.  The batchsize
             only affects memory usage and computational time.  I think numpy.std()
@@ -315,7 +322,10 @@ class GreenKubo():
             The fluctuation of the acf.  This array will have (delta-1) fewer
             values than the acf array.
         """
-        mean = rolling_mean(self.acf, delta)
+        if absmean:
+            mean = rolling_mean(np.abs(self.acf), delta)
+        else:
+            mean = rolling_mean(self.acf, delta)
         std = rolling_std(self.acf, delta, batchsize=batchsize)
 
         # Return the rolling |std/mean| values
@@ -368,6 +378,7 @@ class GreenKubo():
 
     def std_noise_fluctuation(self,
                               delta: int,
+                              absmean: bool = False,
                               startindex: Optional[int] = None,
                               starttime: Optional[float] = None) -> np.ndarray:
         """
@@ -382,6 +393,9 @@ class GreenKubo():
         ----------
         delta : int
             The rolling window size for evaluating the fluctuation.
+        absmean : bool, optional
+            False (default) will use the rolling mean of the ACF values while
+            True will use the rolling mean of the abs(ACF) values.
         startindex : int or None, optional
             All acf data starting with this index will be used to compute the
             standard deviation.  This value should be sufficiently large such
@@ -401,7 +415,10 @@ class GreenKubo():
             The fluctuation of the acf.  This array will have (delta-1) fewer
             values than the acf array.
         """
-        mean = rolling_mean(self.acf, delta)
+        if absmean:
+            mean = rolling_mean(np.abs(self.acf), delta)
+        else:
+            mean = rolling_mean(self.acf, delta)
 
         # Compute the std of the pure noise region
         std = self.std_noise(startindex=startindex, starttime=starttime)
@@ -459,6 +476,7 @@ class GreenKubo():
 
     def tcut_fluctuation(self,
                          delta: int,
+                         absmean: bool = False,
                          threshold: Optional[float] = None,
                          batchsize: int = 100,
                          timeshift: str = 'first') -> Tuple[int, float]:
@@ -470,6 +488,9 @@ class GreenKubo():
         ----------
         delta : int
             The rolling window size for evaluating the fluctuation.
+        absmean : bool, optional
+            False (default) will use the rolling mean of the ACF values while
+            True will use the rolling mean of the abs(ACF) values.
         threshold : float or None, optional
             The threshold value to use.  The cutoff is identified based on the
             first acf value where the fluctuation is greater than the threshold
@@ -493,7 +514,7 @@ class GreenKubo():
             The time value associated with the cutoff value.
         """
         # Compute the fluctuation data
-        f = self.fluctuation(delta, batchsize=batchsize)
+        f = self.fluctuation(delta, absmean=absmean, batchsize=batchsize)
 
         # Set the default threshold
         if threshold is None:
@@ -514,6 +535,7 @@ class GreenKubo():
 
     def tcut_std_noise_fluctuation(self,
                                    delta: int,
+                                   absmean: bool = False,
                                    threshold: float = 1.0,
                                    startindex: Optional[int] = None,
                                    starttime: Optional[float] = None,
@@ -525,7 +547,10 @@ class GreenKubo():
         Parameters
         ----------
         delta : int
-            The size of the rolling window to use.  
+            The size of the rolling window to use.
+        absmean : bool, optional
+            False (default) will use the rolling mean of the ACF values while
+            True will use the rolling mean of the abs(ACF) values.
         threshold : float or None, optional
             The threshold value to use.  The cutoff is identified based on the
             first acf value where the fluctuation is greater than the threshold
@@ -547,7 +572,7 @@ class GreenKubo():
             rolling window: "first" (default), "middle" or "last".
         """
         # Compute the fluctuation data
-        f = self.std_noise_fluctuation(delta, startindex=startindex, starttime=starttime)
+        f = self.std_noise_fluctuation(delta, absmean=absmean, startindex=startindex, starttime=starttime)
 
         # Set the default threshold
         if threshold is None:
