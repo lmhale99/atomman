@@ -521,7 +521,10 @@ class GreenKubo():
             threshold = max(1, 2*f[0])
 
         # Identify the first index where f > threshold
-        icut: int = np.where(f >= threshold)[0][0]
+        try:
+            icut: int = np.where(f >= threshold)[0][0]
+        except:
+            icut: int = len(f) - 1
 
         # Shift according to the timeshift option
         if timeshift == 'last':
@@ -579,7 +582,10 @@ class GreenKubo():
             threshold = max(1, 2*f[0])
 
         # Identify the first index where f > threshold
-        icut: int = np.where(f >= threshold)[0][0]
+        try:
+            icut: int = np.where(f >= threshold)[0][0]
+        except:
+            icut: int = len(f) - 1
 
         # Shift according to the timeshift option
         if timeshift == 'last':
@@ -630,7 +636,10 @@ class GreenKubo():
         f = self.std_noise_fraction(delta, startindex=startindex, starttime=starttime)
 
         # Identify the first index where f > threshold
-        icut: int = np.where(f >= threshold)[0][0]
+        try:
+            icut: int = np.where(f >= threshold)[0][0]
+        except:
+            icut: int = len(f) - 1
 
         # Shift according to the timeshift option
         if timeshift == 'last':
