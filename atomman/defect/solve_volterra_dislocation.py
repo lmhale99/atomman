@@ -75,12 +75,13 @@ def solve_volterra_dislocation(C: ElasticConstants,
     atomman.defect.VolterraDislocation
         The dislocation solution of the appropriate type.
     """
-
-    try:
-        return Stroh(C, burgers, ξ_uvw=ξ_uvw, slip_hkl=slip_hkl, transform=transform,
-                   axes=axes, box=box, m=m, n=n, cart_axes=cart_axes, tol=tol)
-    except ValueError:
+    # Check if C is isotropic
+    if C.is_normal('isotropic', atol=0.0, rtol=1e-4):
         return IsotropicVolterraDislocation(C, burgers, ξ_uvw=ξ_uvw, slip_hkl=slip_hkl,
                                             transform=transform, axes=axes, box=box,
                                             m=m, n=n, cart_axes=cart_axes, tol=tol)
+    else:
+        return Stroh(C, burgers, ξ_uvw=ξ_uvw, slip_hkl=slip_hkl, transform=transform,
+                   axes=axes, box=box, m=m, n=n, cart_axes=cart_axes, tol=tol)
+       
                                             
