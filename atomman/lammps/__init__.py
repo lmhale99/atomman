@@ -20,13 +20,17 @@ from . import style
 from .Log import Log
 from .NEBLog import NEBLog
 from .Potential import Potential
+from potentials.record.PotentialLAMMPS import PotentialLAMMPS
+from potentials.record.PotentialLAMMPSKIM import PotentialLAMMPSKIM
 from .run import run, run_libtest, restart_check, read_logs
 from .normalize import normalize
 from .checkversion import checkversion, versiondate
 from .seed import seed, seedmax, newseed
 from .LAMMPS import LAMMPS, LAMMPSEXE, LAMMPSLIB, LAMMPSobj
 
+
+
 __all__ = ['LammpsError', 'style', 'run', 'run_libtest', 'normalize', 'Potential', 'Log',
            'NEBLog', 'checkversion', 'seed', 'seedmax', 'newseed', 'versiondate',
            'restart_check', 'read_logs', 'LAMMPS', 'LAMMPSEXE', 'LAMMPSLIB',
-           'LAMMPSobj', 'anylammps']
+           'LAMMPSobj', 'anylammps', 'PotentialLAMMPS', 'PotentialLAMMPSKIM']
